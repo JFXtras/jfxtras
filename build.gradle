@@ -1,0 +1,50 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+/***************************************
+ * Set Maven coordinates and build vars
+ ***************************************/
+group                   = 'org.jfxlabs'
+archivesBaseName        = "jfxlabs"
+version                 = '0.1-SNAPSHOT'
+
+isRelease = !version.endsWith('SNAPSHOT')
+requiredJavaFxVersion   = '2.1.0'
+
+/***************************************
+ * Check environment
+ ***************************************/
+javafxHome = System.env['JAVAFX_HOME']
+if(!javafxHome) {
+    println """Please set environment variable JAVAFX_HOME
+to the directory that contains /rt/lib/jfxrt.jar
+for JavaFX version $requiredJavaFxVersion"""
+    System.exit 1
+}
+
+buildscript {
+    dependencies {
+        classpath files("${System.env['JAVAFX_HOME']}/rt/lib/jfxrt.jar")
+    }
+}
+
+actualJavaFXVersion = com.sun.javafx.runtime.VersionInfo.runtimeVersion
+if (!actualJavaFXVersion.startsWith(requiredJavaFxVersion)) {
+    println "Required JavaFX version is '$requiredJavaFxVersion' but actual version is '$actualJavaFXVersion'"
+    System.exit(1)
+}
+// environment is ok
+
+/***************************************
+ * The build script proper
+ ***************************************/
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile     files("${javafxHome}/rt/lib/jfxrt.jar")
+    testCompile 'junit:junit:4.10'
+}
+
