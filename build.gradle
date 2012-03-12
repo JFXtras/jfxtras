@@ -5,8 +5,8 @@ apply plugin: 'signing'
 /***************************************
  * Set Maven coordinates and build vars
  ***************************************/
-group                   = 'org.jfxlabs'
-archivesBaseName        = "jfxlabs"
+group                   = 'org.jfxtras'
+archivesBaseName        = "jfxtras"
 version                 = '0.1-SNAPSHOT'
 
 isRelease = !version.endsWith('SNAPSHOT')
@@ -46,6 +46,15 @@ repositories {
 dependencies {
     compile     files("${javafxHome}/rt/lib/jfxrt.jar")
     testCompile 'junit:junit:4.10'
+}
+
+task buildTimestamped(type: Copy, dependsOn: 'build') {
+    from 'build/libs'
+    into 'build/libs/timestamped'
+    include '*.jar'
+    rename { String fileName ->
+        fileName.replace('SNAPSHOT', "SNAPSHOT-${new Date().format('HH-mm-dd-MM-yyyy')}")
+    }
 }
 
 task wrapper(type: Wrapper) {
