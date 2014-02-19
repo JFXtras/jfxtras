@@ -1,0 +1,38 @@
+/* basic settings */
+.CalendarPicker { 
+	-fx-skin: "jfxtras.internal.scene.control.skin.CalendarPickerControlSkin";
+}
+
+.CalendarPickerControlSkin { 
+}
+
+.CalendarPickerControlSkin .weekday-label {
+	-fx-alignment: CENTER;
+}
+
+.CalendarPickerControlSkin .non-weekend { 
+}
+
+.CalendarPickerControlSkin .weekend { 
+	-fx-text-fill: -fx-accent;
+}
+
+.CalendarPickerControlSkin .day-button { 
+}
+
+/* highlight today */
+.CalendarPickerControlSkin .today { 
+	-fx-color: DARKGRAY; 
+}
+
+/* highlight today */
+.CalendarPickerControlSkin .highlight { 
+	-fx-font-weight: bold;
+	-fx-font-style: italic;
+}
+
+.CalendarPicker .ListSpinner { 
+/*	-fxx-arrow-position:SPLIT; */
+/*	-fxx-arrow-direction:VERTICAL; */
+/*	-fxx-value-alignment:CENTER; */
+}

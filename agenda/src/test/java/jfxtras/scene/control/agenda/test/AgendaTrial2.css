@@ -1,0 +1,172 @@
+/* * some whitespace */
+.CalendarPicker {
+	-fx-padding: 10px;
+}
+
+/* * calendar picker day buttons */
+.CalendarPicker .day-button {
+    -fx-padding: 5 12 5 12;   
+    -fx-border-style: null; 
+    -fx-background-radius: 0;
+ 
+    -fx-background-color: #cccccc;
+   
+    -fx-font-size: 11pt;
+    -fx-text-fill: black;
+}
+
+/* * calendar picker spinners */
+.CalendarPicker .ListSpinner {
+    -fx-padding: 5 12 5 12;   
+    -fx-border-style: null; 
+    -fx-background-radius: 0;
+ 
+    -fx-background-color: #cccccc;
+   
+    -fx-font-size: 15pt;
+    -fx-text-fill: black;
+}
+
+/* * weekday label whitespace */
+.CalendarPicker .weekday-label {
+    -fx-padding: 5 0 0 0;   
+}
+
+/* weekday label lose blue effect & highlight weekend buttons */
+.CalendarPicker .weekend { 
+	-fx-text-fill: BLACK;
+	-fx-font-weight: bold;
+}
+
+/* weeknumber size */
+.CalendarPicker .weeknumber {
+    -fx-font-size: 13pt;
+}
+
+/* highlight today */
+.CalendarPicker .today {
+    -fx-background-color: #aaaaaa;
+}
+
+/* * focus */
+.CalendarPicker .day-button:focused
+{
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: segments(1, 1);
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;   
+}
+
+/* selected */
+.CalendarPicker .day-button:selected
+{
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+    -fx-border-style: segments(1, 1);
+    -fx-background-insets: 0 0 0 0, 0, 1, 2;   
+}
+
+/* ------------ */
+
+/* * let's give it some room */
+.Agenda {
+    -fx-padding: 10px;   
+}
+
+/* * screen background */
+.screen {
+    -fx-background-color: #eeeeee;
+}
+
+/* * increase header font */
+.Agenda .DayHeader .Calendar {
+    -fx-font-size: 12pt;
+}
+
+/* highlight weekend */
+.Agenda .DayHeader .weekend { 
+	-fx-font-weight: bold;
+}
+
+/* lose border in header */
+.Agenda .DayHeader {
+	-fx-border-color:transparent;
+}
+
+/* ------------ */
+
+/* * ungradient scrollbar */
+.scroll-bar {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ScrollBarSkin";
+    -fx-background-color: null !important;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.scroll-bar .thumb {
+    -fx-background-color: rgba(0,0,0,0.4);
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+}
+.scroll-bar .track  {
+    -fx-background-color: null !important;
+    -fx-background-insets:  0;
+}
+.scroll-bar .track-background  {
+    -fx-background-color: null !important;
+    -fx-background-insets:  0;
+    -fx-border-color: rgba(0,0,0,0.2);
+    -fx-border-radius: 0.5em;
+}
+.scroll-bar .increment-button {
+    -fx-background-color: null;
+}
+.scroll-bar:horizontal .increment-button {
+    -fx-padding: 0.5em 0 0.5em 0;
+}
+.scroll-bar:vertical .increment-button {
+    -fx-padding: 0 0.5em 0 0.5em;
+}
+.scroll-bar .decrement-button, .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow {
+    -fx-background-color: null;
+    -fx-padding: 0;
+}
+
+/* ---------- */
+
+/* larger arrows */
+.ListSpinner .left-arrow { 
+    -fx-shape: "M8,-8 L0,0 L8,8 L8,5 L4,0 L8,-5 Z";
+    -fx-scale-shape: false;
+}
+.ListSpinner .right-arrow { 
+    -fx-shape: "M0,-8 L8,0 L0,8 L0,5 L4,0 L0,-5 Z";
+    -fx-scale-shape: false;
+}
+
+
+/* ---------- */
+
+/* no gradient popup */
+.AgendaPopup {
+    -fx-padding: 5;   
+    -fx-border-color: #555555;
+    -fx-background-radius: 0;
+ 
+    -fx-background-color: #cccccc;
+   
+    -fx-font-size: 11pt;
+    -fx-text-fill: black;
+}
+
+/* ---------- */
+
+/* duke approves */
+#TheImage {
+	-fx-image: url("Duke_Wave-300.png");
+	-fx-translate-x: 20px;
+	-fx-translate-y: 20px;
+}
+
+.Agenda .Weekx {
+	-fx-background-image: url("Duke_Wave-300.png");
+}

@@ -1,0 +1,51 @@
+/* basic settings */
+.ListSpinner { 
+	-fx-skin: "jfxtras.internal.scene.control.skin.ListSpinnerCaspianSkin";
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+	-fx-background-insets: 0 0 -1 0, 0, 1, 2;
+	-fx-background-radius: 5, 5, 4, 3;
+	-fx-padding: 0.266667em 0.233333em 0.25em 0.233333em;
+	-fx-text-fill: -fx-text-base-color;
+}
+
+.ListSpinner:hover {
+    -fx-color: -fx-hover-base;
+}
+
+.ListSpinner:focused { 
+	-fx-color: -fx-base;
+	-fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+	-fx-background-insets: -1.4, 0, 1, 2;
+	-fx-background-radius: 6.4, 5, 4, 3;	
+}
+
+.ListSpinner .valuePane { 
+	-fx-padding: 0.0em 0.2em 0.0em 0.2em;
+}
+
+.ListSpinner .left-arrow { 
+    -fx-shape: "M4,-4 L0,0 L4,4 Z";
+    -fx-scale-shape: false;
+    -fx-padding: 8;
+}
+.ListSpinner .right-arrow { 
+    -fx-shape: "M0,-4 L4,0 L0,4 Z";
+    -fx-scale-shape: false;
+    -fx-padding: 8;
+}
+.ListSpinner .down-arrow { 
+    -fx-shape: "M-4,-2 L0,2 L4,-2 Z";
+    -fx-scale-shape: false;
+    -fx-padding: 8;
+}
+.ListSpinner .up-arrow { 
+    -fx-shape: "M4,2 L-4,2 L0,-2 Z";
+    -fx-scale-shape: false;
+    -fx-padding: 8;
+}
+.ListSpinner .idle {
+    -fx-background-color: -fx-mark-color;
+}
+.ListSpinner .clicked { 
+    -fx-background-color: -fx-focus-color;
+}

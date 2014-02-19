@@ -1,0 +1,15 @@
+/* basic settings */
+.CalendarTimePicker { 
+	-fx-skin: "jfxtras.internal.scene.control.skin.CalendarTimePickerSkin";
+}
+
+/* skin level 
+.CalendarTimePickerSkin { 
+}
+*/
+
+.CalendarTimePickerSkin .timeLabel { 
+	-fx-font-size: 2.0em;
+	-fx-opacity: 0.5;
+}
+

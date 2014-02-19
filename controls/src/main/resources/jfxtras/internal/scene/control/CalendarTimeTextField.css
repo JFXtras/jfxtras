@@ -1,0 +1,20 @@
+/* basic settings */
+.CalendarTimeTextField { 
+	-fx-skin: "jfxtras.internal.scene.control.skin.CalendarTimeTextFieldCaspianSkin";
+}
+
+.CalendarTimeTextFieldCaspianSkin .icon  {
+	-fx-image: url("skin/CalendarTimeTextFieldCaspianSkinIcon.png");
+}
+
+.CalendarTimeTextFieldCaspianSkin .icon:disabled  {
+	-fx-image: url("skin/CalendarTimeTextFieldCaspianSkinIconDisabled.png");
+}
+
+.CalendarTimeTextFieldCaspianSkin_popup {
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+	-fx-background-insets: 0 0 -1 0,0,1,2;
+	-fx-background-radius: 5,5,4,3;
+	-fx-padding: 0.766667em 0.733333em 0.75em 0.733333em;
+	-fx-text-fill: -fx-text-base-color;
+}
