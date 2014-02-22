@@ -217,7 +217,7 @@ public class DateTimeToCalendarHelper {
 	/**
 	 * 
 	 * @param calendarProperty
-	 * @param localDateProperty
+	 * @param localDateTimeProperty
 	 * @param localeProperty 
 	 */
 	static public void syncLocalDateTime(ObjectProperty<Calendar> calendarProperty, ObjectProperty<LocalDateTime> localDateTimeProperty, ObjectProperty<Locale> localeProperty)

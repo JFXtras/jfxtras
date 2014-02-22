@@ -1,89 +1,138 @@
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.8'
+    gradleVersion = '1.11'
 }
 
-configurations {
-    asciidoclet
-}
-
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
-        
-		dependencies {
-			classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
-			classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
+allprojects {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven { 
+			url 'https://oss.sonatype.org/content/repositories/snapshots/' 
+		}
+		maven { 
+			url "http://oss.sonatype.org/content/repositories/releases/" 
 		}
 	}
 }
 
-repositories {
-	mavenLocal()
-    mavenCentral()
-	maven { 
-		url 'https://oss.sonatype.org/content/repositories/snapshots/' 
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'maven'	
+	apply plugin: 'signing'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+	
+	// Needed until Gradle supports class-scanning for Java 8
+	tasks.withType(Test) {
+		scanForTestClasses = false
+		include "**/*Test.class"
+		include "**/*Test1.class"
+		exclude 'jfxtras/labs/test/JFXtrasGuiTest.class'
 	}
-	maven { 
-		url "http://oss.sonatype.org/content/repositories/releases/" 
+	
+	// prepend every artifactId with 'jfxtras-'
+	configure(install.repositories.mavenInstaller) {
+		pom.project {
+			artifactId "jfxtras-${project.name}"
+		}
+	}
+	
+	task docJar(type: Jar, dependsOn: javadoc) {
+		classifier = 'javadoc'
+		from 'build/docs/javadoc'
+	}
+
+	task sourcesJar(type: Jar) {
+		from sourceSets.main.allSource
+		classifier = 'sources'
+	}
+
+	artifacts {
+		archives jar
+		archives docJar
+		archives sourcesJar
+	}
+
+	signing {
+		sign configurations.archives
+	}
+
+	uploadArchives.onlyIf {
+		project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+	}
+
+	uploadArchives {
+		if (!project.hasProperty('sonatypeUsername') || !project.hasProperty('sonatypePassword'))
+			  return
+
+		repositories.mavenDeployer {
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+			repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
+				authentication(userName: sonatypeUsername, password: sonatypePassword)
+			}
+
+			snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots') {
+				authentication(userName: sonatypeUsername, password: sonatypePassword)
+			}
+
+			pom.project {
+				artifactId   "jfxtras-${project.name}"
+				name         "JFXtras ${project.name}"
+				url          'http://jfxtras.org'
+				description  'Miscellaneous components for JavaFX 2'
+				packaging    'jar'
+				licenses {
+					license {
+						name 'BSD'
+						url 'http://www.opensource.org/licenses/bsd-license.php'
+						distribution 'repo'
+					}
+				}
+				scm {
+					url 'scm:git@github.com:jfxtras/jfxtras.git'
+					connection 'scm:git@github.com:jfxtras/jfxtras.git'
+					developerConnection 'scm:git@github.com:jfxtras/jfxtras.git'
+				}
+				developers {
+					developer { name 'Tom Eugelink' }
+				}
+			}
+		}
 	}
 }
 
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-
-dependencies {
-    testCompile 'junit:junit:4.10'
-	testCompile 'org.mockito:mockito-all:1.9.5'
-    testCompile 'org.loadui:testFx:3.1.2'
-	asciidoclet 'org.asciidoctor:asciidoclet:0.+'
+project(':agenda') {
+	dependencies {
+		compile project(':controls')
+		testCompile project(':test-support')
+	}
 }
 
-// apply vrl license header plugin
-if (!project.plugins.findPlugin(eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)) {
-    project.apply(plugin: eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)
+project(':common') {
+	dependencies {
+		testCompile project(':test-support')
+	}
 }
 
-// license template (will be used as header in all Java source files)
-repairHeaders.licenseHeaderText = new File(projectDir,"license-template.txt")
-
-javadoc {
-    options.docletpath = configurations.asciidoclet.files.asType(List)
-    options.doclet = 'org.asciidoctor.Asciidoclet'
+project(':controls') {
+	dependencies {
+		compile project(':common')
+		compile project(':fxml')
+		testCompile project(':test-support')
+	}
 }
 
-
-// Needed until Gradle supports class-scanning for Java 8
-tasks.withType(Test) {
-    scanForTestClasses = false
-    include "**/*Test.class"
-    include "**/*Test1.class"
+project(':test-support') {
+	dependencies {
+		compile 'junit:junit:4.10'
+		compile 'org.mockito:mockito-all:1.9.5'
+		compile 'org.loadui:testFx:3.1.2'
+	}
 }
 
-test {
-  // the ANT plugin Gradle is using runs any class ending on *Test as a test
-  exclude 'jfxtras/labs/test/JFXtrasGuiTest.class'
-}
-
-apply {
-    from 'gradle/mavenCentralDeploy.gradle'
-}
-
-signArchives.onlyIf {
-    project.hasProperty('signing.keyId')
-}
-
-uploadArchives.onlyIf {
-    project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
-}
-
+// TODO: _lib folder per project?
 task copyToLib(type: Copy) {
     into "_lib"
-    from configurations.testCompile
+    from project(':test-support').configurations.testCompile
 }

@@ -1,6 +1,6 @@
 /* basic settings */
 .Agenda { 
-	-fx-skin: "jfxtras.labs.internal.scene.control.skin.AgendaWeekSkin";
+	-fx-skin: "jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin";
 }
 
 .AgendaWeekSkin { 
