@@ -73,7 +73,7 @@ public class ListView<T> extends javafx.scene.control.ListView<T>
 	private void construct()
 	{
 		// use a custom skin to enable refreshin
-		setStyle("-fx-skin: \"jfxtras.labs.internal.scene.control.skin.ListViewSkinJFXtras\";");
+		setStyle("-fx-skin: \"jfxtras.internal.scene.control.skin.ListViewSkinJFXtras\";");
 		
 		// construct the properties
 		constructSelectedItem();

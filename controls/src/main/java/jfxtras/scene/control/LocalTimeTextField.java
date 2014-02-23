@@ -36,6 +36,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Skin;
+import jfxtras.internal.scene.control.skin.CalendarTimeTextFieldCaspianSkin;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 
 /**
@@ -77,6 +79,9 @@ public class LocalTimeTextField extends CalendarTimeTextField
 		constructLocalTime();
 	}
 
+	@Override public Skin createDefaultSkin() {
+		return new CalendarTimeTextFieldCaspianSkin(this); // TODO: migrate
+	}
 	
 	// ==================================================================================================================
 	// PROPERTIES

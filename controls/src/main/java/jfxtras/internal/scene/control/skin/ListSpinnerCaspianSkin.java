@@ -52,7 +52,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.Priority;
@@ -66,7 +65,6 @@ import jfxtras.scene.layout.HBox;
 import jfxtras.scene.layout.VBox;
 
 import com.sun.javafx.css.converters.EnumConverter;
-import com.sun.javafx.scene.control.behavior.KeyBinding;
 
 /**
  * 
@@ -342,53 +340,43 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
 			}
 		});
 		// process mouse holds
-		skinNode.setOnMousePressed(new EventHandler<MouseEvent>()
-		{
-			@Override public void handle(MouseEvent evt)
-			{
+		skinNode.setOnMousePressed( evt -> {
+			
 			// if click was the in the greater vicinity of the decrement arrow
 			if (mouseEventOverArrow(evt, decrementArrow))
 			{
 				// left
 				decrementArrow.getStyleClass().add("clicked");
 				repeatDecrementClickTimer.restart();
-				return;
 			}
 
 			// if click was the in the greater vicinity of the increment arrow
-			if (mouseEventOverArrow(evt, incrementArrow))
+			else if (mouseEventOverArrow(evt, incrementArrow))
 			{
 				// right
 				incrementArrow.getStyleClass().add("clicked");
 				repeatIncrementClickTimer.restart();
 				return;
 			}
+			
+			// if a control does not have the focus, request focus
+			ListSpinner<T> lControl = getSkinnable();
+			if (!lControl.isFocused() && lControl.isFocusTraversable()) {
+				lControl.requestFocus();
 			}
 		});
-		skinNode.setOnMouseReleased(new EventHandler<MouseEvent>()
-		{
-			@Override public void handle(MouseEvent evt)
-			{
+		skinNode.setOnMouseReleased( evt -> {
 			unclickArrows();
 			repeatDecrementClickTimer.stop();
 			repeatIncrementClickTimer.stop();
-			}
 		});
-		skinNode.setOnMouseExited(new EventHandler<MouseEvent>()
-		{
-			@Override public void handle(MouseEvent evt)
-			{
+		skinNode.setOnMouseExited( evt -> {
 			unclickArrows();
 			repeatDecrementClickTimer.stop();
 			repeatIncrementClickTimer.stop();
-			}
 		});
 		// mouse wheel
-		skinNode.setOnScroll(new EventHandler<ScrollEvent>()
-		{
-			@Override
-			public void handle(ScrollEvent evt)
-			{
+		skinNode.setOnScroll( evt -> {
 			// if click was the in the greater vicinity of the decrement arrow
 			if (evt.getDeltaY() < 0 || evt.getDeltaX() < 0)
 			{
@@ -410,6 +398,24 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
 				unclickTimer.restart();
 				return;
 			}
+		});
+		
+		// key events
+		getSkinnable().onKeyTypedProperty().set( keyEvent -> {
+			KeyCode lKeyCode = keyEvent.getCode();
+			if ( KeyCode.MINUS.equals(lKeyCode)
+			  || KeyCode.SUBTRACT.equals(lKeyCode)
+			  || KeyCode.DOWN.equals(lKeyCode)
+			  || KeyCode.LEFT.equals(lKeyCode)
+ 			   ) {
+				getSkinnable().decrement();
+			}
+			if ( KeyCode.PLUS.equals(lKeyCode)
+			  || KeyCode.ADD.equals(lKeyCode)
+			  || KeyCode.UP.equals(lKeyCode)
+			  || KeyCode.RIGHT.equals(lKeyCode)
+ 			   ) {
+				getSkinnable().increment();
 			}
 		});
 		
@@ -730,55 +736,4 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
 			}
 		}
 	}
-	
-	// ==================================================================================================================
-	// MOUSE EVENTS
-
-// TODO	
-//	/**
-//	 * 
-//	 */
-//	@Override public void mousePressed(MouseEvent evt)
-//	{
-//		// get the control
-//		ListSpinner<T> lControl = getControl();
-//		
-//		// if a control does not have the focus, request focus
-//		if (!lControl.isFocused() && lControl.isFocusTraversable()) {
-//			lControl.requestFocus();
-//		}
-//	}
-	
-	// ==================================================================================================================
-	// KEY EVENTS
-	// TODO: how are these setup?
-	
-	final static private String EVENT_PREVIOUS = "PreviousPressed";
-	final static private String EVENT_NEXT = "NextPressed";
-	protected final static List<KeyBinding> KEY_BINDINGS = new ArrayList<KeyBinding>();
-	static 
-	{
-		KEY_BINDINGS.add( new KeyBinding(KeyCode.MINUS, EVENT_PREVIOUS) ); // keyboard -		
-		KEY_BINDINGS.add( new KeyBinding(KeyCode.PLUS, EVENT_NEXT) ); // keyboard +
-		KEY_BINDINGS.add( new KeyBinding(KeyCode.SUBTRACT, EVENT_PREVIOUS) ); // keypad -		
-		KEY_BINDINGS.add( new KeyBinding(KeyCode.ADD, EVENT_NEXT) ); // keypad + 
-		KEY_BINDINGS.add(new KeyBinding(KeyCode.UP, EVENT_NEXT));
-		KEY_BINDINGS.add(new KeyBinding(KeyCode.DOWN, EVENT_PREVIOUS));
-		KEY_BINDINGS.add(new KeyBinding(KeyCode.LEFT, EVENT_PREVIOUS));
-		KEY_BINDINGS.add(new KeyBinding(KeyCode.RIGHT, EVENT_NEXT));
-//		KEY_BINDINGS.addAll(TRAVERSAL_BINDINGS);
-	}
-
-// TODO	
-//	@Override protected void callAction(String name) {
-//		if (EVENT_PREVIOUS.equals(name)) {
-//			getSkinnable().decrement();
-//		} 
-//		else if (EVENT_NEXT.equals(name)) {
-//			getSkinnable().increment();
-//		} 
-//		else {
-//			super.callAction(name);
-//		}
-//	}
 }
