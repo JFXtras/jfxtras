@@ -52,13 +52,13 @@ subprojects {
 		archives docJar
 		archives sourcesJar
 	}
-        
-        signing.onlyIf {
-		project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
-	}
 
 	signing {
 		sign configurations.archives
+	}
+        
+        signArchives.onlyIf {
+		project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
 	}
 
 	uploadArchives.onlyIf {
