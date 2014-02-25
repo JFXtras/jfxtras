@@ -30,7 +30,6 @@
 package jfxtras.scene.control.window;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 /**
  *
@@ -44,12 +43,8 @@ public class CloseIcon extends WindowIcon {
 
         getStyleClass().setAll(DEFAULT_STYLE_CLASS);
 
-        setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-
-                w.close();
-            }
+        setOnAction((ActionEvent t) -> {
+            w.close();
         });
     }
 }

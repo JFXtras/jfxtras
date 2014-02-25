@@ -49,23 +49,12 @@ public class DefaultWindowIconSkin extends SkinBase<WindowIcon> {
 
         getNode().setCursor(Cursor.DEFAULT);
 
-        // JDK 7 code
-        getNode().onMouseClickedProperty().set(new EventHandler<MouseEvent>() {
 
-            @Override
-            public void handle(MouseEvent t) {
-                if (c.getOnAction()!=null) {
-                    c.getOnAction().handle(new ActionEvent(t, c));
-                }
+        getNode().onMouseClickedProperty().set((EventHandler<MouseEvent>) (MouseEvent t) -> {
+            if (c.getOnAction()!=null) {
+                c.getOnAction().handle(new ActionEvent(t, c));
             }
         });
-        
-//        // JDK 8 code
-//        getNode().onMouseClickedProperty().set(
-//                (EventHandler<MouseEvent>) (MouseEvent t) -> {
-//            if (c.getOnAction()!=null) {
-//                c.getOnAction().handle(new ActionEvent(t, c));
-//            }
-//        });
+
     }
 }

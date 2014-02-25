@@ -181,18 +181,14 @@ public class DefaultWindowSkin extends SkinBase<Window> {
                     new KeyValue(control.prefHeightProperty(), newHeight)));
 
             minimizeTimeLine.statusProperty().addListener(
-                    new ChangeListener<Animation.Status>() {
-                        @Override
-                        public void changed(ObservableValue<? extends Status> ov, Status oldStatus, Status newStatus) {
-
-                            if (newStatus == Status.STOPPED) {
-                                minimizeTimeLine = null;
-                                if (newValue) {
-                                    control.getContentPane().setVisible(false);
-                                }
+                    (ObservableValue<? extends Status> ov2, Status oldStatus, Status newStatus) -> {
+                        if (newStatus == Status.STOPPED) {
+                            minimizeTimeLine = null;
+                            if (newValue) {
+                                control.getContentPane().setVisible(false);
                             }
                         }
-                    });
+            });
 
             minimizeTimeLine.play();
         });
