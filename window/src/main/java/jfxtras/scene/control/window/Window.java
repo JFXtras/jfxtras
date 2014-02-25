@@ -172,37 +172,29 @@ public class Window extends Control implements SelectableNode {
         setContentPane(new StackPane());
 
         // TODO ugly to do this in control? probably violates pattern rules?
-        boundsListener = new ChangeListener<Bounds>() {
-            @Override
-            public void changed(ObservableValue<? extends Bounds> ov, Bounds t, Bounds t1) {
-
-                if (getParent() != null) {
-
-                    if (t1.equals(t)) {
-                        return;
-                    }
-
-                    getParent().requestLayout();
-
-                    double x = Math.max(0, getLayoutX());
-                    double y = Math.max(0, getLayoutY());
-
-                    setLayoutX(x);
-                    setLayoutY(y);
-
+        boundsListener = (ObservableValue<? extends Bounds> ov, Bounds t, Bounds t1) -> {
+            if (getParent() != null) {
+                
+                if (t1.equals(t)) {
+                    return;
                 }
+                
+                getParent().requestLayout();
+                
+                double x = Math.max(0, getLayoutX());
+                double y = Math.max(0, getLayoutY());
+                
+                setLayoutX(x);
+                setLayoutY(y);
+                
             }
         };
         
-        boundsListenerEnabledProperty.addListener(new ChangeListener<Boolean>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    boundsInParentProperty().addListener(boundsListener);
-                } else {
-                    boundsInParentProperty().removeListener(boundsListener);
-                }
+        boundsListenerEnabledProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+            if (newValue) {
+                boundsInParentProperty().addListener(boundsListener);
+            } else {
+                boundsInParentProperty().removeListener(boundsListener);
             }
         });
 
