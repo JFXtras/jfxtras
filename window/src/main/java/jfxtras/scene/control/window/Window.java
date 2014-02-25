@@ -69,7 +69,7 @@ public class Window extends Control implements SelectableNode {
      * Default css style.
      */
     public static final String DEFAULT_STYLE =
-            "/jfxtras/labs/scene/control/window/default.css";
+            "/jfxtras/scene/control/window/default.css";
     /**
      * Default style class for css.
      */
