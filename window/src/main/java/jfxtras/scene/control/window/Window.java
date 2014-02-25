@@ -147,8 +147,6 @@ public class Window extends Control implements SelectableNode {
      * Selectable property (defines whether this window is selectable.
      */
     private final BooleanProperty selectableProperty = new SimpleBooleanProperty(true);
-    private final BooleanProperty boundsListenerEnabledProperty = new SimpleBooleanProperty(true);
-    private ChangeListener<Bounds> boundsListener;
 
     /**
      * Constructor.
@@ -170,33 +168,6 @@ public class Window extends Control implements SelectableNode {
     private void init() {
         getStyleClass().setAll(DEFAULT_STYLE_CLASS);
         setContentPane(new StackPane());
-
-        // TODO ugly to do this in control? probably violates pattern rules?
-        boundsListener = (ObservableValue<? extends Bounds> ov, Bounds t, Bounds t1) -> {
-            if (getParent() != null) {
-                
-                if (t1.equals(t)) {
-                    return;
-                }
-                
-                getParent().requestLayout();
-                
-                double x = Math.max(0, getLayoutX());
-                double y = Math.max(0, getLayoutY());
-                
-                setLayoutX(x);
-                setLayoutY(y);
-                
-            }
-        };
-        
-        boundsListenerEnabledProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-            if (newValue) {
-                boundsInParentProperty().addListener(boundsListener);
-            } else {
-                boundsInParentProperty().removeListener(boundsListener);
-            }
-        });
 
         closeTransitionProperty.addListener(new ChangeListener<Transition>() {
             @Override
@@ -651,22 +622,12 @@ public class Window extends Control implements SelectableNode {
         return selectedProperty;
     }
 
+    /**
+     * 
+     * @return {@code true} if the window is selected; {@code false} otherwise
+     */
     public boolean isSelected() {
         return selectedProperty.get();
     }
 
-    /**
-     * @return the boundsListenerEnabledProperty
-     */
-    public BooleanProperty boundsListenerEnabledProperty() {
-        return boundsListenerEnabledProperty;
-    }
-    
-    public void setBoundsListenerEnabled(boolean state) {
-        boundsListenerEnabledProperty().set(state);
-    }
-    
-    public boolean getBoundsListenerEnabled() {
-        return boundsListenerEnabledProperty.get();
-    }
 }
