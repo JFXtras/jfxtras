@@ -56,6 +56,10 @@ subprojects {
 	signing {
 		sign configurations.archives
 	}
+        
+        signArchives.onlyIf {
+		project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
+	}
 
 	uploadArchives.onlyIf {
 		project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
