@@ -160,7 +160,7 @@ public class Window extends Control implements SelectableNode {
     /**
      * Constructor.
      *
-     * @param title
+     * @param title window title
      */
     public Window(String title) {
         setTitle(title);
