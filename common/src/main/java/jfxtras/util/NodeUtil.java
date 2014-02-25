@@ -40,7 +40,7 @@ import javafx.scene.Node;
  */
 public class NodeUtil {
 
-    // no instanciation allowed
+    // no instantiation allowed
     private NodeUtil() {
         throw new AssertionError(); // not in this class either!
     }
