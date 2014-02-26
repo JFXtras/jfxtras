@@ -1,8 +1,3 @@
-// all projects must be comatible with the java version specified here
-// overriding this property in subprojects is not allowed
-sourceCompatibility = '1.8'
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
@@ -27,6 +22,10 @@ subprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
 	
+	// all projects must be compatible with the java version specified here
+	sourceCompatibility = '1.8'
+	[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
 	// Needed until Gradle supports class-scanning for Java 8
 	tasks.withType(Test) {
 		scanForTestClasses = false
