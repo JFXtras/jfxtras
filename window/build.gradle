@@ -1,4 +1,4 @@
 dependencies {
     compile project(":common")
-    compile project(":test-support")
+    testCompile project(":test-support")
 }
