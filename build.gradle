@@ -1,3 +1,8 @@
+// all projects must be comatible with the java version specified here
+// overriding this property in subprojects is not allowed
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
@@ -55,6 +60,10 @@ subprojects {
 
 	signing {
 		sign configurations.archives
+	}
+        
+        signArchives.onlyIf {
+		project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
 	}
 
 	uploadArchives.onlyIf {
