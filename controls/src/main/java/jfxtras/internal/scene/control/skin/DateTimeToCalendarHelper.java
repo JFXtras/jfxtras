@@ -38,6 +38,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -99,10 +100,10 @@ public class DateTimeToCalendarHelper {
 	 * @param localTime
 	 * @return
 	 */
-	public static Calendar createCalendarFromLocalTime(LocalTime localTime)
+	public static Calendar createCalendarFromLocalTime(LocalTime localTime, Locale locale)
 	{
 		if (localTime == null) return null;
-		Calendar lCalendar = Calendar.getInstance();
+		Calendar lCalendar = Calendar.getInstance(locale);
 		lCalendar.set(Calendar.HOUR_OF_DAY, localTime.getHour());
 		lCalendar.set(Calendar.MINUTE, localTime.getMinute());
 		lCalendar.set(Calendar.SECOND, localTime.getSecond());
@@ -191,6 +192,29 @@ public class DateTimeToCalendarHelper {
 		LocalDateTime lLocalDateTime = LocalDateTime.ofInstant( date.toInstant(), ZoneId.systemDefault() );
 		return lLocalDateTime;
 	}
+	
+	/**
+	 * 
+	 */
+	public static LocalTime createLocaleTimeFromDate(Date date) {
+		if (date == null) {
+			return null;
+		}
+		LocalTime lLocalTime = LocalTime.of( date.getHours(), date.getMinutes(), date.getSeconds(), 0 );
+		return lLocalTime;
+	}
+
+	/*
+	 *
+	 */
+	public static Date createDateFromLocalTime(LocalTime localTime) {
+		if (localTime == null) {
+			return null;
+		}
+		Date lDate = createDateFromLocalDateTime( localTime.atDate(LocalDate.now()) );
+		return lDate;
+	}
+	
 
 	/**
 	 * 
@@ -236,6 +260,29 @@ public class DateTimeToCalendarHelper {
 		});
 	}
 
+
+	/**
+	 * 
+	 * @param calendarProperty
+	 * @param localDateProperty
+	 * @param localeProperty 
+	 */
+	static public void syncLocalTime(ObjectProperty<Calendar> calendarProperty, ObjectProperty<LocalTime> localTimeProperty, ObjectProperty<Locale> localeProperty)
+	{
+		// initial
+		calendarProperty.set(localTimeProperty.get() == null ? null : createCalendarFromLocalTime(localTimeProperty.get(), localeProperty.get()));
+		
+		// forward changes from calendar
+		calendarProperty.addListener( (ObservableValue<? extends Calendar> observableValue, Calendar oldValue, Calendar newValue) -> {
+			localTimeProperty.set(createLocalTimeFromCalendar(newValue)); 
+		});
+		
+		// forward changes to calendar
+		localTimeProperty.addListener( (ObservableValue<? extends LocalTime> observableValue, LocalTime oldValue, LocalTime newValue) -> {
+			calendarProperty.set(newValue == null ? null : createCalendarFromLocalTime(newValue, localeProperty.get()));
+		});
+	}
+	
 	/**
 	 * 
 	 * @param calendars
@@ -344,14 +391,17 @@ public class DateTimeToCalendarHelper {
 		});
 	}
 
-	static public void syncDateTimeFormatter(ObjectProperty<DateFormat> dateFormatProperty, ObjectProperty<DateTimeFormatter> dateTimeFormatterProperty) {
+	// -------
+	// DateTimeFormatterForDate
+	
+	static public void syncDateTimeFormatterForDate(ObjectProperty<DateFormat> dateFormatProperty, ObjectProperty<DateTimeFormatter> dateTimeFormatterProperty) {
 		dateFormatProperty.set( dateTimeFormatterProperty.get() == null ? null : new DateTimeFormatterToDateFormatWrapper( dateTimeFormatterProperty.get() ));
 		dateTimeFormatterProperty.addListener( (observable) -> {
 			dateFormatProperty.set( new DateTimeFormatterToDateFormatWrapper( dateTimeFormatterProperty.get() ));
 		});
 	}
 	
-	static public void syncDateTimeFormatters(ListProperty<DateFormat> dateFormatsProperty, ListProperty<DateTimeFormatter> dateTimeFormattersProperty) {
+	static public void syncDateTimeFormattersForDate(ListProperty<DateFormat> dateFormatsProperty, ListProperty<DateTimeFormatter> dateTimeFormattersProperty) {
 		final Map<DateTimeFormatter, DateTimeFormatterToDateFormatWrapper> map = new WeakHashMap<>();
 		
 		// initial values
@@ -379,7 +429,6 @@ public class DateTimeToCalendarHelper {
 			}
 		});
 	}
-	final Map<DateTimeFormatter, DateTimeFormatterToDateFormatWrapper> map = new WeakHashMap<>();
 
 	/**
 	 * 
@@ -414,6 +463,151 @@ public class DateTimeToCalendarHelper {
 			return (this == obj);
 		}
 	}
-	
 
+	// -------
+	// DateTimeFormatterForDateTime
+	
+	static public void syncDateTimeFormatterForDateTime(ObjectProperty<DateFormat> dateFormatProperty, ObjectProperty<DateTimeFormatter> dateTimeFormatterProperty) {
+		dateFormatProperty.set( dateTimeFormatterProperty.get() == null ? null : new DateTimeFormatterToDateTimeFormatWrapper( dateTimeFormatterProperty.get() ));
+		dateTimeFormatterProperty.addListener( (observable) -> {
+			dateFormatProperty.set( new DateTimeFormatterToDateTimeFormatWrapper( dateTimeFormatterProperty.get() ));
+		});
+	}
+	
+	static public void syncDateTimeFormattersForDateTime(ListProperty<DateFormat> dateFormatsProperty, ListProperty<DateTimeFormatter> dateTimeFormattersProperty) {
+		final Map<DateTimeFormatter, DateTimeFormatterToDateTimeFormatWrapper> map = new WeakHashMap<>();
+		
+		// initial values
+		for (DateTimeFormatter lDateTimeFormatter : dateTimeFormattersProperty) {
+			DateTimeFormatterToDateTimeFormatWrapper lDateTimeFormatterToDateTimeFormatWrapper = new DateTimeFormatterToDateTimeFormatWrapper( lDateTimeFormatter );
+			map.put(lDateTimeFormatter, lDateTimeFormatterToDateTimeFormatWrapper);
+			dateFormatsProperty.add( lDateTimeFormatterToDateTimeFormatWrapper );
+		}
+		
+		// forward changes from localDate
+		dateTimeFormattersProperty.addListener( (ListChangeListener.Change<? extends DateTimeFormatter> change) -> {
+			while (change.next())
+			{
+				for (DateTimeFormatter lDateTimeFormatter : change.getRemoved())
+				{
+					DateTimeFormatterToDateTimeFormatWrapper lDateTimeFormatterToDateTimeFormatWrapper = map.remove(lDateTimeFormatter);
+					dateFormatsProperty.remove(lDateTimeFormatterToDateTimeFormatWrapper);
+				}
+				for (DateTimeFormatter lDateTimeFormatter : change.getAddedSubList()) 
+				{
+					DateTimeFormatterToDateTimeFormatWrapper lDateTimeFormatterToDateTimeFormatWrapper = new DateTimeFormatterToDateTimeFormatWrapper( lDateTimeFormatter );
+					map.put(lDateTimeFormatter, lDateTimeFormatterToDateTimeFormatWrapper);
+					dateFormatsProperty.add(lDateTimeFormatterToDateTimeFormatWrapper);
+				}
+			}
+		});
+	}
+
+	/**
+	 * 
+	 */
+	static class DateTimeFormatterToDateTimeFormatWrapper extends DateFormat {
+
+		public DateTimeFormatterToDateTimeFormatWrapper(DateTimeFormatter dateTimeFormatter) {
+			this.dateTimeFormatter = dateTimeFormatter;
+		}
+		final private DateTimeFormatter dateTimeFormatter;
+		
+		@Override
+		public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+			LocalDateTime lLocalDateTime = createLocaleDateTimeFromDate(date);
+			String s = this.dateTimeFormatter.format( lLocalDateTime );
+			toAppendTo.append(s);
+			return toAppendTo;
+		}
+
+		@Override
+		public Date parse(String source, ParsePosition pos) {
+			LocalDateTime lLocalDateTime = LocalDateTime.parse(source, this.dateTimeFormatter);
+			Date lDate = createDateFromLocalDateTime(lLocalDateTime);
+			return lDate;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			return (this == obj);
+		}
+	}
+
+
+	// -------
+	// DateTimeFormatterForTime
+	
+	static public void syncDateTimeFormatterForTime(ObjectProperty<DateFormat> dateFormatProperty, ObjectProperty<DateTimeFormatter> dateTimeFormatterProperty) {
+		dateFormatProperty.set( dateTimeFormatterProperty.get() == null ? null : new DateTimeFormatterToTimeFormatWrapper( dateTimeFormatterProperty.get() ));
+		dateTimeFormatterProperty.addListener( (observable) -> {
+			dateFormatProperty.set( new DateTimeFormatterToTimeFormatWrapper( dateTimeFormatterProperty.get() ));
+		});
+	}
+	
+	static public void syncDateTimeFormattersForTime(ListProperty<DateFormat> dateFormatsProperty, ListProperty<DateTimeFormatter> dateTimeFormattersProperty) {
+		final Map<DateTimeFormatter, DateTimeFormatterToTimeFormatWrapper> map = new WeakHashMap<>();
+		
+		// initial values
+		for (DateTimeFormatter lDateTimeFormatter : dateTimeFormattersProperty) {
+			DateTimeFormatterToTimeFormatWrapper lDateTimeFormatterToTimeFormatWrapper = new DateTimeFormatterToTimeFormatWrapper( lDateTimeFormatter );
+			map.put(lDateTimeFormatter, lDateTimeFormatterToTimeFormatWrapper);
+			dateFormatsProperty.add( lDateTimeFormatterToTimeFormatWrapper );
+		}
+		
+		// forward changes from localDate
+		dateTimeFormattersProperty.addListener( (ListChangeListener.Change<? extends DateTimeFormatter> change) -> {
+			while (change.next())
+			{
+				for (DateTimeFormatter lDateTimeFormatter : change.getRemoved())
+				{
+					DateTimeFormatterToTimeFormatWrapper lDateTimeFormatterToTimeFormatWrapper = map.remove(lDateTimeFormatter);
+					dateFormatsProperty.remove(lDateTimeFormatterToTimeFormatWrapper);
+				}
+				for (DateTimeFormatter lDateTimeFormatter : change.getAddedSubList()) 
+				{
+					DateTimeFormatterToTimeFormatWrapper lDateTimeFormatterToTimeFormatWrapper = new DateTimeFormatterToTimeFormatWrapper( lDateTimeFormatter );
+					map.put(lDateTimeFormatter, lDateTimeFormatterToTimeFormatWrapper);
+					dateFormatsProperty.add(lDateTimeFormatterToTimeFormatWrapper);
+				}
+			}
+		});
+	}
+
+	/**
+	 * 
+	 */
+	static class DateTimeFormatterToTimeFormatWrapper extends DateFormat {
+
+		public DateTimeFormatterToTimeFormatWrapper(DateTimeFormatter dateTimeFormatter) {
+			this.dateTimeFormatter = dateTimeFormatter;
+		}
+		final private DateTimeFormatter dateTimeFormatter;
+		
+		@Override
+		public StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition) {
+			LocalTime lLocalTime = createLocaleTimeFromDate(date);
+			String s = this.dateTimeFormatter.format( lLocalTime );
+			toAppendTo.append(s);
+			return toAppendTo;
+		}
+
+		@Override
+		public Date parse(String source, ParsePosition pos) {
+			LocalTime lLocalTime = LocalTime.parse(source, this.dateTimeFormatter);
+			Date lDate = createDateFromLocalTime(lLocalTime);
+			return lDate;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			return (this == obj);
+		}
+	}
 }

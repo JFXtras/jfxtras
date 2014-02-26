@@ -1,5 +1,5 @@
 /**
- * LocalTimePicker.java
+ * LocalTimePickerSkin.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,23 +27,22 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control;
+package jfxtras.internal.scene.control.skin;
 
-import java.time.LocalTime;
+import java.util.Locale;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.Skin;
-import jfxtras.internal.scene.control.skin.LocalTimePickerSkin;
+import javafx.scene.control.SkinBase;
+import jfxtras.scene.control.CalendarTimePicker;
+import jfxtras.scene.control.LocalTimePicker;
 
 /**
- * LocalTime (JSR-310) picker component.
- * This is an extension of the CalendarPicker adding the new date API JSR-310.
- * Since Calendar will not be removed from the JDK, too many applications use it, this approach of extending CalendarPicker is the most flexible one. 
- * 
+ * This skin reuses CalendarPicker
  * @author Tom Eugelink
+ *
  */
-public class LocalTimePicker extends CalendarTimePicker
+public class LocalTimePickerSkin extends SkinBase<LocalTimePicker>
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -51,52 +50,48 @@ public class LocalTimePicker extends CalendarTimePicker
 	/**
 	 * 
 	 */
-	public LocalTimePicker()
+	public LocalTimePickerSkin(LocalTimePicker control)
 	{
+		super(control);
 		construct();
 	}
 
-	/**
-	 * 
-	 * @param localTime
-	 */
-	public LocalTimePicker(LocalTime localTime)
-	{
-		construct();
-		setLocalTime(localTime);
-	}
-	
 	/*
-	 * 
+	 * construct the component
 	 */
 	private void construct()
 	{
-	}
+		// setup component
+		createNodes();
 
-
-	@Override public Skin createDefaultSkin() {
-		return new LocalTimePickerSkin(this); 
+		// bind basic node
+		calendarTimePicker.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
+		calendarTimePicker.getStyleClass().addAll(getSkinnable().getStyleClass());
+		getSkinnable().styleProperty().bindBidirectional( calendarTimePicker.styleProperty() );
+		
+		// bind specifics
+		getSkinnable().showLabelsProperty().bindBidirectional( calendarTimePicker.showLabelsProperty() );
+		DateTimeToCalendarHelper.syncLocalTime(calendarTimePicker.calendarProperty(), getSkinnable().localTimeProperty(), localeObjectProperty); //calendarTimePicker.localeProperty());
 	}
+	volatile private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(this, "locale", Locale.getDefault());
 
 	// ==================================================================================================================
-	// PROPERTIES
+	// BINDING
 	
-	/** LocalTime: */
-	public ObjectProperty<LocalTime> localTimeProperty() { return localTimeObjectProperty; }
-	private final ObjectProperty<LocalTime> localTimeObjectProperty = new SimpleObjectProperty<LocalTime>(this, "localTime");
-	public LocalTime getLocalTime() { return localTimeObjectProperty.getValue(); }
-	public void setLocalTime(LocalTime value) { localTimeObjectProperty.setValue(value); }
-	public LocalTimePicker withLocalTime(LocalTime value) { setLocalTime(value); return this; } 
-
-	/** ShowLabels */
-	public ObjectProperty<Boolean> showLabelsProperty() { return showLabelsProperty; }
-	final private SimpleObjectProperty<Boolean> showLabelsProperty = new SimpleObjectProperty<Boolean>(this, "showLabels", false);
-	public Boolean getShowLabels() { return showLabelsProperty.getValue(); }
-	public void setShowLabels(Boolean value) { showLabelsProperty.setValue(value); }
-	public LocalTimePicker withShowLabels(Boolean value) { setShowLabels(value); return this; } 
-
+    // ==================================================================================================================
+	// DRAW
 	
-	// ==================================================================================================================
-	// SUPPORT
-
+	/**
+	 * construct the nodes
+	 */
+	private void createNodes()
+	{
+		// setup the grid so all weekday togglebuttons will grow, but the weeknumbers do not
+		calendarTimePicker = new CalendarTimePicker();
+		getChildren().add(calendarTimePicker);
+		
+		// setup CSS
+        getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control
+	}
+	private CalendarTimePicker calendarTimePicker = null;
 }
