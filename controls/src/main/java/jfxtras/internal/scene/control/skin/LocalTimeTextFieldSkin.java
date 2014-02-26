@@ -1,5 +1,5 @@
 /**
- * LocalDateTimeTextFieldSkin.java
+ * LocalTimeTextFieldSkin.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -31,17 +31,20 @@ package jfxtras.internal.scene.control.skin;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SkinBase;
-import jfxtras.scene.control.CalendarTextField;
-import jfxtras.scene.control.LocalDateTimeTextField;
+import jfxtras.scene.control.CalendarTimeTextField;
+import jfxtras.scene.control.LocalTimeTextField;
 
 /**
- * This skin reuses CalendarTextField
+ * This skin reuses CalendarTimeTextField
  * @author Tom Eugelink
  *
  */
-public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
+public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField>
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -49,7 +52,7 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 	/**
 	 * 
 	 */
-	public LocalDateTimeTextFieldSkin(LocalDateTimeTextField control)
+	public LocalTimeTextFieldSkin(LocalTimeTextField control)
 	{
 		super(control);
 		construct();
@@ -64,21 +67,22 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 		createNodes();
 		
 		// basic control binding
-		calendarTextField.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
-		calendarTextField.getStyleClass().addAll(getSkinnable().getStyleClass());
-		getSkinnable().styleProperty().bindBidirectional( calendarTextField.styleProperty() );
-		calendarTextField.tooltipProperty().bindBidirectional(getSkinnable().tooltipProperty()); 
+		calendarTimeTextField.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
+		calendarTimeTextField.getStyleClass().addAll(getSkinnable().getStyleClass());
+		getSkinnable().styleProperty().bindBidirectional( calendarTimeTextField.styleProperty() );
+		calendarTimeTextField.tooltipProperty().bindBidirectional(getSkinnable().tooltipProperty()); 
 
 		// bind it up
-		getSkinnable().localeProperty().bindBidirectional( calendarTextField.localeProperty() );
-		getSkinnable().promptTextProperty().bindBidirectional( calendarTextField.promptTextProperty() );
-		getSkinnable().parseErrorCallbackProperty().bindBidirectional( calendarTextField.parseErrorCallbackProperty() );
-		DateTimeToCalendarHelper.syncLocalDateTime(calendarTextField.calendarProperty(), getSkinnable().localDateTimeProperty(), calendarTextField.localeProperty());
+		//getSkinnable().localeProperty().bindBidirectional( calendarTimeTextField.localeProperty() );
+		getSkinnable().promptTextProperty().bindBidirectional( calendarTimeTextField.promptTextProperty() );
+		getSkinnable().parseErrorCallbackProperty().bindBidirectional( calendarTimeTextField.parseErrorCallbackProperty() );
+		DateTimeToCalendarHelper.syncLocalTime(calendarTimeTextField.calendarProperty(), getSkinnable().localTimeProperty(), localeObjectProperty); //calendarTimeTextField.localeProperty());
 		
 		// formatter(s) require special attention
-		DateTimeToCalendarHelper.syncDateTimeFormatterForDate(calendarTextField.dateFormatProperty(), getSkinnable().dateTimeFormatterProperty());
-		DateTimeToCalendarHelper.syncDateTimeFormattersForDate(calendarTextField.dateFormatsProperty(), getSkinnable().dateTimeFormattersProperty());
+		DateTimeToCalendarHelper.syncDateTimeFormatterForTime(calendarTimeTextField.dateFormatProperty(), getSkinnable().dateTimeFormatterProperty());
+		DateTimeToCalendarHelper.syncDateTimeFormattersForTime(calendarTimeTextField.dateFormatsProperty(), getSkinnable().dateTimeFormattersProperty());
 	}
+	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(Locale.getDefault(), "locale", new Locale("NL")); //Locale.getDefault());
 	
 	// ==================================================================================================================
 	// DRAW
@@ -89,11 +93,11 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 	private void createNodes()
 	{
 		// setup the grid so all weekday togglebuttons will grow, but the weeknumbers do not
-		calendarTextField = new CalendarTextField().withDateFormat(SimpleDateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, getSkinnable().getLocale())); // TODO this is not right
-		getChildren().add(calendarTextField);
+		calendarTimeTextField = new CalendarTimeTextField().withDateFormat(SimpleDateFormat.getTimeInstance(DateFormat.LONG, localeObjectProperty.get())); //getSkinnable().getLocale())); // TODO this is not right
+		getChildren().add(calendarTimeTextField);
 		
 		// setup CSS
         getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control
 	}
-	private CalendarTextField calendarTextField = null;
+	private CalendarTimeTextField calendarTimeTextField = null;
 }

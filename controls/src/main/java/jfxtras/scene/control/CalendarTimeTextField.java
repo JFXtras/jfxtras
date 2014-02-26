@@ -120,7 +120,7 @@ public class CalendarTimeTextField extends Control
 	public DateFormat getDateFormat() { return dateFormatObjectProperty.getValue(); }
 	public void setDateFormat(DateFormat value) { dateFormatObjectProperty.setValue(value); }
 	public CalendarTimeTextField withDateFormat(DateFormat value) { setDateFormat(value); return this; }
-	private final static Date DATE_WITH_TIME = new GregorianCalendar(1111,0,1,22,33,44).getTime();
+	private final static Date DATE_WITH_TIME = new GregorianCalendar(1111,0,1,9,33,44).getTime();
 
 	/** MinuteStep */
 	public ObjectProperty<Integer> minuteStepProperty() { return minuteStepProperty; }
