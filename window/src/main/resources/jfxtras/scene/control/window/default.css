@@ -1,0 +1,68 @@
+/* 
+    Document   : default.css
+    Created on : 08.10.2012, 10:17:51
+    Author     : Michael Hoffer <info@michaelhoffer.de>
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.window {
+    -fx-skin: "jfxtras.internal.scene.control.skin.window.DefaultWindowSkin";
+    -fx-glass-color: rgba(85, 132, 160, 0.9);
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-glass-color, 50%), -fx-glass-color);
+    -fx-border-color: derive(-fx-glass-color, -60%);
+    -fx-border-width: 2;
+    -fx-background-insets: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-font-size: 18;
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.65), 100, 0.5, 0.0, 0.0);*/
+
+    /*-fx-padding: -2;*/
+}
+
+.window-icon {
+    -fx-skin: "jfxtras.internal.scene.control.skin.window.DefaultWindowIconSkin";
+    -fx-border-color: rgb(255,255,255);
+    -fx-border-radius: 3;
+}
+
+.window-close-icon {
+    -fx-skin: "jfxtras.internal.scene.control.skin.window.DefaultWindowIconSkin";
+    -fx-border-color: rgb(255,255,255);
+    -fx-shape: "m 81.451435,47.885404 -39.71427,39.714277 m 0,-39.714277 39.71427,39.714277 m 27.285725,-19.85714 c 0,26.03628 -21.106585,47.142859 -47.142865,47.142859 -26.03628,0 -47.14285,-21.106579 -47.14285,-47.142859 0,-26.036277 21.10657,-47.142853 47.14285,-47.142853 26.03628,0 47.142865,21.106576 47.142865,47.142853 z";
+    -fx-border-width: 2;
+    -fx-border-insets: 1;
+}
+
+.window-rotate-icon {
+    -fx-skin: "jfxtras.internal.scene.control.skin.window.DefaultWindowIconSkin";
+    -fx-border-color: rgb(255,255,255);
+    -fx-shape: "m 238.03158,30.844083 -34.78125,9.875 0,0.25 34.78125,13.4375 0,-23.5625 z m -7.85745,10.984542 c 27.30327,0 49.43694,22.133672 49.43694,49.43694 0,27.303265 -22.13367,49.436935 -49.43694,49.436935 -27.30327,0 -49.43694,-22.13367 -49.43694,-49.436937 0,0 0,-10e-7 0,-10e-7";
+    -fx-border-width: 2.0;
+    -fx-border-insets: 1;
+    /*-fx-background-color: rgb(255,255,255);*/
+}
+
+.window-minimize-icon {
+    -fx-skin: "jfxtras.internal.scene.control.skin.window.DefaultWindowIconSkin";
+    -fx-border-color: rgb(255,255,255);
+    -fx-shape: "m 84.388275,210.34884 -47.71427,-0.28572 m 70.999995,0.14286 c 0,26.03628 -21.106585,47.14286 -47.142865,47.14286 -26.03628,0 -47.14285,-21.10658 -47.14285,-47.14286 0,-26.03628 21.10657,-47.14285 47.14285,-47.14285 26.03628,0 47.142865,21.10657 47.142865,47.14285 z";
+    -fx-border-width: 2;
+    -fx-border-insets: 1;
+}
+
+
+.window-titlebar {
+    -fx-glass-color: rgba(42, 42, 42, 0.9);
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to bottom, derive(-fx-glass-color, 30%), -fx-glass-color);
+    -fx-border-color: derive(-fx-glass-color, -60%);
+    -fx-border-width: 2;
+    -fx-background-insets: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-stroke: rgba(255,255,255,50);
+    -fx-fill: rgba(255,255,255,50);
+}
