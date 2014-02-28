@@ -60,7 +60,7 @@ Navigate to the [Gradle](http://www.gradle.org/) project (e.g., `path/to/jfxtras
 
 #### Bash (Linux/OS X/Cygwin/other Unix-like shell)
 
-    ./gradlew assemble
+    sh gradlew assemble
     
 #### Windows (CMD)
 
