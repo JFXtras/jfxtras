@@ -1,4 +1,4 @@
-jfxtras
+JFXtras
 =======
 
 A supporting library for JavaFX, containing helper classes, extended layouts, controls and other interesting widgets.
@@ -67,7 +67,7 @@ Navigate to the [Gradle](http://www.gradle.org/) project (e.g., `path/to/jfxtras
     
 ### How to Compile Subprojects
 
-To compile a subproject, just go to the project folder of the subproject, (e.g., `path/to/jfxtras/controls`) and call the `assemble` task of the subproject.
+To compile a subproject, from the root folder call `gradlew :<subproject>:assemble` e.g. `gradlew :controls:assemble`.
 
 ### How to run Unit Tests
 
