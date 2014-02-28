@@ -3,7 +3,6 @@ jfxtras
 
 A supporting library for JavaFX, containing helper classes, extended layouts, controls and other interesting widgets.
 
-
 ## Project structure:
 
     Root project 'jfxtras-all'
@@ -43,7 +42,7 @@ The `group-id` is `org.jfxtras`, the `artifact-id` depends on the project(s) tha
 
 ## How to Build JFXtras
 
-### Reqirements
+### Requirements
 
 - Java >= 1.8
 - Internet connection (other dependencies are downloaded automatically)
@@ -73,3 +72,7 @@ To compile a subproject, just go to the project folder of the subproject, (e.g.,
 ### How to run Unit Tests
 
 Tu run unit tests call the `test` task of the desired project. To build and test JFXtras at once, the `build` task can be used.
+
+## License
+
+JFXtras uses the [new BSD](http://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22Revised_BSD_License.22.2C_.22New_BSD_License.22.2C_or_.22Modified_BSD_License.22.29) license
