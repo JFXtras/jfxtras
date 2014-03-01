@@ -1,5 +1,5 @@
 /**
- * CalendarTextFieldCaspianSkin.java
+ * CalendarTextFieldSkin.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -69,7 +69,7 @@ import jfxtras.util.NodeUtil;
  * 
  * Possible extension: drop down list or grid for quick selection
  */
-public class CalendarTextFieldCaspianSkin extends SkinBase<CalendarTextField>
+public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -77,7 +77,7 @@ public class CalendarTextFieldCaspianSkin extends SkinBase<CalendarTextField>
 	/**
 	 * 
 	 */
-	public CalendarTextFieldCaspianSkin(CalendarTextField control)
+	public CalendarTextFieldSkin(CalendarTextField control)
 	{
 		super(control);//, new CalendarTextFieldBehavior(control));
 		construct();
@@ -247,13 +247,16 @@ public class CalendarTextFieldCaspianSkin extends SkinBase<CalendarTextField>
 		});
 		
 		// close icon
-		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "CloseWindowIcon.png"));
+		closeIconImage = new ImageView();
+		closeIconImage.getStyleClass().add("close-icon");
+		closeIconImage.setPickOnBounds(true);
+//		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "CloseWindowIcon.png"));
 	}
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
 	private CalendarPicker calendarPicker = null;
-	private Image closeIconImage = null;
+	private ImageView closeIconImage = null;
 
 	/**
 	 * parse the contents that was typed in the textfield
@@ -371,11 +374,11 @@ public class CalendarTextFieldCaspianSkin extends SkinBase<CalendarTextField>
 //			popup = new PopupControl() {
 //
 //	            @Override public Styleable getStyleableParent() {
-//	                return CalendarTextFieldCaspianSkin.this.getSkinnable();
+//	                return CalendarTextFieldSkin.this.getSkinnable();
 //	            }
 //	            {
 //	                setSkin(new Skin<Skinnable>() {
-//	                    @Override public Skinnable getSkinnable() { return CalendarTextFieldCaspianSkin.this.getSkinnable(); }
+//	                    @Override public Skinnable getSkinnable() { return CalendarTextFieldSkin.this.getSkinnable(); }
 //	                    @Override public Node getNode() { return lBorderPane; }
 //	                    @Override public void dispose() { }
 //	                });
@@ -402,7 +405,7 @@ public class CalendarTextFieldCaspianSkin extends SkinBase<CalendarTextField>
 			// add a close button
 			if (isShowingTime() == true)
 			{
-				ImageView lImageView = new ImageView(closeIconImage);
+				ImageView lImageView = new ImageView(closeIconImage.getImage());
 				lImageView.setPickOnBounds(true);
 				lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
 				{

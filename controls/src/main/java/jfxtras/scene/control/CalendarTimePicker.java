@@ -29,7 +29,6 @@
 
 package jfxtras.scene.control;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import javafx.beans.property.ObjectProperty;
@@ -107,35 +106,4 @@ public class CalendarTimePicker extends Control
 	public Integer getMinuteStep() { return minuteStepProperty.getValue(); }
 	public void setMinuteStep(Integer value) { minuteStepProperty.setValue(value); }
 	public CalendarTimePicker withMinuteStep(Integer value) { setMinuteStep(value); return this; } 
-
-	/** ShowLabels */
-	public ObjectProperty<Boolean> showLabelsProperty() { return showLabelsProperty; }
-	final private SimpleObjectProperty<Boolean> showLabelsProperty = new SimpleObjectProperty<Boolean>(this, "showLabels", false)
-	{
-		public void set(Boolean value)
-		{
-			if (value == null) throw new NullPointerException("showLabels cannot be null");
-			super.set(value);
-		}		
-	};
-	public Boolean getShowLabels() { return showLabelsProperty.getValue(); }
-	public void setShowLabels(Boolean value) { showLabelsProperty.setValue(value); }
-	public CalendarTimePicker withShowLabels(Boolean value) { setShowLabels(value); return this; } 
-
-	// TODO: add showTimeLabels, but the labels make the layout jump
-	
-	// ==================================================================================================================
-	// SUPPORT
-	
-
-	/*
-	 * 
-	 */
-	static public String quickFormatCalendar(Calendar value)
-	{
-		if (value == null) return "null";
-		SimpleDateFormat lSimpleDateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
-		lSimpleDateFormat.applyPattern("yyyy-MM-dd HH:mm:ss");
-		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
-	}
 }

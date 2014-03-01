@@ -88,14 +88,7 @@ public class LocalTimePicker extends CalendarTimePicker
 	public void setLocalTime(LocalTime value) { localTimeObjectProperty.setValue(value); }
 	public LocalTimePicker withLocalTime(LocalTime value) { setLocalTime(value); return this; } 
 
-	/** ShowLabels */
-	public ObjectProperty<Boolean> showLabelsProperty() { return showLabelsProperty; }
-	final private SimpleObjectProperty<Boolean> showLabelsProperty = new SimpleObjectProperty<Boolean>(this, "showLabels", false);
-	public Boolean getShowLabels() { return showLabelsProperty.getValue(); }
-	public void setShowLabels(Boolean value) { showLabelsProperty.setValue(value); }
-	public LocalTimePicker withShowLabels(Boolean value) { setShowLabels(value); return this; } 
 
-	
 	// ==================================================================================================================
 	// SUPPORT
 

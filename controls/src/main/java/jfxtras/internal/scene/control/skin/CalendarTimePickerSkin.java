@@ -29,22 +29,36 @@
 
 package jfxtras.internal.scene.control.skin;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.css.CssMetaData;
+import javafx.css.Styleable;
+import javafx.css.StyleableObjectProperty;
+import javafx.css.StyleableProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarTimePicker;
+
+import com.sun.javafx.css.converters.EnumConverter;
 
 /**
  * @author Tom Eugelink
@@ -94,17 +108,6 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			} 
 		});
 		minuteScrollSlider.setBlockIncrement(getSkinnable().getMinuteStep().doubleValue());
-		
-		// react to changes in showLabels 
-		getSkinnable().showLabelsProperty().addListener(new InvalidationListener() 
-		{
-			@Override
-			public void invalidated(Observable observable)
-			{
-				// paint
-				refreshLayout();
-			} 
-		});
 	}
 	
 	// ==================================================================================================================
@@ -112,10 +115,113 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	
 
 	// ==================================================================================================================
+	// StyleableProperties
+	
+	/** ShowTickLabels: */
+    public final ObjectProperty<ShowTickLabels> showTickLabelsProperty()
+    {
+        if (showTickLabels == null)
+        {
+            showTickLabels = new StyleableObjectProperty<ShowTickLabels>(SHOW_TICKLABELS_DEFAULT)
+            {
+                @Override public void invalidated()
+                {
+                	refreshLayout();
+                }
+
+                @Override public CssMetaData<CalendarTimePicker,ShowTickLabels> getCssMetaData() { return StyleableProperties.SHOW_TICKLABELS; }
+                @Override public Object getBean() { return CalendarTimePickerSkin.this; }
+                @Override public String getName() { return "showTickLabels"; }
+            };
+        }
+        return showTickLabels;
+    }
+    private ObjectProperty<ShowTickLabels> showTickLabels = null;
+    public final void setShowTickLabels(ShowTickLabels value) { showTickLabelsProperty().set(value); }
+    public final ShowTickLabels getShowTickLabels() { return showTickLabels == null ? SHOW_TICKLABELS_DEFAULT : showTickLabels.get(); }
+    public final CalendarTimePickerSkin withShowTickLabels(ShowTickLabels value) { setShowTickLabels(value); return this; }
+    public enum ShowTickLabels {YES, NO}
+    static private final ShowTickLabels SHOW_TICKLABELS_DEFAULT = ShowTickLabels.NO;
+    
+	/** LabelDateFormat: */
+    public final ObjectProperty<DateFormat> labelFormatProperty()
+    {
+        if (labelFormat == null)
+        {
+            labelFormat = new StyleableObjectProperty<DateFormat>(LABEL_DATEFORMAT_DEFAULT)
+            {
+                @Override public void invalidated()
+                {
+                	refresh();
+                }
+
+                @Override public CssMetaData<CalendarTimePicker,DateFormat> getCssMetaData() { return StyleableProperties.LABEL_DATEFORMAT; }
+                @Override public Object getBean() { return CalendarTimePickerSkin.this; }
+                @Override public String getName() { return "labelFormat"; }
+            };
+        }
+        return labelFormat;
+    }
+    private ObjectProperty<DateFormat> labelFormat = null;
+    public final void setLabelDateFormat(DateFormat value) { labelFormatProperty().set(value); }
+    public final DateFormat getLabelDateFormat() { return labelFormat == null ? LABEL_DATEFORMAT_DEFAULT : labelFormat.get(); }
+    public final CalendarTimePickerSkin withLabelDateFormat(DateFormat value) { setLabelDateFormat(value); return this; }
+    static private final SimpleDateFormat LABEL_DATEFORMAT_DEFAULT = new SimpleDateFormat("HH:mm");
+
+    // ----------------------------
+    // communicate the styleables
+
+    private static class StyleableProperties
+    {
+        private static final CssMetaData<CalendarTimePicker, ShowTickLabels> SHOW_TICKLABELS = new CssMetaData<CalendarTimePicker, ShowTickLabels>("-fxx-show-ticklabels", new EnumConverter<ShowTickLabels>(ShowTickLabels.class), SHOW_TICKLABELS_DEFAULT )
+        {
+            @Override public boolean isSettable(CalendarTimePicker n) { return !((CalendarTimePickerSkin)n.getSkin()).showTickLabelsProperty().isBound(); }
+            @Override public StyleableProperty<ShowTickLabels> getStyleableProperty(CalendarTimePicker n) { return (StyleableProperty<ShowTickLabels>)((CalendarTimePickerSkin)n.getSkin()).showTickLabelsProperty(); }
+        };
+
+        private static final CssMetaData<CalendarTimePicker, DateFormat> LABEL_DATEFORMAT = new CssMetaData<CalendarTimePicker, DateFormat>("-fxx-label-dateformat", new SimpleDateFormatConverter(), LABEL_DATEFORMAT_DEFAULT )
+        {
+            @Override public boolean isSettable(CalendarTimePicker n) { return !((CalendarTimePickerSkin)n.getSkin()).showTickLabelsProperty().isBound(); }
+            @Override public StyleableProperty<DateFormat> getStyleableProperty(CalendarTimePicker n) { return (StyleableProperty<DateFormat>)((CalendarTimePickerSkin)n.getSkin()).labelFormatProperty(); }
+        };
+
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
+        static
+        {
+            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
+            styleables.add(SHOW_TICKLABELS);
+            styleables.add(LABEL_DATEFORMAT);
+            STYLEABLES = Collections.unmodifiableList(styleables);
+        }
+    }
+
+    /**
+     * @return The CssMetaData associated with this class, which may include the
+     * CssMetaData of its super classes.
+     */
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData()
+    {
+        return StyleableProperties.STYLEABLES;
+    }
+
+    /**
+     * This method should delegate to {@link javafx.scene.Node#getClassCssMetaData()} so that
+     * a Node's CssMetaData can be accessed without the need for reflection.
+     * @return The CssMetaData associated with this node, which may include the
+     * CssMetaData of its super classes.
+     */
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData()
+    {
+        return getClassCssMetaData();
+    }
+
+
+	// ==================================================================================================================
 	// DRAW
 	
     /**
 	 * construct the nodes
+	 * TODO: snap to tick when released
 	 */
 	private void createNodes()
 	{
@@ -123,15 +229,11 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		hourScrollSlider.setId("hourSlider");
 		hourScrollSlider.minProperty().set(00);
 		hourScrollSlider.maxProperty().set(23);
-//		hourScrollSlider.setShowTickLabels(true);
-//		hourScrollSlider.setShowTickMarks(true);
 		hourScrollSlider.setMajorTickUnit(12);
 		hourScrollSlider.setMinorTickCount(3);
 		minuteScrollSlider.setId("minuteSlider");
 		minuteScrollSlider.minProperty().set(00);
 		minuteScrollSlider.maxProperty().set(59);
-//		minuteScrollSlider.setShowTickLabels(true);
-//		minuteScrollSlider.setShowTickMarks(true);
 		minuteScrollSlider.setMajorTickUnit(10);
 		hourScrollSlider.valueProperty().addListener(new ChangeListener<Number>()
 		{
@@ -255,8 +357,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			double lScrollSliderOuterPadding = 5;
 
 			// add a dummy rectangle to make sure the are has enough height
-			if (getSkinnable().showLabelsProperty().get())
-			{
+			if (getShowTickLabels() == ShowTickLabels.YES)  {
 				Text lText = new Text("0");
 				Rectangle lRectangle = new Rectangle(0,0, minuteScrollSlider.getWidth(), lText.prefHeight(0));
 				lRectangle.setFill(Color.TRANSPARENT);
@@ -275,7 +376,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			else if (lNumberOfLabels >= 60/10) lStep = 10;
 			else if (lNumberOfLabels >= 60/15) lStep = 15;			
 			else if (lNumberOfLabels >= 60/30) lStep = 30;
-			if (lStep < getSkinnable().getMinuteStep()) lStep = getSkinnable().getMinuteStep();
+			if (lStep < getSkinnable().getMinuteStep()) {
+				lStep = getSkinnable().getMinuteStep();
+			}
 			for (int i = 0; i <= 59; i += lStep)
 			{
 				Text lText = new Text("" + i);
@@ -295,20 +398,29 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	};
 	
 	/**
-	 * 
+	 * TODO: do not add and remove nodes, just hide and show
 	 */
 	private void refreshLayout()
 	{
 		// layout
 		getChildren().clear();
+		StackPane lStackPane = new StackPane();
+		
 		VBox lVBox = new VBox(0);
 		lVBox.alignmentProperty().set(Pos.CENTER);
-		if (getSkinnable().getShowLabels()) lVBox.getChildren().add(hourLabelsPane);
+		if (getShowTickLabels() == ShowTickLabels.YES) {
+			lVBox.getChildren().add(hourLabelsPane);
+		}
 		lVBox.getChildren().add(hourScrollSlider);
 		lVBox.getChildren().add(minuteScrollSlider);
-		if (getSkinnable().getShowLabels()) lVBox.getChildren().add(minuteLabelsPane);
-		getChildren().add(lVBox);
-		getChildren().add(timeText);
+		if (getShowTickLabels() == ShowTickLabels.YES) {
+			lVBox.getChildren().add(minuteLabelsPane);
+		}
+		lStackPane.getChildren().add(lVBox);
+		
+		lStackPane.getChildren().add(timeText);
+		
+		getChildren().add(lStackPane);
 	}
 	
 	/**
@@ -321,21 +433,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		int lMinute = lCalendar == null ? 0 : lCalendar.get(Calendar.MINUTE);
 		hourScrollSlider.valueProperty().set(lHour);
 		minuteScrollSlider.valueProperty().set(lMinute);
-		timeText.setText( calendarTimeToText(lCalendar));
-	}
-	
-	/**
-	 * 
-	 * @param calendar
-	 * @return
-	 */
-	static public String calendarTimeToText(Calendar calendar)
-	{
-		if (calendar == null) return "";
-		int lHour = calendar.get(Calendar.HOUR_OF_DAY);
-		int lMinute = calendar.get(Calendar.MINUTE);
-		String lText = (lHour < 10 ? "0" : "") + lHour + ":" + (lMinute < 10 ? "0" : "") + lMinute;
-		return lText;
+		timeText.setText( lCalendar == null ? "" : getLabelDateFormat().format(lCalendar.getTime()) );
 	}
 	
 	/**

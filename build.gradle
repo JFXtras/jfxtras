@@ -139,6 +139,13 @@ project(':test-support') {
 	}
 }
 
+task uberJar(type: Jar) {
+	dependsOn { subprojects.jar }
+	subprojects.each { proj ->
+		from { zipTree(proj.jar.archivePath) }
+	}
+}
+
 // TODO: _lib folder per project?
 task copyToLib(type: Copy) {
     into "_lib"

@@ -70,7 +70,6 @@ public class LocalTimePickerSkin extends SkinBase<LocalTimePicker>
 		getSkinnable().styleProperty().bindBidirectional( calendarTimePicker.styleProperty() );
 		
 		// bind specifics
-		getSkinnable().showLabelsProperty().bindBidirectional( calendarTimePicker.showLabelsProperty() );
 		DateTimeToCalendarHelper.syncLocalTime(calendarTimePicker.calendarProperty(), getSkinnable().localTimeProperty(), localeObjectProperty); //calendarTimePicker.localeProperty());
 	}
 	volatile private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(this, "locale", Locale.getDefault());

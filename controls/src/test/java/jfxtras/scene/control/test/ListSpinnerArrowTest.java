@@ -31,7 +31,7 @@ package jfxtras.scene.control.test;
 
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
-import jfxtras.internal.scene.control.skin.ListSpinnerCaspianSkin;
+import jfxtras.internal.scene.control.skin.ListSpinnerSkin;
 import jfxtras.scene.control.ListSpinner;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.util.PlatformUtil;
@@ -149,8 +149,8 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 		// horizontal is the default
 		PlatformUtil.runAndWait( () -> {
 			// the CSS change is not processed correctly?
-			//spinner.setStyle("-fxx-arrow-direction: " + ListSpinnerCaspianSkin.ArrowDirection.VERTICAL);
-			((ListSpinnerCaspianSkin)spinner.getSkin()).arrowDirectionProperty().set(ListSpinnerCaspianSkin.ArrowDirection.VERTICAL);
+			//spinner.setStyle("-fxx-arrow-direction: " + ListSpinnerSkin.ArrowDirection.VERTICAL);
+			((ListSpinnerSkin)spinner.getSkin()).arrowDirectionProperty().set(ListSpinnerSkin.ArrowDirection.VERTICAL);
 		});
 
 		// non cyclic is the default
@@ -204,8 +204,8 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 		// horizontal is the default
 		PlatformUtil.runAndWait( () -> {
 			// the CSS change is not processed correctly?
-			//spinner.setStyle("-fxx-arrow-direction: " + ListSpinnerCaspianSkin.ArrowDirection.VERTICAL);
-			((ListSpinnerCaspianSkin)spinner.getSkin()).arrowDirectionProperty().set(ListSpinnerCaspianSkin.ArrowDirection.VERTICAL);
+			//spinner.setStyle("-fxx-arrow-direction: " + ListSpinnerSkin.ArrowDirection.VERTICAL);
+			((ListSpinnerSkin)spinner.getSkin()).arrowDirectionProperty().set(ListSpinnerSkin.ArrowDirection.VERTICAL);
 		});
 
 		// check to see what the current value is

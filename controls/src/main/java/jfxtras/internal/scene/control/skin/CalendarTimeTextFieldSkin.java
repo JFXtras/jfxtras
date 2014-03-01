@@ -63,7 +63,7 @@ import jfxtras.util.NodeUtil;
  * Format is hardcoded to HH:MM:SS.mmm, but  
  * @author Tom Eugelink
  */
-public class CalendarTimeTextFieldCaspianSkin extends SkinBase<CalendarTimeTextField>
+public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -71,7 +71,7 @@ public class CalendarTimeTextFieldCaspianSkin extends SkinBase<CalendarTimeTextF
 	/**
 	 * 
 	 */
-	public CalendarTimeTextFieldCaspianSkin(CalendarTimeTextField control)
+	public CalendarTimeTextFieldSkin(CalendarTimeTextField control)
 	{
 		super(control);//, new CalendarTimeTextFieldBehavior(control));
 		construct();
@@ -233,7 +233,6 @@ public class CalendarTimeTextFieldCaspianSkin extends SkinBase<CalendarTimeTextF
 		// bind our properties to the picker's 
 		Bindings.bindBidirectional(TimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		Bindings.bindBidirectional(TimePicker.minuteStepProperty(), getSkinnable().minuteStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		Bindings.bindBidirectional(TimePicker.showLabelsProperty(), getSkinnable().showLabelsProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		
 		// close icon
 		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "CloseWindowIcon.png"));

@@ -1,5 +1,5 @@
 /**
- * ListSpinnerCaspianSkin.java
+ * ListSpinnerSkin.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -72,7 +72,7 @@ import com.sun.javafx.css.converters.EnumConverter;
  * 
  * Possible extension: drop down list or grid for quick selection
  */
-public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
+public class ListSpinnerSkin<T> extends SkinBase<ListSpinner<T>>
 {
 	// TODO: vertical centering 
 	
@@ -82,7 +82,7 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
 	/**
 	 * 
 	 */
-	public ListSpinnerCaspianSkin(ListSpinner<T> control)
+	public ListSpinnerSkin(ListSpinner<T> control)
 	{
 		super(control);//, new ListSpinnerBehavior<T>(control));
 		construct();
@@ -164,7 +164,7 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
                     }
                     
                     @Override public CssMetaData<ListSpinner,ArrowPosition> getCssMetaData() { return StyleableProperties.ARROW_POSITION; }
-                    @Override public Object getBean() { return ListSpinnerCaspianSkin.this; }
+                    @Override public Object getBean() { return ListSpinnerSkin.this; }
                     @Override public String getName() { return "arrowPosition"; }
                 };
             }
@@ -173,7 +173,7 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
         private ObjectProperty<ArrowPosition> arrowPosition = null;
         public final void setArrowPosition(ArrowPosition value) { arrowPositionProperty().set(value); }
         public final ArrowPosition getArrowPosition() { return arrowPosition == null ? ArrowPosition.TRAILING : arrowPosition.get(); }
-        public final ListSpinnerCaspianSkin<T> withArrowPosition(ArrowPosition value) { setArrowPosition(value); return this; }
+        public final ListSpinnerSkin<T> withArrowPosition(ArrowPosition value) { setArrowPosition(value); return this; }
         public enum ArrowPosition {LEADING, TRAILING, SPLIT}
         
         /**
@@ -192,7 +192,7 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
                     }
                     
                     @Override public CssMetaData<ListSpinner,ArrowDirection> getCssMetaData() { return StyleableProperties.ARROW_DIRECTION; }
-                    @Override public Object getBean() { return ListSpinnerCaspianSkin.this; }
+                    @Override public Object getBean() { return ListSpinnerSkin.this; }
                     @Override public String getName() { return "arrowDirection"; }
                 };
             }
@@ -201,7 +201,7 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
         private ObjectProperty<ArrowDirection> arrowDirection = null;
         public final void setArrowDirection(ArrowDirection value) { arrowDirectionProperty().set(value); }
         public final ArrowDirection getArrowDirection() { return arrowDirection == null ? ArrowDirection.HORIZONTAL : arrowDirection.get(); }
-        public final ListSpinnerCaspianSkin<T> withArrowDirection(ArrowDirection value) { setArrowDirection(value); return this; }
+        public final ListSpinnerSkin<T> withArrowDirection(ArrowDirection value) { setArrowDirection(value); return this; }
         public enum ArrowDirection {VERTICAL, HORIZONTAL}
         
         /**
@@ -219,7 +219,7 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
                     }
                     
                     @Override public CssMetaData<ListSpinner,Pos> getCssMetaData() { return StyleableProperties.VALUE_ALIGNMENT; }
-                    @Override public Object getBean() { return ListSpinnerCaspianSkin.this; }
+                    @Override public Object getBean() { return ListSpinnerSkin.this; }
                     @Override public String getName() { return "valueAlignment"; }
                 };
             }
@@ -228,7 +228,7 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
         private ObjectProperty<Pos> valueAlignment = null;
         public final void setValueAlignment(Pos value) { valueAlignmentProperty().set(value); }
         public final Pos getValueAlignment() { return valueAlignment == null ? Pos.CENTER_LEFT : valueAlignment.get(); }
-        public final ListSpinnerCaspianSkin<T> withValueAlignment(Pos value) { setValueAlignment(value); return this; }
+        public final ListSpinnerSkin<T> withValueAlignment(Pos value) { setValueAlignment(value); return this; }
     
         // -------------------------
             
@@ -236,20 +236,20 @@ public class ListSpinnerCaspianSkin<T> extends SkinBase<ListSpinner<T>>
         {
             private static final CssMetaData<ListSpinner, ArrowPosition> ARROW_POSITION = new CssMetaData<ListSpinner, ArrowPosition>("-fxx-arrow-position", new EnumConverter<ArrowPosition>(ArrowPosition.class), ArrowPosition.TRAILING ) 
             {
-                @Override public boolean isSettable(ListSpinner n) { return !((ListSpinnerCaspianSkin)n.getSkin()).arrowPositionProperty().isBound(); }
-                @Override public StyleableProperty<ArrowPosition> getStyleableProperty(ListSpinner n) { return (StyleableProperty<ArrowPosition>)((ListSpinnerCaspianSkin)n.getSkin()).arrowPositionProperty(); }
+                @Override public boolean isSettable(ListSpinner n) { return !((ListSpinnerSkin)n.getSkin()).arrowPositionProperty().isBound(); }
+                @Override public StyleableProperty<ArrowPosition> getStyleableProperty(ListSpinner n) { return (StyleableProperty<ArrowPosition>)((ListSpinnerSkin)n.getSkin()).arrowPositionProperty(); }
             };
             
             private static final CssMetaData<ListSpinner, ArrowDirection> ARROW_DIRECTION = new CssMetaData<ListSpinner, ArrowDirection>("-fxx-arrow-direction", new EnumConverter<ArrowDirection>(ArrowDirection.class), ArrowDirection.HORIZONTAL ) 
             {
-                @Override public boolean isSettable(ListSpinner n) { return !((ListSpinnerCaspianSkin)n.getSkin()).arrowDirectionProperty().isBound(); }
-                @Override public StyleableProperty<ArrowDirection> getStyleableProperty(ListSpinner n) { return (StyleableProperty<ArrowDirection>) ((ListSpinnerCaspianSkin)n.getSkin()).arrowDirectionProperty(); }
+                @Override public boolean isSettable(ListSpinner n) { return !((ListSpinnerSkin)n.getSkin()).arrowDirectionProperty().isBound(); }
+                @Override public StyleableProperty<ArrowDirection> getStyleableProperty(ListSpinner n) { return (StyleableProperty<ArrowDirection>) ((ListSpinnerSkin)n.getSkin()).arrowDirectionProperty(); }
             };
             
             private static final CssMetaData<ListSpinner, Pos> VALUE_ALIGNMENT = new CssMetaData<ListSpinner, Pos>("-fxx-value-alignment", new EnumConverter<Pos>(Pos.class), Pos.CENTER_LEFT ) 
             {
-                @Override public boolean isSettable(ListSpinner n) { return !((ListSpinnerCaspianSkin)n.getSkin()).valueAlignmentProperty().isBound(); }
-                @Override public StyleableProperty<Pos> getStyleableProperty(ListSpinner n) { return (StyleableProperty<Pos>) ((ListSpinnerCaspianSkin)n.getSkin()).valueAlignmentProperty(); }
+                @Override public boolean isSettable(ListSpinner n) { return !((ListSpinnerSkin)n.getSkin()).valueAlignmentProperty().isBound(); }
+                @Override public StyleableProperty<Pos> getStyleableProperty(ListSpinner n) { return (StyleableProperty<Pos>) ((ListSpinnerSkin)n.getSkin()).valueAlignmentProperty(); }
             };
             
             private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;

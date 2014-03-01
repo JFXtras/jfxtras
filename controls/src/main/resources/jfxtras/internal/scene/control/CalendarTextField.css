@@ -1,17 +1,21 @@
 /* basic settings */
 .CalendarTextField {
-    -fx-skin: "jfxtras.internal.scene.control.skin.CalendarTextFieldCaspianSkin";
+    -fx-skin: "jfxtras.internal.scene.control.skin.CalendarTextFieldSkin";
 }
 
-.CalendarTextFieldCaspianSkin .icon  {
-    -fx-image: url("skin/CalendarTextFieldCaspianSkinIcon.png");
+.CalendarTextFieldSkin .icon  {
+    -fx-image: url("skin/CalendarTextFieldSkinIcon.png");
 }
 
-.CalendarTextFieldCaspianSkin .icon:disabled  {
-    -fx-image: url("skin/CalendarTextFieldCaspianSkinIconDisabled.png");
+.CalendarTextFieldSkin .icon:disabled  {
+    -fx-image: url("skin/CalendarTextFieldSkinIconDisabled.png");
 }
 
-.CalendarTextFieldCaspianSkin_popup {
+.CalendarTextFieldSkin .close-icon  {
+    -fx-image: url("skin/CalendarTextFieldSkinCloseWindowIcon.png");
+}
+
+.CalendarTextFieldSkin_popup {
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
     -fx-background-insets: 0 0 -1 0,0,1,2;
     -fx-background-radius: 5,5,4,3;
