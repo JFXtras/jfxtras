@@ -44,7 +44,7 @@ import jfxtras.fxml.JFXtrasBuilderFactory;
 /**
  * @author Tom Eugelink
  */
-public class CalendarTextFieldTrial2 extends Application {
+public class LocalDateTextFieldFXMLTrial extends Application {
 	
     public static void main(String[] args) {
     	//java.util.Locale.setDefault(new java.util.Locale("de")); // weeks starts on monday

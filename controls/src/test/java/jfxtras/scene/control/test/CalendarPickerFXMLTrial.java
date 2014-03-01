@@ -34,7 +34,7 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
@@ -44,7 +44,7 @@ import javafx.stage.Stage;
  * @author Michael Paus and Tom Eugelink
  *
  */
-public class CalendarPickerTrial2 extends Application {
+public class CalendarPickerFXMLTrial extends Application {
 	
     public static void main(String[] args) {
     	launch(args);       
@@ -59,7 +59,7 @@ public class CalendarPickerTrial2 extends Application {
 		URL lURL = this.getClass().getResource(lName);
 		System.out.println("loading FXML " + lName + " -> " + lURL);
 		if (lURL == null) throw new IllegalStateException("FXML file not found");
-		AnchorPane lRoot = (AnchorPane)FXMLLoader.load(lURL);
+		VBox lRoot = (VBox)FXMLLoader.load(lURL);
 
         // create scene
         Scene scene = new Scene(lRoot, 800, 300);
