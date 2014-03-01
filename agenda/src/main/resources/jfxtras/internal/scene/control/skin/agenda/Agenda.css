@@ -153,3 +153,11 @@
 	-fx-border-color: WHITE;
 	-fx-border-width: 1px;
 }
+
+.AgendaPopup .close-icon  {
+    -fx-image: url("AgendaWeekSkinPopupCloseWindowIcon.png");
+}
+
+.AgendaPopup .delete-icon  {
+    -fx-image: url("AgendaWeekSkinDeleteIcon.png");
+}

@@ -79,7 +79,6 @@ public class CalendarPicker extends Control
 		// construct properties
 		constructCalendar();
 		constructCalendars();
-		constructLocale();
 		constructDisplayedCalendar();
 	}
 
@@ -181,24 +180,6 @@ public class CalendarPicker extends Control
 	public Locale getLocale() { return localeObjectProperty.getValue(); }
 	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
 	public CalendarPicker withLocale(Locale value) { setLocale(value); return (CalendarPicker)this; } 
-	// construct property
-	private void constructLocale()
-	{
-		// make sure the singled out calendar is 
-		localeProperty().addListener(new InvalidationListener() 
-		{
-			@Override
-			public void invalidated(Observable observable)
-			{
-				// if the locale is changed, all selected calendars must be cleared
-				// because "equals" takes the locale of the calendar in account and suddenly calendars that were equal in date no longer are
-// TODO: skin are created after the control, so this clears any set values because it is initialized in the constructor
-// so we need a smarter way to do this, however calendar does not have a "getLocale"
-// should we recreated all values copying DMY?				
-//calendars().clear();
-			} 
-		});
-	}
 	
 	/** Mode: single, range or multiple */
 	public ObjectProperty<Mode> modeProperty() { return modeObjectProperty; }

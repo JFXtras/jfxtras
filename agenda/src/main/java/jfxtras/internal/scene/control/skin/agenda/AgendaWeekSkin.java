@@ -318,16 +318,12 @@ implements Agenda.AgendaSkin
 		// add to self
 		getSkinnable().getStyleClass().add(getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
 		getChildren().add(dragPane);
-		
-		// load the close icon
-		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "PopupCloseWindowIcon.png"));
 	}
 	private Pane dragPane = null;
 	private BorderPane borderPane = null;
 	private WeekHeaderPane weekHeaderPane = null;
 	private ScrollPane weekScrollPane = null;
 	private WeekPane weekPane = null;
-	private Image closeIconImage = null;
 
 	// ==================================================================================================================
 	// PANES
@@ -898,7 +894,7 @@ implements Agenda.AgendaSkin
 			relayout();
 
 			// and swap the appointments; old ones out, new ones in
-			// TODO: animation? we could move the old appointments to the equivalent positions on the drag pane, then animate them to their new positions, remove thge old, and insert the new ones.
+			// TODO: animation? we could move the old appointments to the equivalent positions on the drag pane, then animate them to their new positions, remove the old, and insert the new ones.
 			// however, this needs to be cross-days, so it cannot be done here (this is only one day), but after the complete setupAppointments()
 			getChildren().removeAll(lOldClusteredDayAppointmentPanes);
 			getChildren().removeAll(lOldWholedayAppointmentPanes);
@@ -1753,17 +1749,20 @@ implements Agenda.AgendaSkin
 		lPopup.getContent().add(lBorderPane);
 
 		// close icon
-		ImageView lImageView = new ImageView(closeIconImage);
-		lImageView.setPickOnBounds(true);
-		lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
 		{
-			@Override public void handle(MouseEvent evt)
+			ImageViewWithMouseOverEffect lImageView = new ImageViewWithMouseOverEffect();
+			lImageView.getStyleClass().add("close-icon");
+			lImageView.setPickOnBounds(true);
+			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
 			{
-				lPopup.hide();
-			}
-		});
-		lBorderPane.setRight(lImageView);
-
+				@Override public void handle(MouseEvent evt)
+				{
+					lPopup.hide();
+				}
+			});
+			lBorderPane.setRight(lImageView);
+		}
+		
 		// initial layout
 		VBox lMenuVBox = new VBox(padding);
 		lBorderPane.setCenter(lMenuVBox);
@@ -1885,13 +1884,16 @@ implements Agenda.AgendaSkin
 		lMenuVBox.getChildren().add(lLocationTextField);
 
 		// actions
-		lMenuVBox.getChildren().add(new Text("Actions:"));
+		lMenuVBox.getChildren().add(new Text("Actions:"));  // TODO: internationalize
 		HBox lHBox = new HBox();
 		lMenuVBox.getChildren().add(lHBox);
 		// delete
 		{
-			ImageButton lImageButton = new ImageButton( new Image(this.getClass().getResourceAsStream("jqueryMobileBlack16x16/delete.png")) );
-			lImageButton.setOnMouseClicked(new EventHandler<MouseEvent>()
+			// close icon
+			ImageViewWithMouseOverEffect lImageView = new ImageViewWithMouseOverEffect();
+			lImageView.getStyleClass().add("delete-icon");
+			lImageView.setPickOnBounds(true);
+			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
 			{
 				@Override public void handle(MouseEvent evt)
 				{
@@ -1900,8 +1902,8 @@ implements Agenda.AgendaSkin
 					// refresh is done via the collection events
 				}
 			});
-			Tooltip.install(lImageButton, new Tooltip("Delete"));
-			lHBox.getChildren().add(lImageButton);
+			Tooltip.install(lImageView, new Tooltip("Delete")); // TODO: internationalize
+			lHBox.getChildren().add(lImageView);
 		}
 
 		// construct a area of appointment groups
@@ -2220,11 +2222,21 @@ implements Agenda.AgendaSkin
 		return to;
 	}
 	
-	class ImageButton extends ImageView
-	{
-		public ImageButton(Image i)
+	class ImageViewWithMouseOverEffect extends ImageView {
+		
+		public ImageViewWithMouseOverEffect()
 		{
+			super();
+			construct();
+		}
+
+		public ImageViewWithMouseOverEffect(Image i) {
 			super(i);
+			construct();
+		}
+		
+		private void construct() {
+			
 			setPickOnBounds(true);
 			setOnMouseEntered(new EventHandler<MouseEvent>()
 			{
@@ -2233,7 +2245,7 @@ implements Agenda.AgendaSkin
 				{
 					if (!mouseEvent.isPrimaryButtonDown())
 					{						
-						ImageButton.this.setCursor(Cursor.HAND);
+						ImageViewWithMouseOverEffect.this.setCursor(Cursor.HAND);
 					}
 				}
 			});
@@ -2244,7 +2256,7 @@ implements Agenda.AgendaSkin
 				{
 					if (!mouseEvent.isPrimaryButtonDown())
 					{
-						ImageButton.this.setCursor(Cursor.DEFAULT);
+						ImageViewWithMouseOverEffect.this.setCursor(Cursor.DEFAULT);
 					}
 				}
 			});

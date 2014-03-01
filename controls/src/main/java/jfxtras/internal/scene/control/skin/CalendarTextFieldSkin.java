@@ -200,7 +200,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		if (getSkinnable().getTooltip() == null)
 		{
 			// TODO: internationalize the tooltip
-			getSkinnable().setTooltip(new Tooltip("Type a date or use # for today, or +/-<number>[d|w|m|y] for delta's (for example: -3m for minus 3 months)/nUse cursor up and down plus optional shift (week), ctrl (month) or alt (year) for quick keyboard changes."));
+			getSkinnable().setTooltip(new Tooltip("Type a date or use # for today, or +/-<number>[d|w|m|y] for delta's (for example: -3m for minus 3 months)\nUse cursor up and down plus optional shift (week), ctrl (month) or alt (year) for quick keyboard changes."));
 		}
         textField.promptTextProperty().bind(getSkinnable().promptTextProperty());
 
@@ -250,7 +250,6 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		closeIconImage = new ImageView();
 		closeIconImage.getStyleClass().add("close-icon");
 		closeIconImage.setPickOnBounds(true);
-//		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "CloseWindowIcon.png"));
 	}
 	private TextField textField = null;
 	private ImageView imageView = null;
@@ -290,7 +289,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 				
 				// parse the delta
 				int lDelta = Integer.parseInt(lText);
-				Calendar lCalendar = (Calendar)getSkinnable().getCalendar().clone(); // TODO locale
+				Calendar lCalendar = (Calendar)getSkinnable().getCalendar().clone();
 				lCalendar.add(lUnit, lDelta);
 				
 				// set the value
@@ -299,7 +298,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			else if (lText.equals("#"))
 			{
 				// set the value
-				getSkinnable().setCalendar(Calendar.getInstance()); // TODO locale
+				getSkinnable().setCalendar(Calendar.getInstance(getSkinnable().getLocale()));
 			}
 			else
 			{
@@ -326,7 +325,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 					}
 					
 					// set the value (the parse with the default formatter either succeeded or threw an exception, skipping this code)
-					lCalendar = Calendar.getInstance(); // TODO: how to get the correct locale
+					lCalendar = Calendar.getInstance(getSkinnable().getLocale());
 					lCalendar.setTime(lDate);
 					getSkinnable().setCalendar(lCalendar);
 				}
