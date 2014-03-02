@@ -41,6 +41,7 @@ import org.junit.Test;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
+ * The strange method naming is to work around an issue in TestFX where it clicks outside the window if the LeftRight tests are run before the UpDown.
  */
 public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
@@ -59,92 +60,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	private ListSpinner<String> spinner = null;
 
 	@Test
-	public void navigateLeftRightThroughTheValuesCyclic()
-	{
-		// non cyclic is the default
-		spinner.cyclicProperty().set(true);
-
-		// check to see what the current value is
-		Assert.assertEquals("a", spinner.getValue());
-
-		// ----
-		// move to next until we cycle over
-
-		// select next
-		click(".right-arrow");
-		Assert.assertEquals("b", spinner.getValue());
-
-		// select next
-		click(".right-arrow");
-		Assert.assertEquals("c", spinner.getValue());
-
-		// select next (cyclic)
-		click(".right-arrow");
-		Assert.assertEquals("a", spinner.getValue());
-
-		// ----
-		// now move backwards, cycling back
-
-		// select prev (cyclic)
-		click(".left-arrow");
-		Assert.assertEquals("c", spinner.getValue());
-
-		// select prev
-		click(".left-arrow");
-		Assert.assertEquals("b", spinner.getValue());
-
-		// select prev
-		click(".left-arrow");
-		Assert.assertEquals("a", spinner.getValue());
-
-		// select prev (cyclic)
-		click(".left-arrow");
-		Assert.assertEquals("c", spinner.getValue());
-
-		// select prev
-		click(".left-arrow");
-		Assert.assertEquals("b", spinner.getValue());
-	}
-
-	@Test
-	public void navigateLeftRightThroughTheValuesNonCyclic()
-	{
-		// check to see what the current value is
-		Assert.assertEquals("a", spinner.getValue());
-
-		// ----
-		// move forward, non cyclic
-
-		// select next
-		click(".right-arrow");
-		Assert.assertEquals("b", spinner.getValue());
-
-		// select next
-		click(".right-arrow");
-		Assert.assertEquals("c", spinner.getValue());
-
-		// select next (stick)
-		click(".right-arrow");
-		Assert.assertEquals("c", spinner.getValue());
-
-		// ----
-		// move back, non cyclic
-
-		// select prev
-		click(".left-arrow");
-		Assert.assertEquals("b", spinner.getValue());
-
-		// select prev
-		click(".left-arrow");
-		Assert.assertEquals("a", spinner.getValue());
-
-		// select prev (stick)
-		click(".left-arrow");
-		Assert.assertEquals("a", spinner.getValue());
-	}
-
-	@Test
-	public void navigateUpDownThroughTheValuesCyclic()
+	public void _001navigateUpDownThroughTheValuesCyclic()
 	{
 		// horizontal is the default
 		PlatformUtil.runAndWait( () -> {
@@ -199,7 +115,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	}
 
 	@Test
-	public void navigateUpDownThroughTheValuesNonCyclic()
+	public void _002navigateUpDownThroughTheValuesNonCyclic()
 	{
 		// horizontal is the default
 		PlatformUtil.runAndWait( () -> {
@@ -239,6 +155,91 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// select prev (stick)
 		click(".down-arrow");
+		Assert.assertEquals("a", spinner.getValue());
+	}
+
+	@Test
+	public void _003navigateLeftRightThroughTheValuesCyclic()
+	{		
+		// non cyclic is the default
+		spinner.cyclicProperty().set(true);
+
+		// check to see what the current value is
+		Assert.assertEquals("a", spinner.getValue());
+
+		// ----
+		// move to next until we cycle over
+
+		// select next
+		click(".right-arrow");
+		Assert.assertEquals("b", spinner.getValue());
+
+		// select next
+		click(".right-arrow");
+		Assert.assertEquals("c", spinner.getValue());
+
+		// select next (cyclic)
+		click(".right-arrow");
+		Assert.assertEquals("a", spinner.getValue());
+
+		// ----
+		// now move backwards, cycling back
+
+		// select prev (cyclic)
+		click(".left-arrow");
+		Assert.assertEquals("c", spinner.getValue());
+
+		// select prev
+		click(".left-arrow");
+		Assert.assertEquals("b", spinner.getValue());
+
+		// select prev
+		click(".left-arrow");
+		Assert.assertEquals("a", spinner.getValue());
+
+		// select prev (cyclic)
+		click(".left-arrow");
+		Assert.assertEquals("c", spinner.getValue());
+
+		// select prev
+		click(".left-arrow");
+		Assert.assertEquals("b", spinner.getValue());
+	}
+
+	@Test
+	public void _004navigateLeftRightThroughTheValuesNonCyclic()
+	{
+		// check to see what the current value is
+		Assert.assertEquals("a", spinner.getValue());
+
+		// ----
+		// move forward, non cyclic
+
+		// select next
+		click(".right-arrow");
+		Assert.assertEquals("b", spinner.getValue());
+
+		// select next
+		click(".right-arrow");
+		Assert.assertEquals("c", spinner.getValue());
+
+		// select next (stick)
+		click(".right-arrow");
+		Assert.assertEquals("c", spinner.getValue());
+
+		// ----
+		// move back, non cyclic
+
+		// select prev
+		click(".left-arrow");
+		Assert.assertEquals("b", spinner.getValue());
+
+		// select prev
+		click(".left-arrow");
+		Assert.assertEquals("a", spinner.getValue());
+
+		// select prev (stick)
+		click(".left-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 	}
 }
