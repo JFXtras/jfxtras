@@ -69,13 +69,13 @@ public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField>
 		// basic control binding
 		calendarTimeTextField.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
 		calendarTimeTextField.getStyleClass().addAll(getSkinnable().getStyleClass());
-		getSkinnable().styleProperty().bindBidirectional( calendarTimeTextField.styleProperty() );
-		calendarTimeTextField.tooltipProperty().bindBidirectional(getSkinnable().tooltipProperty()); 
+		calendarTimeTextField.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
+		calendarTimeTextField.tooltipProperty().bindBidirectional( getSkinnable().tooltipProperty() ); 
 
 		// bind it up
-		//getSkinnable().localeProperty().bindBidirectional( calendarTimeTextField.localeProperty() );
-		getSkinnable().promptTextProperty().bindBidirectional( calendarTimeTextField.promptTextProperty() );
-		getSkinnable().parseErrorCallbackProperty().bindBidirectional( calendarTimeTextField.parseErrorCallbackProperty() );
+		//calendarTimeTextField.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
+		calendarTimeTextField.promptTextProperty().bindBidirectional( getSkinnable().promptTextProperty() );
+		calendarTimeTextField.parseErrorCallbackProperty().bindBidirectional( getSkinnable().parseErrorCallbackProperty() );
 		DateTimeToCalendarHelper.syncLocalTime(calendarTimeTextField.calendarProperty(), getSkinnable().localTimeProperty(), localeObjectProperty); //calendarTimeTextField.localeProperty());
 		
 		// formatter(s) require special attention

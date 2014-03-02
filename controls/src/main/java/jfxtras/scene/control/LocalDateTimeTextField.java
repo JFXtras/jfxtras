@@ -145,7 +145,7 @@ public class LocalDateTimeTextField extends Control
 	 * The DateTimeFormatter used to render/parse the date in the textfield.
 	 */
 	public ObjectProperty<DateTimeFormatter> dateTimeFormatterProperty() { return dateTimeFormatterObjectProperty; }
-	final private ObjectProperty<DateTimeFormatter> dateTimeFormatterObjectProperty = new SimpleObjectProperty<DateTimeFormatter>(this, "dateTimeFormatter", DateTimeFormatter.ofLocalizedDateTime(FormatStyle.LONG).withLocale(getLocale()) )
+	final private ObjectProperty<DateTimeFormatter> dateTimeFormatterObjectProperty = new SimpleObjectProperty<DateTimeFormatter>(this, "dateTimeFormatter", DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale()) )
 	{
 		public void set(DateTimeFormatter value)
 		{

@@ -44,7 +44,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Created by tbee on 26-12-13.
+ * Created by Tom Eugelink on 26-12-13.
  */
 public class LocalDatePickerTest extends JFXtrasGuiTest {
 

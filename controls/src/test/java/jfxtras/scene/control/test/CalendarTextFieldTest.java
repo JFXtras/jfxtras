@@ -45,7 +45,7 @@ import org.junit.Test;
 import org.loadui.testfx.exceptions.NoNodesFoundException;
 
 /**
- * Created by tbee on 26-12-13.
+ * Created by Tom Eugelink on 26-12-13.
  */
 public class CalendarTextFieldTest extends JFXtrasGuiTest {
 

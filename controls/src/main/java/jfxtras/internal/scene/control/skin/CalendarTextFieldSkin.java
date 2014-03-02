@@ -45,7 +45,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -79,9 +78,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	 */
 	public CalendarTextFieldSkin(CalendarTextField control)
 	{
-		super(control);//, new CalendarTextFieldBehavior(control));
+		super(control);
 		construct();
-		// show where the skin is loaded from (for debugging in Ensemble) System.out.println("!!! " + this.getClass().getProtectionDomain().getCodeSource().getLocation());
 	}
 
 	/*
@@ -245,17 +243,11 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 				}
 			}
 		});
-		
-		// close icon
-		closeIconImage = new ImageView();
-		closeIconImage.getStyleClass().add("close-icon");
-		closeIconImage.setPickOnBounds(true);
 	}
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
 	private CalendarPicker calendarPicker = null;
-	private ImageView closeIconImage = null;
 
 	/**
 	 * parse the contents that was typed in the textfield
@@ -316,7 +308,10 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 							lDate = lDateFormat.parse( lText );
 							break; // exit the for loop
 						}
-						catch (java.text.ParseException e2) {} // we can safely ignore this, since we will fall back to the default formatter in the end
+						catch (java.text.ParseException | java.time.format.DateTimeParseException e2) {
+							// we can safely ignore this, since we will fall back to the default formatter in the end
+							// TODO: do we want a way to show these error messages? System.out.println(e2.getMessage());
+						} 
 					}
 					if (lDate == null) 
 					{
@@ -404,8 +399,10 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			// add a close button
 			if (isShowingTime() == true)
 			{
-				ImageView lImageView = new ImageView(closeIconImage.getImage());
+				ImageView lImageView = new ImageView();
+				lImageView.getStyleClass().addAll("close-icon");
 				lImageView.setPickOnBounds(true);
+				lImageView.setFitWidth(16); // TODO: this should not be neccesary, but if omitted the imageview is not shown (probably because it's in the right of the borderpane and the image is delayed-loaded, thus the initial width is 0px)
 				lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
 				{
 					@Override public void handle(MouseEvent evt)
@@ -423,9 +420,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// show it just below the textfield
 		popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
 
-		// move the focus over
-		// TODO: not working
-		calendarPicker.requestFocus();
+		// move the focus over		
+		calendarPicker.requestFocus(); // TODO: not working
 	}
 	private Popup popup = null;
 }

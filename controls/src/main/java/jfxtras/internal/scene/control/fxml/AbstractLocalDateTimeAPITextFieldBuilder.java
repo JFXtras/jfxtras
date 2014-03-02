@@ -1,5 +1,5 @@
 /**
- * CalendarPickerTrial2.java
+ * LocalDateTextFieldBuilder.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,47 +27,43 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.test;
-import java.io.IOException;
-import java.net.URL;
+package jfxtras.internal.scene.control.fxml;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
- * Load a layout from FXML
- * 
- * @author Michael Paus and Tom Eugelink
+ * @author Tom Eugelink
  *
  */
-public class LocalDatePickerFXMLTrial extends Application {
-	
-    public static void main(String[] args) {
-    	launch(args);       
-    }
+public class AbstractLocalDateTimeAPITextFieldBuilder
+{
+	/** Locale */
+	public String getLocale() { return null; } // dummy, just to make it Java Bean compatible
+	public void setLocale(String value) { iLocale = Locale.forLanguageTag(value); }
+	protected Locale iLocale = null;
 
-	@Override
-	public void start(Stage stage)
-	throws IOException
-	{
-    	// load FXML
-		String lName = this.getClass().getSimpleName() + ".fxml";
-		URL lURL = this.getClass().getResource(lName);
-		System.out.println("loading FXML " + lName + " -> " + lURL);
-		if (lURL == null) throw new IllegalStateException("FXML file not found");
-		VBox lRoot = (VBox)FXMLLoader.load(lURL);
+	/** PromptText */
+	public String getPromptText() { return null; } // dummy, just to make it Java Bean compatible
+	public void setPromptText(String value) { iPromptText = value; }
+	protected String iPromptText = null;
 
-        // create scene
-        Scene scene = new Scene(lRoot, 800, 300);
-        
-        // create stage
-        stage.setTitle(this.getClass().getSimpleName());
-        stage.setScene(scene);
-        stage.show();
-    }
+	/** DateTimeFormatter */
+	public String getDateTimeFormatter() { return null; } // dummy, just to make it Java Bean compatible
+	public void setDateTimeFormatter(String value) { iDateTimeFormatter = value; }
+	protected String iDateTimeFormatter = null;
 
+	/** DateTimeFormatters */
+	public String getDateTimeFormatters() { return null; } // dummy, just to make it Java Bean compatible
+	public void setDateTimeFormatters(String value) 
+	{  
+		String[] lParts = value.split(",");
+		iDateTimeFormatters = new ArrayList<>();
+		for (String lPart : lParts) 
+		{
+			iDateTimeFormatters.add( lPart.trim() );
+		}
+	}
+	protected List<String> iDateTimeFormatters = null;
 }

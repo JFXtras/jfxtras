@@ -185,6 +185,7 @@ public class LocalDateTextField extends Control
 	{
 		public void set(Locale value)
 		{
+System.out.println("set local to " + value);		
 			super.set(value);
 			if (dateFormatManual == false)
 			{

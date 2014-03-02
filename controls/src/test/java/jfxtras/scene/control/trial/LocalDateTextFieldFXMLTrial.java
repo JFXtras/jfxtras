@@ -1,5 +1,5 @@
 /**
- * ListSpinnerTrial2.java
+ * CalendarTextFieldTrial2.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,63 +27,56 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.test;
+package jfxtras.scene.control.trial;
+
+import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import jfxtras.scene.control.ListSpinner;
-import jfxtras.scene.control.ListSpinnerIntegerList;
-import jfxtras.util.StringConverterFactory;
+import jfxtras.fxml.JFXtrasBuilderFactory;
 
-public class ListSpinnerTrial2 extends Application
-{
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
+/**
+ * @author Tom Eugelink
+ */
+public class LocalDateTextFieldFXMLTrial extends Application {
+	
+    public static void main(String[] args) {
+    	//java.util.Locale.setDefault(new java.util.Locale("de")); // weeks starts on monday
+        launch(args);       
+    }
 
 	@Override
-	public void start(Stage stage)
-	{
-		VBox lVBox = new VBox(20);
-		
-		final ListSpinnerIntegerList spinnerIntegerList = new ListSpinnerIntegerList(100, 1000, 100);
-		final ListSpinner<Integer> segmentSpinner = new ListSpinner<Integer>(spinnerIntegerList);
-		segmentSpinner.setValue(500);
-		segmentSpinner.setEditable(true);
-		segmentSpinner.setStringConverter(StringConverterFactory.forInteger());
-		segmentSpinner.setStyle("-fxx-arrow-direction:VERTICAL;");
-		segmentSpinner.setMaxWidth(60);
-		segmentSpinner.addCallbackProperty().set(new Callback<Integer, Integer>()
-		{
-			@Override
-			public Integer call(Integer integer)
-			{
-				if (integer < 100 || integer > 1000) return null;
-				int l = integer; while (l > 100) l -= 100; l += 100;
-				int u = integer; while (u < 1000) u += 100; u -= 100;
-				ListSpinnerIntegerList spinnerIntegerList = new ListSpinnerIntegerList(l, u, 100);
-				segmentSpinner.setItems(FXCollections.observableList(spinnerIntegerList));
-				int i = spinnerIntegerList.indexOf(integer);
-				return i;
-			}
-		});
-		lVBox.getChildren().add(segmentSpinner);
-		
-		// just a focusable control
-		lVBox.getChildren().add(new TextField());
-		
-		// create scene
-        Scene scene = new Scene(lVBox, 800, 600);
+	public void start(Stage stage) throws IOException {
+
+    	// load FXML
+		String lName = this.getClass().getSimpleName() + ".fxml";
+		URL lURL = this.getClass().getResource(lName);
+		System.out.println("loading FXML " + lName + " -> " + lURL);
+    	Pane lRoot = (Pane)FXMLLoader.load(lURL, null, new JFXtrasBuilderFactory());
+
+        // create scene
+        Scene scene = new Scene(lRoot);
         
         // create stage
         stage.setTitle(this.getClass().getSimpleName());
         stage.setScene(scene);
         stage.show();
+    }
+	
+	/*
+	 * 
+	 */
+	static protected String quickFormatCalendar(Calendar value)
+	{
+		SimpleDateFormat lSimpleDateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
+		lSimpleDateFormat.applyPattern("yyyy-MM-dd");
+		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
 	}
+
 }

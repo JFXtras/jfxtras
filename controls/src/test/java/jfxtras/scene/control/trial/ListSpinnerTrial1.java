@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.test;
+package jfxtras.scene.control.trial;
 
 import java.math.BigInteger;
 

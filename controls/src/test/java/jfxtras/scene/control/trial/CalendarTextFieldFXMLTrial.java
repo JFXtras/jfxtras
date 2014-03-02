@@ -1,5 +1,5 @@
 /**
- * JFXtrasGuiTest.java
+ * CalendarTextFieldTrial2.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,36 +27,56 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.test;
+package jfxtras.scene.control.trial;
 
-import javafx.scene.input.KeyCode;
+import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-import org.loadui.testfx.GuiTest;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import jfxtras.fxml.JFXtrasBuilderFactory;
 
 /**
- * 
  * @author Tom Eugelink
- * https://github.com/SmartBear/TestFX/blob/master/src/main/java/org/loadui/testfx/GuiTest.java
  */
-abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
+public class CalendarTextFieldFXMLTrial extends Application {
 	
-	/**
-	 * Click with a qualifier pressed
-	 * @param matcher
-	 * @param keyCode
-	 * @param keyCodes
-	 */
-	public GuiTest click(String matcher, KeyCode keyCode, KeyCode... keyCodes) {
-		press(keyCode);
-		for (int i = 0; i < keyCodes.length; i++) {
-			press(keyCodes[i]);
-		}
-		click(matcher);
-		for (int i = keyCodes.length - 1; i >=0 ; i--) {
-			release(keyCodes[i]);
-		}
-		return release(keyCode);
-	}
+    public static void main(String[] args) {
+    	//java.util.Locale.setDefault(new java.util.Locale("de")); // weeks starts on monday
+        launch(args);       
+    }
 
+	@Override
+	public void start(Stage stage) throws IOException {
+
+    	// load FXML
+		String lName = this.getClass().getSimpleName() + ".fxml";
+		URL lURL = this.getClass().getResource(lName);
+		System.out.println("loading FXML " + lName + " -> " + lURL);
+    	Pane lRoot = (Pane)FXMLLoader.load(lURL, null, new JFXtrasBuilderFactory());
+
+        // create scene
+        Scene scene = new Scene(lRoot);
+        
+        // create stage
+        stage.setTitle(this.getClass().getSimpleName());
+        stage.setScene(scene);
+        stage.show();
+    }
+	
+	/*
+	 * 
+	 */
+	static protected String quickFormatCalendar(Calendar value)
+	{
+		SimpleDateFormat lSimpleDateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
+		lSimpleDateFormat.applyPattern("yyyy-MM-dd");
+		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
+	}
 
 }

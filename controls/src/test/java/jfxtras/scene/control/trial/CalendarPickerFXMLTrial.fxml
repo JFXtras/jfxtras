@@ -9,7 +9,6 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml">
 	<children>
-    	<Label text="Just a label" />
-		<LocalDatePicker/>
+		<CalendarPicker/>
     </children>
 </VBox>

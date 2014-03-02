@@ -61,13 +61,13 @@ public class LocalDateTimePickerSkin extends SkinBase<LocalDateTimePicker>
 		createNodes();
 
 		// bind basic node
-		calendarPicker.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
-		calendarPicker.getStyleClass().addAll(getSkinnable().getStyleClass());
-		getSkinnable().styleProperty().bindBidirectional( calendarPicker.styleProperty() );
+		calendarPicker.getStyleClass().addAll( getSkinnable().getClass().getSimpleName() );
+		calendarPicker.getStyleClass().addAll( getSkinnable().getStyleClass() );
+		calendarPicker.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
 		
 		// bind specifics
-		getSkinnable().localeProperty().bindBidirectional( calendarPicker.localeProperty() );
-		getSkinnable().allowNullProperty().bindBidirectional( calendarPicker.allowNullProperty() );
+		calendarPicker.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
+		calendarPicker.allowNullProperty().bindBidirectional( getSkinnable().allowNullProperty() );
 		DateTimeToCalendarHelper.syncLocalDateTime(calendarPicker.calendarProperty(), getSkinnable().localDateTimeProperty(), calendarPicker.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDateTime(calendarPicker.displayedCalendar(), getSkinnable().displayedLocalDateTimeProperty(), calendarPicker.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDateTimes(calendarPicker.highlightedCalendars(), getSkinnable().highlightedLocalDateTimes(), calendarPicker.localeProperty());

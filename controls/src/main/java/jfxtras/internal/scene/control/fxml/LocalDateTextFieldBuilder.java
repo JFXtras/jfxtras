@@ -30,8 +30,6 @@
 package jfxtras.internal.scene.control.fxml;
 
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import javafx.collections.FXCollections;
@@ -43,36 +41,8 @@ import jfxtras.scene.control.LocalDateTextField;
  * @author Tom Eugelink
  *
  */
-public class LocalDateTextFieldBuilder implements BuilderService<LocalDateTextField>
+public class LocalDateTextFieldBuilder extends AbstractLocalDateTimeAPITextFieldBuilder implements BuilderService<LocalDateTextField>
 {
-	/** Locale */
-	public String getLocale() { return null; } // dummy, just to make it Java Bean compatible
-	public void setLocale(String value) { iLocale = Locale.forLanguageTag(value); }
-	private Locale iLocale = null;
-
-	/** PromptText */
-	public String getPromptText() { return null; } // dummy, just to make it Java Bean compatible
-	public void setPromptText(String value) { iPromptText = value; }
-	private String iPromptText = null;
-
-	/** DateFormat */
-	public String getDateFormat() { return null; } // dummy, just to make it Java Bean compatible
-	public void setDateFormat(String value) { iDateFormat = value; }
-	private String iDateFormat = null;
-
-	/** DateFormats */
-	public String getDateFormats() { return null; } // dummy, just to make it Java Bean compatible
-	public void setDateFormats(String value) 
-	{  
-		String[] lParts = value.split(",");
-		iDateFormats = new ArrayList<>();
-		for (String lPart : lParts) 
-		{
-			iDateFormats.add( lPart.trim() );
-		}
-	}
-	private List<String> iDateFormats = null;
-
 	/**
 	 * Implementation of Builder interface
 	 */
@@ -81,13 +51,13 @@ public class LocalDateTextFieldBuilder implements BuilderService<LocalDateTextFi
 	{		
 		Locale lLocale = (iLocale == null ? Locale.getDefault() : iLocale);
 		LocalDateTextField lLocalDateTextField = new LocalDateTextField();
-		if (iDateFormat != null) lLocalDateTextField.setDateTimeFormatter( DateTimeFormatter.ofPattern(iDateFormat).withLocale(lLocale));
+		if (iDateTimeFormatter != null) lLocalDateTextField.setDateTimeFormatter( DateTimeFormatter.ofPattern(iDateTimeFormatter).withLocale(lLocale));
 		if (iLocale != null) lLocalDateTextField.setLocale(iLocale);
 		if (iPromptText != null) lLocalDateTextField.setPromptText(iPromptText);
-		if (iDateFormats != null) 
+		if (iDateTimeFormatters != null) 
 		{
 			ObservableList<DateTimeFormatter> lDateTimeFormatters = FXCollections.observableArrayList();
-			for (String lPart : iDateFormats) 
+			for (String lPart : iDateTimeFormatters) 
 			{
 				lDateTimeFormatters.add( DateTimeFormatter.ofPattern(lPart.trim()).withLocale(lLocale) );
 			}

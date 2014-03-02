@@ -67,7 +67,7 @@ public class LocalTimePickerSkin extends SkinBase<LocalTimePicker>
 		// bind basic node
 		calendarTimePicker.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
 		calendarTimePicker.getStyleClass().addAll(getSkinnable().getStyleClass());
-		getSkinnable().styleProperty().bindBidirectional( calendarTimePicker.styleProperty() );
+		calendarTimePicker.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
 		
 		// bind specifics
 		DateTimeToCalendarHelper.syncLocalTime(calendarTimePicker.calendarProperty(), getSkinnable().localTimeProperty(), localeObjectProperty); //calendarTimePicker.localeProperty());

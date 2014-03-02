@@ -1,5 +1,5 @@
 /**
- * JFXtrasGuiTest.java
+ * CalendarPickerTrial2.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,36 +27,47 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.test;
+package jfxtras.scene.control.trial;
+import java.io.IOException;
+import java.net.URL;
 
-import javafx.scene.input.KeyCode;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
-import org.loadui.testfx.GuiTest;
 
 /**
+ * Load a layout from FXML
  * 
- * @author Tom Eugelink
- * https://github.com/SmartBear/TestFX/blob/master/src/main/java/org/loadui/testfx/GuiTest.java
+ * @author Michael Paus and Tom Eugelink
+ *
  */
-abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
+public class LocalDatePickerFXMLTrial extends Application {
 	
-	/**
-	 * Click with a qualifier pressed
-	 * @param matcher
-	 * @param keyCode
-	 * @param keyCodes
-	 */
-	public GuiTest click(String matcher, KeyCode keyCode, KeyCode... keyCodes) {
-		press(keyCode);
-		for (int i = 0; i < keyCodes.length; i++) {
-			press(keyCodes[i]);
-		}
-		click(matcher);
-		for (int i = keyCodes.length - 1; i >=0 ; i--) {
-			release(keyCodes[i]);
-		}
-		return release(keyCode);
-	}
+    public static void main(String[] args) {
+    	launch(args);       
+    }
 
+	@Override
+	public void start(Stage stage)
+	throws IOException
+	{
+    	// load FXML
+		String lName = this.getClass().getSimpleName() + ".fxml";
+		URL lURL = this.getClass().getResource(lName);
+		System.out.println("loading FXML " + lName + " -> " + lURL);
+		if (lURL == null) throw new IllegalStateException("FXML file not found");
+		VBox lRoot = (VBox)FXMLLoader.load(lURL);
+
+        // create scene
+        Scene scene = new Scene(lRoot, 800, 300);
+        
+        // create stage
+        stage.setTitle(this.getClass().getSimpleName());
+        stage.setScene(scene);
+        stage.show();
+    }
 
 }

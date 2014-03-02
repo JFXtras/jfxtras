@@ -1,5 +1,5 @@
 /**
- * CalendarTextFieldTrial2.java
+ * LocalDateTextFieldBuilder.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,56 +27,52 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.test;
+package jfxtras.internal.scene.control.fxml;
 
-import java.io.IOException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import jfxtras.fxml.JFXtrasBuilderFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import jfxtras.fxml.BuilderService;
+import jfxtras.scene.control.LocalDateTextField;
+import jfxtras.scene.control.LocalDateTimeTextField;
 
 /**
  * @author Tom Eugelink
+ *
  */
-public class CalendarTextFieldFXMLTrial extends Application {
-	
-    public static void main(String[] args) {
-    	//java.util.Locale.setDefault(new java.util.Locale("de")); // weeks starts on monday
-        launch(args);       
-    }
-
-	@Override
-	public void start(Stage stage) throws IOException {
-
-    	// load FXML
-		String lName = this.getClass().getSimpleName() + ".fxml";
-		URL lURL = this.getClass().getResource(lName);
-		System.out.println("loading FXML " + lName + " -> " + lURL);
-    	Pane lRoot = (Pane)FXMLLoader.load(lURL, null, new JFXtrasBuilderFactory());
-
-        // create scene
-        Scene scene = new Scene(lRoot);
-        
-        // create stage
-        stage.setTitle(this.getClass().getSimpleName());
-        stage.setScene(scene);
-        stage.show();
-    }
-	
-	/*
-	 * 
+public class LocalDateTimeTextFieldBuilder extends AbstractLocalDateTimeAPITextFieldBuilder implements BuilderService<LocalDateTimeTextField>
+{
+	/**
+	 * Implementation of Builder interface
 	 */
-	static protected String quickFormatCalendar(Calendar value)
-	{
-		SimpleDateFormat lSimpleDateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
-		lSimpleDateFormat.applyPattern("yyyy-MM-dd");
-		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
+	@Override
+	public LocalDateTimeTextField build()
+	{		
+		Locale lLocale = (iLocale == null ? Locale.getDefault() : iLocale);
+		LocalDateTimeTextField lLocalDateTimeTextField = new LocalDateTimeTextField();
+		if (iDateTimeFormatter != null) lLocalDateTimeTextField.setDateTimeFormatter( DateTimeFormatter.ofPattern(iDateTimeFormatter).withLocale(lLocale));
+		if (iLocale != null) lLocalDateTimeTextField.setLocale(iLocale);
+		if (iPromptText != null) lLocalDateTimeTextField.setPromptText(iPromptText);
+		if (iDateTimeFormatters != null) 
+		{
+			ObservableList<DateTimeFormatter> lDateTimeFormatters = FXCollections.observableArrayList();
+			for (String lPart : iDateTimeFormatters) 
+			{
+				lDateTimeFormatters.add( DateTimeFormatter.ofPattern(lPart.trim()).withLocale(lLocale) );
+			}
+			lLocalDateTimeTextField.setDateTimeFormatters(lDateTimeFormatters);
+		}
+		return lLocalDateTimeTextField;
 	}
-
+	
+	/**
+	 * Implementation of BuilderService interface
+	 */
+	@Override
+	public boolean isBuilderFor(Class<?> clazz)
+	{
+		return LocalDateTimeTextField.class.isAssignableFrom(clazz);
+	}
 }

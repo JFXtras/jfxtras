@@ -11,14 +11,14 @@
     -fx-image: url("skin/CalendarTextFieldSkinIconDisabled.png");
 }
 
-.CalendarTextFieldSkin .close-icon  {
-    -fx-image: url("skin/CalendarTextFieldSkinCloseWindowIcon.png");
-}
-
 .CalendarTextFieldSkin_popup {
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
     -fx-background-insets: 0 0 -1 0,0,1,2;
     -fx-background-radius: 5,5,4,3;
     -fx-padding: 0.766667em 0.733333em 0.75em 0.733333em;
     -fx-text-fill: -fx-text-base-color;
+}
+
+.CalendarTextFieldSkin_popup .close-icon  {
+    -fx-image: url("skin/CalendarTextFieldSkinCloseWindowIcon.png");
 }

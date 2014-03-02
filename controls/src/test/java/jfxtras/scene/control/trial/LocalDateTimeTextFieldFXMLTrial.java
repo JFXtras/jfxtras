@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.test;
+package jfxtras.scene.control.trial;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,7 +44,7 @@ import jfxtras.fxml.JFXtrasBuilderFactory;
 /**
  * @author Tom Eugelink
  */
-public class LocalDateTextFieldFXMLTrial extends Application {
+public class LocalDateTimeTextFieldFXMLTrial extends Application {
 	
     public static void main(String[] args) {
     	//java.util.Locale.setDefault(new java.util.Locale("de")); // weeks starts on monday

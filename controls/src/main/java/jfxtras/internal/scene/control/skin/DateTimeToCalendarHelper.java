@@ -179,6 +179,7 @@ public class DateTimeToCalendarHelper {
 		}
 		Instant lInstant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
 		Date lDate = Date.from(lInstant);
+System.out.println("tbee createDateFromLocalDateTime " + localDateTime + " -> " + lDate);		
 		return lDate;
 	}
 	
@@ -189,7 +190,9 @@ public class DateTimeToCalendarHelper {
 		if (date == null) {
 			return null;
 		}
-		LocalDateTime lLocalDateTime = LocalDateTime.ofInstant( date.toInstant(), ZoneId.systemDefault() );
+		// This gives strange results, for example: Sun Jan 01 02:02:02 CET 1111 -> 1111-01-08T01:55:30
+		// LocalDateTime lLocalDateTime = LocalDateTime.ofInstant( date.toInstant(), ZoneId.systemDefault() );
+		LocalDateTime lLocalDateTime = LocalDateTime.of(1900 + date.getYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
 		return lLocalDateTime;
 	}
 	
@@ -452,6 +455,7 @@ public class DateTimeToCalendarHelper {
 		public Date parse(String source, ParsePosition pos) {
 			LocalDate lLocalDate = LocalDate.parse(source, this.dateTimeFormatter);
 			Date lDate = createDateFromLocalDate(lLocalDate);
+			pos.setIndex(source.length()); // otherwise DateFormat will thrown an exception 
 			return lDate;
 		}
 		
@@ -461,6 +465,10 @@ public class DateTimeToCalendarHelper {
 				return false;
 			}
 			return (this == obj);
+		}
+		
+		public String toString() {
+			return dateTimeFormatter.toString();
 		}
 	}
 
@@ -525,6 +533,7 @@ public class DateTimeToCalendarHelper {
 		public Date parse(String source, ParsePosition pos) {
 			LocalDateTime lLocalDateTime = LocalDateTime.parse(source, this.dateTimeFormatter);
 			Date lDate = createDateFromLocalDateTime(lLocalDateTime);
+			pos.setIndex(source.length()); // otherwise DateFormat will thrown an exception 
 			return lDate;
 		}
 		
@@ -534,6 +543,10 @@ public class DateTimeToCalendarHelper {
 				return false;
 			}
 			return (this == obj);
+		}
+		
+		public String toString() {
+			return dateTimeFormatter.toString();
 		}
 	}
 
@@ -599,6 +612,7 @@ public class DateTimeToCalendarHelper {
 		public Date parse(String source, ParsePosition pos) {
 			LocalTime lLocalTime = LocalTime.parse(source, this.dateTimeFormatter);
 			Date lDate = createDateFromLocalTime(lLocalTime);
+			pos.setIndex(source.length()); // otherwise DateFormat will thrown an exception 
 			return lDate;
 		}
 		
@@ -608,6 +622,10 @@ public class DateTimeToCalendarHelper {
 				return false;
 			}
 			return (this == obj);
+		}
+		
+		public String toString() {
+			return dateTimeFormatter.toString();
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * CalendarPickerTrial2.java
+ * ListSpinnerTrial2.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,47 +27,63 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.test;
-import java.io.IOException;
-import java.net.URL;
+package jfxtras.scene.control.trial;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.collections.FXCollections;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import jfxtras.scene.control.ListSpinner;
+import jfxtras.scene.control.ListSpinnerIntegerList;
+import jfxtras.util.StringConverterFactory;
 
-
-/**
- * Load a layout from FXML
- * 
- * @author Michael Paus and Tom Eugelink
- *
- */
-public class CalendarPickerFXMLTrial extends Application {
-	
-    public static void main(String[] args) {
-    	launch(args);       
-    }
+public class ListSpinnerTrial2 extends Application
+{
+	public static void main(String[] args)
+	{
+		launch(args);
+	}
 
 	@Override
 	public void start(Stage stage)
-	throws IOException
 	{
-    	// load FXML
-		String lName = this.getClass().getSimpleName() + ".fxml";
-		URL lURL = this.getClass().getResource(lName);
-		System.out.println("loading FXML " + lName + " -> " + lURL);
-		if (lURL == null) throw new IllegalStateException("FXML file not found");
-		VBox lRoot = (VBox)FXMLLoader.load(lURL);
-
-        // create scene
-        Scene scene = new Scene(lRoot, 800, 300);
+		VBox lVBox = new VBox(20);
+		
+		final ListSpinnerIntegerList spinnerIntegerList = new ListSpinnerIntegerList(100, 1000, 100);
+		final ListSpinner<Integer> segmentSpinner = new ListSpinner<Integer>(spinnerIntegerList);
+		segmentSpinner.setValue(500);
+		segmentSpinner.setEditable(true);
+		segmentSpinner.setStringConverter(StringConverterFactory.forInteger());
+		segmentSpinner.setStyle("-fxx-arrow-direction:VERTICAL;");
+		segmentSpinner.setMaxWidth(60);
+		segmentSpinner.addCallbackProperty().set(new Callback<Integer, Integer>()
+		{
+			@Override
+			public Integer call(Integer integer)
+			{
+				if (integer < 100 || integer > 1000) return null;
+				int l = integer; while (l > 100) l -= 100; l += 100;
+				int u = integer; while (u < 1000) u += 100; u -= 100;
+				ListSpinnerIntegerList spinnerIntegerList = new ListSpinnerIntegerList(l, u, 100);
+				segmentSpinner.setItems(FXCollections.observableList(spinnerIntegerList));
+				int i = spinnerIntegerList.indexOf(integer);
+				return i;
+			}
+		});
+		lVBox.getChildren().add(segmentSpinner);
+		
+		// just a focusable control
+		lVBox.getChildren().add(new TextField());
+		
+		// create scene
+        Scene scene = new Scene(lVBox, 800, 600);
         
         // create stage
         stage.setTitle(this.getClass().getSimpleName());
         stage.setScene(scene);
         stage.show();
-    }
-
+	}
 }

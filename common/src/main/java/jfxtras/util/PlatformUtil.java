@@ -38,7 +38,7 @@ import javafx.application.Platform;
 import com.sun.javafx.tk.Toolkit;
 
 /**
- * Created by tbee on 26-12-13.
+ * Created by Tom Eugelink on 26-12-13.
  */
 public class PlatformUtil {
 
