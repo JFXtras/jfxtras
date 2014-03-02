@@ -239,7 +239,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			{
 				if (popup != null && isShowingTime() == false) 
 				{
-					popup.hide(); popup = null;
+					popup.hide(); 
+					popup = null;
 				}
 			}
 		});
@@ -402,12 +403,12 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 				ImageView lImageView = new ImageView();
 				lImageView.getStyleClass().addAll("close-icon");
 				lImageView.setPickOnBounds(true);
-				lImageView.setFitWidth(16); // TODO: this should not be neccesary, but if omitted the imageview is not shown (probably because it's in the right of the borderpane and the image is delayed-loaded, thus the initial width is 0px)
 				lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
 				{
 					@Override public void handle(MouseEvent evt)
 					{
-						popup.hide(); popup = null;
+						popup.hide(); 
+						popup = null;
 					}
 				});
 				lBorderPane.rightProperty().set(lImageView);
