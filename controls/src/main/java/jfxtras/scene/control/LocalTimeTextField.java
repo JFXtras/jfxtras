@@ -95,7 +95,7 @@ public class LocalTimeTextField extends Control
 	public LocalTimeTextField withLocalTime(LocalTime value) { setLocalTime(value); return this; } 
 
 	/** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
-	private ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
+	public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
 	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(Locale.getDefault(), "locale", Locale.getDefault()) 
 	{
 		public void set(Locale value)
@@ -103,13 +103,13 @@ public class LocalTimeTextField extends Control
 			super.set(value);
 			if (dateFormatManual == false)
 			{
-				setDateTimeFormatter( DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(getLocale()) );
+				setDateTimeFormatter( null );
 			}
 		}
 	};
-	private Locale getLocale() { return localeObjectProperty.getValue(); }
-	private void setLocale(Locale value) { localeObjectProperty.setValue(value); }
-	private LocalTimeTextField withLocale(Locale value) { setLocale(value); return this; } 
+	public Locale getLocale() { return localeObjectProperty.getValue(); }
+	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
+	public LocalTimeTextField withLocale(Locale value) { setLocale(value); return this; } 
 	
 	/** 
 	 * The DateTimeFormatter used to render/parse the date in the textfield.
@@ -119,7 +119,7 @@ public class LocalTimeTextField extends Control
 	{
 		public void set(DateTimeFormatter value)
 		{
-			super.set( value != null ? value : DateTimeFormatter.ofLocalizedTime(FormatStyle.LONG).withLocale(getLocale()));
+			super.set( value != null ? value : DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(getLocale()));
 			dateFormatManual = (value != null);
 		}
 	};
