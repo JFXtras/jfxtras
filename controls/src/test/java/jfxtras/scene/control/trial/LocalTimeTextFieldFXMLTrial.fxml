@@ -5,7 +5,7 @@
 <VBox xmlns:fx="http://javafx.com/fxml">
     <children>
         <LocalTimeTextField/>
-        <LocalTimeTextField fx:id="test" dateFormat="HH:mm:ss" promptText="multiple formatters"/>
+        <LocalTimeTextField fx:id="test" promptText="multiple formatters"/>
         <LocalTimeTextField locale="DE" promptText="locale set to DE"/>
     </children>
 </VBox>

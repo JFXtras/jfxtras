@@ -37,8 +37,6 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.SkinBase;
@@ -87,14 +85,11 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		createNodes();
 		
 		// react to value changes in the model
-		getSkinnable().calendarProperty().addListener(new InvalidationListener() // invalidation is also fired if there is no change (which is the case if a time if blocked to the existing time), but the text must be refreshed
-		{
-			
-			@Override
-			public void invalidated(Observable arg0)
-			{
-				refreshValue();
-			}
+		getSkinnable().calendarProperty().addListener( (observable) -> {
+			refreshValue();
+		});
+		getSkinnable().dateFormatProperty().addListener( (observable) -> {			
+			refreshValue();
 		});
 		refreshValue();
 		
@@ -109,7 +104,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 	{
 		// write out to textfield
 		Calendar c = getSkinnable().getCalendar();
-		String s = c == null ? "" : getSkinnable().getDateFormat().format(c.getTime());
+		String s = (c == null ? "" : getSkinnable().getDateFormat().format(c.getTime()));
 		textField.setText( s );
 	}
 	
@@ -118,22 +113,11 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 	 */
     private void initFocusSimulation() 
     {
-    	getSkinnable().focusedProperty().addListener(new ChangeListener<Boolean>() 
-		{
-			@Override
-			public void changed(ObservableValue<? extends Boolean> ov, Boolean wasFocused, Boolean isFocused) 
-			{
-				if (isFocused) 
-				{
-                	Platform.runLater(new Runnable() 
-                	{
-						@Override
-						public void run() 
-						{
-							textField.requestFocus();
-						}
-					});
-				}
+    	getSkinnable().focusedProperty().addListener( (observable, wasFocused, isFocused) -> {
+			if (isFocused) {
+            	Platform.runLater( () ->  {
+					textField.requestFocus();
+				});
 			}
 		});
     }
@@ -229,10 +213,10 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		getChildren().add(gridPane);
 		
 		// prep the picker
-		TimePicker = new CalendarTimePicker();
+		calendarTimePicker = new CalendarTimePicker();
 		// bind our properties to the picker's 
-		Bindings.bindBidirectional(TimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		Bindings.bindBidirectional(TimePicker.minuteStepProperty(), getSkinnable().minuteStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		Bindings.bindBidirectional(calendarTimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		Bindings.bindBidirectional(calendarTimePicker.minuteStepProperty(), getSkinnable().minuteStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		
 		// close icon
 		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "CloseWindowIcon.png"));
@@ -240,7 +224,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
-	private CalendarTimePicker TimePicker = null;
+	private CalendarTimePicker calendarTimePicker = null;
 	private Image closeIconImage = null;
 	
 	/**
@@ -273,7 +257,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 				
 				// parse the delta
 				int lDelta = Integer.parseInt(lText);
-				Calendar lCalendar = (Calendar)getSkinnable().getCalendar().clone(); // TODO locale
+				Calendar lCalendar = (Calendar)getSkinnable().getCalendar().clone(); 
 				lCalendar.add(lUnit, lDelta);
 				
 				// set the value
@@ -282,7 +266,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 			else if (lText.equals("#"))
 			{
 				// set the value
-				getSkinnable().setCalendar( CalendarTimePickerSkin.blockMinutesToStep(Calendar.getInstance(), getSkinnable().getMinuteStep()) ); // TODO locale
+				getSkinnable().setCalendar( CalendarTimePickerSkin.blockMinutesToStep(Calendar.getInstance(getSkinnable().getLocale()), getSkinnable().getMinuteStep()) ); 
 			}
 			else
 			{
@@ -309,7 +293,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 					}
 					
 					// set the value (the parse with the default formatter either succeeded or threw an exception, skipping this code)
-					lCalendar = Calendar.getInstance(); // TODO: how to get the correct locale
+					lCalendar = Calendar.getInstance(getSkinnable().getLocale()); 
 					lCalendar.setTime(lDate);
 					getSkinnable().setCalendar(lCalendar);
 				}
@@ -349,22 +333,24 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 			// add the timepicker
 			BorderPane lBorderPane = new BorderPane();
 			lBorderPane.getStyleClass().add(this.getClass().getSimpleName() + "_popup");
-			lBorderPane.setCenter(TimePicker);
+			lBorderPane.setCenter(calendarTimePicker);
 			
 			// add a close button
 			ImageView lImageView = new ImageView(closeIconImage);
 			lImageView.setPickOnBounds(true);
-			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
-					{
-				@Override public void handle(MouseEvent evt)
-				{
+			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override public void handle(MouseEvent evt) {
 					popup.hide();
+					popup = null;
 				}
 			});
 			lBorderPane.rightProperty().set(lImageView);
 			
 			// add pane
 			popup.getContent().add(lBorderPane);
+			popup.setOnShown( (event) -> {
+				((CalendarTimePickerSkin)calendarTimePicker.getSkin()).labelFormatProperty().set( getSkinnable().getDateFormat() );
+			});
 		}
 		
 		// show it just below the textfield

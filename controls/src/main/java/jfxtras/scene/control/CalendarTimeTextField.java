@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -95,32 +96,53 @@ public class CalendarTimeTextField extends Control
 	/** Id */
 	public CalendarTimeTextField withId(String value) { setId(value); return this; }
 
-	/** Value: */
+	/** Calendar: */
 	public ObjectProperty<Calendar> calendarProperty() { return calendarObjectProperty; }
 	final private ObjectProperty<Calendar> calendarObjectProperty = new SimpleObjectProperty<Calendar>(this, "calendar", null);
 	public Calendar getCalendar() { return calendarObjectProperty.getValue(); }
 	public void setCalendar(Calendar value) { calendarObjectProperty.setValue(value); }
 	public CalendarTimeTextField withCalendar(Calendar value) { setCalendar(value); return this; }
 
+	/** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
+	public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
+	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(Locale.getDefault())
+	{
+		public void set(Locale value)
+		{
+			super.set(value);
+			if (dateFormatManual == false)
+			{
+				setDateFormat( null ); // forces a resetting
+			}
+		}
+	};
+	public Locale getLocale() { return localeObjectProperty.getValue(); }
+	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
+	public CalendarTimeTextField withLocale(Locale value) { setLocale(value); return this; } 
+	
 	/** 
 	 * The DateFormat used to render/parse the date in the textfield.
 	 * It is allow to show time as well for example by SimpleDateFormat.getDateTimeInstance().
 	 */
 	public ObjectProperty<DateFormat> dateFormatProperty() { return dateFormatObjectProperty; }
-	final private ObjectProperty<DateFormat> dateFormatObjectProperty = new SimpleObjectProperty<DateFormat>(this, "dateFormat", new SimpleDateFormat("HH:mm"))
+	final private ObjectProperty<DateFormat> dateFormatObjectProperty = new SimpleObjectProperty<DateFormat>(this, "dateFormat", SimpleDateFormat.getTimeInstance(DateFormat.SHORT, getLocale()))
 	{
 		public void set(DateFormat value)
 		{
-			String lFormattedDate = value.format(DATE_WITH_TIME);
-			// the date has 000 for milliseconds, so that will never generate a "1"
-			if (lFormattedDate.contains("1")) throw new IllegalArgumentException("The date format may only show time");
-			super.set(value);
+			if (value != null) {
+				String lFormattedDate = value.format(DATE_WITH_TIME);
+				// the date has 000 for milliseconds, so that will never generate a "1"
+				if (lFormattedDate.contains("1")) throw new IllegalArgumentException("The date format may only show time");
+			}
+			super.set( value != null ? value : SimpleDateFormat.getTimeInstance(DateFormat.SHORT, getLocale()));
+			dateFormatManual = (value != null);
 		}
 	};
 	public DateFormat getDateFormat() { return dateFormatObjectProperty.getValue(); }
 	public void setDateFormat(DateFormat value) { dateFormatObjectProperty.setValue(value); }
 	public CalendarTimeTextField withDateFormat(DateFormat value) { setDateFormat(value); return this; }
 	private final static Date DATE_WITH_TIME = new GregorianCalendar(1111,0,1,9,33,44).getTime();
+	private boolean dateFormatManual = false;
 
 	/** MinuteStep */
 	public ObjectProperty<Integer> minuteStepProperty() { return minuteStepProperty; }

@@ -2,3 +2,4 @@ jfxtras.internal.scene.control.fxml.CalendarTextFieldBuilder
 jfxtras.internal.scene.control.fxml.CalendarTimeTextFieldBuilder
 jfxtras.internal.scene.control.fxml.LocalDateTextFieldBuilder
 jfxtras.internal.scene.control.fxml.LocalDateTimeTextFieldBuilder
+jfxtras.internal.scene.control.fxml.LocalTimeTextFieldBuilder

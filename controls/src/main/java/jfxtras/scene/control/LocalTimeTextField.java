@@ -40,18 +40,17 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalTimeTextFieldSkin;
 
 /**
  * LocalTime (JSR-310) text field component.
- * This is an extension of the CalendarTimeTextField adding the new date API JSR-310.
- * Since Calendar will not be removed from the JDK, too many applications use it, this approach of extending CalendarTextField is the most flexible one. 
  * 
  * @author Tom Eugelink
  */
-public class LocalTimeTextField extends CalendarTimeTextField
+public class LocalTimeTextField extends Control
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -97,7 +96,7 @@ public class LocalTimeTextField extends CalendarTimeTextField
 
 	/** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
 	private ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
-	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(Locale.getDefault(), "locale", new Locale("NL")) //Locale.getDefault())
+	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(Locale.getDefault(), "locale", Locale.getDefault()) 
 	{
 		public void set(Locale value)
 		{

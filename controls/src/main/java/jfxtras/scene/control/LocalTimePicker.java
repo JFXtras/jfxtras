@@ -33,17 +33,16 @@ import java.time.LocalTime;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import jfxtras.internal.scene.control.skin.LocalTimePickerSkin;
 
 /**
  * LocalTime (JSR-310) picker component.
- * This is an extension of the CalendarPicker adding the new date API JSR-310.
- * Since Calendar will not be removed from the JDK, too many applications use it, this approach of extending CalendarPicker is the most flexible one. 
  * 
  * @author Tom Eugelink
  */
-public class LocalTimePicker extends CalendarTimePicker
+public class LocalTimePicker extends Control
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR

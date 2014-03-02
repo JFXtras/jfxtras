@@ -1,5 +1,5 @@
 /**
- * CalendarTimeTextFieldBuilder.java
+ * LocalDateTextFieldBuilder.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -29,72 +29,41 @@
 
 package jfxtras.internal.scene.control.fxml;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jfxtras.fxml.BuilderService;
-import jfxtras.scene.control.CalendarTimeTextField;
+import jfxtras.scene.control.LocalTimeTextField;
 
 /**
  * @author Tom Eugelink
  *
  */
-public class CalendarTimeTextFieldBuilder implements BuilderService<CalendarTimeTextField>
+public class LocalTimeTextFieldBuilder extends AbstractLocalDateTimeAPITextFieldBuilder implements BuilderService<LocalTimeTextField>
 {
-	/** Locale */
-	public String getLocale() { return null; } // dummy, just to make it Java Bean compatible
-	public void setLocale(String value) { iLocale = Locale.forLanguageTag(value); }
-	private Locale iLocale = null;
-
-	/** PromptText */
-	public String getPromptText() { return null; } // dummy, just to make it Java Bean compatible
-	public void setPromptText(String value) { iPromptText = value; }
-	private String iPromptText = null;
-
-	/** DateFormat */
-	public String getDateFormat() { return null; } // dummy, just to make it Java Bean compatible
-	public void setDateFormat(String value) { iDateFormat = value; }
-	private String iDateFormat = null;
-
-	/** DateFormats */
-	public String getDateFormats() { return null; } // dummy, just to make it Java Bean compatible
-	public void setDateFormats(String value) 
-	{  
-		String[] lParts = value.split(",");
-		iDateFormats = new ArrayList<>();
-		for (String lPart : lParts) 
-		{
-			iDateFormats.add( lPart.trim() );
-		}
-	}
-	private List<String> iDateFormats = null;
-
 	/**
 	 * Implementation of Builder interface
 	 */
 	@Override
-	public CalendarTimeTextField build()
-	{
+	public LocalTimeTextField build()
+	{		
 		Locale lLocale = (iLocale == null ? Locale.getDefault() : iLocale);
-		CalendarTimeTextField lCalendarTimeTextField = new CalendarTimeTextField();
-		if (iDateFormat != null) lCalendarTimeTextField.setDateFormat(new SimpleDateFormat(iDateFormat, lLocale));
-		if (iLocale != null) lCalendarTimeTextField.setLocale(iLocale);
-		if (iPromptText != null) lCalendarTimeTextField.setPromptText(iPromptText);
-		if (iDateFormats != null) 
+		LocalTimeTextField lLocalTimeTextField = new LocalTimeTextField();
+		if (iDateTimeFormatter != null) lLocalTimeTextField.setDateTimeFormatter( DateTimeFormatter.ofPattern(iDateTimeFormatter).withLocale(lLocale));
+		//if (iLocale != null) lLocalTimeTextField.setLocale(iLocale);
+		if (iPromptText != null) lLocalTimeTextField.setPromptText(iPromptText);
+		if (iDateTimeFormatters != null) 
 		{
-			ObservableList<DateFormat> lDateFormats = FXCollections.observableArrayList();
-			for (String lPart : iDateFormats) 
+			ObservableList<DateTimeFormatter> lDateTimeFormatters = FXCollections.observableArrayList();
+			for (String lPart : iDateTimeFormatters) 
 			{
-				lDateFormats.add( new SimpleDateFormat(lPart.trim(), lLocale) );
+				lDateTimeFormatters.add( DateTimeFormatter.ofPattern(lPart.trim()).withLocale(lLocale) );
 			}
-			lCalendarTimeTextField.setDateFormats(lDateFormats);
+			lLocalTimeTextField.setDateTimeFormatters(lDateTimeFormatters);
 		}
-		return lCalendarTimeTextField;
+		return lLocalTimeTextField;
 	}
 	
 	/**
@@ -103,6 +72,6 @@ public class CalendarTimeTextFieldBuilder implements BuilderService<CalendarTime
 	@Override
 	public boolean isBuilderFor(Class<?> clazz)
 	{
-		return CalendarTimeTextField.class.isAssignableFrom(clazz);
+		return LocalTimeTextField.class.isAssignableFrom(clazz);
 	}
 }
