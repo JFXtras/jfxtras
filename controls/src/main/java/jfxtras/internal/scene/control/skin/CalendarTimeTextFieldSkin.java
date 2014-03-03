@@ -54,6 +54,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.Popup;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.scene.control.CalendarTimeTextField;
+import jfxtras.scene.control.ImageViewButton;
 import jfxtras.util.NodeUtil;
 
 /**
@@ -184,7 +185,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
         textField.promptTextProperty().bind(getSkinnable().promptTextProperty());
 
 		// the icon
-		imageView = new ImageView();
+		imageView = new ImageViewButton();
 		imageView.getStyleClass().add("icon");
 		imageView.setPickOnBounds(true);
 		imageView.setOnMouseClicked(new EventHandler<MouseEvent>()
@@ -336,7 +337,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 			lBorderPane.setCenter(calendarTimePicker);
 			
 			// add a close button
-			ImageView lImageView = new ImageView(closeIconImage);
+			ImageView lImageView = new ImageViewButton(closeIconImage);
 			lImageView.setPickOnBounds(true);
 			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				@Override public void handle(MouseEvent evt) {

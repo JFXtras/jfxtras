@@ -76,6 +76,7 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
 import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.ImageViewButton;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
@@ -1750,7 +1751,7 @@ implements Agenda.AgendaSkin
 
 		// close icon
 		{
-			ImageViewWithMouseOverEffect lImageView = new ImageViewWithMouseOverEffect();
+			ImageViewButton lImageView = new ImageViewButton();
 			lImageView.getStyleClass().add("close-icon");
 			lImageView.setPickOnBounds(true);
 			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
@@ -1890,7 +1891,7 @@ implements Agenda.AgendaSkin
 		// delete
 		{
 			// close icon
-			ImageViewWithMouseOverEffect lImageView = new ImageViewWithMouseOverEffect();
+			ImageViewButton lImageView = new ImageViewButton();
 			lImageView.getStyleClass().add("delete-icon");
 			lImageView.setPickOnBounds(true);
 			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
@@ -2220,46 +2221,5 @@ implements Agenda.AgendaSkin
 		to.set(Calendar.MONTH, from.get(Calendar.MONTH));
 		to.set(Calendar.DATE, from.get(Calendar.DATE));
 		return to;
-	}
-	
-	class ImageViewWithMouseOverEffect extends ImageView {
-		
-		public ImageViewWithMouseOverEffect()
-		{
-			super();
-			construct();
-		}
-
-		public ImageViewWithMouseOverEffect(Image i) {
-			super(i);
-			construct();
-		}
-		
-		private void construct() {
-			
-			setPickOnBounds(true);
-			setOnMouseEntered(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{						
-						ImageViewWithMouseOverEffect.this.setCursor(Cursor.HAND);
-					}
-				}
-			});
-			setOnMouseExited(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{
-						ImageViewWithMouseOverEffect.this.setCursor(Cursor.DEFAULT);
-					}
-				}
-			});
-		}
 	}
 }
