@@ -31,6 +31,7 @@ package jfxtras.scene.control.test;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
@@ -55,11 +56,14 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 	 */
 	public Parent getRootNode()
 	{
+		Locale.setDefault(Locale.ENGLISH);
+		
 		VBox box = new VBox();
 
 		calendarPicker = new CalendarPicker();
 		box.getChildren().add(calendarPicker);
 
+		// display first of January
 		calendarPicker.setDisplayedCalendar(new GregorianCalendar(2013, 0, 1, 12, 00, 00));
 		
 		// make sure there is enough room for the time sliders

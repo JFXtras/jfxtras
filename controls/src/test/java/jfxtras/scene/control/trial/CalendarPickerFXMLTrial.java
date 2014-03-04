@@ -36,6 +36,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import jfxtras.fxml.JFXtrasBuilderFactory;
 
 
 /**
@@ -59,7 +60,7 @@ public class CalendarPickerFXMLTrial extends Application {
 		URL lURL = this.getClass().getResource(lName);
 		System.out.println("loading FXML " + lName + " -> " + lURL);
 		if (lURL == null) throw new IllegalStateException("FXML file not found");
-		VBox lRoot = (VBox)FXMLLoader.load(lURL);
+		VBox lRoot = (VBox)FXMLLoader.load(lURL, null, new JFXtrasBuilderFactory());
 
         // create scene
         Scene scene = new Scene(lRoot, 800, 300);

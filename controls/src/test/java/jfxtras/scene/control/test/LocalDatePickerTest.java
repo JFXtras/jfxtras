@@ -31,6 +31,7 @@ package jfxtras.scene.control.test;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Locale;
 
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
@@ -53,6 +54,8 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 	 */
 	public Parent getRootNode()
 	{
+		Locale.setDefault(Locale.ENGLISH);
+		
 		VBox box = new VBox();
 
 		localDatePicker = new LocalDatePicker();

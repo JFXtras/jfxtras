@@ -29,6 +29,8 @@
 
 package jfxtras.scene.control.test;
 
+import java.util.Locale;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import jfxtras.scene.control.ListSpinner;
@@ -45,6 +47,8 @@ import org.loadui.testfx.GuiTest;
 public class ListSpinnerEditableTest extends GuiTest {
 	public Parent getRootNode()
 	{
+		Locale.setDefault(Locale.ENGLISH);
+		
 		VBox box = new VBox();
 
 		lSpinner = new ListSpinner<String>("a", "b", "c")

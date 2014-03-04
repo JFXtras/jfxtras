@@ -1,5 +1,5 @@
 /**
- * CalendarTextFieldTest.java
+ * CalendarPickerTest.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -29,94 +29,92 @@
 
 package jfxtras.scene.control.test;
 
-import java.util.Calendar;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
 
-import javafx.scene.Node;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.VBox;
-import jfxtras.scene.control.CalendarTextField;
+import javafx.scene.layout.Pane;
+import jfxtras.fxml.JFXtrasBuilderFactory;
+import jfxtras.scene.control.CalendarPicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.exceptions.NoNodesFoundException;
+
 
 /**
  * Created by Tom Eugelink on 26-12-13.
  */
-public class CalendarTextFieldTest extends JFXtrasGuiTest {
+public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 
 	/**
 	 * 
 	 */
-	public Parent getRootNode()
+	public Parent getRootNode() 
 	{
-		Locale.setDefault(Locale.ENGLISH);
-		
-		VBox box = new VBox();
-		calendarTextField = new CalendarTextField();
-		box.getChildren().add(calendarTextField);
-
-		return box;
-	}
-	private CalendarTextField calendarTextField = null;
-
-	/**
-	 * 
-	 */
-	@Test
-	public void defaultModeIsNull()
-	{
-		// default value is null
-		Assert.assertNull(calendarTextField.getCalendar());
-		
-		// open the popup
-		click(".icon");
-		
-		// click the last day in the first week (this is always clickable)
-		click(".today");
-		
-		// now should be the value in the textfield
-		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
-	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void openPopupAndCloseOnEscape()
-	{
-		// popup should be closed
-//		assertPopupIsNotVisible();
-		
-		// open the popup
-		click(".icon");
-		
-		// popup should be open
-		Assert.assertNotNull(find("#day6"));
-		
-		// send esc
-		press(KeyCode.ESCAPE);
-		
-		// popup should be closed
-//		assertPopupIsNotVisible();
-	}
-	
-	private void assertPopupIsNotVisible() {
-		TestUtil.sleep(2000);
-		PlatformUtil.waitForPaintPulse();
-		// popup should be closed
 		try {
-			Node n = find("#day6"); // last day of first week is always enabled
-			System.out.println(">" + n.isVisible());
-			Assert.assertTrue("Exception expected", false);
+			Locale.setDefault(Locale.ENGLISH);
+			
+	    	// load FXML
+			String lName = this.getClass().getSimpleName() + ".fxml";
+			URL lURL = this.getClass().getResource(lName);
+			//System.out.println("loading FXML " + lName + " -> " + lURL);
+			if (lURL == null) throw new IllegalStateException("FXML file not found: " + lName);
+			Pane lRoot = (Pane)FXMLLoader.load(lURL, null, new JFXtrasBuilderFactory());
+			return lRoot;
 		}
-		catch (NoNodesFoundException e) {
-			// this is expected
+		catch (IOException e) {
+			throw new RuntimeException(e);
 		}
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void defaultPicker()
+	{
+		// get the node
+		CalendarPicker lCalendarPicker = (CalendarPicker)find("#id1");
+		
+		// default value is null
+		Assert.assertNull(lCalendarPicker.getCalendar());
+
+		// click the last day in the first week (this button is always visible)
+		click("#id1 #day6");
+		
+		// default value is not null
+		Assert.assertNotNull(lCalendarPicker.getCalendar());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void atributesAreSet()
+	{
+		// get the node
+		CalendarPicker lCalendarPicker = (CalendarPicker)find("#id2");
+		
+		// displayed calendar
+		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(lCalendarPicker.getDisplayedCalendar()));
+		Assert.assertEquals("de", lCalendarPicker.getLocale().toString());
+		Assert.assertEquals("MULTIPLE", lCalendarPicker.getMode().toString());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void atributesAreSet2()
+	{
+		// get the node
+		CalendarPicker lCalendarPicker = (CalendarPicker)find("#id3");
+		
+		// displayed calendar
+		Assert.assertEquals(true, lCalendarPicker.getShowTime());
 	}
 }

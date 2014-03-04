@@ -37,7 +37,7 @@ import java.util.Locale;
  * @author Tom Eugelink
  *
  */
-public class AbstractLocalDateTimeAPITextFieldBuilder
+public class AbstractLocalDateTimeAPITextFieldBuilder extends AbstractBuilder
 {
 	/** Locale */
 	public String getLocale() { return null; } // dummy, just to make it Java Bean compatible

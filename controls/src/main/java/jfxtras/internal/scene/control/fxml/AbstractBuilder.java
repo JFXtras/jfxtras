@@ -1,5 +1,5 @@
 /**
- * LocalDateTextFieldBuilder.java
+ * CalendarPickerBuilder.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -29,51 +29,27 @@
 
 package jfxtras.internal.scene.control.fxml;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jfxtras.fxml.BuilderService;
-import jfxtras.scene.control.LocalDateTextField;
-import jfxtras.scene.control.LocalDateTimeTextField;
+import javafx.scene.Node;
 
 /**
  * @author Tom Eugelink
  *
  */
-public class LocalDateTimeTextFieldBuilder extends AbstractLocalDateTimeAPITextFieldBuilder implements BuilderService<LocalDateTimeTextField>
+public class AbstractBuilder
 {
+	/** Id */
+	public String getId() { return null; } // dummy, just to make it Java Bean compatible
+	public void setId(String value) { this.id = value; }
+	private String id = null;
+
+
 	/**
 	 * Implementation of Builder interface
 	 */
-	@Override
-	public LocalDateTimeTextField build()
-	{		
-		Locale lLocale = (iLocale == null ? Locale.getDefault() : iLocale);
-		LocalDateTimeTextField lLocalDateTimeTextField = new LocalDateTimeTextField();
-		if (iDateTimeFormatter != null) lLocalDateTimeTextField.setDateTimeFormatter( DateTimeFormatter.ofPattern(iDateTimeFormatter).withLocale(lLocale));
-		if (iLocale != null) lLocalDateTimeTextField.setLocale(iLocale);
-		if (iPromptText != null) lLocalDateTimeTextField.setPromptText(iPromptText);
-		if (iDateTimeFormatters != null) 
-		{
-			ObservableList<DateTimeFormatter> lDateTimeFormatters = FXCollections.observableArrayList();
-			for (String lPart : iDateTimeFormatters) 
-			{
-				lDateTimeFormatters.add( DateTimeFormatter.ofPattern(lPart.trim()).withLocale(lLocale) );
-			}
-			lLocalDateTimeTextField.setDateTimeFormatters(lDateTimeFormatters);
-		}
-		applyCommonProperties(lLocalDateTimeTextField);
-		return lLocalDateTimeTextField;
-	}
-	
-	/**
-	 * Implementation of BuilderService interface
-	 */
-	@Override
-	public boolean isBuilderFor(Class<?> clazz)
+	public void applyCommonProperties(Node node)
 	{
-		return LocalDateTimeTextField.class.isAssignableFrom(clazz);
+		if (id != null) {
+			node.setId(id);
+		}
 	}
 }

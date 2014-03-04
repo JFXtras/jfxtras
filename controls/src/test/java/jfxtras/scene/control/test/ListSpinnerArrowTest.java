@@ -29,6 +29,8 @@
 
 package jfxtras.scene.control.test;
 
+import java.util.Locale;
+
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import jfxtras.internal.scene.control.skin.ListSpinnerSkin;
@@ -47,6 +49,8 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 	public Parent getRootNode()
 	{
+		Locale.setDefault(Locale.ENGLISH);
+		
 		VBox box = new VBox();
 
 		spinner = new ListSpinner<String>("a", "b", "c");

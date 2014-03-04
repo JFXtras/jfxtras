@@ -44,7 +44,7 @@ import jfxtras.scene.control.CalendarTimeTextField;
  * @author Tom Eugelink
  *
  */
-public class CalendarTimeTextFieldBuilder implements BuilderService<CalendarTimeTextField>
+public class CalendarTimeTextFieldBuilder extends AbstractBuilder implements BuilderService<CalendarTimeTextField>
 {
 	/** Locale */
 	public String getLocale() { return null; } // dummy, just to make it Java Bean compatible
@@ -94,6 +94,7 @@ public class CalendarTimeTextFieldBuilder implements BuilderService<CalendarTime
 			}
 			lCalendarTimeTextField.setDateFormats(lDateFormats);
 		}
+		applyCommonProperties(lCalendarTimeTextField);
 		return lCalendarTimeTextField;
 	}
 	

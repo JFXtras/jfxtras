@@ -63,6 +63,7 @@ public class LocalDateTextFieldBuilder extends AbstractLocalDateTimeAPITextField
 			}
 			lLocalDateTextField.setDateTimeFormatters(lDateTimeFormatters);
 		}
+		applyCommonProperties(lLocalDateTextField);
 		return lLocalDateTextField;
 	}
 	
