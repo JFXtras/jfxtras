@@ -1,5 +1,5 @@
 /**
- * CalendarPickerTest.java
+ * CalendarTextFieldTest.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -31,14 +31,18 @@ package jfxtras.scene.control.test;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.Locale;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.TextField;
 import jfxtras.fxml.JFXtrasBuilderFactory;
 import jfxtras.scene.control.CalendarPicker;
+import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
+import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -49,7 +53,7 @@ import org.junit.Test;
  * But in order to prevent that the window becomes too width or heigh, tabs are used to separate the test cases
  * 
  */
-public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
+public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 
 	/**
 	 * 
@@ -76,22 +80,25 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
-	public void defaultPicker()
+	public void defaultControl()
 	{
 		// show the correct tab
-		click("#defaultPicker");
+		click("#defaultControl");
 		
 		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
+		CalendarTextField lCalendarTextField = (CalendarTextField)find(".CalendarTextField");
 		
 		// default value is null
-		Assert.assertNull(lCalendarPicker.getCalendar());
+		Assert.assertNull(lCalendarTextField.getCalendar());
+
+		// popup the picker
+		click(".icon");
 
 		// click the last day in the first week (this button is always visible)
-		click("#id1 #day6");
-		
+		click("#day6");
+
 		// default value is not null
-		Assert.assertNotNull(lCalendarPicker.getCalendar());
+		Assert.assertNotNull(lCalendarTextField.getCalendar());
 	}
 
 	/**
@@ -104,12 +111,38 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 		click("#atributesAreSet2");
 		
 		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
+		CalendarTextField lCalendarTextField = (CalendarTextField)find(".CalendarTextField");
+		TextField lTextField = (TextField)find(".CalendarTextField .text-field");
 		
-		// set properties
-		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(lCalendarPicker.getDisplayedCalendar()));
-		Assert.assertEquals("de", lCalendarPicker.getLocale().toString());
-		Assert.assertEquals("MULTIPLE", lCalendarPicker.getMode().toString());
+		// check properties
+		Assert.assertEquals("2013-01-01 22:33:44", lCalendarTextField.getDateFormat().format(new Date(2013-1900, 1-1, 1, 22, 33, 44)));
+		
+		// type value
+		click(".CalendarTextField .text-field");
+		type("2010");
+		click(".button"); //just to move the focus
+		Assert.assertEquals("2010-01-01T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
+		PlatformUtil.runAndWait(() -> {
+			lTextField.clear();
+		});
+		
+		// type value
+		click(".CalendarTextField .text-field");
+		type("2010-06");
+		click(".button"); //just to move the focus
+		Assert.assertEquals("2010-06-01T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
+		PlatformUtil.runAndWait(() -> {
+			lTextField.clear();
+		});
+		
+		// type value
+		click(".CalendarTextField .text-field");
+		type("2010-06-12");
+		click(".button"); //just to move the focus
+		Assert.assertEquals("2010-06-12T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
+		PlatformUtil.runAndWait(() -> {
+			lTextField.clear();
+		});
 	}
 
 	/**
@@ -122,28 +155,12 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 		click("#atributesAreSet3");
 		
 		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
+		CalendarTextField lCalendarTextField = (CalendarTextField)find(".CalendarTextField");		
+		TextField lTextField = (TextField)find(".CalendarTextField .text-field");
 		
-		// set properties
-		Assert.assertEquals(true, lCalendarPicker.getShowTime());
-		Assert.assertEquals("2013-01-10T22:33:44.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarPicker.getCalendar()));
-		
+		// check properties
+		Assert.assertEquals("de", lCalendarTextField.getLocale().toString());
+		Assert.assertEquals("locale set", lTextField.getPromptText());
 	}
 
-	/**
-	 * 
-	 */
-	@Test
-	public void atributesAreSet4()
-	{
-		// show the correct tab
-		click("#atributesAreSet4");
-		
-		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
-		
-		// set properties
-		Assert.assertEquals(false, lCalendarPicker.getAllowNull());
-		Assert.assertNotNull(lCalendarPicker.getCalendar());
-	}
 }

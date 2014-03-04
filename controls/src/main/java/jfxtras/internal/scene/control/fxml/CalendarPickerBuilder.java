@@ -43,6 +43,9 @@ import jfxtras.scene.control.CalendarPicker;
  */
 public class CalendarPickerBuilder extends AbstractBuilder implements BuilderService<CalendarPicker>
 {
+	static final private SimpleDateFormat YMDSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	static final private SimpleDateFormat YMDHMSSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
 	/** Locale */
 	public String getLocale() { return null; } // dummy, just to make it Java Bean compatible
 	public void setLocale(String value) { 
@@ -62,7 +65,15 @@ public class CalendarPickerBuilder extends AbstractBuilder implements BuilderSer
 		}
 	}
 	private Calendar displayedCalendar = null;
-	static final private SimpleDateFormat YMDSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+
+	/** calendar */
+	public String getCalendar() { return null; } // dummy, just to make it Java Bean compatible
+	public void setCalendar(String value) {
+		this.calendarText = value;
+	}
+	private String calendarText = null;
+
 
 	/** Mode */
 	public String getMode() { return null; } // dummy, just to make it Java Bean compatible
@@ -93,11 +104,38 @@ public class CalendarPickerBuilder extends AbstractBuilder implements BuilderSer
 	public CalendarPicker build()
 	{
 		CalendarPicker lCalendarPicker = new CalendarPicker();
-		if (locale != null) lCalendarPicker.setLocale(locale);
-		if (displayedCalendar != null) lCalendarPicker.setDisplayedCalendar(displayedCalendar);
-		if (mode != null) lCalendarPicker.setMode(mode);
-		if (showTime != null) lCalendarPicker.setShowTime(showTime);
-		if (allowNull != null) lCalendarPicker.setAllowNull(allowNull);
+		if (showTime != null) {
+			lCalendarPicker.setShowTime(showTime);
+		}
+		if (locale != null) {
+			lCalendarPicker.setLocale(locale);
+		}
+		if (calendarText != null) {
+			// we parse here and not in setCalendar because we need the value of showTime, and that may be specified after the calendar attribute
+			try {
+				Calendar lCalendar = Calendar.getInstance();
+				if (lCalendarPicker.showTimeProperty().get()) {
+					lCalendar.setTime( YMDHMSSimpleDateFormat.parse(calendarText) );
+				}
+				else {
+					lCalendar.setTime( YMDSimpleDateFormat.parse(calendarText) );
+				}
+				lCalendarPicker.setCalendar(lCalendar);
+			}
+			catch (ParseException e) {
+				throw new RuntimeException(e);
+			}
+
+		}
+		if (displayedCalendar != null) {
+			lCalendarPicker.setDisplayedCalendar(displayedCalendar);
+		}
+		if (mode != null) {
+			lCalendarPicker.setMode(mode);
+		}
+		if (allowNull != null) {
+			lCalendarPicker.setAllowNull(allowNull);
+		}
 		applyCommonProperties(lCalendarPicker);
 		return lCalendarPicker;
 	}
