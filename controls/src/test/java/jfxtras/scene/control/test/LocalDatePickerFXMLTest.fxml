@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import jfxtras.scene.control.*?>
+
+<TabPane xmlns:fx="http://javafx.com/fxml">
+	<tabs>
+		<Tab id="defaultPicker" text="tab1">
+			<LocalDatePicker id="id1"/>
+		</Tab>
+		<Tab id="atributesAreSet2" text="tab2">
+			<LocalDatePicker id="id2" displayedLocalDate="2013-01-01" locale="de" mode="MULTIPLE"/>
+		</Tab>
+		<Tab id="atributesAreSet3" text="tab3">
+			<LocalDatePicker id="id3" localDate="2013-01-01" />
+		</Tab>
+		<Tab id="atributesAreSet4" text="tab4">
+			<LocalDatePicker id="id4" allowNull="false"/>
+		</Tab>
+    </tabs>
+</TabPane>

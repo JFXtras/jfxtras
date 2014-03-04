@@ -99,7 +99,9 @@ public class CalendarPicker extends Control
 	{
 		public void set(Calendar value)
 		{
-			if (value == null && getAllowNull() == false) throw new NullPointerException("Null not allowed");
+			if (value == null && getAllowNull() == false) {
+				throw new NullPointerException("Null not allowed");
+			}
 			super.set(value);
 		}
 	};

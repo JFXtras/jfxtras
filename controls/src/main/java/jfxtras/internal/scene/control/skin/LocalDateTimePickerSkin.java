@@ -67,11 +67,11 @@ public class LocalDateTimePickerSkin extends SkinBase<LocalDateTimePicker>
 		
 		// bind specifics
 		calendarPicker.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
-		calendarPicker.allowNullProperty().bindBidirectional( getSkinnable().allowNullProperty() );
 		DateTimeToCalendarHelper.syncLocalDateTime(calendarPicker.calendarProperty(), getSkinnable().localDateTimeProperty(), calendarPicker.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDateTime(calendarPicker.displayedCalendar(), getSkinnable().displayedLocalDateTimeProperty(), calendarPicker.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDateTimes(calendarPicker.highlightedCalendars(), getSkinnable().highlightedLocalDateTimes(), calendarPicker.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDateTimes(calendarPicker.disabledCalendars(), getSkinnable().disabledLocalDateTimes(), calendarPicker.localeProperty());
+		calendarPicker.allowNullProperty().bindBidirectional( getSkinnable().allowNullProperty() );
 	}
 	
 	// ==================================================================================================================

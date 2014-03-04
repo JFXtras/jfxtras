@@ -179,7 +179,6 @@ public class DateTimeToCalendarHelper {
 		}
 		Instant lInstant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
 		Date lDate = Date.from(lInstant);
-System.out.println("tbee createDateFromLocalDateTime " + localDateTime + " -> " + lDate);		
 		return lDate;
 	}
 	

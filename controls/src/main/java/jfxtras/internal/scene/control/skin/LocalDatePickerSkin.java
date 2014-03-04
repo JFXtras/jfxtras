@@ -64,17 +64,17 @@ public class LocalDatePickerSkin extends SkinBase<LocalDatePicker>
 		// bind basic node
 		calendarPicker.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
 		calendarPicker.getStyleClass().addAll(getSkinnable().getStyleClass());
-		getSkinnable().styleProperty().bindBidirectional( calendarPicker.styleProperty() );
+		calendarPicker.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
 		
 		// bind specifics
-		getSkinnable().localeProperty().bindBidirectional( calendarPicker.localeProperty() );
-		getSkinnable().allowNullProperty().bindBidirectional( calendarPicker.allowNullProperty() );
-		DateTimeToCalendarHelper.syncLocalDate(calendarPicker.calendarProperty(), getSkinnable().localDateProperty(), calendarPicker.localeProperty());
-		DateTimeToCalendarHelper.syncLocalDate(calendarPicker.displayedCalendar(), getSkinnable().displayedLocalDateProperty(), calendarPicker.localeProperty());
-		DateTimeToCalendarHelper.syncLocalDates(calendarPicker.calendars(), getSkinnable().localDates(), calendarPicker.localeProperty());
-		DateTimeToCalendarHelper.syncLocalDates(calendarPicker.highlightedCalendars(), getSkinnable().highlightedLocalDates(), calendarPicker.localeProperty());
-		DateTimeToCalendarHelper.syncLocalDates(calendarPicker.disabledCalendars(), getSkinnable().disabledLocalDates(), calendarPicker.localeProperty());
+		calendarPicker.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
+		DateTimeToCalendarHelper.syncLocalDate(calendarPicker.calendarProperty(), getSkinnable().localDateProperty(), getSkinnable().localeProperty());
+		DateTimeToCalendarHelper.syncLocalDate(calendarPicker.displayedCalendar(), getSkinnable().displayedLocalDateProperty(), getSkinnable().localeProperty());
+		DateTimeToCalendarHelper.syncLocalDates(calendarPicker.calendars(), getSkinnable().localDates(), getSkinnable().localeProperty());
+		DateTimeToCalendarHelper.syncLocalDates(calendarPicker.highlightedCalendars(), getSkinnable().highlightedLocalDates(), getSkinnable().localeProperty());
+		DateTimeToCalendarHelper.syncLocalDates(calendarPicker.disabledCalendars(), getSkinnable().disabledLocalDates(), getSkinnable().localeProperty());
 		syncMode();
+		calendarPicker.allowNullProperty().bindBidirectional( getSkinnable().allowNullProperty() );
 	}
 	
 	// ==================================================================================================================
