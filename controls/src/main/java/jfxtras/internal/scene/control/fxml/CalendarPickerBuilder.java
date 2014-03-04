@@ -78,6 +78,13 @@ public class CalendarPickerBuilder extends AbstractBuilder implements BuilderSer
 	}
 	private Boolean showTime = null;
 
+	/** AllowNull */
+	public String getAllowNull() { return null; } // dummy, just to make it Java Bean compatible
+	public void setAllowNull(String value) { 
+		this.allowNull = Boolean.valueOf(value); 
+	}
+	private Boolean allowNull = null;
+
 
 	/**
 	 * Implementation of Builder interface
@@ -90,6 +97,7 @@ public class CalendarPickerBuilder extends AbstractBuilder implements BuilderSer
 		if (displayedCalendar != null) lCalendarPicker.setDisplayedCalendar(displayedCalendar);
 		if (mode != null) lCalendarPicker.setMode(mode);
 		if (showTime != null) lCalendarPicker.setShowTime(showTime);
+		if (allowNull != null) lCalendarPicker.setAllowNull(allowNull);
 		applyCommonProperties(lCalendarPicker);
 		return lCalendarPicker;
 	}

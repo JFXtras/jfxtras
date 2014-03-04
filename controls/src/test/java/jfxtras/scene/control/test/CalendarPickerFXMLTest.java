@@ -99,7 +99,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 		// get the node
 		CalendarPicker lCalendarPicker = (CalendarPicker)find("#id2");
 		
-		// displayed calendar
+		// set properties
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(lCalendarPicker.getDisplayedCalendar()));
 		Assert.assertEquals("de", lCalendarPicker.getLocale().toString());
 		Assert.assertEquals("MULTIPLE", lCalendarPicker.getMode().toString());
@@ -114,7 +114,9 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 		// get the node
 		CalendarPicker lCalendarPicker = (CalendarPicker)find("#id3");
 		
-		// displayed calendar
+		// set properties
+		Assert.assertEquals(false, lCalendarPicker.getAllowNull());
+		Assert.assertNotNull(lCalendarPicker.getCalendar());
 		Assert.assertEquals(true, lCalendarPicker.getShowTime());
 	}
 }
