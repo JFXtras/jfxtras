@@ -58,13 +58,4 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 		return release(keyCode);
 	}
 
-//	public GuiTest click(String s) {
-//		try {
-//			return super.click(s);
-//		}
-//		finally {
-//			TestUtil.sleep(50);
-//		}
-//	}
-
 }

@@ -35,6 +35,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import jfxtras.internal.scene.control.skin.CalendarTimePickerSkin;
 import jfxtras.internal.scene.control.skin.LocalTimePickerSkin;
 
 /**
@@ -82,11 +83,17 @@ public class LocalTimePicker extends Control
 	
 	/** LocalTime: */
 	public ObjectProperty<LocalTime> localTimeProperty() { return localTimeObjectProperty; }
-	private final ObjectProperty<LocalTime> localTimeObjectProperty = new SimpleObjectProperty<LocalTime>(this, "localTime");
+	private final ObjectProperty<LocalTime> localTimeObjectProperty = new SimpleObjectProperty<LocalTime>(this, "localTime", LocalTime.now());
 	public LocalTime getLocalTime() { return localTimeObjectProperty.getValue(); }
 	public void setLocalTime(LocalTime value) { localTimeObjectProperty.setValue(value); }
 	public LocalTimePicker withLocalTime(LocalTime value) { setLocalTime(value); return this; } 
 
+	/** MinuteStep */
+	public ObjectProperty<Integer> minuteStepProperty() { return minuteStepProperty; }
+	final private SimpleObjectProperty<Integer> minuteStepProperty = new SimpleObjectProperty<Integer>(this, "minuteStep", 1);
+	public Integer getMinuteStep() { return minuteStepProperty.getValue(); }
+	public void setMinuteStep(Integer value) { minuteStepProperty.setValue(value); }
+	public LocalTimePicker withMinuteStep(Integer value) { setMinuteStep(value); return this; } 
 
 	// ==================================================================================================================
 	// SUPPORT

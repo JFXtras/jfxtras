@@ -99,6 +99,9 @@ public class CalendarTimePicker extends Control
 	{
 		public void set(Integer value)
 		{
+			if (value == null || value.intValue() < 0 || value.intValue() > 59) {
+				throw new IllegalArgumentException("null or outside [0-59] is not allowed");
+			}
 			super.set(value);
 			setCalendar( CalendarTimePickerSkin.blockMinutesToStep(getCalendar(), getMinuteStep()) );
 		}		

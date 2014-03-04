@@ -148,8 +148,16 @@ public class TestUtil {
 	 */
 	static public String quickFormatCalendarAsDate(Calendar value) {
 		if (value == null) return "null";
-		SimpleDateFormat lSimpleDateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
-		lSimpleDateFormat.applyPattern("yyyy-MM-dd");
+		SimpleDateFormat lSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
+	}
+	
+	/**
+	 * 
+	 */
+	static public String quickFormatCalendarAsTime(Calendar value) {
+		if (value == null) return "null";
+		SimpleDateFormat lSimpleDateFormat = new SimpleDateFormat("HH:mm:ss");
 		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
 	}
 	
@@ -158,8 +166,7 @@ public class TestUtil {
 	 */
 	static public String quickFormatCalendarAsDateTime(Calendar value) {
 		if (value == null) return "null";
-		SimpleDateFormat lSimpleDateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.LONG);
-		lSimpleDateFormat.applyPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		SimpleDateFormat lSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
 	}
 	
