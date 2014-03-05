@@ -1,4 +1,4 @@
-rootProject.name = 'jfxtras-all'
+rootProject.name = 'all'
 
 include 'agenda'
 include 'controls'

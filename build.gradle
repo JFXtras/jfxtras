@@ -3,6 +3,12 @@ task wrapper(type: Wrapper) {
 }
 
 allprojects {
+	apply plugin: 'java'
+	apply plugin: 'maven'	
+	apply plugin: 'signing'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+	
 	repositories {
 		mavenLocal()
 		mavenCentral()
@@ -13,55 +19,12 @@ allprojects {
 			url "http://oss.sonatype.org/content/repositories/releases/" 
 		}
 	}
-}
-
-subprojects {
-	apply plugin: 'java'
-	apply plugin: 'maven'	
-	apply plugin: 'signing'
-	apply plugin: 'eclipse'
-	apply plugin: 'idea'
-	
-	// all projects must be compatible with the java version specified here
-	sourceCompatibility = '1.8'
-	[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-	// Needed until Gradle supports class-scanning for Java 8
-	tasks.withType(Test) {
-		scanForTestClasses = false
-		include "**/*Test.class"
-		include "**/*Test1.class"
-		exclude 'jfxtras/labs/test/JFXtrasGuiTest.class'
-	}
-	
-	// prepend every artifactId with 'jfxtras-'
-	configure(install.repositories.mavenInstaller) {
-		pom.project {
-			artifactId "jfxtras-${project.name}"
-		}
-	}
-	
-	task docJar(type: Jar, dependsOn: javadoc) {
-		classifier = 'javadoc'
-		from 'build/docs/javadoc'
-	}
-
-	task sourcesJar(type: Jar) {
-		from sourceSets.main.allSource
-		classifier = 'sources'
-	}
-
-	artifacts {
-		archives jar
-		archives docJar
-		archives sourcesJar
-	}
 
 	signing {
 		sign configurations.archives
 	}
         
-        signArchives.onlyIf {
+    signArchives.onlyIf {
 		project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
 	}
 
@@ -110,6 +73,63 @@ subprojects {
 	}
 }
 
+
+subprojects {
+	// all projects must be compatible with the java version specified here
+	sourceCompatibility = '1.8'
+	[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+	// Needed until Gradle supports class-scanning for Java 8
+	tasks.withType(Test) {
+		scanForTestClasses = false
+		include "**/*Test.class"
+		include "**/*Test1.class"
+		exclude 'jfxtras/labs/test/JFXtrasGuiTest.class'
+	}
+	
+	// prepend every artifactId with 'jfxtras-'
+	configure(install.repositories.mavenInstaller) {
+		pom.project {
+			artifactId "jfxtras-${project.name}"
+		}
+	}
+	
+	configurations {
+		asciidoclet
+	}
+	
+	dependencies {
+		asciidoclet 'org.asciidoctor:asciidoclet:0.+'
+	}
+	
+	javadoc {
+		options.docletpath = configurations.asciidoclet.files.asType(List)
+		options.doclet = 'org.asciidoctor.Asciidoclet'
+	}
+
+	task docJar(type: Jar, dependsOn: javadoc) {
+		classifier = 'javadoc'
+		from 'build/docs/javadoc'
+	}
+
+	task sourcesJar(type: Jar) {
+		from sourceSets.main.allSource
+		classifier = 'sources'
+	}
+
+	artifacts {
+		archives jar
+		archives docJar
+		archives sourcesJar
+	}
+}
+
+project(':') {
+	artifacts {
+		archives jar
+	}
+}
+
 project(':agenda') {
 	dependencies {
 		compile project(':controls')
@@ -139,11 +159,15 @@ project(':test-support') {
 	}
 }
 
-task uberJar(type: Jar) {
-	dependsOn { subprojects.jar }
-	subprojects.each { proj ->
-		from { zipTree(proj.jar.archivePath) }
-	}
+task uberJar(type: Jar, dependsOn: subprojects.jar) {    
+    subprojects.each {
+        proj -> from {
+			if (proj.name != 'test-support') {
+				println("Merging into uberJar: ${proj.jar.archivePath}")
+				zipTree(proj.jar.archivePath) 
+			}
+        }
+    }
 }
 
 // TODO: _lib folder per project?
