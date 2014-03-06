@@ -67,6 +67,7 @@ import jfxtras.scene.control.ListSpinner;
 import jfxtras.scene.control.ListSpinner.CycleEvent;
 import jfxtras.scene.control.ListSpinnerIntegerList;
 import jfxtras.scene.layout.GridPane;
+import jfxtras.test.TestUtil;
 
 import com.sun.javafx.css.converters.EnumConverter;
 
@@ -593,6 +594,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		{
 			lToggledCalendar.set(Calendar.HOUR_OF_DAY, timePicker.getCalendar().get(Calendar.HOUR_OF_DAY));
 			lToggledCalendar.set(Calendar.MINUTE, timePicker.getCalendar().get(Calendar.MINUTE));
+			lToggledCalendar.set(Calendar.SECOND, timePicker.getCalendar().get(Calendar.SECOND));
 		}
 		
 		// return

@@ -35,10 +35,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
 import javafx.css.StyleableObjectProperty;
@@ -94,6 +93,12 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			minuteScrollSlider.setBlockIncrement(getSkinnable().getMinuteStep().doubleValue());
 		});
 		minuteScrollSlider.setBlockIncrement(getSkinnable().getMinuteStep().doubleValue());
+		
+		// react to changes in the minuteStep 
+		getSkinnable().secondStepProperty().addListener( (observable) -> {
+			secondScrollSlider.setBlockIncrement(getSkinnable().getSecondStep().doubleValue());
+		});
+		secondScrollSlider.setBlockIncrement(getSkinnable().getSecondStep().doubleValue());
 		
 		// react to changes in the calendar 
 		getSkinnable().localeProperty().addListener( (observable) -> {
@@ -229,6 +234,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		hourScrollSlider.setMajorTickUnit(12);
 		hourScrollSlider.setMinorTickCount(3);
 		hourScrollSlider.valueProperty().addListener( (observable, oldValue, newValue) ->  {
+			if (refreshingAtomicInteger.get() > 0) {
+				return;
+			}
+			
 			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			lCalendar.set(Calendar.HOUR_OF_DAY, newValue.intValue());
@@ -241,6 +250,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		minuteScrollSlider.maxProperty().set(59);
 		minuteScrollSlider.setMajorTickUnit(10);
 		minuteScrollSlider.valueProperty().addListener( (observable, oldValue, newValue) ->  {
+			if (refreshingAtomicInteger.get() > 0) {
+				return;
+			}
+			
 			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			
@@ -263,6 +276,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		secondScrollSlider.maxProperty().set(59);
 		secondScrollSlider.setMajorTickUnit(10);
 		secondScrollSlider.valueProperty().addListener( (observable, oldValue, newValue) ->  {
+			if (refreshingAtomicInteger.get() > 0) {
+				return;
+			}
+			
 			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			
@@ -443,15 +460,23 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	 */
 	private void refresh()
 	{
-		Calendar lCalendar = getSkinnable().getCalendar();
-		int lHour = lCalendar == null ? 0 : lCalendar.get(Calendar.HOUR_OF_DAY);
-		int lMinute = lCalendar == null ? 0 : lCalendar.get(Calendar.MINUTE);
-		int lSecond = lCalendar == null ? 0 : lCalendar.get(Calendar.SECOND);
-		hourScrollSlider.valueProperty().set(lHour);
-		minuteScrollSlider.valueProperty().set(lMinute);
-		secondScrollSlider.valueProperty().set(lSecond);
-		timeText.setText( lCalendar == null ? "" : getLabelDateFormat().format(lCalendar.getTime()) );
+		try {
+			refreshingAtomicInteger.addAndGet(1);
+
+			Calendar lCalendar = getSkinnable().getCalendar();
+			int lHour = lCalendar == null ? 0 : lCalendar.get(Calendar.HOUR_OF_DAY);
+			int lMinute = lCalendar == null ? 0 : lCalendar.get(Calendar.MINUTE);
+			int lSecond = lCalendar == null ? 0 : lCalendar.get(Calendar.SECOND);
+			hourScrollSlider.valueProperty().set(lHour);
+			minuteScrollSlider.valueProperty().set(lMinute);
+			secondScrollSlider.valueProperty().set(lSecond);
+			timeText.setText( lCalendar == null ? "" : getLabelDateFormat().format(lCalendar.getTime()) );
+		}
+		finally {
+			refreshingAtomicInteger.addAndGet(-1);
+		}
 	}
+	final private AtomicInteger refreshingAtomicInteger = new AtomicInteger(0);
 	
 	/**
 	 * minutes fit in the minute steps

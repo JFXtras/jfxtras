@@ -37,7 +37,9 @@ import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import jfxtras.scene.control.CalendarPicker;
+import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 import jfxtras.util.PlatformUtil;
@@ -419,5 +421,31 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 
 		// Jan 2013 is shown
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getDisplayedCalendar()));
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void changingDateShouldNotTouchTime()
+	{
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+
+		// set a value
+		final Calendar lCalendar = new GregorianCalendar(2013, 00, 01, 12, 34, 56);
+		PlatformUtil.runAndWait( () -> {
+			calendarPicker.setShowTime(true);
+		});
+		final CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
+		PlatformUtil.runAndWait( () -> {
+			lCalendarTimePicker.setStyle("-fxx-label-dateformat:\"HH:mm:ss\";");
+			calendarPicker.setCalendar( (Calendar)lCalendar.clone() );
+		});
+		Assert.assertEquals("2013-01-01T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
+		
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals("2013-01-02T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
 	}
 }

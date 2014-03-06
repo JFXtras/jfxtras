@@ -43,6 +43,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.util.Callback;
+import jfxtras.test.TestUtil;
 
 /**
  * = Calendar picker component
