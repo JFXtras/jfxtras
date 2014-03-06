@@ -116,6 +116,7 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 		
 		// default value is not null
 		Assert.assertEquals(15, lLocalTimePicker.getMinuteStep().intValue());
+		Assert.assertEquals(15, lLocalTimePicker.getSecondStep().intValue());
 	}
 	
 	/**

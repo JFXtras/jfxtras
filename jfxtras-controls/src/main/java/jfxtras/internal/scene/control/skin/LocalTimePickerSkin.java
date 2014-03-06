@@ -29,10 +29,6 @@
 
 package jfxtras.internal.scene.control.skin;
 
-import java.util.Locale;
-
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.SkinBase;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.scene.control.LocalTimePicker;
@@ -71,6 +67,7 @@ public class LocalTimePickerSkin extends SkinBase<LocalTimePicker>
 		
 		// bind specifics
 		calendarTimePicker.minuteStepProperty().bindBidirectional( getSkinnable().minuteStepProperty() );
+		calendarTimePicker.secondStepProperty().bindBidirectional( getSkinnable().secondStepProperty() );
 		calendarTimePicker.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
 		DateTimeToCalendarHelper.syncLocalTime(calendarTimePicker.calendarProperty(), getSkinnable().localTimeProperty(), getSkinnable().localeProperty());
 	}

@@ -73,6 +73,13 @@ public class CalendarTimePickerBuilder extends AbstractBuilder implements Builde
 	}
 	private Integer minuteStep = null;
 
+	/** SecondStep */
+	public Integer getSecondStep() { return null; } // dummy, just to make it Java Bean compatible
+	public void setSecondStep(Integer value) { 
+		this.secondStep = Integer.valueOf(value); 
+	}
+	private Integer secondStep = null;
+
 	/**
 	 * Implementation of Builder interface
 	 */
@@ -88,6 +95,9 @@ public class CalendarTimePickerBuilder extends AbstractBuilder implements Builde
 		}
 		if (minuteStep != null) {
 			lCalendarTimePicker.setMinuteStep(minuteStep);
+		}
+		if (secondStep != null) {
+			lCalendarTimePicker.setSecondStep(secondStep);
 		}
 		applyCommonProperties(lCalendarTimePicker);
 		return lCalendarTimePicker;

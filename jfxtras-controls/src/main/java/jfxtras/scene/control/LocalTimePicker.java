@@ -102,6 +102,14 @@ public class LocalTimePicker extends Control
 	public void setMinuteStep(Integer value) { minuteStepProperty.setValue(value); }
 	public LocalTimePicker withMinuteStep(Integer value) { setMinuteStep(value); return this; } 
 
+
+	/** SecondStep */
+	public ObjectProperty<Integer> secondStepProperty() { return secondStepProperty; }
+	final private SimpleObjectProperty<Integer> secondStepProperty = new SimpleObjectProperty<Integer>(this, "secondStep", 1);
+	public Integer getSecondStep() { return secondStepProperty.getValue(); }
+	public void setSecondStep(Integer value) { secondStepProperty.setValue(value); }
+	public LocalTimePicker withSecondStep(Integer value) { setSecondStep(value); return this; } 
+
 	// ==================================================================================================================
 	// SUPPORT
 

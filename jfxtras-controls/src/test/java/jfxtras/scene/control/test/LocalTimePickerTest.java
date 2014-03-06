@@ -30,7 +30,6 @@
 package jfxtras.scene.control.test;
 
 import java.time.LocalTime;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javafx.scene.Parent;
@@ -89,11 +88,14 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 			localTimePicker.setLocalTime(LocalTime.of(12, 30, 00));			
 		});
 		
+		Text lLabelText = (Text)find(".timeLabel");
+
 		// move the hour slider
 		move("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(100,0);		
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals("8:30 PM", lLabelText.getText());
 		Assert.assertEquals("20:30", localTimePicker.getLocalTime().toString());
 		
 		// move the minute slider
@@ -101,6 +103,7 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 		press(MouseButton.PRIMARY);
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals("8:19 PM", lLabelText.getText());
 		Assert.assertEquals("20:19", localTimePicker.getLocalTime().toString());
 	}
 	
@@ -115,21 +118,35 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 		PlatformUtil.runAndWait( () -> {
 			localTimePicker.setLocalTime(LocalTime.of(12, 30, 00));			
 			localTimePicker.setMinuteStep(15);
+			localTimePicker.setSecondStep(15);
+			localTimePicker.setStyle("-fxx-label-dateformat:\"HH:mm:ss\";");
 		});
 		
+		Text lLabelText = (Text)find(".timeLabel");
+
 		// move the hour slider
 		move("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(100,0);		
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals("20:30:00", lLabelText.getText());
 		Assert.assertEquals("20:30", localTimePicker.getLocalTime().toString());
-		
+
 		// move the minute slider
 		move("#minuteSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals("20:15:00", lLabelText.getText());
 		Assert.assertEquals("20:15", localTimePicker.getLocalTime().toString());
+
+		// move the second slider
+		move("#secondSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(40,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals("20:15:15", lLabelText.getText());
+		Assert.assertEquals("20:15:15", localTimePicker.getLocalTime().toString());
 	}
 	
 	/**

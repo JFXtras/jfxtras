@@ -117,4 +117,21 @@ public class CalendarTimePicker extends Control
 	public Integer getMinuteStep() { return minuteStepProperty.getValue(); }
 	public void setMinuteStep(Integer value) { minuteStepProperty.setValue(value); }
 	public CalendarTimePicker withMinuteStep(Integer value) { setMinuteStep(value); return this; } 
+
+	/** SecondStep */
+	public ObjectProperty<Integer> secondStepProperty() { return secondStepProperty; }
+	final private SimpleObjectProperty<Integer> secondStepProperty = new SimpleObjectProperty<Integer>(this, "secondStep", 1)
+	{
+		public void set(Integer value)
+		{
+			if (value == null || value.intValue() < 0 || value.intValue() > 59) {
+				throw new IllegalArgumentException("null or outside [0-59] is not allowed");
+			}
+			super.set(value);
+			setCalendar( CalendarTimePickerSkin.blockSecondsToStep(getCalendar(), getSecondStep()) );
+		}		
+	};
+	public Integer getSecondStep() { return secondStepProperty.getValue(); }
+	public void setSecondStep(Integer value) { secondStepProperty.setValue(value); }
+	public CalendarTimePicker withSecondStep(Integer value) { setSecondStep(value); return this; } 
 }

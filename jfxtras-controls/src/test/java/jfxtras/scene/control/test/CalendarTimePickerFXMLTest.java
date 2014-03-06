@@ -112,8 +112,9 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 		// get the node
 		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
 		
-		// default value is not null
+		// assert
 		Assert.assertEquals(15, lCalendarTimePicker.getMinuteStep().intValue());
+		Assert.assertEquals(15, lCalendarTimePicker.getSecondStep().intValue());
 	}
 	
 	/**

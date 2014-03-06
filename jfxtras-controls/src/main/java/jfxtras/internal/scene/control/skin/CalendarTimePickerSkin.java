@@ -33,12 +33,9 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-import org.junit.Assert;
-
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -149,6 +146,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
             {
                 @Override public void invalidated()
                 {
+                	refreshLayout();
                 	refresh();
                 }
 
@@ -230,44 +228,56 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		hourScrollSlider.maxProperty().set(23);
 		hourScrollSlider.setMajorTickUnit(12);
 		hourScrollSlider.setMinorTickCount(3);
+		hourScrollSlider.valueProperty().addListener( (observable, oldValue, newValue) ->  {
+			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
+			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+			lCalendar.set(Calendar.HOUR_OF_DAY, newValue.intValue());
+			if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
+				getSkinnable().setCalendar(lCalendar);
+			}
+		});
 		minuteScrollSlider.setId("minuteSlider");
 		minuteScrollSlider.minProperty().set(00);
 		minuteScrollSlider.maxProperty().set(59);
 		minuteScrollSlider.setMajorTickUnit(10);
-		hourScrollSlider.valueProperty().addListener(new ChangeListener<Number>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+		minuteScrollSlider.valueProperty().addListener( (observable, oldValue, newValue) ->  {
+			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
+			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+			
+			// in order no to first set a non stepsize calendar, we step the minutes here 
+			int lMinutes = newValue.intValue();
+			int lMinuteStep = getSkinnable().getMinuteStep();
+			if (lMinuteStep > 1)
 			{
-				Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
-				lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
-				lCalendar.set(Calendar.HOUR_OF_DAY, newValue.intValue());
-				if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
-					getSkinnable().setCalendar(lCalendar);
-				}
+				lMinutes += getSkinnable().getMinuteStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
+				if (lMinutes > 59) lMinutes -= lMinuteStep;
+			}
+			lCalendar.set(Calendar.MINUTE, lMinutes);
+			lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
+			if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
+				getSkinnable().setCalendar(lCalendar);
 			}
 		});
-		minuteScrollSlider.valueProperty().addListener(new ChangeListener<Number>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+		secondScrollSlider.setId("secondSlider");
+		secondScrollSlider.minProperty().set(00);
+		secondScrollSlider.maxProperty().set(59);
+		secondScrollSlider.setMajorTickUnit(10);
+		secondScrollSlider.valueProperty().addListener( (observable, oldValue, newValue) ->  {
+			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
+			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+			
+			// in order no to first set a non stepsize calendar, we step the minutes here 
+			int lSeconds = newValue.intValue();
+			int lSecondStep = getSkinnable().getSecondStep();
+			if (lSecondStep > 1)
 			{
-				Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
-				lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
-				
-				// in order no to first set a non stepsize calendar, we step the minutes here 
-				int lMinutes = newValue.intValue();
-				int lMinuteStep = getSkinnable().getMinuteStep();
-				if (lMinuteStep > 1)
-				{
-					lMinutes += getSkinnable().getMinuteStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
-					if (lMinutes > 59) lMinutes -= lMinuteStep;
-				}
-				lCalendar.set(Calendar.MINUTE, lMinutes);
-				lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
-				if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
-					getSkinnable().setCalendar(lCalendar);
-				}
+				lSeconds += getSkinnable().getSecondStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
+				if (lSeconds > 59) lSeconds -= lSecondStep;
+			}
+			lCalendar.set(Calendar.SECOND, lSeconds);
+			lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getMinuteStep());
+			if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
+				getSkinnable().setCalendar(lCalendar);
 			}
 		});
 		
@@ -275,7 +285,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		timeText.setDisable(true);
 		timeText.getStyleClass().add("timeLabel");
 
-		// refresh layout
+		// layout
 		refreshLayout();
 		
 		// add self as CSS style
@@ -283,7 +293,8 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	}
 	final private Slider hourScrollSlider = new Slider();
 	final private Slider minuteScrollSlider = new Slider();
-	final private Text timeText = new Text("XX:XX");
+	final private Slider secondScrollSlider = new Slider();
+	final private Text timeText = new Text("XX:XX:XX");
 	final Pane hourLabelsPane = new Pane()
 	{
 		{
@@ -397,30 +408,35 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	};
 	
 	/**
-	 * TODO: do not add and remove nodes, just hide and show
+	 * hide or show nodes (VBox reserves room for not visible nodes)
 	 */
 	private void refreshLayout()
 	{
-		// layout
 		getChildren().clear();
 		StackPane lStackPane = new StackPane();
-		
 		VBox lVBox = new VBox(0);
 		lVBox.alignmentProperty().set(Pos.CENTER);
-		if (getShowTickLabels() == ShowTickLabels.YES) {
-			lVBox.getChildren().add(hourLabelsPane);
+		if ( getLabelDateFormat().format(DATE).contains("2") ) {
+			if (getShowTickLabels() == ShowTickLabels.YES) {
+				lVBox.getChildren().add(hourLabelsPane);
+			}
+			lVBox.getChildren().add(hourScrollSlider);
 		}
-		lVBox.getChildren().add(hourScrollSlider);
-		lVBox.getChildren().add(minuteScrollSlider);
-		if (getShowTickLabels() == ShowTickLabels.YES) {
-			lVBox.getChildren().add(minuteLabelsPane);
+		if ( getLabelDateFormat().format(DATE).contains("3") ) {
+			lVBox.getChildren().add(minuteScrollSlider);
+			if (getShowTickLabels() == ShowTickLabels.YES) {
+				lVBox.getChildren().add(minuteLabelsPane);
+			}
+		}
+		if ( getLabelDateFormat().format(DATE).contains("4") ) {
+			lVBox.getChildren().add(secondScrollSlider);
 		}
 		lStackPane.getChildren().add(lVBox);
-		
 		lStackPane.getChildren().add(timeText);
-		
+		StackPane.setAlignment(timeText, getShowTickLabels() == ShowTickLabels.YES ? Pos.CENTER : Pos.TOP_CENTER);
 		getChildren().add(lStackPane);
 	}
+	final static Date DATE = new Date(9999-1900, 0, 1, 2, 3, 4);
 	
 	/**
 	 * 
@@ -430,8 +446,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		Calendar lCalendar = getSkinnable().getCalendar();
 		int lHour = lCalendar == null ? 0 : lCalendar.get(Calendar.HOUR_OF_DAY);
 		int lMinute = lCalendar == null ? 0 : lCalendar.get(Calendar.MINUTE);
+		int lSecond = lCalendar == null ? 0 : lCalendar.get(Calendar.SECOND);
 		hourScrollSlider.valueProperty().set(lHour);
 		minuteScrollSlider.valueProperty().set(lMinute);
+		secondScrollSlider.valueProperty().set(lSecond);
 		timeText.setText( lCalendar == null ? "" : getLabelDateFormat().format(lCalendar.getTime()) );
 	}
 	
@@ -443,18 +461,38 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		if (stepSize == null || calendar == null) return calendar;
 			
 		// set the minutes to match the step size
-		int lMinutes = calendar.get(Calendar.MINUTE);
+		int lValue = calendar.get(Calendar.MINUTE);
 		if (stepSize == 1) return calendar;
-		lMinutes = lMinutes / stepSize; // trunk
-		lMinutes *= stepSize;
-		if (calendar.get(Calendar.MINUTE) != lMinutes)
+		lValue = lValue / stepSize; // trunk
+		lValue *= stepSize;
+		if (calendar.get(Calendar.MINUTE) != lValue)
 		{
 			Calendar lCalendar = (Calendar)calendar.clone();
-			lCalendar.set(Calendar.MINUTE, lMinutes);
+			lCalendar.set(Calendar.MINUTE, lValue);
 			calendar = lCalendar;
 		}
 		return calendar;
 	}
 
-
+	
+	/**
+	 * seconds fit in the second steps
+	 */
+	static public Calendar blockSecondsToStep(Calendar calendar, Integer stepSize)
+	{
+		if (stepSize == null || calendar == null) return calendar;
+			
+		// set the minutes to match the step size
+		int lValue = calendar.get(Calendar.SECOND);
+		if (stepSize == 1) return calendar;
+		lValue = lValue / stepSize; // trunk
+		lValue *= stepSize;
+		if (calendar.get(Calendar.SECOND) != lValue)
+		{
+			Calendar lCalendar = (Calendar)calendar.clone();
+			lCalendar.set(Calendar.SECOND, lValue);
+			calendar = lCalendar;
+		}
+		return calendar;
+	}
 }

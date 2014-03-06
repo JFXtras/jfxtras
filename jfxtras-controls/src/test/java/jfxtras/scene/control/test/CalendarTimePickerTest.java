@@ -84,15 +84,16 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 	@Test
 	public void locale()
 	{
-		Text lLabelText = (Text)find(".timeLabel");
-		
 		// set time to 12:30:00
 		PlatformUtil.runAndWait( () -> {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 20, 30, 00));			
 		});
 		
+		Text lLabelText = (Text)find(".timeLabel");
+		
 		// assert label
 		Assert.assertEquals("8:30 PM", lLabelText.getText());
+		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// change locale
 		PlatformUtil.runAndWait( () -> {
@@ -101,6 +102,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		
 		// assert label
 		Assert.assertEquals("20:30", lLabelText.getText());
+		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
 	
 	/**
@@ -114,11 +116,14 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));			
 		});
 		
+		Text lLabelText = (Text)find(".timeLabel");
+		
 		// move the hour slider
 		move("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(100,0);		
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals("8:30 PM", lLabelText.getText());
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// move the minute slider
@@ -126,6 +131,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		press(MouseButton.PRIMARY);
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals("8:19 PM", lLabelText.getText());
 		Assert.assertEquals("20:19:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
 	
@@ -139,6 +145,8 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		PlatformUtil.runAndWait( () -> {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));
 			calendarTimePicker.setMinuteStep(15);
+			calendarTimePicker.setSecondStep(15);
+			calendarTimePicker.setStyle("-fxx-label-dateformat:\"HH:mm:ss\";");
 		});
 		
 		// move the hour slider
@@ -154,5 +162,12 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals("20:15:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+		
+		// move the second slider
+		move("#secondSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(40,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals("20:15:15", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
 }

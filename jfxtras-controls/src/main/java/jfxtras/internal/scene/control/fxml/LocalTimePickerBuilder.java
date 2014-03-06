@@ -65,6 +65,12 @@ public class LocalTimePickerBuilder extends AbstractBuilder implements BuilderSe
 	}
 	private Integer minuteStep = null;
 
+	/** SecondStep */
+	public Integer getSecondStep() { return null; } // dummy, just to make it Java Bean compatible
+	public void setSecondStep(Integer value) { 
+		this.secondStep = Integer.valueOf(value); 
+	}
+	private Integer secondStep = null;
 	/**
 	 * Implementation of Builder interface
 	 */
@@ -80,6 +86,9 @@ public class LocalTimePickerBuilder extends AbstractBuilder implements BuilderSe
 		}
 		if (minuteStep != null) {
 			lLocalTimePicker.setMinuteStep(minuteStep);
+		}
+		if (secondStep != null) {
+			lLocalTimePicker.setSecondStep(secondStep);
 		}
 		applyCommonProperties(lLocalTimePicker);
 		return lLocalTimePicker;
