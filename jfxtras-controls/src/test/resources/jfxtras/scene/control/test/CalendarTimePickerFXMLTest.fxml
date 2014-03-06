@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import jfxtras.scene.control.*?>
+
+<TabPane xmlns:fx="http://javafx.com/fxml">
+	<tabs>
+		<Tab id="defaultControl" text="tab1">
+			<CalendarTimePicker id="id1"/>
+		</Tab>
+		<Tab id="slideStep15" text="tab2">
+			<CalendarTimePicker id="id2" minuteStep="15"/>
+		</Tab>
+		<Tab id="locale" text="tab3">
+			<CalendarTimePicker id="id3" locale="de"/>
+		</Tab>
+    </tabs>
+</TabPane>

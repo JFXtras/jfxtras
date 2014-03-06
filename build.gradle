@@ -48,8 +48,8 @@ allprojects {
 			}
 
 			pom.project {
-				artifactId   "jfxtras-${project.name}"
-				name         "JFXtras ${project.name}"
+				artifactId   "${project.name}"
+				name         "${project.name}"
 				url          'http://jfxtras.org'
 				description  'Miscellaneous components for JavaFX 2'
 				packaging    'jar'
@@ -85,13 +85,6 @@ subprojects {
 		include "**/*Test.class"
 		include "**/*Test1.class"
 		exclude 'jfxtras/labs/test/JFXtrasGuiTest.class'
-	}
-	
-	// prepend every artifactId with 'jfxtras-'
-	configure(install.repositories.mavenInstaller) {
-		pom.project {
-			artifactId "jfxtras-${project.name}"
-		}
 	}
 	
 	configurations {
@@ -130,28 +123,28 @@ project(':') {
 	}
 }
 
-project(':agenda') {
+project(':jfxtras-agenda') {
 	dependencies {
-		compile project(':controls')
-		testCompile project(':test-support')
+		compile project(':jfxtras-controls')
+		testCompile project(':jfxtras-test-support')
 	}
 }
 
-project(':common') {
+project(':jfxtras-common') {
 	dependencies {
-		testCompile project(':test-support')
+		testCompile project(':jfxtras-test-support')
 	}
 }
 
-project(':controls') {
+project(':jfxtras-controls') {
 	dependencies {
-		compile project(':common')
-		compile project(':fxml')
-		testCompile project(':test-support')
+		compile project(':jfxtras-common')
+		compile project(':jfxtras-fxml')
+		testCompile project(':jfxtras-test-support')
 	}
 }
 
-project(':test-support') {
+project(':jfxtras-test-support') {
 	dependencies {
 		compile 'junit:junit:4.10'
 		compile 'org.mockito:mockito-all:1.9.5'
@@ -173,5 +166,5 @@ task uberJar(type: Jar, dependsOn: subprojects.jar) {
 // TODO: _lib folder per project?
 task copyToLib(type: Copy) {
     into "_lib"
-    from project(':test-support').configurations.testCompile
+    from project(':jfxtras-test-support').configurations.testCompile
 }

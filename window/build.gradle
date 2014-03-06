@@ -1,4 +1,0 @@
-dependencies {
-    compile project(":common")
-    testCompile project(":test-support")
-}
