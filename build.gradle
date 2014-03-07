@@ -1,6 +1,23 @@
 task wrapper(type: Wrapper) {
     gradleVersion = '1.11'
 }
+	
+buildscript {
+	repositories {
+		mavenLocal()
+		mavenCentral()
+		maven {
+			url "https://oss.sonatype.org/content/repositories/snapshots"
+		}
+		maven {
+			name 'JCenter - for Gradle Shadow'
+			url 'http://jcenter.bintray.com/'
+		}
+	}
+	dependencies {
+		classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
+	}
+}
 
 allprojects {
 	apply plugin: 'java'
@@ -51,7 +68,7 @@ allprojects {
 				artifactId   "${project.name}"
 				name         "${project.name}"
 				url          'http://jfxtras.org'
-				description  'Miscellaneous components for JavaFX 2'
+				description  'Miscellaneous components for JavaFX'
 				packaging    'jar'
 				licenses {
 					license {
@@ -73,6 +90,29 @@ allprojects {
 	}
 }
 
+project(':') {
+	dependencies {
+		compile project(':jfxtras-agenda') // just add dependencies that will cause all the rest to be added
+	}
+
+	apply plugin: 'shadow'
+	
+	// merge everything into one jar
+	// https://github.com/johnrengelman/shadow
+	shadow {
+		filter(':jfxtras-*') {
+			include '*'
+		}		
+		//transformer(AppendingTransformer) {
+		//	resource = 'META-INF/services/jfxtras.fxml.BuilderService'
+		//}
+		artifactAttached = false
+	}
+	
+	artifacts {
+		archives shadow.shadowJar
+	}
+}
 
 subprojects {
 	// all projects must be compatible with the java version specified here
@@ -117,12 +157,6 @@ subprojects {
 	}
 }
 
-project(':') {
-	artifacts {
-		archives jar
-	}
-}
-
 project(':jfxtras-agenda') {
 	dependencies {
 		compile project(':jfxtras-controls')
@@ -150,17 +184,6 @@ project(':jfxtras-test-support') {
 		compile 'org.mockito:mockito-all:1.9.5'
 		compile 'org.loadui:testFx:3.1.2'
 	}
-}
-
-task uberJar(type: Jar, dependsOn: subprojects.jar) {    
-    subprojects.each {
-        proj -> from {
-			if (proj.name != 'test-support') {
-				println("Merging into uberJar: ${proj.jar.archivePath}")
-				zipTree(proj.jar.archivePath) 
-			}
-        }
-    }
 }
 
 // TODO: _lib folder per project?
