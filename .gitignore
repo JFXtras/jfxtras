@@ -16,3 +16,4 @@ screenshot*.png
 /gradlew_test.cmd
 /gradlew_updateWrapper.cmd
 
+/jfxtras-test-support/bin
