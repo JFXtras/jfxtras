@@ -33,7 +33,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
-import jfxtras.scene.layout.HBox;
+import jfxtras.scene.layout.VBox;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,23 +42,25 @@ import org.loadui.testfx.GuiTest;
 /**
  * Created by Tom Eugelink on 26-12-13.
  */
-public class HBoxTest extends GuiTest {
+public class VBoxTest extends GuiTest {
 
 	/**
 	 * 
 	 */
 	public Parent getRootNode()
 	{
-		hbox = new HBox(5.0);
-		hbox.add(new Button("grow"), new HBox.C().hgrow(Priority.ALWAYS));
-		hbox.add(new Button("margin 5 grow"), new HBox.C().margin(new Insets(5.0)).hgrow(Priority.ALWAYS));
-		hbox.getChildren().add(new Button("old style"));
-		hbox.add(new Button("margin 20 nogrow"), new HBox.C().margin(new Insets(20.0)));
-		hbox.add(new Button("grow maxheight 50"), new HBox.C().hgrow(Priority.ALWAYS).maxHeight(50.0));
+		vbox = new VBox(5.0);
+		vbox.add(new Button("short"), new VBox.C().vgrow(Priority.ALWAYS));
+		vbox.add(new Button("medium length"), new VBox.C().vgrow(Priority.ALWAYS));
+		vbox.add(new Button("a longer description in order to test things"), new VBox.C().vgrow(Priority.ALWAYS));
+		vbox.add(new Button("margin 5 grow"), new VBox.C().margin(new Insets(5.0)).vgrow(Priority.ALWAYS));
+		vbox.getChildren().add(new Button("old style"));
+		vbox.add(new Button("margin 20 nogrow"), new VBox.C().margin(new Insets(20.0)));
+		vbox.add(new Button("grow maxwidth 150"), new VBox.C().vgrow(Priority.ALWAYS).maxWidth(150.0));
 
-		return hbox;
+		return vbox;
 	}
-	private HBox hbox = null;
+	private VBox vbox = null;
 
 	/**
 	 * 
@@ -67,19 +69,17 @@ public class HBoxTest extends GuiTest {
 	public void checkPositions()
 	{
 		int lIdx = 0;
-		assertButton((Button)hbox.getChildren().get(lIdx++), 0, 0, 43, 65);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 53, 5, 94, 55);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 157, 0, 61, 25);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 243, 20, 114, 25);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 382, 0, 119, 50);
+		assertButton((Button)vbox.getChildren().get(lIdx++), 0, 0, 240, 25);
+		assertButton((Button)vbox.getChildren().get(lIdx++), 0, 30, 240, 25);
+		assertButton((Button)vbox.getChildren().get(lIdx++), 0, 60, 240, 25);
+		assertButton((Button)vbox.getChildren().get(lIdx++), 5, 95, 230, 25);
+		assertButton((Button)vbox.getChildren().get(lIdx++), 0, 130, 61, 25);
+		assertButton((Button)vbox.getChildren().get(lIdx++), 20, 180, 114, 25);
+		assertButton((Button)vbox.getChildren().get(lIdx++), 0, 230, 150, 25);
 	}
 	
 	private void assertButton(Button lButton, double x, double y, double w, double h) {
 		System.out.println(lButton.getText() + ": X=" + lButton.getLayoutX() + ", Y=" + lButton.getLayoutY() + ", W=" + lButton.getWidth() + ", H=" + lButton.getHeight());
-//		System.out.println(lButton.getText() + ": LB=" + lButton.getLayoutBounds());
-//		System.out.println(lButton.getText() + ": BiL=" + lButton.getBoundsInLocal());
-//		System.out.println(lButton.getText() + ": BiP=" + lButton.getBoundsInParent());
-//		System.out.println("\n");
 		Assert.assertEquals(x, lButton.getLayoutX(), 0.001);
 		Assert.assertEquals(y, lButton.getLayoutY(), 0.001);
 		Assert.assertEquals(w, lButton.getWidth(), 0.001);

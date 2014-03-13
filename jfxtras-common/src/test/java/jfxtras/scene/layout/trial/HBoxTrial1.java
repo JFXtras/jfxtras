@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.layout.test;
+package jfxtras.scene.layout.trial;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
