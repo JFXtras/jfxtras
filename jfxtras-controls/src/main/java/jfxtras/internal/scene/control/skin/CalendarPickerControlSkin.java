@@ -621,10 +621,13 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 			if ( getSkinnable().getMode() == CalendarPicker.Mode.SINGLE 
 			  || (getSkinnable().getMode() == CalendarPicker.Mode.RANGE && shiftIsPressed == false)
 			   ) {
-				while (lCalendars.size() > 0) {
+				// Normally one would removed all the old ones and add one new,
+				// but this would result in a moment where the value would be null and that can be unwanted.
+				// So we first add the new value and then clear away the old ones until 1 remains.
+				lCalendars.add(lToggledCalendar);
+				while (lCalendars.size() > 1) {
 					lCalendars.remove(0);
 				}
-				lCalendars.add(lToggledCalendar);
 			}
 			if ( getSkinnable().getMode() == CalendarPicker.Mode.MULTIPLE  && shiftIsPressed == false ) {
 				lCalendars.add(lToggledCalendar);

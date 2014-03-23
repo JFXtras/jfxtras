@@ -147,6 +147,9 @@ public class CalendarPicker extends Control
 				try {
 					// if this is an add
 					while (change.next()) {
+						for (Calendar lCalendar : change.getAddedSubList()) {
+							setCalendar( lCalendar );
+						}
 						for (Calendar lCalendar : change.getRemoved()) {
 							// if the calendar to be removed is the active one
 							if (lCalendar.equals(getCalendar())) {
@@ -160,9 +163,6 @@ public class CalendarPicker extends Control
 									setCalendar(null);
 								}
 							}
-						}
-						for (Calendar lCalendar : change.getAddedSubList()) {
-							setCalendar( lCalendar );
 						}
 					}
 				}

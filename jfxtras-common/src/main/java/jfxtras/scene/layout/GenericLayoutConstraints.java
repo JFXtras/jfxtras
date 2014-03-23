@@ -74,17 +74,17 @@ class GenericLayoutConstraints
 		 */
 		protected void rememberResetValues(Node node)
 		{
-			if (node instanceof javafx.scene.control.Control)
+			if (node instanceof javafx.scene.layout.Region)
 			{
-				javafx.scene.control.Control lControl = (javafx.scene.control.Control)node;
+				javafx.scene.layout.Region lRegion = (javafx.scene.layout.Region)node;
 				
 				// setup the reset values on the first apply
-				if (minWidthReset == UNKNOWN) minWidthReset = lControl.getMinWidth();
-				if (prefWidthReset == UNKNOWN) prefWidthReset = lControl.getPrefWidth();
-				if (maxWidthReset == UNKNOWN) maxWidthReset = lControl.getMaxWidth();
-				if (minHeightReset == UNKNOWN) minHeightReset = lControl.getMinHeight();
-				if (prefHeightReset == UNKNOWN) prefHeightReset = lControl.getPrefHeight();
-				if (maxHeightReset == UNKNOWN) maxHeightReset = lControl.getMaxHeight();
+				if (minWidthReset == UNKNOWN) minWidthReset = lRegion.getMinWidth();
+				if (prefWidthReset == UNKNOWN) prefWidthReset = lRegion.getPrefWidth();
+				if (maxWidthReset == UNKNOWN) maxWidthReset = lRegion.getMaxWidth();
+				if (minHeightReset == UNKNOWN) minHeightReset = lRegion.getMinHeight();
+				if (prefHeightReset == UNKNOWN) prefHeightReset = lRegion.getPrefHeight();
+				if (maxHeightReset == UNKNOWN) maxHeightReset = lRegion.getMaxHeight();
 			}
 		}
 		
@@ -93,25 +93,25 @@ class GenericLayoutConstraints
 		 */
 		protected void apply(Node node)
 		{
-			if (node instanceof javafx.scene.control.Control)
+			if (node instanceof javafx.scene.layout.Region)
 			{
-				javafx.scene.control.Control lControl = (javafx.scene.control.Control)node;
+				javafx.scene.layout.Region lRegion = (javafx.scene.layout.Region)node;
 				
 				// setup the reset values on the first apply
-				rememberResetValues(lControl);
+				rememberResetValues(lRegion);
 				
 				// either set or reset values
-				lControl.setMinWidth(minWidth >= 0 ? minWidth : minWidthReset);
-				lControl.setPrefWidth(prefWidth >= 0 ? prefWidth : prefWidthReset);
-				lControl.setMaxWidth(maxWidth >= 0 ? maxWidth : maxWidthReset);
-				lControl.setMinHeight(minHeight >= 0 ? minHeight : minHeightReset);
-				lControl.setPrefHeight(prefHeight >= 0 ? prefHeight : prefHeightReset);
-				lControl.setMaxHeight(maxHeight >= 0 ? maxHeight : maxHeightReset);
+				lRegion.setMinWidth(minWidth >= 0 ? minWidth : minWidthReset);
+				lRegion.setPrefWidth(prefWidth >= 0 ? prefWidth : prefWidthReset);
+				lRegion.setMaxWidth(maxWidth >= 0 ? maxWidth : maxWidthReset);
+				lRegion.setMinHeight(minHeight >= 0 ? minHeight : minHeightReset);
+				lRegion.setPrefHeight(prefHeight >= 0 ? prefHeight : prefHeightReset);
+				lRegion.setMaxHeight(maxHeight >= 0 ? maxHeight : maxHeightReset);
 			}
 		}
 		
 	}
-	static final double UNKNOWN = -1234;
+	static final double UNKNOWN = -Double.MIN_NORMAL + 10.0;
 	
 	/**
 	 * 
@@ -121,16 +121,11 @@ class GenericLayoutConstraints
 		// just to prevent problems
 		if (node == null) return;
 		
-		// make things go away
-		if ( node instanceof javafx.scene.control.Button
-		  || node instanceof javafx.scene.control.ToggleButton
-		  || node instanceof javafx.scene.control.CheckBox
-		  || node instanceof javafx.scene.control.RadioButton
-		  || node instanceof javafx.scene.control.ChoiceBox
-		   )
+		// make max issues go away
+		if (node instanceof javafx.scene.layout.Region)
 		{
-			javafx.scene.control.Control lControl = (javafx.scene.control.Control)node;
-			lControl.setMaxWidth( c.maxWidth >= 0 ? c.maxWidth : Double.MAX_VALUE);
+			javafx.scene.layout.Region lRegion = (javafx.scene.layout.Region)node;
+			lRegion.setMaxWidth( c.maxWidth >= 0 ? c.maxWidth : Double.MAX_VALUE);
 		}
 	}
 	
@@ -142,13 +137,11 @@ class GenericLayoutConstraints
 		// just to prevent problems
 		if (node == null) return;
 		
-		// make things go away
-		if ( node instanceof javafx.scene.control.Button
-		  || node instanceof javafx.scene.control.ToggleButton
-		   )
+		// make max issues go away
+		if (node instanceof javafx.scene.layout.Region)
 		{
-			javafx.scene.control.Control lControl = (javafx.scene.control.Control)node;
-			lControl.setMaxHeight( c.maxHeight >= 0 ? c.maxHeight : Double.MAX_VALUE);
+			javafx.scene.layout.Region lRegion = (javafx.scene.layout.Region)node;
+			lRegion.setMaxHeight( c.maxHeight >= 0 ? c.maxHeight : Double.MAX_VALUE);
 		}
 	}
 	

@@ -139,7 +139,9 @@ public class Agenda extends Control
 	{
 		public void set(Calendar value)
 		{
-			if (value == null) throw new NullPointerException("Null not allowed");
+			if (value == null) {
+				throw new NullPointerException("Null not allowed");
+			}
 			super.set(value);
 		}
 	};
