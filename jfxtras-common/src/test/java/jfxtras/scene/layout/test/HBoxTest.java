@@ -34,8 +34,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import jfxtras.scene.layout.HBox;
+import jfxtras.test.NodeAssertXYWH;
+import jfxtras.test.NodeAsserts;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
 
@@ -66,24 +67,14 @@ public class HBoxTest extends GuiTest {
 	@Test
 	public void checkPositions()
 	{
-		int lIdx = 0;
-		assertButton((Button)hbox.getChildren().get(lIdx++), 0, 0, 43, 65);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 53, 5, 94, 55);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 157, 0, 61, 25);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 243, 20, 114, 25);
-		assertButton((Button)hbox.getChildren().get(lIdx++), 382, 0, 119, 50);
-	}
-	
-	private void assertButton(Button lButton, double x, double y, double w, double h) {
-		System.out.println(lButton.getText() + ": X=" + lButton.getLayoutX() + ", Y=" + lButton.getLayoutY() + ", W=" + lButton.getWidth() + ", H=" + lButton.getHeight());
-//		System.out.println(lButton.getText() + ": LB=" + lButton.getLayoutBounds());
-//		System.out.println(lButton.getText() + ": BiL=" + lButton.getBoundsInLocal());
-//		System.out.println(lButton.getText() + ": BiP=" + lButton.getBoundsInParent());
-//		System.out.println("\n");
-		Assert.assertEquals(x, lButton.getLayoutX(), 0.001);
-		Assert.assertEquals(y, lButton.getLayoutY(), 0.001);
-		Assert.assertEquals(w, lButton.getWidth(), 0.001);
-		Assert.assertEquals(h, lButton.getHeight(), 0.001);
+		//NodeAssertXYWH.generateSource("hbox", hbox.getChildren(), java.util.Arrays.asList(new String[]{"jfxtras.labs.scene.layout.CircularPane$Bead"}));
+		NodeAsserts nodeAsserts = new NodeAsserts();
+		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(0), 0.0, 0.0, 43.0, 65.0, javafx.scene.control.Button.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(1), 53.0, 5.0, 94.0, 55.0, javafx.scene.control.Button.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(2), 157.0, 0.0, 61.0, 25.0, javafx.scene.control.Button.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(3), 243.0, 20.0, 114.0, 25.0, javafx.scene.control.Button.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(4), 382.0, 0.0, 119.0, 50.0, javafx.scene.control.Button.class, 0.01));
+		nodeAsserts.doAssert();
 	}
 	
 }

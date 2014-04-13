@@ -35,6 +35,8 @@ import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import jfxtras.scene.layout.GridPane;
+import jfxtras.test.NodeAssertXYWH;
+import jfxtras.test.NodeAsserts;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -80,24 +82,17 @@ public class GridPaneTest extends GuiTest {
 	@Test
 	public void checkPositions()
 	{
-		int lIdx = 0;
-		lIdx++; // the first is for some reason a Group
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 71, 10, 52, 17);
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 199, 10, 34, 17);
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 10, 10, 56, 51);
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 71, 38, 162, 17);
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 10, 66, 33, 17);
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 95, 66, 115, 85);
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 10, 134, 49, 17);
-		assertLabel((Label)gridPane.getChildren().get(lIdx++), 238, 88, 23, 17);
+		//NodeAssertXYWH.generateSource("gridPane", gridPane.getChildren(), java.util.Arrays.asList(new String[]{"jfxtras.labs.scene.layout.CircularPane$Bead"}));
+		NodeAsserts nodeAsserts = new NodeAsserts();
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(0), 0.0, 0.0, 261.5, 151.5, javafx.scene.Group.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(1), 71.0, 10.0, 52.0, 17.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(2), 199.0, 10.0, 34.0, 17.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(3), 10.0, 10.0, 56.0, 51.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(4), 71.0, 38.0, 162.0, 17.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(5), 10.0, 66.0, 33.0, 17.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(6), 95.0, 66.0, 115.0, 85.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(7), 10.0, 134.0, 49.0, 17.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.add(new NodeAssertXYWH(gridPane.getChildren().get(8), 238.0, 88.0, 23.0, 17.0, javafx.scene.control.Label.class, 0.01));
+		nodeAsserts.doAssert();
 	}
-	
-	private void assertLabel(Label lLabel, double x, double y, double w, double h) {
-		System.out.println(lLabel.getText() + ": " + lLabel.getLayoutX() + ", " + lLabel.getLayoutY() + ", " + lLabel.getWidth() + ", " + lLabel.getHeight());
-		Assert.assertEquals(x, lLabel.getLayoutX(), 0.001);
-		Assert.assertEquals(y, lLabel.getLayoutY(), 0.001);
-		Assert.assertEquals(w, lLabel.getWidth(), 0.001);
-		Assert.assertEquals(h, lLabel.getHeight(), 0.001);
-	}
-	
 }
