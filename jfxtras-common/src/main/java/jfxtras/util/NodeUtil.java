@@ -142,4 +142,22 @@ public class NodeUtil {
         return null;
     }
 
+    /**
+     * This method prevents blurry horizontal or vertical lines, use snapXY(x) instead of x. 
+     * @param position (x or y)
+     * @return
+     */
+	public static double snapXY(double position) {
+		return ((int) position) + .5;
+	}
+
+    /**
+     * This method prevents blurry horizontal or vertical lines, use snapWH(x, w) instead of w. 
+     * @param position (x or y)
+     * @param offset (width or height)
+     * @return
+     */
+	public static double snapWH(double position, double offset) {
+		return snapXY(position + offset) - snapXY(position);
+	}
 }
