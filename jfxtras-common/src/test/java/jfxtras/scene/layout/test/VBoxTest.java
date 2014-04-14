@@ -35,7 +35,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import jfxtras.scene.layout.VBox;
 import jfxtras.test.NodeAssertXYWH;
-import jfxtras.test.NodeAsserts;
 
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
@@ -70,15 +69,13 @@ public class VBoxTest extends GuiTest {
 	public void checkPositions()
 	{
 		//NodeAssertXYWH.generateSource("vbox", vbox.getChildren(), java.util.Arrays.asList(new String[]{"jfxtras.labs.scene.layout.CircularPane$Bead"}));
-		NodeAsserts nodeAsserts = new NodeAsserts();
-		nodeAsserts.add(new NodeAssertXYWH(vbox.getChildren().get(0), 0.0, 0.0, 240.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(vbox.getChildren().get(1), 0.0, 30.0, 240.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(vbox.getChildren().get(2), 0.0, 60.0, 240.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(vbox.getChildren().get(3), 5.0, 95.0, 230.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(vbox.getChildren().get(4), 0.0, 130.0, 61.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(vbox.getChildren().get(5), 20.0, 180.0, 114.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(vbox.getChildren().get(6), 0.0, 230.0, 150.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.doAssert();
+		new NodeAssertXYWH(vbox.getChildren().get(0), 0.0, 0.0, 240.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(vbox.getChildren().get(1), 0.0, 30.0, 240.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(vbox.getChildren().get(2), 0.0, 60.0, 240.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(vbox.getChildren().get(3), 5.0, 95.0, 230.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(vbox.getChildren().get(4), 0.0, 130.0, 61.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(vbox.getChildren().get(5), 20.0, 180.0, 114.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(vbox.getChildren().get(6), 0.0, 230.0, 150.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
 	}
 	
 }

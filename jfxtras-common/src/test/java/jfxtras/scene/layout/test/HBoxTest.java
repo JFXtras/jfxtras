@@ -35,7 +35,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import jfxtras.scene.layout.HBox;
 import jfxtras.test.NodeAssertXYWH;
-import jfxtras.test.NodeAsserts;
 
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
@@ -68,13 +67,11 @@ public class HBoxTest extends GuiTest {
 	public void checkPositions()
 	{
 		//NodeAssertXYWH.generateSource("hbox", hbox.getChildren(), java.util.Arrays.asList(new String[]{"jfxtras.labs.scene.layout.CircularPane$Bead"}));
-		NodeAsserts nodeAsserts = new NodeAsserts();
-		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(0), 0.0, 0.0, 43.0, 65.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(1), 53.0, 5.0, 94.0, 55.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(2), 157.0, 0.0, 61.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(3), 243.0, 20.0, 114.0, 25.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.add(new NodeAssertXYWH(hbox.getChildren().get(4), 382.0, 0.0, 119.0, 50.0, javafx.scene.control.Button.class, 0.01));
-		nodeAsserts.doAssert();
+		new NodeAssertXYWH(hbox.getChildren().get(0), 0.0, 0.0, 43.0, 65.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(hbox.getChildren().get(1), 53.0, 5.0, 94.0, 55.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(hbox.getChildren().get(2), 157.0, 0.0, 61.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(hbox.getChildren().get(3), 243.0, 20.0, 114.0, 25.0, javafx.scene.control.Button.class, 0.01).doAssert();
+		new NodeAssertXYWH(hbox.getChildren().get(4), 382.0, 0.0, 119.0, 50.0, javafx.scene.control.Button.class, 0.01).doAssert();
 	}
 	
 }

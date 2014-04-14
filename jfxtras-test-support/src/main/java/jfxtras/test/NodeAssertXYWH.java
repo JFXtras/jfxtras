@@ -3,7 +3,6 @@ package jfxtras.test;
 import java.util.List;
 
 import javafx.scene.Node;
-import javafx.scene.layout.Pane;
 
 import org.junit.Assert;
 
@@ -16,8 +15,7 @@ import org.junit.Assert;
  * @author user
  *
  */
-public class NodeAssertXYWH 
-implements NodeAssert {
+public class NodeAssertXYWH {
 	
 	public NodeAssertXYWH(Node node, double x, double y, double w, double h, Class clazz, double accuracy) {
 		this.node = node;
@@ -54,16 +52,14 @@ implements NodeAssert {
 	}
 	
 	static public void generateSource(String paneVariableName, List<Node> nodes, List<String> excludes) {
-		System.out.println("NodeAsserts nodeAsserts = new NodeAsserts();");
 		int idx = 0;
 		for (Node lNode : nodes) {
 			if (excludes != null && excludes.contains(lNode.getClass().getName())) {
 				continue;
 			}
-			System.out.println("nodeAsserts.add(new NodeAssertXYWH(" + paneVariableName + ".getChildren().get(" + idx + "), "+ lNode.getLayoutX() + ", " + lNode.getLayoutY() + ", " + width(lNode) + ", " + height(lNode) + ", " + lNode.getClass().getName() + ".class, 0.01));");
+			System.out.println("new NodeAssertXYWH(" + paneVariableName + ".getChildren().get(" + idx + "), "+ lNode.getLayoutX() + ", " + lNode.getLayoutY() + ", " + width(lNode) + ", " + height(lNode) + ", " + lNode.getClass().getName() + ".class, 0.01).doAssert();");
 			idx++;
 		}
-		System.out.println("nodeAsserts.doAssert();");
 		TestUtil.sleep(3000);
 	}
 	
