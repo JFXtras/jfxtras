@@ -32,7 +32,11 @@ package jfxtras.test;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
@@ -41,6 +45,8 @@ import javafx.scene.control.SkinBase;
 import javafx.scene.layout.Pane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+
+import com.sun.javafx.tk.Toolkit;
 
 public class TestUtil {
 
@@ -215,6 +221,64 @@ public class TestUtil {
 		} 
 		catch (InterruptedException e) { 
 			throw new RuntimeException(e); 
+		}
+	}
+	
+	
+	/**
+	 * This method also exist in PlatformUtil in commons, but we can't use that here
+	 */
+	static public void runAndWait(final Runnable runnable) {
+		try {
+			FutureTask future = new FutureTask(runnable, null);
+			Platform.runLater(future);
+			future.get();
+		}
+		catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * This method also exist in PlatformUtil in commons, but we can't use that here
+	 */
+	static public <V> V runAndWait(final Callable<V> callable) throws InterruptedException, ExecutionException {
+		FutureTask<V> future = new FutureTask<>(callable);
+		Platform.runLater(future);
+		return future.get();
+	}
+	
+	/**
+	 * This method also exist in PlatformUtil in commons, but we can't use that here
+	 */
+	static public void waitForPaintPulse() {
+		runAndWait( () -> {
+			Toolkit.getToolkit().firePulse();
+		});
+	}
+
+	/**
+	 * 
+	 * @param r
+	 */
+	static public void runThenWaitForPaintPulse(Runnable r) {
+		runAndWait(r);
+		waitForPaintPulse();
+	}
+	
+	/**
+	 * 
+	 * @param r
+	 * @return
+	 */
+	static public <T> T runThenWaitForPaintPulse(Callable<T> r)  {
+		try {
+			T t = runAndWait(r);
+			waitForPaintPulse();
+			return t;
+		}
+		catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
