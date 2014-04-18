@@ -35,7 +35,8 @@ import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import jfxtras.scene.layout.GridPane;
-import jfxtras.test.NodeAssertXYWH;
+import jfxtras.test.AssertNode;
+import jfxtras.test.AssertNode.A;
 
 import org.junit.Test;
 import org.loadui.testfx.GuiTest;
@@ -80,15 +81,14 @@ public class GridPaneTest extends GuiTest {
 	@Test
 	public void checkPositions()
 	{
-		//NodeAssertXYWH.generateSource("gridPane", gridPane.getChildren(), java.util.Arrays.asList(new String[]{"jfxtras.labs.scene.layout.CircularPane$Bead"}));
-		new NodeAssertXYWH(gridPane.getChildren().get(0), 0.0, 0.0, 261.5, 151.5, javafx.scene.Group.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(1), 71.0, 10.0, 52.0, 17.0, javafx.scene.control.Label.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(2), 199.0, 10.0, 34.0, 17.0, javafx.scene.control.Label.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(3), 10.0, 10.0, 56.0, 51.0, javafx.scene.control.Label.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(4), 71.0, 38.0, 162.0, 17.0, javafx.scene.control.Label.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(5), 10.0, 66.0, 33.0, 17.0, javafx.scene.control.Label.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(6), 95.0, 66.0, 115.0, 85.0, javafx.scene.control.Label.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(7), 10.0, 134.0, 49.0, 17.0, javafx.scene.control.Label.class, 0.01).doAssert();
-		new NodeAssertXYWH(gridPane.getChildren().get(8), 238.0, 88.0, 23.0, 17.0, javafx.scene.control.Label.class, 0.01).doAssert();
+		//AssertNode.generateSource("gridPane", gridPane.getChildren(), null, false, A.XYWH, A.CLASS);
+		new AssertNode(gridPane.getChildren().get(1)).assertXYWH(71.0, 10.0, 52.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(2)).assertXYWH(199.0, 10.0, 34.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(3)).assertXYWH(10.0, 10.0, 56.0, 51.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(4)).assertXYWH(71.0, 38.0, 162.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(5)).assertXYWH(10.0, 66.0, 33.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(6)).assertXYWH(95.0, 66.0, 115.0, 85.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(7)).assertXYWH(10.0, 134.0, 49.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(8)).assertXYWH(238.0, 88.0, 23.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
 	}
 }
