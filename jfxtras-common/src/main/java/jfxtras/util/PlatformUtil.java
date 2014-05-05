@@ -43,7 +43,7 @@ import com.sun.javafx.tk.Toolkit;
 public class PlatformUtil {
 
 	/**
-	 * Invokes a Runnable in JFX Thread and waits while it's finished. 
+	 * Invokes a Runnable in JFX Thread and waits until it's finished. 
 	 * Similar to SwingUtilities.invokeAndWait.
 	 * This method is not intended to be called from the FAT, but when this happens the runnable is executed synchronously. 
 	 *
@@ -70,7 +70,7 @@ public class PlatformUtil {
 	}
 
 	/**
-	 * Invokes a Callable in JFX Thread and waits while it's finished. 
+	 * Invokes a Callable in JFX Thread and waits until it's finished. 
 	 * Similar to SwingUtilities.invokeAndWait.
 	 * This method is not intended to be called from the FAT, but when this happens the callable is executed synchronously. 
 	 *
