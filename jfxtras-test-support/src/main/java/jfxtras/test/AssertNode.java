@@ -78,6 +78,5 @@ public class AssertNode {
 			
 			idx++;
 		}
-		TestUtil.sleep(3000);
 	}
 }

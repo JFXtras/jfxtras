@@ -43,15 +43,24 @@ import com.sun.javafx.tk.Toolkit;
 public class PlatformUtil {
 
 	/**
-	 * Invokes a Runnable in JFX Thread and waits while it's finished. Like
-	 * SwingUtilities.invokeAndWait does for EDT.
+	 * Invokes a Runnable in JFX Thread and waits while it's finished. 
+	 * Similar to SwingUtilities.invokeAndWait.
+	 * This method is not intended to be called from the FAT, but when this happens the runnable is executed synchronously. 
 	 *
 	 * @param runnable
-	 *            The Runnable that has to be called on JFX thread.
+	 *            The Runnable that has to be executed on JFX application thread.
+	 * @throws RuntimeException which wraps a possible InterruptedException or ExecutionException 
 	 */
 	static public void runAndWait(final Runnable runnable) {
+		// running this from the FAT 
+		if (Platform.isFxApplicationThread()) {
+			runnable.run();
+			return;
+		}
+		
+		// run from a separate thread
 		try {
-			FutureTask future = new FutureTask(runnable, null);
+			FutureTask<Void> future = new FutureTask<>(runnable, null);
 			Platform.runLater(future);
 			future.get();
 		}
@@ -61,16 +70,35 @@ public class PlatformUtil {
 	}
 
 	/**
-	 * Invokes a Callable in JFX Thread and waits while it's finished. Similar to SwingUtilities.invokeAndWait.
+	 * Invokes a Callable in JFX Thread and waits while it's finished. 
+	 * Similar to SwingUtilities.invokeAndWait.
+	 * This method is not intended to be called from the FAT, but when this happens the callable is executed synchronously. 
 	 *
 	 * @param callable
-	 *            The Runnable that has to be called on JFX thread.
+	 *            The Callable that has to be executed on JFX application thread.
 	 * @return the result of callable.call();
+	 * @throws RuntimeException which wraps a possible Exception, InterruptedException or ExecutionException 
 	 */
-	static public <V> V runAndWait(final Callable<V> callable) throws InterruptedException, ExecutionException {
-		FutureTask<V> future = new FutureTask<>(callable);
-		Platform.runLater(future);
-		return future.get();
+	static public <V> V runAndWait(final Callable<V> callable) {
+		// running this from the FAT 
+		if (Platform.isFxApplicationThread()) {
+			try {
+				return callable.call();
+			}
+			catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		
+		// run from a separate thread
+		try {
+			FutureTask<V> future = new FutureTask<>(callable);
+			Platform.runLater(future);
+			return future.get();
+		}
+		catch (InterruptedException | ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**
