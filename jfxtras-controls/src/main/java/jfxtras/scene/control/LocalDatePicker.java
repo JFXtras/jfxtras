@@ -30,6 +30,7 @@
 package jfxtras.scene.control;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 import javafx.beans.property.BooleanProperty;
@@ -39,7 +40,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDatePickerSkin;
+import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 
 /**
  * LocalDate (JSR-310) picker component.<br>
@@ -141,6 +144,35 @@ public class LocalDatePicker extends Control
 	public void setDisplayedLocalDate(LocalDate value) { displayedLocalDateObjectProperty.setValue(value); }
 	public LocalDatePicker withDisplayedLocalDate(LocalDate value) { setDisplayedLocalDate(value); return this; }
 
+	/** localDateRangeCallback: 
+	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
+	 * It is called just before a new range is being displayed, so the developer can change the values in the collections like highlighted or disabled. 
+	 */
+	public ObjectProperty<Callback<LocalDateRange, Void>> LocalDateRangeCallbackProperty() { return localDateRangeCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDateRange, Void>> localDateRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateRange, Void>>(this, "localDateRangeCallback", null);
+	public Callback<LocalDateRange, Void> getLocalDateRangeCallback() { return this.localDateRangeCallbackObjectProperty.getValue(); }
+	public void setLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { this.localDateRangeCallbackObjectProperty.setValue(value); }
+	public LocalDatePicker withLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { setLocalDateRangeCallback(value); return this; }
+	
+	/**
+	 * A Calendar range
+	 */
+	static public class LocalDateRange
+	{
+		public LocalDateRange(LocalDate start, LocalDate end)
+		{
+			this.start = start;
+			this.end = end;
+		}
+		
+		public LocalDate getStartLocalDate() { return start; }
+		final LocalDate start;
+		
+		public LocalDate getEndLocalDate() { return end; }
+		final LocalDate end; 
+	}
+	
+	
 	// ==================================================================================================================
 	// SUPPORT
 

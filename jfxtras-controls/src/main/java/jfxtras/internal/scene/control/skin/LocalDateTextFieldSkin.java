@@ -27,7 +27,10 @@
 package jfxtras.internal.scene.control.skin;
 
 import javafx.scene.control.SkinBase;
+import javafx.util.Callback;
+import jfxtras.scene.control.CalendarPicker.CalendarRange;
 import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
 import jfxtras.scene.control.LocalDateTextField;
 
 /**
@@ -68,10 +71,23 @@ public class LocalDateTextFieldSkin extends SkinBase<LocalDateTextField>
 		calendarTextField.promptTextProperty().bindBidirectional( getSkinnable().promptTextProperty() );
 		calendarTextField.parseErrorCallbackProperty().bindBidirectional( getSkinnable().parseErrorCallbackProperty() );
 		DateTimeToCalendarHelper.syncLocalDate(calendarTextField.calendarProperty(), getSkinnable().localDateProperty(), calendarTextField.localeProperty());
-		
+		DateTimeToCalendarHelper.syncLocalDates(calendarTextField.highlightedCalendars(), getSkinnable().highlightedLocalDates(), calendarTextField.localeProperty());
+		DateTimeToCalendarHelper.syncLocalDates(calendarTextField.disabledCalendars(), getSkinnable().disabledLocalDates(), calendarTextField.localeProperty());
+
 		// formatter(s) require special attention
 		DateTimeToCalendarHelper.syncDateTimeFormatterForDate(calendarTextField.dateFormatProperty(), getSkinnable().dateTimeFormatterProperty());
 		DateTimeToCalendarHelper.syncDateTimeFormattersForDate(calendarTextField.dateFormatsProperty(), getSkinnable().dateTimeFormattersProperty());
+		
+		calendarTextField.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
+			@Override
+			public Void call(CalendarRange calendarRange) {
+				Callback<LocalDateRange, Void> lCallback = getSkinnable().getLocalDateRangeCallback();
+				if (lCallback == null) {
+					return null;
+				}
+				return lCallback.call(new LocalDateRange(DateTimeToCalendarHelper.createLocalDateFromCalendar(calendarRange.getStartCalendar()), DateTimeToCalendarHelper.createLocalDateFromCalendar(calendarRange.getEndCalendar())));
+			}
+		});
 	}
 	
     // ==================================================================================================================

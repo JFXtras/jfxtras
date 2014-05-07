@@ -339,7 +339,7 @@ public class DateTimeToCalendarHelper {
 		});
 	}
 	
-		/**
+	/**
 	 * 
 	 * @param calendars
 	 * @param localDateTimes
@@ -626,5 +626,48 @@ public class DateTimeToCalendarHelper {
 		public String toString() {
 			return dateTimeFormatter.toString();
 		}
+	}
+
+	static public void sync(ObservableList<Calendar> calendars, ObservableList<Calendar> localDateTimes)
+	{
+		// initial values
+		for (Calendar lCalendar : localDateTimes) {
+			calendars.add(lCalendar);
+		}
+		
+		// forward changes from calendar
+		calendars.addListener( (ListChangeListener.Change<? extends Calendar> change) -> {
+			while (change.next())
+			{
+				for (Calendar lCalendar : change.getRemoved())
+				{
+					if (localDateTimes.contains(lCalendar)) {
+						localDateTimes.remove(lCalendar);
+					}				
+				}
+				for (Calendar lCalendar : change.getAddedSubList()) 
+				{
+					if (localDateTimes.contains(lCalendar) == false) {
+						localDateTimes.add(lCalendar);
+					}
+				}
+			}
+		});
+		
+		// forward changes to calendar
+		localDateTimes.addListener( (ListChangeListener.Change<? extends Calendar> change) -> {
+			while (change.next()) {
+				for (Calendar lCalendar : change.getRemoved()) {
+					if (calendars.contains(lCalendar)) {
+						calendars.remove(lCalendar);
+					}
+				}
+				for (Calendar lCalendar : change.getAddedSubList()) {
+					if (calendars.contains(lCalendar) == false) {
+						calendars.add(lCalendar);
+					}
+				}
+			}
+		});
 	}
 }

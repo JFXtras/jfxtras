@@ -37,7 +37,6 @@ import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
@@ -52,7 +51,8 @@ import org.junit.Test;
  * Created by Tom Eugelink on 26-12-13.
  */
 public class CalendarPickerTest extends JFXtrasGuiTest {
-
+// TODO: highlighted, disabled, range callback
+	
 	/**
 	 * 
 	 */

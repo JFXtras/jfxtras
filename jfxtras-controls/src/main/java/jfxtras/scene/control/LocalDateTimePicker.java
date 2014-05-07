@@ -39,6 +39,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDateTimePickerSkin;
 
 /**
@@ -90,15 +91,7 @@ public class LocalDateTimePicker extends Control
 	public LocalDateTime getLocalDateTime() { return localDateTimeObjectProperty.getValue(); }
 	public void setLocalDateTime(LocalDateTime value) { localDateTimeObjectProperty.setValue(value); }
 	public LocalDateTimePicker withLocalDateTime(LocalDateTime value) { setLocalDateTime(value); return this; }
-
-	/** highlightedLocalDateTimes: */
-	public ObservableList<LocalDateTime> highlightedLocalDateTimes() { return highlightedLocalDateTimes; }
-	private final ObservableList<LocalDateTime> highlightedLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
-
-	/** disabledLocalDateTimes: */
-	public ObservableList<LocalDateTime> disabledLocalDateTimes() { return disabledLocalDateTimes; }
-	private final ObservableList<LocalDateTime> disabledLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
-
+	
 	/** DisplayedLocalDateTime: */
 	public ObjectProperty<LocalDateTime> displayedLocalDateTimeProperty() { return displayedLocalDateTimeObjectProperty; }
 	private final ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedLocalDateTime", LocalDateTime.now());
@@ -120,6 +113,41 @@ public class LocalDateTimePicker extends Control
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public LocalDateTimePicker withAllowNull(boolean value) { setAllowNull(value); return this; }
 
+	/** highlightedLocalDateTimes: */
+	public ObservableList<LocalDateTime> highlightedLocalDateTimes() { return highlightedLocalDateTimes; }
+	private final ObservableList<LocalDateTime> highlightedLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
+
+	/** disabledLocalDateTimes: */
+	public ObservableList<LocalDateTime> disabledLocalDateTimes() { return disabledLocalDateTimes; }
+	private final ObservableList<LocalDateTime> disabledLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
+
+	/** localDateTimeRangeCallback: 
+	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
+	 * It is called just before a new range is being displayed, so the developer can change the values in the collections like highlighted or disabled. 
+	 */
+	public ObjectProperty<Callback<LocalDateTimeRange, Void>> LocalDateTimeRangeCallbackProperty() { return localDateTimeRangeCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDateTimeRange, Void>> localDateTimeRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Void>>(this, "localDateTimeRangeCallback", null);
+	public Callback<LocalDateTimeRange, Void> getLocalDateTimeRangeCallback() { return this.localDateTimeRangeCallbackObjectProperty.getValue(); }
+	public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
+	public LocalDateTimePicker withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
+	
+	/**
+	 * A Calendar range
+	 */
+	static public class LocalDateTimeRange
+	{
+		public LocalDateTimeRange(LocalDateTime start, LocalDateTime end)
+		{
+			this.start = start;
+			this.end = end;
+		}
+		
+		public LocalDateTime getStartLocalDateTime() { return start; }
+		final LocalDateTime start;
+		
+		public LocalDateTime getEndLocalDateTime() { return end; }
+		final LocalDateTime end; 
+	}
 
 	// ==================================================================================================================
 	// SUPPORT

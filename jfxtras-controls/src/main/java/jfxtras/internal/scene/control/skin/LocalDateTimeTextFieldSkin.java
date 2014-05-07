@@ -29,11 +29,11 @@
 
 package jfxtras.internal.scene.control.skin;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 import javafx.scene.control.SkinBase;
+import javafx.util.Callback;
+import jfxtras.scene.control.CalendarPicker.CalendarRange;
 import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 import jfxtras.scene.control.LocalDateTimeTextField;
 
 /**
@@ -74,10 +74,23 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 		calendarTextField.promptTextProperty().bindBidirectional( getSkinnable().promptTextProperty() );
 		calendarTextField.parseErrorCallbackProperty().bindBidirectional( getSkinnable().parseErrorCallbackProperty() );
 		DateTimeToCalendarHelper.syncLocalDateTime(calendarTextField.calendarProperty(), getSkinnable().localDateTimeProperty(), calendarTextField.localeProperty());
+		DateTimeToCalendarHelper.syncLocalDateTimes(calendarTextField.highlightedCalendars(), getSkinnable().highlightedLocalDateTimes(), calendarTextField.localeProperty());
+		DateTimeToCalendarHelper.syncLocalDateTimes(calendarTextField.disabledCalendars(), getSkinnable().disabledLocalDateTimes(), calendarTextField.localeProperty());
 		
 		// formatter(s) require special attention
 		DateTimeToCalendarHelper.syncDateTimeFormatterForDateTime(calendarTextField.dateFormatProperty(), getSkinnable().dateTimeFormatterProperty());
 		DateTimeToCalendarHelper.syncDateTimeFormattersForDateTime(calendarTextField.dateFormatsProperty(), getSkinnable().dateTimeFormattersProperty());
+		
+		calendarTextField.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
+			@Override
+			public Void call(CalendarRange calendarRange) {
+				Callback<LocalDateTimeRange, Void> lCallback = getSkinnable().getLocalDateTimeRangeCallback();
+				if (lCallback == null) {
+					return null;
+				}
+				return lCallback.call(new LocalDateTimeRange(DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(calendarRange.getStartCalendar()), DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(calendarRange.getEndCalendar())));
+			}
+		});
 	}
 	
 	// ==================================================================================================================

@@ -42,6 +42,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.util.Callback;
+import jfxtras.scene.control.CalendarPicker.CalendarRange;
 
 // TODO: add disabled and highlighted and connect to popup Calendar's
 // TODO: add null allowed and connect to popup Calendar's
@@ -166,7 +167,25 @@ public class CalendarTextField extends Control
 	public void setParseErrorCallback(Callback<Throwable, Void> value) { this.parseErrorCallbackObjectProperty.setValue(value); }
 	public CalendarTextField withParseErrorCallback(Callback<Throwable, Void> value) { setParseErrorCallback(value); return this; }
 
+    /** disabledCalendars: */
+	public ObservableList<Calendar> disabledCalendars() { return disabledCalendars; }
+	final private ObservableList<Calendar> disabledCalendars =  javafx.collections.FXCollections.observableArrayList();
 
+	/** highlightedCalendars: */
+	public ObservableList<Calendar> highlightedCalendars() { return highlightedCalendars; }
+	final private ObservableList<Calendar> highlightedCalendars =  javafx.collections.FXCollections.observableArrayList();
+
+	/** calendarRangeCallback: 
+	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
+	 * It is called just before a new range is being displayed, so the developer can change the values in the collections like highlighted or disabled. 
+	 */
+	public ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackProperty() { return calendarRangeCallbackObjectProperty; }
+	final private ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<CalendarRange, Void>>(this, "calendarRangeCallback", null);
+	public Callback<CalendarRange, Void> getCalendarRangeCallback() { return this.calendarRangeCallbackObjectProperty.getValue(); }
+	public void setCalendarRangeCallback(Callback<CalendarRange, Void> value) { this.calendarRangeCallbackObjectProperty.setValue(value); }
+	public CalendarTextField withCalendarRangeCallback(Callback<CalendarRange, Void> value) { setCalendarRangeCallback(value); return this; }
+
+	
 	// ==================================================================================================================
 	// EVENTS
 	

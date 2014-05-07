@@ -30,8 +30,11 @@
 package jfxtras.internal.scene.control.skin;
 
 import javafx.scene.control.SkinBase;
+import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.LocalDateTimePicker;
+import jfxtras.scene.control.CalendarPicker.CalendarRange;
+import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 
 /**
  * This skin reuses CalendarPicker
@@ -72,6 +75,16 @@ public class LocalDateTimePickerSkin extends SkinBase<LocalDateTimePicker>
 		DateTimeToCalendarHelper.syncLocalDateTimes(calendarPicker.highlightedCalendars(), getSkinnable().highlightedLocalDateTimes(), calendarPicker.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDateTimes(calendarPicker.disabledCalendars(), getSkinnable().disabledLocalDateTimes(), calendarPicker.localeProperty());
 		calendarPicker.allowNullProperty().bindBidirectional( getSkinnable().allowNullProperty() );
+		calendarPicker.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
+			@Override
+			public Void call(CalendarRange calendarRange) {
+				Callback<LocalDateTimeRange, Void> lCallback = getSkinnable().getLocalDateTimeRangeCallback();
+				if (lCallback == null) {
+					return null;
+				}
+				return lCallback.call(new LocalDateTimePicker.LocalDateTimeRange(DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(calendarRange.getStartCalendar()), DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(calendarRange.getEndCalendar())));
+			}
+		});
 	}
 	
 	// ==================================================================================================================

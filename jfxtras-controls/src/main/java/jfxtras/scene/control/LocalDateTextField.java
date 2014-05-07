@@ -45,6 +45,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDateTextFieldSkin;
+import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
 
 
 /**
@@ -154,7 +155,26 @@ public class LocalDateTextField extends Control
 	public Callback<Throwable, Void> getParseErrorCallback() { return this.parseErrorCallbackObjectProperty.getValue(); }
 	public void setParseErrorCallback(Callback<Throwable, Void> value) { this.parseErrorCallbackObjectProperty.setValue(value); }
 	public LocalDateTextField withParseErrorCallback(Callback<Throwable, Void> value) { setParseErrorCallback(value); return this; }
+	
+	/** highlightedLocalDateTimes: */
+	public ObservableList<LocalDate> highlightedLocalDates() { return highlightedLocalDates; }
+	private final ObservableList<LocalDate> highlightedLocalDates =  javafx.collections.FXCollections.observableArrayList();
 
+	/** disabledLocalDates: */
+	public ObservableList<LocalDate> disabledLocalDates() { return disabledLocalDates; }
+	private final ObservableList<LocalDate> disabledLocalDates =  javafx.collections.FXCollections.observableArrayList();
+	
+	/** localDateRangeCallback: 
+	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
+	 * It is called just before a new range is being displayed, so the developer can change the values in the collections like highlighted or disabled. 
+	 */
+	public ObjectProperty<Callback<LocalDateRange, Void>> LocalDateRangeCallbackProperty() { return localDateRangeCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDateRange, Void>> localDateRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateRange, Void>>(this, "localDateRangeCallback", null);
+	public Callback<LocalDateRange, Void> getLocalDateRangeCallback() { return this.localDateRangeCallbackObjectProperty.getValue(); }
+	public void setLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { this.localDateRangeCallbackObjectProperty.setValue(value); }
+	public LocalDateTextField withLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { setLocalDateRangeCallback(value); return this; }
+
+	
 	// ==================================================================================================================
 	// SUPPORT
 }
