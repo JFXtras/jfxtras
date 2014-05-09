@@ -448,4 +448,38 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		click("#day3");
 		Assert.assertEquals("2013-01-02T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
 	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void disabledCalendars()
+	{
+		// disable 2nd of January
+		PlatformUtil.runAndWait( () -> {
+			calendarPicker.disabledCalendars().add(new GregorianCalendar(2013, 00, 02, 12, 34, 56));
+		});
+
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+
+		// click the 1st of January
+		click("#day2");
+
+		// the last selected value should be set
+		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
+
+		// click the 2nd of January
+		click("#day3");
+
+		// there should be no change
+		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
+
+		// click the 35d of January
+		click("#day4");
+
+		// the last selected value should be set
+		Assert.assertEquals("2013-01-03", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
+	}
+
 }

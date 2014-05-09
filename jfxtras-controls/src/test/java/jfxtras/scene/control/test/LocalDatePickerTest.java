@@ -31,6 +31,7 @@ package jfxtras.scene.control.test;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javafx.scene.Parent;
@@ -360,5 +361,38 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 
 		// Jan 2013 is shown
 		Assert.assertEquals("2013-01-01", localDatePicker.getDisplayedLocalDate().toString());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void disabledCalendars()
+	{
+		// disable 2nd of January
+		PlatformUtil.runAndWait( () -> {
+			localDatePicker.disabledLocalDates().add(LocalDate.of(2013, 01, 02));
+		});
+
+		// default value is null
+		Assert.assertNull(localDatePicker.getLocalDate());
+
+		// click the 1st of January
+		click("#day2");
+
+		// the last selected value should be set
+		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
+
+		// click the 2nd of January
+		click("#day3");
+
+		// there should be no change
+		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
+
+		// click the 35d of January
+		click("#day4");
+
+		// the last selected value should be set
+		Assert.assertEquals("2013-01-03",localDatePicker.getLocalDate().toString());
 	}
 }
