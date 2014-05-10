@@ -221,6 +221,14 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	// ==================================================================================================================
 	// DRAW
 	
+    private Calendar getCalendar() {
+    	if (this.calendar != null) {
+    		return this.calendar;
+    	}
+    	return getSkinnable().getCalendar();
+    }
+    private Calendar calendar = null;
+    
     /**
 	 * construct the nodes
 	 * TODO: snap to tick when released
@@ -238,11 +246,21 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
+			Calendar lCalendar = getCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			lCalendar.set(Calendar.HOUR_OF_DAY, newValue.intValue());
-			if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
-				getSkinnable().setCalendar(lCalendar);
+			if (lCalendar.equals(getCalendar()) == false) {
+				this.calendar = lCalendar;
+				refresh();
+			}
+		});
+		hourScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
+			if (refreshingAtomicInteger.get() > 0) {
+				return;
+			}
+			if (this.calendar != null) {
+				getSkinnable().setCalendar(this.calendar);
+				this.calendar = null;
 			}
 		});
 		minuteScrollSlider.setId("minuteSlider");
@@ -254,7 +272,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
+			Calendar lCalendar = getCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			
 			// in order no to first set a non stepsize calendar, we step the minutes here 
@@ -267,8 +285,18 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 			lCalendar.set(Calendar.MINUTE, lMinutes);
 			lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
-			if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
-				getSkinnable().setCalendar(lCalendar);
+			if (lCalendar.equals(getCalendar()) == false) {
+				this.calendar = lCalendar;
+				refresh();
+			}
+		});
+		minuteScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
+			if (refreshingAtomicInteger.get() > 0) {
+				return;
+			}
+			if (this.calendar != null) {
+				getSkinnable().setCalendar(this.calendar);
+				this.calendar = null;
 			}
 		});
 		secondScrollSlider.setId("secondSlider");
@@ -280,7 +308,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = (Calendar)getSkinnable().getCalendar();
+			Calendar lCalendar = getCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			
 			// in order no to first set a non stepsize calendar, we step the minutes here 
@@ -293,8 +321,18 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 			lCalendar.set(Calendar.SECOND, lSeconds);
 			lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getMinuteStep());
-			if (lCalendar.equals(getSkinnable().getCalendar()) == false) {
-				getSkinnable().setCalendar(lCalendar);
+			if (lCalendar.equals(getCalendar()) == false) {
+				this.calendar = lCalendar;
+				refresh();
+			}
+		});
+		secondScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
+			if (refreshingAtomicInteger.get() > 0) {
+				return;
+			}
+			if (this.calendar != null) {
+				getSkinnable().setCalendar(this.calendar);
+				this.calendar = null;
 			}
 		});
 		
@@ -463,7 +501,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		try {
 			refreshingAtomicInteger.addAndGet(1);
 
-			Calendar lCalendar = getSkinnable().getCalendar();
+			Calendar lCalendar = getCalendar();
 			int lHour = lCalendar == null ? 0 : lCalendar.get(Calendar.HOUR_OF_DAY);
 			int lMinute = lCalendar == null ? 0 : lCalendar.get(Calendar.MINUTE);
 			int lSecond = lCalendar == null ? 0 : lCalendar.get(Calendar.SECOND);

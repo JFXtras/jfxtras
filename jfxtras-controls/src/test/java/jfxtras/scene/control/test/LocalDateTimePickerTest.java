@@ -240,7 +240,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 	{
 		// disable 2nd of January
 		PlatformUtil.runAndWait( () -> {
-			localDateTimePicker.disabledLocalDateTimes().add(LocalDate.of(2013, 01, 02));
+			localDateTimePicker.disabledLocalDateTimes().add(LocalDateTime.of(2013, 01, 02, 00, 00, 00));
 		});
 
 		// default value is null
