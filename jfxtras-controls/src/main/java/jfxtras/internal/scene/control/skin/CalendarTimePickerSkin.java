@@ -221,14 +221,6 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	// ==================================================================================================================
 	// DRAW
 	
-    private Calendar getCalendar() {
-    	if (this.calendar != null) {
-    		return this.calendar;
-    	}
-    	return getSkinnable().getCalendar();
-    }
-    private Calendar calendar = null;
-    
     /**
 	 * construct the nodes
 	 * TODO: snap to tick when released
@@ -246,22 +238,16 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = getCalendar();
+			Calendar lCalendar = getChangingCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			lCalendar.set(Calendar.HOUR_OF_DAY, newValue.intValue());
-			if (lCalendar.equals(getCalendar()) == false) {
-				this.calendar = lCalendar;
-				refresh();
-			}
+			setChangingCalendar(lCalendar);
 		});
 		hourScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
 			if (refreshingAtomicInteger.get() > 0) {
 				return;
 			}
-			if (this.calendar != null) {
-				getSkinnable().setCalendar(this.calendar);
-				this.calendar = null;
-			}
+			acceptChangingCalendar();
 		});
 		minuteScrollSlider.setId("minuteSlider");
 		minuteScrollSlider.minProperty().set(00);
@@ -272,10 +258,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = getCalendar();
+			Calendar lCalendar = getChangingCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			
-			// in order no to first set a non stepsize calendar, we step the minutes here 
+			// in order not to first set a non stepsize calendar, we step the minutes here 
 			int lMinutes = newValue.intValue();
 			int lMinuteStep = getSkinnable().getMinuteStep();
 			if (lMinuteStep > 1)
@@ -285,19 +271,13 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 			lCalendar.set(Calendar.MINUTE, lMinutes);
 			lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
-			if (lCalendar.equals(getCalendar()) == false) {
-				this.calendar = lCalendar;
-				refresh();
-			}
+			setChangingCalendar(lCalendar);
 		});
 		minuteScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
 			if (refreshingAtomicInteger.get() > 0) {
 				return;
 			}
-			if (this.calendar != null) {
-				getSkinnable().setCalendar(this.calendar);
-				this.calendar = null;
-			}
+			acceptChangingCalendar();
 		});
 		secondScrollSlider.setId("secondSlider");
 		secondScrollSlider.minProperty().set(00);
@@ -308,10 +288,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = getCalendar();
+			Calendar lCalendar = getChangingCalendar();
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			
-			// in order no to first set a non stepsize calendar, we step the minutes here 
+			// in order not to first set a non stepsize calendar, we step the minutes here 
 			int lSeconds = newValue.intValue();
 			int lSecondStep = getSkinnable().getSecondStep();
 			if (lSecondStep > 1)
@@ -321,19 +301,13 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 			lCalendar.set(Calendar.SECOND, lSeconds);
 			lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getMinuteStep());
-			if (lCalendar.equals(getCalendar()) == false) {
-				this.calendar = lCalendar;
-				refresh();
-			}
+			setChangingCalendar(lCalendar);
 		});
 		secondScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
 			if (refreshingAtomicInteger.get() > 0) {
 				return;
 			}
-			if (this.calendar != null) {
-				getSkinnable().setCalendar(this.calendar);
-				this.calendar = null;
-			}
+			acceptChangingCalendar();
 		});
 		
 		// add label
@@ -346,6 +320,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		// add self as CSS style
 		getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
 	}
+
 	final private Slider hourScrollSlider = new Slider();
 	final private Slider minuteScrollSlider = new Slider();
 	final private Slider secondScrollSlider = new Slider();
@@ -392,7 +367,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				lText.setY(lText.prefHeight(0));
 				double lX = (lScrollSliderOuterPadding + ((minuteScrollSlider.getWidth() - (2*lScrollSliderOuterPadding)) / 23 * i)) - (lText.prefWidth(0) 
 						  / (i == 23 ? 1 : 2) // center, except the most right 
-						  * ( i == 0 ? 0 : 1)); // and the most left
+						  * (i == 0  ? 0 : 1)); // and the most left
 				lText.setX(lX);
 				getChildren().add(lText);
 			}
@@ -449,8 +424,8 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				Text lText = new Text("" + i);
 				lText.setY(lText.prefHeight(0));
 				double lX = (lScrollSliderOuterPadding + ((minuteScrollSlider.getWidth() - (2*lScrollSliderOuterPadding)) / 59 * i)) - (lText.prefWidth(0) 
-						  / (i == 59? 1 : 2) // center, except the most right 
-						  * ( i == 0 ? 0 : 1)); // and the most left
+						  / (i == 59 ? 1 : 2) // center, except the most right 
+						  * (i == 0  ? 0 : 1)); // and the most left
 				lText.setX(lX);
 				getChildren().add(lText);
 			}
@@ -501,7 +476,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		try {
 			refreshingAtomicInteger.addAndGet(1);
 
-			Calendar lCalendar = getCalendar();
+			Calendar lCalendar = getChangingCalendar();
 			int lHour = lCalendar == null ? 0 : lCalendar.get(Calendar.HOUR_OF_DAY);
 			int lMinute = lCalendar == null ? 0 : lCalendar.get(Calendar.MINUTE);
 			int lSecond = lCalendar == null ? 0 : lCalendar.get(Calendar.SECOND);
@@ -537,7 +512,6 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		return calendar;
 	}
 
-	
 	/**
 	 * seconds fit in the second steps
 	 */
@@ -558,4 +532,26 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		}
 		return calendar;
 	}
+	
+    /** changingCalendar holds the displayed value while the sliders send events with value-is-changing is true */
+    private Calendar changingCalendar = null;
+    private Calendar getChangingCalendar() {
+    	if (this.changingCalendar != null) {
+    		return this.changingCalendar;
+    	}
+    	return getSkinnable().getCalendar();
+    }
+	public void setChangingCalendar(Calendar lCalendar) {
+		if (lCalendar.equals(getChangingCalendar()) == false) {
+			this.changingCalendar = lCalendar;
+			refresh();
+		}
+	}    
+	public void acceptChangingCalendar() {
+		if (this.changingCalendar != null) {
+			getSkinnable().setCalendar(this.changingCalendar);
+			this.changingCalendar = null;
+		}
+	}
+    
 }
