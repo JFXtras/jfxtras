@@ -151,6 +151,13 @@ public class CalendarTimeTextField extends Control
 	public void setMinuteStep(Integer value) { minuteStepProperty.setValue(value); }
 	public CalendarTimeTextField withMinuteStep(Integer value) { setMinuteStep(value); return this; } 
 
+	/** SecondStep */
+	public ObjectProperty<Integer> secondStepProperty() { return secondStepProperty; }
+	final private SimpleObjectProperty<Integer> secondStepProperty = new SimpleObjectProperty<Integer>(this, "secondStep", 1);
+	public Integer getSecondStep() { return secondStepProperty.getValue(); }
+	public void setSecondStep(Integer value) { secondStepProperty.setValue(value); }
+	public CalendarTimeTextField withSecondStep(Integer value) { setSecondStep(value); return this; }
+	
 	/** PromptText: */
 	public ObjectProperty<String> promptTextProperty() { return promptTextObjectProperty; }
 	final private ObjectProperty<String> promptTextObjectProperty = new SimpleObjectProperty<String>(this, "promptText", null);

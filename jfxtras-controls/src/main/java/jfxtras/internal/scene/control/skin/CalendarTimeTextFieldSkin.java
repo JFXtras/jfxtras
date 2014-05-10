@@ -216,8 +216,9 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		// prep the picker
 		calendarTimePicker = new CalendarTimePicker();
 		// bind our properties to the picker's 
-		Bindings.bindBidirectional(calendarTimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		//Bindings.bindBidirectional(calendarTimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		Bindings.bindBidirectional(calendarTimePicker.minuteStepProperty(), getSkinnable().minuteStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		Bindings.bindBidirectional(calendarTimePicker.secondStepProperty(), getSkinnable().secondStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		
 		// close icon
 		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "CloseWindowIcon.png"));
@@ -343,6 +344,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 				@Override public void handle(MouseEvent evt) {
 					popup.hide();
 					popup = null;
+					getSkinnable().calendarProperty().set(calendarTimePicker.calendarProperty().get()); 
 				}
 			});
 			lBorderPane.rightProperty().set(lImageView);
@@ -355,6 +357,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		}
 		
 		// show it just below the textfield
+		calendarTimePicker.calendarProperty().set(getSkinnable().calendarProperty().get()); 
 		popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
 		
 		// move the focus over

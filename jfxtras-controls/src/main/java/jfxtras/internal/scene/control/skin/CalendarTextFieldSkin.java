@@ -54,16 +54,16 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Popup;
+import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker;
+import jfxtras.scene.control.CalendarPicker.CalendarRange;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.ImageViewButton;
 import jfxtras.scene.control.LocalDatePicker;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimePicker;
 import jfxtras.scene.control.LocalDateTimeTextField;
-import jfxtras.scene.control.CalendarPicker.CalendarRange;
-import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 import jfxtras.util.NodeUtil;
 
 /**
@@ -236,7 +236,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		calendarPicker.setMode(CalendarPicker.Mode.SINGLE);
 		// bind our properties to the picker's 
 		Bindings.bindBidirectional(calendarPicker.localeProperty(), getSkinnable().localeProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		Bindings.bindBidirectional(calendarPicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		//Bindings.bindBidirectional(calendarPicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		DateTimeToCalendarHelper.sync(calendarPicker.disabledCalendars(), getSkinnable().disabledCalendars());
 		DateTimeToCalendarHelper.sync(calendarPicker.highlightedCalendars(), getSkinnable().highlightedCalendars());
 		calendarPicker.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
@@ -416,7 +416,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			}
 			
 			// add a close button
-			if (isShowingTime() == true)
+			if (isShowingTime())
 			{
 				ImageView lImageView = new ImageViewButton();
 				lImageView.getStyleClass().addAll("close-icon");
@@ -431,12 +431,18 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 				});
 				lBorderPane.rightProperty().set(lImageView);
 			}
+
+			popup.setOnHiding( (windowEvent) -> {
+				// TODO: we somehow have to be able to cancel the changes (pressing ESC)
+				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+			});
 			
 			// add to popup
 			popup.getContent().add(lBorderPane);
 		}
 		
 		// show it just below the textfield
+		calendarPicker.calendarProperty().set(getSkinnable().calendarProperty().get());
 		popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
 
 		// move the focus over		
