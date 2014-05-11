@@ -54,7 +54,6 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Popup;
-import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
@@ -64,6 +63,7 @@ import jfxtras.scene.control.LocalDatePicker;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimePicker;
 import jfxtras.scene.control.LocalDateTimeTextField;
+import jfxtras.scene.layout.VBox;
 import jfxtras.util.NodeUtil;
 
 /**
@@ -418,10 +418,27 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			// add a close button
 			if (isShowingTime())
 			{
-				ImageView lImageView = new ImageViewButton();
-				lImageView.getStyleClass().addAll("close-icon");
-				lImageView.setPickOnBounds(true);
-				lImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
+				VBox lVBox = new VBox(); 
+				lBorderPane.rightProperty().set(lVBox);
+				
+				ImageView lAcceptIconImageView = new ImageViewButton();
+				lAcceptIconImageView.getStyleClass().addAll("accept-icon");
+				lAcceptIconImageView.setPickOnBounds(true);
+				lAcceptIconImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
+				{
+					@Override public void handle(MouseEvent evt)
+					{
+						getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+						popup.hide(); 
+						popup = null;
+					}
+				});
+				lVBox.add(lAcceptIconImageView);
+				
+				ImageView lCloseIconImageView = new ImageViewButton();
+				lCloseIconImageView.getStyleClass().addAll("close-icon");
+				lCloseIconImageView.setPickOnBounds(true);
+				lCloseIconImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
 				{
 					@Override public void handle(MouseEvent evt)
 					{
@@ -429,12 +446,13 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 						popup = null;
 					}
 				});
-				lBorderPane.rightProperty().set(lImageView);
+				lVBox.add(lCloseIconImageView);
 			}
 
 			popup.setOnHiding( (windowEvent) -> {
-				// TODO: we somehow have to be able to cancel the changes (pressing ESC)
-				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+				if (isShowingTime() == false) {
+					getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+				}
 			});
 			
 			// add to popup

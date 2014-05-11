@@ -219,15 +219,11 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		//Bindings.bindBidirectional(calendarTimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		Bindings.bindBidirectional(calendarTimePicker.minuteStepProperty(), getSkinnable().minuteStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 		Bindings.bindBidirectional(calendarTimePicker.secondStepProperty(), getSkinnable().secondStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		
-		// close icon
-		closeIconImage = new Image(this.getClass().getResourceAsStream(this.getClass().getSimpleName() + "CloseWindowIcon.png"));
 	}
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
 	private CalendarTimePicker calendarTimePicker = null;
-	private Image closeIconImage = null;
 	
 	/**
 	 * parse the contents that was typed in the textfield
@@ -338,7 +334,8 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 			lBorderPane.setCenter(calendarTimePicker);
 			
 			// add a close button
-			ImageView lImageView = new ImageViewButton(closeIconImage);
+			ImageView lImageView = new ImageViewButton();
+			lImageView.getStyleClass().addAll("close-icon");
 			lImageView.setPickOnBounds(true);
 			lImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 				@Override public void handle(MouseEvent evt) {

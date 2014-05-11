@@ -4,11 +4,11 @@
 }
 
 .CalendarTextFieldSkin .icon  {
-    -fx-image: url("skin/CalendarTextFieldSkinIcon.png");
+    -fx-image: url("skin/clock.png");
 }
 
 .CalendarTextFieldSkin .icon:disabled  {
-    -fx-image: url("skin/CalendarTextFieldSkinIconDisabled.png");
+    -fx-image: url("skin/clock-grey.png");
 }
 
 .CalendarTextFieldSkin_popup {
@@ -20,5 +20,9 @@
 }
 
 .CalendarTextFieldSkin_popup .close-icon  {
-    -fx-image: url("skin/CalendarTextFieldSkinCloseWindowIcon.png");
+    -fx-image: url("skin/cancel.png");
+}
+
+.CalendarTextFieldSkin_popup .accept-icon  {
+    -fx-image: url("skin/accept.png");
 }

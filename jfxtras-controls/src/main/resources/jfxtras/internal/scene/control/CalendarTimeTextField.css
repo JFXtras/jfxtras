@@ -4,11 +4,11 @@
 }
 
 .CalendarTimeTextFieldSkin .icon  {
-	-fx-image: url("skin/CalendarTimeTextFieldSkinIcon.png");
+	-fx-image: url("skin/clock.png");
 }
 
 .CalendarTimeTextFieldSkin .icon:disabled  {
-	-fx-image: url("skin/CalendarTimeTextFieldSkinIconDisabled.png");
+	-fx-image: url("skin/clock-grey.png");
 }
 
 .CalendarTimeTextFieldSkin_popup {
@@ -17,4 +17,8 @@
 	-fx-background-radius: 5,5,4,3;
 	-fx-padding: 0.766667em 0.733333em 0.75em 0.733333em;
 	-fx-text-fill: -fx-text-base-color;
+}
+
+.CalendarTimeTextFieldSkin_popup .close-icon  {
+    -fx-image: url("skin/cancel.png");
 }
