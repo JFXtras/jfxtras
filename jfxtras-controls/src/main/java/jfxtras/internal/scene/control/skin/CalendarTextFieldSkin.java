@@ -206,6 +206,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			getSkinnable().setTooltip(new Tooltip("Type a date or use # for today, or +/-<number>[d|w|m|y] for delta's (for example: -3m for minus 3 months)\nUse cursor up and down plus optional shift (week), ctrl (month) or alt (year) for quick keyboard changes."));
 		}
         textField.promptTextProperty().bind(getSkinnable().promptTextProperty());
+        textField.textProperty().bind(getSkinnable().textProperty());
 
 		// the icon
         imageView = new ImageViewButton();

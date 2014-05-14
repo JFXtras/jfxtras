@@ -183,6 +183,12 @@ public class LocalDateTimeTextField extends Control
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public LocalDateTimeTextField withAllowNull(boolean value) { setAllowNull(value); return this; }
 	
+	/** Text: */
+	public ObjectProperty<String> textProperty() { return textObjectProperty; }
+	final private ObjectProperty<String> textObjectProperty = new SimpleObjectProperty<String>(this, "text", null);
+	public String getText() { return textObjectProperty.get(); }
+	public void setText(String value) { textObjectProperty.set(value); }
+	public LocalDateTimeTextField withText(String value) { setText(value); return this; }
 	
 	// ==================================================================================================================
 	// SUPPORT

@@ -46,11 +46,8 @@ import javafx.scene.control.Control;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 
-// TODO: add disabled and highlighted and connect to popup Calendar's
-// TODO: add null allowed and connect to popup Calendar's
-
 /**
- * A textField with displays a calendar (date) with a icon to popup the CalendarPicker
+ * A textField which displays a calendar (date) with a icon to popup the CalendarPicker
  * The calendar is (and should) be treated as immutable. That means the Calendar's setters are not used, but when a value is changed a new instance (clone) is put in the calendar property.
  * Features relative mutation options, like -1 or -1d for yesterday, -1m for minus one month, +1w, +2y. # is today.
  * 
@@ -203,6 +200,13 @@ public class CalendarTextField extends Control
     public boolean getAllowNull() { return allowNullProperty.get(); }
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public CalendarTextField withAllowNull(boolean value) { setAllowNull(value); return this; }
+	
+	/** Text: */
+	public ObjectProperty<String> textProperty() { return textObjectProperty; }
+	final private ObjectProperty<String> textObjectProperty = new SimpleObjectProperty<String>(this, "text", null);
+	public String getText() { return textObjectProperty.get(); }
+	public void setText(String value) { textObjectProperty.set(value); }
+	public CalendarTextField withText(String value) { setText(value); return this; }
 
     
 	// ==================================================================================================================
