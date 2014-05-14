@@ -68,6 +68,7 @@ public class LocalDateTextFieldSkin extends SkinBase<LocalDateTextField>
 
 		// bind it up
 		calendarTextField.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
+		calendarTextField.allowNullProperty().bindBidirectional( getSkinnable().allowNullProperty() );
 		calendarTextField.promptTextProperty().bindBidirectional( getSkinnable().promptTextProperty() );
 		calendarTextField.parseErrorCallbackProperty().bindBidirectional( getSkinnable().parseErrorCallbackProperty() );
 		DateTimeToCalendarHelper.syncLocalDate(calendarTextField.calendarProperty(), getSkinnable().localDateProperty(), calendarTextField.localeProperty());

@@ -31,11 +31,14 @@ package jfxtras.scene.control.test;
 
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
@@ -60,6 +63,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		VBox box = new VBox();
 		calendarTextField = new CalendarTextField();
 		box.getChildren().add(calendarTextField);
+		box.getChildren().add(new Button("focus helper"));
 
 		return box;
 	}
@@ -105,6 +109,59 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// popup should be closed
 //		assertPopupIsNotVisible();
 	}
+
+
+	/**
+	 * 
+	 */
+	@Test
+	public void nullAllowed()
+	{
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setAllowNull(false);
+		});
+		
+		Assert.assertNotNull(calendarTextField.getCalendar());
+	}
+
+
+	/**
+	 * 
+	 */
+	@Test
+	public void nullNotAllowed()
+	{
+		// set null not allowed
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setAllowNull(false);			
+		});
+		AtomicBoolean lParseErrorCallbackWasCalled = new AtomicBoolean(false);
+		calendarTextField.setParseErrorCallback( (throwable) -> {
+			lParseErrorCallbackWasCalled.set(true);
+			return null;
+		});
+
+		// then clear the textfield
+		click(calendarTextField);
+		// TODO: there must be a better way to do this
+		eraseCharacters(10);
+		for (int i = 0; i < 10; i++) {
+			type(KeyCode.RIGHT);
+			eraseCharacters(1);
+		}
+		
+		// move focus away
+		click(".button");
+		
+		// check for result
+		Assert.assertTrue(lParseErrorCallbackWasCalled.get());
+	}
+
+	// =============================================================================================================================
+	// SUPPORT
 	
 	private void assertPopupIsNotVisible() {
 		TestUtil.sleep(2000);

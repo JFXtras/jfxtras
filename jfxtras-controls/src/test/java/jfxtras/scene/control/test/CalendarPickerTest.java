@@ -286,7 +286,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 	@Test
 	public void singleModeWithTime()
 	{
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			calendarPicker.setShowTime(true);
 		});
@@ -304,18 +304,17 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 	@Test
 	public void singleModeWithTimeSlide()
 	{
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			calendarPicker.setShowTime(true);
 		});
-		PlatformUtil.waitForPaintPulse(); // required for JavaFX to load the the skin of the TimePicker, otherwise it is null
 		
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
 		// set a value
 		final Calendar lCalendar = new GregorianCalendar(2013, 00, 01, 12, 34, 56);
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarPicker.setCalendar( (Calendar)lCalendar.clone() );
 		});
 		Assert.assertEquals("2013-01-01T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
@@ -344,7 +343,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			calendarPicker.setAllowNull(false);
 		});
@@ -370,7 +369,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// first of January
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));		
 
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			calendarPicker.setAllowNull(false);
 		});
@@ -434,11 +433,11 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 
 		// set a value
 		final Calendar lCalendar = new GregorianCalendar(2013, 00, 01, 12, 34, 56);
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarPicker.setShowTime(true);
 		});
 		final CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lCalendarTimePicker.setStyle("-fxx-label-dateformat:\"HH:mm:ss\";");
 			calendarPicker.setCalendar( (Calendar)lCalendar.clone() );
 		});
@@ -456,7 +455,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 	public void disabledCalendars()
 	{
 		// disable 2nd of January
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarPicker.disabledCalendars().add(new GregorianCalendar(2013, 00, 02, 12, 34, 56));
 		});
 

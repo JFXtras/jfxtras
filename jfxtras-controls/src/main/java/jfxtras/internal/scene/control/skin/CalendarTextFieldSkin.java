@@ -280,6 +280,9 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			lText = lText.trim();
 			if (lText.length() == 0) 
 			{
+				if (getSkinnable().getAllowNull() == false) {
+					throw new IllegalArgumentException("Empty string would result in null and that is not allowed");
+				}
 				getSkinnable().setCalendar(null);
 				return;
 			}

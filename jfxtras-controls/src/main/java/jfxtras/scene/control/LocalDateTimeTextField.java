@@ -36,8 +36,10 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -174,6 +176,12 @@ public class LocalDateTimeTextField extends Control
 	public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
 	public LocalDateTimeTextField withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
 
+	/** is null allowed */
+    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
+    public BooleanProperty allowNullProperty() { return allowNullProperty; }
+    public boolean getAllowNull() { return allowNullProperty.get(); }
+    public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
+    public LocalDateTimeTextField withAllowNull(boolean value) { setAllowNull(value); return this; }
 	
 	
 	// ==================================================================================================================
