@@ -29,7 +29,11 @@
 
 package jfxtras.scene.control.test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -143,6 +147,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 			lParseErrorCallbackWasCalled.set(true);
 			return null;
 		});
+		
 
 		// then clear the textfield
 		click(calendarTextField);
@@ -158,6 +163,67 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// check for result
 		Assert.assertTrue(lParseErrorCallbackWasCalled.get());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void typeValue()
+	{
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		
+		// type value
+		click(calendarTextField).type(calendarTextField.getDateFormat().format(new GregorianCalendar(2014, 11, 31).getTime()));
+		
+		// move focus away
+		click(".button");
+		
+		// now should be the value in the textfield
+		Assert.assertEquals("2014-12-31", TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void typeValueSecondary()
+	{
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		
+		// add a second formatter
+		calendarTextField.dateFormatsProperty().add(new SimpleDateFormat("yyyy-MM-dd"));
+		
+		// type value
+		click(calendarTextField).type("2014-12-31");
+		
+		// move focus away
+		click(".button");
+		
+		// now should be the value in the textfield
+		Assert.assertEquals("2014-12-31", TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
+	}
+
+
+	/**
+	 * 
+	 */
+	@Test
+	public void setValue()
+	{
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		
+		// set value
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd"));
+			calendarTextField.setCalendar(new GregorianCalendar(2014, 11, 31));
+		});
+		
+		// now should be the value in the textfield
+		Assert.assertEquals("2014-12-31", calendarTextField.getText());
 	}
 
 	// =============================================================================================================================

@@ -97,6 +97,9 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
         getSkinnable().dateFormatProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
+        getSkinnable().textProperty().addListener( (observable) -> {
+        	parse(getSkinnable().getText());
+        });
 		refreshValue();
 		
 		// focus
@@ -111,7 +114,10 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// write out to textfield
 		Calendar c = getSkinnable().getCalendar();
 		String s = c == null ? "" : getSkinnable().getDateFormat().format( c.getTime() );
-		getSkinnable().setText( s );
+		textField.setText(s);
+		if (s.equals(getSkinnable().getText()) == false) {
+			getSkinnable().setText(s);
+		}
 	}
 	
 	/**
@@ -206,7 +212,6 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			getSkinnable().setTooltip(new Tooltip("Type a date or use # for today, or +/-<number>[d|w|m|y] for delta's (for example: -3m for minus 3 months)\nUse cursor up and down plus optional shift (week), ctrl (month) or alt (year) for quick keyboard changes."));
 		}
         textField.promptTextProperty().bind(getSkinnable().promptTextProperty());
-        textField.textProperty().bind(getSkinnable().textProperty());
 
 		// the icon
         imageView = new ImageViewButton();
@@ -272,12 +277,18 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	/**
 	 * parse the contents that was typed in the textfield
 	 */
-	private void parse()
+	private void parse() {
+		parse(textField.getText());
+	}
+	
+	/**
+	 * parse the text
+	 */
+	private void parse(String lText)
 	{
 		try
 		{
-			// get the text to parse
-			String lText = textField.getText();
+			// process the text 			
 			lText = lText.trim();
 			if (lText.length() == 0) 
 			{
