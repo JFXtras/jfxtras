@@ -111,7 +111,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// write out to textfield
 		Calendar c = getSkinnable().getCalendar();
 		String s = c == null ? "" : getSkinnable().getDateFormat().format( c.getTime() );
-		textField.setText( s );
+		getSkinnable().setText( s );
 	}
 	
 	/**
