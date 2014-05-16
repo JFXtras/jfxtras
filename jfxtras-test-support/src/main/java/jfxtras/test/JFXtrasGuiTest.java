@@ -29,7 +29,11 @@
 
 package jfxtras.test;
 
+import javafx.scene.Node;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Popup;
+import javafx.stage.Window;
 
 import org.loadui.testfx.GuiTest;
 
@@ -57,5 +61,34 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 		}
 		return release(keyCode);
 	}
+	
+	protected void assertPopupIsNotVisible() {
+		TestUtil.waitForPaintPulse();
+		for (Window w : getWindows() ) {
+			if (w instanceof Popup) {
+				throw new IllegalStateException("Popup is visible (and should not be)"); 
+			}
+		}
+	}
+	
+	protected void assertPopupIsVisible() {
+		TestUtil.waitForPaintPulse();
+		for (Window w : getWindows() ) {
+			if (w instanceof Popup) {
+				return; 
+			}
+		}
+		throw new IllegalStateException("Popup is not visible (and should be)"); 
+	}
 
+	protected void clear(Node textField) {
+		// then clear the textfield
+		click(textField);
+		// TODO: there must be a better way to do this
+		eraseCharacters(10);
+		for (int i = 0; i < 10; i++) {
+			type(KeyCode.RIGHT);
+			eraseCharacters(1);
+		}
+	}
 }
