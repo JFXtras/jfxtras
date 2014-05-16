@@ -41,7 +41,6 @@ import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;

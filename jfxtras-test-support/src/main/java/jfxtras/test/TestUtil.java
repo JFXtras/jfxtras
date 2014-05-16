@@ -40,6 +40,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Control;
+import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.scene.control.SkinBase;
 import javafx.scene.layout.Pane;
@@ -139,6 +140,10 @@ public class TestUtil {
 				for (Object lChild : lSkinBase.getChildren()) {
 					printHierarchy(stringBuilder, (Node)lChild, offset + 1);
 				}
+			}
+			if (lControl instanceof Label) {
+				Label lLabel = (Label)lControl;
+				stringBuilder.append(" text=" + lLabel.getText() );
 			}
 		}
 		else if (n instanceof Pane) {

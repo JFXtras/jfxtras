@@ -40,6 +40,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -92,6 +94,29 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 	}
 
+
+	/**
+	 * 
+	 */
+	@Test
+	public void popupWithCalendarSet()
+	{
+		Calendar lCalendar = new GregorianCalendar(2013, 0, 1, 12, 00, 00);
+		
+		// set a value
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setCalendar(lCalendar);
+		});
+		
+		// open the popup
+		click(".icon");
+
+		// assert that the popup shows January 1st 2013 
+		Assert.assertTrue( ((ToggleButton)find("#day2")).isSelected() );
+		Assert.assertEquals("January", ((Label)find("#monthListSpinner .label")).getText() );
+		Assert.assertEquals("2013", ((Label)find("#yearListSpinner .label")).getText() );
+	}
+	
 	/**
 	 * 
 	 */

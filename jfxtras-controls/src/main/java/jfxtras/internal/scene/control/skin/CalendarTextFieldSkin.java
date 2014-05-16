@@ -256,12 +256,13 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			}
 		});
 		
+		// if a value is selected in date mode, immediately close the popup
 		calendarPicker.calendarProperty().addListener(new ChangeListener<Calendar>()
 		{
 			@Override
 			public void changed(ObservableValue<? extends Calendar> observable, Calendar oldValue, Calendar newValue)
 			{
-				if (popup != null && isShowingTime() == false) 
+				if (popup != null && isShowingTime() == false && popup.isShowing()) 
 				{
 					popup.hide(); 
 					popup = null;
@@ -468,6 +469,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 				if (isShowingTime() == false) {
 					getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
 				}
+				textField.setDisable(false);
 			});
 			
 			// add to popup
@@ -476,6 +478,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		
 		// show it just below the textfield
 		calendarPicker.calendarProperty().set(getSkinnable().calendarProperty().get());
+		textField.setDisable(true);
 		popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
 
 		// move the focus over		
