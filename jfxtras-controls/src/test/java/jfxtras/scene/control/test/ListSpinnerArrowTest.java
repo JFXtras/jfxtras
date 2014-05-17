@@ -32,6 +32,7 @@ package jfxtras.scene.control.test;
 import java.util.Locale;
 
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import jfxtras.internal.scene.control.skin.ListSpinnerSkin;
 import jfxtras.scene.control.ListSpinner;
@@ -55,6 +56,8 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		spinner = new ListSpinner<String>("a", "b", "c");
 		box.getChildren().add(spinner);
+		box.getChildren().add(new Button("focus helper"));
+		
 
 		// make sure that the listspinner fits with arrows in both directions 
 		box.setPrefSize(100, 100);
@@ -64,7 +67,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	private ListSpinner<String> spinner = null;
 
 	@Test
-	public void _001navigateUpDownThroughTheValuesCyclic()
+	public void navigateUpDownThroughTheValuesCyclic()
 	{
 		// horizontal is the default
 		PlatformUtil.runAndWait( () -> {
@@ -81,7 +84,8 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// ----
 		// move to next until we cycle over
-
+		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		
 		// select next
 		click(".up-arrow");
 		Assert.assertEquals("b", spinner.getValue());
@@ -119,7 +123,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	}
 
 	@Test
-	public void _002navigateUpDownThroughTheValuesNonCyclic()
+	public void navigateUpDownThroughTheValuesNonCyclic()
 	{
 		// horizontal is the default
 		PlatformUtil.runAndWait( () -> {
@@ -133,7 +137,8 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// ----
 		// move forward, non cyclic
-
+		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		
 		// select next
 		click(".up-arrow");
 		Assert.assertEquals("b", spinner.getValue());
@@ -163,7 +168,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	}
 
 	@Test
-	public void _003navigateLeftRightThroughTheValuesCyclic()
+	public void navigateLeftRightThroughTheValuesCyclic()
 	{		
 		// non cyclic is the default
 		spinner.cyclicProperty().set(true);
@@ -173,6 +178,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// ----
 		// move to next until we cycle over
+		click(".button"); // we need to move the focus first, otherwise the test will fail at random
 
 		// select next
 		click(".right-arrow");
@@ -211,13 +217,14 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	}
 
 	@Test
-	public void _004navigateLeftRightThroughTheValuesNonCyclic()
+	public void navigateLeftRightThroughTheValuesNonCyclic()
 	{
 		// check to see what the current value is
 		Assert.assertEquals("a", spinner.getValue());
 
 		// ----
 		// move forward, non cyclic
+		click(".button"); // we need to move the focus first, otherwise the test will fail at random
 
 		// select next
 		click(".right-arrow");

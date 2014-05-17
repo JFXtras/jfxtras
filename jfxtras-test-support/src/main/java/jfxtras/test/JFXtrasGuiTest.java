@@ -30,7 +30,6 @@
 package jfxtras.test;
 
 import javafx.scene.Node;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Popup;
 import javafx.stage.Window;
@@ -62,20 +61,26 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 		return release(keyCode);
 	}
 	
-	protected void assertPopupIsNotVisible() {
+	protected void assertPopupIsNotVisible(Node ownedBy) {
 		TestUtil.waitForPaintPulse();
 		for (Window w : getWindows() ) {
 			if (w instanceof Popup) {
-				throw new IllegalStateException("Popup is visible (and should not be)"); 
+				Popup lPopup = (Popup)w;
+				if (ownedBy.equals(lPopup.getOwnerNode())) {
+					throw new IllegalStateException("Popup is visible (and should not be), owner = " + lPopup.getOwnerNode());
+				}
 			}
 		}
 	}
 	
-	protected void assertPopupIsVisible() {
+	protected void assertPopupIsVisible(Node ownedBy) {
 		TestUtil.waitForPaintPulse();
 		for (Window w : getWindows() ) {
 			if (w instanceof Popup) {
-				return; 
+				Popup lPopup = (Popup)w;
+				if (ownedBy.equals(lPopup.getOwnerNode())) {
+					return;
+				}
 			}
 		}
 		throw new IllegalStateException("Popup is not visible (and should be)"); 
@@ -85,8 +90,8 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 		// then clear the textfield
 		click(textField);
 		// TODO: there must be a better way to do this
-		eraseCharacters(10);
-		for (int i = 0; i < 10; i++) {
+		eraseCharacters(20);
+		for (int i = 0; i < 20; i++) {
 			type(KeyCode.RIGHT);
 			eraseCharacters(1);
 		}

@@ -32,6 +32,7 @@ package jfxtras.scene.control.test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javafx.fxml.FXMLLoader;
@@ -115,7 +116,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 		TextField lTextField = (TextField)find(".CalendarTextField .text-field");
 		
 		// check properties
-		Assert.assertEquals("2013-01-01 22:33:44", lCalendarTextField.getDateFormat().format(new Date(2013-1900, 1-1, 1, 22, 33, 44)));
+		Assert.assertEquals("2013-01-01 22:33:44", lCalendarTextField.getDateFormat().format(new GregorianCalendar(2013, 1-1, 1, 22, 33, 44).getTime()));
 		
 		// type value
 		click(".CalendarTextField .text-field");

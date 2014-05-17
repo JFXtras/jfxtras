@@ -35,19 +35,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javafx.application.Platform;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -125,22 +117,11 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	 */
     private void initFocusSimulation() 
     {
-    	getSkinnable().focusedProperty().addListener(new ChangeListener<Boolean>() 
-		{
-			@Override
-			public void changed(ObservableValue<? extends Boolean> ov, Boolean wasFocused, Boolean isFocused) 
-			{
-				if (isFocused) 
-				{
-                	Platform.runLater(new Runnable() 
-                	{
-						@Override
-						public void run() 
-						{
-							textField.requestFocus();
-						}
-					});
-				}
+    	getSkinnable().focusedProperty().addListener( (observableValue, wasFocused, isFocused) -> {
+			if (isFocused) {
+            	Platform.runLater( () -> {
+					textField.requestFocus();
+				});
 			}
 		});
     }
@@ -157,51 +138,34 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// the main textField
 		textField = new TextField();
 		textField.setPrefColumnCount(20);
-		textField.focusedProperty().addListener(new InvalidationListener()
-		{			
-			@Override
-			public void invalidated(Observable arg0)
-			{
-				if (textField.isFocused() == false) 
-				{
-					parse();
-				}
-			}
-		});
-		textField.setOnAction(new EventHandler<ActionEvent>()
-		{
-			@Override
-			public void handle(ActionEvent evt)
-			{
+		textField.focusedProperty().addListener( (observable) -> {
+			if (textField.isFocused() == false) {
 				parse();
 			}
 		});
-		textField.setOnKeyPressed(new EventHandler<KeyEvent>()
-		{
-			@Override
-			public void handle(KeyEvent keyEvent)
-			{
-				if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.DOWN)
-				{
-					// parse the content
-					parse();
-					
-					// get the calendar to modify
-					Calendar lCalendar = getSkinnable().getCalendar();
-					if (lCalendar == null) return;
-					lCalendar = (Calendar)lCalendar.clone();
-					
-					// modify
-					int lField = Calendar.DATE;
-					if (keyEvent.isShiftDown() == false && keyEvent.isControlDown()) lField = Calendar.MONTH;
-					if (keyEvent.isShiftDown() == false && keyEvent.isAltDown()) lField = Calendar.YEAR;
-					if (keyEvent.isShiftDown() == true && keyEvent.isControlDown() && isShowingTime()) lField = Calendar.HOUR_OF_DAY;
-					if (keyEvent.isShiftDown() == true && keyEvent.isAltDown() && isShowingTime()) lField = Calendar.MINUTE;
-					lCalendar.add(lField, keyEvent.getCode() == KeyCode.UP ? 1 : -1);
-					
-					// set it
-					getSkinnable().setCalendar(lCalendar);
-				}
+		textField.setOnAction( (actionEvent) ->  {
+			parse();
+		});
+		textField.setOnKeyPressed( (keyEvent) ->  {
+			if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.DOWN) {
+				// parse the content
+				parse();
+				
+				// get the calendar to modify
+				Calendar lCalendar = getSkinnable().getCalendar();
+				if (lCalendar == null) return;
+				lCalendar = (Calendar)lCalendar.clone();
+				
+				// modify
+				int lField = Calendar.DATE;
+				if (keyEvent.isShiftDown() == false && keyEvent.isControlDown()) lField = Calendar.MONTH;
+				if (keyEvent.isShiftDown() == false && keyEvent.isAltDown()) lField = Calendar.YEAR;
+				if (keyEvent.isShiftDown() == true && keyEvent.isControlDown() && isShowingTime()) lField = Calendar.HOUR_OF_DAY;
+				if (keyEvent.isShiftDown() == true && keyEvent.isAltDown() && isShowingTime()) lField = Calendar.MINUTE;
+				lCalendar.add(lField, keyEvent.getCode() == KeyCode.UP ? 1 : -1);
+				
+				// set it
+				getSkinnable().setCalendar(lCalendar);
 			}
 		});
 		// bind the textField's tooltip to our (so it will show up) and give it a default value describing the mutation features
@@ -236,44 +200,10 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// add to self
 		getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control
 		getChildren().add(gridPane);
-		
-		// prep the picker
-		calendarPicker = new CalendarPicker();
-		calendarPicker.setMode(CalendarPicker.Mode.SINGLE);
-		// bind our properties to the picker's 
-		Bindings.bindBidirectional(calendarPicker.localeProperty(), getSkinnable().localeProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		//Bindings.bindBidirectional(calendarPicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		DateTimeToCalendarHelper.sync(calendarPicker.disabledCalendars(), getSkinnable().disabledCalendars());
-		DateTimeToCalendarHelper.sync(calendarPicker.highlightedCalendars(), getSkinnable().highlightedCalendars());
-		calendarPicker.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
-			@Override
-			public Void call(CalendarRange calendarRange) {
-				Callback<CalendarRange, Void> lCallback = getSkinnable().getCalendarRangeCallback();
-				if (lCallback == null) {
-					return null;
-				}
-				return lCallback.call(calendarRange);
-			}
-		});
-		
-		// if a value is selected in date mode, immediately close the popup
-		calendarPicker.calendarProperty().addListener(new ChangeListener<Calendar>()
-		{
-			@Override
-			public void changed(ObservableValue<? extends Calendar> observable, Calendar oldValue, Calendar newValue)
-			{
-				if (popup != null && isShowingTime() == false && popup.isShowing()) 
-				{
-					popup.hide(); 
-					popup = null;
-				}
-			}
-		});
 	}
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
-	private CalendarPicker calendarPicker = null;
 
 	/**
 	 * parse the contents that was typed in the textfield
@@ -396,10 +326,26 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	 */
 	private void showPopup(MouseEvent evt)
 	{
-		// create popup
-		if (popup == null)
-		{
-			// TODO: replace with PopupControl because that is styleable (see C:/Users/user/Documents/openjfx/8.0rt/modules/controls/src/main/java/com/sun/javafx/scene/control/skin/ComboBoxPopupControl.java)
+		// create a picker
+		CalendarPicker calendarPicker = new CalendarPicker();
+		calendarPicker.setMode(CalendarPicker.Mode.SINGLE);
+		calendarPicker.localeProperty().set(getSkinnable().localeProperty().get());
+		calendarPicker.allowNullProperty().set(getSkinnable().allowNullProperty().get());
+		calendarPicker.calendarProperty().set(getSkinnable().calendarProperty().get());
+		calendarPicker.disabledCalendars().addAll(getSkinnable().disabledCalendars());
+		calendarPicker.highlightedCalendars().addAll(getSkinnable().highlightedCalendars());
+		calendarPicker.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
+			@Override
+			public Void call(CalendarRange calendarRange) {
+				Callback<CalendarRange, Void> lCallback = getSkinnable().getCalendarRangeCallback();
+				if (lCallback == null) {
+					return null;
+				}
+				return lCallback.call(calendarRange);
+			}
+		});
+		
+		// TODO: replace with PopupControl because that is styleable (see C:/Users/user/Documents/openjfx/8.0rt/modules/controls/src/main/java/com/sun/javafx/scene/control/skin/ComboBoxPopupControl.java)
 //			popup = new PopupControl() {
 //
 //	            @Override public Styleable getStyleableParent() {
@@ -414,75 +360,72 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 //	                getScene().getRoot().impl_processCSS(true);
 //	            }
 //	        };
-			popup = new Popup();
-			popup.setAutoFix(true);
-			popup.setAutoHide(true);
-			popup.setHideOnEscape(true);
-			BorderPane lBorderPane = new BorderPane();
-			lBorderPane.getStyleClass().add(this.getClass().getSimpleName() + "_popup");
-			lBorderPane.setCenter(calendarPicker);
-			calendarPicker.showTimeProperty().set( isShowingTime() );
-			
-			// because the Java 8 DateTime classes use the CalendarPicker, we need to add some specific CSS classes here to support seamless CSS
-			if (getSkinnable().getStyleClass().contains(LocalDateTextField.class.getSimpleName())) {
-				calendarPicker.getStyleClass().addAll(LocalDatePicker.class.getSimpleName());
-			}
-			if (getSkinnable().getStyleClass().contains(LocalDateTimeTextField.class.getSimpleName())) {
-				calendarPicker.getStyleClass().addAll(LocalDateTimePicker.class.getSimpleName());
-			}
-			
-			// add a close button
-			if (isShowingTime())
-			{
-				VBox lVBox = new VBox(); 
-				lBorderPane.rightProperty().set(lVBox);
-				
-				ImageView lAcceptIconImageView = new ImageViewButton();
-				lAcceptIconImageView.getStyleClass().addAll("accept-icon");
-				lAcceptIconImageView.setPickOnBounds(true);
-				lAcceptIconImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
-				{
-					@Override public void handle(MouseEvent evt)
-					{
-						getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
-						popup.hide(); 
-						popup = null;
-					}
-				});
-				lVBox.add(lAcceptIconImageView);
-				
-				ImageView lCloseIconImageView = new ImageViewButton();
-				lCloseIconImageView.getStyleClass().addAll("close-icon");
-				lCloseIconImageView.setPickOnBounds(true);
-				lCloseIconImageView.setOnMouseClicked(new EventHandler<MouseEvent>()
-				{
-					@Override public void handle(MouseEvent evt)
-					{
-						popup.hide(); 
-						popup = null;
-					}
-				});
-				lVBox.add(lCloseIconImageView);
-			}
-
-			popup.setOnHiding( (windowEvent) -> {
-				if (isShowingTime() == false) {
-					getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
-				}
-				textField.setDisable(false);
-			});
-			
-			// add to popup
-			popup.getContent().add(lBorderPane);
+		Popup lPopup = new Popup();
+		lPopup.setAutoFix(true);
+		lPopup.setAutoHide(true);
+		lPopup.setHideOnEscape(true);
+		BorderPane lBorderPane = new BorderPane();
+		lBorderPane.getStyleClass().add(this.getClass().getSimpleName() + "_popup");
+		lBorderPane.setCenter(calendarPicker);
+		calendarPicker.showTimeProperty().set( isShowingTime() );
+		
+		// because the Java 8 DateTime classes use the CalendarPicker, we need to add some specific CSS classes here to support seamless CSS
+		if (getSkinnable().getStyleClass().contains(LocalDateTextField.class.getSimpleName())) {
+			calendarPicker.getStyleClass().addAll(LocalDatePicker.class.getSimpleName());
+		}
+		if (getSkinnable().getStyleClass().contains(LocalDateTimeTextField.class.getSimpleName())) {
+			calendarPicker.getStyleClass().addAll(LocalDateTimePicker.class.getSimpleName());
 		}
 		
+		// add a close and accept button if we're showing time
+		if (isShowingTime())
+		{
+			VBox lVBox = new VBox(); 
+			lBorderPane.rightProperty().set(lVBox);
+			
+			ImageView lAcceptIconImageView = new ImageViewButton();
+			lAcceptIconImageView.getStyleClass().addAll("accept-icon");
+			lAcceptIconImageView.setPickOnBounds(true);
+			lAcceptIconImageView.setOnMouseClicked( (mouseEvent) ->  {
+				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+				lPopup.hide(); 
+			});
+			lVBox.add(lAcceptIconImageView);
+			
+			ImageView lCloseIconImageView = new ImageViewButton();
+			lCloseIconImageView.getStyleClass().addAll("close-icon");
+			lCloseIconImageView.setPickOnBounds(true);
+			lCloseIconImageView.setOnMouseClicked( (mouseEvent) ->  {
+				lPopup.hide(); 
+			});
+			lVBox.add(lCloseIconImageView);
+		}
+		
+		// if a value is selected in date mode, immediately close the popup
+		calendarPicker.calendarProperty().addListener( (observable, oldValue, newValue) -> {
+			if (lPopup != null && isShowingTime() == false && lPopup.isShowing()) {
+				lPopup.hide(); 
+			}
+		});
+
+		// when the popup is hidden 
+		lPopup.setOnHiding( (windowEvent) -> {
+			// and time is not shown, the value must be set into the textfield
+			if (isShowingTime() == false) {
+				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+			}
+			// but at least the textfield must be enabled again
+			textField.setDisable(false);
+		});
+		
+		// add to popup
+		lPopup.getContent().add(lBorderPane);
+		
 		// show it just below the textfield
-		calendarPicker.calendarProperty().set(getSkinnable().calendarProperty().get());
 		textField.setDisable(true);
-		popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
+		lPopup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
 
 		// move the focus over		
 		calendarPicker.requestFocus(); // TODO: not working
 	}
-	private Popup popup = null;
 }

@@ -29,32 +29,25 @@
 
 package jfxtras.scene.control.test;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
-import javafx.stage.Window;
-import javafx.util.Callback;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.exceptions.NoNodesFoundException;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
@@ -68,10 +61,12 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		Locale.setDefault(Locale.ENGLISH);
 		
-		VBox box = new VBox();
+		HBox box = new HBox();
 		calendarTextField = new CalendarTextField();
 		box.getChildren().add(calendarTextField);
-		box.getChildren().add(new Button("focus helper"));
+		Button lButton = new Button("focus helper");
+		lButton.setId("focusHelper");
+		box.getChildren().add(lButton);
 
 		return box;
 	}
@@ -85,17 +80,150 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// default value is null
 		Assert.assertNull(calendarTextField.getCalendar());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void selectDateInPopup()
+	{
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
 		
 		// open the popup
 		click(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
 		
-		// click the last day in the first week (this is always clickable)
+		// click today
 		click(".today");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
+		Assert.assertFalse(find(".text-field").isDisabled());
 	}
 
+	/**
+	 * 
+	 */
+	@Test
+	public void selectDateTimeInPopup()
+	{
+		// set a value
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+		});
+		
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
+		
+		// open the popup
+		click(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
+		
+		// click today
+		click(".today");
+		
+		// click today
+		click(".accept-icon");
+		
+		// now should be the value in the textfield
+		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
+		Assert.assertFalse(find(".text-field").isDisabled());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void cancelDateTimeInPopup()
+	{
+		// set a value
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+		});
+		
+		// start value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
+		
+		// open the popup
+		click(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
+		
+		// click today
+		click(".today");
+		
+		// click close
+		click(".close-icon");
+		
+		// should still be null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void cancelDateTimeInPopupByEscape()
+	{
+		// set a value
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+		});
+		
+		// start value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
+		
+		// open the popup
+		click(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
+		
+		// click today
+		click(".today");
+		
+		// send esc
+		press(KeyCode.ESCAPE);
+		
+		// should still be null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
+	}
+
+
+	/**
+	 * 
+	 */
+	@Test
+	public void cancelDateTimeInPopupByFocusLost()
+	{
+		// set a value
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+		});
+		
+		// start value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
+		
+		// open the popup
+		click(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
+		
+		// click today
+		click(".today");
+		
+		// move focus away
+		click("#focusHelper");
+		
+		// should still be null
+		Assert.assertNull(calendarTextField.getCalendar());
+		Assert.assertFalse(find(".text-field").isDisabled());
+	}
 
 	/**
 	 * 
@@ -126,19 +254,19 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	public void openPopupAndCloseOnEscape()
 	{
 		// popup should be closed
-		assertPopupIsNotVisible();
+		assertPopupIsNotVisible(find(".text-field"));
 		
 		// open the popup
 		click(".icon");
 		
 		// popup should be open
-		assertPopupIsVisible();
+		assertPopupIsVisible(find(".text-field"));
 		
 		// send esc
 		press(KeyCode.ESCAPE);
 		
 		// popup should be closed
-		assertPopupIsNotVisible();
+		assertPopupIsNotVisible(find(".text-field"));
 	}
 
 
@@ -175,15 +303,65 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 			return null;
 		});
 		
-
 		// then clear the textfield
 		clear(calendarTextField);
 		
 		// move focus away
-		click(".button");
+		click("#focusHelper");
 		
 		// check for result
 		Assert.assertTrue(lParseErrorCallbackWasCalled.get());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void nullAllowedAndUnselectInPopup()
+	{
+		// set a value
+		Calendar lCalendar = new GregorianCalendar(2013, 0, 1, 12, 00, 00);
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setCalendar(lCalendar);
+		});
+		
+		// default value is not null
+		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(lCalendar), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
+
+		// open the popup
+		click(".icon");
+
+		// click the 1st of January
+		click("#day2");
+		
+		// value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void nullNotAllowedAndAttemptUnselectInPopup()
+	{
+		// set a value
+		Calendar lCalendar = new GregorianCalendar(2013, 0, 1, 12, 00, 00);
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setCalendar(lCalendar);
+			calendarTextField.setAllowNull(false);
+		});
+		
+		// default value is not null
+		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(lCalendar), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
+
+		// open the popup
+		click(".icon");
+
+		// click the 1st of January
+		click("#day2");
+		
+		// value is still not null
+		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(lCalendar), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 	}
 
 	/**
@@ -199,7 +377,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		click(calendarTextField).type(calendarTextField.getDateFormat().format(new GregorianCalendar(2014, 11, 31).getTime()));
 		
 		// move focus away
-		click(".button");
+		click("#focusHelper");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals("2014-12-31", TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
@@ -209,7 +387,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
-	public void typeValueSecondary()
+	public void typeValueUsingAdditonalDateFormatter()
 	{
 		// default value is null
 		Assert.assertNull(calendarTextField.getCalendar());
@@ -221,12 +399,14 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		click(calendarTextField).type("2014-12-31");
 		
 		// move focus away
-		click(".button");
+		click("#focusHelper");
+		// for some reason the focus is not moved always
+		click(".CalendarTextField");
+		click("#focusHelper");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals("2014-12-31", TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 	}
-
 
 	/**
 	 * 
