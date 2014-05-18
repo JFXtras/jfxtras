@@ -172,10 +172,11 @@ public class VBox extends javafx.scene.layout.VBox
 	 * 
 	 * @param node
 	 */
-	public void add(Node node)
+	public VBox add(Node node)
 	{
 		// add node
 		getChildren().add(node);
+		return this;
 	}
 
 	/**
@@ -183,7 +184,7 @@ public class VBox extends javafx.scene.layout.VBox
 	 * @param node
 	 * @param c
 	 */
-	public void add(Node node, C c)
+	public VBox add(Node node, C c)
 	{
 		// remember constraints
 		cMap.put(node, c);
@@ -191,19 +192,21 @@ public class VBox extends javafx.scene.layout.VBox
 		
 		// add node
 		getChildren().add(node);
+		return this;
 	}
 
 	/**
 	 * Remove a node completely
 	 * @param node
 	 */
-	public void remove(Node node)
+	public VBox remove(Node node)
 	{
 		// remove node
 		getChildren().remove(node);
 		
 		// remove constraints
 		cMap.remove(node);
+		return this;
 	}
 
 	/**

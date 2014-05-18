@@ -240,16 +240,17 @@ public class GridPane extends javafx.scene.layout.GridPane
 	/**
 	 * Add
 	 */
-	public void add(Node node)
+	public GridPane add(Node node)
 	{
 		// add node
 		getChildren().add(node);
+		return this;
 	}
 
 	/**
 	 * Add
 	 */
-	public void add(Node node, C c)
+	public GridPane add(Node node, C c)
 	{
 		// remember constraints
 		cMap.put(node, c);
@@ -257,19 +258,21 @@ public class GridPane extends javafx.scene.layout.GridPane
 		
 		// add node
 		getChildren().add(node);
+		return this;
 	}
 
 	/**
 	 * Remove a node completely
 	 * @param node
 	 */
-	public void remove(Node node)
+	public GridPane remove(Node node)
 	{
 		// remove node
 		getChildren().remove(node);
 		
 		// remove constraints
 		cMap.remove(node);
+		return this;
 	}
 
 	/**

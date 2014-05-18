@@ -172,16 +172,17 @@ public class HBox extends javafx.scene.layout.HBox
 	/**
 	 * Add
 	 */
-	public void add(Node node)
+	public HBox add(Node node)
 	{
 		// add node
 		getChildren().add(node);
+		return this;
 	}
 
 	/**
 	 * Add
 	 */
-	public void add(Node node, C c)
+	public HBox add(Node node, C c)
 	{
 		// remember constraints
 		cMap.put(node, c);
@@ -189,19 +190,21 @@ public class HBox extends javafx.scene.layout.HBox
 		
 		// add node
 		getChildren().add(node);
+		return this;
 	}
 
 	/**
 	 * Remove a node completely
 	 * @param node
 	 */
-	public void remove(Node node)
+	public HBox remove(Node node)
 	{
 		// remove node
 		getChildren().remove(node);
 		
 		// remove constraints
 		cMap.remove(node);
+		return this;
 	}
 
 	/**

@@ -600,12 +600,10 @@ public class ListSpinnerSkin<T> extends SkinBase<ListSpinner<T>>
 		// get helper values
 		ColumnConstraints lColumnValue = new ColumnConstraints(valueHolderNode.getMinWidth(), valueHolderNode.getPrefWidth(), Double.MAX_VALUE);
 		lColumnValue.setHgrow(Priority.ALWAYS);
-		ColumnConstraints lColumnArrow = new ColumnConstraints(10);
 		
 		// get helper values
 		RowConstraints lRowValue = new RowConstraints(valueHolderNode.getMinHeight(), valueHolderNode.getPrefHeight(), Double.MAX_VALUE);
 		lRowValue.setVgrow(Priority.ALWAYS);
-		RowConstraints lRowArrow = new RowConstraints(10);
 
 		// create the grid
 		skinNode.getChildren().clear();
