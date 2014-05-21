@@ -54,7 +54,7 @@ import javafx.util.Callback;
  * Therefore all skins are obligated to report the range they display via the calendarRangeCallback.
  * So if the calendar changes, the skin adapts and reports the new range via the callback, through which the coder can set the correct appointments.
  *
- * @author Tom Eugelink
+ * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
 public class Agenda extends Control
 {

@@ -58,8 +58,6 @@ import javafx.scene.control.ScrollPaneBuilder;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -108,47 +106,27 @@ implements Agenda.AgendaSkin
 		createNodes();
 
 		// react to changes in the locale 
-		getSkinnable().localeProperty().addListener(new InvalidationListener() 
-		{
-			@Override
-			public void invalidated(Observable observable)
-			{
-				refreshLocale();
-			} 
+		getSkinnable().localeProperty().addListener( (observable) -> {
+			refreshLocale();
 		});
 		refreshLocale();
 		
 		// react to changes in the displayed calendar 
-		getSkinnable().displayedCalendar().addListener(new InvalidationListener()
-		{			
-			@Override
-			public void invalidated(Observable observable)
-			{
-				assignCalendarToTheDayPanes();
-				setupAppointments();
-			}
+		getSkinnable().displayedCalendar().addListener( (observable) -> {
+			assignCalendarToTheDayPanes();
+			setupAppointments();
 		});
 		assignCalendarToTheDayPanes();
 		
 		// react to changes in the appointments 
-		getSkinnable().appointments().addListener(new ListChangeListener<Agenda.Appointment>() 
-		{
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> arg0)
-			{
-				setupAppointments();
-			} 
+		getSkinnable().appointments().addListener( (javafx.collections.ListChangeListener.Change<? extends Appointment> change) -> {
+			setupAppointments();
 		});
 		setupAppointments();
 		
 		// react to changes in the appointments 
-		getSkinnable().selectedAppointments().addListener(new ListChangeListener<Agenda.Appointment>() 
-		{
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes)
-			{
-				setOrRemoveSelected();
-			} 
+		getSkinnable().selectedAppointments().addListener( (javafx.collections.ListChangeListener.Change<? extends Appointment> change) -> {
+			setOrRemoveSelected();
 		});
 		setOrRemoveSelected();
 	}
@@ -290,14 +268,9 @@ implements Agenda.AgendaSkin
 			.build();
 		borderPane.setCenter(weekScrollPane);
 		// bind to the scrollpane's viewport
-		weekScrollPane.viewportBoundsProperty().addListener(new InvalidationListener()
-		{
-			@Override
-			public void invalidated(Observable viewportBoundsProperty)
-			{
-				calculateSizes();
-				nowUpdateRunnable.run();
-			}
+		weekScrollPane.viewportBoundsProperty().addListener( (observable) -> {
+			calculateSizes();
+			nowUpdateRunnable.run();
 		});
 		
 		// borderpane top: header has to be created after the content, because there is a binding
@@ -380,32 +353,17 @@ implements Agenda.AgendaSkin
 			calendarText.setClip(lClip);
 			getChildren().add(calendarText);
 			// react to changes in the calendar by updating the label
-			dayPane.calendarObjectProperty.addListener(new InvalidationListener()
-			{
-				@Override
-				public void invalidated(Observable arg0)
-				{
-					String lLabel = DayHeaderPane.this.dayPane.calendarObjectProperty.get() == null ? "" : dayOfWeekDateFormat.format(DayHeaderPane.this.dayPane.calendarObjectProperty.get().getTime()) + " " + dateFormat.format(DayHeaderPane.this.dayPane.calendarObjectProperty.get().getTime());
-					calendarText.setText(lLabel);
-				}
+			dayPane.calendarObjectProperty.addListener( (observable) -> {
+				String lLabel = DayHeaderPane.this.dayPane.calendarObjectProperty.get() == null ? "" : dayOfWeekDateFormat.format(DayHeaderPane.this.dayPane.calendarObjectProperty.get().getTime()) + " " + dateFormat.format(DayHeaderPane.this.dayPane.calendarObjectProperty.get().getTime());
+				calendarText.setText(lLabel);
 			});
 			
 			// change the layout related to the size
-			widthProperty().addListener(new InvalidationListener()
-			{
-				@Override
-				public void invalidated(Observable arg0)
-				{
-					relayout();
-				}
+			widthProperty().addListener( (observable) -> {
+				relayout();
 			});
-			heightProperty().addListener(new InvalidationListener()
-			{
-				@Override
-				public void invalidated(Observable arg0)
-				{
-					relayout();
-				}
+			heightProperty().addListener( (observable) -> {
+				relayout();
 			});
 			
 			// layout
@@ -514,19 +472,19 @@ implements Agenda.AgendaSkin
 					Line l = new Line(0,10,100,10);
 					l.getStyleClass().add("HourLine");
 					l.startXProperty().set(0.0);
-					l.startYProperty().bind(hourHeighProperty.multiply(lHour));
-					l.endXProperty().bind(widthProperty());
-					l.endYProperty().bind(l.startYProperty());
+					l.startYProperty().bind( NodeUtil.snapXY(hourHeighProperty.multiply(lHour)) );
+					l.endXProperty().bind( NodeUtil.snapXY(widthProperty()));
+					l.endYProperty().bind( NodeUtil.snapXY(l.startYProperty()));
 					getChildren().add(l);
 				}
 				// half hour line
 				{
 					Line l = new Line(0,10,100,10);
 					l.getStyleClass().add("HalfHourLine");
-					l.startXProperty().bind(timeWidthProperty);
-					l.endXProperty().bind(widthProperty());
-					l.startYProperty().bind(hourHeighProperty.multiply(lHour + 0.5));
-					l.endYProperty().bind(l.startYProperty());
+					l.startXProperty().bind( NodeUtil.snapXY(timeWidthProperty));
+					l.endXProperty().bind( NodeUtil.snapXY(widthProperty()));
+					l.startYProperty().bind( NodeUtil.snapXY(hourHeighProperty.multiply(lHour + 0.5)));
+					l.endYProperty().bind( NodeUtil.snapXY(l.startYProperty()));
 					getChildren().add(l);
 				}
 				// hour text
@@ -557,7 +515,6 @@ implements Agenda.AgendaSkin
 		}
 	}
 	
-	
 	/**
 	 * Responsible for rendering the appointments within a day 
 	 */
@@ -575,102 +532,77 @@ implements Agenda.AgendaSkin
 			getStyleClass().add("Day");
 			
 			// the appointments layout is too complex to cleanly calculate using binding, so we'll listen to size changes
-			widthProperty().addListener(new InvalidationListener()
-			{
-				@Override
-				public void invalidated(Observable arg0)
-				{
-					relayout();
-				}
+			widthProperty().addListener( (observable) -> {
+				relayout();
 			});
-			heightProperty().addListener(new InvalidationListener()
-			{
-				@Override
-				public void invalidated(Observable arg0)
-				{
-					relayout();
-				}
+			heightProperty().addListener( (observable) -> {
+				relayout();
 			});
 			
 			// ---------
 			
 			// start new appointment
-			setOnMousePressed(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					// if there is no one to handle the result, don't eve bother
-					if (getSkinnable().createAppointmentCallbackProperty().get() == null) return;
-					
-					// show the rectangle
-					DayPane.this.setCursor(Cursor.V_RESIZE);
-					double lY = mouseEvent.getScreenY() - NodeUtil.screenY(DayPane.this);
-					resizeRectangle = new Rectangle(0, lY, dayWidthProperty.get(), 10);
-					resizeRectangle.getStyleClass().add("GhostRectangle");
-					DayPane.this.getChildren().add(resizeRectangle);
-					
-					// this event should not be processed by the appointment area
-					mouseEvent.consume();
-					dragged = false;
-					getSkinnable().selectedAppointments().clear();
-				}
+			setOnMousePressed((mouseEvent) -> {
+				// if there is no one to handle the result, don't eve bother
+				if (getSkinnable().createAppointmentCallbackProperty().get() == null) return;
+				
+				// show the rectangle
+				DayPane.this.setCursor(Cursor.V_RESIZE);
+				double lY = mouseEvent.getScreenY() - NodeUtil.screenY(DayPane.this);
+				resizeRectangle = new Rectangle(0, lY, dayWidthProperty.get(), 10);
+				resizeRectangle.getStyleClass().add("GhostRectangle");
+				DayPane.this.getChildren().add(resizeRectangle);
+				
+				// this event should not be processed by the appointment area
+				mouseEvent.consume();
+				dragged = false;
+				getSkinnable().selectedAppointments().clear();
 			});
 			// visualize resize
-			setOnMouseDragged(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					if (resizeRectangle == null) return;
-					
-					// - calculate the number of pixels from onscreen nodeY (layoutY) to onscreen mouseY					
-					double lHeight = mouseEvent.getScreenY() - NodeUtil.screenY(resizeRectangle);
-					if (lHeight < 5) lHeight = 5;
-					resizeRectangle.setHeight(lHeight);
-					
-					// no one else
-					mouseEvent.consume();
-					dragged = true;
-				}
+			setOnMouseDragged((mouseEvent) -> {
+				if (resizeRectangle == null) return;
+				
+				// - calculate the number of pixels from onscreen nodeY (layoutY) to onscreen mouseY					
+				double lHeight = mouseEvent.getScreenY() - NodeUtil.screenY(resizeRectangle);
+				if (lHeight < 5) lHeight = 5;
+				resizeRectangle.setHeight(lHeight);
+				
+				// no one else
+				mouseEvent.consume();
+				dragged = true;
 			});
 			// end resize
-			setOnMouseReleased(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
+			setOnMouseReleased((mouseEvent) -> {
+				if (resizeRectangle == null) return;
+				
+				// no one else
+				mouseEvent.consume();
+				
+				// reset ui
+				DayPane.this.setCursor(Cursor.HAND);
+				DayPane.this.getChildren().remove(resizeRectangle);
+				
+				// must have dragged (otherwise it is considered an "unselect all" action)
+				if (dragged == false) return;
+				
+				// calculate the starttime
+				Calendar lStartCalendar = setTimeTo0000((Calendar)DayPane.this.calendarObjectProperty.get().clone());
+				lStartCalendar.add(Calendar.MILLISECOND, (int)(resizeRectangle.getY() * durationInMSPerPixelProperty.get()));
+				setTimeToNearestMinutes(lStartCalendar, 5);
+				
+				// calculate the new end date for the appointment (recalculating the duration)
+				Calendar lEndCalendar = (Calendar)lStartCalendar.clone();					
+				lEndCalendar.add(Calendar.MILLISECOND, (int)(resizeRectangle.getHeight() * durationInMSPerPixelProperty.get()));
+				setTimeToNearestMinutes(lEndCalendar, 5);
+				
+				// clean up
+				resizeRectangle = null;					
+				
+				// ask the control to create a new appointment (null may be returned)
+				Agenda.Appointment lAppointment = getSkinnable().createAppointmentCallbackProperty().get().call(new Agenda.CalendarRange(lStartCalendar, lEndCalendar));
+				if (lAppointment != null) 
 				{
-					if (resizeRectangle == null) return;
-					
-					// no one else
-					mouseEvent.consume();
-					
-					// reset ui
-					DayPane.this.setCursor(Cursor.HAND);
-					DayPane.this.getChildren().remove(resizeRectangle);
-					
-					// must have dragged (otherwise it is considered an "unselect all" action)
-					if (dragged == false) return;
-					
-					// calculate the starttime
-					Calendar lStartCalendar = setTimeTo0000((Calendar)DayPane.this.calendarObjectProperty.get().clone());
-					lStartCalendar.add(Calendar.MILLISECOND, (int)(resizeRectangle.getY() * durationInMSPerPixelProperty.get()));
-					setTimeToNearestMinutes(lStartCalendar, 5);
-					
-					// calculate the new end date for the appointment (recalculating the duration)
-					Calendar lEndCalendar = (Calendar)lStartCalendar.clone();					
-					lEndCalendar.add(Calendar.MILLISECOND, (int)(resizeRectangle.getHeight() * durationInMSPerPixelProperty.get()));
-					setTimeToNearestMinutes(lEndCalendar, 5);
-					
-					// clean up
-					resizeRectangle = null;					
-					
-					// ask the control to create a new appointment (null may be returned)
-					Agenda.Appointment lAppointment = getSkinnable().createAppointmentCallbackProperty().get().call(new Agenda.CalendarRange(lStartCalendar, lEndCalendar));
-					if (lAppointment != null) 
-					{
-						getSkinnable().appointments().add(lAppointment); // the appointments collection is listened to, so they will automatically be refreshed
-					}
+					getSkinnable().appointments().add(lAppointment); // the appointments collection is listened to, so they will automatically be refreshed
 				}
 			});
 		}
@@ -698,9 +630,9 @@ implements Agenda.AgendaSkin
 			int lWholedayCnt = 0;
 			for (WholedayAppointmentPane lAppointmentPane : wholedayAppointmentPanes)
 			{
-				lAppointmentPane.setLayoutX(lWholedayCnt * wholedayAppointmentWidth);
+				lAppointmentPane.setLayoutX(NodeUtil.snapXY(lWholedayCnt * wholedayAppointmentWidth));
 				lAppointmentPane.setLayoutY(0);
-				lAppointmentPane.setPrefSize(wholedayAppointmentWidth, dayHeightProperty.get());
+				lAppointmentPane.setPrefSize(NodeUtil.snapWH(lAppointmentPane.getLayoutX(), wholedayAppointmentWidth), NodeUtil.snapWH(lAppointmentPane.getLayoutY(), dayHeightProperty.get()));
 				lWholedayCnt++;
 			}
 			
@@ -710,24 +642,24 @@ implements Agenda.AgendaSkin
 			for (AbstractClusteredDayAppointmentPane lClusteredDayAppointmentPanePane : clusteredAppointmentPanes)
 			{
 				// the X is determine by offsetting the wholeday appointments and then calculate the X of the track the appointment is placed in (available width / number of tracks) 
-				lClusteredDayAppointmentPanePane.setLayoutX((lWholedayCnt * wholedayAppointmentWidth) + (lRemainingWidthForRegularAppointments / lClusteredDayAppointmentPanePane.clusterOwner.clusterTracks.size() * lClusteredDayAppointmentPanePane.clusterTrackIdx));
+				lClusteredDayAppointmentPanePane.setLayoutX( NodeUtil.snapXY((lWholedayCnt * wholedayAppointmentWidth) + (lRemainingWidthForRegularAppointments / lClusteredDayAppointmentPanePane.clusterOwner.clusterTracks.size() * lClusteredDayAppointmentPanePane.clusterTrackIdx)));
 				
 				// the Y is determined by the start time in minutes projected onto the total day height (being 24 hours)
 				int lTimeFactor = (lClusteredDayAppointmentPanePane.start.get(Calendar.HOUR_OF_DAY) * 60) + lClusteredDayAppointmentPanePane.start.get(Calendar.MINUTE);
-				lClusteredDayAppointmentPanePane.setLayoutY(dayHeightProperty.get() / (24 * 60) * lTimeFactor );
+				lClusteredDayAppointmentPanePane.setLayoutY( NodeUtil.snapXY(dayHeightProperty.get() / (24 * 60) * lTimeFactor) );
 				
 				// the width is the remaining width (subtracting the wholeday appointments) divided by the number of tracks in the cluster
 				double lW = (dayContentWidthProperty.get() - (wholedayAppointmentPanes.size() * wholedayAppointmentWidth)) * (1.0 / (((double)lClusteredDayAppointmentPanePane.clusterOwner.clusterTracks.size())));
 				// all but the most right appointment get 50% extra width, so they underlap the next track 
 				if (lClusteredDayAppointmentPanePane.clusterTrackIdx < lClusteredDayAppointmentPanePane.clusterOwner.clusterTracks.size() - 1) lW *= 1.75;
-				lClusteredDayAppointmentPanePane.setPrefWidth(lW);
+				lClusteredDayAppointmentPanePane.setPrefWidth( NodeUtil.snapWH(lClusteredDayAppointmentPanePane.getLayoutX(), lW) );
 				
 				// the height is determing by the duration projected against the total dayHeight (being 24 hours)
 				double lH = (dayHeightProperty.get() / (24 * 60) * (lClusteredDayAppointmentPanePane.durationInMS / 1000 / 60) );
 				// the height has a minimum size, in order to be able to render sensibly
 				// if (lH < textHeight1MProperty.get() + padding) lH = textHeight1MProperty.get() + padding; 
 				if (lH < 2 * padding) lH = 2 * padding; 
-				lClusteredDayAppointmentPanePane.setPrefHeight(lH);
+				lClusteredDayAppointmentPanePane.setPrefHeight( NodeUtil.snapWH(lClusteredDayAppointmentPanePane.getLayoutY(), lH) );
 			}
 		}			
 
@@ -1083,16 +1015,11 @@ implements Agenda.AgendaSkin
 				lTimeText.setY(lTimeText.prefHeight(0) / 2);
 				lTimeText.wrappingWidthProperty().bind(widthProperty().subtract(padding));
 				// add a clip to mask out all except the first line
-				lTimeText.fontProperty().addListener(new InvalidationListener()
-				{
-					@Override
-					public void invalidated(Observable arg0)
-					{
-						Rectangle lClip = new Rectangle();
-						lClip.widthProperty().bind(widthProperty().subtract(padding));
-						lClip.heightProperty().set( lTimeText.fontProperty().getValue().getSize() );
-						lTimeText.setClip(lClip);
-					}
+				lTimeText.fontProperty().addListener( (observable) -> {
+					Rectangle lClip = new Rectangle();
+					lClip.widthProperty().bind(widthProperty().subtract(padding));
+					lClip.heightProperty().set( lTimeText.fontProperty().getValue().getSize() );
+					lTimeText.setClip(lClip);
 				});
 				getChildren().add(lTimeText);
 			}
@@ -1175,8 +1102,8 @@ implements Agenda.AgendaSkin
 		public MenuIcon(final AbstractAppointmentPane abstractAppointmentPane)
 		{
 			// layout
-			setX(padding);
-			setY(padding);
+			setX(NodeUtil.snapXY(padding));
+			setY(NodeUtil.snapXY(padding));
 			setWidth(6);
 			setHeight(3);
 			
@@ -1184,58 +1111,33 @@ implements Agenda.AgendaSkin
 			getStyleClass().add("MenuIcon");
 			
 			// play with the mouse pointer to show something can be done here
-			setOnMouseEntered(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{						
-						MenuIcon.this.setCursor(Cursor.HAND);
-						
-						// no one else
-						mouseEvent.consume();
-					}
-				}
-			});
-			setOnMouseExited(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{
-						MenuIcon.this.setCursor(Cursor.DEFAULT);
-						
-						// no one else
-						mouseEvent.consume();
-					}
-				}
-			});
-			setOnMousePressed(new EventHandler<MouseEvent>() // these just need to be captured, so they are not processed by the underlying pane
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
+			setOnMouseEntered((mouseEvent) -> {
+				if (!mouseEvent.isPrimaryButtonDown())
+				{						
+					MenuIcon.this.setCursor(Cursor.HAND);
+					
+					// no one else
 					mouseEvent.consume();
 				}
 			});
-			setOnMouseReleased(new EventHandler<MouseEvent>() // these just need to be captured, so they are not processed by the underlying pane
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
+			setOnMouseExited((mouseEvent) -> {
+				if (!mouseEvent.isPrimaryButtonDown())
 				{
+					MenuIcon.this.setCursor(Cursor.DEFAULT);
+					
+					// no one else
 					mouseEvent.consume();
 				}
 			});
-			setOnMouseClicked(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					mouseEvent.consume();
-					showMenu(mouseEvent, abstractAppointmentPane);
-				}
+			setOnMousePressed((mouseEvent) -> {
+				mouseEvent.consume();
+			});
+			setOnMouseReleased((mouseEvent) -> {
+				mouseEvent.consume();
+			});
+			setOnMouseClicked( (mouseEvent) -> {
+				mouseEvent.consume();
+				showMenu(mouseEvent, abstractAppointmentPane);
 			});
 		}
 	}
@@ -1255,110 +1157,89 @@ implements Agenda.AgendaSkin
 			this.appointmentPane = appointmentPane;
 			
 			// bind
-			xProperty().bind(appointmentPane.widthProperty().multiply(0.25));
-			yProperty().bind(appointmentPane.heightProperty().subtract(5));
-			widthProperty().bind(appointmentPane.widthProperty().multiply(0.5));
+			xProperty().bind( NodeUtil.snapXY(appointmentPane.widthProperty().multiply(0.25)) );
+			yProperty().bind( NodeUtil.snapXY(appointmentPane.heightProperty().subtract(5)) );
+			widthProperty().bind( appointmentPane.widthProperty().multiply(0.5));
 			setHeight(3);
 			
 			// styling
 			getStyleClass().add("DurationDragger");
 
 			// play with the mouse pointer to show something can be done here
-			setOnMouseEntered(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{						
-						DurationDragger.this.setCursor(Cursor.HAND);
-						
-						// no one else
-						mouseEvent.consume();
-					}
+			setOnMouseEntered( (mouseEvent) -> {
+				if (!mouseEvent.isPrimaryButtonDown())
+				{						
+					DurationDragger.this.setCursor(Cursor.HAND);
+					
+					// no one else
+					mouseEvent.consume();
 				}
 			});
-			setOnMouseExited(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
+			setOnMouseExited( (mouseEvent) -> {
+				if (!mouseEvent.isPrimaryButtonDown())
 				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{
-						DurationDragger.this.setCursor(Cursor.DEFAULT);
-						
-						// no one else
-						mouseEvent.consume();
-					}
+					DurationDragger.this.setCursor(Cursor.DEFAULT);
+					
+					// no one else
+					mouseEvent.consume();
 				}
 			});
 			// start resize
-			setOnMousePressed(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					// // record a delta distance for the drag and drop operation.
-					// dragDelta.x = stage.getX() - mouseEvent.getScreenX();
-					// dragDelta.y = stage.getY() - mouseEvent.getScreenY();
-					DurationDragger.this.setCursor(Cursor.V_RESIZE);
-					resizeRectangle = new Rectangle(DurationDragger.this.appointmentPane.getLayoutX(), DurationDragger.this.appointmentPane.getLayoutY(), DurationDragger.this.appointmentPane.getWidth(), DurationDragger.this.appointmentPane.getHeight());
-					resizeRectangle.getStyleClass().add("GhostRectangle");
-					DurationDragger.this.appointmentPane.dayPane.getChildren().add(resizeRectangle);
-					
-					// this event should not be processed by the appointment area
-					mouseEvent.consume();
-				}
+			setOnMousePressed( (mouseEvent) -> {
+				// // record a delta distance for the drag and drop operation.
+				// dragDelta.x = stage.getX() - mouseEvent.getScreenX();
+				// dragDelta.y = stage.getY() - mouseEvent.getScreenY();
+				DurationDragger.this.setCursor(Cursor.V_RESIZE);
+				resizeRectangle = new Rectangle(
+						NodeUtil.snapXY(DurationDragger.this.appointmentPane.getLayoutX()),
+						NodeUtil.snapXY(DurationDragger.this.appointmentPane.getLayoutY()), 
+						NodeUtil.snapWH(DurationDragger.this.appointmentPane.getLayoutX(), DurationDragger.this.appointmentPane.getWidth()), 
+						NodeUtil.snapWH(DurationDragger.this.appointmentPane.getLayoutY(), DurationDragger.this.appointmentPane.getHeight()));
+				resizeRectangle.getStyleClass().add("GhostRectangle");
+				DurationDragger.this.appointmentPane.dayPane.getChildren().add(resizeRectangle);
+				
+				// this event should not be processed by the appointment area
+				mouseEvent.consume();
 			});
 			// visualize resize
-			setOnMouseDragged(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					// - calculate the number of pixels from onscreen nodeY (layoutY) to onscreen mouseY					
-					double lNodeScreenY = NodeUtil.screenY(DurationDragger.this.appointmentPane);
-					double lMouseY = mouseEvent.getScreenY();
-					double lHeight = lMouseY - lNodeScreenY;
-					if (lHeight < 5) lHeight = 5;
-					resizeRectangle.setHeight(lHeight);
-					
-					// no one else
-					mouseEvent.consume();
-				}
+			setOnMouseDragged( (mouseEvent) -> {
+				// - calculate the number of pixels from onscreen nodeY (layoutY) to onscreen mouseY					
+				double lNodeScreenY = NodeUtil.screenY(DurationDragger.this.appointmentPane);
+				double lMouseY = mouseEvent.getScreenY();
+				double lHeight = lMouseY - lNodeScreenY;
+				if (lHeight < 5) lHeight = 5;
+				resizeRectangle.setHeight( NodeUtil.snapWH(resizeRectangle.getLayoutY(), lHeight) );
+				
+				// no one else
+				mouseEvent.consume();
 			});
 			// end resize
-			setOnMouseReleased(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{					
-					// - calculate the new end date for the appointment (recalculating the duration)
-					int ms = (int)(resizeRectangle.getHeight() * durationInMSPerPixelProperty.get());
-					Calendar lCalendar = (Calendar)DurationDragger.this.appointmentPane.appointment.getStartTime().clone();					
-					lCalendar.add(Calendar.MILLISECOND, ms);
-					
-					// align to X minutes accuracy
-					setTimeToNearestMinutes(lCalendar, 5);
-					
-					// set the new enddate
-					DurationDragger.this.appointmentPane.appointment.setEndTime(lCalendar);
-					
-					// redo whole week
-					setupAppointments();
-									
-					// reset ui
-					DurationDragger.this.setCursor(Cursor.HAND);
-					DurationDragger.this.appointmentPane.dayPane.getChildren().remove(resizeRectangle);
-					resizeRectangle = null;					
-					
-					// no one else
-					mouseEvent.consume();
-				}
+			setOnMouseReleased( (mouseEvent) -> {					
+				// - calculate the new end date for the appointment (recalculating the duration)
+				int ms = (int)(resizeRectangle.getHeight() * durationInMSPerPixelProperty.get());
+				Calendar lCalendar = (Calendar)DurationDragger.this.appointmentPane.appointment.getStartTime().clone();					
+				lCalendar.add(Calendar.MILLISECOND, ms);
+				
+				// align to X minutes accuracy
+				setTimeToNearestMinutes(lCalendar, 5);
+				
+				// set the new enddate
+				DurationDragger.this.appointmentPane.appointment.setEndTime(lCalendar);
+				
+				// redo whole week
+				setupAppointments();
+								
+				// reset ui
+				DurationDragger.this.setCursor(Cursor.HAND);
+				DurationDragger.this.appointmentPane.dayPane.getChildren().remove(resizeRectangle);
+				resizeRectangle = null;					
+				
+				// no one else
+				mouseEvent.consume();
 			});
 		}
-		final AbstractDayAppointmentPane appointmentPane;
-		Rectangle resizeRectangle;
+		private final AbstractDayAppointmentPane appointmentPane;
+		private Rectangle resizeRectangle;
 	}
 	
 	
@@ -1418,180 +1299,165 @@ implements Agenda.AgendaSkin
 			// dragging
 			
 			// start drag
-			setOnMousePressed(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{					
-					// no one else
-					mouseEvent.consume();
-					if (mouseEvent.isPrimaryButtonDown() == false) return;
-					if (isDraggable == false) return;
+			setOnMousePressed((mouseEvent) -> {					
+				// no one else
+				mouseEvent.consume();
+				if (mouseEvent.isPrimaryButtonDown() == false) return;
+				if (isDraggable == false) return;
 
-					// no drag yet
-					dragEventHasOccurred = mouseEvent.isPrimaryButtonDown() ? false : true; // if not primary mouse, then just assume drag from the start 
-					if (isFirstAreaOfAppointment == false) return; // TODO: temporarily
+				// no drag yet
+				dragEventHasOccurred = mouseEvent.isPrimaryButtonDown() ? false : true; // if not primary mouse, then just assume drag from the start 
+				if (isFirstAreaOfAppointment == false) return; // TODO: temporarily
 
-					// place the rectangle
-					AbstractAppointmentPane.this.setCursor(Cursor.MOVE);
-					double lX = NodeUtil.screenX(AbstractAppointmentPane.this) - NodeUtil.screenX(dragPane);
-					double lY = NodeUtil.screenY(AbstractAppointmentPane.this) - NodeUtil.screenY(dragPane);
-					dragRectangle = new Rectangle(lX, lY, AbstractAppointmentPane.this.getWidth(), (AbstractAppointmentPane.this.appointment.isWholeDay() ? titleCalendarHeightProperty.get() : AbstractAppointmentPane.this.getHeight()) );
-					dragRectangle.getStyleClass().add("GhostRectangle");
-					dragPane.getChildren().add(dragRectangle);
-					
-					// remember
-					startX = mouseEvent.getScreenX();
-					startY = mouseEvent.getScreenY();
-				}
+				// place the rectangle
+				AbstractAppointmentPane.this.setCursor(Cursor.MOVE);
+				double lX = NodeUtil.screenX(AbstractAppointmentPane.this) - NodeUtil.screenX(dragPane);
+				double lY = NodeUtil.screenY(AbstractAppointmentPane.this) - NodeUtil.screenY(dragPane);
+				dragRectangle = new Rectangle(NodeUtil.snapXY(lX), NodeUtil.snapXY(lY), NodeUtil.snapWH(lX, AbstractAppointmentPane.this.getWidth()), NodeUtil.snapWH(lY, (AbstractAppointmentPane.this.appointment.isWholeDay() ? titleCalendarHeightProperty.get() : AbstractAppointmentPane.this.getHeight())) );
+				dragRectangle.getStyleClass().add("GhostRectangle");
+				dragPane.getChildren().add(dragRectangle);
+				
+				// remember
+				startX = mouseEvent.getScreenX();
+				startY = mouseEvent.getScreenY();
 			});
 			// visualize dragging
-			setOnMouseDragged(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					// no one else
-					mouseEvent.consume();
-					if (mouseEvent.isPrimaryButtonDown() == false) return;
+			setOnMouseDragged((mouseEvent) -> {
+				// no one else
+				mouseEvent.consume();
+				if (mouseEvent.isPrimaryButtonDown() == false) return;
 
-					// no dragged
-					dragEventHasOccurred = true;
-					if (dragRectangle == null) return;
-					
-					double lDeltaX = mouseEvent.getScreenX() - startX;
-					double lDeltaY = mouseEvent.getScreenY() - startY;
-					double lX = NodeUtil.screenX(AbstractAppointmentPane.this) - NodeUtil.screenX(dragPane) + lDeltaX;
-					double lY = NodeUtil.screenY(AbstractAppointmentPane.this) - NodeUtil.screenY(dragPane) + lDeltaY;
-					dragRectangle.setX(lX);
-					dragRectangle.setY(lY);
-					
-					// no one else
-					mouseEvent.consume();
-				}
+				// no dragged
+				dragEventHasOccurred = true;
+				if (dragRectangle == null) return;
+				
+				double lDeltaX = mouseEvent.getScreenX() - startX;
+				double lDeltaY = mouseEvent.getScreenY() - startY;
+				double lX = NodeUtil.screenX(AbstractAppointmentPane.this) - NodeUtil.screenX(dragPane) + lDeltaX;
+				double lY = NodeUtil.screenY(AbstractAppointmentPane.this) - NodeUtil.screenY(dragPane) + lDeltaY;
+				dragRectangle.setX(NodeUtil.snapXY(lX));
+				dragRectangle.setY(NodeUtil.snapXY(lY));
+				
+				// no one else
+				mouseEvent.consume();
 			});
 			// end drag
-			setOnMouseReleased(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					// no one else
-					mouseEvent.consume();
+			setOnMouseReleased((mouseEvent) -> {
+				// no one else
+				mouseEvent.consume();
 
-					// reset ui
-					boolean lDragRectangleWasVisible = (dragRectangle != null);
-					AbstractAppointmentPane.this.setCursor(Cursor.HAND);
-					dragPane.getChildren().remove(dragRectangle);
-					dragRectangle = null;					
-					
-					// -----
-					// select
-					
-					// if have not dragged (even if the drag rectangle was shown), then we're selecting
-					if (dragEventHasOccurred == false)
+				// reset ui
+				boolean lDragRectangleWasVisible = (dragRectangle != null);
+				AbstractAppointmentPane.this.setCursor(Cursor.HAND);
+				dragPane.getChildren().remove(dragRectangle);
+				dragRectangle = null;					
+				
+				// -----
+				// select
+				
+				// if have not dragged (even if the drag rectangle was shown), then we're selecting
+				if (dragEventHasOccurred == false)
+				{
+					// if not shift pressed, clear the selection
+					if (mouseEvent.isShiftDown() == false)
 					{
-						// if not shift pressed, clear the selection
-						if (mouseEvent.isShiftDown() == false)
-						{
-							getSkinnable().selectedAppointments().clear();
-						}
-						// add to selection if not already added
-						if (getSkinnable().selectedAppointments().contains(AbstractAppointmentPane.this.appointment) == false)
-						{
-							getSkinnable().selectedAppointments().add(AbstractAppointmentPane.this.appointment);
-						}
-						return;
+						getSkinnable().selectedAppointments().clear();
 					}
-					
-					// ------------
-					// dragging
-					
-					if (lDragRectangleWasVisible == false) return;
-					
-					// find out where it was dropped
-					for (DayPane lDayPane : weekPane.dayPanes)
+					// add to selection if not already added
+					if (getSkinnable().selectedAppointments().contains(AbstractAppointmentPane.this.appointment) == false)
 					{
-						double lDayX = NodeUtil.screenX(lDayPane); 
-						double lDayY = NodeUtil.screenY(lDayPane); 
-						if ( lDayX <= mouseEvent.getScreenX() && mouseEvent.getScreenX() < lDayX + lDayPane.getWidth()
-						  && lDayY <= mouseEvent.getScreenY() && mouseEvent.getScreenY() < lDayY + lDayPane.getHeight()
-						   )
-						{
-							// get the appointment that needs handling
-							Appointment lAppointment = AbstractAppointmentPane.this.appointment;
-							Calendar lDroppedOnCalendar = lDayPane.calendarObjectProperty.get();
-		
-							// is wholeday now, will become partial
-							if (lAppointment.isWholeDay())
-							{
-								// calculate new start
-								Calendar lStartCalendar = copyYMD( lDroppedOnCalendar, (Calendar)lAppointment.getStartTime().clone() );
-								// and end times
-								Calendar lEndCalendar = lAppointment.getEndTime() == null ? setTimeTo2359( (Calendar)lDroppedOnCalendar.clone() ) : copyYMD( lDroppedOnCalendar, (Calendar)lAppointment.getEndTime().clone() );
-								
-								// set the new enddate
-								lAppointment.setStartTime(lStartCalendar);
-								lAppointment.setEndTime(lEndCalendar);
-								
-								// no longer whole day
-								lAppointment.setWholeDay(false);
-							}
-							{
-								// calculate new start
-								Calendar lStartCalendar = copyYMD(lDroppedOnCalendar, (Calendar)lAppointment.getStartTime().clone());
-	
-								// also add the delta Y minutes
-								int lDeltaDurationInMS = (int)((mouseEvent.getScreenY() - startY) * durationInMSPerPixelProperty.get());
-								lStartCalendar.add(Calendar.MILLISECOND, lDeltaDurationInMS);
-								setTimeToNearestMinutes(lStartCalendar, 5);
-								while (isSameDay(lStartCalendar, lDroppedOnCalendar) == false && lStartCalendar.before(lDroppedOnCalendar)) { lStartCalendar.add(Calendar.MINUTE, 1);  }// the delta may have pushed it out of today 
-								while (isSameDay(lStartCalendar, lDroppedOnCalendar) == false && lStartCalendar.after(lDroppedOnCalendar)) { lStartCalendar.add(Calendar.MINUTE, -1);  }// the delta may have pushed it out of today
-								
-								// duration -> enddate (take tasks -which have no enddate- into account)
-								Calendar lEndCalendar = null;
-								if (lAppointment.getEndTime() != null)
-								{
-									long lDurationInMS = lAppointment.getEndTime().getTimeInMillis() - lAppointment.getStartTime().getTimeInMillis();
-									lEndCalendar = (Calendar)lStartCalendar.clone();
-									lEndCalendar.add(Calendar.MILLISECOND, (int)lDurationInMS);
-								}
-								
-								// set dates
-								lAppointment.setStartTime(lStartCalendar);
-								lAppointment.setEndTime(lEndCalendar);								
-							}
-						}
+						getSkinnable().selectedAppointments().add(AbstractAppointmentPane.this.appointment);
 					}
-					
-					// find out where it was dropped
-					for (DayHeaderPane lDayHeaderPane : weekHeaderPane.dayHeaderPanes)
-					{
-						double lDayX = NodeUtil.screenX(lDayHeaderPane); 
-						double lDayY = NodeUtil.screenY(lDayHeaderPane); 
-						if ( lDayX <= mouseEvent.getScreenX() && mouseEvent.getScreenX() < lDayX + lDayHeaderPane.getWidth()
-						  && lDayY <= mouseEvent.getScreenY() && mouseEvent.getScreenY() < lDayY + lDayHeaderPane.getHeight()
-						   )
-						{
-							// get the appointment that needs handling
-							Appointment lAppointment = AbstractAppointmentPane.this.appointment;
-							
-							// calculate new start
-							Calendar lStartCalendar = copyYMD(lDayHeaderPane.dayPane.calendarObjectProperty.get(), (Calendar)lAppointment.getStartTime().clone() );
-							
-							// set the new start date
-							lAppointment.setStartTime(lStartCalendar);
-							
-							// enddate can be ignored
-							
-							// now a whole day (just in case it wasn't)
-							lAppointment.setWholeDay(true);
-						}
-					}
-					
-					// redo whole week
-					setupAppointments();					
+					return;
 				}
+				
+				// ------------
+				// dragging
+				
+				if (lDragRectangleWasVisible == false) return;
+				
+				// find out where it was dropped
+				for (DayPane lDayPane : weekPane.dayPanes)
+				{
+					double lDayX = NodeUtil.screenX(lDayPane); 
+					double lDayY = NodeUtil.screenY(lDayPane); 
+					if ( lDayX <= mouseEvent.getScreenX() && mouseEvent.getScreenX() < lDayX + lDayPane.getWidth()
+					  && lDayY <= mouseEvent.getScreenY() && mouseEvent.getScreenY() < lDayY + lDayPane.getHeight()
+					   )
+					{
+						// get the appointment that needs handling
+						Appointment lAppointment = AbstractAppointmentPane.this.appointment;
+						Calendar lDroppedOnCalendar = lDayPane.calendarObjectProperty.get();
+	
+						// is wholeday now, will become partial
+						if (lAppointment.isWholeDay())
+						{
+							// calculate new start
+							Calendar lStartCalendar = copyYMD( lDroppedOnCalendar, (Calendar)lAppointment.getStartTime().clone() );
+							// and end times
+							Calendar lEndCalendar = lAppointment.getEndTime() == null ? setTimeTo2359( (Calendar)lDroppedOnCalendar.clone() ) : copyYMD( lDroppedOnCalendar, (Calendar)lAppointment.getEndTime().clone() );
+							
+							// set the new enddate
+							lAppointment.setStartTime(lStartCalendar);
+							lAppointment.setEndTime(lEndCalendar);
+							
+							// no longer whole day
+							lAppointment.setWholeDay(false);
+						}
+						{
+							// calculate new start
+							Calendar lStartCalendar = copyYMD(lDroppedOnCalendar, (Calendar)lAppointment.getStartTime().clone());
+
+							// also add the delta Y minutes
+							int lDeltaDurationInMS = (int)((mouseEvent.getScreenY() - startY) * durationInMSPerPixelProperty.get());
+							lStartCalendar.add(Calendar.MILLISECOND, lDeltaDurationInMS);
+							setTimeToNearestMinutes(lStartCalendar, 5);
+							while (isSameDay(lStartCalendar, lDroppedOnCalendar) == false && lStartCalendar.before(lDroppedOnCalendar)) { lStartCalendar.add(Calendar.MINUTE, 1);  }// the delta may have pushed it out of today 
+							while (isSameDay(lStartCalendar, lDroppedOnCalendar) == false && lStartCalendar.after(lDroppedOnCalendar)) { lStartCalendar.add(Calendar.MINUTE, -1);  }// the delta may have pushed it out of today
+							
+							// duration -> enddate (take tasks -which have no enddate- into account)
+							Calendar lEndCalendar = null;
+							if (lAppointment.getEndTime() != null)
+							{
+								long lDurationInMS = lAppointment.getEndTime().getTimeInMillis() - lAppointment.getStartTime().getTimeInMillis();
+								lEndCalendar = (Calendar)lStartCalendar.clone();
+								lEndCalendar.add(Calendar.MILLISECOND, (int)lDurationInMS);
+							}
+							
+							// set dates
+							lAppointment.setStartTime(lStartCalendar);
+							lAppointment.setEndTime(lEndCalendar);								
+						}
+					}
+				}
+				
+				// find out where it was dropped
+				for (DayHeaderPane lDayHeaderPane : weekHeaderPane.dayHeaderPanes)
+				{
+					double lDayX = NodeUtil.screenX(lDayHeaderPane); 
+					double lDayY = NodeUtil.screenY(lDayHeaderPane); 
+					if ( lDayX <= mouseEvent.getScreenX() && mouseEvent.getScreenX() < lDayX + lDayHeaderPane.getWidth()
+					  && lDayY <= mouseEvent.getScreenY() && mouseEvent.getScreenY() < lDayY + lDayHeaderPane.getHeight()
+					   )
+					{
+						// get the appointment that needs handling
+						Appointment lAppointment = AbstractAppointmentPane.this.appointment;
+						
+						// calculate new start
+						Calendar lStartCalendar = copyYMD(lDayHeaderPane.dayPane.calendarObjectProperty.get(), (Calendar)lAppointment.getStartTime().clone() );
+						
+						// set the new start date
+						lAppointment.setStartTime(lStartCalendar);
+						
+						// enddate can be ignored
+						
+						// now a whole day (just in case it wasn't)
+						lAppointment.setWholeDay(true);
+					}
+				}
+				
+				// redo whole week
+				setupAppointments();					
 			});
 		}
 		Rectangle dragRectangle;
@@ -1674,7 +1540,7 @@ implements Agenda.AgendaSkin
 
 					// place it
 					int lOffsetY = (lNow.get(Calendar.HOUR_OF_DAY) * 60) + lNow.get(Calendar.MINUTE);
-					nowLine.setY(dayHeightProperty.get() / (24 * 60) * lOffsetY );
+					nowLine.setY(NodeUtil.snapXY(dayHeightProperty.get() / (24 * 60) * lOffsetY) );
 					if (nowLine.widthProperty().isBound() == false) nowLine.widthProperty().bind(dayWidthProperty);	
 				}
 				
@@ -1928,44 +1794,29 @@ implements Agenda.AgendaSkin
 			Tooltip.install(lPane, new Tooltip(lAppointmentGroup.getDescription()));
 
 			// mouse reactions
-			lPane.setOnMouseEntered(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
+			lPane.setOnMouseEntered((mouseEvent) -> {
+				if (!mouseEvent.isPrimaryButtonDown())
 				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{
-						mouseEvent.consume();
-						lPane.setCursor(Cursor.HAND);
-					}
+					mouseEvent.consume();
+					lPane.setCursor(Cursor.HAND);
 				}
 			});
-			lPane.setOnMouseExited(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
+			lPane.setOnMouseExited((mouseEvent) -> {
+				if (!mouseEvent.isPrimaryButtonDown())
 				{
-					if (!mouseEvent.isPrimaryButtonDown())
-					{
-						mouseEvent.consume();
-						lPane.setCursor(Cursor.DEFAULT);
-					}
+					mouseEvent.consume();
+					lPane.setCursor(Cursor.DEFAULT);
 				}
 			});
 			final Agenda.AppointmentGroup lAppointmentGroupFinal = lAppointmentGroup;
-			lPane.setOnMouseClicked(new EventHandler<MouseEvent>()
-			{
-				@Override
-				public void handle(MouseEvent mouseEvent)
-				{
-					mouseEvent.consume();
+			lPane.setOnMouseClicked((mouseEvent) -> {
+				mouseEvent.consume();
 
-					// assign appointment group
-					abstractAppointmentPane.appointment.setAppointmentGroup(lAppointmentGroupFinal);
+				// assign appointment group
+				abstractAppointmentPane.appointment.setAppointmentGroup(lAppointmentGroupFinal);
 
-					// refresh is done upon popup close
-					lPopup.hide();
-				}
+				// refresh is done upon popup close
+				lPopup.hide();
 			});
 		}
 		

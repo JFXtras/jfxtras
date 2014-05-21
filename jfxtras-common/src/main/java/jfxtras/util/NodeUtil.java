@@ -29,10 +29,18 @@ package jfxtras.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javafx.beans.Observable;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.value.ObservableNumberValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
+
+import com.sun.javafx.collections.ImmutableObservableList;
 
 /**
  * Utility class that provides methods to simplify node handling. Possible use
@@ -40,6 +48,7 @@ import javafx.scene.layout.Pane;
  * to/from parents (Parent interface does not give write access to children).
  *
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
+ * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
 public class NodeUtil {
 
@@ -150,6 +159,37 @@ public class NodeUtil {
 	public static double snapXY(double position) {
 		return ((int) position) + .5;
 	}
+	
+	/**
+	 * This is the snapXY method for using in a binding, for example:
+	 * p1.bind( snapXY( p2.multiply(0.1) ));
+	 * 
+     * @param position (x or y)
+	 * @return
+	 */
+	public static DoubleBinding snapXY(final ObservableNumberValue position) {
+		return new DoubleBinding() {
+            {
+                super.bind(position);
+            }
+
+            @Override
+            public void dispose() {
+                super.unbind(position);
+            }
+
+            @Override
+            protected double computeValue() {
+                return NodeUtil.snapXY(position.doubleValue());
+            }
+
+            @Override
+            public ObservableList<?> getDependencies() {
+                return FXCollections.singletonObservableList(position);
+            }
+        };
+    }
+
 
     /**
      * This method prevents blurry horizontal or vertical lines, use snapWH(x, w) instead of w. 
@@ -160,4 +200,38 @@ public class NodeUtil {
 	public static double snapWH(double position, double offset) {
 		return snapXY(position + offset) - snapXY(position);
 	}
+	
+	/**
+	 * This is the snapXY method for using in a binding, for example:
+	 * p1.bind( snapXY( p2.multiply(0.1) ));
+	 * 
+     * @param position (x or y)
+     * @param offset (width or height)
+	 * @param dependencies
+	 * @return
+	 */
+	public static DoubleBinding snapWH(final ObservableNumberValue position, final ObservableNumberValue offset, final Observable... dependencies) {
+        return new DoubleBinding() {
+            {
+                super.bind(dependencies);
+            }
+
+            @Override
+            public void dispose() {
+                super.unbind(dependencies);
+            }
+
+            @Override
+            protected double computeValue() {
+                return NodeUtil.snapWH(position.doubleValue(), offset.doubleValue());
+            }
+
+            @Override
+            public ObservableList<?> getDependencies() {
+                return (dependencies.length == 1)? 
+                        FXCollections.singletonObservableList(dependencies[0]) 
+                        : new ImmutableObservableList<Observable>(dependencies);
+            }
+        };
+    }
 }
