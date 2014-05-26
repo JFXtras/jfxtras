@@ -33,10 +33,12 @@ import java.util.Locale;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import jfxtras.internal.scene.control.skin.ListSpinnerSkin;
 import jfxtras.scene.control.ListSpinner;
 import jfxtras.test.JFXtrasGuiTest;
+import jfxtras.test.TestUtil;
 import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
@@ -44,7 +46,6 @@ import org.junit.Test;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
- * The strange method naming is to work around an issue in TestFX where it clicks outside the window if the LeftRight tests are run before the UpDown.
  */
 public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
@@ -251,6 +252,38 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// select prev (stick)
 		click(".left-arrow");
+		Assert.assertEquals("a", spinner.getValue());
+	}
+
+	@Test
+	public void navigateLeftAndHold()
+	{
+		// check to see what the current value is
+		Assert.assertEquals("a", spinner.getValue());
+
+		// we need to move the focus first, otherwise the test will fail at random
+		click(".button"); 
+
+		// ----
+		
+		// press and hold
+		move(".right-arrow");
+		press(MouseButton.PRIMARY);
+		TestUtil.sleep(500);
+		release(MouseButton.PRIMARY);
+		
+		// the value repeatedly changed and stopped at the end 
+		Assert.assertEquals("c", spinner.getValue());
+
+		// ----
+		
+		// press and hold
+		move(".left-arrow");
+		press(MouseButton.PRIMARY);
+		TestUtil.sleep(500);
+		release(MouseButton.PRIMARY);
+		
+		// the value repeatedly changed and stopped at the beginning 
 		Assert.assertEquals("a", spinner.getValue());
 	}
 }
