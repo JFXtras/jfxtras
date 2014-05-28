@@ -41,7 +41,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
@@ -86,10 +85,9 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
-	public void selectDateInPopup()
+	public void textfieldIsDisabledWhenPopupIsOpen()
 	{
 		// default value is null
-		Assert.assertNull(calendarTextField.getCalendar());
 		Assert.assertFalse(find(".text-field").isDisabled());
 		
 		// open the popup
@@ -100,8 +98,54 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		click(".today");
 		
 		// now should be the value in the textfield
-		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 		Assert.assertFalse(find(".text-field").isDisabled());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void textfieldIsDisabledWhenPopupIsOpenDateTime()
+	{
+		// switch to datetime mode
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+		});
+		
+		// default value is null
+		Assert.assertFalse(find(".text-field").isDisabled());
+		
+		// open the popup
+		click(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
+		
+		// click today
+		click(".today");
+		
+		// click today
+		click(".accept-icon");
+		
+		// now should be the value in the textfield
+		Assert.assertFalse(find(".text-field").isDisabled());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void selectDateInPopup()
+	{
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		
+		// open the popup
+		click(".icon");
+		
+		// click today
+		click(".today");
+		
+		// now should be the value in the textfield
+		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 	}
 
 	/**
@@ -110,7 +154,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	@Test
 	public void selectDateTimeInPopup()
 	{
-		// set a value
+		// switch to datetime mode
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
 		});
@@ -425,5 +469,35 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// now should be the value in the textfield
 		Assert.assertEquals("2014-12-31", calendarTextField.getText());
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void popupIsClosedWhenReselectingSameDateInNotNullMode()
+	{
+		Calendar lCalendar = new GregorianCalendar(2013, 0, 1, 12, 00, 00);
+		
+		// set a value
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setCalendar(lCalendar);
+			calendarTextField.setAllowNull(false);
+		});
+		
+		// popup should be closed
+		assertPopupIsNotVisible(find(".text-field"));
+		
+		// open the popup
+		click(".icon");
+		
+		// popup should be closed
+		assertPopupIsVisible(find(".text-field"));
+		
+		// reselect 1st of January
+		click("#day2");
+		
+		// popup should be closed
+		assertPopupIsNotVisible(find(".text-field"));
 	}
 }

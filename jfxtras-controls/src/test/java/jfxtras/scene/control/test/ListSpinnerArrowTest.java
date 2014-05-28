@@ -223,9 +223,10 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 		// check to see what the current value is
 		Assert.assertEquals("a", spinner.getValue());
 
+		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		
 		// ----
 		// move forward, non cyclic
-		click(".button"); // we need to move the focus first, otherwise the test will fail at random
 
 		// select next
 		click(".right-arrow");

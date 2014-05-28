@@ -31,7 +31,6 @@ package jfxtras.scene.control.test;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -39,7 +38,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
 import jfxtras.fxml.JFXtrasBuilderFactory;
-import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;

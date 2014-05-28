@@ -32,14 +32,12 @@ package jfxtras.scene.control.test;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalTime;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.text.Text;
 import jfxtras.fxml.JFXtrasBuilderFactory;
-import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.util.PlatformUtil;
@@ -67,7 +65,9 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 			String lName = this.getClass().getSimpleName() + ".fxml";
 			URL lURL = this.getClass().getResource(lName);
 			//System.out.println("loading FXML " + lName + " -> " + lURL);
-			if (lURL == null) throw new IllegalStateException("FXML file not found: " + lName);
+			if (lURL == null) {
+				throw new IllegalStateException("FXML file not found: " + lName);
+			}
 			Parent lRoot = (Parent)FXMLLoader.load(lURL, null, new JFXtrasBuilderFactory());
 			return lRoot;
 		}

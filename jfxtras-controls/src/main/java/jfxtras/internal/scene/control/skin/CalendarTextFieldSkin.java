@@ -402,7 +402,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		}
 		
 		// if a value is selected in date mode, immediately close the popup
-		calendarPicker.calendarProperty().addListener( (observable, oldValue, newValue) -> {
+		calendarPicker.calendarProperty().addListener( (observable) -> {
 			if (lPopup != null && isShowingTime() == false && lPopup.isShowing()) {
 				lPopup.hide(); 
 			}

@@ -657,11 +657,21 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 			// remember
 			iLastSelected = (Calendar)lToggledCalendar.clone();
 		}
-        else if(lCalendars.size() > 1 || getSkinnable().getAllowNull())
+        else 
         {
-            // remove
-            lCalendars.remove(lFoundCalendar);
-            iLastSelected = null;
+            // special behavior for CalendarTextField: reselect in case of not allow null, by inserting the same calendar again, so the current can be removed (the popup will be closed then)
+            if (lCalendars.size() == 1 && getSkinnable().getAllowNull() == false)
+            {
+// for some reason this causes a UnsupportedOperationException:
+//            	lCalendars.add( (Calendar)lFoundCalendar.clone() );
+                getSkinnable().setCalendar( (Calendar)lFoundCalendar.clone()  );
+            }
+            
+            if (lCalendars.size() > 1 || getSkinnable().getAllowNull()) {
+	            // remove
+	            lCalendars.remove(lFoundCalendar);
+	            iLastSelected = null;
+	        }
         }
 
 		// make sure the buttons are toggled correctly
