@@ -30,7 +30,6 @@
 package jfxtras.scene.control;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Locale;
 
 import javafx.beans.property.BooleanProperty;
@@ -42,7 +41,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDatePickerSkin;
-import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 
 /**
  * LocalDate (JSR-310) picker component.<br>
