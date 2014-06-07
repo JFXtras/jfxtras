@@ -39,6 +39,11 @@ public class AssertNode {
 		return this;
 	}
 	
+	public AssertNode assertClassName(String className) {
+		Assert.assertEquals(description, className, node.getClass().getName());
+		return this;
+	}
+	
 	static private double width(Node n) {
 		return n.getLayoutBounds().getWidth() + n.getLayoutBounds().getMinX();
 	}
@@ -47,7 +52,7 @@ public class AssertNode {
 		return n.getLayoutBounds().getHeight() + n.getLayoutBounds().getMinY();
 	}
 	
-	static public enum A {XYWH, CLASS}
+	static public enum A {XYWH, CLASS, CLASSNAME}
 	static public void generateSource(String paneVariableName, List<Node> nodes, List<String> excludedNodeClasses, boolean newline, A... asserts) {
 		
 		// init
@@ -72,6 +77,9 @@ public class AssertNode {
 				}
 				if (a == A.CLASS) {
 					System.out.print(lNewline + ".assertClass(" + lNode.getClass().getName() + ".class)");
+				}
+				if (a == A.CLASSNAME) {
+					System.out.print(lNewline + ".assertClassName(\"" + lNode.getClass().getName() + "\")");
 				}
 			}
 			System.out.println(";");
