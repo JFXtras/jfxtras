@@ -60,6 +60,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.Priority;
+import javafx.util.Callback;
 import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
@@ -405,6 +406,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 
 		// add timepicker
 		Bindings.bindBidirectional(timePicker.calendarProperty(), getSkinnable().calendarProperty());
+		Bindings.bindBidirectional(timePicker.valueValidationCallbackProperty(), getSkinnable().valueValidationCallbackProperty());
 
 		// add to self
         getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control
@@ -487,7 +489,10 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 				ToggleButton lToggleButton = dayButtons.get(i);	
 				if (getSkinnable().getMode() == CalendarPicker.Mode.RANGE) 
 				{
-					getSkinnable().calendars().add( calendarForToggleButton(lToggleButton) );
+					Calendar lCalendar = calendarForToggleButton(lToggleButton);
+					if (callValueValidationCallback(lCalendar)) {
+						getSkinnable().calendars().add(lCalendar);
+					}
 				}
 				else
 				{
@@ -624,13 +629,17 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 				// Normally one would removed all the old ones and add one new,
 				// but this would result in a moment where the value would be null and that can be unwanted.
 				// So we first add the new value and then clear away the old ones until 1 remains.
-				lCalendars.add(lToggledCalendar);
-				while (lCalendars.size() > 1) {
-					lCalendars.remove(0);
+				if (callValueValidationCallback(lToggledCalendar)) {
+					lCalendars.add(lToggledCalendar);
+					while (lCalendars.size() > 1) {
+						lCalendars.remove(0);
+					}
 				}
 			}
 			if ( getSkinnable().getMode() == CalendarPicker.Mode.MULTIPLE  && shiftIsPressed == false ) {
-				lCalendars.add(lToggledCalendar);
+				if (callValueValidationCallback(lToggledCalendar)) {
+					lCalendars.add(lToggledCalendar);
+				}
 			}
 			if ( (getSkinnable().getMode() == CalendarPicker.Mode.MULTIPLE || getSkinnable().getMode() == CalendarPicker.Mode.RANGE) 
 			  && shiftIsPressed == true
@@ -647,10 +656,15 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 					lWalker.add(Calendar.DATE, lDirection);
 					while (lWalker.equals(lToggledCalendar) == false)
 					{
-						lCalendars.add((Calendar)lWalker.clone()); // the @#$#@$@# calendars are mutable
+						Calendar lCalendar = (Calendar)lWalker.clone();
+						if (callValueValidationCallback(lCalendar)) {
+							lCalendars.add(lCalendar); // the @#$#@$@# calendars are mutable
+						}
 						lWalker.add(Calendar.DATE, lDirection);
 					}
-					lCalendars.add(lToggledCalendar);
+					if (callValueValidationCallback(lToggledCalendar)) {
+						lCalendars.add(lToggledCalendar);
+					}
 				}
 			}
 			
@@ -664,7 +678,10 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
             {
 // for some reason this causes a UnsupportedOperationException:
 //            	lCalendars.add( (Calendar)lFoundCalendar.clone() );
-                getSkinnable().setCalendar( (Calendar)lFoundCalendar.clone()  );
+            	Calendar lCalendar = (Calendar)lFoundCalendar.clone();
+            	if (callValueValidationCallback(lCalendar)) {
+            		getSkinnable().setCalendar(lCalendar);
+            	}
             }
             
             if (lCalendars.size() > 1 || getSkinnable().getAllowNull()) {
@@ -919,5 +936,18 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private boolean callValueValidationCallback(Calendar value) {
+		Callback<Calendar, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+		if (lCallback == null) {
+			return true;
+		}
+		return lCallback.call(value);
 	}
 }

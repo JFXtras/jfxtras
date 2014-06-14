@@ -29,8 +29,10 @@
 
 package jfxtras.scene.control.test;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
@@ -170,4 +172,53 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals("20:15:15", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
+	
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void validate()
+	{
+		// setup to invalidate odd hours
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTimePicker.setValueValidationCallback( (calendar) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (calendar == null || ((calendar.get(Calendar.HOUR_OF_DAY) % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// set time to 12:30:00
+		PlatformUtil.runAndWait( () -> {
+			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));			
+		});
+		
+		// move the hour slider: even hour is accepted
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(100,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+
+		// move the hour slider: odd hour is not accepted
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(15,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+		
+		// move the hour slider: even hour is accepted
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(30,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("22:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+	}
+
 }

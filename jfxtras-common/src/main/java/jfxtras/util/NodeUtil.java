@@ -64,7 +64,6 @@ public class NodeUtil {
      */
     static public double screenX(Node node) {
         return node.localToScene(node.getBoundsInLocal()).getMinX() + node.getScene().getX() + node.getScene().getWindow().getX();
-
     }
 
     /**

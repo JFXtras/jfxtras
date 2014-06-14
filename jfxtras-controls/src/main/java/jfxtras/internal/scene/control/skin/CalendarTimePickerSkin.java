@@ -52,6 +52,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarTimePicker;
 
@@ -549,9 +550,24 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	}    
 	public void acceptChangingCalendar() {
 		if (this.changingCalendar != null) {
-			getSkinnable().setCalendar(this.changingCalendar);
+			if (callValueValidationCallback((Calendar)this.changingCalendar.clone())) {
+				getSkinnable().setCalendar(this.changingCalendar);
+			}
 			this.changingCalendar = null;
+			refresh();
 		}
 	}
-    
+
+	/**
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private boolean callValueValidationCallback(Calendar value) {
+		Callback<Calendar, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+		if (lCallback == null) {
+			return true;
+		}
+		return lCallback.call(value);
+	}
 }

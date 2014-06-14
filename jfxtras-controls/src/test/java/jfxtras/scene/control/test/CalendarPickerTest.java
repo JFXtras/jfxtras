@@ -32,11 +32,13 @@ package jfxtras.scene.control.test;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
@@ -50,7 +52,7 @@ import org.junit.Test;
  * Created by Tom Eugelink on 26-12-13.
  */
 public class CalendarPickerTest extends JFXtrasGuiTest {
-// TODO: highlighted, disabled, range callback
+// TODO: highlighted, range callback, validation callback
 	
 	/**
 	 * 
@@ -478,6 +480,186 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInSingleMode()
+	{
+		// setup to invalidate odd days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarPicker.setValueValidationCallback( (calendar) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (calendar == null || ((calendar.get(Calendar.DATE) % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+
+		// click the 1st of January: not valid
+		click("#day2");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 3rd of January: not valid
+		click("#day4");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 2nd of January again
+		click("#day3");
+		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // reselecting does not add
+		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInMultipleMode()
+	{
+		// setup to invalidate odd days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarPicker.setValueValidationCallback( (calendar) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (calendar == null || ((calendar.get(Calendar.DATE) % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+		
+		// change calendarPicker's setting
+		calendarPicker.setMode(CalendarPicker.Mode.MULTIPLE);
+
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+
+		// click the 1st of January: not valid
+		click("#day2");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 4th of January
+		click("#day5");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 3rd of January: not valid
+		click("#day4");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 2nd of January (unselecting it)
+		click("#day3");
+		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
+		Assert.assertEquals("[2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 4st of January (unselecting it)
+		click("#day5");
+		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
+		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+		
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInMultipleModeSelectingRange()
+	{
+		// setup to invalidate odd days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarPicker.setValueValidationCallback( (calendar) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (calendar == null || ((calendar.get(Calendar.DATE) % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// change calendarPicker's setting
+		calendarPicker.setMode(CalendarPicker.Mode.MULTIPLE);
+
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// shift click the 6th of January
+		click("#day7", KeyCode.SHIFT);
+		lCallbackCount += 4; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 6th are validated: 4 times  
+		Assert.assertEquals("[2013-01-02, 2013-01-04, 2013-01-06]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 1st of January: not valid
+		click("#day2");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02, 2013-01-04, 2013-01-06]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInSingleModeWithTimeSlide()
+	{
+		// setup to invalidate odd hours
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarPicker.setValueValidationCallback( (calendar) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (calendar == null || ((calendar.get(Calendar.HOUR_OF_DAY) % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			// show time
+			calendarPicker.setShowTime(true);
+		});
+		
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+		
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02T00:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
+		
+		// move the hour slider
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(100,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals("[2013-01-02T08:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
+		
+		// move the hour slider
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(20,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals("[2013-01-02T08:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
 	}
 
 }

@@ -229,8 +229,8 @@ public class CalendarPicker extends Control
 	final private ObservableList<Calendar> highlightedCalendars =  javafx.collections.FXCollections.observableArrayList();
 
 	/** calendarRangeCallback: 
-	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
-	 * It is called just before a new range is being displayed, so the developer can change the values in the collections like highlighted or disabled. 
+	 * This callback allows a developer to limit the amount of calendars put in any of the collections like highlighted or disabled.
+	 * It is called just before a new range is being displayed, so the developer can change the values in the collections. 
 	 */
 	public ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackProperty() { return calendarRangeCallbackObjectProperty; }
 	final private ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<CalendarRange, Void>>(this, "calendarRangeCallback", null);
@@ -271,4 +271,14 @@ public class CalendarPicker extends Control
 		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
 		setDisplayedCalendar(Calendar.getInstance(getLocale()));
 	}
+	
+	/** valueValidationCallback: 
+	 * This callback allows a developer deny or accept a value just prior before it gets added.
+	 * Returning true will allow the value.
+	 */
+	public ObjectProperty<Callback<Calendar, Boolean>> valueValidationCallbackProperty() { return valueValidationCallbackObjectProperty; }
+	final private ObjectProperty<Callback<Calendar, Boolean>> valueValidationCallbackObjectProperty = new SimpleObjectProperty<Callback<Calendar, Boolean>>(this, "valueValidationCallback", null);
+	public Callback<Calendar, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
+	public void setValueValidationCallback(Callback<Calendar, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
+	public CalendarPicker withValueValidationCallback(Callback<Calendar, Boolean> value) { setValueValidationCallback(value); return this; }
 }
