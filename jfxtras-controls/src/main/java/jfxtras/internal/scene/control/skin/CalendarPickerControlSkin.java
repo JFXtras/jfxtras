@@ -651,28 +651,23 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 					Calendar lOtherCalendar = iLastSelected;
 					int lDirection = (lOtherCalendar.after(lToggledCalendar) ? -1 : 1);
 					
-					// walk towards the toggled date and add all in between
-					Calendar lWalker = (Calendar)lOtherCalendar.clone(); // the @#$#@$@# calendars are mutable
+					// walk towards the target (toggle) date and add all in between
+					Calendar lWalker = (Calendar)lOtherCalendar.clone(); 
 					lWalker.add(Calendar.DATE, lDirection);
-					boolean lValid = true;
-					while (lWalker.equals(lToggledCalendar) == false)
+					Calendar lTarget = (Calendar)lToggledCalendar.clone(); 
+					lTarget.add(Calendar.DATE, lDirection);
+					while (lWalker.equals(lTarget) == false)
 					{
-						Calendar lCalendar = (Calendar)lWalker.clone();  // the @#$#@$@# calendars are mutable
-						lValid = callValueValidationCallback(lCalendar);
-						if (lValid) {
-							lCalendars.add(lCalendar);
+						if (callValueValidationCallback(lWalker)) {
+							lCalendars.add((Calendar)lWalker.clone());
 						}
 						else {
+							// if a calendar was not valid then in range mode (in which ranges must always be uninterrupted), than exist the loop
 							if (getSkinnable().getMode() == CalendarPicker.Mode.RANGE) {
 								break; // in range mode a range is broken on the first invalid
 							}
-							lValid = true;
 						}
 						lWalker.add(Calendar.DATE, lDirection);
-					}
-					if ( (getSkinnable().getMode() == CalendarPicker.Mode.MULTIPLE || (getSkinnable().getMode() == CalendarPicker.Mode.RANGE && lValid)) // in range mode the last add must have been valid  
-					  && callValueValidationCallback(lToggledCalendar)) {
-						lCalendars.add(lToggledCalendar);
 					}
 				}
 			}
@@ -957,6 +952,6 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		if (lCallback == null) {
 			return true;
 		}
-		return lCallback.call(value);
+		return lCallback.call((Calendar)value.clone());
 	}
 }
