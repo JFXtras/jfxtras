@@ -584,13 +584,13 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 	@Test
 	public void validateInMultipleModeSelectingRange()
 	{
-		// setup to invalidate odd days
+		// setup to invalidate every fifth days
 		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarPicker.setValueValidationCallback( (calendar) -> {
 				// if day is odd, return false, so if even return true
 				lCallbackCountAtomicInteger.incrementAndGet();
-				return (calendar == null || ((calendar.get(Calendar.DATE) % 2) == 0) );
+				return (calendar == null || ((calendar.get(Calendar.DATE) % 5) != 0) );
 			});
 		});
 		int lCallbackCount = 0;
@@ -606,17 +606,57 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// shift click the 6th of January
-		click("#day7", KeyCode.SHIFT);
-		lCallbackCount += 4; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 6th are validated: 4 times  
-		Assert.assertEquals("[2013-01-02, 2013-01-04, 2013-01-06]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+		// shift click the 7th of January; 5th should be skipped
+		click("#day8", KeyCode.SHIFT);
+		lCallbackCount += 5; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 7th are validated: 5 times  
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 1st of January: not valid
-		click("#day2");
+		// click the 5th of January: not valid
+		click("#day6");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
-		Assert.assertEquals("[2013-01-02, 2013-01-04, 2013-01-06]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 	}
 
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInRangeModeSelectingRange()
+	{
+		// setup to invalidate every fifth days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarPicker.setValueValidationCallback( (calendar) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (calendar == null || ((calendar.get(Calendar.DATE) % 5) != 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// change calendarPicker's setting
+		calendarPicker.setMode(CalendarPicker.Mode.RANGE);
+
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// shift click the 7th of January
+		click("#day8", KeyCode.SHIFT);
+		lCallbackCount += 3; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 5th are validated: 3 times, then in range mode the range is broken  
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+
+		// click the 5th of January: not valid
+		click("#day6");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
+	}
+	
 	/**
 	 * 
 	 */

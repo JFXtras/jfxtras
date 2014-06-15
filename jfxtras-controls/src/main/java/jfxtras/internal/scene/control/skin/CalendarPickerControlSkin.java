@@ -68,6 +68,7 @@ import jfxtras.scene.control.ListSpinner;
 import jfxtras.scene.control.ListSpinner.CycleEvent;
 import jfxtras.scene.control.ListSpinnerIntegerList;
 import jfxtras.scene.layout.GridPane;
+import jfxtras.test.TestUtil;
 
 import com.sun.javafx.css.converters.EnumConverter;
 
@@ -654,15 +655,24 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 					// walk towards the toggled date and add all in between
 					Calendar lWalker = (Calendar)lOtherCalendar.clone(); // the @#$#@$@# calendars are mutable
 					lWalker.add(Calendar.DATE, lDirection);
+					boolean lValid = true;
 					while (lWalker.equals(lToggledCalendar) == false)
 					{
-						Calendar lCalendar = (Calendar)lWalker.clone();
-						if (callValueValidationCallback(lCalendar)) {
-							lCalendars.add(lCalendar); // the @#$#@$@# calendars are mutable
+						Calendar lCalendar = (Calendar)lWalker.clone();  // the @#$#@$@# calendars are mutable
+						lValid = callValueValidationCallback(lCalendar);
+						if (lValid) {
+							lCalendars.add(lCalendar);
+						}
+						else {
+							if (getSkinnable().getMode() == CalendarPicker.Mode.RANGE) {
+								break; // in range mode a range is broken on the first invalid
+							}
+							lValid = true;
 						}
 						lWalker.add(Calendar.DATE, lDirection);
 					}
-					if (callValueValidationCallback(lToggledCalendar)) {
+					if ( (getSkinnable().getMode() == CalendarPicker.Mode.MULTIPLE || (getSkinnable().getMode() == CalendarPicker.Mode.RANGE && lValid)) // in range mode the last add must have been valid  
+					  && callValueValidationCallback(lToggledCalendar)) {
 						lCalendars.add(lToggledCalendar);
 					}
 				}
