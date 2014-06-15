@@ -68,7 +68,6 @@ import jfxtras.scene.control.ListSpinner;
 import jfxtras.scene.control.ListSpinner.CycleEvent;
 import jfxtras.scene.control.ListSpinnerIntegerList;
 import jfxtras.scene.layout.GridPane;
-import jfxtras.test.TestUtil;
 
 import com.sun.javafx.css.converters.EnumConverter;
 
