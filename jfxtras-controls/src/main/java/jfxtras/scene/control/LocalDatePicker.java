@@ -170,6 +170,16 @@ public class LocalDatePicker extends Control
 		final LocalDate end; 
 	}
 	
+	/** valueValidationCallback: 
+	 * This callback allows a developer deny or accept a value just prior before it gets added.
+	 * Returning true will allow the value.
+	 */
+	public ObjectProperty<Callback<LocalDate, Boolean>> valueValidationCallbackProperty() { return valueValidationCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDate, Boolean>> valueValidationCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDate, Boolean>>(this, "valueValidationCallback", null);
+	public Callback<LocalDate, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
+	public void setValueValidationCallback(Callback<LocalDate, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
+	public LocalDatePicker withValueValidationCallback(Callback<LocalDate, Boolean> value) { setValueValidationCallback(value); return this; }
+
 	
 	// ==================================================================================================================
 	// SUPPORT

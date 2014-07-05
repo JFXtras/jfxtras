@@ -29,6 +29,9 @@
 
 package jfxtras.internal.scene.control.skin;
 
+import java.time.LocalDate;
+import java.util.Calendar;
+
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.SkinBase;
 import javafx.util.Callback;
@@ -36,7 +39,6 @@ import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 import jfxtras.scene.control.LocalDatePicker;
 import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
-import jfxtras.scene.control.LocalDateTimePicker;
 
 /**
  * This skin reuses CalendarPicker
@@ -87,6 +89,16 @@ public class LocalDatePickerSkin extends SkinBase<LocalDatePicker>
 					return null;
 				}
 				return lCallback.call(new LocalDatePicker.LocalDateRange(DateTimeToCalendarHelper.createLocalDateFromCalendar(calendarRange.getStartCalendar()), DateTimeToCalendarHelper.createLocalDateFromCalendar(calendarRange.getEndCalendar())));
+			}
+		});
+		calendarPicker.setValueValidationCallback(new Callback<Calendar, Boolean>() {
+			@Override
+			public Boolean call(Calendar calendar) {
+				Callback<LocalDate, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+				if (lCallback == null) {
+					return true;
+				}
+				return lCallback.call(DateTimeToCalendarHelper.createLocalDateFromCalendar(calendar));
 			}
 		});
 	}

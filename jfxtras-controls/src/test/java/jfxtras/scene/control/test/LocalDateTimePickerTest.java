@@ -29,10 +29,10 @@
 
 package jfxtras.scene.control.test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
@@ -263,5 +263,86 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03T00:00", localDateTimePicker.getLocalDateTime().toString());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validate()
+	{
+		// setup to invalidate odd days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDateTimePicker.setValueValidationCallback( (localDateTime) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (localDateTime == null || ((localDateTime.getDayOfMonth() % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// default value is null
+		Assert.assertNull(localDateTimePicker.getLocalDateTime());
+
+		// click the 1st of January: not valid
+		click("#day2");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertNull(localDateTimePicker.getLocalDateTime());
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("2013-01-02T00:00", localDateTimePicker.getLocalDateTime().toString());
+
+		// click the 3rd of January: not valid
+		click("#day4");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("2013-01-02T00:00", localDateTimePicker.getLocalDateTime().toString());
+
+		// click the 2nd of January again
+		click("#day3");
+		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // reselecting does not add
+		Assert.assertNull(localDateTimePicker.getLocalDateTime());
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void validateWithTimeSlide()
+	{
+		// setup to invalidate odd hours
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDateTimePicker.setValueValidationCallback( (localDateTime) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (localDateTime == null || (localDateTime.getHour() %2) == 0);
+			});
+		});
+		int lCallbackCount = 0;
+
+		// default value is null
+		Assert.assertNull(localDateTimePicker.getLocalDateTime());
+		
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("2013-01-02T00:00", localDateTimePicker.getLocalDateTime().toString());
+		
+		// move the hour slider
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(100,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals("2013-01-02T08:00", localDateTimePicker.getLocalDateTime().toString());
+		
+		// move the hour slider
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(20,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals("2013-01-02T08:00", localDateTimePicker.getLocalDateTime().toString());
 	}
 }

@@ -173,7 +173,6 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("20:15:15", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
 	
-	
 	/**
 	 * 
 	 */
@@ -220,5 +219,4 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("22:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
-
 }

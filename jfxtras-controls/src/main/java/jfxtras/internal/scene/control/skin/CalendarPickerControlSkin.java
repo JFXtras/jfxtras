@@ -658,15 +658,18 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 					lTarget.add(Calendar.DATE, lDirection);
 					while (lWalker.equals(lTarget) == false)
 					{
+						// if valid do add to range
 						if (callValueValidationCallback(lWalker)) {
 							lCalendars.add((Calendar)lWalker.clone());
 						}
 						else {
-							// if a calendar was not valid then in range mode (in which ranges must always be uninterrupted), than exist the loop
+							// if a calendar was not valid in range mode (in which ranges must always be uninterrupted), exit the loop
 							if (getSkinnable().getMode() == CalendarPicker.Mode.RANGE) {
-								break; // in range mode a range is broken on the first invalid
+								break; 
 							}
 						}
+						
+						// next
 						lWalker.add(Calendar.DATE, lDirection);
 					}
 				}
@@ -952,6 +955,6 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		if (lCallback == null) {
 			return true;
 		}
-		return lCallback.call((Calendar)value.clone());
+		return lCallback.call(value == null ? null : (Calendar)value.clone());
 	}
 }

@@ -31,6 +31,7 @@ package jfxtras.scene.control.test;
 
 import java.time.LocalTime;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
@@ -38,6 +39,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
+import jfxtras.test.TestUtil;
 import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
@@ -172,5 +174,52 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 		
 		// assert label
 		Assert.assertEquals("20:30", lLabelText.getText());
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void validate()
+	{
+		// setup to invalidate odd hours
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localTimePicker.setValueValidationCallback( (localTime) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (localTime == null || ((localTime.getHour() % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// set time to 12:30:00
+		PlatformUtil.runAndWait( () -> {
+			localTimePicker.setLocalTime(LocalTime.of(12, 30, 00));			
+		});
+		
+		// move the hour slider: even hour is accepted
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(100,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("20:30", localTimePicker.getLocalTime().toString());
+
+		// move the hour slider: odd hour is not accepted
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(15,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("20:30", localTimePicker.getLocalTime().toString());
+		
+		// move the hour slider: even hour is accepted
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(30,0);		
+		release(MouseButton.PRIMARY);
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("22:30", localTimePicker.getLocalTime().toString());
 	}
 }

@@ -31,8 +31,8 @@ package jfxtras.scene.control.test;
 
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
@@ -394,5 +394,180 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03",localDatePicker.getLocalDate().toString());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInSingleMode()
+	{
+		// setup to invalidate odd days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDatePicker.setValueValidationCallback( (localDate) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (localDate == null || ((localDate.getDayOfMonth() % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// default value is null
+		Assert.assertNull(localDatePicker.getLocalDate());
+
+		// click the 1st of January: not valid
+		click("#day2");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[]", localDatePicker.localDates().toString());
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
+
+		// click the 3rd of January: not valid
+		click("#day4");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
+
+		// click the 2nd of January again
+		click("#day3");
+		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // reselecting does not add
+		Assert.assertEquals("[]", localDatePicker.localDates().toString());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInMultipleMode()
+	{
+		// setup to invalidate odd days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDatePicker.setValueValidationCallback( (localDate) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (localDate == null || ((localDate.getDayOfMonth() % 2) == 0) );
+			});
+		});
+		int lCallbackCount = 0;
+		
+		// change localDatePicker's setting
+		localDatePicker.setMode(LocalDatePicker.Mode.MULTIPLE);
+
+		// default value is null
+		Assert.assertNull(localDatePicker.getLocalDate());
+
+		// click the 1st of January: not valid
+		click("#day2");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[]", localDatePicker.localDates().toString());
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
+
+		// click the 4th of January
+		click("#day5");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02, 2013-01-04]", localDatePicker.localDates().toString());
+
+		// click the 3rd of January: not valid
+		click("#day4");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
+		Assert.assertEquals("[2013-01-02, 2013-01-04]", localDatePicker.localDates().toString());
+
+		// click the 2nd of January (unselecting it)
+		click("#day3");
+		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
+		Assert.assertEquals("[2013-01-04]", localDatePicker.localDates().toString());
+
+		// click the 4st of January (unselecting it)
+		click("#day5");
+		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
+		Assert.assertEquals("[]", localDatePicker.localDates().toString());
+		
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInMultipleModeSelectingRange()
+	{
+		// setup to invalidate every fifth days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDatePicker.setValueValidationCallback( (localDate) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (localDate == null || ((localDate.getDayOfMonth() % 5) != 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// change localDatePicker's setting
+		localDatePicker.setMode(LocalDatePicker.Mode.MULTIPLE);
+
+		// default value is null
+		Assert.assertNull(localDatePicker.getLocalDate());
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
+
+		// shift click the 7th of January; 5th should be skipped
+		click("#day8", KeyCode.SHIFT);
+		lCallbackCount += 5; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 7th are validated: 5 times  
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", localDatePicker.localDates().toString());
+
+		// click the 5th of January: not valid
+		click("#day6");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", localDatePicker.localDates().toString());
+	}
+
+
+	/**
+	 * 
+	 */
+	@Test
+	public void validateInRangeModeSelectingRange()
+	{
+		// setup to invalidate every fifth days
+		AtomicInteger lCallbackCountAtomicInteger = new AtomicInteger();
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDatePicker.setValueValidationCallback( (localDate) -> {
+				// if day is odd, return false, so if even return true
+				lCallbackCountAtomicInteger.incrementAndGet();
+				return (localDate == null || ((localDate.getDayOfMonth() % 5) != 0) );
+			});
+		});
+		int lCallbackCount = 0;
+
+		// change localDatePicker's setting
+		localDatePicker.setMode(LocalDatePicker.Mode.RANGE);
+
+		// default value is null
+		Assert.assertNull(localDatePicker.getLocalDate());
+
+		// click the 2nd of January
+		click("#day3");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
+
+		// shift click the 7th of January
+		click("#day8", KeyCode.SHIFT);
+		lCallbackCount += 3; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 5th are validated: 3 times, then in range mode the range is broken  
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", localDatePicker.localDates().toString());
+
+		// click the 5th of January: not valid
+		click("#day6");
+		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
+		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", localDatePicker.localDates().toString());
 	}
 }

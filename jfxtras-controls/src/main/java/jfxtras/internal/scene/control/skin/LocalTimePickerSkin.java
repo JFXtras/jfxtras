@@ -29,7 +29,11 @@
 
 package jfxtras.internal.scene.control.skin;
 
+import java.time.LocalTime;
+import java.util.Calendar;
+
 import javafx.scene.control.SkinBase;
+import javafx.util.Callback;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.scene.control.LocalTimePicker;
 
@@ -70,6 +74,16 @@ public class LocalTimePickerSkin extends SkinBase<LocalTimePicker>
 		calendarTimePicker.secondStepProperty().bindBidirectional( getSkinnable().secondStepProperty() );
 		calendarTimePicker.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
 		DateTimeToCalendarHelper.syncLocalTime(calendarTimePicker.calendarProperty(), getSkinnable().localTimeProperty(), getSkinnable().localeProperty());
+		calendarTimePicker.setValueValidationCallback(new Callback<Calendar, Boolean>() {
+			@Override
+			public Boolean call(Calendar calendar) {
+				Callback<LocalTime, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+				if (lCallback == null) {
+					return true;
+				}
+				return lCallback.call(DateTimeToCalendarHelper.createLocalTimeFromCalendar(calendar));
+			}
+		});
 	}
 
 	// ==================================================================================================================

@@ -29,11 +29,14 @@
 
 package jfxtras.internal.scene.control.skin;
 
+import java.time.LocalDateTime;
+import java.util.Calendar;
+
 import javafx.scene.control.SkinBase;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker;
-import jfxtras.scene.control.LocalDateTimePicker;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
+import jfxtras.scene.control.LocalDateTimePicker;
 import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 
 /**
@@ -83,6 +86,16 @@ public class LocalDateTimePickerSkin extends SkinBase<LocalDateTimePicker>
 					return null;
 				}
 				return lCallback.call(new LocalDateTimePicker.LocalDateTimeRange(DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(calendarRange.getStartCalendar()), DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(calendarRange.getEndCalendar())));
+			}
+		});
+		calendarPicker.setValueValidationCallback(new Callback<Calendar, Boolean>() {
+			@Override
+			public Boolean call(Calendar calendar) {
+				Callback<LocalDateTime, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+				if (lCallback == null) {
+					return true;
+				}
+				return lCallback.call(DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(calendar));
 			}
 		});
 	}
