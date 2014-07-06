@@ -40,7 +40,6 @@ import javafx.scene.layout.VBox;
 import jfxtras.scene.control.LocalDatePicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -282,7 +281,7 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(localDatePicker.getLocalDate());
 
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			localDatePicker.setAllowNull(false);
 		});
@@ -309,7 +308,7 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		// first of January
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());		
 
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			localDatePicker.setAllowNull(false);
 		});
@@ -370,7 +369,7 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 	public void disabledCalendars()
 	{
 		// disable 2nd of January
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localDatePicker.disabledLocalDates().add(LocalDate.of(2013, 01, 02));
 		});
 

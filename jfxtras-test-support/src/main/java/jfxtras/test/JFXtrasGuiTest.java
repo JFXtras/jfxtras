@@ -29,6 +29,8 @@
 
 package jfxtras.test;
 
+import java.util.Locale;
+
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Popup;
@@ -42,6 +44,11 @@ import org.loadui.testfx.GuiTest;
  * https://github.com/SmartBear/TestFX/blob/master/src/main/java/org/loadui/testfx/GuiTest.java
  */
 abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
+	
+	public JFXtrasGuiTest() {
+		// default we're in US locale: keep (re)setting this for each test
+		Locale.setDefault(Locale.US);
+	}
 	
 	/**
 	 * Click with a qualifier pressed

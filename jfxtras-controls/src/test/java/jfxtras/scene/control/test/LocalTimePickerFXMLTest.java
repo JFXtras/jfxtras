@@ -40,7 +40,7 @@ import javafx.scene.text.Text;
 import jfxtras.fxml.JFXtrasBuilderFactory;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
-import jfxtras.util.PlatformUtil;
+import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -94,7 +94,7 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 		Assert.assertEquals(1, lLocalTimePicker.getMinuteStep().intValue());
 		
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lLocalTimePicker.setLocalTime(LocalTime.of(20, 30, 00));			
 		});
 		
@@ -133,7 +133,7 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 		Text lLabelText = (Text)find(".timeLabel");
 		
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lLocalTimePicker.setLocalTime(LocalTime.of(20, 30, 00));			
 		});
 		

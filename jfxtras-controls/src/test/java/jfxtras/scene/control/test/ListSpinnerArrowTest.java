@@ -71,7 +71,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	public void navigateUpDownThroughTheValuesCyclic()
 	{
 		// horizontal is the default
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// the CSS change is not processed correctly?
 			//spinner.setStyle("-fxx-arrow-direction: " + ListSpinnerSkin.ArrowDirection.VERTICAL);
 			((ListSpinnerSkin)spinner.getSkin()).arrowDirectionProperty().set(ListSpinnerSkin.ArrowDirection.VERTICAL);
@@ -127,7 +127,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	public void navigateUpDownThroughTheValuesNonCyclic()
 	{
 		// horizontal is the default
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// the CSS change is not processed correctly?
 			//spinner.setStyle("-fxx-arrow-direction: " + ListSpinnerSkin.ArrowDirection.VERTICAL);
 			((ListSpinnerSkin)spinner.getSkin()).arrowDirectionProperty().set(ListSpinnerSkin.ArrowDirection.VERTICAL);

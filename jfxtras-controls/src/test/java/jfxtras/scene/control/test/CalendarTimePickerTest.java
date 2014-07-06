@@ -87,7 +87,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 	public void locale()
 	{
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 20, 30, 00));			
 		});
 		
@@ -98,7 +98,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// change locale
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTimePicker.setLocale(Locale.GERMAN);			
 		});
 		
@@ -114,7 +114,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 	public void slide()
 	{
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));			
 		});
 		
@@ -144,7 +144,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 	public void slideStep15()
 	{
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));
 			calendarTimePicker.setMinuteStep(15);
 			calendarTimePicker.setSecondStep(15);
@@ -191,7 +191,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		int lCallbackCount = 0;
 
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));			
 		});
 		

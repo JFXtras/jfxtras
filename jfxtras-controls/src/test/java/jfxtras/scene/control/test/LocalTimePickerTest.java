@@ -40,7 +40,6 @@ import javafx.scene.text.Text;
 import jfxtras.scene.control.LocalTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -86,7 +85,7 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 	public void slide()
 	{
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localTimePicker.setLocalTime(LocalTime.of(12, 30, 00));			
 		});
 		
@@ -117,7 +116,7 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 	public void slideStep15()
 	{
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localTimePicker.setLocalTime(LocalTime.of(12, 30, 00));			
 			localTimePicker.setMinuteStep(15);
 			localTimePicker.setSecondStep(15);
@@ -160,7 +159,7 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 		Text lLabelText = (Text)find(".timeLabel");
 		
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localTimePicker.setLocalTime(LocalTime.of(20, 30, 00));			
 		});
 		
@@ -168,7 +167,7 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("8:30 PM", lLabelText.getText());
 		
 		// change locale
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localTimePicker.setLocale(Locale.GERMAN);			
 		});
 		
@@ -194,7 +193,7 @@ public class LocalTimePickerTest extends JFXtrasGuiTest {
 		int lCallbackCount = 0;
 
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localTimePicker.setLocalTime(LocalTime.of(12, 30, 00));			
 		});
 		

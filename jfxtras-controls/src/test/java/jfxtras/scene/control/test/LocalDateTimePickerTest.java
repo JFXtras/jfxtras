@@ -40,7 +40,6 @@ import javafx.scene.layout.VBox;
 import jfxtras.scene.control.LocalDateTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -122,7 +121,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 
 		// set a value
 		final LocalDateTime lLocalDateTime = LocalDateTime.of(2013, 01, 01, 12, 34, 56);
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localDateTimePicker.setLocalDateTime( lLocalDateTime );
 		});
 		Assert.assertEquals("2013-01-01T12:34:56", localDateTimePicker.getLocalDateTime().toString());
@@ -152,7 +151,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(localDateTimePicker.getLocalDateTime());
 
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			localDateTimePicker.setAllowNull(false);
 		});
@@ -178,7 +177,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		// first of January
 		Assert.assertEquals("2013-01-01T00:00", localDateTimePicker.getLocalDateTime().toString());		
 
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			// show time
 			localDateTimePicker.setAllowNull(false);
 		});
@@ -239,7 +238,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 	public void disabledCalendars()
 	{
 		// disable 2nd of January
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			localDateTimePicker.disabledLocalDateTimes().add(LocalDateTime.of(2013, 01, 02, 00, 00, 00));
 		});
 

@@ -121,7 +121,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 		type("2010");
 		click(".button"); //just to move the focus
 		Assert.assertEquals("2010-01-01T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
-		PlatformUtil.runAndWait(() -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lTextField.clear();
 		});
 		
@@ -130,7 +130,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 		type("2010-06");
 		click(".button"); //just to move the focus
 		Assert.assertEquals("2010-06-01T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
-		PlatformUtil.runAndWait(() -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lTextField.clear();
 		});
 		
@@ -139,7 +139,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 		type("2010-06-12");
 		click(".button"); //just to move the focus
 		Assert.assertEquals("2010-06-12T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
-		PlatformUtil.runAndWait(() -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lTextField.clear();
 		});
 	}

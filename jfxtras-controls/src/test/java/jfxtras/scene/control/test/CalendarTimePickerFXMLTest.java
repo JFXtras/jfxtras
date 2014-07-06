@@ -32,7 +32,6 @@ package jfxtras.scene.control.test;
 import java.io.IOException;
 import java.net.URL;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -40,6 +39,7 @@ import javafx.scene.text.Text;
 import jfxtras.fxml.JFXtrasBuilderFactory;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
+import jfxtras.test.TestUtil;
 import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
@@ -59,8 +59,6 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 	public Parent getRootNode() 
 	{
 		try {
-			Locale.setDefault(Locale.ENGLISH);
-			
 	    	// load FXML
 			String lName = this.getClass().getSimpleName() + ".fxml";
 			URL lURL = this.getClass().getResource(lName);
@@ -92,7 +90,7 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 		Assert.assertEquals(1, lCalendarTimePicker.getMinuteStep().intValue());
 		
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lCalendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 20, 30, 00));			
 		});
 		
@@ -131,7 +129,7 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 		Text lLabelText = (Text)find(".timeLabel");
 		
 		// set time to 12:30:00
-		PlatformUtil.runAndWait( () -> {
+		TestUtil.runThenWaitForPaintPulse( () -> {
 			lCalendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 20, 30, 00));			
 		});
 		
