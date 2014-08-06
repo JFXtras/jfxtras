@@ -116,7 +116,7 @@ public class CalendarTextField extends Control
 			super.set(value);
 			if (dateFormatManual == false)
 			{
-				setDateFormat( SimpleDateFormat.getDateInstance(DateFormat.LONG, value) );
+				setDateFormat( getShowTime() ? SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG, value) : SimpleDateFormat.getDateInstance(DateFormat.LONG, value) );
 			}
 		}
 	};
@@ -126,7 +126,17 @@ public class CalendarTextField extends Control
 	
 	/** ShowTime */
 	public ObjectProperty<Boolean> showTimeProperty() { return showTimeObjectProperty; }
-	volatile private ObjectProperty<Boolean> showTimeObjectProperty = new SimpleObjectProperty<Boolean>(this, "showTime", false);
+	volatile private ObjectProperty<Boolean> showTimeObjectProperty = new SimpleObjectProperty<Boolean>(this, "showTime", false)
+	{
+		public void set(Boolean value)
+		{
+			super.set(value);
+			if (dateFormatManual == false)
+			{
+				setDateFormat( getShowTime() ? SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG,  getLocale()) : SimpleDateFormat.getDateInstance(DateFormat.LONG,  getLocale()) );
+			}
+		}
+	};
 	public Boolean getShowTime() { return showTimeObjectProperty.getValue(); }
 	public void setShowTime(Boolean value) { showTimeObjectProperty.setValue(value); }
 	public CalendarTextField withShowTime(Boolean value) { setShowTime(value); return this; }
@@ -140,7 +150,7 @@ public class CalendarTextField extends Control
 	{
 		public void set(DateFormat value)
 		{
-			super.set( value != null ? value : SimpleDateFormat.getDateInstance(DateFormat.LONG, getLocale()));
+			super.set( value != null ? value : getShowTime() ? SimpleDateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.LONG, getLocale()) : (SimpleDateFormat.getDateInstance(DateFormat.LONG, getLocale())));
 			dateFormatManual = (value != null);
 		}
 	};
