@@ -61,6 +61,7 @@ public class LocalDateTextFieldSkin extends SkinBase<LocalDateTextField>
 		createNodes();
 		
 		// basic control binding
+		calendarTextField.setShowTime(false);
 		calendarTextField.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
 		calendarTextField.getStyleClass().addAll(getSkinnable().getStyleClass());
 		calendarTextField.styleProperty().bindBidirectional( getSkinnable().styleProperty() );

@@ -124,6 +124,13 @@ public class CalendarTextField extends Control
 	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
 	public CalendarTextField withLocale(Locale value) { setLocale(value); return this; } 
 	
+	/** ShowTime */
+	public ObjectProperty<Boolean> showTimeProperty() { return showTimeObjectProperty; }
+	volatile private ObjectProperty<Boolean> showTimeObjectProperty = new SimpleObjectProperty<Boolean>(this, "showTime", false);
+	public Boolean getShowTime() { return showTimeObjectProperty.getValue(); }
+	public void setShowTime(Boolean value) { showTimeObjectProperty.setValue(value); }
+	public CalendarTextField withShowTime(Boolean value) { setShowTime(value); return this; }
+
 	/** 
 	 * The DateFormat used to render/parse the date in the textfield.
 	 * It is allow to show time as well for example by SimpleDateFormat.getDateTimeInstance().

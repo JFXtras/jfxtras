@@ -64,6 +64,7 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 		createNodes();
 		
 		// basic control binding
+		calendarTextField.setShowTime(true);
 		calendarTextField.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
 		calendarTextField.getStyleClass().addAll(getSkinnable().getStyleClass());
 		calendarTextField.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
@@ -103,8 +104,8 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 	 */
 	private void createNodes()
 	{
-		// setup the grid so all weekday togglebuttons will grow, but the weeknumbers do not
-		calendarTextField = new CalendarTextField(); // TODO this is not right
+		// we use our universal control
+		calendarTextField = new CalendarTextField();
 		getChildren().add(calendarTextField);
 		
 		// setup CSS

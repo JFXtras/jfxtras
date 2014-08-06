@@ -407,6 +407,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		// add timepicker
 		Bindings.bindBidirectional(timePicker.calendarProperty(), getSkinnable().calendarProperty());
 		Bindings.bindBidirectional(timePicker.valueValidationCallbackProperty(), getSkinnable().valueValidationCallbackProperty());
+		Bindings.bindBidirectional(timePicker.localeProperty(), getSkinnable().localeProperty());
 
 		// add to self
         getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control

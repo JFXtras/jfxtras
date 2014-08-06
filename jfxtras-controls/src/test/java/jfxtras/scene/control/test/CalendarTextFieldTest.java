@@ -109,6 +109,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// switch to datetime mode
 		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setShowTime(true);
 			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
 		});
 		
@@ -156,6 +157,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// switch to datetime mode
 		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setShowTime(true);
 			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
 		});
 		
@@ -186,6 +188,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// set a value
 		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setShowTime(true);
 			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
 		});
 		
@@ -216,6 +219,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// set a value
 		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setShowTime(true);
 			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
 		});
 		
@@ -247,6 +251,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// set a value
 		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setShowTime(true);
 			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
 		});
 		

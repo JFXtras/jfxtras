@@ -160,8 +160,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 				int lField = Calendar.DATE;
 				if (keyEvent.isShiftDown() == false && keyEvent.isControlDown()) lField = Calendar.MONTH;
 				if (keyEvent.isShiftDown() == false && keyEvent.isAltDown()) lField = Calendar.YEAR;
-				if (keyEvent.isShiftDown() == true && keyEvent.isControlDown() && isShowingTime()) lField = Calendar.HOUR_OF_DAY;
-				if (keyEvent.isShiftDown() == true && keyEvent.isAltDown() && isShowingTime()) lField = Calendar.MINUTE;
+				if (keyEvent.isShiftDown() == true && keyEvent.isControlDown() &&  getSkinnable().getShowTime()) lField = Calendar.HOUR_OF_DAY;
+				if (keyEvent.isShiftDown() == true && keyEvent.isAltDown() &&  getSkinnable().getShowTime()) lField = Calendar.MINUTE;
 				lCalendar.add(lField, keyEvent.getCode() == KeyCode.UP ? 1 : -1);
 				
 				// set it
@@ -309,18 +309,6 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		} 
 	}
 	
-	/**
-	 * Detect if the control is showing time or not
-	 * This is done by formatting a date with contains a time and checking the formatted string if the values for time are present 
-	 * @return
-	 */
-	private boolean isShowingTime()
-	{
-		String lDateAsString = getSkinnable().dateFormatProperty().get().format(DATE_WITH_TIME);
-		return lDateAsString.contains("2");
-	}
-	private final static Date DATE_WITH_TIME = new GregorianCalendar(1111,0,1,2,2,2).getTime();
-	
 	/*
 	 * 
 	 */
@@ -367,7 +355,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		BorderPane lBorderPane = new BorderPane();
 		lBorderPane.getStyleClass().add(this.getClass().getSimpleName() + "_popup");
 		lBorderPane.setCenter(calendarPicker);
-		calendarPicker.showTimeProperty().set( isShowingTime() );
+		calendarPicker.showTimeProperty().set( getSkinnable().getShowTime() );
 		
 		// because the Java 8 DateTime classes use the CalendarPicker, we need to add some specific CSS classes here to support seamless CSS
 		if (getSkinnable().getStyleClass().contains(LocalDateTextField.class.getSimpleName())) {
@@ -378,7 +366,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		}
 		
 		// add a close and accept button if we're showing time
-		if (isShowingTime())
+		if ( getSkinnable().getShowTime())
 		{
 			VBox lVBox = new VBox(); 
 			lBorderPane.rightProperty().set(lVBox);
@@ -403,7 +391,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		
 		// if a value is selected in date mode, immediately close the popup
 		calendarPicker.calendarProperty().addListener( (observable) -> {
-			if (lPopup != null && isShowingTime() == false && lPopup.isShowing()) {
+			if (lPopup != null &&  getSkinnable().getShowTime() == false && lPopup.isShowing()) {
 				lPopup.hide(); 
 			}
 		});
@@ -411,7 +399,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// when the popup is hidden 
 		lPopup.setOnHiding( (windowEvent) -> {
 			// and time is not shown, the value must be set into the textfield
-			if (isShowingTime() == false) {
+			if ( getSkinnable().getShowTime() == false) {
 				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
 			}
 			// but at least the textfield must be enabled again
