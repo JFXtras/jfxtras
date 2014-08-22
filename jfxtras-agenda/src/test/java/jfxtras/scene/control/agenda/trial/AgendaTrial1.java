@@ -1,5 +1,5 @@
 /**
- * AgendaTrial2.java
+ * AgendaTrial1.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.agenda.test;
+package jfxtras.scene.control.agenda.trial;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -37,30 +37,21 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javafx.animation.FadeTransitionBuilder;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Popup;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import javafx.util.Duration;
-import jfxtras.scene.control.CalendarPicker;
+import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.control.agenda.Agenda;
-import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.Agenda.CalendarRange;
-import jfxtras.util.NodeUtil;
 
 /**
  * @author Tom Eugelink
  */
-public class AgendaTrial2 extends Application {
+public class AgendaTrial1 extends Application {
 	
     public static void main(String[] args) {
         launch(args);       
@@ -69,85 +60,10 @@ public class AgendaTrial2 extends Application {
 	@Override
 	public void start(Stage stage) {
 
-        // create agenda
+        // add a node
 		final Agenda lAgenda = new Agenda();		
+//    	lAgenda.setLocale(new java.util.Locale("de")); // weeks starts on monday
 		
-		// create calendar picker
-		CalendarPicker lCalendarPicker = new CalendarPicker();
-		lCalendarPicker.setCalendar(Calendar.getInstance()); // set to today
-		
-		// bind picker to agenda
-		lAgenda.displayedCalendar().bind(lCalendarPicker.calendarProperty());
-		
-		// image
-		final ImageView lImageView = new ImageView();
-		lImageView.setId("TheImage");
-        
-        // layout scene
-        BorderPane lBorderPane = new BorderPane();
-        lBorderPane.setCenter(lAgenda);
-	        VBox lVBox = new VBox();
-	        lVBox.getChildren().add(lCalendarPicker);        
-	        lVBox.getChildren().add(lImageView);
-        lBorderPane.setLeft(lVBox);
-        lBorderPane.getStyleClass().add("screen");
-        
-        // setup scene
-		Scene scene = new Scene(lBorderPane, 1000, 600);
-		
-		// load custom CSS
-        scene.getStylesheets().addAll(this.getClass().getResource(this.getClass().getSimpleName() + ".css").toExternalForm());
-//        try
-//		{
-////    		File f = new File("/Documents and Settings/User/My Documents/jfxtras-styles/src/jmetro/JMetroLightTheme.css");
-//    		File f = new File("/Documents and Settings/User/My Documents/jfxtras-styles/src/jmetro/JMetroDarkTheme.css");
-//			scene.getStylesheets().addAll(f.toURI().toURL().toExternalForm());
-//		}
-//		catch (MalformedURLException e) { e.printStackTrace(); }
-
-        // create stage
-        stage.setTitle(this.getClass().getSimpleName());
-        stage.setScene(scene);
-        stage.show();	
-
-        
-        // appear animation on image
-        lImageView.opacityProperty().set(0.0); // hide image
-        FadeTransitionBuilder.create()
-        	.node(lImageView)
-        	.delay(Duration.millis(2000))
-        	.fromValue(0.0)
-        	.toValue(1.0)
-        	.duration(Duration.millis(2000))
-        	.build()
-        	.play();
-        
-        lAgenda.editAppointmentCallbackProperty().set(new Callback<Agenda.Appointment, Void>()
-		{
-			@Override
-			public Void call(final Appointment appointment)
-			{
-				// create popup
-				final Popup lPopup = new Popup();
-				Button lButton = new Button("Close custom popup");
-				lButton.setPrefWidth(lImageView.getImage().getWidth());
-				lButton.setPrefHeight(lImageView.getImage().getHeight());
-				lButton.setOnAction(new EventHandler<ActionEvent>()
-				{
-					@Override
-					public void handle(ActionEvent evt)
-					{
-						lPopup.hide();
-						appointment.setSummary("custom popup");
-						lAgenda.refresh();
-					}
-				});
-				lPopup.getContent().add(lButton);
-				lPopup.show(lImageView, NodeUtil.screenX(lImageView), NodeUtil.screenY(lImageView));
-				return null;
-			}
-		});
-        
 		// setup appointment groups
 		final Map<String, Agenda.AppointmentGroup> lAppointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
 		lAppointmentGroupMap.put("group00", new Agenda.AppointmentGroupImpl().withStyleClass("group0"));
@@ -277,6 +193,18 @@ public class AgendaTrial2 extends Application {
 				.withDescription("A description 4")
 				.withAppointmentGroup(lAppointmentGroupMap.get("group07"))
 		, 	new Agenda.AppointmentImpl()
+				.withStartTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 8, 10))
+				.withEndTime(null)
+				.withSummary("K asfsfd dsfsdfs fsfds sdgsds dsdfsd ")
+				.withDescription("A description 4")
+				.withAppointmentGroup(lAppointmentGroupMap.get("group07"))
+		, 	new Agenda.AppointmentImpl()
+				.withStartTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 19, 00))
+				.withEndTime(null)
+				.withSummary("L asfsfd dsfsdfs fsfds sdgsds dsdfsd ")
+				.withDescription("A description 4")
+				.withAppointmentGroup(lAppointmentGroupMap.get("group07"))
+		, 	new Agenda.AppointmentImpl()
 				.withStartTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 15, 00))
 				.withEndTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 16, 00))
 				.withSummary("I")
@@ -318,7 +246,7 @@ public class AgendaTrial2 extends Application {
 				.withStartTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay + 1))
 				.withSummary("all day")
 				.withDescription("A description3")
-				.withAppointmentGroup(lAppointmentGroupMap.get("group22"))
+				.withAppointmentGroup(lAppointmentGroupMap.get("group03"))
 				.withWholeDay(true)
 		);
 		final String lIpsum = "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus";
@@ -335,10 +263,11 @@ public class AgendaTrial2 extends Application {
 			.withEndTime(lEnd)
 			.withSummary(lIpsum.substring(0, new Random().nextInt(50)))
 			.withDescription(lIpsum.substring(0, 10 + new Random().nextInt(lIpsum.length() - 10)))
-			.withAppointmentGroup(lAppointmentGroupMap.get("group1" + (new Random().nextInt(3) + 1)));
+			.withAppointmentGroup(lAppointmentGroupMap.get("group0" + (new Random().nextInt(3) + 1)));
 			
 			lAgenda.appointments().add(lAppointment);
-		}		
+		}
+		
 
 		// update range
 		final AtomicBoolean lSkippedFirstRangeChange = new AtomicBoolean(false);		
@@ -356,7 +285,7 @@ public class AgendaTrial2 extends Application {
 				
 				// add a whole bunch of random appointments
 				lAgenda.appointments().clear();
-				for (int i = 0; i < 10; i++)
+				for (int i = 0; i < 20; i++)
 				{
 					Calendar lFirstDayOfWeekCalendar = getFirstDayOfWeekCalendar(lAgenda.getLocale(), lAgenda.getDisplayedCalendar());
 					
@@ -380,18 +309,25 @@ public class AgendaTrial2 extends Application {
 				return null;
 			}
 		});
+		
+		HBox lHBox = new HBox();
+		CalendarTextField lCalendarTextField = new CalendarTextField();
+		lCalendarTextField.calendarProperty().bindBidirectional(lAgenda.displayedCalendar());		
+        lHBox.getChildren().add(lCalendarTextField);
+        
+        // create scene
+        BorderPane lBorderPane = new BorderPane();
+        lBorderPane.setCenter(lAgenda);
+        lBorderPane.setBottom(lHBox);
+        //lBorderPane.setLeft(new Label("AAAAAAA"));
+        Scene scene = new Scene(lBorderPane, 900, 900);
+
+        // create stage
+        stage.setTitle(this.getClass().getSimpleName());
+        stage.setScene(scene);
+        stage.show();	
     }
 	
-//  Timeline lTimeline = new Timeline();
-//  lImageView.opacityProperty().set(0.0);
-//  final KeyValue lKeyValueOpacity = new KeyValue(lImageView.opacityProperty(), 1.0);
-//  final KeyFrame lKeyFrame1 = new KeyFrame(Duration.millis(500), lKeyValueOpacity);
-//  lTimeline.getKeyFrames().addAll(lKeyFrame1);
-//  lTimeline.delayProperty().set(Duration.millis(2000));
-//  lTimeline.play();
-  
-//  lVBox.getChildren().add(new ToggleButton("test"));
-
 	/**
 	 * get the calendar for the first day of the week
 	 */

@@ -29,6 +29,7 @@
 
 package jfxtras.test;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -179,6 +180,22 @@ public class TestUtil {
 		if (value == null) return "null";
 		SimpleDateFormat lSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
+	}
+	
+	/**
+	 * 
+	 */
+	static public Calendar quickParseCalendarFromDateTime(String value) {
+		try {
+			if (value == null) return null;
+			SimpleDateFormat lSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+			Calendar c = Calendar.getInstance();
+			c.setTime( lSimpleDateFormat.parse(value) );
+			return c;
+		}
+		catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	/**

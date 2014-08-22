@@ -39,7 +39,6 @@ import jfxtras.internal.scene.control.skin.ListSpinnerSkin;
 import jfxtras.scene.control.ListSpinner;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;

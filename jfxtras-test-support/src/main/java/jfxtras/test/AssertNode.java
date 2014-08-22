@@ -71,20 +71,37 @@ public class AssertNode {
 			
 			// output an assertline
 			System.out.print("new AssertNode(" + paneVariableName + ".getChildren().get(" + idx + "))");
-			for (A a : lAsserts) {
-				if (a == A.XYWH) {
-					System.out.print(lNewline + ".assertXYWH(" + lNode.getLayoutX() + ", " + lNode.getLayoutY() + ", " + width(lNode) + ", " + height(lNode) + ", 0.01)");
-				}
-				if (a == A.CLASS) {
-					System.out.print(lNewline + ".assertClass(" + lNode.getClass().getName() + ".class)");
-				}
-				if (a == A.CLASSNAME) {
-					System.out.print(lNewline + ".assertClassName(\"" + lNode.getClass().getName() + "\")");
-				}
-			}
+			generateAsserts(lNode, lNewline, lAsserts);
 			System.out.println(";");
 			
 			idx++;
+		}
+	}
+	
+	static public void generateSource(String variableName, Node node, List<String> excludedNodeClasses, boolean newline, A... asserts) {
+		
+		// init
+		String lNewline = (newline ? "\n    " : "");
+		// if no asserts are specified, use the default
+		List<A> lAsserts = Arrays.asList( (asserts != null && asserts.length > 0 ? asserts : new A[]{A.XYWH, A.CLASS}) );
+		
+		// output an assertline
+		System.out.print("new AssertNode(" + variableName + ")");
+		generateAsserts(node, lNewline, lAsserts);
+		System.out.println(";");
+	}
+
+	private static void generateAsserts(Node node, String newline, List<A> asserts) {
+		for (A a : asserts) {
+			if (a == A.XYWH) {
+				System.out.print(newline + ".assertXYWH(" + node.getLayoutX() + ", " + node.getLayoutY() + ", " + width(node) + ", " + height(node) + ", 0.01)");
+			}
+			if (a == A.CLASS) {
+				System.out.print(newline + ".assertClass(" + node.getClass().getName() + ".class)");
+			}
+			if (a == A.CLASSNAME) {
+				System.out.print(newline + ".assertClassName(\"" + node.getClass().getName() + "\")");
+			}
 		}
 	}
 }

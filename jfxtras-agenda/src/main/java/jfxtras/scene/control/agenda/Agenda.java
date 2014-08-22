@@ -74,6 +74,9 @@ public class Agenda extends Control
 	 */
 	private void construct()
 	{
+		// pref size
+		setPrefSize(1000, 800);
+		
 		// setup the CSS
 		// the -fx-skin attribute in the CSS sets which Skin class is used
 		this.getStyleClass().add(this.getClass().getSimpleName());
