@@ -41,7 +41,6 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.AssertNode;
-import jfxtras.test.AssertNode.A;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 import junit.framework.Assert;
@@ -98,6 +97,55 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	VBox vbox = new VBox();
     final private Map<String, Agenda.AppointmentGroup> appointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
 	private Agenda agenda = null;
+
+	/**
+	 * 
+	 */
+	@Test
+	public void renderRegularAppointment()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImpl()
+	            .withStartTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T10:00:00.000"))
+	            .withEndTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T12:00:00.000"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+		});
+				
+		Node n = (Node)find("#RegularAppointmentPane1");
+		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+		//TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void renderWholeDayAppointment()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImpl()
+	            .withStartTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T10:00:00.000"))
+	            .withEndTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T12:00:00.000"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+	            .withWholeDay(true)
+            );
+		});
+			
+		{
+			Node n = (Node)find("#WholedayAppointmentPane1");
+			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.0, 0.01);
+		}
+		{
+			Node n = (Node)find("#AppointmentHeaderPane1");
+			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			new AssertNode(n).assertXYWH(0.0, 23.94140625, 135.21763392857142, 20.9609375, 0.01);
+		}
+		//TestUtil.sleep(3000);
+	}
+
 
 	/**
 	 * 
@@ -254,13 +302,47 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 				
 		{
 			Node n = (Node)find("#RegularAppointmentPane1");
-			//AssertNode.generateSource("n", n, null, false, A.XYWH);
+			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.A.XYWH);
 			new AssertNode(n).assertXYWH(0.5, 419.5, 110.0, 84.0, 0.01);
 		}
 		{
 			Node n = (Node)find("#RegularAppointmentPane2");
-			//AssertNode.generateSource("n", n, null, false, A.XYWH);
+			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.A.XYWH);
 			new AssertNode(n).assertXYWH(62.5, 461.5, 63.0, 84.0, 0.01);
+		}
+		//TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void toggleWholedayInMenu()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImpl()
+	            .withStartTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T10:00:00.000"))
+	            .withEndTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T12:00:00.000"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+		});
+
+		click("#RegularAppointmentPane1 .MenuIcon");
+		click("#wholeday-checkbox");
+		click(".close-icon");
+		Assert.assertEquals(1, agenda.appointments().size() );
+		Assert.assertEquals(true, agenda.appointments().get(0).isWholeDay().booleanValue() );
+
+		// this not only checks if the appointment was changed, but also if it was rerendered
+		{
+			Node n = (Node)find("#WholedayAppointmentPane1");
+			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.0, 0.01);
+		}
+		{
+			Node n = (Node)find("#AppointmentHeaderPane1");
+			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			new AssertNode(n).assertXYWH(0.0, 23.94140625, 135.21763392857142, 20.9609375, 0.01);
 		}
 		//TestUtil.sleep(3000);
 	}

@@ -391,7 +391,7 @@ implements Agenda.AgendaSkin
 			
 			// for all wholeday appointments on the day pane, create a header appointment pane as well
 			for (WholedayAppointmentPane lAppointmentPane : dayPane.wholedayAppointmentPanes) {
-				AppointmentHeaderPane lAppointmentHeaderPane = new AppointmentHeaderPane(lAppointmentPane.appointment); 
+				AppointmentHeaderPane lAppointmentHeaderPane = new AppointmentHeaderPane(lAppointmentPane.appointment);
 				getChildren().add(lAppointmentHeaderPane);				
 				appointmentHeaderPanes.add(lAppointmentHeaderPane);
 				lAppointmentHeaderPane.setId(lAppointmentHeaderPane.getClass().getSimpleName() + appointmentHeaderPanes.size());
@@ -1660,6 +1660,7 @@ implements Agenda.AgendaSkin
 		if ((abstractAppointmentPane.appointment.isWholeDay() != null && abstractAppointmentPane.appointment.isWholeDay() == true) || abstractAppointmentPane.appointment.getEndTime() != null)
 		{
 			final CheckBox lWholedayCheckBox = new CheckBox("Wholeday");
+			lWholedayCheckBox.setId("wholeday-checkbox");
 			lWholedayCheckBox.selectedProperty().set(abstractAppointmentPane.appointment.isWholeDay());
 			lMenuVBox.getChildren().add(lWholedayCheckBox);
 			lWholedayCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>()

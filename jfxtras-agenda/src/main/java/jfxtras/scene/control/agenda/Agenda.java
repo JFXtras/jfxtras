@@ -45,14 +45,31 @@ import javafx.util.Callback;
  * This controls renders appointments similar to Google Calendar.
  * Normally this would be called a Calendar, but since there are controls like CalendarPicker, this would be confusing, hence the name "Agenda".
  * 
- * The control has a list of appointments and a calendar (date) that should be displayed.
- * The skin will use the calendar to display the appropriate time frames and then it scans the list of appointments and display those that are visible.
+ * The control has a list of appointments (classes implementing the Agenda.Appointment interface) and a calendar (date) that should be displayed.
+ * The the appropriate appointments for the displayed time frame will be rendered.
+ * The coder could provide all appointments in one big list, but that may be a bit memory heavy.
+ * An alternative is to register to the displayedCalendar property and upon change update the appointment collection to match the time frame.
  * 
- * You could provide all available appointments in one big list, but that may be a bit memory heavy.
- * An alternative is to register to the displayedCalendar property and upon change update the appointment collection.
- * A drawback of this approach is that you need to know what skin (day, week, ...) is active, so the correct set is provided, but most of the time this is known to the coder.
- * Therefore all skins are obligated to report the range they display via the calendarRangeCallback.
- * So if the calendar changes, the skin adapts and reports the new range via the callback, through which the coder can set the correct appointments.
+ * Each appointment must have an appointment group, this is a class implementing the Agenda.AppointmentGroup interface (Agenda.AppointmentGroupImpl is available).
+ * The most important thing this class provides is a style class name which takes care of the rendering (color) of all appointments in that group.
+ * Per default agenda has style classes defined, called group0 .. group23. 
+ * 
+ * A new appointment can be added by click-and-drag, but only if a createAppointmentCallbackProperty() is set. 
+ * This method should return a new appointment object, for example:
+ * [source,java]
+ * --
+ *      agenda.createAppointmentCallbackProperty().set(new Callback<Agenda.CalendarRange, Agenda.Appointment>() {
+ *           @Override
+ *           public Agenda.Appointment call(Agenda.CalendarRange calendarRange) {
+ *               return new Agenda.AppointmentImpl()
+ *                       .withStartTime(calendarRange.getStartCalendar())
+ *                       .withEndTime(calendarRange.getEndCalendar())
+ *                       .withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass("group1")); // it is better to have a map of appointment groups to get from
+ *           }
+ *       });
+ * --
+ * 
+ * Agenda has a default implementation of the Agenda.Appointment interface, in the form of Agenda.AppointmentImpl.
  *
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
