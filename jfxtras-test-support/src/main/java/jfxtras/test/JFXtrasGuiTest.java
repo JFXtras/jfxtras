@@ -94,13 +94,8 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 	}
 
 	protected void clear(Node textField) {
-		// then clear the textfield
 		click(textField);
-		// TODO: there must be a better way to do this
-		eraseCharacters(20);
-		for (int i = 0; i < 20; i++) {
-			type(KeyCode.RIGHT);
-			eraseCharacters(1);
-		}
+		push(KeyCode.CONTROL, KeyCode.A);
+		push(KeyCode.DELETE);
 	}
 }
