@@ -38,7 +38,6 @@ import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
@@ -84,22 +83,21 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January
-		click("#day2");
+		// TODO: should we rename the button as their date, so we can do: click("#2013-01-01")
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertEquals("2013-01-02", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January again
-		click("#day3");
+		// click again
+		click("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertNull(calendarPicker.getCalendar());
@@ -118,43 +116,40 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 
 		// the selected value should be changed, and because of multiple mode, there are two in calendars
 		Assert.assertEquals("2013-01-02", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01, 2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 4th of January
-		click("#day5");
+		click("#2013-01-04");
 
 		// the selected value should be changed, and because of multiple mode, there are three in calendars
 		Assert.assertEquals("2013-01-04", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January (unselecting it)
-		click("#day3");
+		// unselect
+		click("#2013-01-02");
 
 		// since the selected calendar was not unselected, it stays the samt
 		Assert.assertEquals("2013-01-04", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 4st of January (unselecting it)
-		click("#day5");
+		// unselect
+		click("#2013-01-04");
 
 		// the first value in the list should be selected
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 1th of January (unselecting it)
-		click("#day2");
+		// unselect
+		click("#2013-01-01");
 
 		// the first value in the list should be selected
 		Assert.assertNull(calendarPicker.getCalendar());
@@ -173,29 +168,26 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// shift click the 3rd of January
-		click("#day4", KeyCode.SHIFT);
+		click("#2013-01-03", KeyCode.SHIFT);
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 5th of January
-		click("#day6");
+		click("#2013-01-05");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-05", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03, 2013-01-05]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January (unselecting it)
-		click("#day3");
+		// unselect
+		click("#2013-01-02");
 
 		// since the selected calendar was not unselected, it stays the samt
 		Assert.assertEquals("2013-01-05", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
@@ -211,22 +203,20 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertEquals("2013-01-02", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January again
-		click("#day3");
+		// click again
+		click("#2013-01-02");
 
 		// the first value in the list should be selected
 		Assert.assertNull(calendarPicker.getCalendar());
@@ -245,36 +235,34 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// shift click the 3rd of January
-		click("#day4", KeyCode.SHIFT);
+		click("#2013-01-03", KeyCode.SHIFT);
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// shift click the 5th of January (extending the range)
-		click("#day6", KeyCode.SHIFT);
+		// extending the range
+		click("#2013-01-05", KeyCode.SHIFT);
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-05", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03, 2013-01-04, 2013-01-05]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 		
-		// click the 10th of January (switching to a single date)
-		click("#day11");
+		// switching to a single date
+		click("#2013-01-10");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-10", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 		Assert.assertEquals("[2013-01-10]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// shift click the 5th of January (selecting a range downwards)
-		click("#day6", KeyCode.SHIFT);
+		// selecting a range downwards
+		click("#2013-01-05", KeyCode.SHIFT);
 
 		// the last selected value should be set 
 		Assert.assertEquals("2013-01-05", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
@@ -288,14 +276,11 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 	public void singleModeWithTime()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			// show time
 			calendarPicker.setShowTime(true);
 		});
 		
-		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
-		// first of January at midnight
 		Assert.assertEquals("2013-01-01T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));		
 	}
 
@@ -306,7 +291,6 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 	public void singleModeWithTimeSlide()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			// show time
 			calendarPicker.setShowTime(true);
 		});
 		
@@ -345,7 +329,6 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarPicker.getCalendar());
 
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			// show time
 			calendarPicker.setAllowNull(false);
 		});
 		
@@ -364,19 +347,17 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// first of January
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));		
 
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			// show time
 			calendarPicker.setAllowNull(false);
 		});
 		
-		// click the 1st of January again (which would unselect in allow null mode)
-		click("#day2");
+		// click again (which would unselect in allow null mode)
+		click("#2013-01-01");
 
 		// first of January
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));		
@@ -445,7 +426,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("2013-01-01T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
 		
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals("2013-01-02T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
 	}
 
@@ -464,19 +445,19 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarPicker.getCalendar());
 
 		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 
 		// there should be no change
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 
 		// click the 35d of January
-		click("#day4");
+		click("#2013-01-03");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
@@ -503,22 +484,22 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarPicker.getCalendar());
 
 		// click the 1st of January: not valid
-		click("#day2");
+		click("#2013-01-01");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 3rd of January: not valid
-		click("#day4");
+		click("#2013-01-03");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 2nd of January again
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // reselecting does not add
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 	}
@@ -547,32 +528,32 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarPicker.getCalendar());
 
 		// click the 1st of January: not valid
-		click("#day2");
+		click("#2013-01-01");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 4th of January
-		click("#day5");
+		click("#2013-01-04");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 3rd of January: not valid
-		click("#day4");
+		click("#2013-01-03");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 2nd of January (unselecting it)
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
 		Assert.assertEquals("[2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 4st of January (unselecting it)
-		click("#day5");
+		click("#2013-01-04");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 		
@@ -602,17 +583,17 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarPicker.getCalendar());
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// shift click the 7th of January; 5th should be skipped
-		click("#day8", KeyCode.SHIFT);
+		click("#2013-01-07", KeyCode.SHIFT);
 		lCallbackCount += 5; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 7th are validated: 5 times  
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 5th of January: not valid
-		click("#day6");
+		click("#2013-01-05");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 	}
@@ -642,17 +623,17 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarPicker.getCalendar());
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// shift click the 7th of January
-		click("#day8", KeyCode.SHIFT);
+		click("#2013-01-05", KeyCode.SHIFT);
 		lCallbackCount += 3; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 5th are validated: 3 times, then in range mode the range is broken  
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
 		// click the 5th of January: not valid
-		click("#day6");
+		click("#2013-01-05");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 	}
@@ -683,7 +664,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarPicker.getCalendar());
 		
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02T00:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
 		

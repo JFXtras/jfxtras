@@ -31,6 +31,8 @@ package jfxtras.scene.control.test;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 import javafx.fxml.FXMLLoader;
@@ -86,8 +88,8 @@ public class LocalDatePickerFXMLTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(lLocalDatePicker.getLocalDate());
 
-		// click the last day in the first week (this button is always visible)
-		click("#id1 #day6");
+		// click the first of the displayed month		
+		click("#id1 #" + lLocalDatePicker.getDisplayedLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-01")));
 		
 		// default value is not null
 		Assert.assertNotNull(lLocalDatePicker.getLocalDate());

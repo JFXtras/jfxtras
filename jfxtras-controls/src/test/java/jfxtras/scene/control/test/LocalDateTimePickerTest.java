@@ -79,19 +79,19 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull( localDateTimePicker.getLocalDateTime());
 
 		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01T00:00", localDateTimePicker.getLocalDateTime().toString());
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertEquals("2013-01-02T00:00", localDateTimePicker.getLocalDateTime().toString());
 
 		// click the 2nd of January again
-		click("#day3");
+		click("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertNull( localDateTimePicker.getLocalDateTime());
@@ -104,7 +104,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 	public void singleModeWithTime()
 	{
 		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// first of January at midnight
 		Assert.assertEquals("2013-01-01T00:00", localDateTimePicker.getLocalDateTime().toString());		
@@ -172,7 +172,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDateTimePicker.getLocalDateTime());
 
 		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// first of January
 		Assert.assertEquals("2013-01-01T00:00", localDateTimePicker.getLocalDateTime().toString());		
@@ -183,7 +183,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		});
 		
 		// click the 1st of January again (which would unselect in allow null mode)
-		click("#day2");
+		click("#2013-01-01");
 
 		// first of January
 		Assert.assertEquals("2013-01-01T00:00", localDateTimePicker.getLocalDateTime().toString());		
@@ -246,19 +246,19 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDateTimePicker.getLocalDateTime());
 
 		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01T00:00", localDateTimePicker.getLocalDateTime().toString());
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 
 		// there should be no change
 		Assert.assertEquals("2013-01-01T00:00", localDateTimePicker.getLocalDateTime().toString());
 
 		// click the 35d of January
-		click("#day4");
+		click("#2013-01-03");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03T00:00", localDateTimePicker.getLocalDateTime().toString());
@@ -285,22 +285,22 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDateTimePicker.getLocalDateTime());
 
 		// click the 1st of January: not valid
-		click("#day2");
+		click("#2013-01-01");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertNull(localDateTimePicker.getLocalDateTime());
 
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("2013-01-02T00:00", localDateTimePicker.getLocalDateTime().toString());
 
 		// click the 3rd of January: not valid
-		click("#day4");
+		click("#2013-01-03");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("2013-01-02T00:00", localDateTimePicker.getLocalDateTime().toString());
 
 		// click the 2nd of January again
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // reselecting does not add
 		Assert.assertNull(localDateTimePicker.getLocalDateTime());
 	}
@@ -326,7 +326,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDateTimePicker.getLocalDateTime());
 		
 		// click the 2nd of January
-		click("#day3");
+		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("2013-01-02T00:00", localDateTimePicker.getLocalDateTime().toString());
 		

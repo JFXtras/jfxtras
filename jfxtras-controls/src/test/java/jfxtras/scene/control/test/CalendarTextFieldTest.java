@@ -291,7 +291,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		click(".icon");
 
 		// assert that the popup shows January 1st 2013 
-		Assert.assertTrue( ((ToggleButton)find("#day2")).isSelected() );
+		Assert.assertTrue( ((ToggleButton)find("#2013-01-01")).isSelected() );
 		Assert.assertEquals("January", ((Label)find("#monthListSpinner .label")).getText() );
 		Assert.assertEquals("2013", ((Label)find("#yearListSpinner .label")).getText() );
 	}
@@ -381,7 +381,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		click(".icon");
 
 		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 		
 		// value is null
 		Assert.assertNull(calendarTextField.getCalendar());
@@ -407,7 +407,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		click(".icon");
 
 		// click the 1st of January
-		click("#day2");
+		click("#2013-01-01");
 		
 		// value is still not null
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(lCalendar), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
@@ -500,7 +500,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		assertPopupIsVisible(find(".text-field"));
 		
 		// reselect 1st of January
-		click("#day2");
+		click("#2013-01-01");
 		
 		// popup should be closed
 		assertPopupIsNotVisible(find(".text-field"));

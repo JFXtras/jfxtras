@@ -31,6 +31,8 @@ package jfxtras.scene.control.test;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -94,7 +96,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 		click(".icon");
 
 		// click the last day in the first week (this button is always visible)
-		click("#day6");
+		click("#" + new SimpleDateFormat("yyyy-MM-01").format(Calendar.getInstance().getTime()));
 
 		// default value is not null
 		Assert.assertNotNull(lCalendarTextField.getCalendar());

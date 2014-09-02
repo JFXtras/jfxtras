@@ -31,6 +31,7 @@ package jfxtras.scene.control.test;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import javafx.fxml.FXMLLoader;
@@ -87,8 +88,8 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(lCalendarPicker.getCalendar());
 
-		// click the last day in the first week (this button is always visible)
-		click("#id1 #day6");
+		// click the first of the displayed month		
+		click("#id1 #" + new SimpleDateFormat("yyyy-MM-01").format(lCalendarPicker.getDisplayedCalendar().getTime()));
 		
 		// default value is not null
 		Assert.assertNotNull(lCalendarPicker.getCalendar());

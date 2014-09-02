@@ -229,6 +229,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
     public final DateFormat getLabelDateFormat() { return labelDateFormat == null ? LABEL_DATEFORMAT_DEFAULT : labelDateFormat.get(); }
     public final CalendarPickerControlSkin withLabelDateFormat(DateFormat value) { setLabelDateFormat(value); return this; }
     static private final SimpleDateFormat LABEL_DATEFORMAT_DEFAULT = new SimpleDateFormat("d");
+    static private final SimpleDateFormat ID_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
     
     // ----------------------------
     // communicate the styleables
@@ -833,7 +834,9 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		// hide the preceeding buttons
 		for (int i = 0; i < lFirstOfMonthIdx; i++)
 		{
-			dayButtons.get(i).setVisible(false);
+			ToggleButton lToggleButton = dayButtons.get(i); 
+			lToggleButton.setVisible(false);
+			lToggleButton.setId("day" + i);
 		}
 		// make all weeklabels invisible
 		for (int i = 1; i < 6; i++)
@@ -854,6 +857,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 
 			// update the button
 			ToggleButton lToggleButton = dayButtons.get(lIdx); 
+			lToggleButton.setId(ID_DATEFORMAT.format(lCalendar.getTime()));
 			lToggleButton.setVisible(true);
 			lToggleButton.setText(getLabelDateFormat().format(lCalendar.getTime()));
 			lToggleButton.setAlignment(Pos.BASELINE_CENTER);
@@ -882,7 +886,9 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		// hide the trailing buttons
 		for (int i = lFirstOfMonthIdx + lDaysInMonth; i < 6*7; i++)
 		{
-			dayButtons.get(i).setVisible(false);
+			ToggleButton lToggleButton = dayButtons.get(i); 
+			lToggleButton.setVisible(false);
+			lToggleButton.setId("day" + i);
 		}
 	}
 
