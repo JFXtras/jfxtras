@@ -413,7 +413,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// set a value
+		// set a value and a format
 		final Calendar lCalendar = new GregorianCalendar(2013, 00, 01, 12, 34, 56);
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarPicker.setShowTime(true);
@@ -424,8 +424,8 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 			calendarPicker.setCalendar( (Calendar)lCalendar.clone() );
 		});
 		Assert.assertEquals("2013-01-01T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
-		
-		// click the 2nd of January
+
+		// change date, time should not change
 		click("#2013-01-02");
 		Assert.assertEquals("2013-01-02T12:34:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
 	}
@@ -444,22 +444,15 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January
 		click("#2013-01-01");
-
-		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 
-		// click the 2nd of January
+		// this is disabled
 		click("#2013-01-02");
-
 		// there should be no change
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 
-		// click the 35d of January
 		click("#2013-01-03");
-
-		// the last selected value should be set
 		Assert.assertEquals("2013-01-03", TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
 	}
 
@@ -483,22 +476,22 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January: not valid
+		// 1st of January: not valid
 		click("#2013-01-01");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January
+		// 2nd of January: valid
 		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 3rd of January: not valid
+		// 3rd of January: not valid
 		click("#2013-01-03");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January again
+		// 2nd of January again; since 3rd was not selected, this will deselect 
 		click("#2013-01-02");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // reselecting does not add
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
@@ -527,32 +520,32 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 1st of January: not valid
+		// 1st of January: not valid
 		click("#2013-01-01");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January
+		// 2nd of January: valid
 		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 4th of January
+		// 4th of January: valid
 		click("#2013-01-04");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 3rd of January: not valid
+		// 3rd of January: not valid
 		click("#2013-01-03");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 2nd of January (unselecting it)
+		// 2nd of January (unselect)
 		click("#2013-01-02");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
 		Assert.assertEquals("[2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 4st of January (unselecting it)
+		// 4st of January (unselect)
 		click("#2013-01-04");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
 		Assert.assertEquals("[]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
@@ -582,17 +575,17 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 2nd of January
+		// 2nd of January: valid
 		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// shift click the 7th of January; 5th should be skipped
+		// range select to the 7th of January; 5th should be skipped
 		click("#2013-01-07", KeyCode.SHIFT);
 		lCallbackCount += 5; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 7th are validated: 5 times  
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 5th of January: not valid
+		// 5th of January: not valid
 		click("#2013-01-05");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
@@ -622,17 +615,17 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 
-		// click the 2nd of January
+		// 2nd of January: valid
 		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// shift click the 7th of January
+		// range select to the 5th of January
 		click("#2013-01-05", KeyCode.SHIFT);
 		lCallbackCount += 3; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 5th are validated: 3 times, then in range mode the range is broken  
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
 
-		// click the 5th of January: not valid
+		// 5th of January: not valid
 		click("#2013-01-05");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", TestUtil.quickFormatCalendarsAsDate(calendarPicker.calendars()));
@@ -656,14 +649,13 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		int lCallbackCount = 0;
 
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			// show time
 			calendarPicker.setShowTime(true);
 		});
 		
 		// default value is null
 		Assert.assertNull(calendarPicker.getCalendar());
 		
-		// click the 2nd of January
+		// 2nd of January: valid
 		click("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02T00:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
@@ -675,7 +667,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals("[2013-01-02T08:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
 		
-		// move the hour slider
+		// move the hour slider again
 		move("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(20,0);		
