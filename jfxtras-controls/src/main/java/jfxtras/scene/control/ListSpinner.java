@@ -154,7 +154,7 @@ public class ListSpinner<T> extends Control
 	{
 		// setup the CSS
 		// the -fx-skin attribute in the CSS sets which Skin class is used
-		this.getStyleClass().add(this.getClass().getSimpleName());
+		this.getStyleClass().add(ListSpinner.class.getSimpleName());
 		
 		// react to changes of the value
 		this.valueObjectProperty.addListener(new ChangeListener<T>()
@@ -232,7 +232,7 @@ public class ListSpinner<T> extends Control
 	 */
 	@Override protected String getUserAgentStylesheet()
 	{
-		return this.getClass().getResource("/jfxtras/internal/scene/control/" + this.getClass().getSimpleName() + ".css").toExternalForm();
+		return this.getClass().getResource("/jfxtras/internal/scene/control/" + ListSpinner.class.getSimpleName() + ".css").toExternalForm();
 	}
 	
 	// ==================================================================================================================
