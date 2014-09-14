@@ -181,6 +181,13 @@ project(':jfxtras-controls') {
 	}
 }
 
+project(':jfxtras-menu') {
+	dependencies {
+		compile project(':jfxtras-common')
+		testCompile project(':jfxtras-test-support')
+	}
+}
+
 project(':jfxtras-test-support') {
 	dependencies {
 		compile 'junit:junit:4.10'
