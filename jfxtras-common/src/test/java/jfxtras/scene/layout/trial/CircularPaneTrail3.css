@@ -1,0 +1,11 @@
+.time {
+	-fx-text-fill: white;
+}
+
+.time:hover {
+	-fx-text-fill: red;
+}
+
+.center {
+    -fx-font-size: 16pt;
+}

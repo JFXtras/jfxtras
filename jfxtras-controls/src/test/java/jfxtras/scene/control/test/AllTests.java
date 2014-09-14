@@ -1,5 +1,9 @@
 package jfxtras.scene.control.test;
 
+import jfxtras.scene.layout.test.CircularPaneTest;
+import jfxtras.scene.menu.test.CirclePopupMenuTest;
+import jfxtras.scene.menu.test.CornerMenuTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -23,6 +27,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	          , LocalDateTimePickerFXMLTest.class 
 	          , LocalTimePickerTest.class
 	          , LocalTimePickerFXMLTest.class
+	          , CircularPaneTest.class
+              , CornerMenuTest.class
+              , CirclePopupMenuTest.class
 	          })
 public class AllTests {
 

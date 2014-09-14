@@ -1,0 +1,15 @@
+.time {
+	-fx-text-fill: gray;
+}
+
+.time:hover {
+	-fx-text-fill: blue;
+}
+
+.timecircle:hover {
+	-fx-fill: red;
+}
+
+.center {
+    -fx-font-size: 16pt;
+}
