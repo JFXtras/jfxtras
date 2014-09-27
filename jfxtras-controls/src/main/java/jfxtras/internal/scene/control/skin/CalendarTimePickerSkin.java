@@ -37,8 +37,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -57,7 +55,6 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarTimePicker;
-import jfxtras.test.TestUtil;
 
 import com.sun.javafx.css.converters.EnumConverter;
 
