@@ -37,6 +37,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.Styleable;
@@ -55,6 +57,7 @@ import javafx.scene.text.Text;
 import javafx.util.Callback;
 import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarTimePicker;
+import jfxtras.test.TestUtil;
 
 import com.sun.javafx.css.converters.EnumConverter;
 
@@ -243,6 +246,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
 			lCalendar.set(Calendar.HOUR_OF_DAY, newValue.intValue());
 			setChangingCalendar(lCalendar);
+			if (hourScrollSlider.valueChangingProperty().get() == false) {
+				acceptChangingCalendar();
+			}
 		});
 		hourScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
 			if (refreshingAtomicInteger.get() > 0) {
@@ -273,6 +279,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			lCalendar.set(Calendar.MINUTE, lMinutes);
 			lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
 			setChangingCalendar(lCalendar);
+			if (minuteScrollSlider.valueChangingProperty().get() == false) {
+				acceptChangingCalendar();
+			}
 		});
 		minuteScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
 			if (refreshingAtomicInteger.get() > 0) {
@@ -303,6 +312,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			lCalendar.set(Calendar.SECOND, lSeconds);
 			lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getMinuteStep());
 			setChangingCalendar(lCalendar);
+			if (secondScrollSlider.valueChangingProperty().get() == false) {
+				acceptChangingCalendar();
+			}
 		});
 		secondScrollSlider.valueChangingProperty().addListener( (observable, oldValue, newValue) ->  {
 			if (refreshingAtomicInteger.get() > 0) {
