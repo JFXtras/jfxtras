@@ -228,7 +228,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	 */
 	private void createNodes()
 	{
-		// two sliders
+		// sliders
 		hourScrollSlider.setId("hourSlider");
 		hourScrollSlider.minProperty().set(00);
 		hourScrollSlider.maxProperty().set(23);
@@ -239,10 +239,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = getChangingCalendar();
-			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
-			lCalendar.set(Calendar.HOUR_OF_DAY, newValue.intValue());
-			setChangingCalendar(lCalendar);
+			modifyChangingCalendarHour(newValue.intValue());
+			
+			// because of a bug in the slider, clicking on the axis and thus moving the knob does not fire a valueChangeProperty event, so we need the code below
 			if (hourScrollSlider.valueChangingProperty().get() == false) {
 				acceptChangingCalendar();
 			}
@@ -262,20 +261,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = getChangingCalendar();
-			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+			modifyChangingCalendarMinute(newValue.intValue());
 			
-			// in order not to first set a non stepsize calendar, we step the minutes here 
-			int lMinutes = newValue.intValue();
-			int lMinuteStep = getSkinnable().getMinuteStep();
-			if (lMinuteStep > 1)
-			{
-				lMinutes += getSkinnable().getMinuteStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
-				if (lMinutes > 59) lMinutes -= lMinuteStep;
-			}
-			lCalendar.set(Calendar.MINUTE, lMinutes);
-			lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
-			setChangingCalendar(lCalendar);
+			// because of a bug in the slider, clicking on the axis and thus moving the knob does not fire a valueChangeProperty event, so we need the code below
 			if (minuteScrollSlider.valueChangingProperty().get() == false) {
 				acceptChangingCalendar();
 			}
@@ -295,20 +283,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 				return;
 			}
 			
-			Calendar lCalendar = getChangingCalendar();
-			lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+			modifyChangingCalendarSecond(newValue.intValue());
 			
-			// in order not to first set a non stepsize calendar, we step the minutes here 
-			int lSeconds = newValue.intValue();
-			int lSecondStep = getSkinnable().getSecondStep();
-			if (lSecondStep > 1)
-			{
-				lSeconds += getSkinnable().getSecondStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
-				if (lSeconds > 59) lSeconds -= lSecondStep;
-			}
-			lCalendar.set(Calendar.SECOND, lSeconds);
-			lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getMinuteStep());
-			setChangingCalendar(lCalendar);
+			// because of a bug in the slider, clicking on the axis and thus moving the knob does not fire a valueChangeProperty event, so we need the code below
 			if (secondScrollSlider.valueChangingProperty().get() == false) {
 				acceptChangingCalendar();
 			}
@@ -330,13 +307,60 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		// add self as CSS style
 		getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
 	}
-
 	final private Slider hourScrollSlider = new Slider();
 	final private Slider minuteScrollSlider = new Slider();
 	final private Slider secondScrollSlider = new Slider();
 	final private Text timeText = new Text("XX:XX:XX");
+
+	/**
+	 * 
+	 */
+	public void modifyChangingCalendarSecond(int seconds) {
+		Calendar lCalendar = getChangingCalendar();
+		lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+		
+		// in order not to first set a non stepsize calendar, we step the minutes here 
+		int lSecondStep = getSkinnable().getSecondStep();
+		if (lSecondStep > 1) {
+			seconds += getSkinnable().getSecondStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
+			if (seconds > 59) seconds -= lSecondStep;
+		}
+		lCalendar.set(Calendar.SECOND, seconds);
+		lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getMinuteStep());
+		setChangingCalendar(lCalendar);
+	}
+
+	/**
+	 * 
+	 */
+	public void modifyChangingCalendarMinute(int minutes) {
+		Calendar lCalendar = getChangingCalendar();
+		lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+		
+		// in order not to first set a non stepsize calendar, we step the minutes here 
+		int lMinuteStep = getSkinnable().getMinuteStep();
+		if (lMinuteStep > 1) {
+			minutes += getSkinnable().getMinuteStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
+			if (minutes > 59) minutes -= lMinuteStep;
+		}
+		lCalendar.set(Calendar.MINUTE, minutes);
+		lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
+		setChangingCalendar(lCalendar);
+	}
+
+	/**
+	 * 
+	 */
+	public void modifyChangingCalendarHour(int hour) {
+		Calendar lCalendar = getChangingCalendar();
+		lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+		lCalendar.set(Calendar.HOUR_OF_DAY, hour);
+		setChangingCalendar(lCalendar);
+	}
+
 	final Pane hourLabelsPane = new Pane()
 	{
+		// anonymous constructor
 		{
 			prefWidthProperty().bind(hourScrollSlider.prefWidthProperty());
 			layoutChildren();
@@ -389,8 +413,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 		}
 	};
+	
 	final Pane minuteLabelsPane = new Pane()
 	{
+		// anonymous constructor
 		{
 			layoutChildren();
 			//setStyle("-fx-border-color: red; -fx-border-width:1px;");
