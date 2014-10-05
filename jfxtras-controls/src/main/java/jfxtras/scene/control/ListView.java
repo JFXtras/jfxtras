@@ -95,7 +95,7 @@ public class ListView<T> extends javafx.scene.control.ListView<T>
 	// BINDABLE SELECTED ITEM PROPERTY
 	
 	/** 
-	 * A direct accessable and tywo way bindable selected item property (unlike the one in selection model). 
+	 * A direct accessable and two way bindable selected item property (unlike the one in selection model). 
 	 * If in multi select mode, this will be the last selected item.
 	 * If you bind bidirectional to this property in multi selected mode, it will keep selecting just one item. 
 	 */
