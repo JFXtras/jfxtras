@@ -23,6 +23,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	          , LocalDateTimePickerFXMLTest.class 
 	          , LocalTimePickerTest.class
 	          , LocalTimePickerFXMLTest.class
+	          , ToggleGroupValueTest.class
 	          })
 public class AllTests {
 
