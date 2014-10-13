@@ -35,6 +35,7 @@ import java.util.Locale;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Control;
+import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.CalendarTimePickerSkin;
 
@@ -72,9 +73,13 @@ public class CalendarTimePicker extends Control
 	 */
 	@Override protected String getUserAgentStylesheet()
 	{
-		return this.getClass().getResource("/jfxtras/internal/scene/control/" + CalendarTimePicker.class.getSimpleName() + ".css").toExternalForm();
+		return CalendarTimePicker.class.getResource("/jfxtras/internal/scene/control/" + CalendarTimePicker.class.getSimpleName() + ".css").toExternalForm();
 	}
 	
+	@Override public Skin<?> createDefaultSkin() {
+		return new jfxtras.internal.scene.control.skin.CalendarTimePickerSkin(this); 
+	}
+
 	// ==================================================================================================================
 	// PROPERTIES
 

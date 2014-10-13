@@ -42,6 +42,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
+import javafx.scene.control.Skin;
 import javafx.util.Callback;
 
 /**
@@ -85,9 +86,13 @@ public class CalendarPicker extends Control
 	 */
 	@Override protected String getUserAgentStylesheet()
 	{
-		return this.getClass().getResource("/jfxtras/internal/scene/control/" + CalendarPicker.class.getSimpleName() + ".css").toExternalForm();
+		return  CalendarPicker.class.getResource("/jfxtras/internal/scene/control/" + CalendarPicker.class.getSimpleName() + ".css").toExternalForm();
 	}
 	
+	@Override public Skin<?> createDefaultSkin() {
+		return new jfxtras.internal.scene.control.skin.CalendarPickerControlSkin(this); 
+	}
+
 	// ==================================================================================================================
 	// PROPERTIES
 

@@ -74,8 +74,7 @@ public class LocalTimePicker extends Control
 	{
 	}
 
-
-	@Override public Skin createDefaultSkin() {
+	@Override public Skin<?> createDefaultSkin() {
 		return new LocalTimePickerSkin(this); 
 	}
 

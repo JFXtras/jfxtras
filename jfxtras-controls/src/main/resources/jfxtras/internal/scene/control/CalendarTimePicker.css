@@ -1,6 +1,5 @@
 /* basic settings */
 .CalendarTimePicker { 
-	-fx-skin: "jfxtras.internal.scene.control.skin.CalendarTimePickerSkin";
 }
 
 /* skin level 

@@ -78,7 +78,7 @@ public class LocalDatePicker extends Control
 	{
 	}
 
-	@Override public Skin createDefaultSkin() {
+	@Override public Skin<LocalDatePicker> createDefaultSkin() {
 		return new LocalDatePickerSkin(this);
 	}
 

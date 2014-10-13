@@ -43,6 +43,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
+import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 
@@ -91,9 +92,13 @@ public class CalendarTextField extends Control
 	 */
 	@Override protected String getUserAgentStylesheet()
 	{
-		return this.getClass().getResource("/jfxtras/internal/scene/control/" + CalendarTextField.class.getSimpleName() + ".css").toExternalForm();
+		return CalendarTextField.class.getResource("/jfxtras/internal/scene/control/" + CalendarTextField.class.getSimpleName() + ".css").toExternalForm();
 	}
 	
+	@Override public Skin<?> createDefaultSkin() {
+		return new jfxtras.internal.scene.control.skin.CalendarTextFieldSkin(this); 
+	}
+
 	// ==================================================================================================================
 	// PROPERTIES
 

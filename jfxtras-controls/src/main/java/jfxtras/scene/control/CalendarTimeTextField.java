@@ -43,6 +43,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
+import javafx.scene.control.Skin;
 import javafx.util.Callback;
 
 /**
@@ -87,7 +88,11 @@ public class CalendarTimeTextField extends Control
 	 */
 	@Override protected String getUserAgentStylesheet()
 	{
-		return this.getClass().getResource("/jfxtras/internal/scene/control/" + CalendarTimeTextField.class.getSimpleName() + ".css").toExternalForm();
+		return CalendarTimeTextField.class.getResource("/jfxtras/internal/scene/control/" + CalendarTimeTextField.class.getSimpleName() + ".css").toExternalForm();
+	}
+	
+	@Override public Skin<?> createDefaultSkin() {
+		return new jfxtras.internal.scene.control.skin.CalendarTimeTextFieldSkin(this); 
 	}
 	
 	// ==================================================================================================================

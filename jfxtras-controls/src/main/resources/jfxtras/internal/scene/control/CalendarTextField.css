@@ -1,6 +1,5 @@
 /* basic settings */
 .CalendarTextField {
-    -fx-skin: "jfxtras.internal.scene.control.skin.CalendarTextFieldSkin";
 }
 
 .CalendarTextFieldSkin .icon  {

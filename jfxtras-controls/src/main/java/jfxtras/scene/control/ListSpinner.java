@@ -45,8 +45,10 @@ import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import jfxtras.internal.scene.control.skin.LocalTimePickerSkin;
 
 /**
  * This is a spinner, showing one value at a time from a list.
@@ -235,9 +237,13 @@ public class ListSpinner<T> extends Control
 	 */
 	@Override protected String getUserAgentStylesheet()
 	{
-		return this.getClass().getResource("/jfxtras/internal/scene/control/" + ListSpinner.class.getSimpleName() + ".css").toExternalForm();
+		return ListSpinner.class.getResource("/jfxtras/internal/scene/control/" + ListSpinner.class.getSimpleName() + ".css").toExternalForm();
 	}
-	
+
+	@Override public Skin<?> createDefaultSkin() {
+		return new jfxtras.internal.scene.control.skin.ListSpinnerSkin(this); 
+	}
+
 	// ==================================================================================================================
 	// PROPERTIES
 
