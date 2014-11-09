@@ -1,5 +1,5 @@
 /**
- * AgendaWeekSkin.java
+ * CalendarPickerTest.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,66 +27,54 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.scene.control.agenda.test;
 
-import java.time.LocalDate;
-import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Locale;
 
-import jfxtras.scene.control.agenda.Agenda;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import jfxtras.test.JFXtrasGuiTest;
+import jfxtras.test.TestUtil;
+
+import org.junit.Test;
+
 
 /**
- * @author Tom Eugelink
+ * We use a single FXML to minimize the number of files.
+ * But in order to prevent that the window becomes too width or heigh, tabs are used to separate the test cases
+ * 
  */
-public class AgendaWeekSkin extends AgendaSkinTimeScale24HourAbstract {
-	
+public class AgendaFXMLTest extends JFXtrasGuiTest {
+
 	/**
 	 * 
 	 */
-	public AgendaWeekSkin(Agenda control) {
-		super(control);
-	}
-	
-	/**
-	 * Assign a calendar to each day, so it knows what it must draw.
-	 */
-	protected List<LocalDate> determineDisplayedLocalDates()
+	public Parent getRootNode() 
 	{
-		// the result 
-		List<LocalDate> lLocalDates = new ArrayList<>();
-		
-		// 7 days stating at the first day of week
-		LocalDate lStartLocalDate = getFirstDayOfWeekLocalDate();
-		for (int i = 0; i < 7; i++) {
-			lLocalDates.add(lStartLocalDate.plusDays(i));
+		try {
+			Locale.setDefault(Locale.ENGLISH);
+			
+	    	// load FXML
+			String lName = this.getClass().getSimpleName() + ".fxml";
+			URL lURL = this.getClass().getResource(lName);
+			//System.out.println("loading FXML " + lName + " -> " + lURL);
+			if (lURL == null) throw new IllegalStateException("FXML file not found: " + lName);
+			Parent lRoot = (Parent)FXMLLoader.load(lURL, null);
+			return lRoot;
 		}
-		
-		// done
-		return lLocalDates;
+		catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
-	
 	/**
-	 * get the date of the first day of the week
+	 * 
 	 */
-	private LocalDate getFirstDayOfWeekLocalDate()
+	@Test
+	public void defaultAgenda()
 	{
-		Locale lLocale = getSkinnable().getLocale();
-		WeekFields lWeekFields = WeekFields.of(lLocale);
-		int lFirstDayOfWeek = lWeekFields.getFirstDayOfWeek().getValue();
-		LocalDate lDisplayedDateTime = getSkinnable().getDisplayedDateTime().toLocalDate();
-		int lCurrentDayOfWeek = lDisplayedDateTime.getDayOfWeek().getValue();
-
-		if (lFirstDayOfWeek <= lCurrentDayOfWeek) {
-			lDisplayedDateTime = lDisplayedDateTime.plusDays(-lCurrentDayOfWeek + lFirstDayOfWeek);
-		}
-		else {
-			lDisplayedDateTime = lDisplayedDateTime.plusDays(-lCurrentDayOfWeek - (7-lFirstDayOfWeek));
-		}
-		
-		return lDisplayedDateTime;
+		TestUtil.sleep(3000);
 	}
-
 }

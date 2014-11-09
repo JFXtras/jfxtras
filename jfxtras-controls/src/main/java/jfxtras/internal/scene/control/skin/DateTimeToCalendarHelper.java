@@ -32,6 +32,7 @@ package jfxtras.internal.scene.control.skin;
 import java.text.DateFormat;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -668,5 +670,31 @@ public class DateTimeToCalendarHelper {
 				}
 			}
 		});
+	}
+
+	/**
+	 * 
+	 */
+	static public String quickFormatCalendar(Calendar value)
+	{
+		if (value == null) return "";
+		SimpleDateFormat lSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		return lSimpleDateFormat.format(value.getTime());
+	}
+
+	/**
+	 * 
+	 */
+	static public String quickFormatCalendar(List<Calendar> value)
+	{
+		if (value == null) return "null";
+		String s = value.size() + "x [";
+		for (Calendar lCalendar : value)
+		{
+			if (s.endsWith("[") == false) s += ",";
+			s += quickFormatCalendar(lCalendar);
+		}
+		s += "]";
+		return s;
 	}
 }

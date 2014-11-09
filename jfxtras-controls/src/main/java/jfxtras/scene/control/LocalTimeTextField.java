@@ -98,11 +98,9 @@ public class LocalTimeTextField extends Control
 	public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
 	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(Locale.getDefault(), "locale", Locale.getDefault()) 
 	{
-		public void set(Locale value)
-		{
+		public void set(Locale value) {
 			super.set(value);
-			if (dateFormatManual == false)
-			{
+			if (dateFormatManual == false) {
 				setDateTimeFormatter( null );
 			}
 		}

@@ -30,22 +30,20 @@
 package jfxtras.internal.scene.control.skin.agenda;
 
 import java.time.LocalDate;
-import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import jfxtras.scene.control.agenda.Agenda;
 
 /**
  * @author Tom Eugelink
  */
-public class AgendaWeekSkin extends AgendaSkinTimeScale24HourAbstract {
+public class AgendaDaySkin extends AgendaSkinTimeScale24HourAbstract {
 	
 	/**
 	 * 
 	 */
-	public AgendaWeekSkin(Agenda control) {
+	public AgendaDaySkin(Agenda control) {
 		super(control);
 	}
 	
@@ -57,36 +55,10 @@ public class AgendaWeekSkin extends AgendaSkinTimeScale24HourAbstract {
 		// the result 
 		List<LocalDate> lLocalDates = new ArrayList<>();
 		
-		// 7 days stating at the first day of week
-		LocalDate lStartLocalDate = getFirstDayOfWeekLocalDate();
-		for (int i = 0; i < 7; i++) {
-			lLocalDates.add(lStartLocalDate.plusDays(i));
-		}
+		// only the display date
+		lLocalDates.add(control.getDisplayedDateTime().toLocalDate());
 		
 		// done
 		return lLocalDates;
 	}
-
-	
-	/**
-	 * get the date of the first day of the week
-	 */
-	private LocalDate getFirstDayOfWeekLocalDate()
-	{
-		Locale lLocale = getSkinnable().getLocale();
-		WeekFields lWeekFields = WeekFields.of(lLocale);
-		int lFirstDayOfWeek = lWeekFields.getFirstDayOfWeek().getValue();
-		LocalDate lDisplayedDateTime = getSkinnable().getDisplayedDateTime().toLocalDate();
-		int lCurrentDayOfWeek = lDisplayedDateTime.getDayOfWeek().getValue();
-
-		if (lFirstDayOfWeek <= lCurrentDayOfWeek) {
-			lDisplayedDateTime = lDisplayedDateTime.plusDays(-lCurrentDayOfWeek + lFirstDayOfWeek);
-		}
-		else {
-			lDisplayedDateTime = lDisplayedDateTime.plusDays(-lCurrentDayOfWeek - (7-lFirstDayOfWeek));
-		}
-		
-		return lDisplayedDateTime;
-	}
-
 }

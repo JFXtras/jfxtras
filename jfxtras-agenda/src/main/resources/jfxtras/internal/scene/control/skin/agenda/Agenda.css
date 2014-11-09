@@ -1,70 +1,67 @@
 /* basic settings */
+
 .Agenda { 
-	-fx-skin: "jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin";
 }
 
-.AgendaWeekSkin { 
-}
-
-.AgendaWeekSkin .Week {
+.Agenda .Week {
 	-fx-background-color: WHITE;
 }
 
-.AgendaWeekSkin .HourLabel {
+.Agenda .HourLabel {
 	-fx-fill: BLACK;
 	-fx-stroke: transparent;
 }
 
-.AgendaWeekSkin .HourLine {
+.Agenda .HourLine {
 	-fx-fill: transparent;
 	-fx-stroke: LIGHTGRAY;
 }
 
-.AgendaWeekSkin .HalfHourLine {
+.Agenda .HalfHourLine {
 	-fx-fill: transparent;
 	-fx-stroke: LIGHTGRAY;
 	-fx-stroke-dash-array: 4 4 4 4;
 }
 
-.AgendaWeekSkin .DayHeader {
+.Agenda .DayHeader {
 	-fx-border-color:LIGHTGRAY;
 	-fx-border-width: 0px 0px 0px 1px;
 }
 
-.AgendaWeekSkin .DayHeader .weekend { 
+.Agenda .DayHeader .weekend { 
 	-fx-text-fill: BLACK;
 	-fx-font-weight: bold;
 }
 
-.AgendaWeekSkin .Day {
+.Agenda .Day {
 	-fx-fill: transparent;
 	-fx-stroke: transparent;
 	-fx-border-color:LIGHTGRAY;
 	-fx-border-width: 0px 0px 0px 1px;
 }
 
-.AgendaWeekSkin .weekend {
+.Agenda .weekend {
 	-fx-background-color: #eeeeee90;
 }
 
-/* TODO: for some reason this does not work: removing today from the style classes does not clear the grayish background 
-.AgendaWeekSkin .today {
+/* TBEERNOT: for some reason this does not work: removing today from the style classes does not clear the grayish background 
+.Agenda .today {
 	-fx-background-color: #eeeeee90;
 }
 */
 
-.AgendaWeekSkin .Appointment {
+.Agenda .Appointment {
 	-fx-border-color: WHITE;
 	-fx-border-width: 1px;
 }
 
-.AgendaWeekSkin .AppointmentTimeLabel {
+.Agenda .AppointmentTimeLabel {
 	-fx-fill: BLACK;
 	-fx-stroke: transparent;
 	-fx-font-size: 0.8em;
 }
 
-.AgendaWeekSkin .AppointmentLabel {
+.Agenda .AppointmentLabel {
 	-fx-fill: BLACK;
 	-fx-stroke: transparent;
 }
@@ -105,33 +102,33 @@
 .group7 { -fx-background-color: #ff5700; } 
  */
  
-.AgendaWeekSkin .DurationDragger {
+.Agenda .DurationDragger {
 	-fx-fill: #00000040;	
 }
 
-.AgendaWeekSkin .MenuIcon {
+.Agenda .MenuIcon {
 	-fx-fill: #00000040;	
 }
 
-.AgendaWeekSkin .GhostRectangle {
+.Agenda .GhostRectangle {
 	-fx-fill: transparent;
 	-fx-stroke: #00000080;
     -fx-stroke-width: 1;
     -fx-stroke-dash-array: 4 4 4 4;
 }
 
-.AgendaWeekSkin .Selected { 
+.Agenda .Selected { 
 	-xfx-color: -fx-focused-base;
 	-fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
 	-fx-background-insets: -1.4, 0, 1, 2;
 	-fx-background-radius: 6.4, 5, 4, 3;
 }
 
-.AgendaWeekSkin .Now {
+.Agenda .Now {
 	-fx-fill: #FF000088;
 	-fx-stroke: WHITE;
 }
-.AgendaWeekSkin .History {
+.Agenda .History {
 	-fx-stroke: transparent;
 	-fx-fill: #FFFFFF70;
 }

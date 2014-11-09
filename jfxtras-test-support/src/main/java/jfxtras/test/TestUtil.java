@@ -31,6 +31,8 @@ package jfxtras.test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -197,7 +199,19 @@ public class TestUtil {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param string
+	 * @return
+	 */
+	public static LocalDateTime quickParseLocalDateTimeYMDhm(String value) {
+		if (value == null) return null;
+		DateTimeFormatter lDateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+		LocalDateTime dt = LocalDateTime.parse(value, lDateTimeFormatter);
+		return dt;
+	}
+
 	/**
 	 * 
 	 * @param value

@@ -104,12 +104,10 @@ public class LocalDateTimeTextField extends Control
 	public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
 	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(Locale.getDefault())
 	{
-		public void set(Locale value)
-		{
+		public void set(Locale value) {
 			super.set(value);
-			if (dateFormatManual == false)
-			{
-				setDateTimeFormatter( DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG).withLocale(getLocale()) );
+			if (dateFormatManual == false) {
+				setDateTimeFormatter( DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale()) );
 			}
 		}
 	};
@@ -123,8 +121,7 @@ public class LocalDateTimeTextField extends Control
 	public ObjectProperty<DateTimeFormatter> dateTimeFormatterProperty() { return dateTimeFormatterObjectProperty; }
 	final private ObjectProperty<DateTimeFormatter> dateTimeFormatterObjectProperty = new SimpleObjectProperty<DateTimeFormatter>(this, "dateTimeFormatter", DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale()) )
 	{
-		public void set(DateTimeFormatter value)
-		{
+		public void set(DateTimeFormatter value) {
 			super.set( value != null ? value : DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(getLocale()));
 			dateFormatManual = (value != null);
 		}
