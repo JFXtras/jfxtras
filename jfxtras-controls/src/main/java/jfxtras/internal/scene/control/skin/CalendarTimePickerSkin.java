@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.beans.property.ObjectProperty;
@@ -144,7 +145,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
     static private final ShowTickLabels SHOW_TICKLABELS_DEFAULT = ShowTickLabels.NO;
     
 	/** LabelDateFormat: */
-    public final ObjectProperty<DateFormat> labelFormatProperty()
+    public final ObjectProperty<DateFormat> labelDateFormatProperty()
     {
         if (labelFormat == null)
         {
@@ -164,8 +165,17 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
         return labelFormat;
     }
     private ObjectProperty<DateFormat> labelFormat = null;
-    public final void setLabelDateFormat(DateFormat value) { labelFormatProperty().set(value); }
-    public final DateFormat getLabelDateFormat() { return labelFormat == null ? getLABEL_DATEFORMAT_DEFAULT() : labelFormat.get(); }
+    public final void setLabelDateFormat(DateFormat value) { labelDateFormatProperty().set(value); }
+    public final DateFormat getLabelDateFormat() {
+    	if (labelFormat == null) {
+    		return getLABEL_DATEFORMAT_DEFAULT();
+    	}
+    	
+    	// prevent timezones to screw up things
+    	DateFormat labelDateFormat = (DateFormat)labelFormat.get().clone();    	
+		labelDateFormat.setTimeZone(TimeZone.getDefault());
+		return labelDateFormat;
+    }
     public final CalendarTimePickerSkin withLabelDateFormat(DateFormat value) { setLabelDateFormat(value); return this; }
     private DateFormat getLABEL_DATEFORMAT_DEFAULT() {
     	return DateFormat.getTimeInstance(DateFormat.SHORT, getSkinnable().getLocale());
@@ -185,7 +195,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
         private static final CssMetaData<CalendarTimePicker, DateFormat> LABEL_DATEFORMAT = new CssMetaData<CalendarTimePicker, DateFormat>("-fxx-label-dateformat", new SimpleDateFormatConverter(), null )
         {
             @Override public boolean isSettable(CalendarTimePicker n) { return !((CalendarTimePickerSkin)n.getSkin()).showTickLabelsProperty().isBound(); }
-            @Override public StyleableProperty<DateFormat> getStyleableProperty(CalendarTimePicker n) { return (StyleableProperty<DateFormat>)((CalendarTimePickerSkin)n.getSkin()).labelFormatProperty(); }
+            @Override public StyleableProperty<DateFormat> getStyleableProperty(CalendarTimePicker n) { return (StyleableProperty<DateFormat>)((CalendarTimePickerSkin)n.getSkin()).labelDateFormatProperty(); }
         };
 
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
@@ -478,23 +488,26 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	 */
 	private void refreshLayout()
 	{
+		DateFormat labelDateFormat = getLabelDateFormat();
+		String formattedDate = labelDateFormat.format(DATE);
+		
 		getChildren().clear();
 		StackPane lStackPane = new StackPane();
 		VBox lVBox = new VBox(0);
 		lVBox.alignmentProperty().set(Pos.CENTER);
-		if ( getLabelDateFormat().format(DATE).contains("2") ) {
+		if ( formattedDate.contains("2") ) {
 			if (getShowTickLabels() == ShowTickLabels.YES) {
 				lVBox.getChildren().add(hourLabelsPane);
 			}
 			lVBox.getChildren().add(hourScrollSlider);
 		}
-		if ( getLabelDateFormat().format(DATE).contains("3") ) {
+		if ( formattedDate.contains("3") ) {
 			lVBox.getChildren().add(minuteScrollSlider);
 			if (getShowTickLabels() == ShowTickLabels.YES) {
 				lVBox.getChildren().add(minuteLabelsPane);
 			}
 		}
-		if ( getLabelDateFormat().format(DATE).contains("4") ) {
+		if ( formattedDate.contains("4") ) {
 			lVBox.getChildren().add(secondScrollSlider);
 		}
 		lStackPane.getChildren().add(lVBox);

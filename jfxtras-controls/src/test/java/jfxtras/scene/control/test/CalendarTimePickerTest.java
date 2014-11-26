@@ -29,22 +29,27 @@
 
 package jfxtras.scene.control.test;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import jfxtras.internal.scene.control.skin.CalendarTimePickerSkin;
 import jfxtras.scene.control.CalendarTimePicker;
+import jfxtras.scene.control.CalendarTimeTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.loadui.testfx.exceptions.NoNodesFoundException;
 
 
 /**
@@ -218,5 +223,87 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("22:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void labelDateFormatSlider()
+	{
+        
+		// set time to 12:30:00
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 20, 30, 00));
+		});
+		
+		// show only hours
+		TestUtil.runThenWaitForPaintPulse( () -> {
+	        SimpleDateFormat timeFormat = new SimpleDateFormat("HH");
+	        ((CalendarTimePickerSkin)calendarTimePicker.getSkin()).setLabelDateFormat(timeFormat);
+		});
+		assertFind("#hourSlider");
+		assertNotFind("#minuteSlider");
+		assertNotFind("#secondSlider");
+		
+		// show only minutes
+		TestUtil.runThenWaitForPaintPulse( () -> {
+	        SimpleDateFormat timeFormat = new SimpleDateFormat("mm");
+	        ((CalendarTimePickerSkin)calendarTimePicker.getSkin()).setLabelDateFormat(timeFormat);
+		});
+		assertNotFind("#hourSlider");
+		assertFind("#minuteSlider");
+		assertNotFind("#secondSlider");
+		
+		// show only seconds
+		TestUtil.runThenWaitForPaintPulse( () -> {
+	        SimpleDateFormat timeFormat = new SimpleDateFormat("ss");
+	        ((CalendarTimePickerSkin)calendarTimePicker.getSkin()).setLabelDateFormat(timeFormat);
+		});
+		assertNotFind("#hourSlider");
+		assertNotFind("#minuteSlider");
+		assertFind("#secondSlider");
+		
+		// show hms
+		TestUtil.runThenWaitForPaintPulse( () -> {
+	        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+	        ((CalendarTimePickerSkin)calendarTimePicker.getSkin()).setLabelDateFormat(timeFormat);
+		});
+		assertFind("#hourSlider");
+		assertFind("#minuteSlider");
+		assertFind("#secondSlider");
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void labelDateFormatTimeZone()
+	{
+        
+		// set time to 12:30:00
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 20, 30, 00));
+	        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+			timeFormat.setTimeZone(TimeZone.getTimeZone("CET"));
+	        ((CalendarTimePickerSkin)calendarTimePicker.getSkin()).setLabelDateFormat(timeFormat);
+		});
+		
+		Text lLabelText = (Text)find(".timeLabel");
+		
+		// assert label
+		Assert.assertEquals("20:30:00", lLabelText.getText());
+		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+		
+		// change timezone
+		TestUtil.runThenWaitForPaintPulse( () -> {
+	        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+			timeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+	        ((CalendarTimePickerSkin)calendarTimePicker.getSkin()).setLabelDateFormat(timeFormat);
+		});
+
+		// assert label
+		Assert.assertEquals("20:30:00", lLabelText.getText());
+		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
 }

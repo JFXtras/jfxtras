@@ -36,7 +36,9 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Popup;
 import javafx.stage.Window;
 
+import org.junit.Assert;
 import org.loadui.testfx.GuiTest;
+import org.loadui.testfx.exceptions.NoNodesFoundException;
 
 /**
  * 
@@ -97,5 +99,20 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 		click(textField);
 		push(KeyCode.CONTROL, KeyCode.A);
 		push(KeyCode.DELETE);
+	}
+	
+
+	protected void assertNotFind(String string) {
+		try {
+			find(string);
+			Assert.assertTrue("Should not have found '" + string + "', but did anyway", false);
+		}
+		catch (NoNodesFoundException e) {
+			// all is well
+		}
+	}
+
+	protected void assertFind(String string) {
+		find(string);
 	}
 }

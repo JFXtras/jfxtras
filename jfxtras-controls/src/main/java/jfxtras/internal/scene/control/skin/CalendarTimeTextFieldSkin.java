@@ -42,7 +42,6 @@ import javafx.event.EventHandler;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -349,7 +348,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 			// add pane
 			popup.getContent().add(lBorderPane);
 			popup.setOnShown( (event) -> {
-				((CalendarTimePickerSkin)calendarTimePicker.getSkin()).labelFormatProperty().set( getSkinnable().getDateFormat() );
+				((CalendarTimePickerSkin)calendarTimePicker.getSkin()).labelDateFormatProperty().set( getSkinnable().getDateFormat() );
 			});
 		}
 		
