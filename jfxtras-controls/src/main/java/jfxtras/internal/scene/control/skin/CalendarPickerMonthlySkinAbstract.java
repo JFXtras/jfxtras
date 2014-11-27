@@ -301,10 +301,12 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 		int lYear = calendar.get(java.util.Calendar.YEAR);
 		int lMonth = calendar.get(java.util.Calendar.MONTH);
 		int lDay = calendar.get(java.util.Calendar.DATE);
-		return (lYear == iTodayYear && lMonth == iTodayMonth && lDay == iTodayDay);
+		
+		Calendar today = java.util.Calendar.getInstance();
+		int lTodayYear = today.get(java.util.Calendar.YEAR);
+		int lTodayMonth = today.get(java.util.Calendar.MONTH);
+		int lTodayDay = today.get(java.util.Calendar.DATE);
+		
+		return (lYear == lTodayYear && lMonth == lTodayMonth && lDay == lTodayDay);
 	}
-	private Calendar iToday = java.util.Calendar.getInstance();
-	private int iTodayYear = iToday.get(java.util.Calendar.YEAR);
-	private int iTodayMonth = iToday.get(java.util.Calendar.MONTH);
-	private int iTodayDay = iToday.get(java.util.Calendar.DATE);
 }
