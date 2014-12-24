@@ -48,7 +48,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import jfxtras.internal.scene.control.skin.LocalTimePickerSkin;
 
 /**
  * This is a spinner, showing one value at a time from a list.

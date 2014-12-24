@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ ListSpinnerArrowTest.class
               , ListSpinnerEditableTest.class
+              , ListSpinnerEditableNumericTest.class
               , ListSpinnerExtendedTest.class
               , CalendarTimePickerTest.class
               , CalendarTimePickerFXMLTest.class

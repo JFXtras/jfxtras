@@ -305,43 +305,43 @@ public class ListSpinnerTrial1 extends Application {
 			}
 			{
 				lGridPane.add(new Label("HORIZONTAL LEADING"), 0, lRowIdx);
-				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true);
+				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
 				lSpinner.setStyle("-fxx-arrow-direction:HORIZONTAL; -fxx-arrow-position:LEADING;");
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 			}
 			{
 				lGridPane.add(new Label("HORIZONTAL TRAILING"), 0, lRowIdx);
-				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true);
+				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
 				lSpinner.setStyle("-fxx-arrow-direction:HORIZONTAL; -fxx-arrow-position:TRAILING;");
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 			}
 			{
 				lGridPane.add(new Label("HORIZONTAL SPLIT"), 0, lRowIdx);
-				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true);
+				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
 				lSpinner.setStyle("-fxx-arrow-direction:HORIZONTAL; -fxx-arrow-position:SPLIT;");
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 			}
 			{
 				lGridPane.add(new Label("VERTICAL LEADING"), 0, lRowIdx);
-				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true);
+				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
 				lSpinner.setStyle("-fxx-arrow-direction:VERTICAL; -fxx-arrow-position:LEADING;");
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 			}
 			{
 				lGridPane.add(new Label("VERTICAL TRAILING"), 0, lRowIdx);
-				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true);
+				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
 				lSpinner.setStyle("-fxx-arrow-direction:VERTICAL; -fxx-arrow-position:TRAILING;");
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 			}
 			{
 				lGridPane.add(new Label("VERTICAL SPLIT"), 0, lRowIdx);
-				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true);
+				ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
 				lSpinner.setStyle("-fxx-arrow-direction:VERTICAL; -fxx-arrow-position:SPLIT;");
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 			}
 			{
 				lGridPane.add(new Label("CSS SPLIT"), 0, lRowIdx);
-				final ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true);
+				final ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
 				
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 				lSpinner.setId("TheEditableSpinner");

@@ -87,7 +87,7 @@ public class ListSpinnerIntegerList extends java.util.AbstractList<Integer>
 		// calculate the index
 		int lValue = ((Integer)o).intValue();
 		int lIndex = (lValue - this.from) / this.step;
-		if (lIndex < 0 || lIndex > size) return -1;
+		if (lIndex < 0 || lIndex >= size) return -1;
 		
 		// check if that what is at the index matches with out value
 		Integer lValueAtIndex = get(lIndex);

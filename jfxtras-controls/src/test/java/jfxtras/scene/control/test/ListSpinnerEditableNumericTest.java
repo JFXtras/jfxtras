@@ -44,37 +44,88 @@ import org.loadui.testfx.GuiTest;
 /**
  * Created by user on 26-12-13.
  */
-public class ListSpinnerEditableTest extends GuiTest {
+public class ListSpinnerEditableNumericTest extends GuiTest {
 	public Parent getRootNode()
 	{
 		Locale.setDefault(Locale.ENGLISH);
 		
 		VBox box = new VBox();
 
-		lSpinner = new ListSpinner<String>("a", "b", "c")
+		lSpinner = new ListSpinner<Integer>(1, 10)
 				.withEditable(true)
-				.withStringConverter(StringConverterFactory.forString())
+				.withStringConverter(StringConverterFactory.forInteger())
+				.withValue(5)
 				;
 		box.getChildren().add(lSpinner);
 		box.getChildren().add(new Button("focus helper"));
 
 		return box;
 	}
-	ListSpinner<String> lSpinner = null;
+	ListSpinner<Integer> lSpinner = null;
 
 	@Test
 	public void enterSelectValueByTyping()
 	{
 		// check to see what the current value is
-		Assert.assertEquals("a", lSpinner.getValue());
+		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		click(".value").eraseCharacters(1).type("c");
+		click(".value").eraseCharacters(1).type("6");
 
 		// move focus away
 		click(".button");
 
 		// see if the typed text is the current value
-		Assert.assertEquals("c", lSpinner.getValue());
+		Assert.assertEquals(6, lSpinner.getValue().intValue());
+	}
+
+	@Test
+	public void lowerEdge()
+	{
+		// check to see what the current value is
+		Assert.assertEquals(5, lSpinner.getValue().intValue());
+
+		// enter the text (this still is limited to the list)
+		click(".value").eraseCharacters(1).type("0");
+
+		// move focus away
+		click(".button");
+
+		// see if the typed text is the current value
+		Assert.assertEquals(5, lSpinner.getValue().intValue());
+
+		// enter the text (this still is limited to the list)
+		click(".value").eraseCharacters(1).type("1");
+
+		// move focus away
+		click(".button");
+
+		// see if the typed text is the current value
+		Assert.assertEquals(1, lSpinner.getValue().intValue());
+	}
+
+	@Test
+	public void upperEdge()
+	{
+		// check to see what the current value is
+		Assert.assertEquals(5, lSpinner.getValue().intValue());
+
+		// enter the text (this still is limited to the list)
+		click(".value").eraseCharacters(1).type("11");
+
+		// move focus away
+		click(".button");
+
+		// see if the typed text is the current value
+		Assert.assertEquals(5, lSpinner.getValue().intValue());
+
+		// enter the text (this still is limited to the list)
+		click(".value").eraseCharacters(1).type("10");
+
+		// move focus away
+		click(".button");
+
+		// see if the typed text is the current value
+		Assert.assertEquals(10, lSpinner.getValue().intValue());
 	}
 }
