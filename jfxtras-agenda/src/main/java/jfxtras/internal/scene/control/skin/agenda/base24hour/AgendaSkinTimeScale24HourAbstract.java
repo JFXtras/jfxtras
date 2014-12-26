@@ -108,7 +108,7 @@ implements AgendaSkin
 		refresh();
 	}
 	AllAppointments appointments = null;
-	
+
 	/**
 	 * Assign a calendar to each day, so it knows what it must draw.
 	 */
@@ -200,6 +200,9 @@ implements AgendaSkin
 	 */
 	private void createNodes()
 	{
+		// when switching skin, remove any old stuff
+		getChildren().clear();
+		
 		// we use a borderpane
 		borderPane = new BorderPane();
 		borderPane.prefWidthProperty().bind(getSkinnable().widthProperty()); // the border pane is the same size as the whole skin
@@ -272,6 +275,7 @@ implements AgendaSkin
 			prefWidthProperty().bind(weekBodyPane.widthProperty()); // same width as the weekpane
 			prefHeightProperty().bind(layoutHelp.headerHeightProperty);
 			
+// TBEERNOT: need to unbind all listeners from the skinnable before I can set a new skin!!!			
 //			// add the skin switcher
 //			AgendaSkinSwitcher skinSwitcher = new AgendaSkinSwitcher(control);
 //			getChildren().add(skinSwitcher);

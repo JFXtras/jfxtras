@@ -276,6 +276,7 @@ public class AgendaTrial1 extends Application {
 		// update range
 		lAgenda.dateTimeRangeCallbackProperty().set( (DateTimeRange range) ->  {
 
+			System.out.println("dateTimeRangeCallback " + range);
 			lAgenda.appointments().clear();
 			LocalDateTime now = LocalDateTime.now();
 			

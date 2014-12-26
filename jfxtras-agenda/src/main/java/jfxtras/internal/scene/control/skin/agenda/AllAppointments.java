@@ -10,6 +10,9 @@ import jfxtras.scene.control.agenda.Agenda.Appointment;
 
 public class AllAppointments {
 
+	/**
+	 * 
+	 */
 	public AllAppointments(ObservableList<Agenda.Appointment> appointments) {
 		this.appointments = appointments;
 		
@@ -20,6 +23,9 @@ public class AllAppointments {
 	}
 	final ObservableList<Agenda.Appointment> appointments;
 	
+	/**
+	 * fires when something changes in the appointments 
+	 */
 	public void addOnChangeListener(Runnable runnable) {
 		this.runnables.add(runnable);
 	}
@@ -34,6 +40,9 @@ public class AllAppointments {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	public List<Appointment> collectWholedayFor(LocalDate localDate) {
 		List<Appointment> collectedAppointments = new ArrayList<>();
 		
@@ -53,6 +62,9 @@ public class AllAppointments {
 		return collectedAppointments;
 	}
 	
+	/**
+	 * 
+	 */
 	public List<Appointment> collectTaskFor(LocalDate localDate) {
 		List<Appointment> collectedAppointments = new ArrayList<>();
 		
@@ -69,6 +81,9 @@ public class AllAppointments {
 		return collectedAppointments;
 	}
 	
+	/**
+	 * 
+	 */
 	public List<Appointment> collectRegularFor(LocalDate localDate) {
 		List<Appointment> collectedAppointments = new ArrayList<>();
 		

@@ -73,7 +73,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  *       });
  * --
  * 
- * Agenda has a default implementation of the Agenda.Appointment interface, in the form of Agenda.AppointmentImpl.
+ * Agenda has a default implementation of the Agenda.Appointment interface, in the form of Agenda.AppointmentImpl (Calendar based) or Agenda.AppointmentImpl2 (Java 8 DateTime based).
  *
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
