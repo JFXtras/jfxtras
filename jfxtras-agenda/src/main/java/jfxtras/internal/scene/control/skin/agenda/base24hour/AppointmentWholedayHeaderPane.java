@@ -1,4 +1,4 @@
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda;

@@ -1,5 +1,5 @@
 /**
- * AgendaWeekSkin.java
+ * AgendaDaySkin.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import jfxtras.internal.scene.control.skin.agenda.base24hour.AgendaSkinTimeScale24HourAbstract;
 import jfxtras.scene.control.agenda.Agenda;
 
 /**

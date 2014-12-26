@@ -1,4 +1,4 @@
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -253,7 +253,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 	 * 
 	 */
 	private void handleAction() {
-		// has the client regsitered an action
+		// has the client registered an action
 		Callback<Appointment, Void> lCallback = layoutHelp.skinnable.getActionCallback();
 		if (lCallback != null) {
 			lCallback.call(appointment);

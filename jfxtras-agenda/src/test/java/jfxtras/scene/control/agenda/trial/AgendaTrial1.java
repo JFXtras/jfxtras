@@ -256,6 +256,15 @@ public class AgendaTrial1 extends Application {
 				.withAppointmentGroup(lAppointmentGroupMap.get("group13"))
 				.withWholeDay(true)
 		, 	new Agenda.AppointmentImpl2()
+				.withStartDateTime(LocalDate.of(lTodayYear, lTodayMonth, lTodayDay).atStartOfDay())
+				.withEndDateTime(LocalDate.of(lTodayYear, lTodayMonth, lTodayDay + 1).atTime(13, 00))
+				.withSummary("whole+spanning")
+				.withDescription("A description " + (++idx))
+				.withAppointmentGroup(lAppointmentGroupMap.get("group14"))
+				.withWholeDay(true)
+		// -----
+		// regular spanning
+		, 	new Agenda.AppointmentImpl2()
 				.withStartDateTime(lMultipleDaySpannerStartDateTime)
 				.withEndDateTime(lMultipleDaySpannerEndDateTime)
 				.withSummary(lIpsum.substring(0, 20 + new Random().nextInt(lIpsum.length() - 20)))

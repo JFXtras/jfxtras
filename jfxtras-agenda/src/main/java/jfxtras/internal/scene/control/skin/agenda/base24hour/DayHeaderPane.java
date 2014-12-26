@@ -1,4 +1,4 @@
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
+import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
@@ -125,7 +126,7 @@ public class DayHeaderPane extends Pane {
 			AppointmentWholedayHeaderPane lAppointmentHeaderPane = new AppointmentWholedayHeaderPane(lAppointment, layoutHelp);
 			getChildren().add(lAppointmentHeaderPane);				
 			appointmentHeaderPanes.add(lAppointmentHeaderPane);
-			lAppointmentHeaderPane.setId(lAppointmentHeaderPane.getClass().getSimpleName() + (++lCnt)); // for testing
+			lAppointmentHeaderPane.setId(lAppointmentHeaderPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + (++lCnt)); // for testing
 		}
 		
 		// and layout

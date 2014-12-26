@@ -1,4 +1,4 @@
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -16,6 +16,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.scene.control.agenda.Agenda;
 
 /**

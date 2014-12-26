@@ -1,4 +1,4 @@
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +12,7 @@ import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
+import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
@@ -147,15 +148,16 @@ class DayBodyPane extends Pane
 			}
 		});
 	}
-	Rectangle resizeRectangle = null;
-	boolean dragged = false;
+	private Rectangle resizeRectangle = null;
+	private boolean dragged = false;
 
 	/**
 	 * 
 	 */
 	private void relayout()
 	{
-		// first add all the whole day appointments
+		// TBEERNOT: binding instead of set (and remove the event listeners in the constructor as well)
+		// first place all the whole day appointments
 		int lWholedayCnt = 0;
 		for (AppointmentWholedayBodyPane lAppointmentPane : wholedayAppointmentBodyPanes) {
 			lAppointmentPane.setLayoutX(NodeUtil.snapXY(lWholedayCnt * layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get()));
@@ -238,7 +240,7 @@ class DayBodyPane extends Pane
 		for (Appointment lAppointment : wholedayAppointments) {
 			AppointmentWholedayBodyPane lAppointmentPane = new AppointmentWholedayBodyPane(localDateObjectProperty.get(), lAppointment, layoutHelp);
 			wholedayAppointmentBodyPanes.add(lAppointmentPane);
-			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + (++lCnt)); // for testing
+			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + (++lCnt)); // for testing
 		}
 		getChildren().addAll(wholedayAppointmentBodyPanes);				
 	}
@@ -261,7 +263,7 @@ class DayBodyPane extends Pane
 		for (Appointment lAppointment : taskAppointments) {
 			AppointmentTaskBodyPane lAppointmentPane = new AppointmentTaskBodyPane(lAppointment, layoutHelp);
 			taskAppointmentBodyPanes.add(lAppointmentPane);
-			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + (++lCnt)); // for testing
+			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + (++lCnt)); // for testing
 		}
 		//getChildren().addAll(taskAppointmentBodyPanes);				
 	}
@@ -284,7 +286,7 @@ class DayBodyPane extends Pane
 		for (Appointment lAppointment : regularAppointments) {
 			AppointmentRegularBodyPane lAppointmentPane = new AppointmentRegularBodyPane(localDateObjectProperty.get(), lAppointment, layoutHelp);
 			regularAppointmentBodyPanes.add(lAppointmentPane);
-			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + (++lCnt)); // for testing
+			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + (++lCnt)); // for testing
 		}
 		//getChildren().addAll(regularAppointmentBodyPanes);				
 	}

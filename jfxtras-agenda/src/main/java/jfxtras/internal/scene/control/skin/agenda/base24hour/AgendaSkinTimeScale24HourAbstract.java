@@ -27,7 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -50,6 +50,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
+import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
+import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
@@ -57,8 +59,7 @@ import jfxtras.util.NodeUtil;
 /**
  * @author Tom Eugelink
  */
-// TBEERNOT: TODO: whole day Task (TaskHeaderPane)
-// TBEERNOT: multiple day spanning task
+// TBEERNOT: whole day Task (TaskHeaderPane)
 // TBEERNOT: number of call to determineDisplayedLocalDates, can we cache? 
 abstract public class AgendaSkinTimeScale24HourAbstract extends SkinBase<Agenda>
 implements AgendaSkin

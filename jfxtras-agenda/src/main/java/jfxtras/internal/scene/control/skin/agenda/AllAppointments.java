@@ -41,8 +41,11 @@ public class AllAppointments {
 		for (Agenda.Appointment lAppointment : appointments) {
 			if (lAppointment.isWholeDay()) {
 				
-				// if appointment falls on the same date as this day pane
-				if (lAppointment.getStartDateTime().toLocalDate().isEqual(localDate)) {
+				LocalDate startLocalDate = lAppointment.getStartDateTime().toLocalDate();
+				LocalDate endLocalDate = (lAppointment.getEndDateTime() == null ? startLocalDate : lAppointment.getEndDateTime().minusNanos(1).toLocalDate());  // end is exclusive, so subtract one nano
+				if ( (startLocalDate.isEqual(localDate) || startLocalDate.isBefore(localDate))
+				  && (endLocalDate.isEqual(localDate) || endLocalDate.isAfter(localDate)) 
+				) {
 					collectedAppointments.add(lAppointment);
 				}
 			}
