@@ -14,6 +14,11 @@ public interface AgendaSkin {
 	void setupAppointments();
 	
 	/**
+	 * Needed to be able to switch skins
+	 */
+	void unbindFromSkinnable();
+	
+	/**
 	 * 
 	 * @param x screen coordinate
 	 * @param y screen coordinate

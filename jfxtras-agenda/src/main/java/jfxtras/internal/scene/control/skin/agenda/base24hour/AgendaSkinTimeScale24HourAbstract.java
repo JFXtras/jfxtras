@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -51,6 +54,7 @@ import javafx.util.Duration;
 import jfxtras.animation.Timer;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
+import jfxtras.internal.scene.control.skin.agenda.AgendaSkinSwitcher;
 import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
@@ -89,25 +93,46 @@ implements AgendaSkin
 		createNodes();
 
 		// react to changes in the locale 
-		getSkinnable().localeProperty().addListener( (observable) -> {
-			refresh();
-		});
+		getSkinnable().localeProperty().addListener(localeInvalidationListener);
 		 
 		// react to changes in the displayed calendar 
-		getSkinnable().displayedDateTime().addListener( (observable) -> {
-			assignDateToDayAndHeaderPanes();
-			setupAppointments();
-		});
+		getSkinnable().displayedDateTime().addListener(displayedDateTimeInvalidationListener);
 		
 		// react to changes in the appointments 
-		getSkinnable().appointments().addListener( (javafx.collections.ListChangeListener.Change<? extends Appointment> change) -> {
-			setupAppointments();
-		});
+		getSkinnable().appointments().addListener(appointmentsListChangeListener);
 		
 		// initial setup
 		refresh();
 	}
-	AllAppointments appointments = null;
+	AllAppointments appointments = null;	
+	private InvalidationListener localeInvalidationListener = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable arg0) {
+			refresh();
+		}
+	};
+	private InvalidationListener displayedDateTimeInvalidationListener = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable arg0) {
+			assignDateToDayAndHeaderPanes();
+			setupAppointments();
+		}
+	};
+	private ListChangeListener<Agenda.Appointment> appointmentsListChangeListener = new ListChangeListener<Agenda.Appointment>(){
+		@Override
+		public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes) {
+			setupAppointments();
+		}
+	};
+	
+	/**
+	 * 
+	 */
+	public void unbindFromSkinnable() {
+		getSkinnable().localeProperty().removeListener(localeInvalidationListener);
+		getSkinnable().displayedDateTime().removeListener(displayedDateTimeInvalidationListener);
+		getSkinnable().appointments().removeListener(appointmentsListChangeListener);
+	}
 
 	/**
 	 * Assign a calendar to each day, so it knows what it must draw.
@@ -149,10 +174,11 @@ implements AgendaSkin
 	private void refreshLocale()
 	{
 		// create the formatter to use
-		layoutHelp.dayOfWeekDateFormat = new SimpleDateFormat("E", getSkinnable().getLocale());
-		layoutHelp.dayOfWeekDateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("E").toFormatter(getSkinnable().getLocale());
-		layoutHelp.dateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, getSkinnable().getLocale());
-		layoutHelp.dateDateTimeFormatter= new DateTimeFormatterBuilder().appendLocalized(FormatStyle.SHORT, null).toFormatter(getSkinnable().getLocale());
+		Locale locale = getSkinnable().getLocale();
+		layoutHelp.dayOfWeekDateFormat = new SimpleDateFormat("E", locale);
+		layoutHelp.dayOfWeekDateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("E").toFormatter(locale);
+		layoutHelp.dateFormat = (SimpleDateFormat)SimpleDateFormat.getDateInstance(SimpleDateFormat.SHORT, locale);
+		layoutHelp.dateDateTimeFormatter= new DateTimeFormatterBuilder().appendLocalized(FormatStyle.SHORT, null).toFormatter(locale);
 
 		// assign weekend of weekday class
 		for (DayBodyPane lDayBodyPane : weekBodyPane.dayBodyPanes)
@@ -275,10 +301,11 @@ implements AgendaSkin
 			prefWidthProperty().bind(weekBodyPane.widthProperty()); // same width as the weekpane
 			prefHeightProperty().bind(layoutHelp.headerHeightProperty);
 			
-// TBEERNOT: need to unbind all listeners from the skinnable before I can set a new skin!!!			
-//			// add the skin switcher
-//			AgendaSkinSwitcher skinSwitcher = new AgendaSkinSwitcher(control);
-//			getChildren().add(skinSwitcher);
+// TBEERNOT: allow to hide this in CSS		
+// TBEERNOT: if this becomes larger that the space available, it will not push out			
+			// add the skin switcher
+			AgendaSkinSwitcher skinSwitcher = new AgendaSkinSwitcher(control);
+			getChildren().add(skinSwitcher);
 		}
 	}
 

@@ -5,6 +5,7 @@ import jfxtras.scene.control.ImageViewButton;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.layout.HBox;
 
+// TBEERNOT: should we be able to switch dates as well?
 public class AgendaSkinSwitcher extends HBox {
 
 	public AgendaSkinSwitcher(Agenda agenda) {
@@ -19,7 +20,8 @@ public class AgendaSkinSwitcher extends HBox {
 	private ImageViewButton createDayButton(Agenda agenda) {
 		ImageViewButton button = createIcon("week", "Week view");
 		button.setOnMouseClicked( (actionEvent) -> {
-			clearStyleClass(agenda);
+			unbindSkin();
+			clearStyleClass();
 			agenda.setSkin(new AgendaWeekSkin(agenda));
 		});
 		return button;
@@ -28,17 +30,23 @@ public class AgendaSkinSwitcher extends HBox {
 	private ImageViewButton createWeekButton(Agenda agenda) {
 		ImageViewButton button = createIcon("day", "Day view");
 		button.setOnMouseClicked( (actionEvent) -> {
-			clearStyleClass(agenda);
+			unbindSkin();
+			clearStyleClass();
 			agenda.setSkin(new AgendaDaySkin(agenda));
 		});
 		return button;
 	}
 
-	private void clearStyleClass(Agenda agenda) {
+	private void clearStyleClass() {
 		agenda.getStyleClass().clear();
 		agenda.getStyleClass().add(Agenda.class.getSimpleName());
 	}
 	
+	private void unbindSkin() {
+		if (agenda.getSkin() != null) {
+			((AgendaSkin)agenda.getSkin()).unbindFromSkinnable();
+		}
+	}
 	
 	/**
 	 * 
