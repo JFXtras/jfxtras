@@ -41,11 +41,11 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 	protected final boolean lastPaneOfAppointment;
 
 	// for the role of cluster owner
-	List<AppointmentAbstractTrackedPane> clusterMembers = null; 
-	List<List<AppointmentAbstractTrackedPane>> clusterTracks = null;
+	List<AppointmentAbstractTrackedPane> clusterMembers = new ArrayList<>(); 
+	List<List<AppointmentAbstractTrackedPane>> clusterTracks = new ArrayList<>();
 	
 	// for the role of cluster member
-	AppointmentAbstractTrackedPane clusterOwner = null;
+	AppointmentAbstractTrackedPane clusterOwner = this;
 	int clusterTrackIdx = -1;
 
 	/**
@@ -101,22 +101,33 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 	 * - and naturally the total width and height available to draw the day.
 	 * 
 	 */
-	static public List<? extends AppointmentAbstractTrackedPane> determineTracks(List<? extends AppointmentAbstractTrackedPane> regularAppointmentBodyPanes) {
+	static public List<? extends AppointmentAbstractTrackedPane> determineTracks(List<? extends AppointmentAbstractTrackedPane> appointmentAbstractTrackedPanes) {
 		
 		// sort on start time and then decreasing duration
-		Collections.sort(regularAppointmentBodyPanes, new Comparator<AppointmentAbstractTrackedPane>() {
+		Collections.sort(appointmentAbstractTrackedPanes, new Comparator<AppointmentAbstractTrackedPane>() {
 			@Override
 			public int compare(AppointmentAbstractTrackedPane o1, AppointmentAbstractTrackedPane o2) {
-				if (o1.startDateTime.isEqual(o2.startDateTime) == false) {
+				// if not same start, then compare on starttime
+				if (!o1.startDateTime.isEqual(o2.startDateTime)) {
 					return o1.startDateTime.compareTo(o2.startDateTime);
 				}
+				
+				// task after appointment
+				if (o1 instanceof AppointmentRegularBodyPane && o2 instanceof AppointmentTaskBodyPane) {
+					return -1;
+				}
+				if (o1 instanceof AppointmentTaskBodyPane && o2 instanceof AppointmentRegularBodyPane) {
+					return 1;
+				}
+				
+				// longest last 
 				return o1.durationInMS == o2.durationInMS ? 0 : (o1.durationInMS > o2.durationInMS ? -1 : 1);
 			}
 		});
 		
 		// start placing appointments in the tracks
 		AppointmentAbstractTrackedPane lClusterOwner = null;
-		for (AppointmentAbstractTrackedPane lAppointmentPane : regularAppointmentBodyPanes) 
+		for (AppointmentAbstractTrackedPane lAppointmentPane : appointmentAbstractTrackedPanes) 
 		{
 			// if there is no cluster owner
 			if (lClusterOwner == null) {
@@ -158,7 +169,7 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 		}
 		
 		// done
-		return regularAppointmentBodyPanes;
+		return appointmentAbstractTrackedPanes;
 	}
 	
 	/**
@@ -189,7 +200,7 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 	/**
 	 * 
 	 */
-	static private boolean checkIfTheAppointmentOverlapsAnAppointmentAlreadyInThisTrack(List<List<AppointmentAbstractTrackedPane>> tracks, int tracknr, AppointmentAbstractTrackedPane appointmentPane)
+	static private boolean checkIfTheAppointmentOverlapsAnAppointmentAlreadyInThisTrack(List<List<AppointmentAbstractTrackedPane>> tracks, int tracknr, AppointmentAbstractTrackedPane newAppointmentPane)
 	{
 		// get the track
 		List<AppointmentAbstractTrackedPane> lTrack = tracks.get(tracknr);
@@ -200,15 +211,19 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 			// There is an overlap:
 			// if the start time of the already placed appointment is before or equals the new appointment's end time 
 			// and the end time of the already placed appointment is after or equals the new appointment's start time
-			// ...PPPPPPPPP...
+			// ...PPPPPPPPP...    
 			// .NNNN.......... -> Ps <= Ne & Pe >= Ns -> overlap
 			// .....NNNNN..... -> Ps <= Ne & Pe >= Ns -> overlap
 			// ..........NNN.. -> Ps <= Ne & Pe >= Ns -> overlap
 			// .NNNNNNNNNNNNN. -> Ps <= Ne & Pe >= Ns -> overlap
-			// .N............. -> false	& Pe >= Ns -> no overlap
-			// .............N. -> Ps <= Ne & false	-> no overlap
-			if ( (lAppointmentPane.startDateTime.isEqual(appointmentPane.startDateTime) || appointmentPane.endDateTime == null || lAppointmentPane.startDateTime.isBefore(appointmentPane.endDateTime)) 
-			  && lAppointmentPane.endDateTime != null && (lAppointmentPane.endDateTime.isEqual(appointmentPane.startDateTime) || lAppointmentPane.endDateTime.isAfter(appointmentPane.startDateTime))
+			// .N............. -> false    & Pe >= Ns -> no overlap
+			// .............N. -> Ps <= Ne & false	  -> no overlap
+			LocalDateTime lPlacedStart = lAppointmentPane.startDateTime;
+			LocalDateTime lPlacedEnd = (lAppointmentPane.endDateTime != null ? lAppointmentPane.endDateTime : lAppointmentPane.startDateTime.plusMinutes(10));
+			LocalDateTime lNewStart = newAppointmentPane.startDateTime;
+			LocalDateTime lNewEnd = (newAppointmentPane.endDateTime != null ? newAppointmentPane.endDateTime : newAppointmentPane.startDateTime.plusMinutes(10));
+			if ( (lPlacedStart.isEqual(lNewStart) || lNewEnd == null || lPlacedStart.isBefore(lNewEnd)) 
+			  && lPlacedEnd != null && (lPlacedEnd.isEqual(lNewStart) || lPlacedEnd.isAfter(lNewStart))
 			   )
 			{
 				// overlap
@@ -219,6 +234,68 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 		// no overlap
 		return false;
 	}
+	
+	/**
+	 * 
+	 */
+//	static private boolean checkIfTheAppointmentOverlapsAnAppointmentAlreadyInThisTrack(List<List<AppointmentAbstractTrackedPane>> tracks, int tracknr, AppointmentAbstractTrackedPane newAppointmentPane)
+//	{
+//		// get the track
+//		List<AppointmentAbstractTrackedPane> lTrack = tracks.get(tracknr);
+//		if (lTrack.size() == 0) {
+//			return false; // no overlap
+//		}
+//		
+//		// scan all existing appointments in this track
+//		for (AppointmentAbstractTrackedPane lPlacedAppointmentPane : lTrack)
+//		{
+//			// There is an overlap:
+//			// if the start time of the already placed appointment is before or equals the new appointment's end time 
+//			// and the end time of the already placed appointment is after or equals the new appointment's start time
+//			//
+//			// ...PPPPPPPPP... already placed appointment with end date
+//			//
+//			// .NNNN.......... -> overlap
+//			// .....NNNNN..... -> overlap
+//			// ..........NNN.. -> overlap
+//			// .NNNNNNNNNNNNN. -> overlap
+//			// .N............. -> no overlap -> N-end <= P-start [1]
+//			// .............N. -> no overlap -> N-start >= p-end [2]
+//			// .NNNNNNNNNNNNNN -> overlap (new without end date)
+//			// ......NNNNNNNNN -> overlap (new without end date)
+//			// .............NN -> no overlap (new without end date) -> N-start >= p-end [3]
+//			//
+//			// ...PPPPPPPPPPPP already placed appointment without end date
+//			// .NNNN.......... -> overlap
+//			// .....NNNNN..... -> overlap
+//			// ..........NNN.. -> overlap
+//			// .NNNNNNNNNNNNN. -> overlap
+//			// .N............. -> no overlap -> N-end <= P-start [4]
+//			// .............N. -> overlap
+//			// .NNNNNNNNNNNNNN -> overlap (new without end date)
+//			// ......NNNNNNNNN -> overlap (new without end date)
+//			// .............NN -> overlap (new without end date)
+//			if ( (lPlacedAppointmentPane.endDateTime != null && newAppointmentPane.endDateTime != null && isBeforeOrEqual(newAppointmentPane.endDateTime, lPlacedAppointmentPane.startDateTime)) // [1]
+//			  || (lPlacedAppointmentPane.endDateTime != null && newAppointmentPane.endDateTime != null && isAfterOrEqual(newAppointmentPane.startDateTime, lPlacedAppointmentPane.endDateTime)) // [2]
+//			  || (lPlacedAppointmentPane.endDateTime != null && newAppointmentPane.endDateTime == null && isAfterOrEqual(newAppointmentPane.startDateTime, lPlacedAppointmentPane.endDateTime)) // [3]
+//			  || (lPlacedAppointmentPane.endDateTime == null && newAppointmentPane.endDateTime != null && isBeforeOrEqual(newAppointmentPane.endDateTime, lPlacedAppointmentPane.startDateTime)) // [4]
+//			   )
+//			{
+//				// no overlap
+//				return false;
+//			}
+//		}
+//		// overlap
+//		return true;
+//	}
+//
+//	static private boolean isBeforeOrEqual(LocalDateTime ldt1, LocalDateTime ldt2) {
+//		return ldt1.isBefore(ldt2) || ldt1.isEqual(ldt2);
+//	}
+//	
+//	static private boolean isAfterOrEqual(LocalDateTime ldt1, LocalDateTime ldt2) {
+//		return ldt1.isAfter(ldt2) || ldt1.isEqual(ldt2);
+//	}
 
 	/**
 	 * 

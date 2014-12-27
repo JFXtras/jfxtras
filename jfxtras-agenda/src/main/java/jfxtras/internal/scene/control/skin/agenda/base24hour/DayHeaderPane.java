@@ -69,14 +69,6 @@ public class DayHeaderPane extends Pane {
 		});
 		setupAppointments();
 		
-		// change the layout related to the size
-		widthProperty().addListener( (observable) -> {
-			relayout();
-		});
-		heightProperty().addListener( (observable) -> {
-			relayout();
-		});
-		
 		// setup the create appointment
 		setupMouse();
 	}
@@ -93,25 +85,6 @@ public class DayHeaderPane extends Pane {
 	/**
 	 * 
 	 */
-	public void relayout() {
-		// position headers:
-		// - we know our own height
-		// - we know the height each AppointmentHeaderPar is allowed to have
-		// - so the start position is calculated from the bottom
-		double lY = getHeight() - (appointmentHeaderPanes.size() * layoutHelp.appointmentHeaderPaneHeightProperty.get()); // to make sure the appointments are renders aligned bottom
-		for (AppointmentWholedayHeaderPane lAppointmentHeaderPane : appointmentHeaderPanes) {
-			int lIdx = appointmentHeaderPanes.indexOf(lAppointmentHeaderPane);
-			lAppointmentHeaderPane.setLayoutX(lIdx * layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get()); // each pane is cascade offset to the right to allow connecting to the wholeday appointment on the day pane 
-			lAppointmentHeaderPane.setLayoutY(lY); // each pane is cascaded offset down so the title label is visible 
-			lAppointmentHeaderPane.setPrefWidth( getWidth() - (lIdx * layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get()) ); // make sure the size matches the cascading
-			lAppointmentHeaderPane.setPrefHeight( getHeight() - lY ); // and the height reaches all the way to the bottom to connect to the flagpole 
-			lY += layoutHelp.appointmentHeaderPaneHeightProperty.get();
-		}
-	}
-	
-	/**
-	 * 
-	 */
 	public void setupAppointments() {
 		
 		// remove all appointments
@@ -123,14 +96,20 @@ public class DayHeaderPane extends Pane {
 		appointments.addAll( allAppointments.collectWholedayFor(localDateObjectProperty.get()) );
 		int lCnt = 0;
 		for (Appointment lAppointment : appointments) {
+			// create pane
 			AppointmentWholedayHeaderPane lAppointmentHeaderPane = new AppointmentWholedayHeaderPane(lAppointment, layoutHelp);
 			getChildren().add(lAppointmentHeaderPane);				
 			appointmentHeaderPanes.add(lAppointmentHeaderPane);
-			lAppointmentHeaderPane.setId(lAppointmentHeaderPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + (++lCnt)); // for testing
+			lAppointmentHeaderPane.setId(lAppointmentHeaderPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
+			
+			// position by binding
+			lAppointmentHeaderPane.layoutXProperty().bind(layoutHelp.wholedayAppointmentFlagpoleWidthProperty.multiply(lCnt)); // each pane is cascade offset to the right to allow connecting to the wholeday appointment on the day pane
+			lAppointmentHeaderPane.layoutYProperty().bind(heightProperty().subtract(layoutHelp.appointmentHeaderPaneHeightProperty.multiply(appointments.size() - lCnt))); // each pane is cascaded offset down so the title label is visible 
+			lAppointmentHeaderPane.prefWidthProperty().bind(widthProperty().subtract(layoutHelp.wholedayAppointmentFlagpoleWidthProperty.multiply(lCnt))); // make sure the size matches the cascading
+			lAppointmentHeaderPane.prefHeightProperty().bind(heightProperty().subtract(lAppointmentHeaderPane.layoutYProperty())); // and the height reaches all the way to the bottom to connect to the flagpole
+			
+			lCnt++;
 		}
-		
-		// and layout
-		relayout();
 	}
 	final private List<Appointment> appointments = new ArrayList<>();
 	final private List<AppointmentWholedayHeaderPane> appointmentHeaderPanes = new ArrayList<>();

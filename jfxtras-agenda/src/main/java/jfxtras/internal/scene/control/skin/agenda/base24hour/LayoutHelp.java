@@ -47,7 +47,6 @@ public class LayoutHelp {
 		
 		// time column
 		timeWidthProperty.bind( timeColumnWhitespaceProperty.add( new Text("88:88").getBoundsInParent().getWidth() )  );
-
 	}
 	final Agenda skinnable;
 	final AgendaSkin skin;

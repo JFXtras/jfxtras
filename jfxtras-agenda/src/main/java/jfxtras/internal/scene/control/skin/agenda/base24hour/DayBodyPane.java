@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
@@ -155,49 +157,50 @@ class DayBodyPane extends Pane
 	private boolean dragged = false;
 
 	/**
-	 * 
+	 * The tracked panes are too complex to do via binding (unlike the wholeday flagpoles)
 	 */
 	private void relayout()
 	{
-		// TBEERNOT: binding instead of set (and remove the event listeners in the constructor as well)
-		// first place all the whole day appointments
-		int lWholedayCnt = 0;
-		for (AppointmentWholedayBodyPane lAppointmentPane : wholedayAppointmentBodyPanes) {
-			lAppointmentPane.setLayoutX(NodeUtil.snapXY(lWholedayCnt * layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get()));
-			lAppointmentPane.setLayoutY(0);
-			lAppointmentPane.setPrefSize(NodeUtil.snapWH(lAppointmentPane.getLayoutX(), layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get()), NodeUtil.snapWH(lAppointmentPane.getLayoutY(), layoutHelp.dayHeightProperty.get()));
-			lWholedayCnt++;
-		}
-		
-		// calculate how much room is remaining for the regular appointments
-		double lRemainingWidthForRegularAppointments = layoutHelp.dayContentWidthProperty.get() - (lWholedayCnt * layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get());			
+		// prepare
+		int lWholedayCnt = wholedayAppointmentBodyPanes.size();
+		double lAllFlagpolesWidth = layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get() * lWholedayCnt;
+		double lDayWidth = layoutHelp.dayContentWidthProperty.get();
+		double lRemainingWidthForAppointments = lDayWidth - lAllFlagpolesWidth;
+		double lNumberOfPixelsPerMinute = layoutHelp.dayHeightProperty.get() / (24 * 60);
 		
 		// then add all tracked appointments (regular & task) to the day
 		for (AppointmentAbstractTrackedPane lAppointmentAbstractTrackedPane : trackedAppointmentBodyPanes) {
 			
-			// the X is determine by offsetting the wholeday appointments and then calculate the X of the track the appointment is placed in (available width / number of tracks) 
-			lAppointmentAbstractTrackedPane.setLayoutX( NodeUtil.snapXY((lWholedayCnt * layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get()) + (lRemainingWidthForRegularAppointments / lAppointmentAbstractTrackedPane.clusterOwner.clusterTracks.size() * lAppointmentAbstractTrackedPane.clusterTrackIdx)));
+			// for this pane specifically
+			double lNumberOfTracks = (double)lAppointmentAbstractTrackedPane.clusterOwner.clusterTracks.size();
+			double lTrackWidth = lRemainingWidthForAppointments / lNumberOfTracks;
+			double lTrackIdx = (double)lAppointmentAbstractTrackedPane.clusterTrackIdx;
+			
+			// the X is determined by offsetting the wholeday appointments and then calculate the X of the track the appointment is placed in (available width / number of tracks) 
+			double lX = lAllFlagpolesWidth + (lTrackWidth * lTrackIdx);
+			lAppointmentAbstractTrackedPane.setLayoutX( NodeUtil.snapXY(lX));
 			
 			// the Y is determined by the start time in minutes projected onto the total day height (being 24 hours)
-			int lTimeFactor = (lAppointmentAbstractTrackedPane.startDateTime.getHour() * 60) + lAppointmentAbstractTrackedPane.startDateTime.getMinute();
-			lAppointmentAbstractTrackedPane.setLayoutY( NodeUtil.snapXY(layoutHelp.dayHeightProperty.get() / (24 * 60) * lTimeFactor) );
+			int lStartOffsetInMinutes = (lAppointmentAbstractTrackedPane.startDateTime.getHour() * 60) + lAppointmentAbstractTrackedPane.startDateTime.getMinute();
+			double lY = lNumberOfPixelsPerMinute * lStartOffsetInMinutes;
+			lAppointmentAbstractTrackedPane.setLayoutY( NodeUtil.snapXY(lY) );
 			
 			// the width is the remaining width (subtracting the wholeday appointments) divided by the number of tracks in the cluster
-			double lW = (layoutHelp.dayContentWidthProperty.get() - (wholedayAppointmentBodyPanes.size() * layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get())) * (1.0 / (((double)lAppointmentAbstractTrackedPane.clusterOwner.clusterTracks.size())));
+			double lW = lTrackWidth;
 			// all but the most right appointment get 50% extra width, so they underlap the next track 
-			if (lAppointmentAbstractTrackedPane.clusterTrackIdx < lAppointmentAbstractTrackedPane.clusterOwner.clusterTracks.size() - 1) {
+			if (lTrackIdx < lNumberOfTracks - 1) {
 				lW *= 1.75;
 			}
 			lAppointmentAbstractTrackedPane.setPrefWidth( NodeUtil.snapWH(lAppointmentAbstractTrackedPane.getLayoutX(), lW) );
-			// TBEERNOT: task may scale to full remaining width (including the columns to the right)
 			
-			// the height is determing by the duration projected against the total dayHeight (being 24 hours)
+			// the height is determined by the duration projected against the total dayHeight (being 24 hours)
 			double lH;
 			if (lAppointmentAbstractTrackedPane instanceof AppointmentTaskBodyPane) {
 				lH = 5; // TBEERNOT: task height via layoutHelper?
 			}
 			else {
-				lH = (layoutHelp.dayHeightProperty.get() / (24 * 60) * (lAppointmentAbstractTrackedPane.durationInMS / 1000 / 60) );
+				long lHeightInMinutes = lAppointmentAbstractTrackedPane.durationInMS / 1000 / 60;
+				lH = lNumberOfPixelsPerMinute * lHeightInMinutes;
 
 				// the height has a minimum size, in order to be able to render sensibly
 				if (lH < 2 * layoutHelp.paddingProperty.get()) {
@@ -241,9 +244,18 @@ class DayBodyPane extends Pane
 		// for all wholeday appointments on this date, create a header appointment pane
 		int lCnt = 0;
 		for (Appointment lAppointment : wholedayAppointments) {
+			// create pane
 			AppointmentWholedayBodyPane lAppointmentPane = new AppointmentWholedayBodyPane(localDateObjectProperty.get(), lAppointment, layoutHelp);
 			wholedayAppointmentBodyPanes.add(lAppointmentPane);
-			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + (++lCnt)); // for testing
+			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
+			
+			// position by binding
+			lAppointmentPane.layoutXProperty().bind(NodeUtil.snapXY( layoutHelp.wholedayAppointmentFlagpoleWidthProperty.multiply(lCnt) ));
+			lAppointmentPane.setLayoutY(0);
+			lAppointmentPane.prefWidthProperty().bind(layoutHelp.wholedayAppointmentFlagpoleWidthProperty);
+			lAppointmentPane.prefHeightProperty().bind(layoutHelp.dayHeightProperty);
+			
+			lCnt++;
 		}
 		getChildren().addAll(wholedayAppointmentBodyPanes);				
 	}
