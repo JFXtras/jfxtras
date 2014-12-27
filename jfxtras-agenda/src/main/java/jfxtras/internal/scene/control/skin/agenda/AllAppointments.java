@@ -8,6 +8,11 @@ import javafx.collections.ObservableList;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 
+/**
+ * Capture the logic to extract the different types of appointments in one place.
+ * 
+ * @author Tom Eugelink
+ */
 public class AllAppointments {
 
 	/**

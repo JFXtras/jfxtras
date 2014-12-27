@@ -45,7 +45,10 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.LocalDateTextField;
+import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.Agenda;
+import jfxtras.scene.control.agenda.AgendaSkinSwitcher;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.Agenda.DateTimeRange;
@@ -280,14 +283,15 @@ public class AgendaTrial1 extends Application {
 			lAgenda.appointments().clear();
 			LocalDateTime now = LocalDateTime.now();
 			
-			if ( (range.getStartDateTime().isBefore(now) || range.getStartDateTime().isEqual(now))
-			  && (range.getEndDateTime().isAfter(now) || range.getEndDateTime().isEqual(now))
-			) {
+			WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
+			int startWeekNumber = range.getStartDateTime().get(weekFields.weekOfWeekBasedYear());
+			int nowWeekNumber = range.getStartDateTime().get(weekFields.weekOfWeekBasedYear());
+			
+			if (startWeekNumber == nowWeekNumber) {
 				// add predefined appointments 
 				lAgenda.appointments().addAll(lTestAppointments);
 			}
 			else {
-				WeekFields weekFields = WeekFields.of(Locale.getDefault());
 				int firstDayOfWeek = weekFields.getFirstDayOfWeek().getValue();
 				int currentDayOfWeek = now.getDayOfWeek().getValue();
 				LocalDateTime lFirstDayOfWeekCalendar = now.plusDays( currentDayOfWeek >= firstDayOfWeek ? currentDayOfWeek - firstDayOfWeek : firstDayOfWeek - currentDayOfWeek);
@@ -316,9 +320,13 @@ public class AgendaTrial1 extends Application {
 		});
 		
 		HBox lHBox = new HBox();
-		CalendarTextField lCalendarTextField = new CalendarTextField();
-		lCalendarTextField.calendarProperty().bindBidirectional(lAgenda.displayedCalendar());		
-        lHBox.getChildren().add(lCalendarTextField);
+		// add the skin switcher
+		AgendaSkinSwitcher skinSwitcher = new AgendaSkinSwitcher(lAgenda);
+		lHBox.getChildren().add(skinSwitcher);
+		// add the displayed date textfield
+		LocalDateTimeTextField lLocalDateTimeTextField = new LocalDateTimeTextField();
+		lLocalDateTimeTextField.localDateTimeProperty().bindBidirectional(lAgenda.displayedDateTime());		
+        lHBox.getChildren().add(lLocalDateTimeTextField);
         
         // create scene
         BorderPane lBorderPane = new BorderPane();

@@ -54,7 +54,6 @@ import javafx.util.Duration;
 import jfxtras.animation.Timer;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
-import jfxtras.internal.scene.control.skin.agenda.AgendaSkinSwitcher;
 import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
@@ -300,12 +299,6 @@ implements AgendaSkin
 			
 			prefWidthProperty().bind(weekBodyPane.widthProperty()); // same width as the weekpane
 			prefHeightProperty().bind(layoutHelp.headerHeightProperty);
-			
-// TBEERNOT: allow to hide this in CSS		
-// TBEERNOT: if this becomes larger that the space available, it will not push out			
-			// add the skin switcher
-			AgendaSkinSwitcher skinSwitcher = new AgendaSkinSwitcher(control);
-			getChildren().add(skinSwitcher);
 		}
 	}
 

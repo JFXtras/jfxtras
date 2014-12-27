@@ -41,8 +41,10 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
+import jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
+import jfxtras.scene.control.ImageViewButton;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -554,4 +556,23 @@ public class Agenda extends Control
 		public void setStyleClass(String value) { styleClassObjectProperty.setValue(value); }
 		public AppointmentGroupImpl withStyleClass(String value) { setStyleClass(value); return this; }
 	}
+	
+	
+	/**
+	 * Calling setSkin alone does not cut it.
+	 */
+	public void switchSkin(Skin skin) {
+		// unbind existing skin
+		if (getSkin() != null && getSkin() instanceof AgendaSkin) {
+			((AgendaSkin)getSkin()).unbindFromSkinnable();
+		}
+
+		// clearStyleClass
+		getStyleClass().clear();
+		getStyleClass().add(Agenda.class.getSimpleName());
+		
+		// set new skin
+		setSkin(skin);
+	}
+
 }

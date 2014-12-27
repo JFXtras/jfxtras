@@ -22,9 +22,9 @@ import jfxtras.util.NodeUtil;
  */
 class DayBodyPane extends Pane
 {
-	// know your header
-//	DayHeaderPane dayHeaderPane = null;
-	
+	/**
+	 * 
+	 */
 	public DayBodyPane(LocalDate localDate, AllAppointments allAppointments, LayoutHelp layoutHints) {
 		this.localDateObjectProperty.set(localDate);
 		this.allAppointments = allAppointments;
@@ -35,6 +35,9 @@ class DayBodyPane extends Pane
 	final AllAppointments allAppointments;
 	final LayoutHelp layoutHelp;
 	
+	/**
+	 * 
+	 */
 	private void construct() {
 		
 		// for debugging setStyle("-fx-border-color:PINK;-fx-border-width:4px;");		
