@@ -8,6 +8,9 @@ import jfxtras.scene.layout.HBox;
 
 public class AgendaSkinSwitcher extends HBox {
 
+	/**
+	 * 
+	 */
 	public AgendaSkinSwitcher(Agenda agenda) {
 		this.agenda = agenda;
 		getStyleClass().add(AgendaSkinSwitcher.class.getSimpleName());
@@ -17,6 +20,9 @@ public class AgendaSkinSwitcher extends HBox {
 	}
 	final Agenda agenda;
 	
+	/**
+	 * 
+	 */
 	private ImageViewButton createDayButton(Agenda agenda) {
 		ImageViewButton button = createIcon("week", "Week view");
 		button.setOnMouseClicked( (actionEvent) -> {
@@ -24,7 +30,10 @@ public class AgendaSkinSwitcher extends HBox {
 		});
 		return button;
 	}
-	
+
+	/**
+	 * 
+	 */
 	private ImageViewButton createWeekButton(Agenda agenda) {
 		ImageViewButton button = createIcon("day", "Day view");
 		button.setOnMouseClicked( (actionEvent) -> {
@@ -35,8 +44,6 @@ public class AgendaSkinSwitcher extends HBox {
 	
 	/**
 	 * 
-	 * @param popup
-	 * @return
 	 */
 	private ImageViewButton createIcon(String type, String tooltip) {
 		ImageViewButton imageView = new ImageViewButton();

@@ -27,14 +27,8 @@ public class AbstractAgendaTest extends JFXtrasGuiTest {
 		agenda.setPrefSize(1000, 800);
 		
         // setup appointment groups
-        for (int i = 0; i < 24; i++) {
-        	appointmentGroupMap.put("group" + (i < 10 ? "0" : "") + i, new Agenda.AppointmentGroupImpl().withStyleClass("group" + i));
-        }
-        for (String lId : appointmentGroupMap.keySet())
-        {
-            Agenda.AppointmentGroup lAppointmentGroup = appointmentGroupMap.get(lId);
-            lAppointmentGroup.setDescription(lId);
-            agenda.appointmentGroups().add(lAppointmentGroup);
+        for (Agenda.AppointmentGroup lAppointmentGroup : agenda.appointmentGroups()) {
+        	appointmentGroupMap.put(lAppointmentGroup.getDescription(), lAppointmentGroup);
         }
 
         // accept new appointments
@@ -55,8 +49,8 @@ public class AbstractAgendaTest extends JFXtrasGuiTest {
 		vbox.getChildren().add(agenda);
 		return vbox;
 	}
-	protected VBox vbox = new VBox();
+	protected VBox vbox = null; // cannot make this final and assign upon construction
     final protected Map<String, Agenda.AppointmentGroup> appointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
-    protected Agenda agenda = null;
+    protected Agenda agenda = null; // cannot make this final and assign upon construction
 
 }

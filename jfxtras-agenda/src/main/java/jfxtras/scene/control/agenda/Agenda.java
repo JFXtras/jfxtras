@@ -34,6 +34,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -109,11 +111,13 @@ public class Agenda extends Control
 		setPrefSize(1000, 800);
 		
 		// setup the CSS
-		// the -fx-skin attribute in the CSS sets which Skin class is used
-		this.getStyleClass().add(this.getClass().getSimpleName());
+		this.getStyleClass().add(Agenda.class.getSimpleName());
 		
 		// handle deprecated
 		DateTimeToCalendarHelper.syncLocalDateTime(displayedCalendarObjectProperty, displayedLocalDateTimeObjectProperty, localeObjectProperty);
+
+		// appointmentGroups
+		constructAppointmentGroups();
 		
 		// appointments
 		constructAppointments();
@@ -165,6 +169,19 @@ public class Agenda extends Control
 	/** AppointmentGroups: */
 	public ObservableList<AppointmentGroup> appointmentGroups() { return appointmentGroups; }
 	final private ObservableList<AppointmentGroup> appointmentGroups =  javafx.collections.FXCollections.observableArrayList();
+	private void constructAppointmentGroups() {
+		// setup appointment groups as predefined in the CSS
+        final Map<String, Agenda.AppointmentGroup> lAppointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
+        for (int i = 0; i < 24; i++) {
+        	lAppointmentGroupMap.put("group" + (i < 10 ? "0" : "") + i, new Agenda.AppointmentGroupImpl().withStyleClass("group" + i));
+        }
+        for (String lId : lAppointmentGroupMap.keySet())
+        {
+            Agenda.AppointmentGroup lAppointmentGroup = lAppointmentGroupMap.get(lId);
+            lAppointmentGroup.setDescription(lId);
+            appointmentGroups().add(lAppointmentGroup);
+        }
+	}
 
 	/** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
 	public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }

@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -130,6 +131,10 @@ public class DayHeaderPane extends Pane {
 		
 		// start new appointment
 		setOnMousePressed((mouseEvent) -> {
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+				return;
+			}
 			// if there is no one to handle the result, don't even bother
 			if (layoutHelp.skinnable.createAppointmentCallbackProperty().get() == null && layoutHelp.skinnable.newAppointmentCallbackProperty().get() == null) {
 				return;

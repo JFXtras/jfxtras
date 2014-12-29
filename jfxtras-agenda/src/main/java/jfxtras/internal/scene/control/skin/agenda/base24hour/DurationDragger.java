@@ -3,6 +3,7 @@ package jfxtras.internal.scene.control.skin.agenda.base24hour;
 import java.time.LocalDateTime;
 
 import javafx.scene.Cursor;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -42,6 +43,10 @@ public class DurationDragger extends Rectangle
 	private void setupMouseDrag() {
 		// start resize
 		setOnMousePressed( (mouseEvent) -> {
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+				return;
+			}
 
 			// we handle this event
 			mouseEvent.consume();
@@ -62,6 +67,10 @@ public class DurationDragger extends Rectangle
 		
 		// visualize resize
 		setOnMouseDragged( (mouseEvent) -> {
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+				return;
+			}
 
 			// we handle this event
 			mouseEvent.consume();
@@ -82,6 +91,11 @@ public class DurationDragger extends Rectangle
 		
 		// end resize
 		setOnMouseReleased( (mouseEvent) -> {			
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+				return;
+			}
+
 			LocalDateTime endLocalDateTime = calculateEndDateTime(); // must be done before the UI is reset and the event is consumed
 							
 			// we handle this event

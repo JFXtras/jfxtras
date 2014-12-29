@@ -210,6 +210,39 @@ public class AgendaSelectTest extends AbstractAgendaTest {
 		
 		// then
 		Assert.assertEquals(1, cnt.get() );
+		Assert.assertEquals(1, agenda.selectedAppointments().size() );
+		
+		// TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void action2()
+	{
+		// given
+		AtomicInteger cnt = new AtomicInteger(0);
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+			agenda.setActionCallback( (appointment) -> {
+				cnt.incrementAndGet();
+				return null;
+			});
+		});
+		Assert.assertEquals(0, cnt.get() );
+		
+		// when
+		move("#AppointmentRegularBodyPane2014-01-01/0"); 
+		click(MouseButton.MIDDLE); // one click of the middle button suffices
+		
+		// then
+		Assert.assertEquals(1, cnt.get() );
+		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// TestUtil.sleep(3000);
 	}

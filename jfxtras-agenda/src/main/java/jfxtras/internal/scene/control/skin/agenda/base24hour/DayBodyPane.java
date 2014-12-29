@@ -10,6 +10,7 @@ import java.util.TimeZone;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Cursor;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
@@ -75,6 +76,10 @@ class DayBodyPane extends Pane
 		
 		// start new appointment
 		setOnMousePressed((mouseEvent) -> {
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+				return;
+			}
 			// if there is no one to handle the result, don't even bother
 			if (layoutHelp.skinnable.createAppointmentCallbackProperty().get() == null && layoutHelp.skinnable.newAppointmentCallbackProperty().get() == null) {
 				return;
@@ -195,7 +200,7 @@ class DayBodyPane extends Pane
 			// the height is determined by the duration projected against the total dayHeight (being 24 hours)
 			double lH;
 			if (lAppointmentAbstractTrackedPane instanceof AppointmentTaskBodyPane) {
-				lH = 5; // TBEERNOT: task height via layoutHelper?
+				lH = 5; // task height
 			}
 			else {
 				long lHeightInMinutes = lAppointmentAbstractTrackedPane.durationInMS / 1000 / 60;

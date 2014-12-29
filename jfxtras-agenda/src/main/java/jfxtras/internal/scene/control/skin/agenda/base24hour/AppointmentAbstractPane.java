@@ -6,6 +6,7 @@ import java.time.Period;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -87,11 +88,15 @@ abstract public class AppointmentAbstractPane extends Pane {
 	 * 
 	 */
 	private void setupDragging() {
-		
 		// start drag
 		setOnMousePressed( (mouseEvent) -> {
-			// is this a drag start, action or a select?
-			if (mouseEvent.isPrimaryButtonDown() == false) {
+			// action without select: middle button
+			if (mouseEvent.getButton().equals(MouseButton.MIDDLE)) {
+				handleAction();
+				return;
+			}
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
 				return;
 			}
 
@@ -108,10 +113,15 @@ abstract public class AppointmentAbstractPane extends Pane {
 			startX = mouseEvent.getScreenX();
 			startY = mouseEvent.getScreenY();
 			mouseActuallyHasDragged = false;
+			trackingMouse = true;
 		});
 		
 		// visualize dragging
 		setOnMouseDragged( (mouseEvent) -> {
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+				return;
+			}
 			// we handle this event
 			mouseEvent.consume();
 			
@@ -125,8 +135,8 @@ abstract public class AppointmentAbstractPane extends Pane {
 			}
 			
 			// move the drag rectangle
-			double lX = (NodeUtil.screenX(this) - NodeUtil.screenX(layoutHelp.dragPane)) + (mouseEvent.getScreenX() - startX); // top-left of pane + offset of dragrectangle
-			double lY = (NodeUtil.screenY(this) - NodeUtil.screenY(layoutHelp.dragPane)) + (mouseEvent.getScreenY() - startY); // top-left of pane + offset of dragrectangle
+			double lX = (NodeUtil.screenX(this) - NodeUtil.screenX(layoutHelp.dragPane)) + (mouseEvent.getScreenX() - startX); // top-left of pane + offset of drag rectangle
+			double lY = (NodeUtil.screenY(this) - NodeUtil.screenY(layoutHelp.dragPane)) + (mouseEvent.getScreenY() - startY); // top-left of pane + offset of drag rectangle
 			dragRectangle.setX(NodeUtil.snapXY(lX));
 			dragRectangle.setY(NodeUtil.snapXY(lY));
 			mouseActuallyHasDragged = true;
@@ -134,8 +144,13 @@ abstract public class AppointmentAbstractPane extends Pane {
 		
 		// end drag
 		setOnMouseReleased((mouseEvent) -> {
+			// only on primary
+			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+				return;
+			}
 			// we handle this event
 			mouseEvent.consume();
+			trackingMouse = false;
 
 			// reset ui
 			setCursor(Cursor.HAND);
@@ -158,6 +173,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 			}
 		});
 	}
+	private boolean trackingMouse = false;
 	private Rectangle dragRectangle = null;
 	private double startX = 0;
 	private double startY = 0;
