@@ -63,7 +63,6 @@ import jfxtras.util.NodeUtil;
 /**
  * @author Tom Eugelink
  */
-// TBEERNOT: whole day Task (TaskHeaderPane)
 // TBEERNOT: number of call to determineDisplayedLocalDates, can we cache? 
 abstract public class AgendaSkinTimeScale24HourAbstract extends SkinBase<Agenda>
 implements AgendaSkin
@@ -166,9 +165,9 @@ implements AgendaSkin
 		// tell the control what range is displayed, so it can update the appointments
 		LocalDate lStartLocalDate = lLocalDates.get(0);
 		LocalDate lEndLocalDate = lLocalDates.get(lLocalDates.size() - 1);
-		if (getSkinnable().getDateTimeRangeCallback() != null) {
-			Agenda.DateTimeRange lRange = new Agenda.DateTimeRange(lStartLocalDate.atStartOfDay(), lEndLocalDate.plusDays(1).atStartOfDay());
-			getSkinnable().getDateTimeRangeCallback().call(lRange);
+		if (getSkinnable().getLocalDateTimeRangeCallback() != null) {
+			Agenda.LocalDateTimeRange lRange = new Agenda.LocalDateTimeRange(lStartLocalDate.atStartOfDay(), lEndLocalDate.plusDays(1).atStartOfDay());
+			getSkinnable().getLocalDateTimeRangeCallback().call(lRange);
 		}
 		if (getSkinnable().getCalendarRangeCallback() != null) {
 			Agenda.CalendarRange lRange = new Agenda.CalendarRange( DateTimeToCalendarHelper.createCalendarFromLocalDate(lStartLocalDate, TimeZone.getDefault(), Locale.getDefault()), DateTimeToCalendarHelper.createCalendarFromLocalDate(lEndLocalDate, TimeZone.getDefault(), Locale.getDefault()));

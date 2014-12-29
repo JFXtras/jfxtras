@@ -142,7 +142,7 @@ class DayBodyPane extends Pane
 			// ask the control to create a new appointment (null may be returned)
 			Agenda.Appointment lAppointment;
 			if (layoutHelp.skinnable.newAppointmentCallbackProperty().get() != null) {
-				lAppointment = layoutHelp.skinnable.newAppointmentCallbackProperty().get().call(new Agenda.DateTimeRange(lStartDateTime, lEndDateTime));
+				lAppointment = layoutHelp.skinnable.newAppointmentCallbackProperty().get().call(new Agenda.LocalDateTimeRange(lStartDateTime, lEndDateTime));
 			}
 			else {
 				lAppointment = layoutHelp.skinnable.createAppointmentCallbackProperty().get().call(new Agenda.CalendarRange(DateTimeToCalendarHelper.createCalendarFromLocalDateTime(lStartDateTime, TimeZone.getDefault(), Locale.getDefault()), DateTimeToCalendarHelper.createCalendarFromLocalDateTime(lEndDateTime, TimeZone.getDefault(), Locale.getDefault())));

@@ -51,11 +51,21 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * This controls renders appointments similar to Google Calendar.
  * Normally this would be called a Calendar, but since there are controls like CalendarPicker, this would be confusing, hence the name "Agenda".
  * 
- * The control has a list of appointments (classes implementing the Agenda.Appointment interface) and a calendar (date) that should be displayed.
+ * The control has a list of appointments (classes implementing the Agenda.Appointment interface) and a LocalDateTime (date) that should be displayed.
  * The the appropriate appointments for the displayed time frame will be rendered.
  * The coder could provide all appointments in one big list, but that may be a bit memory heavy.
  * An alternative is to register to the displayedCalendar property and upon change update the appointment collection to match the time frame.
  * 
+ * Agenda.Appointment can be used in three ways:
+ * - through Calendar values (by implementing the *StartTime methods or use the Agenda.AppointmentImpl class)
+ * - through ZonedDateTime values (by implementing the *ZonedDateTime methods or use the Agenda.AppointmentImplZoned class)
+ * - through LocalDateTime values (by implementing the *LocalDateTime methods or use the Agenda.AppointmentImplLocal class)
+ * Agenda uses LocalDateTime for render the appointments, the Agenda.Appointment interface contains default implementations for converting all the other presentations to LocalDateTime.
+ * After all Agenda must display all appointments in the same "time scale", it simply is not possible to mix different time zones in one view.
+ * Google Calendar does this by converting everything to UTC (Coordinated Universal Time, previously know as Greenwich Mean time, or GMT), Agenda does this by converting Calendars to ZonedDateTimes, and ZonedDateTimes to LocalDateTimes.
+ * The code used to convert ZonedDateTime to LocalDateTime is somewhat crude and possibly too simplistic, you may want to provide more intelligent conversion.
+ * But you can provide the data in any of the three types, just as long as you understand that LocalDateTime is what is used to render, and what is communicated by Agenda.
+ *
  * Each appointment must have an appointment group, this is a class implementing the Agenda.AppointmentGroup interface (Agenda.AppointmentGroupImpl is available).
  * The most important thing this class provides is a style class name which takes care of the rendering (color) of all appointments in that group.
  * Per default agenda has style classes defined, called group0 .. group23. 
@@ -64,23 +74,17 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * This method should return a new appointment object, for example:
  * [source,java]
  * --
- *      agenda.newAppointmentCallbackProperty().set(new Callback<Agenda.DateTimeRange, Agenda.Appointment>() {
+ *      agenda.newAppointmentCallbackProperty().set(new Callback<Agenda.LocalDateTimeRange, Agenda.Appointment>() {
  *           @Override
- *           public Agenda.Appointment call(Agenda.DateTimeRange dateTimeRange) {
+ *           public Agenda.Appointment call(Agenda.LocalDateTimeRange dateTimeRange) {
  *               return new Agenda.AppointmentImpl()
- *                       .withStartTime(dateTimeRange.getStartDateTime())
- *                       .withEndTime(dateTimeRange.getEndDateTime())
+ *                       .withStartLocalDateTime(dateTimeRange.getStartLocalDateTime())
+ *                       .withEndLocalDateTime(dateTimeRange.getEndLocalDateTime())
  *                       .withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass("group1")); // it is better to have a map of appointment groups to get from
  *           }
  *       });
  * --
  * 
- * Agenda has a default implementation of the Agenda.Appointment interface, in the form of Agenda.AppointmentImpl (Calendar based) or Agenda.AppointmentImpl2 (Java 8 DateTime based).
- * 
- * Agenda displays all appointments in the same "time scale", so if the appointments would provide ZonedDateTime instead of LocalDateTime (all possible TimeZones intermixed), Agenda would need to convert these to the TimeZone it is rendering in.
- * Google Calendar does this by converting everything to UTC (Coordinated Universal Time, previously know as Greenwich Mean time, or GMT), Agenda does this by converting ZonedDateTimes to LocalDateTimes.
- * In order to do this, the Appointment interface has defined methods like getDisplayedAtStartLocalDateTime() with a default implementation. 
- *
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
 public class Agenda extends Control
@@ -211,16 +215,16 @@ public class Agenda extends Control
 	@Deprecated public void setCalendarRangeCallback(Callback<CalendarRange, Void> value) { this.calendarRangeCallbackObjectProperty.setValue(value); }
 	@Deprecated public Agenda withCalendarRangeCallback(Callback<CalendarRange, Void> value) { setCalendarRangeCallback(value); return this; }
 	
-	/** dateTimeRangeCallback: 
+	/** localDateTimeRangeCallback: 
 	 * Appointments should match:
 	 * - start date &gt;= range start
 	 * - end date &lt;= range end
 	 */
-	public ObjectProperty<Callback<DateTimeRange, Void>> dateTimeRangeCallbackProperty() { return dateTimeRangeCallbackObjectProperty; }
-	final private ObjectProperty<Callback<DateTimeRange, Void>> dateTimeRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<DateTimeRange, Void>>(this, "dateTimeRangeCallback", null);
-	public Callback<DateTimeRange, Void> getDateTimeRangeCallback() { return this.dateTimeRangeCallbackObjectProperty.getValue(); }
-	public void setDateTimeRangeCallback(Callback<DateTimeRange, Void> value) { this.dateTimeRangeCallbackObjectProperty.setValue(value); }
-	public Agenda withDateTimeRangeCallback(Callback<DateTimeRange, Void> value) { setDateTimeRangeCallback(value); return this; }
+	public ObjectProperty<Callback<LocalDateTimeRange, Void>> localDateTimeRangeCallbackProperty() { return localDateTimeRangeCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDateTimeRange, Void>> localDateTimeRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Void>>(this, "localDateTimeRangeCallback", null);
+	public Callback<LocalDateTimeRange, Void> getLocalDateTimeRangeCallback() { return this.localDateTimeRangeCallbackObjectProperty.getValue(); }
+	public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
+	public Agenda withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
 	
 	/** addAppointmentCallback:
 	 * Since the Agenda is not the owner of the appointments but only dictates an interface, it does not know how to create a new one.
@@ -272,11 +276,11 @@ public class Agenda extends Control
 		});
 	 * 
 	 */
-	public ObjectProperty<Callback<DateTimeRange, Appointment>> newAppointmentCallbackProperty() { return newAppointmentCallbackObjectProperty; }
-	final private ObjectProperty<Callback<DateTimeRange, Appointment>> newAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<DateTimeRange, Appointment>>(this, "newAppointmentCallback", null);
-	public Callback<DateTimeRange, Appointment> getNewAppointmentCallback() { return this.newAppointmentCallbackObjectProperty.getValue(); }
-	public void setNewAppointmentCallback(Callback<DateTimeRange, Appointment> value) { this.newAppointmentCallbackObjectProperty.setValue(value); }
-	public Agenda withNewAppointmentCallback(Callback<DateTimeRange, Appointment> value) { setNewAppointmentCallback(value); return this; }
+	public ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackProperty() { return newAppointmentCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Appointment>>(this, "newAppointmentCallback", null);
+	public Callback<LocalDateTimeRange, Appointment> getNewAppointmentCallback() { return this.newAppointmentCallbackObjectProperty.getValue(); }
+	public void setNewAppointmentCallback(Callback<LocalDateTimeRange, Appointment> value) { this.newAppointmentCallbackObjectProperty.setValue(value); }
+	public Agenda withNewAppointmentCallback(Callback<LocalDateTimeRange, Appointment> value) { setNewAppointmentCallback(value); return this; }
 
 	/** editAppointmentCallback:
 	 * Agenda has a default popup, but maybe you want to do something yourself.
@@ -320,18 +324,18 @@ public class Agenda extends Control
 	/**
 	 * A Datetime range, for callbacks
 	 */
-	static public class DateTimeRange
+	static public class LocalDateTimeRange
 	{
-		public DateTimeRange(LocalDateTime start, LocalDateTime end)
+		public LocalDateTimeRange(LocalDateTime start, LocalDateTime end)
 		{
 			this.start = start;
 			this.end = end;
 		}
 		
-		public LocalDateTime getStartDateTime() { return start; }
+		public LocalDateTime getStartLocalDateTime() { return start; }
 		final LocalDateTime start;
 		
-		public LocalDateTime getEndDateTime() { return end; }
+		public LocalDateTime getEndLocalDateTime() { return end; }
 		final LocalDateTime end; 
 		
 		public String toString() {
@@ -395,38 +399,38 @@ public class Agenda extends Control
 		// ----
 		// ZonedDateTime: this is the new base to work on
 		
-		default ZonedDateTime getStartDateTime() {
+		default ZonedDateTime getStartZonedDateTime() {
 			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime());
 	    }
-		default void setStartDateTime(ZonedDateTime v) {
+		default void setStartZonedDateTime(ZonedDateTime v) {
 			setStartTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
-		default ZonedDateTime getEndDateTime() {
+		default ZonedDateTime getEndZonedDateTime() {
 			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getEndTime());
 	    }
 		/**
 		 * End is exclusive
 		 */
-		default void setEndDateTime(ZonedDateTime v) {
+		default void setEndZonedDateTime(ZonedDateTime v) {
 			setEndTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
 		// ----
-		// DisplayedAtLocalDateTime: methods to convert the ZonedDateTime to LocalDateTime and vice versa, for displaying the appointment 
+		// LocalDateTime: methods to convert the ZonedDateTime to LocalDateTime and vice versa
 		
-		default LocalDateTime getStartDisplayedAtLocalDateTime() {
-			return getStartDateTime().toLocalDateTime();
+		default LocalDateTime getStartLocalDateTime() {
+			return getStartZonedDateTime().toLocalDateTime();
 	    }
-		default void setStartDisplayedAtLocalDateTime(LocalDateTime v) {
-			setStartDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
+		default void setStartLocalDateTime(LocalDateTime v) {
+			setStartZonedDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 		
-		default LocalDateTime getEndDisplayedAtLocalDateTime() {
-			return getEndDateTime() == null ? null : getEndDateTime().toLocalDateTime();
+		default LocalDateTime getEndLocalDateTime() {
+			return getEndZonedDateTime() == null ? null : getEndZonedDateTime().toLocalDateTime();
 	    }
-		default void setEndDisplayedAtLocalDateTime(LocalDateTime v) {
-			setEndDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
+		default void setEndLocalDateTime(LocalDateTime v) {
+			setEndZonedDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 	}
 	
@@ -505,30 +509,61 @@ public class Agenda extends Control
 	/**
 	 * A class to help you get going using LocalDateTime; all the required methods of the interface are implemented as JavaFX properties 
 	 */
-	static public class AppointmentImpl2 extends AppointmentImplBase<AppointmentImpl2> 
+	static public class AppointmentImplLocal extends AppointmentImplBase<AppointmentImplLocal> 
 	implements Appointment
 	{
 		/** StartDateTime: */
-		public ObjectProperty<LocalDateTime> startDateTimeProperty() { return startDateTimeObjectProperty; }
-		final private ObjectProperty<LocalDateTime> startDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "startDateTime");
-		public LocalDateTime getStartDisplayedAtLocalDateTime() { return startDateTimeObjectProperty.getValue(); }
-		public void setStartDisplayedAtLocalDateTime(LocalDateTime value) { startDateTimeObjectProperty.setValue(value); }
-		public AppointmentImpl2 withStartDateTime(LocalDateTime value) { setStartDisplayedAtLocalDateTime(value); return this; }
+		public ObjectProperty<LocalDateTime> startDisplayedAtLocalDateTime() { return startDisplayedAtLocalDateTime; }
+		final private ObjectProperty<LocalDateTime> startDisplayedAtLocalDateTime = new SimpleObjectProperty<LocalDateTime>(this, "startDisplayedAtLocalDateTime");
+		public LocalDateTime getStartLocalDateTime() { return startDisplayedAtLocalDateTime.getValue(); }
+		public void setStartLocalDateTime(LocalDateTime value) { startDisplayedAtLocalDateTime.setValue(value); }
+		public AppointmentImplLocal withStartDisplayedAtLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
 		
 		/** EndDateTime: */
-		public ObjectProperty<LocalDateTime> endDateTimeProperty() { return endDateTimeObjectProperty; }
-		final private ObjectProperty<LocalDateTime> endDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "endDateTime");
-		public LocalDateTime getEndDisplayedAtLocalDateTime() { return endDateTimeObjectProperty.getValue(); }
-		public void setEndDisplayedAtLocalDateTime(LocalDateTime value) { endDateTimeObjectProperty.setValue(value); }
-		public AppointmentImpl2 withEndDateTime(LocalDateTime value) { setEndDisplayedAtLocalDateTime(value); return this; } 
+		public ObjectProperty<LocalDateTime> endDisplayedAtLocalDateTimeProperty() { return endDisplayedAtLocalDateTimeProperty; }
+		final private ObjectProperty<LocalDateTime> endDisplayedAtLocalDateTimeProperty = new SimpleObjectProperty<LocalDateTime>(this, "endDisplayedAtLocalDateTimeProperty");
+		public LocalDateTime getEndLocalDateTime() { return endDisplayedAtLocalDateTimeProperty.getValue(); }
+		public void setEndLocalDateTime(LocalDateTime value) { endDisplayedAtLocalDateTimeProperty.setValue(value); }
+		public AppointmentImplLocal withEndDisplayedAtLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
 		
 		public String toString()
 		{
 			return super.toString()
 				 + ", "
-				 + this.getStartDisplayedAtLocalDateTime()
+				 + this.getStartLocalDateTime()
 				 + " - "
-				 + this.getEndDisplayedAtLocalDateTime()
+				 + this.getEndLocalDateTime()
+				 ;
+		}
+	}
+	
+	/**
+	 * A class to help you get going using ZonedDateTime; all the required methods of the interface are implemented as JavaFX properties 
+	 */
+	static public class AppointmentImplZoned extends AppointmentImplBase<AppointmentImplZoned> 
+	implements Appointment
+	{
+		/** StartDateTime: */
+		public ObjectProperty<ZonedDateTime> startDateTime() { return startDateTime; }
+		final private ObjectProperty<ZonedDateTime> startDateTime = new SimpleObjectProperty<ZonedDateTime>(this, "startDateTime");
+		public ZonedDateTime getStartZonedDateTime() { return startDateTime.getValue(); }
+		public void setStartZonedDateTime(ZonedDateTime value) { startDateTime.setValue(value); }
+		public AppointmentImplZoned withStartDateTime(ZonedDateTime value) { setStartZonedDateTime(value); return this; }
+		
+		/** EndDateTime: */
+		public ObjectProperty<ZonedDateTime> endDateTimeProperty() { return endDateTimeProperty; }
+		final private ObjectProperty<ZonedDateTime> endDateTimeProperty = new SimpleObjectProperty<ZonedDateTime>(this, "endDateTimeProperty");
+		public ZonedDateTime getEndZonedDateTime() { return endDateTimeProperty.getValue(); }
+		public void setEndZonedDateTime(ZonedDateTime value) { endDateTimeProperty.setValue(value); }
+		public AppointmentImplZoned withEndDateTime(ZonedDateTime value) { setEndZonedDateTime(value); return this; } 
+		
+		public String toString()
+		{
+			return super.toString()
+				 + ", "
+				 + this.getStartZonedDateTime()
+				 + " - "
+				 + this.getEndZonedDateTime()
 				 ;
 		}
 	}

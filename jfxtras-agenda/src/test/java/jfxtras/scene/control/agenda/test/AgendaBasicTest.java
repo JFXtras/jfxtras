@@ -79,14 +79,14 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
         }
 
         // accept new appointments
-        agenda.newAppointmentCallbackProperty().set(new Callback<Agenda.DateTimeRange, Agenda.Appointment>()
+        agenda.newAppointmentCallbackProperty().set(new Callback<Agenda.LocalDateTimeRange, Agenda.Appointment>()
         {
             @Override
-            public Agenda.Appointment call(Agenda.DateTimeRange calendarRange)
+            public Agenda.Appointment call(Agenda.LocalDateTimeRange calendarRange)
             {
-                return new Agenda.AppointmentImpl2()
-                        .withStartDateTime(calendarRange.getStartDateTime())
-                        .withEndDateTime(calendarRange.getEndDateTime())
+                return new Agenda.AppointmentImplLocal()
+                        .withStartDisplayedAtLocalDateTime(calendarRange.getStartLocalDateTime())
+                        .withEndDisplayedAtLocalDateTime(calendarRange.getEndLocalDateTime())
                         .withSummary("new")
                         .withDescription("new")
                         .withAppointmentGroup(appointmentGroupMap.get("group01"));
@@ -107,9 +107,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void renderRegularAppointment()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -147,9 +147,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void renderRegularSpanningAppointment()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-02T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-02T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -174,9 +174,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void renderWholeDayAppointment()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
 	            .withWholeDay(true)
             );
@@ -209,8 +209,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-01T12:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T12:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
 		
 		find("#AppointmentRegularBodyPane2014-01-01/0"); // validate that the pane has the expected id
 		//TestUtil.sleep(3000);
@@ -229,8 +229,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
 		
 		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
@@ -244,9 +244,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void showAppointmentMenu()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -263,9 +263,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void deleteAppointmentByMenu()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -306,14 +306,14 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void renderOverlappingAppointments()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T11:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T13:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T11:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T13:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
 	        );
 		});
@@ -338,9 +338,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void toggleWholedayInMenu()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -372,9 +372,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void dragRegularAppointment()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -386,8 +386,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-01T16:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T16:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 	
@@ -398,9 +398,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void dragRegularAppointmentToNextDay()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -412,8 +412,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -424,9 +424,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void extendAppointmentByDragging()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -437,8 +437,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -450,9 +450,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void dragWholeDayToOutside()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withWholeDay(true)
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
@@ -481,9 +481,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void dragWholeDayToBody()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T00:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T00:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withWholeDay(true)
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
@@ -502,8 +502,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		// now there should be a regular appointment
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -514,8 +514,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void dragWholeDayTaskToBody()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T00:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T00:00"))
 	            .withWholeDay(true)
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
@@ -534,8 +534,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		// now there should be a regular appointment
 		assertFind("#AppointmentTaskBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
-		Assert.assertNull(agenda.appointments().get(0).getEndDisplayedAtLocalDateTime());
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertNull(agenda.appointments().get(0).getEndLocalDateTime());
 		//TestUtil.sleep(3000);
 	}
 
@@ -546,9 +546,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void dragRegularToHeader()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T01:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T01:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -566,7 +566,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-02/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
 		Assert.assertTrue(agenda.appointments().get(0).isWholeDay());
 		//TestUtil.sleep(3000);
 	}
@@ -578,8 +578,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	public void dragTaskToHeader()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T01:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T01:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -597,7 +597,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-02/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
 		Assert.assertTrue(agenda.appointments().get(0).isWholeDay());
 		//TestUtil.sleep(3000);
 	}
@@ -610,9 +610,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	{
 		// given
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
@@ -643,14 +643,14 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	{
 		// given
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T07:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T08:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T07:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T08:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
 	        );
 		});
@@ -692,14 +692,14 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	{
 		// given
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T07:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T08:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T07:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T08:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
 	        );
 		});
@@ -739,9 +739,9 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		// given
 		AtomicInteger cnt = new AtomicInteger(0);
 		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImpl2()
-	            .withStartDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
-	            .withEndDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndDisplayedAtLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 			agenda.setActionCallback( (appointment) -> {
@@ -795,6 +795,6 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		//TestUtil.sleep(3000);
 	}
 	
-	// TBEERNOT: NowVisualizer
-	// TBEERNOT: AgendaDaySkin
+	// TBEERNOT: add test for NowVisualizer
+	// TBEERNOT: add test for AgendaDaySkin
 }

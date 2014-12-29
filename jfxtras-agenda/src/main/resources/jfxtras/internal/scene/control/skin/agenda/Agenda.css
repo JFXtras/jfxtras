@@ -1,5 +1,3 @@
-/* basic settings */
-
 .Agenda { 
 }
 
@@ -28,10 +26,12 @@
 	-fx-border-width: 0px 0px 0px 1px;
 }
 
+/*
 .Agenda .DayHeader .weekend { 
 	-fx-text-fill: BLACK;
 	-fx-font-weight: bold;
 }
+*/
 
 .Agenda .Day {
 	-fx-fill: transparent;
@@ -44,11 +44,8 @@
 	-fx-background-color: #eeeeee90;
 }
 
-/* TBEERNOT: for some reason this does not work: removing today from the style classes does not clear the grayish background 
 .Agenda .today {
-	-fx-background-color: #eeeeee90;
 }
-*/
 
 .Agenda .Appointment {
 	-fx-border-color: WHITE;
@@ -141,10 +138,8 @@
 	-fx-text-fill: -fx-text-base-color;
 }
 
-/* empty block causes an IndexOutOfBoundsException
 .AgendaPopup .AppointmentGroups {
 }
-*/
 
 .AgendaPopup .AppointmentGroup {
 	-fx-border-color: WHITE;

@@ -20,17 +20,17 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 		super(appointment, layoutHelp, draggable);
 		
 		// we know start and end optionally are set
-		startDateTime = appointment.getStartDisplayedAtLocalDateTime().toLocalDate().isEqual(localDate) ? appointment.getStartDisplayedAtLocalDateTime() : localDate.atStartOfDay();
-		if (appointment.getEndDisplayedAtLocalDateTime() == null) {
+		startDateTime = appointment.getStartLocalDateTime().toLocalDate().isEqual(localDate) ? appointment.getStartLocalDateTime() : localDate.atStartOfDay();
+		if (appointment.getEndLocalDateTime() == null) {
 			endDateTime = null; // a task does not have an end time 
 			durationInMS = 0;
 		}
 		else {
-			endDateTime = appointment.getEndDisplayedAtLocalDateTime().toLocalDate().isEqual(localDate) ? appointment.getEndDisplayedAtLocalDateTime() : localDate.plusDays(1).atStartOfDay();
+			endDateTime = appointment.getEndLocalDateTime().toLocalDate().isEqual(localDate) ? appointment.getEndLocalDateTime() : localDate.plusDays(1).atStartOfDay();
 			durationInMS = startDateTime.until(endDateTime, ChronoUnit.MILLIS);
 		}
-		firstPaneOfAppointment = startDateTime.equals(appointment.getStartDisplayedAtLocalDateTime());
-		lastPaneOfAppointment = (endDateTime != null && endDateTime.equals(appointment.getEndDisplayedAtLocalDateTime()));
+		firstPaneOfAppointment = startDateTime.equals(appointment.getStartLocalDateTime());
+		lastPaneOfAppointment = (endDateTime != null && endDateTime.equals(appointment.getEndLocalDateTime()));
 		intermediatePaneOfAppointment = !firstPaneOfAppointment && !lastPaneOfAppointment;
 	}
 	protected final LocalDateTime startDateTime;

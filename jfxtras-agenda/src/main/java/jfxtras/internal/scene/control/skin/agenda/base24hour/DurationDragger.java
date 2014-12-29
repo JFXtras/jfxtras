@@ -53,7 +53,7 @@ public class DurationDragger extends Rectangle
 			((Pane)appointmentPane.getParent()).getChildren().add(resizeRectangle);
 			
 			// place a text node at the bottom of the resize rectangle
-			endTimeText = new Text(layoutHelp.timeDateTimeFormatter.format(appointment.getEndDisplayedAtLocalDateTime()));
+			endTimeText = new Text(layoutHelp.timeDateTimeFormatter.format(appointment.getEndLocalDateTime()));
 			endTimeText.layoutXProperty().set(appointmentPane.getLayoutX()); 
 			endTimeText.layoutYProperty().bind(resizeRectangle.heightProperty().add(appointmentPane.getLayoutY())); 
 			endTimeText.getStyleClass().add("GhostRectangleText");
@@ -95,7 +95,7 @@ public class DurationDragger extends Rectangle
 			endTimeText = null;
 			
 			// set the new enddate
-			appointmentPane.appointment.setEndDisplayedAtLocalDateTime(endLocalDateTime);
+			appointmentPane.appointment.setEndLocalDateTime(endLocalDateTime);
 			
 			// relayout the entire skin
 			layoutHelp.skin.setupAppointments();

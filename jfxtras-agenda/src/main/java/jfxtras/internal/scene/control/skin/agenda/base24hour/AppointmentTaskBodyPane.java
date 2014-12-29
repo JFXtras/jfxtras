@@ -7,7 +7,7 @@ import jfxtras.scene.control.agenda.Agenda.Appointment;
 public class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
 
 	public AppointmentTaskBodyPane(Appointment appointment, LayoutHelp layoutHelp) {
-		super(appointment.getStartDisplayedAtLocalDateTime().toLocalDate(), appointment, layoutHelp, Draggable.YES);
+		super(appointment.getStartLocalDateTime().toLocalDate(), appointment, layoutHelp, Draggable.YES);
 		
 		// strings
 		this.startAsString = layoutHelp.timeDateTimeFormatter.format(this.startDateTime);
@@ -69,7 +69,7 @@ public class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
 		Rectangle lClip = new Rectangle(0,0,0,0);
 		lClip.xProperty().bind(summaryText.xProperty());
 		lClip.yProperty().bind(summaryText.yProperty().multiply(-1.0));
-		lClip.widthProperty().bind(widthProperty().subtract(summaryText.yProperty()).subtract(40.0)); // TBEERNOT: no clue why I need to subtract an additional 40 pixels here
+		lClip.widthProperty().bind(widthProperty().subtract(summaryText.yProperty()).subtract(40.0)); // no clue why I need to subtract an additional 40 pixels here
 		lClip.heightProperty().set(timeText.prefHeight(0.0));
 		summaryText.setClip(lClip);
 		

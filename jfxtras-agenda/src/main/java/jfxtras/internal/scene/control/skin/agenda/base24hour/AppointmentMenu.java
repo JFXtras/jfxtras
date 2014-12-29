@@ -107,7 +107,7 @@ public class AppointmentMenu extends Rectangle {
 		lVBox.getChildren().add(createEndTextField());
 
 		// wholeday
-		if ((appointment.isWholeDay() != null && appointment.isWholeDay() == true) || appointment.getEndDisplayedAtLocalDateTime() != null) {
+		if ((appointment.isWholeDay() != null && appointment.isWholeDay() == true) || appointment.getEndLocalDateTime() != null) {
 			lVBox.getChildren().add(createWholedayCheckbox());
 		}
 		
@@ -155,27 +155,27 @@ public class AppointmentMenu extends Rectangle {
 	private LocalDateTimeTextField createStartTextField() {
 		startTextField = new LocalDateTimeTextField();
 		startTextField.setLocale(layoutHelp.skinnable.getLocale());
-		startTextField.setLocalDateTime(appointment.getStartDisplayedAtLocalDateTime());
+		startTextField.setLocalDateTime(appointment.getStartLocalDateTime());
 		
 		// event handling
 		startTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
 			
 			// remember
-			LocalDateTime lOldStart = appointment.getStartDisplayedAtLocalDateTime();
+			LocalDateTime lOldStart = appointment.getStartLocalDateTime();
 
 			// set
-			appointment.setStartDisplayedAtLocalDateTime(newValue);
+			appointment.setStartLocalDateTime(newValue);
 
 			// update end date
-			if (appointment.getEndDisplayedAtLocalDateTime() != null) {
+			if (appointment.getEndLocalDateTime() != null) {
 				
 				// enddate = start + duration
-				long lDurationInNano = appointment.getEndDisplayedAtLocalDateTime().getNano() - lOldStart.getNano();
-				LocalDateTime lEndLocalDateTime = appointment.getStartDisplayedAtLocalDateTime().plusNanos(lDurationInNano);
-				appointment.setEndDisplayedAtLocalDateTime(lEndLocalDateTime);
+				long lDurationInNano = appointment.getEndLocalDateTime().getNano() - lOldStart.getNano();
+				LocalDateTime lEndLocalDateTime = appointment.getStartLocalDateTime().plusNanos(lDurationInNano);
+				appointment.setEndLocalDateTime(lEndLocalDateTime);
 
 				// update field
-				endTextField.setLocalDateTime(appointment.getEndDisplayedAtLocalDateTime());
+				endTextField.setLocalDateTime(appointment.getEndLocalDateTime());
 			}
 
 			// refresh is done upon popup close
@@ -192,11 +192,11 @@ public class AppointmentMenu extends Rectangle {
 	private LocalDateTimeTextField createEndTextField() {
 		endTextField = new LocalDateTimeTextField();
 		endTextField.setLocale(layoutHelp.skinnable.getLocale());
-		endTextField.setLocalDateTime(appointment.getEndDisplayedAtLocalDateTime());
-		endTextField.setVisible(appointment.getEndDisplayedAtLocalDateTime() != null);
+		endTextField.setLocalDateTime(appointment.getEndLocalDateTime());
+		endTextField.setVisible(appointment.getEndLocalDateTime() != null);
 
 		endTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
-			appointment.setEndDisplayedAtLocalDateTime(newValue);
+			appointment.setEndLocalDateTime(newValue);
 			// refresh is done upon popup close
 		});
 
@@ -216,14 +216,14 @@ public class AppointmentMenu extends Rectangle {
 		wholedayCheckBox.selectedProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setWholeDay(newValue);
 			if (newValue == true) {
-				appointment.setEndDisplayedAtLocalDateTime(null);
+				appointment.setEndLocalDateTime(null);
 			}
 			else {
-				LocalDateTime lEndTime = appointment.getStartDisplayedAtLocalDateTime().plusMinutes(30);
-				appointment.setEndDisplayedAtLocalDateTime(lEndTime);
-				endTextField.setLocalDateTime(appointment.getEndDisplayedAtLocalDateTime());
+				LocalDateTime lEndTime = appointment.getStartLocalDateTime().plusMinutes(30);
+				appointment.setEndLocalDateTime(lEndTime);
+				endTextField.setLocalDateTime(appointment.getEndLocalDateTime());
 			}
-			endTextField.setVisible(appointment.getEndDisplayedAtLocalDateTime() != null);
+			endTextField.setVisible(appointment.getEndLocalDateTime() != null);
 			// refresh is done upon popup close
 		});
 		
@@ -281,6 +281,9 @@ public class AppointmentMenu extends Rectangle {
 			Tooltip.install(deleteIconImageView, new Tooltip("Delete")); // TBEERNOT: internationalize
 			lHBox.getChildren().add(deleteIconImageView);
 		}
+		
+		// TBEERNOT: add "action" action (double click)
+		
 		return lHBox;
 	}
 	private ImageViewButton deleteIconImageView = null;
