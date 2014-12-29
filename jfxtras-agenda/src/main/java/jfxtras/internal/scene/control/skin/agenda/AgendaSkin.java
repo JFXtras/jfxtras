@@ -9,20 +9,15 @@ public interface AgendaSkin {
 	void refresh();
 	
 	/**
-	 * Relayout the appointments
+	 * Recreate the appointments
 	 */
 	void setupAppointments();
-	
-	/**
-	 * Needed to be able to switch skins
-	 */
-	void unbindFromSkinnable();
 	
 	/**
 	 * 
 	 * @param x screen coordinate
 	 * @param y screen coordinate
-	 * @return a localDateTime where a drop in the day section has nano seconds == 1, and a drop in a header (wholeday) section has nano seconds == 0
+	 * @return a localDateTime equivalent of the clickj location, where a drop in the day section has nano seconds == 1, and a drop in a header (wholeday) section has nano seconds == 0
 	 */
 	LocalDateTime convertClickToDateTime(double x, double y);
 }

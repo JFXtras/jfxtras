@@ -570,23 +570,4 @@ public class Agenda extends Control
 		public void setStyleClass(String value) { styleClassObjectProperty.setValue(value); }
 		public AppointmentGroupImpl withStyleClass(String value) { setStyleClass(value); return this; }
 	}
-	
-	
-	/**
-	 * Calling setSkin alone does not cut it.
-	 */
-	public void switchSkin(Skin skin) {
-		// unbind existing skin
-		if (getSkin() != null && getSkin() instanceof AgendaSkin) {
-			((AgendaSkin)getSkin()).unbindFromSkinnable();
-		}
-
-		// clearStyleClass
-		getStyleClass().clear();
-		getStyleClass().add(Agenda.class.getSimpleName());
-		
-		// set new skin
-		setSkin(skin);
-	}
-
 }

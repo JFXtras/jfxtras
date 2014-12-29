@@ -20,7 +20,7 @@ public class AgendaSkinSwitcher extends HBox {
 	private ImageViewButton createDayButton(Agenda agenda) {
 		ImageViewButton button = createIcon("week", "Week view");
 		button.setOnMouseClicked( (actionEvent) -> {
-			agenda.switchSkin(new AgendaWeekSkin(agenda));
+			agenda.setSkin(new AgendaWeekSkin(agenda));
 		});
 		return button;
 	}
@@ -28,7 +28,7 @@ public class AgendaSkinSwitcher extends HBox {
 	private ImageViewButton createWeekButton(Agenda agenda) {
 		ImageViewButton button = createIcon("day", "Day view");
 		button.setOnMouseClicked( (actionEvent) -> {
-			agenda.switchSkin(new AgendaDaySkin(agenda));
+			agenda.setSkin(new AgendaDaySkin(agenda));
 		});
 		return button;
 	}

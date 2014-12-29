@@ -128,10 +128,18 @@ implements AgendaSkin
 	/**
 	 * 
 	 */
-	public void unbindFromSkinnable() {
+	public void dispose() {
+		// remove listeners
 		getSkinnable().localeProperty().removeListener(localeInvalidationListener);
 		getSkinnable().displayedDateTime().removeListener(displayedDateTimeInvalidationListener);
 		getSkinnable().appointments().removeListener(appointmentsListChangeListener);
+		
+		// reset style classes
+		getSkinnable().getStyleClass().clear();
+		getSkinnable().getStyleClass().add(Agenda.class.getSimpleName());
+
+		// continue
+		super.dispose();
 	}
 
 	/**
