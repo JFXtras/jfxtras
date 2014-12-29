@@ -1,5 +1,5 @@
 /**
- * CalendarPickerTest.java
+ * JFXtrasGuiTest.java
  *
  * Copyright (c) 2011-2014, JFXtras
  * All rights reserved.
@@ -27,54 +27,30 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.scene.control.agenda.test;
+package jfxtras.test;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Locale;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import jfxtras.test.JFXtrasGuiTest;
-import jfxtras.test.TestUtil;
-
-import org.junit.Test;
-
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 
 /**
- * We use a single FXML to minimize the number of files.
- * But in order to prevent that the window becomes too width or heigh, tabs are used to separate the test cases
  * 
+ * @author Tom Eugelink
  */
-public class AgendaFXMLTest extends JFXtrasGuiTest {
-
-	/**
-	 * 
-	 */
-	public Parent getRootNode() 
-	{
-		try {
-			Locale.setDefault(Locale.ENGLISH);
-			
-	    	// load FXML
-			String lName = this.getClass().getSimpleName() + ".fxml";
-			URL lURL = this.getClass().getResource(lName);
-			//System.out.println("loading FXML " + lName + " -> " + lURL);
-			if (lURL == null) throw new IllegalStateException("FXML file not found: " + lName);
-			Parent lRoot = (Parent)FXMLLoader.load(lURL, null);
-			return lRoot;
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+abstract public class JFXtrasTest {
+	
+	@Rule public TestName testName = new TestName();
+	
+	public JFXtrasTest() {
 	}
-
-	/**
-	 * 
-	 */
-	@Test
-	public void defaultAgenda()
-	{
-		//TestUtil.sleep(3000);
+	
+	@Before
+	public void before() {
+		System.out.println("========================================================================\n" + this.getClass().getSimpleName() + "." + testName.getMethodName());
+		
+		// default we're in US locale: keep (re)setting this for each test
+		Locale.setDefault(Locale.US);
 	}
 }

@@ -270,23 +270,39 @@ public class AppointmentMenu extends Rectangle {
 		
 		// delete
 		{
-			deleteIconImageView = new ImageViewButton();
-			deleteIconImageView.getStyleClass().add("delete-icon");
-			deleteIconImageView.setPickOnBounds(true);
-			deleteIconImageView.setOnMouseClicked( (mouseEvent) -> {
+			deleteImageViewButton = createActionButton("delete-icon", "Delete"); // TBEERNOT: internationalize
+			deleteImageViewButton.setOnMouseClicked( (mouseEvent) -> {
 				popup.hide();
 				layoutHelp.skinnable.appointments().remove(appointment);
 				// refresh is done via the collection events
 			});
-			Tooltip.install(deleteIconImageView, new Tooltip("Delete")); // TBEERNOT: internationalize
-			lHBox.getChildren().add(deleteIconImageView);
+			lHBox.getChildren().add(deleteImageViewButton);
 		}
 		
-		// TBEERNOT: add "action" action (double click)
+		// action
+		if (layoutHelp.skinnable.getActionCallback() != null)
+		{
+			actionImageViewButton = createActionButton("action-icon", "Action"); // TBEERNOT: internationalize
+			actionImageViewButton.setOnMouseClicked( (mouseEvent) -> {
+				popup.hide();
+				layoutHelp.skinnable.getActionCallback().call(appointment);
+				// any refresh is done via the collection events
+			});
+			lHBox.getChildren().add(actionImageViewButton);
+		}
 		
 		return lHBox;
 	}
-	private ImageViewButton deleteIconImageView = null;
+	private ImageViewButton deleteImageViewButton = null;
+	private ImageViewButton actionImageViewButton = null;
+
+	private ImageViewButton createActionButton(String styleClass, String tooltipText) {
+		ImageViewButton lImageViewButton = new ImageViewButton();
+		lImageViewButton.getStyleClass().add(styleClass);
+		lImageViewButton.setPickOnBounds(true);
+		Tooltip.install(lImageViewButton, new Tooltip(tooltipText)); 
+		return lImageViewButton;
+	}
 
 	/**
 	 * 

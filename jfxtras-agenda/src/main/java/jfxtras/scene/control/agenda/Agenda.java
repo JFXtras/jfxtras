@@ -513,18 +513,18 @@ public class Agenda extends Control
 	implements Appointment
 	{
 		/** StartDateTime: */
-		public ObjectProperty<LocalDateTime> startDisplayedAtLocalDateTime() { return startDisplayedAtLocalDateTime; }
-		final private ObjectProperty<LocalDateTime> startDisplayedAtLocalDateTime = new SimpleObjectProperty<LocalDateTime>(this, "startDisplayedAtLocalDateTime");
-		public LocalDateTime getStartLocalDateTime() { return startDisplayedAtLocalDateTime.getValue(); }
-		public void setStartLocalDateTime(LocalDateTime value) { startDisplayedAtLocalDateTime.setValue(value); }
-		public AppointmentImplLocal withStartDisplayedAtLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
+		public ObjectProperty<LocalDateTime> startLocalDateTime() { return startLocalDateTime; }
+		final private ObjectProperty<LocalDateTime> startLocalDateTime = new SimpleObjectProperty<LocalDateTime>(this, "startLocalDateTime");
+		public LocalDateTime getStartLocalDateTime() { return startLocalDateTime.getValue(); }
+		public void setStartLocalDateTime(LocalDateTime value) { startLocalDateTime.setValue(value); }
+		public AppointmentImplLocal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
 		
 		/** EndDateTime: */
-		public ObjectProperty<LocalDateTime> endDisplayedAtLocalDateTimeProperty() { return endDisplayedAtLocalDateTimeProperty; }
-		final private ObjectProperty<LocalDateTime> endDisplayedAtLocalDateTimeProperty = new SimpleObjectProperty<LocalDateTime>(this, "endDisplayedAtLocalDateTimeProperty");
-		public LocalDateTime getEndLocalDateTime() { return endDisplayedAtLocalDateTimeProperty.getValue(); }
-		public void setEndLocalDateTime(LocalDateTime value) { endDisplayedAtLocalDateTimeProperty.setValue(value); }
-		public AppointmentImplLocal withEndDisplayedAtLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
+		public ObjectProperty<LocalDateTime> endLocalDateTimeProperty() { return endLocalDateTimeProperty; }
+		final private ObjectProperty<LocalDateTime> endLocalDateTimeProperty = new SimpleObjectProperty<LocalDateTime>(this, "endLocalDateTimeProperty");
+		public LocalDateTime getEndLocalDateTime() { return endLocalDateTimeProperty.getValue(); }
+		public void setEndLocalDateTime(LocalDateTime value) { endLocalDateTimeProperty.setValue(value); }
+		public AppointmentImplLocal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
 		
 		public String toString()
 		{
@@ -544,18 +544,18 @@ public class Agenda extends Control
 	implements Appointment
 	{
 		/** StartDateTime: */
-		public ObjectProperty<ZonedDateTime> startDateTime() { return startDateTime; }
-		final private ObjectProperty<ZonedDateTime> startDateTime = new SimpleObjectProperty<ZonedDateTime>(this, "startDateTime");
-		public ZonedDateTime getStartZonedDateTime() { return startDateTime.getValue(); }
-		public void setStartZonedDateTime(ZonedDateTime value) { startDateTime.setValue(value); }
-		public AppointmentImplZoned withStartDateTime(ZonedDateTime value) { setStartZonedDateTime(value); return this; }
+		public ObjectProperty<ZonedDateTime> startZonedDateTime() { return startZonedDateTime; }
+		final private ObjectProperty<ZonedDateTime> startZonedDateTime = new SimpleObjectProperty<ZonedDateTime>(this, "startZonedDateTime");
+		public ZonedDateTime getStartZonedDateTime() { return startZonedDateTime.getValue(); }
+		public void setStartZonedDateTime(ZonedDateTime value) { startZonedDateTime.setValue(value); }
+		public AppointmentImplZoned withStartZonedDateTime(ZonedDateTime value) { setStartZonedDateTime(value); return this; }
 		
 		/** EndDateTime: */
-		public ObjectProperty<ZonedDateTime> endDateTimeProperty() { return endDateTimeProperty; }
-		final private ObjectProperty<ZonedDateTime> endDateTimeProperty = new SimpleObjectProperty<ZonedDateTime>(this, "endDateTimeProperty");
-		public ZonedDateTime getEndZonedDateTime() { return endDateTimeProperty.getValue(); }
-		public void setEndZonedDateTime(ZonedDateTime value) { endDateTimeProperty.setValue(value); }
-		public AppointmentImplZoned withEndDateTime(ZonedDateTime value) { setEndZonedDateTime(value); return this; } 
+		public ObjectProperty<ZonedDateTime> endZonedDateTimeProperty() { return endZonedDateTimeProperty; }
+		final private ObjectProperty<ZonedDateTime> endZonedDateTimeProperty = new SimpleObjectProperty<ZonedDateTime>(this, "endZonedDateTimeProperty");
+		public ZonedDateTime getEndZonedDateTime() { return endZonedDateTimeProperty.getValue(); }
+		public void setEndZonedDateTime(ZonedDateTime value) { endZonedDateTimeProperty.setValue(value); }
+		public AppointmentImplZoned withEndZonedDateTime(ZonedDateTime value) { setEndZonedDateTime(value); return this; } 
 		
 		public String toString()
 		{

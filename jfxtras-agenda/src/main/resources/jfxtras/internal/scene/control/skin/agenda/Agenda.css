@@ -154,6 +154,10 @@
     -fx-image: url("AgendaWeekSkinDeleteIcon.png");
 }
 
+.AgendaPopup .action-icon  {
+    -fx-image: url("AgendaWeekSkinActionIcon.png");
+}
+
 .AgendaSkinSwitcher .day-icon  {
     -fx-image: url("SkinDay.png");
 }

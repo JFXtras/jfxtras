@@ -58,7 +58,7 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 	
 	@Before
 	public void before() {
-		System.out.println("========================================================================\n" + testName.getMethodName());
+		System.out.println("========================================================================\n" + this.getClass().getSimpleName() + "." + testName.getMethodName());
 		
 		// default we're in US locale: keep (re)setting this for each test
 		Locale.setDefault(Locale.US);
