@@ -80,7 +80,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 	 * @param now
 	 */
 	public void determineHistoryVisualizer(LocalDateTime now) {
-		historyVisualizer.setVisible(appointment.getDisplayedAtStartLocalDateTime().isBefore(now));
+		historyVisualizer.setVisible(appointment.getStartDisplayedAtLocalDateTime().isBefore(now));
 	}
 
 	/**
@@ -185,11 +185,11 @@ abstract public class AppointmentAbstractPane extends Pane {
 		) {				
 			// simply add the duration
 			Duration duration = Duration.between(dragStartDateTime, dragEndDateTime);
-			if (appointment.getDisplayedAtStartLocalDateTime() != null) {
-				appointment.setDisplayedAtStartLocalDateTime( appointment.getDisplayedAtStartLocalDateTime().plus(duration) );
+			if (appointment.getStartDisplayedAtLocalDateTime() != null) {
+				appointment.setStartDisplayedAtLocalDateTime( appointment.getStartDisplayedAtLocalDateTime().plus(duration) );
 			}
-			if (appointment.getDisplayedAtEndLocalDateTime() != null) {
-				appointment.setDisplayedAtEndLocalDateTime( appointment.getDisplayedAtEndLocalDateTime().plus(duration) );
+			if (appointment.getEndDisplayedAtLocalDateTime() != null) {
+				appointment.setEndDisplayedAtLocalDateTime( appointment.getEndDisplayedAtLocalDateTime().plus(duration) );
 			}
 		}
 		
@@ -200,11 +200,11 @@ abstract public class AppointmentAbstractPane extends Pane {
 			
 			// simply add the duration, but without time
 			Period period = Period.between(dragStartDateTime.toLocalDate(), dragEndDateTime.toLocalDate());
-			if (appointment.getDisplayedAtStartLocalDateTime() != null) {
-				appointment.setDisplayedAtStartLocalDateTime( appointment.getDisplayedAtStartLocalDateTime().plus(period) );
+			if (appointment.getStartDisplayedAtLocalDateTime() != null) {
+				appointment.setStartDisplayedAtLocalDateTime( appointment.getStartDisplayedAtLocalDateTime().plus(period) );
 			}
-			if (appointment.getDisplayedAtEndLocalDateTime() != null) {
-				appointment.setDisplayedAtEndLocalDateTime( appointment.getDisplayedAtEndLocalDateTime().plus(period) );
+			if (appointment.getEndDisplayedAtLocalDateTime() != null) {
+				appointment.setEndDisplayedAtLocalDateTime( appointment.getEndDisplayedAtLocalDateTime().plus(period) );
 			}
 		}
 		
@@ -214,15 +214,15 @@ abstract public class AppointmentAbstractPane extends Pane {
 			appointment.setWholeDay(false);
 
 			// if this is a task
-			if (appointment.getDisplayedAtStartLocalDateTime() != null && appointment.getDisplayedAtEndLocalDateTime() == null) {
+			if (appointment.getStartDisplayedAtLocalDateTime() != null && appointment.getEndDisplayedAtLocalDateTime() == null) {
 				// set the drop time as the task time
-				appointment.setDisplayedAtStartLocalDateTime(dragEndDateTime );
+				appointment.setStartDisplayedAtLocalDateTime(dragEndDateTime );
 			}
 			else {
 				// simply add the duration, but without time
 				Period period = Period.between(dragStartDateTime.toLocalDate(), dragEndDateTime.toLocalDate());
-				appointment.setDisplayedAtStartLocalDateTime( appointment.getDisplayedAtStartLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
-				appointment.setDisplayedAtEndLocalDateTime( appointment.getDisplayedAtEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
+				appointment.setStartDisplayedAtLocalDateTime( appointment.getStartDisplayedAtLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
+				appointment.setEndDisplayedAtLocalDateTime( appointment.getEndDisplayedAtLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
 			}
 		}
 		
@@ -286,7 +286,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 	 */
 	public String toString()
 	{
-		return "appointment=" + appointment.getDisplayedAtStartLocalDateTime() + "-" + appointment.getDisplayedAtEndLocalDateTime()
+		return "appointment=" + appointment.getStartDisplayedAtLocalDateTime() + "-" + appointment.getEndDisplayedAtLocalDateTime()
 		     + ";"
 			 + "sumary=" + appointment.getSummary()
 			 ;

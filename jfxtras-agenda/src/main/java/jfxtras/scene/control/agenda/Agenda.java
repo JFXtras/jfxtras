@@ -34,7 +34,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -84,7 +83,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  *
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
-// TBEERNOT: should we use LocalDateTime or ZonedDateTime?
 public class Agenda extends Control
 {
 	// ==================================================================================================================
@@ -398,7 +396,6 @@ public class Agenda extends Control
 		// ZonedDateTime: this is the new base to work on
 		
 		default ZonedDateTime getStartDateTime() {
-			System.out.println("Calendar based " + DateTimeToCalendarHelper.quickFormatCalendar(getStartTime()) + " -> " + DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime()));
 			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime());
 	    }
 		default void setStartDateTime(ZonedDateTime v) {
@@ -416,19 +413,19 @@ public class Agenda extends Control
 	    }
 		
 		// ----
-		// DisplayedAtDateTime: the methods to convert the ZonedDateTime to LocalDateTime used for displaying and vice versa
+		// DisplayedAtLocalDateTime: methods to convert the ZonedDateTime to LocalDateTime and vice versa, for displaying the appointment 
 		
-		default LocalDateTime getDisplayedAtStartLocalDateTime() {
+		default LocalDateTime getStartDisplayedAtLocalDateTime() {
 			return getStartDateTime().toLocalDateTime();
 	    }
-		default void setDisplayedAtStartLocalDateTime(LocalDateTime v) {
+		default void setStartDisplayedAtLocalDateTime(LocalDateTime v) {
 			setStartDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 		
-		default LocalDateTime getDisplayedAtEndLocalDateTime() {
+		default LocalDateTime getEndDisplayedAtLocalDateTime() {
 			return getEndDateTime() == null ? null : getEndDateTime().toLocalDateTime();
 	    }
-		default void setDisplayedAtEndLocalDateTime(LocalDateTime v) {
+		default void setEndDisplayedAtLocalDateTime(LocalDateTime v) {
 			setEndDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 	}
@@ -514,24 +511,24 @@ public class Agenda extends Control
 		/** StartDateTime: */
 		public ObjectProperty<LocalDateTime> startDateTimeProperty() { return startDateTimeObjectProperty; }
 		final private ObjectProperty<LocalDateTime> startDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "startDateTime");
-		public LocalDateTime getDisplayedAtStartLocalDateTime() { return startDateTimeObjectProperty.getValue(); }
-		public void setDisplayedAtStartLocalDateTime(LocalDateTime value) { startDateTimeObjectProperty.setValue(value); }
-		public AppointmentImpl2 withStartDateTime(LocalDateTime value) { setDisplayedAtStartLocalDateTime(value); return this; }
+		public LocalDateTime getStartDisplayedAtLocalDateTime() { return startDateTimeObjectProperty.getValue(); }
+		public void setStartDisplayedAtLocalDateTime(LocalDateTime value) { startDateTimeObjectProperty.setValue(value); }
+		public AppointmentImpl2 withStartDateTime(LocalDateTime value) { setStartDisplayedAtLocalDateTime(value); return this; }
 		
 		/** EndDateTime: */
 		public ObjectProperty<LocalDateTime> endDateTimeProperty() { return endDateTimeObjectProperty; }
 		final private ObjectProperty<LocalDateTime> endDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "endDateTime");
-		public LocalDateTime getDisplayedAtEndLocalDateTime() { return endDateTimeObjectProperty.getValue(); }
-		public void setDisplayedAtEndLocalDateTime(LocalDateTime value) { endDateTimeObjectProperty.setValue(value); }
-		public AppointmentImpl2 withEndDateTime(LocalDateTime value) { setDisplayedAtEndLocalDateTime(value); return this; } 
+		public LocalDateTime getEndDisplayedAtLocalDateTime() { return endDateTimeObjectProperty.getValue(); }
+		public void setEndDisplayedAtLocalDateTime(LocalDateTime value) { endDateTimeObjectProperty.setValue(value); }
+		public AppointmentImpl2 withEndDateTime(LocalDateTime value) { setEndDisplayedAtLocalDateTime(value); return this; } 
 		
 		public String toString()
 		{
 			return super.toString()
 				 + ", "
-				 + this.getDisplayedAtStartLocalDateTime()
+				 + this.getStartDisplayedAtLocalDateTime()
 				 + " - "
-				 + this.getDisplayedAtEndLocalDateTime()
+				 + this.getEndDisplayedAtLocalDateTime()
 				 ;
 		}
 	}

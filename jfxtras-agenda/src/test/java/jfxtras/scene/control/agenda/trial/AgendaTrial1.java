@@ -45,14 +45,12 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-import jfxtras.scene.control.CalendarTextField;
-import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.Agenda;
-import jfxtras.scene.control.agenda.AgendaSkinSwitcher;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.Agenda.DateTimeRange;
+import jfxtras.scene.control.agenda.AgendaSkinSwitcher;
 
 /**
  * @author Tom Eugelink
@@ -213,8 +211,8 @@ public class AgendaTrial1 extends Application {
 				.withAppointmentGroup(lAppointmentGroupMap.get("group07"))
 		// backwards compatibility: calendar based appointment
 		, 	new Agenda.AppointmentImpl()
-				.withStartTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 5, 00))
-				.withEndTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 5, 30))
+				.withStartTime(new GregorianCalendar(lTodayYear, lTodayMonth - 1, lTodayDay, 4, 00)) // yeah, calendar month is 0 based
+				.withEndTime(new GregorianCalendar(lTodayYear, lTodayMonth - 1, lTodayDay, 5, 30)) // yeah, calendar month is 0 based
 				.withSummary("Cal")
 				.withDescription("Calendar based")
 				.withAppointmentGroup(lAppointmentGroupMap.get("group08"))

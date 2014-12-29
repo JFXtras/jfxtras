@@ -124,6 +124,26 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
+	public void renderRegularAppointmentCalendar()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImpl()
+	            .withStartTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T10:00:00.000"))
+	            .withEndTime(TestUtil.quickParseCalendarFromDateTime("2014-01-01T12:00:00.000"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+		});
+				
+		Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/0");
+		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+		//TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+	@Test
 	public void renderRegularSpanningAppointment()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {
@@ -189,8 +209,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-01T12:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T12:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
 		
 		find("#AppointmentRegularBodyPane2014-01-01/0"); // validate that the pane has the expected id
 		//TestUtil.sleep(3000);
@@ -209,8 +229,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
 		
 		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
@@ -366,8 +386,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-01T16:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T16:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 	
@@ -392,8 +412,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -417,8 +437,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -482,8 +502,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		// now there should be a regular appointment
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndDisplayedAtLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -514,8 +534,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		// now there should be a regular appointment
 		assertFind("#AppointmentTaskBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
-		Assert.assertNull(agenda.appointments().get(0).getDisplayedAtEndLocalDateTime());
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
+		Assert.assertNull(agenda.appointments().get(0).getEndDisplayedAtLocalDateTime());
 		//TestUtil.sleep(3000);
 	}
 
@@ -546,7 +566,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-02/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
 		Assert.assertTrue(agenda.appointments().get(0).isWholeDay());
 		//TestUtil.sleep(3000);
 	}
@@ -577,7 +597,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-02/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartDisplayedAtLocalDateTime().toString() );
 		Assert.assertTrue(agenda.appointments().get(0).isWholeDay());
 		//TestUtil.sleep(3000);
 	}

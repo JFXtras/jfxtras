@@ -107,7 +107,7 @@ public class AppointmentMenu extends Rectangle {
 		lVBox.getChildren().add(createEndTextField());
 
 		// wholeday
-		if ((appointment.isWholeDay() != null && appointment.isWholeDay() == true) || appointment.getDisplayedAtEndLocalDateTime() != null) {
+		if ((appointment.isWholeDay() != null && appointment.isWholeDay() == true) || appointment.getEndDisplayedAtLocalDateTime() != null) {
 			lVBox.getChildren().add(createWholedayCheckbox());
 		}
 		
@@ -155,27 +155,27 @@ public class AppointmentMenu extends Rectangle {
 	private LocalDateTimeTextField createStartTextField() {
 		startTextField = new LocalDateTimeTextField();
 		startTextField.setLocale(layoutHelp.skinnable.getLocale());
-		startTextField.setLocalDateTime(appointment.getDisplayedAtStartLocalDateTime());
+		startTextField.setLocalDateTime(appointment.getStartDisplayedAtLocalDateTime());
 		
 		// event handling
 		startTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
 			
 			// remember
-			LocalDateTime lOldStart = appointment.getDisplayedAtStartLocalDateTime();
+			LocalDateTime lOldStart = appointment.getStartDisplayedAtLocalDateTime();
 
 			// set
-			appointment.setDisplayedAtStartLocalDateTime(newValue);
+			appointment.setStartDisplayedAtLocalDateTime(newValue);
 
 			// update end date
-			if (appointment.getDisplayedAtEndLocalDateTime() != null) {
+			if (appointment.getEndDisplayedAtLocalDateTime() != null) {
 				
 				// enddate = start + duration
-				long lDurationInNano = appointment.getDisplayedAtEndLocalDateTime().getNano() - lOldStart.getNano();
-				LocalDateTime lEndLocalDateTime = appointment.getDisplayedAtStartLocalDateTime().plusNanos(lDurationInNano);
-				appointment.setDisplayedAtEndLocalDateTime(lEndLocalDateTime);
+				long lDurationInNano = appointment.getEndDisplayedAtLocalDateTime().getNano() - lOldStart.getNano();
+				LocalDateTime lEndLocalDateTime = appointment.getStartDisplayedAtLocalDateTime().plusNanos(lDurationInNano);
+				appointment.setEndDisplayedAtLocalDateTime(lEndLocalDateTime);
 
 				// update field
-				endTextField.setLocalDateTime(appointment.getDisplayedAtEndLocalDateTime());
+				endTextField.setLocalDateTime(appointment.getEndDisplayedAtLocalDateTime());
 			}
 
 			// refresh is done upon popup close
@@ -192,11 +192,11 @@ public class AppointmentMenu extends Rectangle {
 	private LocalDateTimeTextField createEndTextField() {
 		endTextField = new LocalDateTimeTextField();
 		endTextField.setLocale(layoutHelp.skinnable.getLocale());
-		endTextField.setLocalDateTime(appointment.getDisplayedAtEndLocalDateTime());
-		endTextField.setVisible(appointment.getDisplayedAtEndLocalDateTime() != null);
+		endTextField.setLocalDateTime(appointment.getEndDisplayedAtLocalDateTime());
+		endTextField.setVisible(appointment.getEndDisplayedAtLocalDateTime() != null);
 
 		endTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
-			appointment.setDisplayedAtEndLocalDateTime(newValue);
+			appointment.setEndDisplayedAtLocalDateTime(newValue);
 			// refresh is done upon popup close
 		});
 
@@ -216,14 +216,14 @@ public class AppointmentMenu extends Rectangle {
 		wholedayCheckBox.selectedProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setWholeDay(newValue);
 			if (newValue == true) {
-				appointment.setDisplayedAtEndLocalDateTime(null);
+				appointment.setEndDisplayedAtLocalDateTime(null);
 			}
 			else {
-				LocalDateTime lEndTime = appointment.getDisplayedAtStartLocalDateTime().plusMinutes(30);
-				appointment.setDisplayedAtEndLocalDateTime(lEndTime);
-				endTextField.setLocalDateTime(appointment.getDisplayedAtEndLocalDateTime());
+				LocalDateTime lEndTime = appointment.getStartDisplayedAtLocalDateTime().plusMinutes(30);
+				appointment.setEndDisplayedAtLocalDateTime(lEndTime);
+				endTextField.setLocalDateTime(appointment.getEndDisplayedAtLocalDateTime());
 			}
-			endTextField.setVisible(appointment.getDisplayedAtEndLocalDateTime() != null);
+			endTextField.setVisible(appointment.getEndDisplayedAtLocalDateTime() != null);
 			// refresh is done upon popup close
 		});
 		

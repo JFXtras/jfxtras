@@ -7,7 +7,7 @@ import jfxtras.scene.control.agenda.Agenda.Appointment;
 public class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
 
 	public AppointmentTaskBodyPane(Appointment appointment, LayoutHelp layoutHelp) {
-		super(appointment.getDisplayedAtStartLocalDateTime().toLocalDate(), appointment, layoutHelp, Draggable.YES);
+		super(appointment.getStartDisplayedAtLocalDateTime().toLocalDate(), appointment, layoutHelp, Draggable.YES);
 		
 		// strings
 		this.startAsString = layoutHelp.timeDateTimeFormatter.format(this.startDateTime);
