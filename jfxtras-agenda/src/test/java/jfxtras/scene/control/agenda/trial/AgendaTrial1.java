@@ -218,9 +218,9 @@ public class AgendaTrial1 extends Application {
 				.withSummary("Cal")
 				.withDescription("Calendar based")
 				.withAppointmentGroup(lAppointmentGroupMap.get("group08"))
-		// zoned date time
+		// ZonedDateTime: there is no additional value in using ZonedDateTime everywhere, so we just have one test appointment
 		, 	new Agenda.AppointmentImplZoned()
-				.withStartDateTime(ZonedDateTime.of(LocalDateTime.of(lTodayYear, lTodayMonth, lTodayDay, 2, 00), ZoneId.systemDefault()) ) // yeah, calendar month is 0 based
+				.withStartDateTime(ZonedDateTime.of(LocalDateTime.of(lTodayYear, lTodayMonth, lTodayDay, 2, 00), ZoneId.systemDefault()) )
 				.withEndDateTime(ZonedDateTime.of(LocalDateTime.of(lTodayYear, lTodayMonth, lTodayDay, 3, 30), ZoneId.systemDefault()) ) 
 				.withSummary("Zoned")
 				.withDescription("Zoned based")
@@ -350,7 +350,7 @@ public class AgendaTrial1 extends Application {
 		lHBox.getChildren().add(skinSwitcher);
 		// add the displayed date textfield
 		LocalDateTimeTextField lLocalDateTimeTextField = new LocalDateTimeTextField();
-		lLocalDateTimeTextField.localDateTimeProperty().bindBidirectional(lAgenda.displayedDateTime());		
+		lLocalDateTimeTextField.localDateTimeProperty().bindBidirectional(lAgenda.displayedLocalDateTime());		
         lHBox.getChildren().add(lLocalDateTimeTextField);
         
         // create scene

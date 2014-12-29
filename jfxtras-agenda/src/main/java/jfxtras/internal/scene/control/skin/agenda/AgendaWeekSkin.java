@@ -77,7 +77,7 @@ public class AgendaWeekSkin extends AgendaSkinTimeScale24HourAbstract {
 		Locale lLocale = getSkinnable().getLocale();
 		WeekFields lWeekFields = WeekFields.of(lLocale);
 		int lFirstDayOfWeek = lWeekFields.getFirstDayOfWeek().getValue();
-		LocalDate lDisplayedDateTime = getSkinnable().getDisplayedDateTime().toLocalDate();
+		LocalDate lDisplayedDateTime = getSkinnable().getDisplayedLocalDateTime().toLocalDate();
 		int lCurrentDayOfWeek = lDisplayedDateTime.getDayOfWeek().getValue();
 
 		if (lFirstDayOfWeek <= lCurrentDayOfWeek) {

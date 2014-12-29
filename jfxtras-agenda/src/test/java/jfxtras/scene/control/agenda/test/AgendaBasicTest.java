@@ -64,7 +64,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		vbox = new VBox();
 
 		agenda = new Agenda();
-		agenda.setDisplayedDateTime(LocalDate.of(2014, 1, 1).atStartOfDay());
+		agenda.setDisplayedLocalDateTime(LocalDate.of(2014, 1, 1).atStartOfDay());
 		agenda.setPrefSize(1000, 800);
 		
         // setup appointment groups

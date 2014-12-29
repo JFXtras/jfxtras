@@ -95,7 +95,7 @@ implements AgendaSkin
 		getSkinnable().localeProperty().addListener(localeInvalidationListener);
 		 
 		// react to changes in the displayed calendar 
-		getSkinnable().displayedDateTime().addListener(displayedDateTimeInvalidationListener);
+		getSkinnable().displayedLocalDateTime().addListener(displayedDateTimeInvalidationListener);
 		
 		// react to changes in the appointments 
 		getSkinnable().appointments().addListener(appointmentsListChangeListener);
@@ -130,7 +130,7 @@ implements AgendaSkin
 	public void dispose() {
 		// remove listeners
 		getSkinnable().localeProperty().removeListener(localeInvalidationListener);
-		getSkinnable().displayedDateTime().removeListener(displayedDateTimeInvalidationListener);
+		getSkinnable().displayedLocalDateTime().removeListener(displayedDateTimeInvalidationListener);
 		getSkinnable().appointments().removeListener(appointmentsListChangeListener);
 		
 		// reset style classes

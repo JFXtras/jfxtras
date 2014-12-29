@@ -113,7 +113,7 @@ public class Agenda extends Control
 		this.getStyleClass().add(this.getClass().getSimpleName());
 		
 		// handle deprecated
-		DateTimeToCalendarHelper.syncLocalDateTime(displayedCalendarObjectProperty, displayedDateTimeObjectProperty, localeObjectProperty);
+		DateTimeToCalendarHelper.syncLocalDateTime(displayedCalendarObjectProperty, displayedLocalDateTimeObjectProperty, localeObjectProperty);
 		
 		// appointments
 		constructAppointments();
@@ -185,20 +185,15 @@ public class Agenda extends Control
 	@Deprecated public Agenda withDisplayedCalendar(Calendar value) { setDisplayedCalendar(value); return this; }
 	
 	/** 
-	 * The skin will use this date to determine what to display.
+	 * The skin will use this date and time to determine what to display.
+	 * Each skin determines what interval suites best; for example the week skin will find the week where this LocalDateTime falls in using the Locale to decide on what day a week starts, the day skin will render the date.
+	 * Possibly in the future there may be skins that render part of a day, that simply is not known, hence this is a LocalDateTime instead of a LocalDate. 
 	 */
-	public ObjectProperty<LocalDateTime> displayedDateTime() { return displayedDateTimeObjectProperty; }
-	private final ObjectProperty<LocalDateTime> displayedDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedDateTime", LocalDateTime.now()) {
-		public void set(LocalDateTime value) {
-			if (value == null) {
-				throw new NullPointerException("Null not allowed");
-			}
-			super.set(value);
-		}
-	};
-	public LocalDateTime getDisplayedDateTime() { return displayedDateTimeObjectProperty.getValue(); }
-	public void setDisplayedDateTime(LocalDateTime value) { displayedDateTimeObjectProperty.setValue(value); }
-	public Agenda withDisplayedDateTime(LocalDateTime value) { setDisplayedDateTime(value); return this; }
+	public ObjectProperty<LocalDateTime> displayedLocalDateTime() { return displayedLocalDateTimeObjectProperty; }
+	private final ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedLocalDateTime", LocalDateTime.now());
+	public LocalDateTime getDisplayedLocalDateTime() { return displayedLocalDateTimeObjectProperty.getValue(); }
+	public void setDisplayedLocalDateTime(LocalDateTime value) { displayedLocalDateTimeObjectProperty.setValue(value); }
+	public Agenda withDisplayedLocalDateTime(LocalDateTime value) { setDisplayedLocalDateTime(value); return this; }
 	
 	/** selectedAppointments: */
 	public ObservableList<Appointment> selectedAppointments() { return selectedAppointments; }
@@ -360,20 +355,20 @@ public class Agenda extends Control
 	 */
 	static public interface Appointment
 	{
-		public Boolean isWholeDay();
-		public void setWholeDay(Boolean b);
+		Boolean isWholeDay();
+		void setWholeDay(Boolean b);
 		
-		public String getSummary();
-		public void setSummary(String s);
+		String getSummary();
+		void setSummary(String s);
 		
-		public String getDescription();
-		public void setDescription(String s);
+		String getDescription();
+		void setDescription(String s);
 		
-		public String getLocation();
-		public void setLocation(String s);
+		String getLocation();
+		void setLocation(String s);
 		
-		public AppointmentGroup getAppointmentGroup();
-		public void setAppointmentGroup(AppointmentGroup s);
+		AppointmentGroup getAppointmentGroup();
+		void setAppointmentGroup(AppointmentGroup s);
 		
 		// ----
 		// Calendar
@@ -383,52 +378,57 @@ public class Agenda extends Control
 			throw new NotImplementedException();
 		}
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		default public void setStartTime(Calendar c) {
+		default void setStartTime(Calendar c) {
 			throw new NotImplementedException();
 		}
 		
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		default public Calendar getEndTime() {
+		default Calendar getEndTime() {
 			throw new NotImplementedException();
 		}
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		default public void setEndTime(Calendar c) {
+		default void setEndTime(Calendar c) {
 			throw new NotImplementedException();
 		}
 		
 		// ----
-		// ZonedDateTime: this is the new base to work on
+		// ZonedDateTime
 		
+		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
 		default ZonedDateTime getStartZonedDateTime() {
 			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime());
 	    }
+		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
 		default void setStartZonedDateTime(ZonedDateTime v) {
 			setStartTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
+		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
 		default ZonedDateTime getEndZonedDateTime() {
 			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getEndTime());
 	    }
-		/**
-		 * End is exclusive
-		 */
+		/** End is exclusive */
 		default void setEndZonedDateTime(ZonedDateTime v) {
 			setEndTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
 		// ----
-		// LocalDateTime: methods to convert the ZonedDateTime to LocalDateTime and vice versa
+		// LocalDateTime 
 		
+		/** This is what Agenda uses to render the appointments */
 		default LocalDateTime getStartLocalDateTime() {
 			return getStartZonedDateTime().toLocalDateTime();
 	    }
+		/** This is what Agenda uses to render the appointments */
 		default void setStartLocalDateTime(LocalDateTime v) {
 			setStartZonedDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 		
+		/** This is what Agenda uses to render the appointments */
 		default LocalDateTime getEndLocalDateTime() {
 			return getEndZonedDateTime() == null ? null : getEndZonedDateTime().toLocalDateTime();
 	    }
+		/** End is exclusive */
 		default void setEndLocalDateTime(LocalDateTime v) {
 			setEndZonedDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }

@@ -57,7 +57,7 @@ public class AgendaDaySkin extends AgendaSkinTimeScale24HourAbstract {
 		List<LocalDate> lLocalDates = new ArrayList<>();
 		
 		// only the display date
-		lLocalDates.add(control.getDisplayedDateTime().toLocalDate());
+		lLocalDates.add(control.getDisplayedLocalDateTime().toLocalDate());
 		
 		// done
 		return lLocalDates;
