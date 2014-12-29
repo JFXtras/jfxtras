@@ -55,8 +55,8 @@ public class AllAppointments {
 		for (Agenda.Appointment lAppointment : appointments) {
 			if (lAppointment.isWholeDay()) {
 				
-				LocalDate startLocalDate = lAppointment.getStartDateTime().toLocalDate();
-				LocalDate endLocalDate = (lAppointment.getEndDateTime() == null ? startLocalDate : lAppointment.getEndDateTime().minusNanos(1).toLocalDate());  // end is exclusive, so subtract one nano
+				LocalDate startLocalDate = lAppointment.getDisplayedAtStartLocalDateTime().toLocalDate();
+				LocalDate endLocalDate = (lAppointment.getDisplayedAtEndLocalDateTime() == null ? startLocalDate : lAppointment.getDisplayedAtEndLocalDateTime().minusNanos(1).toLocalDate());  // end is exclusive, so subtract one nano
 				if ( (startLocalDate.isEqual(localDate) || startLocalDate.isBefore(localDate))
 				  && (endLocalDate.isEqual(localDate) || endLocalDate.isAfter(localDate)) 
 				) {
@@ -76,9 +76,9 @@ public class AllAppointments {
 		// scan all appointments and filter the ones for this day
 		for (Agenda.Appointment lAppointment : appointments) {
 			// an not-wholeday appointment WITHOUT an end is a task
-			if (!lAppointment.isWholeDay() && lAppointment.getEndDateTime() == null) {
+			if (!lAppointment.isWholeDay() && lAppointment.getDisplayedAtEndLocalDateTime() == null) {
 				
-				if (lAppointment.getStartDateTime().toLocalDate().isEqual(localDate)) {
+				if (lAppointment.getDisplayedAtStartLocalDateTime().toLocalDate().isEqual(localDate)) {
 					collectedAppointments.add(lAppointment);
 				}
 			}
@@ -95,10 +95,10 @@ public class AllAppointments {
 		// scan all appointments and filter the ones for this day
 		for (Agenda.Appointment lAppointment : appointments) {
 			// an not-wholeday appointment WITH a set enddate is a regular appointment
-			if (!lAppointment.isWholeDay() && lAppointment.getEndDateTime() != null) {
+			if (!lAppointment.isWholeDay() && lAppointment.getDisplayedAtEndLocalDateTime() != null) {
 				
-				LocalDate startLocalDate = lAppointment.getStartDateTime().toLocalDate();
-				LocalDate endLocalDate = lAppointment.getEndDateTime().minusNanos(1).toLocalDate();  // end is exclusive, so subtract one nano
+				LocalDate startLocalDate = lAppointment.getDisplayedAtStartLocalDateTime().toLocalDate();
+				LocalDate endLocalDate = lAppointment.getDisplayedAtEndLocalDateTime().minusNanos(1).toLocalDate();  // end is exclusive, so subtract one nano
 				if ( (startLocalDate.isEqual(localDate) || startLocalDate.isBefore(localDate))
 				  && (endLocalDate.isEqual(localDate) || endLocalDate.isAfter(localDate)) 
 				) {

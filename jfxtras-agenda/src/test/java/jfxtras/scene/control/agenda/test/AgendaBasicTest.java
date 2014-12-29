@@ -114,7 +114,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
             );
 		});
 				
-		Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/1");
+		Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/0");
 		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
 		//TestUtil.sleep(3000);
@@ -135,12 +135,12 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 			
 		{
-			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/1");
+			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 587.0, 0.01);
 		}
 		{
-			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-02/1");
+			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-02/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			new AssertNode(n).assertXYWH(0.5, 0.5, 125.0, 503.0, 0.01);
 		}
@@ -163,12 +163,12 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 			
 		{
-			Node n = (Node)find("#AppointmentWholedayBodyPane2014-01-01/1");
+			Node n = (Node)find("#AppointmentWholedayBodyPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.0, 0.01);
+			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.125, 0.01);
 		}
 		{
-			Node n = (Node)find("#AppointmentWholedayHeaderPane2014-01-01/1");
+			Node n = (Node)find("#AppointmentWholedayHeaderPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			new AssertNode(n).assertXYWH(0.0, 24.0390625, 135.21763392857142, 20.9609375, 0.01);
 		}
@@ -189,10 +189,10 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDateTime().toString() );
-		Assert.assertEquals("2014-01-01T12:00", agenda.appointments().get(0).getEndDateTime().toString() );
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T12:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
 		
-		find("#AppointmentRegularBodyPane2014-01-01/1"); // validate that the pane has the expected id
+		find("#AppointmentRegularBodyPane2014-01-01/0"); // validate that the pane has the expected id
 		//TestUtil.sleep(3000);
 	}
 	
@@ -209,11 +209,11 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartDateTime().toString() );
-		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndDateTime().toString() );
+		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
 		
-		assertFind("#AppointmentWholedayBodyPane2014-01-01/1");
-		assertFind("#AppointmentWholedayHeaderPane2014-01-01/1");
+		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
+		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		//TestUtil.sleep(3000);
 	}
 
@@ -231,8 +231,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
             );
 		});
 				
-		click("#AppointmentRegularBodyPane2014-01-01/1 .MenuIcon");
-		assertPopupIsVisible(find("#AppointmentRegularBodyPane2014-01-01/1"));
+		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
+		assertPopupIsVisible(find("#AppointmentRegularBodyPane2014-01-01/0"));
 		//TestUtil.sleep(3000);
 	}
 
@@ -251,7 +251,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 				
 		Assert.assertEquals(1, agenda.appointments().size() );
-		click("#AppointmentRegularBodyPane2014-01-01/1 .MenuIcon");
+		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
 		click(".delete-icon");
 		Assert.assertEquals(0, agenda.appointments().size() );
 		//TestUtil.sleep(3000);
@@ -272,7 +272,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 //		});
 //				
 //		Assert.assertEquals(1, agenda.appointments().size() );
-//		move("#AppointmentRegularBodyPane2014-01-01/1"); 
+//		move("#AppointmentRegularBodyPane2014-01-01/0"); 
 //		press(KeyCode.DELETE);
 //		Assert.assertEquals(0, agenda.appointments().size() );
 //		TestUtil.sleep(3000);
@@ -299,12 +299,12 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 				
 		{
-			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/1");
+			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.A.XYWH);
 			new AssertNode(n).assertXYWH(0.5, 419.5, 110.0, 84.0, 0.01);
 		}
 		{
-			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/2");
+			Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/1");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.A.XYWH);
 			new AssertNode(n).assertXYWH(62.5, 461.5, 63.0, 84.0, 0.01);
 		}
@@ -325,7 +325,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
             );
 		});
 
-		click("#AppointmentRegularBodyPane2014-01-01/1 .MenuIcon");
+		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
 		click("#wholeday-checkbox");
 		click(".close-icon");
 		Assert.assertEquals(1, agenda.appointments().size() );
@@ -333,12 +333,12 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 
 		// this not only checks if the appointment was changed, but also if it was rerendered
 		{
-			Node n = (Node)find("#AppointmentWholedayBodyPane2014-01-01/1");
+			Node n = (Node)find("#AppointmentWholedayBodyPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.0, 0.01);
+			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.125, 0.01);
 		}
 		{
-			Node n = (Node)find("#AppointmentWholedayHeaderPane2014-01-01/1");
+			Node n = (Node)find("#AppointmentWholedayHeaderPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			new AssertNode(n).assertXYWH(0.0, 24.0390625, 135.21763392857142, 20.9609375, 0.01);
 		}
@@ -358,7 +358,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
-		assertFind("#AppointmentRegularBodyPane2014-01-01/1"); 
+		assertFind("#AppointmentRegularBodyPane2014-01-01/0"); 
 				
 		move("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
 		press(MouseButton.PRIMARY);
@@ -366,8 +366,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getStartDateTime().toString() );
-		Assert.assertEquals("2014-01-01T16:00", agenda.appointments().get(0).getEndDateTime().toString() );
+		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T16:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 	
@@ -384,7 +384,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
-		assertFind("#AppointmentRegularBodyPane2014-01-01/1");
+		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 				
 		move("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
 		press(MouseButton.PRIMARY);
@@ -392,8 +392,8 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getStartDateTime().toString() );
-		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getEndDateTime().toString() );
+		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -411,14 +411,14 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
             );
 		});
 				
-		move("#AppointmentRegularBodyPane2014-01-01/1 .DurationDragger"); 
+		move("#AppointmentRegularBodyPane2014-01-01/0 .DurationDragger"); 
 		press(MouseButton.PRIMARY);
 		move("#hourLine15");
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDateTime().toString() );
-		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getEndDateTime().toString() );
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -439,18 +439,18 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 		
 		// make sure the two nodes exist 
-		assertFind("#AppointmentWholedayBodyPane2014-01-01/1");
-		assertFind("#AppointmentWholedayHeaderPane2014-01-01/1");
+		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
+		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		
-		move("#AppointmentWholedayBodyPane2014-01-01/1"); 
+		move("#AppointmentWholedayBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
 		move(0, 0);
 		release(MouseButton.PRIMARY);
 		
 		// nothing changed 
 		Assert.assertEquals(1, agenda.appointments().size() );
-		assertFind("#AppointmentWholedayBodyPane2014-01-01/1");
-		assertFind("#AppointmentWholedayHeaderPane2014-01-01/1");
+		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
+		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		// TestUtil.sleep(3000);
 	}
 
@@ -470,20 +470,20 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 		
 		// make sure the two nodes exist 
-		assertFind("#AppointmentWholedayBodyPane2014-01-01/1");
-		assertFind("#AppointmentWholedayHeaderPane2014-01-01/1");
+		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
+		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentWholedayHeaderPane2014-01-01/1"); 
+		move("#AppointmentWholedayHeaderPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
 		move("#hourLine10");
 		release(MouseButton.PRIMARY);
 		
 		// now there should be a regular appointment
-		assertFind("#AppointmentRegularBodyPane2014-01-01/1");
+		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartDateTime().toString() );
-		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndDateTime().toString() );
+		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getDisplayedAtEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -502,20 +502,20 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 		
 		// make sure the two nodes exist 
-		assertFind("#AppointmentWholedayBodyPane2014-01-01/1");
-		assertFind("#AppointmentWholedayHeaderPane2014-01-01/1");
+		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
+		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentWholedayHeaderPane2014-01-01/1"); 
+		move("#AppointmentWholedayHeaderPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
 		move("#hourLine10");
 		release(MouseButton.PRIMARY);
 		
 		// now there should be a regular appointment
-		assertFind("#AppointmentTaskBodyPane2014-01-01/1");
+		assertFind("#AppointmentTaskBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartDateTime().toString() );
-		Assert.assertNull(agenda.appointments().get(0).getEndDateTime());
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
+		Assert.assertNull(agenda.appointments().get(0).getDisplayedAtEndLocalDateTime());
 		//TestUtil.sleep(3000);
 	}
 
@@ -534,19 +534,19 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 		
 		// make sure the node exist 
-		assertFind("#AppointmentRegularBodyPane2014-01-01/1");
+		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentRegularBodyPane2014-01-01/1"); 
+		move("#AppointmentRegularBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
 		move("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
 		
 		// now there should be a regular appointment
-		assertFind("#AppointmentWholedayBodyPane2014-01-02/1");
-		assertFind("#AppointmentWholedayHeaderPane2014-01-02/1");
+		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
+		assertFind("#AppointmentWholedayHeaderPane2014-01-02/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartDateTime().toString() );
+		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
 		Assert.assertTrue(agenda.appointments().get(0).isWholeDay());
 		//TestUtil.sleep(3000);
 	}
@@ -565,19 +565,19 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		});
 		
 		// make sure the node exist 
-		assertFind("#AppointmentTaskBodyPane2014-01-01/1");
+		assertFind("#AppointmentTaskBodyPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentTaskBodyPane2014-01-01/1"); 
+		move("#AppointmentTaskBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
 		move("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
 		
 		// now there should be a regular appointment
-		assertFind("#AppointmentWholedayBodyPane2014-01-02/1");
-		assertFind("#AppointmentWholedayHeaderPane2014-01-02/1");
+		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
+		assertFind("#AppointmentWholedayHeaderPane2014-01-02/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getStartDateTime().toString() );
+		Assert.assertEquals("2014-01-02T01:00", agenda.appointments().get(0).getDisplayedAtStartLocalDateTime().toString() );
 		Assert.assertTrue(agenda.appointments().get(0).isWholeDay());
 		//TestUtil.sleep(3000);
 	}
@@ -600,7 +600,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/1");
+		click("#AppointmentRegularBodyPane2014-01-01/0");
 		
 		// then
 		Assert.assertEquals(1, agenda.appointments().size() );
@@ -638,22 +638,22 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select first
+		click("#AppointmentRegularBodyPane2014-01-01/0"); // select first
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/2"); // select second
+		click("#AppointmentRegularBodyPane2014-01-01/1"); // select second
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.SHIFT);
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select both
+		click("#AppointmentRegularBodyPane2014-01-01/0"); // select both
 		release(KeyCode.SHIFT);
 		Assert.assertEquals(2, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.SHIFT);
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select again (no change)
+		click("#AppointmentRegularBodyPane2014-01-01/0"); // select again (no change)
 		release(KeyCode.SHIFT);
 		Assert.assertEquals(2, agenda.selectedAppointments().size() );
 		
@@ -687,24 +687,24 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select first
+		click("#AppointmentRegularBodyPane2014-01-01/0"); // select first
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
-		click("#AppointmentRegularBodyPane2014-01-01/2"); // select second
+		click("#AppointmentRegularBodyPane2014-01-01/1"); // select second
 		release(KeyCode.CONTROL);
 		Assert.assertEquals(2, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
-		click("#AppointmentRegularBodyPane2014-01-01/2"); // select again (deselects)
+		click("#AppointmentRegularBodyPane2014-01-01/1"); // select again (deselects)
 		release(KeyCode.CONTROL);
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select again (deselects)
+		click("#AppointmentRegularBodyPane2014-01-01/0"); // select again (deselects)
 		release(KeyCode.CONTROL);
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		//TestUtil.sleep(3000);
@@ -732,7 +732,7 @@ public class AgendaBasicTest extends JFXtrasGuiTest {
 		Assert.assertEquals(0, cnt.get() );
 		
 		// when
-		move("#AppointmentRegularBodyPane2014-01-01/1"); 
+		move("#AppointmentRegularBodyPane2014-01-01/0"); 
 		click(MouseButton.PRIMARY); // single click
 		click(MouseButton.PRIMARY); // double click
 		

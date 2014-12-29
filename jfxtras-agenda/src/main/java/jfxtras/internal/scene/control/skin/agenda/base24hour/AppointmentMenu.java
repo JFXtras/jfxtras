@@ -107,7 +107,7 @@ public class AppointmentMenu extends Rectangle {
 		lVBox.getChildren().add(createEndTextField());
 
 		// wholeday
-		if ((appointment.isWholeDay() != null && appointment.isWholeDay() == true) || appointment.getEndDateTime() != null) {
+		if ((appointment.isWholeDay() != null && appointment.isWholeDay() == true) || appointment.getDisplayedAtEndLocalDateTime() != null) {
 			lVBox.getChildren().add(createWholedayCheckbox());
 		}
 		
@@ -155,27 +155,27 @@ public class AppointmentMenu extends Rectangle {
 	private LocalDateTimeTextField createStartTextField() {
 		startTextField = new LocalDateTimeTextField();
 		startTextField.setLocale(layoutHelp.skinnable.getLocale());
-		startTextField.setLocalDateTime(appointment.getStartDateTime());
+		startTextField.setLocalDateTime(appointment.getDisplayedAtStartLocalDateTime());
 		
 		// event handling
 		startTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
 			
 			// remember
-			LocalDateTime lOldStart = appointment.getStartDateTime();
+			LocalDateTime lOldStart = appointment.getDisplayedAtStartLocalDateTime();
 
 			// set
-			appointment.setStartDateTime(newValue);
+			appointment.setDisplayedAtStartLocalDateTime(newValue);
 
 			// update end date
-			if (appointment.getEndDateTime() != null) {
+			if (appointment.getDisplayedAtEndLocalDateTime() != null) {
 				
 				// enddate = start + duration
-				long lDurationInNano = appointment.getEndDateTime().getNano() - lOldStart.getNano();
-				LocalDateTime lEndLocalDateTime = appointment.getStartDateTime().plusNanos(lDurationInNano);
-				appointment.setEndDateTime(lEndLocalDateTime);
+				long lDurationInNano = appointment.getDisplayedAtEndLocalDateTime().getNano() - lOldStart.getNano();
+				LocalDateTime lEndLocalDateTime = appointment.getDisplayedAtStartLocalDateTime().plusNanos(lDurationInNano);
+				appointment.setDisplayedAtEndLocalDateTime(lEndLocalDateTime);
 
 				// update field
-				endTextField.setLocalDateTime(appointment.getEndDateTime());
+				endTextField.setLocalDateTime(appointment.getDisplayedAtEndLocalDateTime());
 			}
 
 			// refresh is done upon popup close
@@ -192,11 +192,11 @@ public class AppointmentMenu extends Rectangle {
 	private LocalDateTimeTextField createEndTextField() {
 		endTextField = new LocalDateTimeTextField();
 		endTextField.setLocale(layoutHelp.skinnable.getLocale());
-		endTextField.setLocalDateTime(appointment.getEndDateTime());
-		endTextField.setVisible(appointment.getEndDateTime() != null);
+		endTextField.setLocalDateTime(appointment.getDisplayedAtEndLocalDateTime());
+		endTextField.setVisible(appointment.getDisplayedAtEndLocalDateTime() != null);
 
 		endTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
-			appointment.setEndDateTime(newValue);
+			appointment.setDisplayedAtEndLocalDateTime(newValue);
 			// refresh is done upon popup close
 		});
 
@@ -216,14 +216,14 @@ public class AppointmentMenu extends Rectangle {
 		wholedayCheckBox.selectedProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setWholeDay(newValue);
 			if (newValue == true) {
-				appointment.setEndDateTime(null);
+				appointment.setDisplayedAtEndLocalDateTime(null);
 			}
 			else {
-				LocalDateTime lEndTime = appointment.getStartDateTime().plusMinutes(30);
-				appointment.setEndDateTime(lEndTime);
-				endTextField.setLocalDateTime(appointment.getEndDateTime());
+				LocalDateTime lEndTime = appointment.getDisplayedAtStartLocalDateTime().plusMinutes(30);
+				appointment.setDisplayedAtEndLocalDateTime(lEndTime);
+				endTextField.setLocalDateTime(appointment.getDisplayedAtEndLocalDateTime());
 			}
-			endTextField.setVisible(appointment.getEndDateTime() != null);
+			endTextField.setVisible(appointment.getDisplayedAtEndLocalDateTime() != null);
 			// refresh is done upon popup close
 		});
 		

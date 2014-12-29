@@ -38,12 +38,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.WeakHashMap;
 
 import javafx.beans.property.ListProperty;
@@ -63,10 +66,12 @@ public class DateTimeToCalendarHelper {
 	 * @param localDate
 	 * @return
 	 */
-	public static Calendar createCalendarFromLocalDate(LocalDate localDate, Locale locale)
+	public static Calendar createCalendarFromLocalDate(LocalDate localDate, TimeZone timeZone, Locale locale)
 	{
-		if (localDate == null) return null;
-		Calendar lCalendar = Calendar.getInstance(locale);
+		if (localDate == null) {
+			return null;
+		}
+		Calendar lCalendar = Calendar.getInstance(timeZone, locale);
 		lCalendar.set(Calendar.YEAR, localDate.getYear());
 		lCalendar.set(Calendar.MONTH, localDate.getMonth().getValue() - 1);
 		lCalendar.set(Calendar.DATE, localDate.getDayOfMonth());
@@ -79,13 +84,29 @@ public class DateTimeToCalendarHelper {
 	
 	/**
 	 * 
+	 * @param zonedDateTime
+	 * @return
+	 */
+	public static Calendar createCalendarFromZonedDateTime(ZonedDateTime zonedDateTime)
+	{
+		if (zonedDateTime == null) {
+			return null;
+		}
+		Calendar lCalendar = GregorianCalendar.from(zonedDateTime);
+		return lCalendar;
+	}
+	
+	/**
+	 * 
 	 * @param localDateTime
 	 * @return
 	 */
-	public static Calendar createCalendarFromLocalDateTime(LocalDateTime localDateTime, Locale locale)
+	public static Calendar createCalendarFromLocalDateTime(LocalDateTime localDateTime, TimeZone timeZone, Locale locale)
 	{
-		if (localDateTime == null) return null;
-		Calendar lCalendar = Calendar.getInstance(locale);
+		if (localDateTime == null) {
+			return null;
+		}
+		Calendar lCalendar = Calendar.getInstance(timeZone, locale);
 		lCalendar.set(Calendar.YEAR, localDateTime.getYear());
 		lCalendar.set(Calendar.MONTH, localDateTime.getMonth().getValue() - 1);
 		lCalendar.set(Calendar.DATE, localDateTime.getDayOfMonth());
@@ -101,10 +122,12 @@ public class DateTimeToCalendarHelper {
 	 * @param localTime
 	 * @return
 	 */
-	public static Calendar createCalendarFromLocalTime(LocalTime localTime, Locale locale)
+	public static Calendar createCalendarFromLocalTime(LocalTime localTime, TimeZone timeZone, Locale locale)
 	{
-		if (localTime == null) return null;
-		Calendar lCalendar = Calendar.getInstance(locale);
+		if (localTime == null) {
+			return null;
+		}
+		Calendar lCalendar = Calendar.getInstance(timeZone, locale);
 		lCalendar.set(Calendar.HOUR_OF_DAY, localTime.getHour());
 		lCalendar.set(Calendar.MINUTE, localTime.getMinute());
 		lCalendar.set(Calendar.SECOND, localTime.getSecond());
@@ -119,7 +142,9 @@ public class DateTimeToCalendarHelper {
 	 */
 	public static LocalDate createLocalDateFromCalendar(Calendar calendar)
 	{
-		if (calendar == null) return null;
+		if (calendar == null) {
+			return null;
+		}
 		LocalDate lLocalDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE));
 		return lLocalDate;
 	}
@@ -129,9 +154,26 @@ public class DateTimeToCalendarHelper {
 	 * @param calendar
 	 * @return
 	 */
+	public static ZonedDateTime createZonedDateTimeFromCalendar(Calendar calendar)
+	{
+		if (calendar == null) {
+			return null;		
+		}
+		Instant instant = Instant.ofEpochMilli(calendar.getTimeInMillis());
+		ZoneId zone = toZoneId(calendar.getTimeZone());
+		return ZonedDateTime.ofInstant(instant, zone);
+	}
+	
+	/**
+	 * 
+	 * @param calendar
+	 * @return
+	 */
 	public static LocalDateTime createLocalDateTimeFromCalendar(Calendar calendar)
 	{
-		if (calendar == null) return null;
+		if (calendar == null) {
+			return null;
+		}
 		LocalDateTime lLocalDateTime = LocalDateTime.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DATE), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), calendar.get(Calendar.MILLISECOND) * 1000000);
 		return lLocalDateTime;
 	}
@@ -143,7 +185,9 @@ public class DateTimeToCalendarHelper {
 	 */
 	public static LocalTime createLocalTimeFromCalendar(Calendar calendar)
 	{
-		if (calendar == null) return null;
+		if (calendar == null) {
+			return null;
+		}
 		LocalTime lLocalTime = LocalTime.of(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), calendar.get(Calendar.MILLISECOND) * 1000000);
 		return lLocalTime;
 	}
@@ -228,7 +272,7 @@ public class DateTimeToCalendarHelper {
 	static public void syncLocalDate(ObjectProperty<Calendar> calendarProperty, ObjectProperty<LocalDate> localDateProperty, ObjectProperty<Locale> localeProperty)
 	{
 		// initial
-		calendarProperty.set(localDateProperty.get() == null ? null : createCalendarFromLocalDate(localDateProperty.get(), localeProperty.get()));
+		calendarProperty.set(localDateProperty.get() == null ? null : createCalendarFromLocalDate(localDateProperty.get(), TimeZone.getDefault(), localeProperty.get()));
 		
 		// forward changes from calendar
 		calendarProperty.addListener( (ObservableValue<? extends Calendar> observableValue, Calendar oldValue, Calendar newValue) -> {
@@ -237,7 +281,7 @@ public class DateTimeToCalendarHelper {
 		
 		// forward changes to calendar
 		localDateProperty.addListener( (ObservableValue<? extends LocalDate> observableValue, LocalDate oldValue, LocalDate newValue) -> {
-			calendarProperty.set(newValue == null ? null : createCalendarFromLocalDate(newValue, localeProperty.get()));
+			calendarProperty.set(newValue == null ? null : createCalendarFromLocalDate(newValue, TimeZone.getDefault(), localeProperty.get()));
 		});
 	}
 
@@ -250,7 +294,7 @@ public class DateTimeToCalendarHelper {
 	static public void syncLocalDateTime(ObjectProperty<Calendar> calendarProperty, ObjectProperty<LocalDateTime> localDateTimeProperty, ObjectProperty<Locale> localeProperty)
 	{
 		// initial
-		calendarProperty.set(localDateTimeProperty.get() == null ? null : createCalendarFromLocalDateTime(localDateTimeProperty.get(), localeProperty.get()));
+		calendarProperty.set(localDateTimeProperty.get() == null ? null : createCalendarFromLocalDateTime(localDateTimeProperty.get(), TimeZone.getDefault(), localeProperty.get()));
 		
 		// forward changes from calendar
 		calendarProperty.addListener( (ObservableValue<? extends Calendar> observableValue, Calendar oldValue, Calendar newValue) -> {
@@ -259,7 +303,7 @@ public class DateTimeToCalendarHelper {
 		
 		// forward changes to calendar
 		localDateTimeProperty.addListener( (ObservableValue<? extends LocalDateTime> observableValue, LocalDateTime oldValue, LocalDateTime newValue) -> {
-			calendarProperty.set(newValue == null ? null : createCalendarFromLocalDateTime(newValue, localeProperty.get()));
+			calendarProperty.set(newValue == null ? null : createCalendarFromLocalDateTime(newValue, TimeZone.getDefault(), localeProperty.get()));
 		});
 	}
 
@@ -273,7 +317,7 @@ public class DateTimeToCalendarHelper {
 	static public void syncLocalTime(ObjectProperty<Calendar> calendarProperty, ObjectProperty<LocalTime> localTimeProperty, ObjectProperty<Locale> localeProperty)
 	{
 		// initial
-		calendarProperty.set(localTimeProperty.get() == null ? null : createCalendarFromLocalTime(localTimeProperty.get(), localeProperty.get()));
+		calendarProperty.set(localTimeProperty.get() == null ? null : createCalendarFromLocalTime(localTimeProperty.get(), TimeZone.getDefault(), localeProperty.get()));
 		
 		// forward changes from calendar
 		calendarProperty.addListener( (ObservableValue<? extends Calendar> observableValue, Calendar oldValue, Calendar newValue) -> {
@@ -282,7 +326,7 @@ public class DateTimeToCalendarHelper {
 		
 		// forward changes to calendar
 		localTimeProperty.addListener( (ObservableValue<? extends LocalTime> observableValue, LocalTime oldValue, LocalTime newValue) -> {
-			calendarProperty.set(newValue == null ? null : createCalendarFromLocalTime(newValue, localeProperty.get()));
+			calendarProperty.set(newValue == null ? null : createCalendarFromLocalTime(newValue, TimeZone.getDefault(), localeProperty.get()));
 		});
 	}
 	
@@ -296,7 +340,7 @@ public class DateTimeToCalendarHelper {
 	{
 		// initial values
 		for (LocalDate lLocalDate : localDates) {
-			Calendar lCalendar = createCalendarFromLocalDate(lLocalDate, localeProperty.get());
+			Calendar lCalendar = createCalendarFromLocalDate(lLocalDate, TimeZone.getDefault(), localeProperty.get());
 			calendars.add(lCalendar);
 		}
 		
@@ -325,13 +369,13 @@ public class DateTimeToCalendarHelper {
 		localDates.addListener( (ListChangeListener.Change<? extends LocalDate> change) -> {
 			while (change.next()) {
 				for (LocalDate lLocalDate : change.getRemoved()) {
-					Calendar lCalendar = createCalendarFromLocalDate(lLocalDate, localeProperty.get());
+					Calendar lCalendar = createCalendarFromLocalDate(lLocalDate, TimeZone.getDefault(), localeProperty.get());
 					if (calendars.contains(lCalendar)) {
 						calendars.remove(lCalendar);
 					}
 				}
 				for (LocalDate lLocalDate : change.getAddedSubList()) {
-					Calendar lCalendar = createCalendarFromLocalDate(lLocalDate, localeProperty.get());
+					Calendar lCalendar = createCalendarFromLocalDate(lLocalDate, TimeZone.getDefault(), localeProperty.get());
 					if (calendars.contains(lCalendar) == false) {
 						calendars.add(lCalendar);
 					}
@@ -350,7 +394,7 @@ public class DateTimeToCalendarHelper {
 	{
 		// initial values
 		for (LocalDateTime lLocalDateTime : localDateTimes) {
-			Calendar lCalendar = createCalendarFromLocalDateTime(lLocalDateTime, localeProperty.get());
+			Calendar lCalendar = createCalendarFromLocalDateTime(lLocalDateTime, TimeZone.getDefault(), localeProperty.get());
 			calendars.add(lCalendar);
 		}
 		
@@ -379,13 +423,13 @@ public class DateTimeToCalendarHelper {
 		localDateTimes.addListener( (ListChangeListener.Change<? extends LocalDateTime> change) -> {
 			while (change.next()) {
 				for (LocalDateTime lLocalDateTime : change.getRemoved()) {
-					Calendar lCalendar = createCalendarFromLocalDateTime(lLocalDateTime, localeProperty.get());
+					Calendar lCalendar = createCalendarFromLocalDateTime(lLocalDateTime, TimeZone.getDefault(), localeProperty.get());
 					if (calendars.contains(lCalendar)) {
 						calendars.remove(lCalendar);
 					}
 				}
 				for (LocalDateTime lLocalDateTime : change.getAddedSubList()) {
-					Calendar lCalendar = createCalendarFromLocalDateTime(lLocalDateTime, localeProperty.get());
+					Calendar lCalendar = createCalendarFromLocalDateTime(lLocalDateTime, TimeZone.getDefault(), localeProperty.get());
 					if (calendars.contains(lCalendar) == false) {
 						calendars.add(lCalendar);
 					}
@@ -696,5 +740,10 @@ public class DateTimeToCalendarHelper {
 		}
 		s += "]";
 		return s;
+	}
+	
+
+	public static ZoneId toZoneId(TimeZone timeZone) {
+		return ZoneId.of(timeZone.getID(), ZoneId.SHORT_IDS);
 	}
 }

@@ -30,8 +30,11 @@
 package jfxtras.scene.control.agenda;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -41,10 +44,8 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
-import jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
-import jfxtras.scene.control.ImageViewButton;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -76,10 +77,14 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * --
  * 
  * Agenda has a default implementation of the Agenda.Appointment interface, in the form of Agenda.AppointmentImpl (Calendar based) or Agenda.AppointmentImpl2 (Java 8 DateTime based).
+ * 
+ * Agenda displays all appointments in the same "time scale", so if the appointments would provide ZonedDateTime instead of LocalDateTime (all possible TimeZones intermixed), Agenda would need to convert these to the TimeZone it is rendering in.
+ * Google Calendar does this by converting everything to UTC (Coordinated Universal Time, previously know as Greenwich Mean time, or GMT), Agenda does this by converting ZonedDateTimes to LocalDateTimes.
+ * In order to do this, the Appointment interface has defined methods like getDisplayedAtStartLocalDateTime() with a default implementation. 
  *
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
-// TBEERNOT: should we use LocalDateTime or DateTime?
+// TBEERNOT: should we use LocalDateTime or ZonedDateTime?
 public class Agenda extends Control
 {
 	// ==================================================================================================================
@@ -120,6 +125,9 @@ public class Agenda extends Control
 		return this.getClass().getResource("/jfxtras/internal/scene/control/skin/agenda/" + Agenda.class.getSimpleName() + ".css").toExternalForm();
 	}
 	
+	/**
+	 * 
+	 */
 	@Override public Skin<?> createDefaultSkin() {
 		return new AgendaWeekSkin(this); 
 	}
@@ -387,32 +395,41 @@ public class Agenda extends Control
 		}
 		
 		// ----
-		// DateTime
+		// ZonedDateTime: this is the new base to work on
 		
-		default LocalDateTime getStartDateTime() {
-			return DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(getStartTime());
+		default ZonedDateTime getStartDateTime() {
+			System.out.println("Calendar based " + DateTimeToCalendarHelper.quickFormatCalendar(getStartTime()) + " -> " + DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime()));
+			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime());
 	    }
-		default void setStartDateTime(LocalDateTime v) {
-			setStartTime(DateTimeToCalendarHelper.createCalendarFromLocalDateTime(v, getLocale()));
+		default void setStartDateTime(ZonedDateTime v) {
+			setStartTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
-		default LocalDateTime getEndDateTime() {
-			return DateTimeToCalendarHelper.createLocalDateTimeFromCalendar(getEndTime());
+		default ZonedDateTime getEndDateTime() {
+			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getEndTime());
 	    }
 		/**
 		 * End is exclusive
 		 */
-		default void setEndDateTime(LocalDateTime v) {
-			setEndTime(DateTimeToCalendarHelper.createCalendarFromLocalDateTime(v, getLocale()));
+		default void setEndDateTime(ZonedDateTime v) {
+			setEndTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
-		/**
-		 * Only needed to implement this if you use calendar based setter and getters, and you are not satisfied with using the default locale to convert it to LocalDateTime.
-		 * Calendar unfortunately does not expose the Locale is was created under.
-		 * @return
-		 */
-		default Locale getLocale() {
-			return Locale.getDefault();
+		// ----
+		// DisplayedAtDateTime: the methods to convert the ZonedDateTime to LocalDateTime used for displaying and vice versa
+		
+		default LocalDateTime getDisplayedAtStartLocalDateTime() {
+			return getStartDateTime().toLocalDateTime();
+	    }
+		default void setDisplayedAtStartLocalDateTime(LocalDateTime v) {
+			setStartDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
+	    }
+		
+		default LocalDateTime getDisplayedAtEndLocalDateTime() {
+			return getEndDateTime() == null ? null : getEndDateTime().toLocalDateTime();
+	    }
+		default void setDisplayedAtEndLocalDateTime(LocalDateTime v) {
+			setEndDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 	}
 	
@@ -497,24 +514,24 @@ public class Agenda extends Control
 		/** StartDateTime: */
 		public ObjectProperty<LocalDateTime> startDateTimeProperty() { return startDateTimeObjectProperty; }
 		final private ObjectProperty<LocalDateTime> startDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "startDateTime");
-		public LocalDateTime getStartDateTime() { return startDateTimeObjectProperty.getValue(); }
-		public void setStartDateTime(LocalDateTime value) { startDateTimeObjectProperty.setValue(value); }
-		public AppointmentImpl2 withStartDateTime(LocalDateTime value) { setStartDateTime(value); return this; }
+		public LocalDateTime getDisplayedAtStartLocalDateTime() { return startDateTimeObjectProperty.getValue(); }
+		public void setDisplayedAtStartLocalDateTime(LocalDateTime value) { startDateTimeObjectProperty.setValue(value); }
+		public AppointmentImpl2 withStartDateTime(LocalDateTime value) { setDisplayedAtStartLocalDateTime(value); return this; }
 		
 		/** EndDateTime: */
 		public ObjectProperty<LocalDateTime> endDateTimeProperty() { return endDateTimeObjectProperty; }
 		final private ObjectProperty<LocalDateTime> endDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "endDateTime");
-		public LocalDateTime getEndDateTime() { return endDateTimeObjectProperty.getValue(); }
-		public void setEndDateTime(LocalDateTime value) { endDateTimeObjectProperty.setValue(value); }
-		public AppointmentImpl2 withEndDateTime(LocalDateTime value) { setEndDateTime(value); return this; } 
+		public LocalDateTime getDisplayedAtEndLocalDateTime() { return endDateTimeObjectProperty.getValue(); }
+		public void setDisplayedAtEndLocalDateTime(LocalDateTime value) { endDateTimeObjectProperty.setValue(value); }
+		public AppointmentImpl2 withEndDateTime(LocalDateTime value) { setDisplayedAtEndLocalDateTime(value); return this; } 
 		
 		public String toString()
 		{
 			return super.toString()
 				 + ", "
-				 + this.getStartDateTime()
+				 + this.getDisplayedAtStartLocalDateTime()
 				 + " - "
-				 + this.getEndDateTime()
+				 + this.getDisplayedAtEndLocalDateTime()
 				 ;
 		}
 	}

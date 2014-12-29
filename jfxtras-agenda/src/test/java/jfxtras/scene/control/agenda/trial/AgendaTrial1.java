@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.WeekFields;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
@@ -210,6 +211,13 @@ public class AgendaTrial1 extends Application {
 				.withSummary("J")
 				.withDescription("A description " + (++idx))
 				.withAppointmentGroup(lAppointmentGroupMap.get("group07"))
+		// backwards compatibility: calendar based appointment
+		, 	new Agenda.AppointmentImpl()
+				.withStartTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 5, 00))
+				.withEndTime(new GregorianCalendar(lTodayYear, lTodayMonth, lTodayDay, 5, 30))
+				.withSummary("Cal")
+				.withDescription("Calendar based")
+				.withAppointmentGroup(lAppointmentGroupMap.get("group08"))
 		// -----
 		// too short for actual rendering
 		, 	new Agenda.AppointmentImpl2()

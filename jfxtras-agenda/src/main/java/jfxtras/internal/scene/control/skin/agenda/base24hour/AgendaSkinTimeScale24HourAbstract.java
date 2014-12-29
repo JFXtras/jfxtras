@@ -38,6 +38,7 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -162,7 +163,7 @@ implements AgendaSkin
 			getSkinnable().getDateTimeRangeCallback().call(lRange);
 		}
 		if (getSkinnable().getCalendarRangeCallback() != null) {
-			Agenda.CalendarRange lRange = new Agenda.CalendarRange( DateTimeToCalendarHelper.createCalendarFromLocalDate(lStartLocalDate, Locale.getDefault()), DateTimeToCalendarHelper.createCalendarFromLocalDate(lEndLocalDate, Locale.getDefault()));
+			Agenda.CalendarRange lRange = new Agenda.CalendarRange( DateTimeToCalendarHelper.createCalendarFromLocalDate(lStartLocalDate, TimeZone.getDefault(), Locale.getDefault()), DateTimeToCalendarHelper.createCalendarFromLocalDate(lEndLocalDate, TimeZone.getDefault(), Locale.getDefault()));
 			getSkinnable().getCalendarRangeCallback().call(lRange);
 		}
 	}

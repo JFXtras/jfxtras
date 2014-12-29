@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -147,7 +148,10 @@ public class DayHeaderPane extends Pane {
 				lAppointment = layoutHelp.skinnable.newAppointmentCallbackProperty().get().call(new Agenda.DateTimeRange(lStartDateTime, lEndDateTime));
 			}
 			else {
-				lAppointment = layoutHelp.skinnable.createAppointmentCallbackProperty().get().call(new Agenda.CalendarRange(DateTimeToCalendarHelper.createCalendarFromLocalDateTime(lStartDateTime, Locale.getDefault()), DateTimeToCalendarHelper.createCalendarFromLocalDateTime(lEndDateTime, Locale.getDefault())));
+				lAppointment = layoutHelp.skinnable.createAppointmentCallbackProperty().get().call( new Agenda.CalendarRange(
+					DateTimeToCalendarHelper.createCalendarFromLocalDateTime(lStartDateTime, TimeZone.getDefault(), Locale.getDefault()),
+					DateTimeToCalendarHelper.createCalendarFromLocalDateTime(lEndDateTime, TimeZone.getDefault(), Locale.getDefault())
+			    ));
 			}
 			if (lAppointment != null) {
 				lAppointment.setWholeDay(true);
