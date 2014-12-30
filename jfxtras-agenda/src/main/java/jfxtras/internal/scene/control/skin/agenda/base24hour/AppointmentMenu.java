@@ -71,12 +71,16 @@ public class AppointmentMenu extends Rectangle {
 	 * 
 	 * @param mouseEvent
 	 */
-	private void showMenu(MouseEvent mouseEvent) {
-		
+	void showMenu(MouseEvent mouseEvent) {
 		// has the client done his own popup?
 		Callback<Appointment, Void> lEditCallback = layoutHelp.skinnable.getEditAppointmentCallback();
 		if (lEditCallback != null) {
 			lEditCallback.call(appointment);
+			return;
+		}
+
+		// only if not already showing
+		if (popup != null && popup.isShowing()) {
 			return;
 		}
 		

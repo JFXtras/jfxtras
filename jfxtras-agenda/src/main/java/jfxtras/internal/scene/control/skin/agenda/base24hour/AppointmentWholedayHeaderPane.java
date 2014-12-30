@@ -16,13 +16,13 @@ class AppointmentWholedayHeaderPane extends AppointmentAbstractPane
 	 */
 	public AppointmentWholedayHeaderPane(Agenda.Appointment appointment, LayoutHelp layoutHelp)
 	{
-		super(appointment, layoutHelp, Draggable.YES);
+		super(appointment, layoutHelp);
 		
 		// add the duration as text
 		getChildren().add(createSummaryText());
 		
 		// add the menu header
-		getChildren().add(new AppointmentMenu(this, appointment, layoutHelp));
+		getChildren().add(appointmentMenu);
 	}
 
 	private Text createSummaryText() {

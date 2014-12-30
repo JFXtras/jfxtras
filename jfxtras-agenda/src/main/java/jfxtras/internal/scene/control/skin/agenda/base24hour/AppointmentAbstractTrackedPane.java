@@ -15,9 +15,9 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 	 * @param calendar
 	 * @param appointment
 	 */
-	public AppointmentAbstractTrackedPane(LocalDate localDate, Agenda.Appointment appointment, LayoutHelp layoutHelp, Draggable draggable)
+	public AppointmentAbstractTrackedPane(LocalDate localDate, Agenda.Appointment appointment, LayoutHelp layoutHelp)
 	{
-		super(appointment, layoutHelp, draggable);
+		super(appointment, layoutHelp);
 		
 		// we know start and end optionally are set
 		startDateTime = appointment.getStartLocalDateTime().toLocalDate().isEqual(localDate) ? appointment.getStartLocalDateTime() : localDate.atStartOfDay();

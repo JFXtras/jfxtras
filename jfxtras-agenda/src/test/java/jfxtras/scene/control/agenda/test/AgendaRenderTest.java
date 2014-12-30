@@ -46,7 +46,7 @@ import org.junit.Test;
 /**
  * 
  */
-public class AgendaRenderTest extends AbstractAgendaTest {
+public class AgendaRenderTest extends AbstractAgendaTestBase {
 
 	/**
 	 * 

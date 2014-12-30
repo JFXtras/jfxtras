@@ -7,13 +7,14 @@ import jfxtras.scene.control.agenda.Agenda.Appointment;
 public class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
 
 	public AppointmentTaskBodyPane(Appointment appointment, LayoutHelp layoutHelp) {
-		super(appointment.getStartLocalDateTime().toLocalDate(), appointment, layoutHelp, Draggable.YES);
+		super(appointment.getStartLocalDateTime().toLocalDate(), appointment, layoutHelp);
 		
 		// strings
 		this.startAsString = layoutHelp.timeDateTimeFormatter.format(this.startDateTime);
 
 		// add the menu
-		getChildren().add(createMenu());
+		appointmentMenu.yProperty().bind(heightProperty().subtract(appointmentMenu.heightProperty()).divide(2.0)); // position is slightly different from the default
+		getChildren().add(appointmentMenu);
 
 		// add the start time as text
 		getChildren().add(createTimeText());
@@ -24,21 +25,6 @@ public class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
 		}
 	}
 	private String startAsString;
-	
-	/**
-	 * 
-	 * @param appointment
-	 * @param layoutHelp
-	 */
-	private AppointmentMenu createMenu() {
-		menu = new AppointmentMenu(this, appointment, layoutHelp);
-		
-		// override placement of the menu for task: center vertically
-		menu.yProperty().bind(heightProperty().subtract(menu.heightProperty()).divide(2.0));
-		
-		return menu;
-	}
-	private AppointmentMenu menu = null;
 
 	/**
 	 * 
@@ -47,7 +33,7 @@ public class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
 		timeText = new Text(startAsString);
 		{
 			timeText.getStyleClass().add("AppointmentTimeLabel");
-			timeText.xProperty().bind( menu.widthProperty().add(layoutHelp.paddingProperty).add(layoutHelp.paddingProperty) ); // directly next to the menu
+			timeText.xProperty().bind( appointmentMenu.widthProperty().add(layoutHelp.paddingProperty).add(layoutHelp.paddingProperty) ); // directly next to the menu
 			timeText.yProperty().bind( heightProperty().multiply(-0.5).add(timeText.prefHeight(0) / 2) );
 		}
 		return timeText;

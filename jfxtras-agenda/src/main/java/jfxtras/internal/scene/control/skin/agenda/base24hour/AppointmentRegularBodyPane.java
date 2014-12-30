@@ -8,7 +8,7 @@ import jfxtras.scene.control.agenda.Agenda.Appointment;
 public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 
 	public AppointmentRegularBodyPane(LocalDate localDate, Appointment appointment, LayoutHelp layoutHelp) {
-		super(localDate, appointment, layoutHelp, Draggable.YES);
+		super(localDate, appointment, layoutHelp);
 		
 		// strings
 		this.startAsString = layoutHelp.timeDateTimeFormatter.format(this.startDateTime);
@@ -36,7 +36,7 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 		}
 		
 		// add the menu header
-		getChildren().add(new AppointmentMenu(this, appointment, layoutHelp));
+		getChildren().add(appointmentMenu);
 		
 		// add the duration dragger
 		if (lastPaneOfAppointment) {

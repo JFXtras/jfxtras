@@ -21,12 +21,12 @@ abstract public class AppointmentAbstractPane extends Pane {
 	 * @param calendar
 	 * @param appointment
 	 */
-	public AppointmentAbstractPane(Agenda.Appointment appointment, LayoutHelp layoutHelp, Draggable draggable)
+	public AppointmentAbstractPane(Agenda.Appointment appointment, LayoutHelp layoutHelp)
 	{
 		this.appointment = appointment;
 		this.layoutHelp = layoutHelp;
-		this.draggable = draggable;
-
+		appointmentMenu = new AppointmentMenu(this, appointment, layoutHelp);
+		
 		// for debugging setStyle("-fx-border-color:PINK;-fx-border-width:1px;");
 		getStyleClass().add("Appointment");
 		getStyleClass().add(appointment.getAppointmentGroup().getStyleClass());
@@ -41,9 +41,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 		}
 		
 		// dragging
-		if (draggable == Draggable.YES) {
-			setupDragging();
-		}
+		setupDragging();
 		
 		// react to changes in the selected appointments
 		layoutHelp.skinnable.selectedAppointments().addListener( (javafx.collections.ListChangeListener.Change<? extends Appointment> change) -> {
@@ -52,10 +50,9 @@ abstract public class AppointmentAbstractPane extends Pane {
 	}
 	final protected Agenda.Appointment appointment; 
 	final protected LayoutHelp layoutHelp;
-	final protected Draggable draggable;
-	enum Draggable { YES, NO }
 	final protected HistoricalVisualizer historyVisualizer;
-
+	final protected AppointmentMenu appointmentMenu;
+	
 	/**
 	 * 
 	 */
@@ -93,6 +90,11 @@ abstract public class AppointmentAbstractPane extends Pane {
 			// action without select: middle button
 			if (mouseEvent.getButton().equals(MouseButton.MIDDLE)) {
 				handleAction();
+				return;
+			}
+			// popup: right button
+			if (mouseEvent.getButton().equals(MouseButton.SECONDARY)) {
+				appointmentMenu.showMenu(mouseEvent);
 				return;
 			}
 			// only on primary

@@ -42,7 +42,7 @@ import org.junit.Test;
 /**
  * 
  */
-public class AgendaMenuTest extends AbstractAgendaTest {
+public class AgendaMenuTest extends AbstractAgendaTestBase {
 
 	/**
 	 * 
@@ -67,6 +67,25 @@ public class AgendaMenuTest extends AbstractAgendaTest {
 		});
 				
 		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
+		assertPopupIsVisible(find("#AppointmentRegularBodyPane2014-01-01/0"));
+		//TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void showAppointmentMenuRMB()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+		});
+				
+		click("#AppointmentRegularBodyPane2014-01-01/0", MouseButton.SECONDARY);
 		assertPopupIsVisible(find("#AppointmentRegularBodyPane2014-01-01/0"));
 		//TestUtil.sleep(3000);
 	}

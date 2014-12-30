@@ -11,7 +11,7 @@ import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.JFXtrasGuiTest;
 
-public class AbstractAgendaTest extends JFXtrasGuiTest {
+public class AbstractAgendaTestBase extends JFXtrasGuiTest {
 
 	/**
 	 * 

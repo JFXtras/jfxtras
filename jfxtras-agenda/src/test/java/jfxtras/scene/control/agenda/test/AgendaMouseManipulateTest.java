@@ -40,7 +40,7 @@ import org.junit.Test;
 /**
  * 
  */
-public class AgendaMouseManipulateTest extends AbstractAgendaTest {
+public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 
 	/**
 	 * 

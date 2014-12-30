@@ -43,7 +43,7 @@ import org.junit.Test;
 /**
  * 
  */
-public class AgendaSelectTest extends AbstractAgendaTest {
+public class AgendaSelectTest extends AbstractAgendaTestBase {
 
 	/**
 	 * 
@@ -219,7 +219,7 @@ public class AgendaSelectTest extends AbstractAgendaTest {
 	 * 
 	 */
 	@Test
-	public void action2()
+	public void actionMMB()
 	{
 		// given
 		AtomicInteger cnt = new AtomicInteger(0);
