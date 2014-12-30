@@ -35,9 +35,9 @@ import jfxtras.util.Implements;
  * The first step is to determine how large a single bead is. This already is an interesting question.
  * A beat should encompass the contents of the node, but CircularPane does not know what exactly is drawn in the node.
  * It could be a simple flat or vertical line, where the encompassing circle's diameter is equal to the width or height (whichever is the largest). 
- * But if the contents is an X or a rectangle, then then encompassing circle's diameter is equal to the diagonal (Pythagoras).
- * Since CircularPane does not know, it has to assume the worst and use the diameter.
- * But the childrenAreCircles property allows the user to inform CircularPane than all the children are circular (or smaller), so it can then use the width or height to calculate the encompassing circle.  
+ * But if the contents is an X or a rectangle, then then encompassing circle's diameter is equal to the diagonal.
+ * Since CircularPane does not know, it has to assume the worst and use the diagonal.
+ * But the childrenAreCircles property allows the user to inform CircularPane than all the children are circular (or smaller), so it can then use the width or height to calculate the encompassing circle (bead).  
  *
  * CircularPane segments the 360 degrees in equal parts; 360 / number of children. 
  * The largest bead determines the distance from the origin to where it fits in a segment, and this determines the size of the chain.
@@ -230,7 +230,7 @@ public class CircularPane extends Pane {
     	// In 'normal' layout logic these computed sizes would denote an ability.
     	// - Min would indicate the minimal size the node or layout is able to render itself, 
     	// - Pref the preferred size a node would like to have, 
-    	// - and Max the maximum size a node is ABLE to render itself.
+    	// - Max the maximum size a node is ABLE to render itself.
     	//
     	// If a node were given more space to render itself, without any further instructions from the user (through layout constraints), 
     	// it should still stick to its preferred size, because that after all is its preferred size.
@@ -805,9 +805,42 @@ public class CircularPane extends Pane {
 
     	// force set?
     	if (getDiameter() != null) {
-    		return getDiameter() - beadDiameter; // the diameter is the outer circle, the chain runs through the bead's centers
+    		// The specified diameter denotes the layout's outer circle, the chain however runs through the bead's centers, 
+    		// so subtract a bead's radius from either side of the outer circle, to get to the oen going through the bead centers.
+    		// 2x radius = diameter.
+    		return getDiameter() - beadDiameter; 
     	}
     	
+    	// Determining the size of the circle where the center of the bead would be placed on is not that complex, once it is explained.
+    	// If anyone ever wants to understand it, the logic behind this formula is the following:
+    	// - Suppose N beads must be rendered on a chain.
+    	// - Each bead would then be placed in a segment of 360/N degrees.
+    	// - The maximum width of a bead (circle) in any direction is its diameter, so when the bead is placed closest to the chain's origin without breaking out of it segment, it is possible to draw a rectangle:
+    	//   * from the chain's origin, 
+    	//   * via the left leg of the segment, 
+    	//   * through the diameter of the bead, 
+    	//   * via the right leg of the segment, 
+    	//   * back to the origin.
+    	// - The radius of the chain is the length of either the left or right leg of the segment in this triangle.
+    	// - The next step is to construct a right angled triangle, by drawing a perpendicular line from the center of the bead to the origin of the chain.
+    	// - Trigonometry defines that the sin of the angle (a) between the adjacent side (A) and the hypothenuse (H), equals the length of the opposing side (O) divided by the length of the hypotenuse. 
+    	//   * http://en.wikipedia.org/wiki/Right_triangle#Trigonometric_ratios
+    	//   * sin(a) = O/H
+    	// - It just so happens that the hypotenuse is what we are looking for, it is the radius of the chain (Rc), so H = Rc.
+    	// - We know that the angle "a" is half that of the total angle available to the segment, so a = 1/2 * 360/N = 360/2N = 180/N
+    	// - And we know that the opposing side "O" is half the diameter of the bead (Db), aka its radius (Rb), so O = Rb.
+    	// - Thus we can write: sin(a) = O / H
+    	//                  <=> sin(180/N) = Rb / Rc
+    	//                  <=> Rc * sin(180/N) = Rb  
+    	//                  <=> Rc = Rb / sin(180/N)
+    	// - The hypotenuse equals the radius of the chain, in order to calculate the chain's diameter (Dc) it must be multiplied by 2. 
+    	// Hence the resulting formula: Rc = Rb / sin(180/N)  
+    	//                         <=> 2Rc = 2Rb / sin(180/N)  
+    	//                         <=> Dc = Db / sin(180/N)
+    	// - Or: chain-diameter = bead-diameter / sin( 180 / number-of-nodes-on-the-chain )
+    	//
+    	// This formula works great except for a few special situations, namely 0 and 1 nodes on a chain: this would cause division by zero errors and must be treated separately.
+
     	// prepare
     	List<Node> nodes = getManagedChildrenWithoutBeads();
     	int numberOfNodes = nodes.size();
@@ -819,15 +852,10 @@ public class CircularPane extends Pane {
     		return 0;
     	}
     	if (numberOfNodes == 1) {
-    		return 0; // the chain runs through the center of the beads, with only one bead, there is no chain
+    		return 0; // the chain runs through the center of the beads, with only one bead, there is no chain, so this would cause a divide by zero in the formula below
     	}
-    	if (numberOfNodesOnFullChain == 2) {
-    		// the chain runs through the center of the beads, with only two beads the chain runs through 2x 1/2 a bead
-    		return beadDiameter + getGap(); 
-    	}
-    	
-    	// determine the size of the circle where the center of the bead would be placed on (Daan's formula) 
-    	double lDiameter = (beadDiameter + getGap()) / Math.sin(degreesToRadials(360 / ((double)numberOfNodesOnFullChain) / 2));
+    	// Since the layout allows for gaps, this is simply added to the bead diameter.  
+    	double lDiameter = (beadDiameter + getGap()) / Math.sin(degreesToRadials(180 / ((double)numberOfNodesOnFullChain))); // See description above: Dc = Db / sin(180/N)
     	return lDiameter;
     }
 

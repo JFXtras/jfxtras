@@ -133,7 +133,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 				dragRectangle = new Rectangle(0, 0, NodeUtil.snapWH(0, getWidth()), NodeUtil.snapWH(0, (appointment.isWholeDay() ? layoutHelp.titleDateTimeHeightProperty.get() : getHeight())) );
 				dragRectangle.getStyleClass().add("GhostRectangle");
 				layoutHelp.dragPane.getChildren().add(dragRectangle);
-				// TBEERNOT: show time label in dragged rectangle?
+				// TODO: show time label in dragged rectangle?
 			}
 			
 			// move the drag rectangle

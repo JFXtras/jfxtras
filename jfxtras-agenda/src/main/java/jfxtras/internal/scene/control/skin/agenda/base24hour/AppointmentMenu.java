@@ -21,6 +21,7 @@ import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.util.NodeUtil;
 
+//TODO: internationalize the labels and tooltips
 public class AppointmentMenu extends Rectangle {
 
 	/**
@@ -124,7 +125,7 @@ public class AppointmentMenu extends Rectangle {
 		lVBox.getChildren().add(createLocationTextField());
 
 		// actions
-		lVBox.getChildren().add(new Text("Actions:"));  // TBEERNOT: internationalize
+		lVBox.getChildren().add(new Text("Actions:"));  
 		lVBox.getChildren().add(createActions());
 
 		// appointment groups
@@ -274,7 +275,7 @@ public class AppointmentMenu extends Rectangle {
 		
 		// delete
 		{
-			deleteImageViewButton = createActionButton("delete-icon", "Delete"); // TBEERNOT: internationalize
+			deleteImageViewButton = createActionButton("delete-icon", "Delete");
 			deleteImageViewButton.setOnMouseClicked( (mouseEvent) -> {
 				popup.hide();
 				layoutHelp.skinnable.appointments().remove(appointment);
@@ -286,7 +287,7 @@ public class AppointmentMenu extends Rectangle {
 		// action
 		if (layoutHelp.skinnable.getActionCallback() != null)
 		{
-			actionImageViewButton = createActionButton("action-icon", "Action"); // TBEERNOT: internationalize
+			actionImageViewButton = createActionButton("action-icon", "Action");
 			actionImageViewButton.setOnMouseClicked( (mouseEvent) -> {
 				popup.hide();
 				layoutHelp.skinnable.getActionCallback().call(appointment);

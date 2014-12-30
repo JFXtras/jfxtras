@@ -63,7 +63,7 @@ import jfxtras.util.NodeUtil;
 /**
  * @author Tom Eugelink
  */
-// TBEERNOT: number of call to determineDisplayedLocalDates, can we cache? 
+// TODO: number of call to determineDisplayedLocalDates, can we cache? 
 abstract public class AgendaSkinTimeScale24HourAbstract extends SkinBase<Agenda>
 implements AgendaSkin
 {
