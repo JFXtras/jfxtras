@@ -639,7 +639,6 @@ public class CircularPane extends Pane {
     	double lOY = animationLayoutInfo.originY - (animationLayoutInfo.layoutInfo.beadDiameter / 2);
 		double lX = lOX + (progress * (animationLayoutInfo.nodeLayoutInfo.x - lOX));
 		double lY = lOY + (progress * (animationLayoutInfo.nodeLayoutInfo.y - lOY));
-//System.out.println(animationLayoutInfo.idx + ": x=" + lX + ", y=" + lY);
 		animationLayoutInfo.node.relocate(lX, lY);    	
     }
 	

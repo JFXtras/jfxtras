@@ -18,8 +18,8 @@ public class CircularPaneTrail2 extends Application {
 	@Override
 	public void start(Stage stage) {
 
-		VBox lVBox = new VBox();		
-		HBox lHBox = new HBox(0);
+		VBox lVBox = new VBox(10);		
+		HBox lHBox = new HBox(10);
 		lVBox.getChildren().add(lHBox);
 
 		for (int j = 1; j < 27; j++)
@@ -34,7 +34,7 @@ public class CircularPaneTrail2 extends Application {
 			}
 			lHBox.getChildren().add(lCircularPane);
 			if (lHBox.prefWidth(-1) > 1000) {
-				lHBox = new HBox(0);
+				lHBox = new HBox(10);
 				lVBox.getChildren().add(lHBox);
 			}
 		}
