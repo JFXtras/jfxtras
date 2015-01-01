@@ -812,22 +812,24 @@ public class CircularPane extends Pane {
     	
     	// Determining the size of the circle where the center of the bead would be placed on is not that complex, once it is explained.
     	// If anyone ever wants to understand it, the logic behind this formula is the following:
+    	// - The distance between the centers of two touching circles, not matter how they are positioned in relation to each other, is the sum of their radiuses.
+    	// - Two adjacent beads can be seen as two equally sized touching circles, so the distance between their centers is the sum of their radiuses (and since these are equal; the diameter of a bead). 
     	// - Suppose N beads must be rendered on a chain.
-    	// - Each bead would then be placed in a segment of 360/N degrees.
-    	// - The maximum width of a bead (circle) in any direction is its diameter, so when the bead is placed closest to the chain's origin without breaking out of it segment, it is possible to draw a rectangle:
+    	// - If you draw lines from the origin of the chain to the center of each bead, the lines would have an angle of 360/N degrees.
+    	// - The length of the lines to the center of the beads is the radius of the chain, this is the value we are looking for.
+    	// - Now it is possible to draw a rectangle:
     	//   * from the chain's origin, 
-    	//   * via the left leg of the segment, 
-    	//   * through the diameter of the bead, 
-    	//   * via the right leg of the segment, 
+    	//   * to the center of a bead, 
+    	//   * to the center of an adjacent bead, 
     	//   * back to the origin.
-    	// - The radius of the chain is the length of either the left or right leg of the segment in this triangle.
-    	// - The next step is to construct a right angled triangle, by drawing a perpendicular line from the center of the bead to the origin of the chain.
+    	// - The next step is to construct a right angled triangle, by drawing a perpendicular line from the touch point of two adjacent beads to the origin of the chain.
+    	// - This line is perpendicular, because the beads are equal in size and thus the distance from the touch point to the centers is the radius of the bead.
     	// - Trigonometry defines that the sin of the angle (a) between the adjacent side (A) and the hypothenuse (H), equals the length of the opposing side (O) divided by the length of the hypotenuse. 
     	//   * http://en.wikipedia.org/wiki/Right_triangle#Trigonometric_ratios
     	//   * sin(a) = O/H
     	// - It just so happens that the hypotenuse is what we are looking for, it is the radius of the chain (Rc), so H = Rc.
     	// - We know that the angle "a" is half that of the total angle available to the segment, so a = 1/2 * 360/N = 360/2N = 180/N
-    	// - And we know that the opposing side "O" is half the diameter of the bead (Db), aka its radius (Rb), so O = Rb.
+    	// - And we know that the opposing side "O" is the radius of the bead (Rb), so O = Rb.
     	// - Thus we can write: sin(a) = O / H
     	//                  <=> sin(180/N) = Rb / Rc
     	//                  <=> Rc * sin(180/N) = Rb  
