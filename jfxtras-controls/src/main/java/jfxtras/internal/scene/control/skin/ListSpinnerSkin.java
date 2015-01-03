@@ -41,7 +41,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.css.CssMetaData;
 import javafx.css.SimpleStyleableObjectProperty;
 import javafx.css.Styleable;
-import javafx.css.StyleableProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -60,6 +59,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
+import jfxtras.css.CssMetaDataForSkinProperty;
 import jfxtras.scene.control.ListSpinner;
 import jfxtras.scene.layout.HBox;
 import jfxtras.scene.layout.VBox;
@@ -141,126 +141,114 @@ public class ListSpinnerSkin<T> extends SkinBase<ListSpinner<T>>
             else
             {
                 // get node for this value
-                Node lNode = getSkinnable().getCellFactory().call( getSkinnable() );
+                getSkinnable().getCellFactory().call( getSkinnable() );
             }
 	}
 	
 	// ==================================================================================================================
 	// StyleableProperties
 	
-        /**
-         * arrowPosition
-         */
-        public final ObjectProperty<ArrowPosition> arrowPositionProperty() { return arrowPosition; }
-        private ObjectProperty<ArrowPosition> arrowPosition = new SimpleStyleableObjectProperty<ArrowPosition>(StyleableProperties.ARROW_POSITION, this, "arrowPosition", ArrowPosition.TRAILING) {
-        	{ // anonymous constructor
-    			addListener( (invalidationEvent) -> {
-                    setArrowCSS();
-                    layout();
-    			});
-    		}
-        };
-        public final void setArrowPosition(ArrowPosition value) { arrowPositionProperty().set(value); }
-        public final ArrowPosition getArrowPosition() { return arrowPosition.get(); }
-        public final ListSpinnerSkin<T> withArrowPosition(ArrowPosition value) { setArrowPosition(value); return this; }
-        public enum ArrowPosition {LEADING, TRAILING, SPLIT}
-        
-        /**
-         * arrowDirection
-         */
-        public final ObjectProperty<ArrowDirection> arrowDirectionProperty() { return arrowDirection; }
-        private ObjectProperty<ArrowDirection> arrowDirection = new SimpleStyleableObjectProperty<ArrowDirection>(StyleableProperties.ARROW_DIRECTION, this, "arrowDirection", ArrowDirection.HORIZONTAL) {
-        	{ // anonymous constructor
-    			addListener( (invalidationEvent) -> {
-                    setArrowCSS();
-                    layout();
-    			});
-    		}
-        };
-        public final void setArrowDirection(ArrowDirection value) { arrowDirectionProperty().set(value); }
-        public final ArrowDirection getArrowDirection() { return arrowDirection.get(); }
-        public final ListSpinnerSkin<T> withArrowDirection(ArrowDirection value) { setArrowDirection(value); return this; }
-        public enum ArrowDirection {VERTICAL, HORIZONTAL}
-        
-        /**
-         * valueAlignment
-         */
-        public final ObjectProperty<Pos> valueAlignmentProperty() { return valueAlignment; }
-        private ObjectProperty<Pos> valueAlignment = new SimpleStyleableObjectProperty<Pos>(StyleableProperties.VALUE_ALIGNMENT, this, "valueAlignment", Pos.CENTER_LEFT) {
-        	{ // anonymous constructor
-    			addListener( (invalidationEvent) -> {
-                    alignValue();
-    			});
-    		}
-        };
-        public final void setValueAlignment(Pos value) { valueAlignmentProperty().set(value); }
-        public final Pos getValueAlignment() { return valueAlignment.get(); }
-        public final ListSpinnerSkin<T> withValueAlignment(Pos value) { setValueAlignment(value); return this; }
+    /**
+     * arrowPosition
+     */
+    public final ObjectProperty<ArrowPosition> arrowPositionProperty() { return arrowPosition; }
+    private ObjectProperty<ArrowPosition> arrowPosition = new SimpleStyleableObjectProperty<ArrowPosition>(StyleableProperties.ARROW_POSITION, this, "arrowPosition", StyleableProperties.ARROW_POSITION.getInitialValue(null)) {
+    	{ // anonymous constructor
+			addListener( (invalidationEvent) -> {
+                setArrowCSS();
+                layout();
+			});
+		}
+    };
+    public final void setArrowPosition(ArrowPosition value) { arrowPositionProperty().set(value); }
+    public final ArrowPosition getArrowPosition() { return arrowPosition.get(); }
+    public final ListSpinnerSkin<T> withArrowPosition(ArrowPosition value) { setArrowPosition(value); return this; }
+    public enum ArrowPosition {LEADING, TRAILING, SPLIT}
     
-        // -------------------------
-            
-        private static class StyleableProperties 
-        {
-            private static final CssMetaData<ListSpinner<?>, ArrowPosition> ARROW_POSITION = new CssMetaData<ListSpinner<?>, ArrowPosition>("-fxx-arrow-position", new EnumConverter<ArrowPosition>(ArrowPosition.class), ArrowPosition.TRAILING ) 
-            {
-                @Override public boolean isSettable(ListSpinner<?> n) { 
-                	return !((ListSpinnerSkin<?>)n.getSkin()).arrowPositionProperty().isBound(); 
-                }
-                @Override public StyleableProperty<ArrowPosition> getStyleableProperty(ListSpinner<?> n) { 
-                	return (StyleableProperty<ArrowPosition>)((ListSpinnerSkin<?>)n.getSkin()).arrowPositionProperty(); 
-                }
-            };
-            
-            private static final CssMetaData<ListSpinner<?>, ArrowDirection> ARROW_DIRECTION = new CssMetaData<ListSpinner<?>, ArrowDirection>("-fxx-arrow-direction", new EnumConverter<ArrowDirection>(ArrowDirection.class), ArrowDirection.HORIZONTAL ) 
-            {
-                @Override public boolean isSettable(ListSpinner<?> n) { 
-                	return !((ListSpinnerSkin<?>)n.getSkin()).arrowDirectionProperty().isBound(); 
-                }
-                @Override public StyleableProperty<ArrowDirection> getStyleableProperty(ListSpinner<?> n) { 
-                	return (StyleableProperty<ArrowDirection>) ((ListSpinnerSkin<?>)n.getSkin()).arrowDirectionProperty(); 
-                }
-            };
-            
-            private static final CssMetaData<ListSpinner<?>, Pos> VALUE_ALIGNMENT = new CssMetaData<ListSpinner<?>, Pos>("-fxx-value-alignment", new EnumConverter<Pos>(Pos.class), Pos.CENTER_LEFT ) 
-            {
-                @Override public boolean isSettable(ListSpinner<?> n) { 
-                	return !((ListSpinnerSkin<?>)n.getSkin()).valueAlignmentProperty().isBound(); 
-                }
-                @Override public StyleableProperty<Pos> getStyleableProperty(ListSpinner<?> n) { 
-                	return (StyleableProperty<Pos>) ((ListSpinnerSkin<?>)n.getSkin()).valueAlignmentProperty(); 
-                }
-            };
-            
-            private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
-            static 
-            {
-                final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
-                styleables.add(ARROW_POSITION);
-                styleables.add(ARROW_DIRECTION);
-                styleables.add(VALUE_ALIGNMENT);
-                STYLEABLES = Collections.unmodifiableList(styleables);                
-            }
-        }
-        
-        /** 
-         * @return The CssMetaData associated with this class, which may include the
-         * CssMetaData of its super classes.
-         */    
-        public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() 
-        {
-            return StyleableProperties.STYLEABLES;
-        }
+    /**
+     * arrowDirection
+     */
+    public final ObjectProperty<ArrowDirection> arrowDirectionProperty() { return arrowDirection; }
+    private ObjectProperty<ArrowDirection> arrowDirection = new SimpleStyleableObjectProperty<ArrowDirection>(StyleableProperties.ARROW_DIRECTION, this, "arrowDirection", StyleableProperties.ARROW_DIRECTION.getInitialValue(null)) {
+    	{ // anonymous constructor
+			addListener( (invalidationEvent) -> {
+                setArrowCSS();
+                layout();
+			});
+		}
+    };
+    public final void setArrowDirection(ArrowDirection value) { arrowDirectionProperty().set(value); }
+    public final ArrowDirection getArrowDirection() { return arrowDirection.get(); }
+    public final ListSpinnerSkin<T> withArrowDirection(ArrowDirection value) { setArrowDirection(value); return this; }
+    public enum ArrowDirection {VERTICAL, HORIZONTAL}
+    
+    /**
+     * valueAlignment
+     */
+    public final ObjectProperty<Pos> valueAlignmentProperty() { return valueAlignment; }
+    private ObjectProperty<Pos> valueAlignment = new SimpleStyleableObjectProperty<Pos>(StyleableProperties.VALUE_ALIGNMENT, this, "valueAlignment", StyleableProperties.VALUE_ALIGNMENT.getInitialValue(null)) {
+    	{ // anonymous constructor
+			addListener( (invalidationEvent) -> {
+                alignValue();
+			});
+		}
+    };
+    public final void setValueAlignment(Pos value) { valueAlignmentProperty().set(value); }
+    public final Pos getValueAlignment() { return valueAlignment.get(); }
+    public final ListSpinnerSkin<T> withValueAlignment(Pos value) { setValueAlignment(value); return this; }
 
-        /**
-         * This method should delegate to {@link Node#getClassCssMetaData()} so that
-         * a Node's CssMetaData can be accessed without the need for reflection.
-         * @return The CssMetaData associated with this node, which may include the
-         * CssMetaData of its super classes.
-         */
-        public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() 
-        {
-            return getClassCssMetaData();
+    // -------------------------
+        
+    private static class StyleableProperties 
+    {
+        private static final CssMetaData<ListSpinner<?>, ArrowPosition> ARROW_POSITION = new CssMetaDataForSkinProperty<ListSpinner<?>, ListSpinnerSkin<?>, ArrowPosition>("-fxx-arrow-position", new EnumConverter<ArrowPosition>(ArrowPosition.class), ArrowPosition.TRAILING ) {
+        	@Override 
+        	protected ObjectProperty<ArrowPosition> getProperty(ListSpinnerSkin<?> s) {
+            	return s.arrowPositionProperty();
+            }
+        };
+        
+        private static final CssMetaData<ListSpinner<?>, ArrowDirection> ARROW_DIRECTION = new CssMetaDataForSkinProperty<ListSpinner<?>, ListSpinnerSkin<?>, ArrowDirection>("-fxx-arrow-direction", new EnumConverter<ArrowDirection>(ArrowDirection.class), ArrowDirection.HORIZONTAL ) {
+        	@Override 
+        	protected ObjectProperty<ArrowDirection> getProperty(ListSpinnerSkin<?> s) {
+            	return s.arrowDirectionProperty();
+            }
+        };
+        
+        private static final CssMetaData<ListSpinner<?>, Pos> VALUE_ALIGNMENT = new CssMetaDataForSkinProperty<ListSpinner<?>, ListSpinnerSkin<?>, Pos>("-fxx-value-alignment", new EnumConverter<Pos>(Pos.class), Pos.CENTER_LEFT ) {
+        	@Override 
+        	protected ObjectProperty<Pos> getProperty(ListSpinnerSkin<?> s) {
+            	return s.valueAlignmentProperty();
+            }
+        };
+        
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
+        static  {
+            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
+            styleables.add(ARROW_POSITION);
+            styleables.add(ARROW_DIRECTION);
+            styleables.add(VALUE_ALIGNMENT);
+            STYLEABLES = Collections.unmodifiableList(styleables);                
         }
+    }
+    
+    /** 
+     * @return The CssMetaData associated with this class, which may include the
+     * CssMetaData of its super classes.
+     */    
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.STYLEABLES;
+    }
+
+    /**
+     * This method should delegate to {@link Node#getClassCssMetaData()} so that
+     * a Node's CssMetaData can be accessed without the need for reflection.
+     * @return The CssMetaData associated with this node, which may include the
+     * CssMetaData of its super classes.
+     */
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return getClassCssMetaData();
+    }
         
 	// ==================================================================================================================
 	// DRAW

@@ -48,9 +48,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.css.CssMetaData;
+import javafx.css.SimpleStyleableObjectProperty;
 import javafx.css.Styleable;
-import javafx.css.StyleableObjectProperty;
-import javafx.css.StyleableProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -61,6 +60,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.Priority;
 import javafx.util.Callback;
+import jfxtras.css.CssMetaDataForSkinProperty;
 import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
@@ -180,77 +180,54 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 	// StyleableProperties
 	
 	/** ShowWeeknumbers: */
-    public final ObjectProperty<ShowWeeknumbers> showWeeknumbersProperty()
-    {
-        if (showWeeknumbers == null)
-        {
-            showWeeknumbers = new StyleableObjectProperty<ShowWeeknumbers>(SHOW_WEEKNUMBERS_DEFAULT)
-            {
-                @Override public void invalidated()
-                {
-                    layoutNodes();
-                }
-
-                @Override public CssMetaData<CalendarPicker,ShowWeeknumbers> getCssMetaData() { return StyleableProperties.SHOW_WEEKNUMBERS; }
-                @Override public Object getBean() { return CalendarPickerControlSkin.this; }
-                @Override public String getName() { return "showWeeknumbers"; }
-            };
-        }
-        return showWeeknumbers;
-    }
-    private ObjectProperty<ShowWeeknumbers> showWeeknumbers = null;
+    public final ObjectProperty<ShowWeeknumbers> showWeeknumbersProperty() { return showWeeknumbers; }
+    private ObjectProperty<ShowWeeknumbers> showWeeknumbers = new SimpleStyleableObjectProperty<ShowWeeknumbers>(StyleableProperties.SHOW_WEEKNUMBERS, this, "showWeeknumbers", StyleableProperties.SHOW_WEEKNUMBERS.getInitialValue(null)) {
+    	{ // anonymous constructor
+			addListener( (invalidationEvent) -> {
+                layoutNodes();
+			});
+		}
+    };
     public final void setShowWeeknumbers(ShowWeeknumbers value) { showWeeknumbersProperty().set(value); }
-    public final ShowWeeknumbers getShowWeeknumbers() { return showWeeknumbers == null ? SHOW_WEEKNUMBERS_DEFAULT : showWeeknumbers.get(); }
+    public final ShowWeeknumbers getShowWeeknumbers() { return showWeeknumbers.get(); }
     public final CalendarPickerControlSkin withShowWeeknumbers(ShowWeeknumbers value) { setShowWeeknumbers(value); return this; }
     public enum ShowWeeknumbers {YES, NO}
-    static private final ShowWeeknumbers SHOW_WEEKNUMBERS_DEFAULT = ShowWeeknumbers.YES;
     
 	/** LabelDateFormat: */
-    public final ObjectProperty<DateFormat> labelDateFormatProperty()
-    {
-        if (labelDateFormat == null)
-        {
-            labelDateFormat = new StyleableObjectProperty<DateFormat>(LABEL_DATEFORMAT_DEFAULT)
-            {
-                @Override public void invalidated()
-                {
-                    refreshDayButtonsVisibilityAndLabel();
-                }
-
-                @Override public CssMetaData<CalendarPicker,DateFormat> getCssMetaData() { return StyleableProperties.LABEL_DATEFORMAT; }
-                @Override public Object getBean() { return CalendarPickerControlSkin.this; }
-                @Override public String getName() { return "labelDateFormat"; }
-            };
-        }
-        return labelDateFormat;
-    }
-    private ObjectProperty<DateFormat> labelDateFormat = null;
+    public final ObjectProperty<DateFormat> labelDateFormatProperty() { return labelDateFormat; }
+    private ObjectProperty<DateFormat> labelDateFormat = new SimpleStyleableObjectProperty<DateFormat>(StyleableProperties.LABEL_DATEFORMAT, this, "labelDateFormat", StyleableProperties.LABEL_DATEFORMAT.getInitialValue(null)) {
+    	{ // anonymous constructor
+			addListener( (invalidationEvent) -> {
+                refreshDayButtonsVisibilityAndLabel();
+			});
+		}
+    };
     public final void setLabelDateFormat(DateFormat value) { labelDateFormatProperty().set(value); }
-    public final DateFormat getLabelDateFormat() { return labelDateFormat == null ? LABEL_DATEFORMAT_DEFAULT : labelDateFormat.get(); }
+    public final DateFormat getLabelDateFormat() { return labelDateFormat.get(); }
     public final CalendarPickerControlSkin withLabelDateFormat(DateFormat value) { setLabelDateFormat(value); return this; }
-    static private final SimpleDateFormat LABEL_DATEFORMAT_DEFAULT = new SimpleDateFormat("d");
     static private final SimpleDateFormat ID_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
     
     // ----------------------------
     // communicate the styleables
 
-    private static class StyleableProperties
-    {
-        private static final CssMetaData<CalendarPicker, ShowWeeknumbers> SHOW_WEEKNUMBERS = new CssMetaData<CalendarPicker, ShowWeeknumbers>("-fxx-show-weeknumbers", new EnumConverter<ShowWeeknumbers>(ShowWeeknumbers.class), SHOW_WEEKNUMBERS_DEFAULT )
-        {
-            @Override public boolean isSettable(CalendarPicker n) { return !((CalendarPickerControlSkin)n.getSkin()).showWeeknumbersProperty().isBound(); }
-            @Override public StyleableProperty<ShowWeeknumbers> getStyleableProperty(CalendarPicker n) { return (StyleableProperty<ShowWeeknumbers>)((CalendarPickerControlSkin)n.getSkin()).showWeeknumbersProperty(); }
+    private static class StyleableProperties {
+    	
+        private static final CssMetaData<CalendarPicker, ShowWeeknumbers> SHOW_WEEKNUMBERS = new CssMetaDataForSkinProperty<CalendarPicker, CalendarPickerControlSkin, ShowWeeknumbers>("-fxx-show-weeknumbers", new EnumConverter<ShowWeeknumbers>(ShowWeeknumbers.class), ShowWeeknumbers.YES ) {
+        	@Override 
+        	protected ObjectProperty<ShowWeeknumbers> getProperty(CalendarPickerControlSkin s) {
+            	return s.showWeeknumbersProperty();
+            }
         };
 
-        private static final CssMetaData<CalendarPicker, DateFormat> LABEL_DATEFORMAT = new CssMetaData<CalendarPicker, DateFormat>("-fxx-label-dateformat", new SimpleDateFormatConverter(), LABEL_DATEFORMAT_DEFAULT )
-        {
-            @Override public boolean isSettable(CalendarPicker n) { return !((CalendarPickerControlSkin)n.getSkin()).showWeeknumbersProperty().isBound(); }
-            @Override public StyleableProperty<DateFormat> getStyleableProperty(CalendarPicker n) { return (StyleableProperty<DateFormat>)((CalendarPickerControlSkin)n.getSkin()).labelDateFormatProperty(); }
+        private static final CssMetaData<CalendarPicker, DateFormat> LABEL_DATEFORMAT = new CssMetaDataForSkinProperty<CalendarPicker, CalendarPickerControlSkin, DateFormat>("-fxx-label-dateformat", new SimpleDateFormatConverter(), new SimpleDateFormat("d") ) {
+        	@Override 
+        	protected ObjectProperty<DateFormat> getProperty(CalendarPickerControlSkin s) {
+            	return s.labelDateFormatProperty();
+            }
         };
 
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
-        static
-        {
+        static {
             final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
             styleables.add(SHOW_WEEKNUMBERS);
             styleables.add(LABEL_DATEFORMAT);
@@ -262,8 +239,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
      * @return The CssMetaData associated with this class, which may include the
      * CssMetaData of its super classes.
      */
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData()
-    {
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
         return StyleableProperties.STYLEABLES;
     }
 
@@ -273,8 +249,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
      * @return The CssMetaData associated with this node, which may include the
      * CssMetaData of its super classes.
      */
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData()
-    {
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         return getClassCssMetaData();
     }
 

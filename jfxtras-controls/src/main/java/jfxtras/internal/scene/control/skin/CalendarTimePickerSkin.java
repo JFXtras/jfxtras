@@ -40,9 +40,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.css.CssMetaData;
+import javafx.css.SimpleStyleableObjectProperty;
 import javafx.css.Styleable;
-import javafx.css.StyleableObjectProperty;
-import javafx.css.StyleableProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.Slider;
@@ -54,6 +53,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
+import jfxtras.css.CssMetaDataForSkinProperty;
 import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarTimePicker;
 
@@ -119,60 +119,37 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	// StyleableProperties
 	
 	/** ShowTickLabels: */
-    public final ObjectProperty<ShowTickLabels> showTickLabelsProperty()
-    {
-        if (showTickLabels == null)
-        {
-            showTickLabels = new StyleableObjectProperty<ShowTickLabels>(SHOW_TICKLABELS_DEFAULT)
-            {
-                @Override public void invalidated()
-                {
-                	refreshLayout();
-                }
-
-                @Override public CssMetaData<CalendarTimePicker,ShowTickLabels> getCssMetaData() { return StyleableProperties.SHOW_TICKLABELS; }
-                @Override public Object getBean() { return CalendarTimePickerSkin.this; }
-                @Override public String getName() { return "showTickLabels"; }
-            };
-        }
-        return showTickLabels;
-    }
-    private ObjectProperty<ShowTickLabels> showTickLabels = null;
+    public final ObjectProperty<ShowTickLabels> showTickLabelsProperty() { return showTickLabels; }
+    private ObjectProperty<ShowTickLabels> showTickLabels = new SimpleStyleableObjectProperty<ShowTickLabels>(StyleableProperties.SHOW_TICKLABELS, this, "showTickLabels", StyleableProperties.SHOW_TICKLABELS.getInitialValue(null)) {
+    	{ // anonymous constructor
+			addListener( (invalidationEvent) -> {
+            	refreshLayout();
+			});
+		}
+    };
     public final void setShowTickLabels(ShowTickLabels value) { showTickLabelsProperty().set(value); }
-    public final ShowTickLabels getShowTickLabels() { return showTickLabels == null ? SHOW_TICKLABELS_DEFAULT : showTickLabels.get(); }
+    public final ShowTickLabels getShowTickLabels() { return showTickLabels.get(); }
     public final CalendarTimePickerSkin withShowTickLabels(ShowTickLabels value) { setShowTickLabels(value); return this; }
     public enum ShowTickLabels {YES, NO}
-    static private final ShowTickLabels SHOW_TICKLABELS_DEFAULT = ShowTickLabels.NO;
     
 	/** LabelDateFormat: */
-    public final ObjectProperty<DateFormat> labelDateFormatProperty()
-    {
-        if (labelFormat == null)
-        {
-            labelFormat = new StyleableObjectProperty<DateFormat>(getLABEL_DATEFORMAT_DEFAULT())
-            {
-                @Override public void invalidated()
-                {
-                	refreshLayout();
-                	refresh();
-                }
-
-                @Override public CssMetaData<CalendarTimePicker,DateFormat> getCssMetaData() { return StyleableProperties.LABEL_DATEFORMAT; }
-                @Override public Object getBean() { return CalendarTimePickerSkin.this; }
-                @Override public String getName() { return "labelFormat"; }
-            };
-        }
-        return labelFormat;
-    }
-    private ObjectProperty<DateFormat> labelFormat = null;
+    public final ObjectProperty<DateFormat> labelDateFormatProperty() { return labelDateFormat; }
+    private ObjectProperty<DateFormat> labelDateFormat = new SimpleStyleableObjectProperty<DateFormat>(StyleableProperties.LABEL_DATEFORMAT, this, "labelDateFormat", StyleableProperties.LABEL_DATEFORMAT.getInitialValue(null)) {
+    	{ // anonymous constructor
+			addListener( (invalidationEvent) -> {
+            	refreshLayout();
+            	refresh();
+			});
+		}
+    };
     public final void setLabelDateFormat(DateFormat value) { labelDateFormatProperty().set(value); }
     public final DateFormat getLabelDateFormat() {
-    	if (labelFormat == null) {
+    	if (labelDateFormat.get() == null) {
     		return getLABEL_DATEFORMAT_DEFAULT();
     	}
-    	
+
     	// prevent timezones to screw up things
-    	DateFormat labelDateFormat = (DateFormat)labelFormat.get().clone();    	
+    	DateFormat labelDateFormat = (DateFormat)this.labelDateFormat.get().clone();    	
 		labelDateFormat.setTimeZone(TimeZone.getDefault());
 		return labelDateFormat;
     }
@@ -184,23 +161,24 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
     // ----------------------------
     // communicate the styleables
 
-    private static class StyleableProperties
-    {
-        private static final CssMetaData<CalendarTimePicker, ShowTickLabels> SHOW_TICKLABELS = new CssMetaData<CalendarTimePicker, ShowTickLabels>("-fxx-show-ticklabels", new EnumConverter<ShowTickLabels>(ShowTickLabels.class), SHOW_TICKLABELS_DEFAULT )
-        {
-            @Override public boolean isSettable(CalendarTimePicker n) { return !((CalendarTimePickerSkin)n.getSkin()).showTickLabelsProperty().isBound(); }
-            @Override public StyleableProperty<ShowTickLabels> getStyleableProperty(CalendarTimePicker n) { return (StyleableProperty<ShowTickLabels>)((CalendarTimePickerSkin)n.getSkin()).showTickLabelsProperty(); }
+    private static class StyleableProperties {
+    	
+        private static final CssMetaData<CalendarTimePicker, ShowTickLabels> SHOW_TICKLABELS = new CssMetaDataForSkinProperty<CalendarTimePicker, CalendarTimePickerSkin, ShowTickLabels>("-fxx-show-ticklabels", new EnumConverter<ShowTickLabels>(ShowTickLabels.class), ShowTickLabels.NO ) {
+        	@Override 
+        	protected ObjectProperty<ShowTickLabels> getProperty(CalendarTimePickerSkin s) {
+            	return s.showTickLabelsProperty();
+            }
         };
 
-        private static final CssMetaData<CalendarTimePicker, DateFormat> LABEL_DATEFORMAT = new CssMetaData<CalendarTimePicker, DateFormat>("-fxx-label-dateformat", new SimpleDateFormatConverter(), null )
-        {
-            @Override public boolean isSettable(CalendarTimePicker n) { return !((CalendarTimePickerSkin)n.getSkin()).showTickLabelsProperty().isBound(); }
-            @Override public StyleableProperty<DateFormat> getStyleableProperty(CalendarTimePicker n) { return (StyleableProperty<DateFormat>)((CalendarTimePickerSkin)n.getSkin()).labelDateFormatProperty(); }
+        private static final CssMetaData<CalendarTimePicker, DateFormat> LABEL_DATEFORMAT = new CssMetaDataForSkinProperty<CalendarTimePicker, CalendarTimePickerSkin, DateFormat>("-fxx-label-dateformat", new SimpleDateFormatConverter(), null ) {
+        	@Override 
+        	protected ObjectProperty<DateFormat> getProperty(CalendarTimePickerSkin s) {
+            	return s.labelDateFormatProperty();
+            }
         };
 
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
-        static
-        {
+        static {
             final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
             styleables.add(SHOW_TICKLABELS);
             styleables.add(LABEL_DATEFORMAT);
@@ -212,8 +190,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
      * @return The CssMetaData associated with this class, which may include the
      * CssMetaData of its super classes.
      */
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData()
-    {
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
         return StyleableProperties.STYLEABLES;
     }
 
@@ -223,8 +200,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
      * @return The CssMetaData associated with this node, which may include the
      * CssMetaData of its super classes.
      */
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData()
-    {
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
         return getClassCssMetaData();
     }
 
