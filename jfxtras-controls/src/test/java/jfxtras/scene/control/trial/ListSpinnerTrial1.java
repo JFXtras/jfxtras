@@ -341,8 +341,7 @@ public class ListSpinnerTrial1 extends Application {
 			}
 			{
 				lGridPane.add(new Label("CSS SPLIT"), 0, lRowIdx);
-				final ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());
-				
+				final ListSpinner<String> lSpinner = new ListSpinner<String>("a", "b", "c").withEditable(true).withStringConverter(StringConverterFactory.forString());				
 				lGridPane.add(lSpinner, 1, lRowIdx++);
 				lSpinner.setId("TheEditableSpinner");
 			}

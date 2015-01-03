@@ -786,7 +786,6 @@ public class CircularPane extends Pane {
     		super();
     		setFill(null);
     		setStroke(getShowDebug());
-    		setStroke(getShowDebug());
     		setStartX(animationLayoutInfo.originX); 
     		setStartY(animationLayoutInfo.originY);
     		setEndX(animationLayoutInfo.nodeLayoutInfo.beadX); 
@@ -805,7 +804,7 @@ public class CircularPane extends Pane {
     	// force set?
     	if (getDiameter() != null) {
     		// The specified diameter denotes the layout's outer circle, the chain however runs through the bead's centers, 
-    		// so subtract a bead's radius from either side of the outer circle, to get to the oen going through the bead centers.
+    		// so subtract a bead's radius from either side of the outer circle, to get to the one going through the bead centers.
     		// 2x radius = diameter.
     		return getDiameter() - beadDiameter; 
     	}
