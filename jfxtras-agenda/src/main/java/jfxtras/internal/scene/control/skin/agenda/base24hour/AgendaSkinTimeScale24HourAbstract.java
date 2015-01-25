@@ -298,7 +298,7 @@ implements AgendaSkin
 				lDayHeader.layoutXProperty().bind(dayBodyPane.layoutXProperty()); // same x position as the body			
 				lDayHeader.layoutYProperty().set(0);
 				lDayHeader.prefWidthProperty().bind(dayBodyPane.prefWidthProperty()); // same width as the body			
-				lDayHeader.prefHeightProperty().bind(heightProperty()); // same heigh as the week pane
+				lDayHeader.prefHeightProperty().bind(heightProperty()); // same height as the week pane
 				getChildren().add(lDayHeader);
 				
 				// remember

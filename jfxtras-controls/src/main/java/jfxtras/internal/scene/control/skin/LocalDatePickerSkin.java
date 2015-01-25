@@ -31,8 +31,9 @@ package jfxtras.internal.scene.control.skin;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.logging.Logger;
 
-import javafx.beans.value.ObservableValue;
+import javafx.beans.InvalidationListener;
 import javafx.scene.control.SkinBase;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker;
@@ -47,6 +48,7 @@ import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
  */
 public class LocalDatePickerSkin extends SkinBase<LocalDatePicker>
 {
+private static final Logger log = Logger.getLogger( LocalDatePickerSkin.class.getName() );
 	// ==================================================================================================================
 	// CONSTRUCTOR
 	
@@ -109,7 +111,8 @@ public class LocalDatePickerSkin extends SkinBase<LocalDatePicker>
 	private void syncMode()
 	{
 		// forward changes from calendar
-		calendarPicker.modeProperty().addListener( (ObservableValue<? extends CalendarPicker.Mode> observableValue, CalendarPicker.Mode oldValue, CalendarPicker.Mode newValue) -> {
+		calendarPicker.modeProperty().addListener( (invalidationEvent) -> {
+			CalendarPicker.Mode newValue = calendarPicker.getMode();
 			if (newValue == CalendarPicker.Mode.SINGLE) {
 				getSkinnable().modeProperty().set(LocalDatePicker.Mode.SINGLE); 
 			}
@@ -122,7 +125,8 @@ public class LocalDatePickerSkin extends SkinBase<LocalDatePicker>
 		});
 		
 		// forward changes to calendar
-		getSkinnable().modeProperty().addListener( (ObservableValue<? extends LocalDatePicker.Mode> observableValue, LocalDatePicker.Mode oldValue, LocalDatePicker.Mode newValue) -> {
+		InvalidationListener localDatePickerModeInvalidationListener = (invalidationEvent) -> {
+			LocalDatePicker.Mode newValue = getSkinnable().getMode();
 			if (newValue == LocalDatePicker.Mode.SINGLE) {
 				calendarPicker.modeProperty().set(CalendarPicker.Mode.SINGLE); 
 			}
@@ -132,7 +136,10 @@ public class LocalDatePickerSkin extends SkinBase<LocalDatePicker>
 			if (newValue == LocalDatePicker.Mode.MULTIPLE) {
 				calendarPicker.modeProperty().set(CalendarPicker.Mode.MULTIPLE); 
 			}
-		});
+		};
+		getSkinnable().modeProperty().addListener( localDatePickerModeInvalidationListener);
+		// this will set the value on the initial construction
+		localDatePickerModeInvalidationListener.invalidated(null);
 	}
 
     // ==================================================================================================================
