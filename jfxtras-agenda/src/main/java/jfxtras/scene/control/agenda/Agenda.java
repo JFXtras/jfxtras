@@ -41,6 +41,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.print.PrinterJob;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
@@ -622,4 +623,21 @@ public class Agenda extends Control
 		public void setStyleClass(String value) { styleClassObjectProperty.setValue(value); }
 		public AppointmentGroupImpl withStyleClass(String value) { setStyleClass(value); return this; }
 	}
+	
+	
+	// ==================================================================================================================
+	// Print
+
+    /**
+     * Prints the current agenda using the given printer job.
+     * <p>This method does not modify the state of the job, nor does it call
+     * {@link PrinterJob#endJob}, so the job may be safely reused afterwards.
+     * 
+     * This method is experimental.
+     * 
+     * @param job printer job used for printing
+     */
+    public void print(PrinterJob job) {
+    	((AgendaSkin)getSkin()).print(job);
+    }
 }

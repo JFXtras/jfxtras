@@ -43,6 +43,11 @@ import java.util.TimeZone;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.ListChangeListener;
+import javafx.print.PageLayout;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -50,7 +55,9 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.SkinBase;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
@@ -257,7 +264,7 @@ implements AgendaSkin
 		});
 		
 		// borderpane top: header has to be created after the content, because there is a binding
-		weekHeaderPane = new WeekHeaderPane(); // must be done after the WeekBodyPane
+		weekHeaderPane = new WeekHeaderPane(weekBodyPane); // must be done after the WeekBodyPane
 		weekHeaderPane.setTranslateX(1); // correct for the scrollpane
 		borderPane.setTop(weekHeaderPane);
 		
@@ -286,7 +293,7 @@ implements AgendaSkin
 	{
 		final List<DayHeaderPane> dayHeaderPanes = new ArrayList<DayHeaderPane>();
 
-		public WeekHeaderPane()
+		public WeekHeaderPane(WeekBodyPane weekBodyPane)
 		{
 			// one day header pane per day body pane 
 			for (DayBodyPane dayBodyPane : weekBodyPane.dayBodyPanes)
@@ -491,4 +498,48 @@ implements AgendaSkin
 		}
 		return null;
 	}
+	
+	
+	// ==================================================================================================================
+	// Print
+
+    /**
+     * Prints the current skin using the given printer job.
+     * <p>This method does not modify the state of the job, nor does it call
+     * {@link PrinterJob#endJob}, so the job may be safely reused afterwards.
+     * 
+     * @param job printer job used for printing
+     * @since JavaFX 8.0
+     */
+    public void print(PrinterJob job) {
+        float width = 5000; 
+        float height = 5000; 
+        
+		// we use a borderpane
+		BorderPane borderPane = new BorderPane();
+		borderPane.prefWidthProperty().set(width);
+		borderPane.prefHeightProperty().set(height);
+		
+		// borderpane center
+		WeekBodyPane weekBodyPane = new WeekBodyPane();
+		borderPane.setCenter(weekBodyPane);
+		
+		// borderpane top: header has to be created after the content, because there is a binding
+		WeekHeaderPane weekHeaderPane = new WeekHeaderPane(weekBodyPane); // must be done after the WeekBodyPane
+		borderPane.setTop(weekHeaderPane);
+		
+		// style
+		borderPane.getStyleClass().add(Agenda.class.getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
+		borderPane.getStyleClass().add(getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
+
+		// scale to match page
+        PageLayout pageLayout = job.getJobSettings().getPageLayout();
+        double scaleX = pageLayout.getPrintableWidth() / borderPane.getBoundsInParent().getWidth();
+		double scaleY = pageLayout.getPrintableHeight() / borderPane.getBoundsInParent().getHeight();
+		scaleY *= 0.9; // for some reason the height doesn't fit
+		borderPane.getTransforms().add(new Scale(scaleX, scaleY));
+
+        // print
+        job.printPage(pageLayout, borderPane);
+    }
 }
