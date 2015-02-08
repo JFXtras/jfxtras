@@ -40,6 +40,15 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 	protected final boolean intermediatePaneOfAppointment;
 	protected final boolean lastPaneOfAppointment;
 
+	@Override
+	protected  boolean showStartTimeText() {
+		return firstPaneOfAppointment;
+	}
+	@Override
+	protected  boolean showEndTimeText() {
+		return lastPaneOfAppointment;
+	}
+
 	// for the role of cluster owner
 	List<AppointmentAbstractTrackedPane> clusterMembers = new ArrayList<>(); 
 	List<List<AppointmentAbstractTrackedPane>> clusterTracks = new ArrayList<>();

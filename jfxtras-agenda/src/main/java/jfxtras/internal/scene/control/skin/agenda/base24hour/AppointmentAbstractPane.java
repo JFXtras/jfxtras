@@ -10,6 +10,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
@@ -115,7 +116,6 @@ abstract public class AppointmentAbstractPane extends Pane {
 			startX = mouseEvent.getScreenX();
 			startY = mouseEvent.getScreenY();
 			mouseActuallyHasDragged = false;
-			trackingMouse = true;
 		});
 		
 		// visualize dragging
@@ -130,10 +130,24 @@ abstract public class AppointmentAbstractPane extends Pane {
 			// show the drag rectangle when we actually drag
 			if (dragRectangle == null) {
 				setCursor(Cursor.MOVE);
+				// TODO: when dropping an appointment overlapping the day edge, the appointment is correctly(?) split in two. When dragging up such a splitted appointment the visualization does not match the actual time 
 				dragRectangle = new Rectangle(0, 0, NodeUtil.snapWH(0, getWidth()), NodeUtil.snapWH(0, (appointment.isWholeDay() ? layoutHelp.titleDateTimeHeightProperty.get() : getHeight())) );
 				dragRectangle.getStyleClass().add("GhostRectangle");
 				layoutHelp.dragPane.getChildren().add(dragRectangle);
-				// TODO: show time label in dragged rectangle?
+				
+				// place a text node at the bottom of the resize rectangle
+				startTimeText = new Text("...");
+				startTimeText.getStyleClass().add("GhostRectangleText");
+				if (showStartTimeText()) {
+					layoutHelp.dragPane.getChildren().add(startTimeText);
+				}
+				endTimeText = new Text("...");
+				endTimeText.getStyleClass().add("GhostRectangleText");
+				if (showEndTimeText()) {
+					layoutHelp.dragPane.getChildren().add(endTimeText);
+				}
+				// we use a clone for calculating the current time during the drag
+				appointmentForDrag = new Agenda.AppointmentImplLocal();
 			}
 			
 			// move the drag rectangle
@@ -141,7 +155,25 @@ abstract public class AppointmentAbstractPane extends Pane {
 			double lY = (NodeUtil.screenY(this) - NodeUtil.screenY(layoutHelp.dragPane)) + (mouseEvent.getScreenY() - startY); // top-left of pane + offset of drag rectangle
 			dragRectangle.setX(NodeUtil.snapXY(lX));
 			dragRectangle.setY(NodeUtil.snapXY(lY));
+			startTimeText.layoutXProperty().set(dragRectangle.getX()); 
+			startTimeText.layoutYProperty().set(dragRectangle.getY()); 
+			endTimeText.layoutXProperty().set(dragRectangle.getX()); 
+			endTimeText.layoutYProperty().set(dragRectangle.getY() + dragRectangle.getHeight() + endTimeText.getBoundsInParent().getHeight()); 
 			mouseActuallyHasDragged = true;
+			
+			// update the start time
+			appointmentForDrag.setStartLocalDateTime(appointment.getStartLocalDateTime());
+			appointmentForDrag.setEndLocalDateTime(appointment.getEndLocalDateTime());
+			appointmentForDrag.setWholeDay(appointment.isWholeDay());
+			// determine start and end DateTime of the drag
+			LocalDateTime dragStartDateTime = layoutHelp.skin.convertClickToDateTime(startX, startY);
+			LocalDateTime dragEndDateTime = layoutHelp.skin.convertClickToDateTime(mouseEvent.getScreenX(), mouseEvent.getScreenY());
+			if (dragEndDateTime != null) { // not dropped somewhere outside
+				handleDrag(appointmentForDrag, dragStartDateTime, dragEndDateTime);					
+				startTimeText.setText(appointmentForDrag.isWholeDay() ? "" : layoutHelp.timeDateTimeFormatter.format(appointmentForDrag.getStartLocalDateTime()));
+				endTimeText.setText(appointmentForDrag.isWholeDay() ? "" : layoutHelp.timeDateTimeFormatter.format(appointmentForDrag.getEndLocalDateTime()));
+			}
+			
 		});
 		
 		// end drag
@@ -152,13 +184,17 @@ abstract public class AppointmentAbstractPane extends Pane {
 			}
 			// we handle this event
 			mouseEvent.consume();
-			trackingMouse = false;
 
 			// reset ui
 			setCursor(Cursor.HAND);
 			if (dragRectangle != null) {
 				layoutHelp.dragPane.getChildren().remove(dragRectangle);
+				layoutHelp.dragPane.getChildren().remove(startTimeText);
+				layoutHelp.dragPane.getChildren().remove(endTimeText);
 				dragRectangle = null;
+				startTimeText = null;
+				endTimeText = null;
+				appointmentForDrag = null;
 			}
 			
 			// if not dragged, then we're selecting
@@ -171,21 +207,34 @@ abstract public class AppointmentAbstractPane extends Pane {
 			LocalDateTime dragStartDateTime = layoutHelp.skin.convertClickToDateTime(startX, startY);
 			LocalDateTime dragEndDateTime = layoutHelp.skin.convertClickToDateTime(mouseEvent.getScreenX(), mouseEvent.getScreenY());
 			if (dragEndDateTime != null) { // not dropped somewhere outside
-				handleDrag(dragStartDateTime, dragEndDateTime);					
+				handleDrag(appointment, dragStartDateTime, dragEndDateTime);					
+				
+				// relayout whole week
+				layoutHelp.skin.setupAppointments();
 			}
 		});
 	}
-	private boolean trackingMouse = false;
 	private Rectangle dragRectangle = null;
 	private double startX = 0;
 	private double startY = 0;
 	private boolean mouseActuallyHasDragged = false;
 	private final int roundToMinutes = 5;
+	private Text startTimeText = null;
+	private Text endTimeText = null;
+	private Agenda.Appointment appointmentForDrag = null;
+
+	protected  boolean showStartTimeText() {
+		return true;
+	}
+
+	protected  boolean showEndTimeText() {
+		return true;
+	}
 
 	/**
 	 * 
 	 */
-	private void handleDrag(LocalDateTime dragStartDateTime, LocalDateTime dragEndDateTime) {
+	private void handleDrag(Agenda.Appointment appointment, LocalDateTime dragStartDateTime, LocalDateTime dragEndDateTime) {
 		
 		// drag start
 		boolean dragStartInDayBody = dragInDayBody(dragStartDateTime);
@@ -243,9 +292,6 @@ abstract public class AppointmentAbstractPane extends Pane {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
 			}
 		}
-		
-		// redo whole week
-		layoutHelp.skin.setupAppointments();
 	}
 
 	/**
