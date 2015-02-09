@@ -328,7 +328,13 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 			popup.setHideOnEscape(true);
 			
 			// add the timepicker
-			BorderPane lBorderPane = new BorderPane();
+			BorderPane lBorderPane = new BorderPane() {
+				// As of 1.8.0_40 CSS files are added in the scope of a control, the popup does not fall under the control, so the stylesheet must be reapplied 
+				// When JFxtras is based on 1.8.0_40+: @Override 
+				public String getUserAgentStylesheet() {
+					return getSkinnable().getUserAgentStylesheet();
+				}
+			};
 			lBorderPane.getStyleClass().add(this.getClass().getSimpleName() + "_popup");
 			lBorderPane.setCenter(calendarTimePicker);
 			

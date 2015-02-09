@@ -19,5 +19,5 @@
 }
 
 .CalendarTimeTextFieldSkin_popup .close-icon  {
-    -fx-image: url("skin/cancel.png");
+    -fx-image: url("skin/accept.png");
 }

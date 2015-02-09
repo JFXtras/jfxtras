@@ -20,6 +20,11 @@ public class AgendaSkinSwitcher extends HBox {
 	}
 	final Agenda agenda;
 	
+	// When JFxtras is based on 1.8.0_40+: @Override 
+	public String getUserAgentStylesheet() {
+		return AgendaSkinSwitcher.class.getResource("/jfxtras/internal/scene/control/skin/agenda/" + AgendaSkinSwitcher.class.getSimpleName() + ".css").toExternalForm();
+	}
+	
 	/**
 	 * 
 	 */
