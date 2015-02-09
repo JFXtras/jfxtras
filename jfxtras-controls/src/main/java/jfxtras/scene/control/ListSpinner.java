@@ -234,7 +234,7 @@ public class ListSpinner<T> extends Control
 	/**
 	 * Return the path to the CSS file so things are setup right
 	 */
-	@Override protected String getUserAgentStylesheet()
+	@Override public String getUserAgentStylesheet()
 	{
 		return ListSpinner.class.getResource("/jfxtras/internal/scene/control/" + ListSpinner.class.getSimpleName() + ".css").toExternalForm();
 	}

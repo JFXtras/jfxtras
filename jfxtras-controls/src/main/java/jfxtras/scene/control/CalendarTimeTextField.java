@@ -86,7 +86,7 @@ public class CalendarTimeTextField extends Control
 	/**
 	 * Return the path to the CSS file so things are setup right
 	 */
-	@Override protected String getUserAgentStylesheet()
+	@Override public String getUserAgentStylesheet()
 	{
 		return CalendarTimeTextField.class.getResource("/jfxtras/internal/scene/control/" + CalendarTimeTextField.class.getSimpleName() + ".css").toExternalForm();
 	}

@@ -45,6 +45,7 @@ public class AgendaSkinSwitcher extends HBox {
 	/**
 	 * 
 	 */
+	// TODO: As of 1.8.0_40 CSS files are added in the scope of a control, this class does not fall under the Agenda control, so it must have its own stylesheet. 
 	private ImageViewButton createIcon(String type, String tooltip) {
 		ImageViewButton imageView = new ImageViewButton();
 		imageView.getStyleClass().add(type + "-icon");

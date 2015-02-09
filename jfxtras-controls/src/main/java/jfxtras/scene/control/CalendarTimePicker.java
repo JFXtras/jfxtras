@@ -70,7 +70,7 @@ public class CalendarTimePicker extends Control
 	/**
 	 * Return the path to the CSS file so things are setup right
 	 */
-	@Override protected String getUserAgentStylesheet()
+	@Override public String getUserAgentStylesheet()
 	{
 		return CalendarTimePicker.class.getResource("/jfxtras/internal/scene/control/" + CalendarTimePicker.class.getSimpleName() + ".css").toExternalForm();
 	}
