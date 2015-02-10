@@ -30,6 +30,7 @@
 package jfxtras.internal.scene.control.skin;
 
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -120,7 +121,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	
 	/** ShowTickLabels: */
     public final ObjectProperty<ShowTickLabels> showTickLabelsProperty() { return showTickLabels; }
-    private ObjectProperty<ShowTickLabels> showTickLabels = new SimpleStyleableObjectProperty<ShowTickLabels>(StyleableProperties.SHOW_TICKLABELS, this, "showTickLabels", StyleableProperties.SHOW_TICKLABELS.getInitialValue(null)) {
+    private final ObjectProperty<ShowTickLabels> showTickLabels = new SimpleStyleableObjectProperty<ShowTickLabels>(StyleableProperties.SHOW_TICKLABELS, this, "showTickLabels", StyleableProperties.SHOW_TICKLABELS.getInitialValue(null)) {
     	{ // anonymous constructor
 			addListener( (invalidationEvent) -> {
             	refreshLayout();
@@ -134,7 +135,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
     
 	/** LabelDateFormat: */
     public final ObjectProperty<DateFormat> labelDateFormatProperty() { return labelDateFormat; }
-    private ObjectProperty<DateFormat> labelDateFormat = new SimpleStyleableObjectProperty<DateFormat>(StyleableProperties.LABEL_DATEFORMAT, this, "labelDateFormat", StyleableProperties.LABEL_DATEFORMAT.getInitialValue(null)) {
+    private final ObjectProperty<DateFormat> labelDateFormat = new SimpleStyleableObjectProperty<DateFormat>(StyleableProperties.LABEL_DATEFORMAT, this, "labelDateFormat", StyleableProperties.LABEL_DATEFORMAT.getInitialValue(null)) {
     	{ // anonymous constructor
 			addListener( (invalidationEvent) -> {
             	refreshLayout();
@@ -149,7 +150,15 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
     	}
 
     	// prevent timezones to screw up things
-    	DateFormat labelDateFormat = (DateFormat)this.labelDateFormat.get().clone();    	
+    	DateFormat labelDateFormat = this.labelDateFormat.get();
+    	// getCalendar must not be null for a clone()
+    	if (labelDateFormat.getCalendar() == null) {
+    		labelDateFormat.setCalendar(Calendar.getInstance(getSkinnable().getLocale()));
+    	}
+    	if (labelDateFormat.getNumberFormat() == null) {
+    		labelDateFormat.setNumberFormat(NumberFormat.getInstance(getSkinnable().getLocale()));
+    	}
+    	labelDateFormat = (DateFormat)labelDateFormat.clone();    	
 		labelDateFormat.setTimeZone(TimeZone.getDefault());
 		return labelDateFormat;
     }
