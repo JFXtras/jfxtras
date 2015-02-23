@@ -927,7 +927,7 @@ public class CircularPane extends Pane {
     }
     
     static private double degreesToRadials(double d) {
-    	double r = (d % 360) / 360 * 2 * Math.PI;
+    	double r = (d % 360.0) / 360.0 * 2.0 * Math.PI;
     	return r;
     }
 }

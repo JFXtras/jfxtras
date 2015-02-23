@@ -34,6 +34,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -141,6 +143,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			if (textField.isFocused() == false) {
 				parse();
 			}
+			focusForward.set(textField.focusedProperty().get());
 		});
 		textField.setOnAction( (actionEvent) ->  {
 			parse();
@@ -203,7 +206,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
-
+	public BooleanProperty focusForward = new SimpleBooleanProperty();
+	
 	/**
 	 * parse the contents that was typed in the textfield
 	 */

@@ -45,6 +45,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
+import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 
 /**
@@ -85,6 +86,16 @@ public class CalendarTextField extends Control
 		
 		// this is apparently needed for good focus behavior
 		setFocusTraversable(false);
+		
+		skinProperty().addListener( (observable) -> {
+			Skin<?> skin = getSkin();
+			if (skin instanceof CalendarTextFieldSkin) {
+				CalendarTextFieldSkin lCalendarTextFieldSkin = (CalendarTextFieldSkin)skin;
+				lCalendarTextFieldSkin.focusForward.addListener( (observable2) -> {
+					super.setFocused(lCalendarTextFieldSkin.focusForward.get());
+				});
+			}
+		});
 	}
 
 	/**
