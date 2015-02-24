@@ -35,12 +35,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
@@ -87,16 +90,22 @@ public class CalendarTextField extends Control
 		// this is apparently needed for good focus behavior
 		setFocusTraversable(false);
 		
-		skinProperty().addListener( (observable) -> {
-			Skin<?> skin = getSkin();
-			if (skin instanceof CalendarTextFieldSkin) {
-				CalendarTextFieldSkin lCalendarTextFieldSkin = (CalendarTextFieldSkin)skin;
-				lCalendarTextFieldSkin.focusForward.addListener( (observable2) -> {
-					super.setFocused(lCalendarTextFieldSkin.focusForward.get());
-				});
+		// forward certain information from the skin to this
+		skinProperty().addListener( (observable, oldValue, newValue) -> {
+			if (oldValue instanceof CalendarTextFieldSkin) {
+				((CalendarTextFieldSkin)oldValue).focusForwardingProperty.removeListener(focusInvalidationListener);
+			}
+			if (newValue instanceof CalendarTextFieldSkin) {
+				((CalendarTextFieldSkin)newValue).focusForwardingProperty.addListener(focusInvalidationListener);
 			}
 		});
 	}
+	final private InvalidationListener focusInvalidationListener = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable observable) {
+			CalendarTextField.this.setFocused(((CalendarTextFieldSkin)getSkin()).focusForwardingProperty.get());
+		}
+	};
 
 	/**
 	 * Return the path to the CSS file so things are setup right

@@ -143,7 +143,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			if (textField.isFocused() == false) {
 				parse();
 			}
-			focusForward.set(textField.focusedProperty().get());
+			// update derived properties on our control 
+			focusForwardingProperty.set(textField.focusedProperty().get());
 		});
 		textField.setOnAction( (actionEvent) ->  {
 			parse();
@@ -206,7 +207,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
-	public BooleanProperty focusForward = new SimpleBooleanProperty();
+	final public BooleanProperty focusForwardingProperty = new SimpleBooleanProperty();
 	
 	/**
 	 * parse the contents that was typed in the textfield
