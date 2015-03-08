@@ -127,7 +127,7 @@ public class Agenda extends Control
 	/**
 	 * Return the path to the CSS file so things are setup right
 	 */
-	@Override protected String getUserAgentStylesheet()
+	@Override public String getUserAgentStylesheet()
 	{
 		return Agenda.class.getResource("/jfxtras/internal/scene/control/skin/agenda/" + Agenda.class.getSimpleName() + ".css").toExternalForm();
 	}
