@@ -3,6 +3,7 @@ package jfxtras.internal.scene.control.skin.agenda.base24hour;
 import java.time.LocalDateTime;
 
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Skinnable;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -95,7 +96,13 @@ public class AppointmentMenu extends Rectangle {
 		});
 
 		// popup contents
-		BorderPane lBorderPane = new BorderPane();
+		BorderPane lBorderPane = new BorderPane() {
+			// As of 1.8.0_40 CSS files are added in the scope of a control, the popup does not fall under the control, so the stylesheet must be reapplied 
+			// When JFxtras is based on 1.8.0_40+: @Override 
+			public String getUserAgentStylesheet() {
+				return layoutHelp.skinnable.getUserAgentStylesheet();
+			}
+		};
 		lBorderPane.getStyleClass().add(layoutHelp.skinnable.getClass().getSimpleName() + "Popup");
 		popup.getContent().add(lBorderPane);
 
