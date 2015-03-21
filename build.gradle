@@ -135,7 +135,7 @@ subprojects {
 	}
 	
 	dependencies {
-		asciidoclet 'org.asciidoctor:asciidoclet:0.+'
+		asciidoclet 'org.asciidoctor:asciidoclet:1.5.2'
 	}
 	
 	javadoc {
