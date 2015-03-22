@@ -305,7 +305,7 @@ public class CircularPaneTest extends JFXtrasGuiTest {
 	// =============================================================================================================================================================================================================================
 	// SUPPORT
 
-	List<String> EXCLUDED_CLASSES = java.util.Arrays.asList(new String[]{"jfxtras.labs.scene.layout.CircularPane$Bead", "jfxtras.labs.scene.layout.CircularPane$Connector"});
+	List<String> EXCLUDED_CLASSES = java.util.Arrays.asList("jfxtras.labs.scene.layout.CircularPane$Bead", "jfxtras.labs.scene.layout.CircularPane$Connector");
 	
 	private void assertWH(CircularPane pane, double w, double h) {
 		Assert.assertEquals(w, pane.getWidth(), 0.01);

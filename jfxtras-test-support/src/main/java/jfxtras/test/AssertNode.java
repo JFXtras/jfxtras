@@ -4,6 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import javafx.scene.Node;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
 
 import org.junit.Assert;
 
@@ -34,6 +38,31 @@ public class AssertNode {
 		return this;
 	}
 	
+	public AssertNode assertRotate(double x, double y, double angle, double accuracy) {
+		Rotate r = null;
+		for (Transform t : node.getTransforms()) {
+			if (t instanceof Rotate) {
+				r = (Rotate)t;
+				break;
+			}
+		}
+		Assert.assertEquals(description + ", PivotX", x, r.getPivotX(), accuracy);
+		Assert.assertEquals(description + ", PivotY", y, r.getPivotY(), accuracy);
+		Assert.assertEquals(description + ", Angle", angle, r.getAngle(), accuracy);
+		return this;
+	}
+	
+	public AssertNode assertArcCenterRadiusAngleLength(double x, double y, double radiusX, double radiusY, double startAngle, double length, double accuracy) {
+		Arc arc = (Arc)node;
+		Assert.assertEquals(description + ", CenterX", x, arc.getCenterX(), accuracy);
+		Assert.assertEquals(description + ", CenterY", y, arc.getCenterY(), accuracy);
+		Assert.assertEquals(description + ", RadiusX", radiusX, arc.getRadiusX(), accuracy);
+		Assert.assertEquals(description + ", RadiusY", radiusY, arc.getRadiusY(), accuracy);
+		Assert.assertEquals(description + ", StartAngle", startAngle, arc.getStartAngle(), accuracy);
+		Assert.assertEquals(description + ", Length", length, arc.getLength(), accuracy);
+		return this;
+	}
+	
 	public AssertNode assertClass(Class clazz) {
 		Assert.assertEquals(description, clazz, node.getClass());
 		return this;
@@ -52,7 +81,7 @@ public class AssertNode {
 		return n.getLayoutBounds().getHeight() + n.getLayoutBounds().getMinY();
 	}
 	
-	static public enum A {XYWH, CLASS, CLASSNAME}
+	static public enum A {XYWH, ROTATE, ARC, CLASS, CLASSNAME}
 	static public void generateSource(String paneVariableName, List<Node> nodes, List<String> excludedNodeClasses, boolean newline, A... asserts) {
 		
 		// init
@@ -95,6 +124,20 @@ public class AssertNode {
 		for (A a : asserts) {
 			if (a == A.XYWH) {
 				System.out.print(newline + ".assertXYWH(" + node.getLayoutX() + ", " + node.getLayoutY() + ", " + width(node) + ", " + height(node) + ", 0.01)");
+			}
+			if (a == A.ROTATE) {
+				Rotate r = null;
+				for (Transform t : node.getTransforms()) {
+					if (t instanceof Rotate) {
+						r = (Rotate)t;
+						break;
+					}
+				}
+				System.out.print(newline + ".assertRotate(" + r.getPivotX() + ", " + r.getPivotY() + ", " + r.getAngle() + ", 0.01)");
+			}
+			if (a == A.ARC) {
+				Arc arc = (Arc)node;
+				System.out.print(newline + ".assertArcCenterRadiusAngleLength(" + arc.getCenterX() + ", " + arc.getCenterY() + ", " + arc.getRadiusX() + ", " + arc.getRadiusY() + ", " + arc.getStartAngle() + ", " + arc.getLength() + ", 0.01)");
 			}
 			if (a == A.CLASS) {
 				System.out.print(newline + ".assertClass(" + node.getClass().getName() + ".class)");
