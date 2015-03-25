@@ -38,6 +38,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -190,6 +191,20 @@ public class Agenda extends Control
 	public Locale getLocale() { return localeObjectProperty.getValue(); }
 	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
 	public Agenda withLocale(Locale value) { setLocale(value); return this; } 
+
+	/** AllowDragging:  */
+	public SimpleBooleanProperty allowDraggingProperty() { return allowDraggingObjectProperty; }
+	final private SimpleBooleanProperty allowDraggingObjectProperty = new SimpleBooleanProperty(this, "allowDragging", true);
+	public boolean getAllowDragging() { return allowDraggingObjectProperty.getValue(); }
+	public void setAllowDragging(boolean value) { allowDraggingObjectProperty.setValue(value); }
+	public Agenda withAllowDragging(boolean value) { setAllowDragging(value); return this; } 
+
+	/** AllowResize:  */
+	public SimpleBooleanProperty allowResizeProperty() { return allowResizeObjectProperty; }
+	final private SimpleBooleanProperty allowResizeObjectProperty = new SimpleBooleanProperty(this, "allowResize", true);
+	public boolean getAllowResize() { return allowResizeObjectProperty.getValue(); }
+	public void setAllowResize(boolean value) { allowResizeObjectProperty.setValue(value); }
+	public Agenda withAllowResize(boolean value) { setAllowResize(value); return this; } 
 
 	/** 
 	 * DisplayedCalendar: this calendar denotes the timeframe being displayed. 

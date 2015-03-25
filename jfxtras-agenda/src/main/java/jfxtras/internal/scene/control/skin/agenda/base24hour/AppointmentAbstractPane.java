@@ -88,6 +88,11 @@ abstract public class AppointmentAbstractPane extends Pane {
 	private void setupDragging() {
 		// start drag
 		setOnMousePressed( (mouseEvent) -> {
+			// is dragging allowed
+			if (layoutHelp.skinnable.getAllowDragging() == false) {
+				return;
+			}
+			
 			// action without select: middle button
 			if (mouseEvent.getButton().equals(MouseButton.MIDDLE)) {
 				handleAction();
@@ -116,14 +121,15 @@ abstract public class AppointmentAbstractPane extends Pane {
 			startX = mouseEvent.getScreenX();
 			startY = mouseEvent.getScreenY();
 			mouseActuallyHasDragged = false;
+			dragging = true;
 		});
 		
 		// visualize dragging
 		setOnMouseDragged( (mouseEvent) -> {
-			// only on primary
-			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+			if (dragging == false) {
 				return;
 			}
+
 			// we handle this event
 			mouseEvent.consume();
 			
@@ -178,12 +184,13 @@ abstract public class AppointmentAbstractPane extends Pane {
 		
 		// end drag
 		setOnMouseReleased((mouseEvent) -> {
-			// only on primary
-			if (mouseEvent.getButton().equals(MouseButton.PRIMARY) == false) {
+			if (dragging == false) {
 				return;
 			}
+			
 			// we handle this event
 			mouseEvent.consume();
+			dragging = false;
 
 			// reset ui
 			setCursor(Cursor.HAND);
@@ -214,6 +221,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 			}
 		});
 	}
+	private boolean dragging = false;
 	private Rectangle dragRectangle = null;
 	private double startX = 0;
 	private double startY = 0;

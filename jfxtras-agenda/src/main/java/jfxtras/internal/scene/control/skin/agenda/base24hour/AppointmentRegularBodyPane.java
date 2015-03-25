@@ -39,7 +39,7 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 		getChildren().add(appointmentMenu);
 		
 		// add the duration dragger
-		if (lastPaneOfAppointment) {
+		if (lastPaneOfAppointment && layoutHelp.skinnable.getAllowResize()) {
 			getChildren().add(new DurationDragger(this, appointment, layoutHelp));
 		}
 	}
