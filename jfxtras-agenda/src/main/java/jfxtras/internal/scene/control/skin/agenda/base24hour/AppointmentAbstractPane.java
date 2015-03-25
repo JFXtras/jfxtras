@@ -88,11 +88,6 @@ abstract public class AppointmentAbstractPane extends Pane {
 	private void setupDragging() {
 		// start drag
 		setOnMousePressed( (mouseEvent) -> {
-			// is dragging allowed
-			if (layoutHelp.skinnable.getAllowDragging() == false) {
-				return;
-			}
-			
 			// action without select: middle button
 			if (mouseEvent.getButton().equals(MouseButton.MIDDLE)) {
 				handleAction();
@@ -110,6 +105,13 @@ abstract public class AppointmentAbstractPane extends Pane {
 
 			// we handle this event
 			mouseEvent.consume();
+
+			// is dragging allowed
+			// TBEERNOT: test this
+			if (layoutHelp.skinnable.getAllowDragging() == false) {
+				handleSelect(mouseEvent);
+				return;
+			}
 
 			// if this an action
 			if (mouseEvent.getClickCount() > 1) {
