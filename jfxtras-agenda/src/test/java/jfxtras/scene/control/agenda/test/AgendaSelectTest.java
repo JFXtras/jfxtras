@@ -160,24 +160,28 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		
 		// when
 		click("#AppointmentRegularBodyPane2014-01-01/0"); // select first
+		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
 		click("#AppointmentRegularBodyPane2014-01-01/1"); // select second
 		release(KeyCode.CONTROL);
+		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(2, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
 		click("#AppointmentRegularBodyPane2014-01-01/1"); // select again (deselects)
 		release(KeyCode.CONTROL);
+		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
 		click("#AppointmentRegularBodyPane2014-01-01/0"); // select again (deselects)
 		release(KeyCode.CONTROL);
+		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		//TestUtil.sleep(3000);
 	}
