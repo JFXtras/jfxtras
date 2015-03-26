@@ -39,10 +39,27 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 		getChildren().add(appointmentMenu);
 		
 		// add the duration dragger
-		if (lastPaneOfAppointment && layoutHelp.skinnable.getAllowResize()) {
-			getChildren().add(new DurationDragger(this, appointment, layoutHelp));
-		}
+		layoutHelp.skinnable.allowResizeProperty().addListener( (observable) -> {
+			setupDurationDragger();
+		});
+		setupDurationDragger();
 	}
 	private String startAsString;
 	private String endAsString;
+	
+	/**
+	 * 
+	 */
+	private void setupDurationDragger() {
+		if (lastPaneOfAppointment && layoutHelp.skinnable.getAllowResize()) {
+			if (durationDragger == null) {
+				durationDragger = new DurationDragger(this, appointment, layoutHelp);
+			}
+			getChildren().add(durationDragger);
+		}
+		else {
+			getChildren().remove(durationDragger);
+		}
+	}
+	private DurationDragger durationDragger = null;
 }

@@ -53,7 +53,6 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		return super.getRootNode();
 	}
 
-
 	/**
 	 * 
 	 */
@@ -249,5 +248,39 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void selectSingleWithDragNotAllowed()
+	{
+		// given
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+			agenda.withAllowDragging(false);
+		});
+		Assert.assertEquals(1, agenda.appointments().size() );
+		Assert.assertEquals(0, agenda.selectedAppointments().size() );
+		
+		// when
+		click("#AppointmentRegularBodyPane2014-01-01/0");
+		
+		// then
+		Assert.assertEquals(1, agenda.appointments().size() );
+		Assert.assertEquals(1, agenda.selectedAppointments().size() );
+		
+		// when
+		click("#hourLine15");
+		
+		// then
+		Assert.assertEquals(1, agenda.appointments().size() );
+		Assert.assertEquals(0, agenda.selectedAppointments().size() );
+		//TestUtil.sleep(3000);
 	}
 }

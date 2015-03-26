@@ -107,7 +107,6 @@ abstract public class AppointmentAbstractPane extends Pane {
 			mouseEvent.consume();
 
 			// is dragging allowed
-			// TBEERNOT: test this
 			if (layoutHelp.skinnable.getAllowDragging() == false) {
 				handleSelect(mouseEvent);
 				return;
