@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 
 import org.junit.Assert;
@@ -52,6 +53,21 @@ public class AssertNode {
 		return this;
 	}
 	
+	public AssertNode assertScale(double x, double y, double scaleX, double scaleY, double accuracy) {
+		Scale s = null;
+		for (Transform t : node.getTransforms()) {
+			if (t instanceof Scale) {
+				s = (Scale)t;
+				break;
+			}
+		}
+		Assert.assertEquals(description + ", PivotX", x, s.getPivotX(), accuracy);
+		Assert.assertEquals(description + ", PivotY", y, s.getPivotY(), accuracy);
+		Assert.assertEquals(description + ", X", scaleX, s.getX(), accuracy);
+		Assert.assertEquals(description + ", Y", scaleY, s.getY(), accuracy);
+		return this;
+	}
+	
 	public AssertNode assertArcCenterRadiusAngleLength(double x, double y, double radiusX, double radiusY, double startAngle, double length, double accuracy) {
 		Arc arc = (Arc)node;
 		Assert.assertEquals(description + ", CenterX", x, arc.getCenterX(), accuracy);
@@ -81,7 +97,7 @@ public class AssertNode {
 		return n.getLayoutBounds().getHeight() + n.getLayoutBounds().getMinY();
 	}
 	
-	static public enum A {XYWH, ROTATE, ARC, CLASS, CLASSNAME}
+	static public enum A {XYWH, ROTATE, SCALE, ARC, CLASS, CLASSNAME}
 	static public void generateSource(String paneVariableName, List<Node> nodes, List<String> excludedNodeClasses, boolean newline, A... asserts) {
 		
 		// init
@@ -134,6 +150,16 @@ public class AssertNode {
 					}
 				}
 				System.out.print(newline + ".assertRotate(" + r.getPivotX() + ", " + r.getPivotY() + ", " + r.getAngle() + ", 0.01)");
+			}
+			if (a == A.SCALE) {
+				Scale s = null;
+				for (Transform t : node.getTransforms()) {
+					if (t instanceof Scale) {
+						s = (Scale)t;
+						break;
+					}
+				}
+				System.out.print(newline + ".assertScale(" + s.getPivotX() + ", " + s.getPivotY() + ", " + s.getX() + ", " + s.getY() + ", 0.01)");
 			}
 			if (a == A.ARC) {
 				Arc arc = (Arc)node;
