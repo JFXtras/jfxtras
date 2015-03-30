@@ -118,6 +118,10 @@ project(':') {
 }
 
 subprojects {
+        //Excluding internal classes from Javadoc
+        javadoc {
+            exclude 'jfxtras/internal/*'
+        }
 	// all projects must be compatible with the java version specified here
 	sourceCompatibility = '1.8'
 	[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
