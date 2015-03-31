@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, JFXtras
+ * Copyright (c) 2011, 2015 JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -67,6 +67,7 @@ public class LocalDateTextFieldSkin extends SkinBase<LocalDateTextField>
 		calendarTextField.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
 		calendarTextField.tooltipProperty().bindBidirectional( getSkinnable().tooltipProperty() ); 
 		calendarTextField.textProperty().bindBidirectional( getSkinnable().textProperty() ); 
+                calendarTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
 
 		// bind it up
 		calendarTextField.localeProperty().bindBidirectional( getSkinnable().localeProperty() );

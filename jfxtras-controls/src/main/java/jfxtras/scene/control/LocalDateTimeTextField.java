@@ -1,7 +1,7 @@
 /**
  * LocalDateTimeTextField.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011, 2015 JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -187,6 +187,36 @@ public class LocalDateTimeTextField extends Control
 	public void setText(String value) { textObjectProperty.set(value); }
 	public LocalDateTimeTextField withText(String value) { setText(value); return this; }
 	
+        
+         final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
+
+    /**
+     * Represents the current state of the Picker popup, and whether it is
+     * currently visible on screen.
+     *
+     * @return
+     */
+    public BooleanProperty pickerShowingProperty() {
+        return pickerShowingProperty;
+    }
+
+    /**
+     * Allow to show/hide the Picker.
+     *
+     * @param value
+     */
+    public void setPickerShowing(boolean value) {
+        pickerShowingProperty.set(value);
+    }
+
+    /**
+     * Return true if the Picker is currently shown.
+     *
+     * @return
+     */
+    public boolean isPickerShowing() {
+        return pickerShowingProperty.get();
+    }
 	// ==================================================================================================================
 	// SUPPORT
 }
