@@ -249,37 +249,15 @@ public class CalendarTextField extends Control
 	public void setText(String value) { textObjectProperty.set(value); }
 	public CalendarTextField withText(String value) { setText(value); return this; }
 
-    
-    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
-
-    
-    /**
+     /**
      * Represents the current state of the Picker popup, and whether it is
      * currently visible on screen.
-     *
-     * @return
      */
-    public BooleanProperty pickerShowingProperty() {
-        return pickerShowingProperty;
-    }
-
-    /**
-     * Allow to show/hide the Picker.
-     *
-     * @param value
-     */
-    public void setPickerShowing(boolean value) {
-        pickerShowingProperty.set(value);
-    }
-
-    /**
-     * Return true if the Picker is currently shown.
-     *
-     * @return
-     */
-    public boolean isPickerShowing() {
-        return pickerShowingProperty.get();
-    }
+    public BooleanProperty pickerShowingProperty() { return pickerShowingProperty; }
+    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
+    public boolean isPickerShowing() { return pickerShowingProperty.get(); }
+    public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
+    
 	// ==================================================================================================================
 	// EVENTS
 	

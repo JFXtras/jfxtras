@@ -37,6 +37,7 @@ import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -64,9 +65,6 @@ import jfxtras.util.NodeUtil;
  */
 public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 {
-    
-    private final Popup popup = new Popup();
-    private CalendarTimePicker calendarPicker;
 	// ==================================================================================================================
 	// CONSTRUCTOR
 	
@@ -88,9 +86,6 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		// setup component
 		createNodes();
 		
-                //We initiate the popup here
-                setupPopup();
-                
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observable) -> {
 			refreshValue();
@@ -103,13 +98,6 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		// focus
 		initFocusSimulation();
             
-            /**
-             * If the popup is showing/hiding, we must notify the property of
-             * the CalendarTextField so that they are always in sync.
-             */
-            popup.showingProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) -> {
-                getSkinnable().setPickerShowing(showing);
-            });
 
             /**
              * If the user is triggering the property, we must show the popup.
@@ -120,7 +108,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
             getSkinnable().pickerShowingProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) -> {
                 if (showing) {
                     showPopup();
-                } else {
+                } else if(popup != null){
                     popup.hide();
                 }
             });
@@ -344,14 +332,15 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 	}
 	
         
-        private void setupPopup() {
+       private void setupPopup() {
+        popup = new Popup();
         popup.setAutoFix(true);
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
 
         // add the timepicker
         BorderPane lBorderPane = new BorderPane() {
-				// As of 1.8.0_40 CSS files are added in the scope of a control, the popup does not fall under the control, so the stylesheet must be reapplied 
+            // As of 1.8.0_40 CSS files are added in the scope of a control, the popup does not fall under the control, so the stylesheet must be reapplied 
             // When JFxtras is based on 1.8.0_40+: @Override 
             public String getUserAgentStylesheet() {
                 return getSkinnable().getUserAgentStylesheet();
@@ -368,6 +357,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
             @Override
             public void handle(MouseEvent evt) {
                 popup.hide();
+                popup = null;
                 getSkinnable().calendarProperty().set(calendarTimePicker.calendarProperty().get());
             }
         });
@@ -378,13 +368,33 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
         popup.setOnShown((event) -> {
             ((CalendarTimePickerSkin) calendarTimePicker.getSkin()).labelDateFormatProperty().set(getSkinnable().getDateFormat());
         });
+
+        /**
+         * If the popup is showing/hiding, we must notify the property of the
+         * CalendarTextField so that they are always in sync.
+         */
+        popup.showingProperty().addListener(new ChangeListener<Boolean>() {
+
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) {
+                getSkinnable().setPickerShowing(showing);
+                if (!showing) {
+                    popup.showingProperty().removeListener(this);
+                    popup = null;
+                }
+            }
+        });
     }
+    private Popup popup = null;
+    private CalendarTimePicker calendarPicker = null;
 	   /*
      * 
      */
 
     private void showPopup() {
 
+        if(popup == null){
+            setupPopup();
+        }
         // show it just below the textfield
         calendarTimePicker.calendarProperty().set(getSkinnable().calendarProperty().get());
         popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
