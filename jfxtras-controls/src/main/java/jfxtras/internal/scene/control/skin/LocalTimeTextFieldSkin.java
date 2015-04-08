@@ -1,7 +1,7 @@
 /**
  * LocalTimeTextFieldSkin.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011, 2015 JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -71,6 +71,7 @@ public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField>
 		calendarTimeTextField.getStyleClass().addAll(getSkinnable().getStyleClass());
 		calendarTimeTextField.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
 		calendarTimeTextField.tooltipProperty().bindBidirectional( getSkinnable().tooltipProperty() ); 
+                calendarTimeTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
 
 		// bind it up
 		calendarTimeTextField.localeProperty().bindBidirectional( getSkinnable().localeProperty() );

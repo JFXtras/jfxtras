@@ -1,7 +1,7 @@
 /**
  * CalendarTextFieldSkin.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011, 2015 JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -36,12 +36,13 @@ import java.util.Date;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -86,7 +87,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	{
 		// setup component
 		createNodes();
-		
+                
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
         getSkinnable().dateFormatProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
@@ -97,6 +98,20 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		
 		// focus
 		initFocusSimulation();
+                
+            /**
+             * If the user is triggering the property, we must show the popup.
+             * We cannot bind the property directly to the popup because the
+             * popup property is read only. MoreOver, we want to show the popup
+             * next to the TextField, that's why we need to call showPopup();
+             */
+            getSkinnable().pickerShowingProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) -> {
+                if (showing) {
+                    showPopup();
+                } else if(popup != null){
+                    popup.hide();
+                }
+            });
 	}
 	
 	/*
@@ -188,7 +203,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			if (textField.focusedProperty().get() == true) {
 				parse();
 			}
-			showPopup(evt);
+                        getSkinnable().setPickerShowing(true);
 		});
 		
 		// construct a gridpane: one row, two columns
@@ -208,8 +223,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
 	final public BooleanProperty focusForwardingProperty = new SimpleBooleanProperty();
-	
-	/**
+
+        /**
 	 * parse the contents that was typed in the textfield
 	 */
 	private void parse() {
@@ -313,13 +328,10 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		} 
 	}
 	
-	/*
-	 * 
-	 */
-	private void showPopup(MouseEvent evt)
-	{
-		// create a picker
-		CalendarPicker calendarPicker = new CalendarPicker();
+        
+        private void setupPopup(){
+            // create a picker
+		calendarPicker = new CalendarPicker();
 		calendarPicker.setMode(CalendarPicker.Mode.SINGLE);
 		calendarPicker.localeProperty().set(getSkinnable().localeProperty().get());
 		calendarPicker.allowNullProperty().set(getSkinnable().allowNullProperty().get());
@@ -352,10 +364,10 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 //	                getScene().getRoot().impl_processCSS(true);
 //	            }
 //	        };
-		Popup lPopup = new Popup();
-		lPopup.setAutoFix(true);
-		lPopup.setAutoHide(true);
-		lPopup.setHideOnEscape(true);
+                popup = new Popup();
+                popup.setAutoFix(true);
+                popup.setAutoHide(true);
+                popup.setHideOnEscape(true);
 		BorderPane lBorderPane = new BorderPane() {
 			// As of 1.8.0_40 CSS files are added in the scope of a control, the popup does not fall under the control, so the stylesheet must be reapplied 
 			// When JFxtras is based on 1.8.0_40+: @Override 
@@ -365,7 +377,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		};
 		lBorderPane.getStyleClass().add(this.getClass().getSimpleName() + "_popup");
 		lBorderPane.setCenter(calendarPicker);
-		calendarPicker.showTimeProperty().set( getSkinnable().getShowTime() );
+		calendarPicker.showTimeProperty().set(getSkinnable().getShowTime());
 		
 		// because the Java 8 DateTime classes use the CalendarPicker, we need to add some specific CSS classes here to support seamless CSS
 		if (getSkinnable().getStyleClass().contains(LocalDateTextField.class.getSimpleName())) {
@@ -386,7 +398,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			lAcceptIconImageView.setPickOnBounds(true);
 			lAcceptIconImageView.setOnMouseClicked( (mouseEvent) ->  {
 				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
-				lPopup.hide(); 
+				popup.hide(); 
 			});
 			lVBox.add(lAcceptIconImageView);
 			
@@ -394,20 +406,20 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			lCloseIconImageView.getStyleClass().addAll("close-icon");
 			lCloseIconImageView.setPickOnBounds(true);
 			lCloseIconImageView.setOnMouseClicked( (mouseEvent) ->  {
-				lPopup.hide(); 
+				popup.hide(); 
 			});
 			lVBox.add(lCloseIconImageView);
 		}
 		
 		// if a value is selected in date mode, immediately close the popup
 		calendarPicker.calendarProperty().addListener( (observable) -> {
-			if (lPopup != null &&  getSkinnable().getShowTime() == false && lPopup.isShowing()) {
-				lPopup.hide(); 
+			if (getSkinnable().getShowTime() == false && popup.isShowing()) {
+				popup.hide(); 
 			}
 		});
 
 		// when the popup is hidden 
-		lPopup.setOnHiding( (windowEvent) -> {
+		popup.setOnHiding( (windowEvent) -> {
 			// and time is not shown, the value must be set into the textfield
 			if ( getSkinnable().getShowTime() == false) {
 				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
@@ -417,13 +429,45 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		});
 		
 		// add to popup
-		lPopup.getContent().add(lBorderPane);
+		popup.getContent().setAll(lBorderPane);
 		
 		// show it just below the textfield
 		textField.setDisable(true);
-		lPopup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
+                
+            /**
+             * If the popup is showing/hiding, we must notify the property of
+             * the CalendarTextField so that they are always in sync.
+             */
+            popup.showingProperty().addListener(new ChangeListener<Boolean>() {
 
-		// move the focus over		
-		calendarPicker.requestFocus(); // TODO: not working
-	}
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) {
+                    getSkinnable().setPickerShowing(showing);
+                    if (!showing) {
+                        popup.showingProperty().removeListener(this);
+                        popup = null;
+                    }
+                }
+            });
+		
+        }
+        
+        private Popup popup = null;
+        private CalendarPicker calendarPicker = null;
+
+    /**
+     * This is either called by the user clicking on the button, or
+     * programmaticaly with {@link CalendarTextField#setPickerShowing(boolean)
+     * }.
+     */
+    private void showPopup() {
+        if(popup == null){
+            setupPopup();
+        }
+        
+        popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
+
+        // move the focus over		
+        calendarPicker.requestFocus(); // TODO: not working
+    }
 }

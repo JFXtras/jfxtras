@@ -89,6 +89,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// default value is null
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
 		click(".icon");
@@ -99,6 +100,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// now should be the value in the textfield
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
 	/**
@@ -115,6 +117,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// default value is null
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
 		click(".icon");
@@ -128,6 +131,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// now should be the value in the textfield
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
 	/**
@@ -138,16 +142,23 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// default value is null
 		Assert.assertNull(calendarTextField.getCalendar());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
 		click(".icon");
-		
+                
+                //The popup should be displayed.
+		Assert.assertTrue(calendarTextField.isPickerShowing());
+                
 		// click today
 		click(".today");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
-	}
+                
+                //The popup should be hidden.
+		Assert.assertFalse(calendarTextField.isPickerShowing());
+        }
 
 	/**
 	 * 
@@ -168,6 +179,9 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// open the popup
 		click(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
+                
+                //The popup should be displayed.
+		Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
 		click(".today");
@@ -178,6 +192,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// now should be the value in the textfield
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
 	/**
@@ -199,6 +214,9 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// open the popup
 		click(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
+                
+                //The popup should be displayed.
+		Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
 		click(".today");
@@ -209,6 +227,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// should still be null
 		Assert.assertNull(calendarTextField.getCalendar());
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
 	/**
@@ -230,6 +249,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// open the popup
 		click(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
+		Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
 		click(".today");
@@ -240,6 +260,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// should still be null
 		Assert.assertNull(calendarTextField.getCalendar());
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
 
@@ -262,6 +283,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// open the popup
 		click(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
+                Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
 		click(".today");
@@ -272,6 +294,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// should still be null
 		Assert.assertNull(calendarTextField.getCalendar());
 		Assert.assertFalse(find(".text-field").isDisabled());
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
 	/**
@@ -289,6 +312,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// open the popup
 		click(".icon");
+                Assert.assertTrue(calendarTextField.isPickerShowing());
 
 		// assert that the popup shows January 1st 2013 
 		Assert.assertTrue( ((ToggleButton)find("#2013-01-01")).isSelected() );
@@ -304,9 +328,11 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	{
 		// popup should be closed
 		assertPopupIsNotVisible(find(".text-field"));
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
 		click(".icon");
+                Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// popup should be open
 		assertPopupIsVisible(find(".text-field"));
@@ -316,6 +342,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// popup should be closed
 		assertPopupIsNotVisible(find(".text-field"));
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
 
@@ -492,17 +519,49 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// popup should be closed
 		assertPopupIsNotVisible(find(".text-field"));
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
 		click(".icon");
 		
 		// popup should be closed
 		assertPopupIsVisible(find(".text-field"));
+                Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// reselect 1st of January
 		click("#2013-01-01");
 		
 		// popup should be closed
 		assertPopupIsNotVisible(find(".text-field"));
+                Assert.assertFalse(calendarTextField.isPickerShowing());
+	}
+        
+        /**
+	 * 
+	 */
+	@Test
+	public void openPopupAndCloseWithProperty()
+	{
+		// popup should be closed
+		assertPopupIsNotVisible(find(".text-field"));
+                Assert.assertFalse(calendarTextField.isPickerShowing());
+		
+		// open the popup
+                TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setPickerShowing(true);
+		});
+                
+		// popup should be open
+		assertPopupIsVisible(find(".text-field"));
+                Assert.assertTrue(calendarTextField.isPickerShowing());
+		
+		// Close the popup
+                TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setPickerShowing(false);
+		});
+		
+		// popup should be closed
+		assertPopupIsNotVisible(find(".text-field"));
+                Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 }

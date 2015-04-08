@@ -1,7 +1,7 @@
 /**
  * LocalDateTextField.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011, 2015 JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -190,6 +190,15 @@ public class LocalDateTextField extends Control
 	public void setText(String value) { textObjectProperty.set(value); }
 	public LocalDateTextField withText(String value) { setText(value); return this; }
 
+        
+        /**
+     * Represents the current state of the Picker popup, and whether it is
+     * currently visible on screen.
+     */
+    public BooleanProperty pickerShowingProperty() { return pickerShowingProperty; }
+    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
+    public boolean isPickerShowing() { return pickerShowingProperty.get(); }
+    public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
 	// ==================================================================================================================
 	// SUPPORT
 }

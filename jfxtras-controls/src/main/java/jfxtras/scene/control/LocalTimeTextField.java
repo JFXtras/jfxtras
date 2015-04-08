@@ -1,7 +1,7 @@
 /**
  * LocalTimeTextField.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011, 2015 JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -34,9 +34,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Locale;
+import javafx.beans.property.BooleanProperty;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
@@ -150,7 +152,14 @@ public class LocalTimeTextField extends Control
 	public void setParseErrorCallback(Callback<Throwable, Void> value) { this.parseErrorCallbackObjectProperty.setValue(value); }
 	public LocalTimeTextField withParseErrorCallback(Callback<Throwable, Void> value) { setParseErrorCallback(value); return this; }
 
-	
+    /**
+     * Represents the current state of the Picker popup, and whether it is
+     * currently visible on screen.
+     */
+    public BooleanProperty pickerShowingProperty() { return pickerShowingProperty; }
+    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
+    public boolean isPickerShowing() { return pickerShowingProperty.get(); }
+    public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
 	// ==================================================================================================================
 	// SUPPORT
 }
