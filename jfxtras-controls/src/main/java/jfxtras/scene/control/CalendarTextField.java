@@ -249,7 +249,7 @@ public class CalendarTextField extends Control
 	public void setText(String value) { textObjectProperty.set(value); }
 	public CalendarTextField withText(String value) { setText(value); return this; }
 
-     /**
+    /**
      * Represents the current state of the Picker popup, and whether it is
      * currently visible on screen.
      */
@@ -257,11 +257,5 @@ public class CalendarTextField extends Control
     final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
-    
-	// ==================================================================================================================
-	// EVENTS
-	
-	// ==================================================================================================================
-	// BEHAVIOR
-	
+	public CalendarTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }
 }

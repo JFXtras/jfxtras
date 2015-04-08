@@ -189,9 +189,8 @@ public class LocalDateTextField extends Control
 	public String getText() { return textObjectProperty.get(); }
 	public void setText(String value) { textObjectProperty.set(value); }
 	public LocalDateTextField withText(String value) { setText(value); return this; }
-
         
-        /**
+    /**
      * Represents the current state of the Picker popup, and whether it is
      * currently visible on screen.
      */
@@ -199,6 +198,5 @@ public class LocalDateTextField extends Control
     final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
-	// ==================================================================================================================
-	// SUPPORT
+	public LocalDateTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }
 }
