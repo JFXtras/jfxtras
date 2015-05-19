@@ -196,6 +196,5 @@ public class LocalDateTimeTextField extends Control
     final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
-	// ==================================================================================================================
-	// SUPPORT
+	public LocalDateTimeTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }
 }
