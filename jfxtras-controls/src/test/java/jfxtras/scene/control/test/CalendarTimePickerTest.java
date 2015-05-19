@@ -31,7 +31,6 @@ package jfxtras.scene.control.test;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -43,13 +42,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import jfxtras.internal.scene.control.skin.CalendarTimePickerSkin;
 import jfxtras.scene.control.CalendarTimePicker;
-import jfxtras.scene.control.CalendarTimeTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.exceptions.NoNodesFoundException;
 
 
 /**
