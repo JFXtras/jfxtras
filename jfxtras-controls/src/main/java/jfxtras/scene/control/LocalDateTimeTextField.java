@@ -84,6 +84,7 @@ public class LocalDateTimeTextField extends Control
 	 */
 	private void construct()
 	{
+            constructDisplayedLocalDateTime();
 	}
 
 	@Override public Skin createDefaultSkin() {
@@ -173,6 +174,22 @@ public class LocalDateTimeTextField extends Control
 	public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
 	public LocalDateTimeTextField withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
 
+        /**
+	 * DisplayedLocalDateTime:
+	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
+	 * The localDateTime should not be modified using any of its add or set methods (it should be considered immutable)
+	 */
+	public ObjectProperty<LocalDateTime> displayedLocalDateTime() { return displayedLocalDateTimeObjectProperty; }
+	volatile private ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedCalendar");
+	public LocalDateTime getDisplayedLocalDateTime() { return displayedLocalDateTimeObjectProperty.getValue(); }
+	public void setDisplayedLocalDateTime(LocalDateTime value) { displayedLocalDateTimeObjectProperty.setValue(value); }
+	public LocalDateTimeTextField withDisplayedLocalDateTime(LocalDateTime value) { setDisplayedLocalDateTime(value); return this; }
+	private void constructDisplayedLocalDateTime()
+	{
+		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
+		setDisplayedLocalDateTime(LocalDateTime.now());
+	}
+        
 	/** is null allowed */
     volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
     public BooleanProperty allowNullProperty() { return allowNullProperty; }

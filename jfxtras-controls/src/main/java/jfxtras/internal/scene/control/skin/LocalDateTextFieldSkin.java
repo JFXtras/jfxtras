@@ -77,7 +77,7 @@ public class LocalDateTextFieldSkin extends SkinBase<LocalDateTextField>
 		DateTimeToCalendarHelper.syncLocalDate(calendarTextField.calendarProperty(), getSkinnable().localDateProperty(), calendarTextField.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDates(calendarTextField.highlightedCalendars(), getSkinnable().highlightedLocalDates(), calendarTextField.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDates(calendarTextField.disabledCalendars(), getSkinnable().disabledLocalDates(), calendarTextField.localeProperty());
-
+                DateTimeToCalendarHelper.syncLocalDate(calendarTextField.displayedCalendar(), getSkinnable().displayedLocalDate(), calendarTextField.localeProperty());
 		// formatter(s) require special attention
 		DateTimeToCalendarHelper.syncDateTimeFormatterForDate(calendarTextField.dateFormatProperty(), getSkinnable().dateTimeFormatterProperty());
 		DateTimeToCalendarHelper.syncDateTimeFormattersForDate(calendarTextField.dateFormatsProperty(), getSkinnable().dateTimeFormattersProperty());

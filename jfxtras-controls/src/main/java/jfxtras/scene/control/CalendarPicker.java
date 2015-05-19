@@ -263,7 +263,7 @@ public class CalendarPicker extends Control
 
 	/**
 	 * DisplayedCalendar:
-	 * Yoy may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
+	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
 	 * The calendar should not be modified using any of its add or set methods (it should be considered immutable)
 	 */
 	public ObjectProperty<Calendar> displayedCalendar() { return displayedCalendarObjectProperty; }
