@@ -564,4 +564,17 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		assertPopupIsNotVisible(find(".text-field"));
                 Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
+        
+    @Test
+    public void setDisplayedCalendar() {
+        Calendar lCalendar = new GregorianCalendar(2013, 0, 1, 12, 00, 00);
+        calendarTextField.setDisplayedCalendar(lCalendar);
+
+        // open the popup
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            calendarTextField.setPickerShowing(true);
+        });
+
+        assertFind("#2013-01-01");
+    }
 }
