@@ -547,7 +547,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
-                TestUtil.runThenWaitForPaintPulse( () -> {
+        TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTextField.setPickerShowing(true);
 		});
                 
@@ -556,7 +556,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// Close the popup
-                TestUtil.runThenWaitForPaintPulse( () -> {
+        TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTextField.setPickerShowing(false);
 		});
 		

@@ -20,10 +20,12 @@ import org.junit.runners.Suite.SuiteClasses;
               , CalendarTextFieldExtendedTest.class
 	          , LocalDatePickerTest.class
 	          , LocalDatePickerFXMLTest.class
+              , LocalDateTextFieldTest.class
 	          , LocalDateTimePickerTest.class 
 	          , LocalDateTimePickerFXMLTest.class 
 	          , LocalTimePickerTest.class
 	          , LocalTimePickerFXMLTest.class
+              , LocalDateTimeTextFieldTest.class
 	          , ToggleGroupValueTest.class
 	          })
 public class AllTests {

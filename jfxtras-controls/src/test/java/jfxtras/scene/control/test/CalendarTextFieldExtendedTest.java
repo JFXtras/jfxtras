@@ -22,7 +22,7 @@ public class CalendarTextFieldExtendedTest extends JFXtrasGuiTest {
     private volatile boolean pass = true;
 
     @Test
-    public void TestAnonymousCalendarPicker() throws Exception {
+    public void testAnonymousCalendarPicker() throws Exception {
         final CalendarTextField spinner = new CalendarTextField() {};
         Assert.assertEquals(expected, spinner.getStyleClass());
         FXTestUtils.invokeAndWait(new Runnable() {
@@ -35,7 +35,7 @@ public class CalendarTextFieldExtendedTest extends JFXtrasGuiTest {
     }
 
     @Test
-    public void TestExtendedCalendarPicker() throws Exception {
+    public void testExtendedCalendarPicker() throws Exception {
         final TestCalendarTextField picker = new TestCalendarTextField();
         Assert.assertEquals(expected, picker.getStyleClass());
         FXTestUtils.invokeAndWait(new Runnable() {

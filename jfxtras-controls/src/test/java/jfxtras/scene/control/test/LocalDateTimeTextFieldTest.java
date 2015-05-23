@@ -46,7 +46,6 @@ import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
-import static org.loadui.testfx.GuiTest.find;
 
 /**
  * Created by Samir Hadzic on 21-05-14.
