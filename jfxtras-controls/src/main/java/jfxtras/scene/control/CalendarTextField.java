@@ -98,6 +98,7 @@ public class CalendarTextField extends Control
 				((CalendarTextFieldSkin)newValue).focusForwardingProperty.addListener(focusInvalidationListener);
 			}
 		});
+                constructDisplayedCalendar();
 	}
 	final private InvalidationListener focusInvalidationListener = new InvalidationListener() {
 		@Override
@@ -225,6 +226,22 @@ public class CalendarTextField extends Control
 	public void setCalendarRangeCallback(Callback<CalendarRange, Void> value) { this.calendarRangeCallbackObjectProperty.setValue(value); }
 	public CalendarTextField withCalendarRangeCallback(Callback<CalendarRange, Void> value) { setCalendarRangeCallback(value); return this; }
 
+        /**
+	 * DisplayedCalendar:
+	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
+	 * The calendar should not be modified using any of its add or set methods (it should be considered immutable)
+	 */
+	public ObjectProperty<Calendar> displayedCalendar() { return displayedCalendarObjectProperty; }
+	volatile private ObjectProperty<Calendar> displayedCalendarObjectProperty = new SimpleObjectProperty<Calendar>(this, "displayedCalendar");
+	public Calendar getDisplayedCalendar() { return displayedCalendarObjectProperty.getValue(); }
+	public void setDisplayedCalendar(Calendar value) { displayedCalendarObjectProperty.setValue(value); }
+	public CalendarTextField withDisplayedCalendar(Calendar value) { setDisplayedCalendar(value); return this; }
+	private void constructDisplayedCalendar()
+	{
+		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
+		setDisplayedCalendar(Calendar.getInstance(getLocale()));
+	}
+        
 	/** is null allowed */
     volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true)
     {
