@@ -474,20 +474,21 @@ implements AgendaSkin
 	
 
 	/**
-	 * 
+	 * @param x scene coordinate
+	 * @param y scene coordinate
 	 */
-	public LocalDateTime convertClickToDateTime(double x, double y) {
+	public LocalDateTime convertClickInSceneToDateTime(double x, double y) {
 		
 		// the click has only value in either the day panes 
 		for (DayBodyPane lDayPane : weekBodyPane.dayBodyPanes) {
-			LocalDateTime lLocalDateTime = lDayPane.convertClickToDateTime(x, y);
+			LocalDateTime lLocalDateTime = lDayPane.convertClickInSceneToDateTime(x, y);
 			if (lLocalDateTime != null) {
 				return lLocalDateTime;
 			}
 		}
 		// or the day header panes
 		for (DayHeaderPane lDayHeaderPane : weekHeaderPane.dayHeaderPanes) {
-			LocalDateTime lLocalDateTime = lDayHeaderPane.convertClickToDateTime(x, y);
+			LocalDateTime lLocalDateTime = lDayHeaderPane.convertClickInSceneToDateTime(x, y);
 			if (lLocalDateTime != null) {
 				return lLocalDateTime;
 			}

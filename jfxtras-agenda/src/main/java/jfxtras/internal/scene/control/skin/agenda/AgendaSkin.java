@@ -17,11 +17,11 @@ public interface AgendaSkin {
 	
 	/**
 	 * 
-	 * @param x screen coordinate
-	 * @param y screen coordinate
-	 * @return a localDateTime equivalent of the clickj location, where a drop in the day section has nano seconds == 1, and a drop in a header (wholeday) section has nano seconds == 0
+	 * @param x scene coordinate
+	 * @param y scene coordinate
+	 * @return a localDateTime equivalent of the click location, where a drop in the day section has nano seconds == 1, and a drop in a header (wholeday) section has nano seconds == 0
 	 */
-	LocalDateTime convertClickToDateTime(double x, double y);
+	LocalDateTime convertClickInSceneToDateTime(double x, double y);
 	
 	public void print(PrinterJob job);
 }
