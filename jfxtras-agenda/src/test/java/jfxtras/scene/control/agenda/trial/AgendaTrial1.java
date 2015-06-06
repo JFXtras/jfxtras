@@ -43,7 +43,6 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import javafx.application.Application;
-import javafx.geometry.NodeOrientation;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -73,7 +72,7 @@ public class AgendaTrial1 extends Application {
 //		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin(lAgenda));
 //		lAgenda.setAllowDragging(false);
 //		lAgenda.setAllowResize(false);
-		lAgenda.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		lAgenda.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
 		
 		// setup appointment groups
         final Map<String, Agenda.AppointmentGroup> lAppointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
@@ -220,7 +219,7 @@ public class AgendaTrial1 extends Application {
 				.withWholeDay(true)
 		, 	new Agenda.AppointmentImplLocal()
 				.withStartLocalDateTime(lTodayLocalDate.atStartOfDay())
-				.withSummary("whole2")
+				.withSummary("whole but then with a long description")
 				.withDescription("A description " + (++idx))
 				.withAppointmentGroup(lAppointmentGroupMap.get("group18"))
 				.withWholeDay(true)
