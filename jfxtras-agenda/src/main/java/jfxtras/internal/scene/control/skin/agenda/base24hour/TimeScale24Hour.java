@@ -6,9 +6,9 @@ import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import jfxtras.util.NodeUtil;
 
-public class TimeScale24Hour extends Pane {
+class TimeScale24Hour extends Pane {
 
-	public TimeScale24Hour(Pane pane, LayoutHelp layoutHelp) {
+	TimeScale24Hour(Pane pane, LayoutHelp layoutHelp) {
 		this.pane = pane;
 		this.layoutHelp = layoutHelp;
 		

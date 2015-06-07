@@ -25,7 +25,7 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 			lTimeText.getStyleClass().add("AppointmentTimeLabel");
 			lTimeText.setX(layoutHelp.paddingProperty.get() );
 			lTimeText.setY(lTimeText.prefHeight(0));
-			layoutHelp.clip(this, lTimeText, widthProperty().subtract( layoutHelp.paddingProperty ), heightProperty().add(0.0), true);
+			layoutHelp.clip(this, lTimeText, widthProperty().subtract( layoutHelp.paddingProperty ), heightProperty().add(0.0), true, 0.0);
 			getChildren().add(lTimeText);
 		}
 		
@@ -36,7 +36,7 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 			lSummaryText.setX( layoutHelp.paddingProperty.get() );
 			lSummaryText.setY( lTimeText.getY() + layoutHelp.textHeightProperty.get());
 			lSummaryText.wrappingWidthProperty().bind(widthProperty().subtract( layoutHelp.paddingProperty.get() ));
-			layoutHelp.clip(this, lSummaryText, widthProperty().add(0.0), heightProperty().subtract( layoutHelp.paddingProperty ), false);
+			layoutHelp.clip(this, lSummaryText, widthProperty().add(0.0), heightProperty().subtract( layoutHelp.paddingProperty ), false, 0.0);
 			getChildren().add(lSummaryText);			
 		}
 		

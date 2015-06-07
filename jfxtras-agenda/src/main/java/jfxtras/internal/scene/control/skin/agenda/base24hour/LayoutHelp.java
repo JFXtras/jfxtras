@@ -7,14 +7,11 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
@@ -28,7 +25,7 @@ import jfxtras.scene.control.agenda.Agenda;
  * This class is not a class but a data holder, a record, all fields are accessed directly.
  * Its methods are utility methods, which normally would be statics in a util class. 
  */
-public class LayoutHelp {
+class LayoutHelp {
 	public LayoutHelp(Agenda skinnable, AgendaSkin skin) {
 		this.skinnable = skinnable;
 		this.skin = skin;
@@ -84,21 +81,12 @@ public class LayoutHelp {
 	DateTimeFormatter timeDateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter(Locale.getDefault());
 
 	/**
-	 * 
+	 * I have no clue why the wholeday appointment header needs an additional 10.0 px X offset in right-to-left mode
 	 */
-	public void clip(Pane pane, Text text, DoubleBinding width, DoubleBinding height, boolean mirrorWidth) {
+	void clip(Pane pane, Text text, DoubleBinding width, DoubleBinding height, boolean mirrorWidth, double additionMirorXOffset) {
 		Rectangle lClip = new Rectangle(0,0,0,0);
-//		if (text.getText().contains("whole but")) {
-//			System.out.println(text.getText() + " " + lClip.xProperty().get() + " / " + pane.widthProperty().get() + " / " + text.getBoundsInParent().getWidth());
-//			lClip.xProperty().addListener(new InvalidationListener() {
-//				@Override
-//				public void invalidated(Observable arg0) {
-//					System.out.println(lClip.xProperty().get() + " / " + pane.widthProperty().get() + " / " + text.getBoundsInParent().getWidth());
-//				}
-//			});
-//		}
 		if (mirrorWidth && skinnable.getNodeOrientation().equals(NodeOrientation.RIGHT_TO_LEFT)) {
-			lClip.xProperty().bind(pane.widthProperty().multiply(-1.0).add(text.getBoundsInParent().getWidth()));
+			lClip.xProperty().bind(pane.widthProperty().multiply(-1.0).add(text.getBoundsInParent().getWidth()).add(additionMirorXOffset));
 		}
 		lClip.widthProperty().bind(width);
 		lClip.heightProperty().bind(height);
@@ -108,7 +96,7 @@ public class LayoutHelp {
 	/**
 	 * 
 	 */
-	public void setupMouseOverAsBusy(final Node node) {
+	void setupMouseOverAsBusy(final Node node) {
 		// play with the mouse pointer to show something can be done here
 		node.setOnMouseEntered( (mouseEvent) -> {
 			if (!mouseEvent.isPrimaryButtonDown()) {						
@@ -130,7 +118,7 @@ public class LayoutHelp {
 	 * @param minutes
 	 * @return
 	 */
-	public LocalDateTime roundTimeToNearestMinutes(LocalDateTime localDateTime, int minutes)
+	LocalDateTime roundTimeToNearestMinutes(LocalDateTime localDateTime, int minutes)
 	{
 		localDateTime = localDateTime.withSecond(0).withNano(0);
 		int lMinutes = localDateTime.getMinute() % minutes;

@@ -30,7 +30,7 @@ class AppointmentWholedayHeaderPane extends AppointmentAbstractPane
 		summaryText.getStyleClass().add("AppointmentLabel");
 		summaryText.setX( layoutHelp.paddingProperty.get() );
 		summaryText.setY(summaryText.prefHeight(0));
-		layoutHelp.clip(this, summaryText, widthProperty().subtract(layoutHelp.paddingProperty), heightProperty().subtract(0.0), true);
+		layoutHelp.clip(this, summaryText, widthProperty().subtract(layoutHelp.paddingProperty), heightProperty().subtract(0.0), true, 10.0);
 		return summaryText;
 	}
 	private Text summaryText = null;

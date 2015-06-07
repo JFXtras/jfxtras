@@ -10,10 +10,10 @@ import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
-public class DurationDragger extends Rectangle
+class DurationDragger extends Rectangle
 {
 
-	public DurationDragger(AppointmentRegularBodyPane appointmentPane, Appointment appointment, LayoutHelp layoutHelp)
+	DurationDragger(AppointmentRegularBodyPane appointmentPane, Appointment appointment, LayoutHelp layoutHelp)
 	{
 		// remember
 		this.appointmentPane = appointmentPane;

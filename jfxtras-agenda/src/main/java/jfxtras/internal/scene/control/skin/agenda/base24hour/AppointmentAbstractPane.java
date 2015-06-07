@@ -16,13 +16,13 @@ import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
-abstract public class AppointmentAbstractPane extends Pane {
+abstract class AppointmentAbstractPane extends Pane {
 
 	/**
 	 * @param calendar
 	 * @param appointment
 	 */
-	public AppointmentAbstractPane(Agenda.Appointment appointment, LayoutHelp layoutHelp)
+	AppointmentAbstractPane(Agenda.Appointment appointment, LayoutHelp layoutHelp)
 	{
 		this.appointment = appointment;
 		this.layoutHelp = layoutHelp;
@@ -78,7 +78,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 	 * 
 	 * @param now
 	 */
-	public void determineHistoryVisualizer(LocalDateTime now) {
+	void determineHistoryVisualizer(LocalDateTime now) {
 		historyVisualizer.setVisible(appointment.getStartLocalDateTime().isBefore(now));
 	}
 
@@ -351,8 +351,8 @@ abstract public class AppointmentAbstractPane extends Pane {
 	private boolean dragInDayHeader(LocalDateTime localDateTime) {
 		return localDateTime.getNano() == DRAG_DAYHEADER;
 	}
-	static public final int DRAG_DAY = 1;
-	static public final int DRAG_DAYHEADER = 0;
+	static final int DRAG_DAY = 1;
+	static final int DRAG_DAYHEADER = 0;
 	
 	/**
 	 * 
