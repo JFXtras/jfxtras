@@ -356,7 +356,7 @@ public class ListSpinner<T> extends Control
 	public void setCellFactory(Callback<ListSpinner<T>, Node> value) { this.cellFactoryObjectProperty.setValue(value); }
 	public ListSpinner<T> withCellFactory(Callback<ListSpinner<T>, Node> value) { setCellFactory(value); return this; }
 
-	/** StringConverter&lt;T&gt;: convert a value in the list to its string representation and (when in edit mode) vice verse. */
+	/** StringConverter&lt;T&gt;: convert a value in the list to its string representation and (when in edit mode) vice versa. */
 	public ObjectProperty<StringConverter<T>> stringConverterProperty() { return this.stringConverterObjectProperty; }
 	final private ObjectProperty<StringConverter<T>> stringConverterObjectProperty = new SimpleObjectProperty<StringConverter<T>>(this, "stringConverter", new DefaultStringConverter());
 	public StringConverter<T> getStringConverter() { return this.stringConverterObjectProperty.getValue(); }
