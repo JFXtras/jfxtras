@@ -15,7 +15,7 @@ class AppointmentWholedayBodyPane extends AppointmentAbstractPane {
 	 * @param calendar
 	 * @param appointment
 	 */
-	public AppointmentWholedayBodyPane(LocalDate localDate, Agenda.Appointment appointment, LayoutHelp layoutHelp) {
+	AppointmentWholedayBodyPane(LocalDate localDate, Agenda.Appointment appointment, LayoutHelp layoutHelp) {
 		super(appointment, layoutHelp);
 	}
 }

@@ -319,12 +319,12 @@ class DayBodyPane extends Pane
 	
 	/**
 	 * 
-	 * @param x screen coordinate
-	 * @param y screen coordinate
+	 * @param x scene coordinate
+	 * @param y scene coordinate
 	 * @return a localDateTime where nano seconds == 1
 	 */
-	LocalDateTime convertClickToDateTime(double x, double y) {
-		Rectangle r = new Rectangle(NodeUtil.screenX(this), NodeUtil.screenY(this), this.getWidth(), this.getHeight());
+	LocalDateTime convertClickInSceneToDateTime(double x, double y) {
+		Rectangle r = new Rectangle(NodeUtil.sceneX(this), NodeUtil.sceneY(this), this.getWidth(), this.getHeight());
 		if (r.contains(x, y)) {
 			LocalDate localDate = localDateObjectProperty.get();
 			double lHeightOffset = (y -  r.getY());

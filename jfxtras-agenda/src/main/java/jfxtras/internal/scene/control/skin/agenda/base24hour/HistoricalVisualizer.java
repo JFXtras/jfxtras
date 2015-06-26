@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
  */
 class HistoricalVisualizer extends Rectangle
 {
-	public HistoricalVisualizer(AppointmentAbstractPane pane) // TBEE: pane must implement something to show its begin and end datetime, so this class knowns how to render itself?
+	HistoricalVisualizer(AppointmentAbstractPane pane) // TBEE: pane must implement something to show its begin and end datetime, so this class knowns how to render itself?
 	{
 		// 100% overlay the pane
 		setMouseTransparent(true);

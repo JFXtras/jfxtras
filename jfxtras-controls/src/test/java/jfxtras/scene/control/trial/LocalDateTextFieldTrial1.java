@@ -35,14 +35,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.LocalDateTextField;
 
 /**
  * 
  * @author Tom Eugelink
  *
  */
-public class CalendarTextFieldTrial1 extends Application {
+public class LocalDateTextFieldTrial1 extends Application {
 	
     public static void main(String[] args) {
         launch(args);       
@@ -54,12 +54,12 @@ public class CalendarTextFieldTrial1 extends Application {
 		FlowPane lFlowPane = new FlowPane();
 		
 		{
-			CalendarTextField lCalendarTextField = new CalendarTextField();
-			lFlowPane.getChildren().add(lCalendarTextField);
-			lCalendarTextField.focusedProperty().addListener( (observable) -> {
-				System.out.println("FOCUS " + lCalendarTextField.focusedProperty().get());
+			LocalDateTextField lLocalDateTextField = new LocalDateTextField();
+			lFlowPane.getChildren().add(lLocalDateTextField);
+			lLocalDateTextField.focusedProperty().addListener( (observable) -> {
+				System.out.println("FOCUS " + lLocalDateTextField.focusedProperty().get());
 			});
-			lCalendarTextField.tooltipProperty().set(new Tooltip("This is a custom tooltip"));
+			lLocalDateTextField.tooltipProperty().set(new Tooltip("This is a custom tooltip"));
 		}
 		
 		Button lButton = new Button("dummy");

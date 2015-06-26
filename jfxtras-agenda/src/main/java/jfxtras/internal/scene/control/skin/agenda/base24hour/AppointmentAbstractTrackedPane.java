@@ -10,12 +10,12 @@ import java.util.List;
 
 import jfxtras.scene.control.agenda.Agenda;
 
-abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstractPane {
+abstract class AppointmentAbstractTrackedPane extends AppointmentAbstractPane {
 	/**
 	 * @param calendar
 	 * @param appointment
 	 */
-	public AppointmentAbstractTrackedPane(LocalDate localDate, Agenda.Appointment appointment, LayoutHelp layoutHelp)
+	AppointmentAbstractTrackedPane(LocalDate localDate, Agenda.Appointment appointment, LayoutHelp layoutHelp)
 	{
 		super(appointment, layoutHelp);
 		
@@ -110,7 +110,7 @@ abstract public class AppointmentAbstractTrackedPane extends AppointmentAbstract
 	 * - and naturally the total width and height available to draw the day.
 	 * 
 	 */
-	static public List<? extends AppointmentAbstractTrackedPane> determineTracks(List<? extends AppointmentAbstractTrackedPane> appointmentAbstractTrackedPanes) {
+	static List<? extends AppointmentAbstractTrackedPane> determineTracks(List<? extends AppointmentAbstractTrackedPane> appointmentAbstractTrackedPanes) {
 		
 		// sort on start time and then decreasing duration
 		Collections.sort(appointmentAbstractTrackedPanes, new Comparator<AppointmentAbstractTrackedPane>() {

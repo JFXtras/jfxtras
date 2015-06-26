@@ -3,7 +3,6 @@ package jfxtras.internal.scene.control.skin.agenda.base24hour;
 import java.time.LocalDateTime;
 
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Skinnable;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
@@ -23,7 +22,7 @@ import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.util.NodeUtil;
 
 //TODO: internationalize the labels and tooltips
-public class AppointmentMenu extends Rectangle {
+class AppointmentMenu extends Rectangle {
 
 	/**
 	 * 
@@ -31,7 +30,7 @@ public class AppointmentMenu extends Rectangle {
 	 * @param appointment
 	 * @param layoutHelp
 	 */
-	public AppointmentMenu(Pane pane, Appointment appointment, LayoutHelp layoutHelp) {
+	AppointmentMenu(Pane pane, Appointment appointment, LayoutHelp layoutHelp) {
 		this.pane = pane;
 		this.appointment = appointment;
 		this.layoutHelp = layoutHelp;

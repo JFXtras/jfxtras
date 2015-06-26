@@ -4,9 +4,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 
-public class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
+class AppointmentTaskBodyPane extends AppointmentAbstractTrackedPane {
 
-	public AppointmentTaskBodyPane(Appointment appointment, LayoutHelp layoutHelp) {
+	AppointmentTaskBodyPane(Appointment appointment, LayoutHelp layoutHelp) {
 		super(appointment.getStartLocalDateTime().toLocalDate(), appointment, layoutHelp);
 		
 		// strings

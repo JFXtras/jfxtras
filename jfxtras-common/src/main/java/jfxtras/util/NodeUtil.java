@@ -57,13 +57,47 @@ public class NodeUtil {
         throw new AssertionError(); // not in this class either!
     }
 
+   /**
+    *
+    * @param node
+    * @return The X coordinate of the node within the parent.
+    */
+   static public double xInParent(Node node, Node parent) {
+	   double lX = 0;
+	   
+	   while (node != parent) {
+		   double lXDelta = node.getBoundsInParent().getMinX();
+		   lX += lXDelta;
+		   //System.out.println("xInParent " + node + " -> " + lXDelta + " " + lX);
+		   node = node.getParent();
+	   }
+       return lX;
+   }
+
+   /**
+   *
+   * @param node
+   * @return The Y coordinate of the node within the parent.
+   */
+  static public double yInParent(Node node, Node parent) {
+	   double lY = 0;
+	   
+	   while (node != parent) {
+		   double lYDelta = node.getBoundsInParent().getMinY();
+		   lY += lYDelta;
+		   //System.out.println("yInParent " + node + " -> " + lYDelta + " " + lY);
+		   node = node.getParent();
+	   }
+      return lY;
+  }
+
     /**
      *
      * @param node
      * @return The X screen coordinate of the node.
      */
     static public double screenX(Node node) {
-        return node.localToScene(node.getBoundsInLocal()).getMinX() + node.getScene().getX() + node.getScene().getWindow().getX();
+        return sceneX(node) + node.getScene().getWindow().getX();
     }
 
     /**
@@ -72,8 +106,26 @@ public class NodeUtil {
      * @return The Y screen coordinate of the node.
      */
     static public double screenY(Node node) {
-        return node.localToScene(node.getBoundsInLocal()).getMinY() + node.getScene().getY() + node.getScene().getWindow().getY();
+        return sceneY(node) + node.getScene().getWindow().getY();
     }
+
+    /**
+    *
+    * @param node
+    * @return The X scene coordinate of the node.
+    */
+   static public double sceneX(Node node) {
+       return node.localToScene(node.getBoundsInLocal()).getMinX() + node.getScene().getX();
+   }
+
+   /**
+    *
+    * @param node
+    * @return The Y scene coordinate of the node.
+    */
+   static public double sceneY(Node node) {
+       return node.localToScene(node.getBoundsInLocal()).getMinY() + node.getScene().getY();
+   }
 
     /**
      * Removes the specified node from its parent.
