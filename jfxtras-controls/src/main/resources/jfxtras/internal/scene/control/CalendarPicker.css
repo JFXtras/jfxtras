@@ -24,6 +24,12 @@
 	-fx-color: DARKGRAY; 
 }
 
+.CalendarPickerControlSkin .today-button { 
+    -fx-cursor: hand;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
 /* highlight today */
 .CalendarPickerControlSkin .highlight { 
 	-fx-font-weight: bold;
