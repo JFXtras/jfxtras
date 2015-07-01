@@ -316,7 +316,7 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		press(MouseButton.PRIMARY);
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
-		Assert.assertEquals("2013-01-01T20:23:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
+		Assert.assertEquals("2013-01-01T20:22:56.000", TestUtil.quickFormatCalendarAsDateTime(calendarPicker.getCalendar()));
 	}
 	
 	/**
