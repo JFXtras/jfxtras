@@ -336,9 +336,9 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		calendarPicker.localeProperty().set(getSkinnable().localeProperty().get());
 		calendarPicker.allowNullProperty().set(getSkinnable().allowNullProperty().get());
 		calendarPicker.calendarProperty().set(getSkinnable().calendarProperty().get());
-		calendarPicker.disabledCalendars().addAll(getSkinnable().disabledCalendars());
+                DateTimeToCalendarHelper.sync(calendarPicker.disabledCalendars(), getSkinnable().disabledCalendars());
+                DateTimeToCalendarHelper.sync(calendarPicker.highlightedCalendars(), getSkinnable().highlightedCalendars());
                 calendarPicker.displayedCalendar().set(getSkinnable().getDisplayedCalendar());
-		calendarPicker.highlightedCalendars().addAll(getSkinnable().highlightedCalendars());
 		calendarPicker.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
 			@Override
 			public Void call(CalendarRange calendarRange) {

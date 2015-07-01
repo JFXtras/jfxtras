@@ -1,7 +1,7 @@
 /**
  * DateTimeToCalendarHelper.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -676,9 +676,7 @@ public class DateTimeToCalendarHelper {
 	static public void sync(ObservableList<Calendar> calendars, ObservableList<Calendar> localDateTimes)
 	{
 		// initial values
-		for (Calendar lCalendar : localDateTimes) {
-			calendars.add(lCalendar);
-		}
+                calendars.addAll(localDateTimes);
 		
 		// forward changes from calendar
 		calendars.addListener( (ListChangeListener.Change<? extends Calendar> change) -> {

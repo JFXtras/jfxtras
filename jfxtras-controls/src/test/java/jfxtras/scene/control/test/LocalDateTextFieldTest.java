@@ -31,6 +31,8 @@ package jfxtras.scene.control.test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -40,12 +42,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
+import jfxtras.scene.control.LocalDatePicker;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.loadui.testfx.GuiTest.find;
 
 /**
  * Created by Samir Hadzic on 21-05-14.
@@ -124,6 +129,26 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(localDateTextField.isPickerShowing());
     }
 
+    @Test
+    public void disabledDateRuntime() {
+        localDateTextField.setLocalDateRangeCallback(new Callback<LocalDatePicker.LocalDateRange, Void>() {
+
+            @Override
+            public Void call(LocalDatePicker.LocalDateRange param) {
+
+                List<LocalDate> calendars = new ArrayList<>();
+                for (LocalDate current = param.getStartLocalDate(); current.compareTo(param.getEndLocalDate()) <= 0; current = current.plusDays(1)) {
+                    calendars.add(current);
+                }
+                localDateTextField.disabledLocalDates().setAll(calendars);
+                return null;
+            }
+        });
+        click(".icon");
+
+        Assert.assertTrue(find(".today").isDisabled());
+    }
+    
     /**
      *
      */
