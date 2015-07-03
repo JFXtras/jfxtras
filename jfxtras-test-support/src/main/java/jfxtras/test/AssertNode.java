@@ -89,6 +89,11 @@ public class AssertNode {
 		return this;
 	}
 	
+	public AssertNode assertTextText(String text) {
+		Assert.assertEquals(description, text, ((javafx.scene.text.Text)node).getText());
+		return this;
+	}
+	
 	static private double width(Node n) {
 		return n.getLayoutBounds().getWidth() + n.getLayoutBounds().getMinX();
 	}
@@ -97,7 +102,7 @@ public class AssertNode {
 		return n.getLayoutBounds().getHeight() + n.getLayoutBounds().getMinY();
 	}
 	
-	static public enum A {XYWH, ROTATE, SCALE, ARC, CLASS, CLASSNAME}
+	static public enum A {XYWH, ROTATE, SCALE, ARC, CLASS, CLASSNAME, TEXTTEXT}
 	static public void generateSource(String paneVariableName, List<Node> nodes, List<String> excludedNodeClasses, boolean newline, A... asserts) {
 		
 		// init
@@ -170,6 +175,9 @@ public class AssertNode {
 			}
 			if (a == A.CLASSNAME) {
 				System.out.print(newline + ".assertClassName(\"" + node.getClass().getName() + "\")");
+			}
+			if (a == A.TEXTTEXT) {
+				System.out.print(newline + ".assertTextText(\"" + ((javafx.scene.text.Text)node).getText() + "\")");
 			}
 		}
 	}
