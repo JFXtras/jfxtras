@@ -31,9 +31,6 @@ package jfxtras.scene.control.test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,16 +40,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
-import jfxtras.scene.control.LocalDatePicker;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.loadui.testfx.GuiTest.find;
 
 /**
  * Created by Samir Hadzic on 21-05-14.
@@ -153,8 +146,9 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".today").isDisabled());
         
     	// make today disabled   
-        localDateTextField.disabledLocalDates().add(LocalDate.now());
-        TestUtil.waitForPaintPulse();
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	localDateTextField.disabledLocalDates().add(LocalDate.now());
+        });
         
         // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").isDisabled());
@@ -182,8 +176,9 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".today").getStyleClass().contains("highlight"));
         
     	// make today Highlighted   
-        localDateTextField.highlightedLocalDates().add(LocalDate.now());
-        TestUtil.waitForPaintPulse();
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	localDateTextField.highlightedLocalDates().add(LocalDate.now());
+        });
         
         // make sure that today in the picker is Highlighted
         Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));

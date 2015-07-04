@@ -233,8 +233,9 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".today").isDisabled());
         
     	// make today disabled   
-        localDateTimeTextField.disabledLocalDateTimes().add(LocalDateTime.now());
-        TestUtil.waitForPaintPulse();
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	localDateTimeTextField.disabledLocalDateTimes().add(LocalDateTime.now());
+        });
         
         // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").isDisabled());
@@ -262,8 +263,9 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".today").getStyleClass().contains("highlight"));
         
     	// make today highlighted   
-        localDateTimeTextField.highlightedLocalDateTimes().add(LocalDateTime.now());
-        TestUtil.waitForPaintPulse();
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	localDateTimeTextField.highlightedLocalDateTimes().add(LocalDateTime.now());
+        });
         
         // make sure that today in the picker is highlighted
         Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));

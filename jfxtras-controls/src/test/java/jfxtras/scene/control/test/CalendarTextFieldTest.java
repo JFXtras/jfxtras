@@ -30,10 +30,8 @@
 package jfxtras.scene.control.test;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,8 +41,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
-import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
@@ -129,8 +125,9 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".today").isDisabled());
         
     	// make today highlighted   
-        calendarTextField.disabledCalendars().add(Calendar.getInstance());
-        TestUtil.waitForPaintPulse();
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	calendarTextField.disabledCalendars().add(Calendar.getInstance());
+        });
         
         // make sure that today in the picker is highlighted
         Assert.assertTrue(find(".today").isDisabled());
@@ -158,8 +155,9 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".today").getStyleClass().contains("highlight"));
         
     	// make today disabled   
-        calendarTextField.highlightedCalendars().add(Calendar.getInstance());
-        TestUtil.waitForPaintPulse();
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	calendarTextField.highlightedCalendars().add(Calendar.getInstance());
+        });
         
         // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
