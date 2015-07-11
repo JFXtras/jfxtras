@@ -51,10 +51,19 @@ import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 
 
 /**
- * LocalDateTime (JSR-310) text field component.
- * This component allows selecting of one date time.
+ * // These are used for the includes (shared with LocalDatePicker and LocalDateTimePicker) 
+ * :control: LocalDateTimeTextField 
+ * :calendar: localDateTime
+ * :calendars: localDateTimes
+ * :calendar_class: LocalDateTime
+ * :calendars_class: LocalDateTimes
  * 
- * @author Tom Eugelink
+ * = LocalDateTimeTextField
+ * 
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ * 
+ * == Icon
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
  */
 public class LocalDateTimeTextField extends Control
 {

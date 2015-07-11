@@ -46,7 +46,8 @@ import javafx.scene.control.Skin;
 import javafx.util.Callback;
 
 /**
- * // These are used for the includes (shared with LocalDatePicker and LocalDateTimePicker) 
+ * // These are used for the includes
+ * :control: CalendarPicker 
  * :calendar: calendar
  * :calendars: calendars
  * :calendar_class: Calendar
@@ -64,10 +65,7 @@ import javafx.util.Callback;
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  * 
  * == Immutability
- * Important note:
- * The calendar is treated (and should have been implemented in Java) as immutable. 
- * That means the properties of Calendar are not used to modify its value or listen for changes.
- * CalendarPicker will create a new instance (clone) each time a new value is put in the calendar property.
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/Calendar_immutability.adoc[]
  * 
  * @author Tom Eugelink
  */

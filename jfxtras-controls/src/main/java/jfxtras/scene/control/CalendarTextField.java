@@ -51,31 +51,25 @@ import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 
 /**
- * = CalendarTextField 
- *
- * A textField which displays a calendar (date) with a icon to pop up the CalendarPicker
- * Features relative mutation options, like -1 or -1d for plus or minus a day, -1m for minus one month, +1w, +2y, etc. 
- * # is today.
+ * // These are used for the includes
+ * :control: CalendarTextField 
+ * :calendar: calendar
+ * :calendars: calendars
+ * :calendar_class: Calendar
+ * :calendars_class: Calendars 
  * 
- * A lot of the properties are mirrors of the ones in the CalendarPicker. 
+ * = CalendarTextField
+ *
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
  * 
  * == Icon
- * To change the icon use:
- * [source,css]
- * --
- *     .CalendarTextField .icon  {
- *         -fx-image: url("AlternateCalendarIcon.jpg");
- *     }
- * --
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
  *
  * The textField can also show time by specifying a DateFormat accordingly, e.g. setDateFormat(SimpleDateFormat.getDateTimeInstance());
  * 
  * 
  * == Immutability
- * Important note:
- * The calendar is treated (and should have been implemented in Java) as immutable. 
- * That means the properties of Calendar are not used to modify its value or listen for changes.
- * CalendarTextField will create a new instance (clone) each time a new value is put in the calendar property.
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/Calendar_immutability.adoc[]
  */
 public class CalendarTextField extends Control
 {

@@ -1,0 +1,7 @@
+
+A textField which displays a {calendar} (date) with a icon to pop up a {calendar_class}Picker.
+Features relative mutation options, like typing -1 or -1d for plus or minus a day, -1m for minus one month, +1w, +2y, etc. 
+Typing # will set now / today.
+
+This control allows selecting of one {calendar}.
+A lot of the properties are mirrors of the ones in the {calendar_class}Picker. 

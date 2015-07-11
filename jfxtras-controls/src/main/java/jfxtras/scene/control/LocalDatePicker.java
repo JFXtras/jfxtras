@@ -43,7 +43,8 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDatePickerSkin;
 
 /**
- * // These are used for the includes (shared with LocalDatePicker and LocalDateTimePicker) 
+ * // These are used for the includes
+ * :control: LocalDatePicker 
  * :calendar: localDate
  * :calendars: localDates
  * :calendar_class: LocalDate
