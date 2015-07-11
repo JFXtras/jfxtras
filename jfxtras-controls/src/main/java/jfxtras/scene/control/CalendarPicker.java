@@ -46,55 +46,22 @@ import javafx.scene.control.Skin;
 import javafx.util.Callback;
 
 /**
+ * // These are used for the includes (shared with LocalDatePicker and LocalDateTimePicker) 
+ * :calendar: calendar
+ * :calendars: calendars
+ * :calendar_class: Calendar
+ * :calendars_class: Calendars
+ * 
  * = CalendarPicker 
- *
  * CalendarPicker is a control for selecting one, multiple or a range of dates, possibly including time. 
  * The name CalendarPicker is because it uses Java's Calendar (as opposed to Date) in its API to do so, mainly because Calendar holds Locale information and thus the days of the week can be rendered correctly.
  * 
- * - The calendar property holds the selected calendar, or when in range or multiple mode, the last selected calendar. 
- * - The calendars list holds all selected calendars. 
- * - If one, multiple or more dates can be selected is specified using the mode property.
- * - If it is possible to deselect all calendars can be set using the allowNull property.
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_modeProperty.adoc[]
  * - The showTime property enables the embedded time picker, so the time part of a Calendar can be set as well. This is only possible in SINGLE mode.
- * - There is a disabledCalendars list that will allow specifying calendars that are not selectable (see callback below). 
- * - There is a highlightedCalendars list that will allow specifying calendars that are hightlighted (see callback below).  
  * 
  * == Callback
- * 
- * === calendarRangeCallback
- * The user is allowed to navigate through all eternity. 
- * So if there are many possible meaningful dates, all have to be fetched and populated in the calendars, disabledCalenders and highlightedCalendars lists.
- * This could become quite a performance and memory issue.
- * In order to deal with this situation, the calendarRangeCallback property can be used.
- * 
- * The calendarRangeCallback is called each time a different range is shown in the picker and the CalendarRange parameter has the begin and end of the range that is going to be shown. 
- * By registering to the calendarRangeCallback, it is possible to populate the lists with the values relevant to the range.
- * 
- * ==== Example
- * [source,java]
- * --
- *     calendarPicker.setCalendarRangeCallback( (range) -> {
- *         calendarPicker.disabledCalenders().clear;
- *         calendarPicker.disabledCalenders.addAll( BusinessModel.findDisabledCalendarsIn(range.getStartCalendar(), range.getEndCalendar() );
- *     });
- * --
- *
- * === valueValidationCallback
- * Using the disabledCalendars collection only makes sense in non-time mode. 
- * When time is shown, a lot of possibles times (up to milliseconds) can be selected on a single date, so populating the disabledCalendars list with all possible values is practically impossible.
- * To still be able to prevent certain Calendars to be selected, the valueValidationCallback is an alternative.      
- * It allows, prior to a Calendar being selected, to check if it is allowed.
- * 
- * ==== Example
- * [source,java]
- * --
- *     calendarPicker.valueValidationCallback( (calendar) -> {
- *         if (some_condition(calendar)) {
- *             return false; // not allowed
- *         }
- *         return true; // allowed
- *     });
- * --
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  * 
  * == Immutability
  * Important note:
@@ -150,7 +117,7 @@ public class CalendarPicker extends Control
 	/** Id: for a fluent API */
 	public CalendarPicker withId(String value) { setId(value); return this; }
 
-	/** Calendar: the selected calendar, or when in RANGE or MULTIPLE mode, the last selected calendar. */
+	/** Calendar: the selected date, or when in RANGE or MULTIPLE mode, the last selected date. */
 	public ObjectProperty<Calendar> calendarProperty() { return calendarObjectProperty; }
 	final private ObjectProperty<Calendar> calendarObjectProperty = new SimpleObjectProperty<Calendar>(this, "calendar")
 	{
@@ -259,7 +226,7 @@ public class CalendarPicker extends Control
 	public void setShowTime(Boolean value) { showTimeObjectProperty.setValue(value); }
 	public CalendarPicker withShowTime(Boolean value) { setShowTime(value); return this; }
 
-	/** AllowNull: indicates if no selected calendar (resulting in null in the calendar property) is an allowed state. */
+	/** AllowNull: indicates if no selected date (resulting in null in the calendar property) is an allowed state. */
     public BooleanProperty allowNullProperty() { return allowNullProperty; }
     volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true)
     {
@@ -276,11 +243,11 @@ public class CalendarPicker extends Control
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public CalendarPicker withAllowNull(boolean value) { setAllowNull(value); return this; }
 
-	/** disabledCalendars: a list of calendars that cannot be selected. */
+	/** disabledCalendars: a list of dates that cannot be selected. */
 	public ObservableList<Calendar> disabledCalendars() { return disabledCalendars; }
 	final private ObservableList<Calendar> disabledCalendars =  javafx.collections.FXCollections.observableArrayList();
 
-	/** highlightedCalendars: a list of calendars that are rendered with the highlight class added. This can then be styled using CSS. */
+	/** highlightedCalendars: a list of dates that are rendered with the highlight class added. This can then be styled using CSS. */
 	public ObservableList<Calendar> highlightedCalendars() { return highlightedCalendars; }
 	final private ObservableList<Calendar> highlightedCalendars =  javafx.collections.FXCollections.observableArrayList();
 

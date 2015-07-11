@@ -51,18 +51,31 @@ import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 
 /**
- * A textField which displays a calendar (date) with a icon to popup the CalendarPicker
- * The calendar is (and should) be treated as immutable. That means the Calendar's setters are not used, but when a value is changed a new instance (clone) is put in the calendar property.
- * Features relative mutation options, like -1 or -1d for yesterday, -1m for minus one month, +1w, +2y. # is today.
+ * = CalendarTextField 
+ *
+ * A textField which displays a calendar (date) with a icon to pop up the CalendarPicker
+ * Features relative mutation options, like -1 or -1d for plus or minus a day, -1m for minus one month, +1w, +2y, etc. 
+ * # is today.
  * 
+ * A lot of the properties are mirrors of the ones in the CalendarPicker. 
+ * 
+ * == Icon
  * To change the icon use:
- * .CalendarTextField .icon  {
- *     -fx-image: url("AlternateCalendarIcon.jpg");
- * }
+ * [source,css]
+ * --
+ *     .CalendarTextField .icon  {
+ *         -fx-image: url("AlternateCalendarIcon.jpg");
+ *     }
+ * --
  *
  * The textField can also show time by specifying a DateFormat accordingly, e.g. setDateFormat(SimpleDateFormat.getDateTimeInstance());
  * 
- * @author Tom Eugelink
+ * 
+ * == Immutability
+ * Important note:
+ * The calendar is treated (and should have been implemented in Java) as immutable. 
+ * That means the properties of Calendar are not used to modify its value or listen for changes.
+ * CalendarTextField will create a new instance (clone) each time a new value is put in the calendar property.
  */
 public class CalendarTextField extends Control
 {
