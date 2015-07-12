@@ -59,15 +59,11 @@ import jfxtras.scene.control.CalendarPicker.CalendarRange;
  * :calendars_class: Calendars 
  * 
  * = CalendarTextField
- *
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
  * 
  * == Icon
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
  *
- * The textField can also show time by specifying a DateFormat accordingly, e.g. setDateFormat(SimpleDateFormat.getDateTimeInstance());
- * 
- * 
  * == Immutability
  * include::jfxtras-controls/src/main/asciidoc/scene/control/Calendar_immutability.adoc[]
  */

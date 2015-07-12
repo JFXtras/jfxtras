@@ -5,3 +5,5 @@ Typing # will set now / today.
 
 This control allows selecting of one {calendar}.
 A lot of the properties are mirrors of the ones in the {calendar_class}Picker. 
+
+The textField can also show time by specifying a DateFormat accordingly, e.g. setDateFormat(SimpleDateFormat.getDateTimeInstance());

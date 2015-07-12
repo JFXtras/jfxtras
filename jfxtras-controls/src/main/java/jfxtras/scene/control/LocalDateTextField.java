@@ -59,7 +59,6 @@ import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
  * :calendars_class: LocalDates
  * 
  * = LocalDateTextField
- * 
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
  * 
  * == Icon
