@@ -1,7 +1,6 @@
 To change the icon use:
 
-// if CSS is used, the attribute replacement does not work
-[source,xml,subs="+attributes"]
+[source,css,subs="attributes+"]
 ----
     .{control} .icon  {
         -fx-image: url("AlternateCalendarIcon.jpg");
