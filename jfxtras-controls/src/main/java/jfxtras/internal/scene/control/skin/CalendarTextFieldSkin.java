@@ -349,6 +349,16 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 				return lCallback.call(calendarRange);
 			}
 		});
+		calendarPicker.setValueValidationCallback(new Callback<Calendar, Boolean>() {
+			@Override
+			public Boolean call(Calendar calendar) {
+				Callback<Calendar, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+				if (lCallback == null) {
+					return true;
+				}
+				return lCallback.call(calendar);
+			}
+		});
 		
 		// TODO: replace with PopupControl because that is styleable (see C:/Users/user/Documents/openjfx/8.0rt/modules/controls/src/main/java/com/sun/javafx/scene/control/skin/ComboBoxPopupControl.java)
 //			popup = new PopupControl() {

@@ -53,6 +53,7 @@ import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 /**
  * // These are used for the includes (shared with LocalDatePicker and LocalDateTimePicker) 
  * :control: LocalDateTimeTextField 
+ * :control_instance: localDateTimeTextField 
  * :calendar: localDateTime
  * :calendars: localDateTimes
  * :calendar_class: LocalDateTime
@@ -60,6 +61,9 @@ import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
  * 
  * = LocalDateTimeTextField
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ * 
+ * == Callback
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  * 
  * == Icon
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
@@ -181,20 +185,30 @@ public class LocalDateTimeTextField extends Control
 	public Callback<LocalDateTimeRange, Void> getLocalDateTimeRangeCallback() { return this.localDateTimeRangeCallbackObjectProperty.getValue(); }
 	public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
 	public LocalDateTimeTextField withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
+	
+	/** valueValidationCallback: 
+	 * This callback allows a developer deny or accept a value just prior before it gets added.
+	 * Returning true will allow the value.
+	 */
+	public ObjectProperty<Callback<LocalDateTime, Boolean>> valueValidationCallbackProperty() { return valueValidationCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDateTime, Boolean>> valueValidationCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTime, Boolean>>(this, "valueValidationCallback", null);
+	public Callback<LocalDateTime, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
+	public void setValueValidationCallback(Callback<LocalDateTime, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
+	public LocalDateTimeTextField withValueValidationCallback(Callback<LocalDateTime, Boolean> value) { setValueValidationCallback(value); return this; }
 
-        /**
+    /**
 	 * DisplayedLocalDateTime:
 	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
 	 * The localDateTime should not be modified using any of its add or set methods (it should be considered immutable)
 	 */
 	public ObjectProperty<LocalDateTime> displayedLocalDateTime() { return displayedLocalDateTimeObjectProperty; }
-	volatile private ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedCalendar");
+	volatile private ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedLocalDateTimeRange");
 	public LocalDateTime getDisplayedLocalDateTime() { return displayedLocalDateTimeObjectProperty.getValue(); }
 	public void setDisplayedLocalDateTime(LocalDateTime value) { displayedLocalDateTimeObjectProperty.setValue(value); }
 	public LocalDateTimeTextField withDisplayedLocalDateTime(LocalDateTime value) { setDisplayedLocalDateTime(value); return this; }
 	private void constructDisplayedLocalDateTime()
 	{
-		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
+		// init here, so deriveDisplayedLocalDateTimeRange in the skin will modify it accordingly
 		setDisplayedLocalDateTime(LocalDateTime.now());
 	}
         

@@ -45,6 +45,7 @@ import jfxtras.internal.scene.control.skin.LocalDatePickerSkin;
 /**
  * // These are used for the includes
  * :control: LocalDatePicker 
+ * :control_instance: localDatePicker 
  * :calendar: localDate
  * :calendars: localDates
  * :calendar_class: LocalDate

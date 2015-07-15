@@ -1,4 +1,5 @@
-- The {calendar} property holds the selected {calendar}, or when in range or multiple mode, the last selected {calendar}. 
+
+- The {calendar} property holds the selected {calendar_class}. 
 - The control can be set to allow no selection at all through the allowNull property.
 - There is a disabled{calendars_class} list that will allow specifying {calendars} that are not selectable (see callback below). 
 - There is a highlighted{calendars_class} list that will allow specifying {calendars} that are hightlighted (see callback below).  

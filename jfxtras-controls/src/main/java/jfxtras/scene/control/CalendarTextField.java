@@ -53,6 +53,7 @@ import jfxtras.scene.control.CalendarPicker.CalendarRange;
 /**
  * // These are used for the includes
  * :control: CalendarTextField 
+ * :control_instance: calendarTextField 
  * :calendar: calendar
  * :calendars: calendars
  * :calendar_class: Calendar
@@ -60,6 +61,9 @@ import jfxtras.scene.control.CalendarPicker.CalendarRange;
  * 
  * = CalendarTextField
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ * 
+ * == Callback
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  * 
  * == Icon
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
@@ -228,8 +232,18 @@ public class CalendarTextField extends Control
 	public Callback<CalendarRange, Void> getCalendarRangeCallback() { return this.calendarRangeCallbackObjectProperty.getValue(); }
 	public void setCalendarRangeCallback(Callback<CalendarRange, Void> value) { this.calendarRangeCallbackObjectProperty.setValue(value); }
 	public CalendarTextField withCalendarRangeCallback(Callback<CalendarRange, Void> value) { setCalendarRangeCallback(value); return this; }
+	
+	/** valueValidationCallback: 
+	 * This callback allows a developer deny or accept a value just prior before it gets added.
+	 * Returning true will allow the value.
+	 */
+	public ObjectProperty<Callback<Calendar, Boolean>> valueValidationCallbackProperty() { return valueValidationCallbackObjectProperty; }
+	final private ObjectProperty<Callback<Calendar, Boolean>> valueValidationCallbackObjectProperty = new SimpleObjectProperty<Callback<Calendar, Boolean>>(this, "valueValidationCallback", null);
+	public Callback<Calendar, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
+	public void setValueValidationCallback(Callback<Calendar, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
+	public CalendarTextField withValueValidationCallback(Callback<Calendar, Boolean> value) { setValueValidationCallback(value); return this; }
 
-        /**
+    /**
 	 * DisplayedCalendar:
 	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
 	 * The calendar should not be modified using any of its add or set methods (it should be considered immutable)

@@ -48,6 +48,7 @@ import javafx.util.Callback;
 /**
  * // These are used for the includes
  * :control: CalendarPicker 
+ * :control_instance: calendarPicker 
  * :calendar: calendar
  * :calendars: calendars
  * :calendar_class: Calendar

@@ -53,6 +53,7 @@ import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
 /**
  * // These are used for the includes
  * :control: LocalDateTextField 
+ * :control_instance: localDateTextField 
  * :calendar: localDate
  * :calendars: localDates
  * :calendar_class: LocalDate
@@ -60,6 +61,9 @@ import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
  * 
  * = LocalDateTextField
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ * 
+ * == Callback
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  * 
  * == Icon
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
@@ -176,7 +180,7 @@ public class LocalDateTextField extends Control
 	private final ObservableList<LocalDate> disabledLocalDates =  javafx.collections.FXCollections.observableArrayList();
 	
 	/** localDateRangeCallback: 
-	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
+	 * This callback allows a developer to limit the amount of LocalDateTimeRanges put in any of the collections.
 	 * It is called just before a new range is being displayed, so the developer can change the values in the collections like highlighted or disabled. 
 	 */
 	public ObjectProperty<Callback<LocalDateRange, Void>> LocalDateRangeCallbackProperty() { return localDateRangeCallbackObjectProperty; }
@@ -184,20 +188,30 @@ public class LocalDateTextField extends Control
 	public Callback<LocalDateRange, Void> getLocalDateRangeCallback() { return this.localDateRangeCallbackObjectProperty.getValue(); }
 	public void setLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { this.localDateRangeCallbackObjectProperty.setValue(value); }
 	public LocalDateTextField withLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { setLocalDateRangeCallback(value); return this; }
+	
+	/** valueValidationCallback: 
+	 * This callback allows a developer deny or accept a value just prior before it gets added.
+	 * Returning true will allow the value.
+	 */
+	public ObjectProperty<Callback<LocalDate, Boolean>> valueValidationCallbackProperty() { return valueValidationCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDate, Boolean>> valueValidationCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDate, Boolean>>(this, "valueValidationCallback", null);
+	public Callback<LocalDate, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
+	public void setValueValidationCallback(Callback<LocalDate, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
+	public LocalDateTextField withValueValidationCallback(Callback<LocalDate, Boolean> value) { setValueValidationCallback(value); return this; }
 
-        /**
+    /**
 	 * DisplayedLocalDate:
 	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
 	 * The localDate should not be modified using any of its add or set methods (it should be considered immutable)
 	 */
 	public ObjectProperty<LocalDate> displayedLocalDate() { return displayedLocalDateObjectProperty; }
-	volatile private ObjectProperty<LocalDate> displayedLocalDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "displayedCalendar");
+	volatile private ObjectProperty<LocalDate> displayedLocalDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "displayedLocalDate");
 	public LocalDate getDisplayedLocalDate() { return displayedLocalDateObjectProperty.getValue(); }
 	public void setDisplayedLocalDate(LocalDate value) { displayedLocalDateObjectProperty.setValue(value); }
 	public LocalDateTextField withDisplayedLocalDate(LocalDate value) { setDisplayedLocalDate(value); return this; }
 	private void constructDisplayedLocalDate()
 	{
-		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
+		// init here, so deriveDisplayedLocalDate in the skin will modify it accordingly
 		setDisplayedLocalDate(LocalDate.now());
 	}
         
