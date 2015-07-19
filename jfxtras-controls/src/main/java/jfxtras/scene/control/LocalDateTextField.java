@@ -58,12 +58,14 @@ import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
  * :calendars: localDates
  * :calendar_class: LocalDate
  * :calendars_class: LocalDates
+ * :dateFormat: dateTimeFormatter
+ * :dateFormats: dateTimeFormaters
  * 
  * = LocalDateTextField
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
  * 
  * == Callback
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
  * 
  * == Icon
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
@@ -107,7 +109,7 @@ public class LocalDateTextField extends Control
 	// ==================================================================================================================
 	// PROPERTIES
 	
-	/** LocalDate: */
+	/** LocalDate: the selected date. */
 	public ObjectProperty<LocalDate> localDateProperty() { return localDateObjectProperty; }
 	private final ObjectProperty<LocalDate> localDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "localDate");
 	public LocalDate getLocalDate() { return localDateObjectProperty.getValue(); }
@@ -171,11 +173,11 @@ public class LocalDateTextField extends Control
 	public void setParseErrorCallback(Callback<Throwable, Void> value) { this.parseErrorCallbackObjectProperty.setValue(value); }
 	public LocalDateTextField withParseErrorCallback(Callback<Throwable, Void> value) { setParseErrorCallback(value); return this; }
 	
-	/** highlightedLocalDateTimes: */
+	/** highlightedLocalDateTimes: a list of dates that are rendered with the highlight class added. This can then be styled using CSS. */
 	public ObservableList<LocalDate> highlightedLocalDates() { return highlightedLocalDates; }
 	private final ObservableList<LocalDate> highlightedLocalDates =  javafx.collections.FXCollections.observableArrayList();
 
-	/** disabledLocalDates: */
+	/** disabledLocalDates: a list of dates that cannot be selected. */
 	public ObservableList<LocalDate> disabledLocalDates() { return disabledLocalDates; }
 	private final ObservableList<LocalDate> disabledLocalDates =  javafx.collections.FXCollections.observableArrayList();
 	
@@ -215,9 +217,9 @@ public class LocalDateTextField extends Control
 		setDisplayedLocalDate(LocalDate.now());
 	}
         
-	/** is null allowed */
-    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
+	/** AllowNull: indicates if no selected date (resulting in null in the calendar property) is an allowed state. */
     public BooleanProperty allowNullProperty() { return allowNullProperty; }
+    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
     public boolean getAllowNull() { return allowNullProperty.get(); }
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public LocalDateTextField withAllowNull(boolean value) { setAllowNull(value); return this; }

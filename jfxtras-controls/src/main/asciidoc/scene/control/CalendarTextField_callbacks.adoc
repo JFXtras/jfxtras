@@ -1,0 +1,15 @@
+A lot of the callbacks are mirrors of the ones in the {calendar_class}Picker. 
+include::CalendarPicker_callbacks.adoc[]
+
+=== parseErrorCallback
+The parseErrorCallback can be used to react to typed text that is not interpretable by the {dataFormats}.
+The control normally will print a stack dump on the console, but the callback can be used to show an error message.
+
+==== Example
+[source,java,subs="attributes+"]
+--
+    {control_instance}.parseErrorCallback( (throwable) -> {
+        // show error here
+    });
+--
+

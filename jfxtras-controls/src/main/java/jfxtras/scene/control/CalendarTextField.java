@@ -58,12 +58,15 @@ import jfxtras.scene.control.CalendarPicker.CalendarRange;
  * :calendars: calendars
  * :calendar_class: Calendar
  * :calendars_class: Calendars 
+ * :dateFormat: dateFormat
+ * :dateFormats: dateFormats
  * 
  * = CalendarTextField
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
- * 
+ * The textField can also show time by specifying a DateFormat accordingly, e.g. setDateFormat(SimpleDateFormat.getDateTimeInstance());
+ *
  * == Callback
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
  * 
  * == Icon
  * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
@@ -132,7 +135,7 @@ public class CalendarTextField extends Control
 	/** Id */
 	public CalendarTextField withId(String value) { setId(value); return this; }
 
-	/** Calendar: */
+	/** Calendar: the selected date. */
 	public ObjectProperty<Calendar> calendarProperty() { return calendarObjectProperty; }
 	final private ObjectProperty<Calendar> calendarObjectProperty = new SimpleObjectProperty<Calendar>(this, "calendar", null);
 	public Calendar getCalendar() { return calendarObjectProperty.getValue(); }
@@ -215,13 +218,13 @@ public class CalendarTextField extends Control
 	public void setParseErrorCallback(Callback<Throwable, Void> value) { this.parseErrorCallbackObjectProperty.setValue(value); }
 	public CalendarTextField withParseErrorCallback(Callback<Throwable, Void> value) { setParseErrorCallback(value); return this; }
 
-    /** disabledCalendars: */
-	public ObservableList<Calendar> disabledCalendars() { return disabledCalendars; }
-	final private ObservableList<Calendar> disabledCalendars =  javafx.collections.FXCollections.observableArrayList();
-
-	/** highlightedCalendars: */
+	/** highlightedCalendars: a list of dates that are rendered with the highlight class added. This can then be styled using CSS. */
 	public ObservableList<Calendar> highlightedCalendars() { return highlightedCalendars; }
 	final private ObservableList<Calendar> highlightedCalendars =  javafx.collections.FXCollections.observableArrayList();
+
+    /** disabledCalendars: a list of dates that cannot be selected. */
+	public ObservableList<Calendar> disabledCalendars() { return disabledCalendars; }
+	final private ObservableList<Calendar> disabledCalendars =  javafx.collections.FXCollections.observableArrayList();
 
 	/** calendarRangeCallback: 
 	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
@@ -259,7 +262,8 @@ public class CalendarTextField extends Control
 		setDisplayedCalendar(Calendar.getInstance(getLocale()));
 	}
         
-	/** is null allowed */
+	/** AllowNull: indicates if no selected date (resulting in null in the calendar property) is an allowed state. */
+    public BooleanProperty allowNullProperty() { return allowNullProperty; }
     volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true)
     {
 		public void set(boolean value)
@@ -271,7 +275,6 @@ public class CalendarTextField extends Control
 			}
 		}
 	};
-    public BooleanProperty allowNullProperty() { return allowNullProperty; }
     public boolean getAllowNull() { return allowNullProperty.get(); }
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public CalendarTextField withAllowNull(boolean value) { setAllowNull(value); return this; }

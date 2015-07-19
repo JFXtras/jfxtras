@@ -317,11 +317,11 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		
 		// double click here to show today
 		todayButton = new Button("   ");
-                todayButton.getStyleClass().add("today-button");
-                todayButton.setMinSize(16, 16);
+        todayButton.getStyleClass().add("today-button");
+        todayButton.setMinSize(16, 16);
 		todayButton.setOnAction((ActionEvent event) -> {
-                    setDisplayedCalendarToToday();
-                });
+            setDisplayedCalendarToToday();
+        });
 		
 		// weekday labels
 		for (int i = 0; i < 7; i++)
