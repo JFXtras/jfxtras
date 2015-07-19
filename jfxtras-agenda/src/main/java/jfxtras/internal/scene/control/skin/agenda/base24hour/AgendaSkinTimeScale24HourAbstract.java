@@ -42,6 +42,7 @@ import java.util.TimeZone;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.print.PageLayout;
 import javafx.print.PrinterJob;
@@ -117,6 +118,7 @@ implements AgendaSkin
 		@Override
 		public void invalidated(Observable arg0) {
 			assignDateToDayAndHeaderPanes();
+			scrollWeekpaneToShowDisplayedTime();
 			setupAppointments();
 		}
 	};
@@ -277,6 +279,21 @@ implements AgendaSkin
 	private ScrollPane weekScrollPane = null;
 	private WeekBodyPane weekBodyPane = null;
 
+	
+	/**
+	 * 
+	 */
+	private void scrollWeekpaneToShowDisplayedTime() {
+		// calculate the offset of the displayed time from midnight
+		LocalDateTime lDisplayedLocalDateTime = getSkinnable().displayedLocalDateTime().get();
+		double lOffsetInMinutes = (lDisplayedLocalDateTime.getHour() * 60) + lDisplayedLocalDateTime.getMinute();
+		
+		// calculate the position of the scrollbar that matches that offset from midnight
+		double lScrollRange = weekScrollPane.getVmax() - weekScrollPane.getVmin();
+		double lValue = lScrollRange * lOffsetInMinutes / (24.0 * 60.0);
+		weekScrollPane.setVvalue(lValue);
+	}
+	
 	// ==================================================================================================================
 	// PANES
 	
