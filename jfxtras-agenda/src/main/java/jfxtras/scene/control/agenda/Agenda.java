@@ -52,46 +52,78 @@ import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
+ * = Agenda
+ * 
  * This controls renders appointments similar to Google Calendar.
  * Normally this would be called a Calendar, but since there are controls like CalendarPicker, this would be confusing, hence the name "Agenda".
+ * [source,java]
+ * --
+ *     // create Agenda
+ *     Agenda agenda = new Agenda();
+ *
+ *     // add an appointment
+ *     agenda.appointments().addAll(
+ *         new Agenda.AppointmentImplLocal()
+ *             .withStartLocalDateTime(LocalDate.now().atTime(4, 00))
+ *             .withEndLocalDateTime(LocalDate.now().atTime(15, 30))
+ *             .withDescription("It's time")
+ *             .withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass("group1")) // you should use a map of AppointmentGroups
+ *     );
+ *           
+ *    // show it
+ *    primaryStage.setScene(new Scene(agenda, 800, 600));
+ *    primaryStage.show();
+ * --
+ *
+ * == Properties:
  * 
+ * - appointments: a list of instances of the Appointment interface, to be rendered by Agenda.
+ * - appointmentGroups: a list of AppointmentGroup implementations, for grouping appointments together (e.g. render in the same color).
+ * - displayedLocalDateTime: the moment in time that is rendered, depending on the active skin this can be different time frames (day, week, etc).
+ * - locale: used to determine the first-day-of-week and week day labels.
+ * - allowDragging: allow appointments to be dragged by the mouse.
+ * - allowResize: allow appointments to be resized using the mouse.
+ * - selectedAppointments: appointments that are selected.
+ *  
+ * == Appointments
  * The control has a list of appointments (classes implementing the Agenda.Appointment interface) and a LocalDateTime (date) that should be displayed.
- * The the appropriate appointments for the displayed time frame will be rendered.
- * The coder could provide all appointments in one big list, but that may be a bit memory heavy.
- * An alternative is to register to the displayedCalendar property and upon change update the appointment collection to match the time frame.
+ * The appropriate appointments for the to-be-displayed time (based on the currently active skin) will be rendered.
+ * The coder could provide all appointments in one big list, but that probably will be a memory heavy.
+ * The better approach is to register to the localDateTimeRangeCallbackProperty, and update the appointment collection to match the time frame.
  * 
  * Agenda.Appointment can be provided in three ways:
  * 
- * - through Calendar values (by implementing the *StartTime methods or use the Agenda.AppointmentImpl class)
- * - through ZonedDateTime values (by implementing the *ZonedDateTime methods or use the Agenda.AppointmentImplZoned class)
- * - through LocalDateTime values (by implementing the *LocalDateTime methods or use the Agenda.AppointmentImplLocal class)
+ * - through Calendar values (by implementing the *StartTime methods in Appointment or use the Agenda.AppointmentImpl class)
+ * - through ZonedDateTime values (by implementing the *ZonedDateTime methods in Appointment or use the Agenda.AppointmentImplZoned class)
+ * - through LocalDateTime values (by implementing the *LocalDateTime methods in Appointment or use the Agenda.AppointmentImplLocal class)
  * 
- * Agenda uses LocalDateTime for render the appointments, the Agenda.Appointment interface contains default implementations for converting all the other presentations to LocalDateTime.
- * After all Agenda must display all appointments in the same "time scale", it simply is not possible to mix different time zones in one view.
+ * == Calendar, LocalDateTime or ZonedDateTime
+ * Agenda uses LocalDateTime for render the appointments.
+ * Since Agenda must display all appointments in the same "time scale", it simply is not possible to mix different time zones in one view.
  * Google Calendar does this by converting everything to UTC (Coordinated Universal Time, previously know as Greenwich Mean time, or GMT), Agenda does this by converting Calendars to ZonedDateTimes, and ZonedDateTimes to LocalDateTimes.
- * The code used to convert ZonedDateTime to LocalDateTime is somewhat crude and possibly too simplistic, you may want to provide more intelligent conversion.
+ * The code used to convert ZonedDateTime to LocalDateTime is somewhat crude and possibly too simplistic, you may want to provide more intelligent conversion by overriding the default methods in the Appointment interface.
  * But you can provide the data in any of the three types, just as long as you understand that LocalDateTime is what is used to render, and what is communicated by Agenda.
  *
- * Each appointment must have an appointment group, this is a class implementing the Agenda.AppointmentGroup interface (Agenda.AppointmentGroupImpl is available).
+ * == AppointmentGroup
+ * Each appointment should have an appointment group, this is a class implementing the Agenda.AppointmentGroup interface (Agenda.AppointmentGroupImpl is available).
  * The most important thing this class provides is a style class name which takes care of the rendering (color) of all appointments in that group.
  * Per default agenda has style classes defined, called group0 .. group23. 
  * 
- * A new appointment can be added by click-and-drag, but only if a createAppointmentCallbackProperty() is set. 
- * This method should return a new appointment object, for example:
+ * == Callbacks
+ * 
+ * === Action callback
+ * The actionCallback property is called when the 'action' is executed on a appointment.
+ * Per default this is a double click.
  * [source,java]
  * --
- *      agenda.newAppointmentCallbackProperty().set(new Callback<Agenda.CalendarRange, Agenda.Appointment>() {
- *           @Override
- *           public Agenda.Appointment call(Agenda.CalendarRange calendarRange) {
- *               return new Agenda.AppointmentImpl()
- *                       .withStartCalendar(calendarRange.getStartCalendar())
- *                       .withEndCalendar(calendarRange.getEndCalendar())
- *                       .withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass("group1")); // it is better to have a map of appointment groups to get from
- *           }
+ *      agenda.actionCallback().set( (appointment) -> {
+ *           System.out.println("Action was triggered on " + appointment.getDescription());
  *       });
  * --
  * 
- * or in Java 8 style and using its Date API:
+ * === Adding appointments using the mouse
+ * A new appointment can be added by click-and-drag, but only if a createAppointmentCallbackProperty() is set. 
+ * This method should return a new appointment object, for example:
  * [source,java]
  * --
  *      agenda.newAppointmentCallbackProperty().set( (localDateTimeRange) -> {
@@ -101,7 +133,12 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  *                   .withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass("group1")); // it is better to have a map of appointment groups to get from
  *       });
  * --
-
+ * 
+ * === Editing appointments
+ * Agenda has a default popup the allows the primarty properties of appointments to be edited, but maybe you want to do something yourself.
+ * If so, you need to register to the editAppointmentCallback, and open your own popup.
+ * Because Agenda does not dictate an event/callback mechanism in the implementation of Appointment, it has no way of being informed of changes on the appointment.
+ * So when the custom edit is done, make sure that control gets updated (if this does not happen automatically through any of the existing listeners) by calling refresh(). 
  * 
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
@@ -206,14 +243,14 @@ public class Agenda extends Control
 	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
 	public Agenda withLocale(Locale value) { setLocale(value); return this; } 
 
-	/** AllowDragging:  */
+	/** AllowDragging: allow appointments being dragged by the mouse */
 	public SimpleBooleanProperty allowDraggingProperty() { return allowDraggingObjectProperty; }
 	final private SimpleBooleanProperty allowDraggingObjectProperty = new SimpleBooleanProperty(this, "allowDragging", true);
 	public boolean getAllowDragging() { return allowDraggingObjectProperty.getValue(); }
 	public void setAllowDragging(boolean value) { allowDraggingObjectProperty.setValue(value); }
 	public Agenda withAllowDragging(boolean value) { setAllowDragging(value); return this; } 
 
-	/** AllowResize:  */
+	/** AllowResize: allow appointments to be resized using the mouse */
 	public SimpleBooleanProperty allowResizeProperty() { return allowResizeObjectProperty; }
 	final private SimpleBooleanProperty allowResizeObjectProperty = new SimpleBooleanProperty(this, "allowResize", true);
 	public boolean getAllowResize() { return allowResizeObjectProperty.getValue(); }
@@ -242,7 +279,7 @@ public class Agenda extends Control
 	public void setDisplayedLocalDateTime(LocalDateTime value) { displayedLocalDateTimeObjectProperty.setValue(value); }
 	public Agenda withDisplayedLocalDateTime(LocalDateTime value) { setDisplayedLocalDateTime(value); return this; }
 	
-	/** selectedAppointments: */
+	/** selectedAppointments: a list of selected appointments */
 	public ObservableList<Appointment> selectedAppointments() { return selectedAppointments; }
 	final private ObservableList<Appointment> selectedAppointments =  javafx.collections.FXCollections.observableArrayList();
 
@@ -274,21 +311,6 @@ public class Agenda extends Control
 	 * The calendars in the provided range specify the start and end times, they can be used to create the new appointment (they do not need to be cloned).
 	 * Null may be returned to indicate that no appointment was created.
 	 * 
-	 * Example:
-		lAgenda.createAppointmentCallbackProperty().set(new Callback&lt;Agenda.CalendarRange, Appointment&gt;()
-		{
-            &#064;Override
-			public Void call(CalendarRange calendarRange)
-			{
-				return new Agenda.AppointmentImpl()
-					.withStartTime(calendarRange.start)
-					.withEndTime(calendarRange.end)
-					.withSummary("new")
-					.withDescription("new")
-					.withStyleClass("group1");
-			}
-		});
-	 * 
 	 */
 	@Deprecated public ObjectProperty<Callback<CalendarRange, Appointment>> createAppointmentCallbackProperty() { return createAppointmentCallbackObjectProperty; }
 	@Deprecated final private ObjectProperty<Callback<CalendarRange, Appointment>> createAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<CalendarRange, Appointment>>(this, "createAppointmentCallback", null);
@@ -301,22 +323,6 @@ public class Agenda extends Control
 	 * So you need to implement this callback and create an appointment.
 	 * The calendars in the provided range specify the start and end times, they can be used to create the new appointment (they do not need to be cloned).
 	 * Null may be returned to indicate that no appointment was created.
-	 * 
-	 * Example:
-		lAgenda.createAppointmentCallbackProperty().set(new Callback&lt;Agenda.DateTimeRange, Appointment&gt;()
-		{
-            &#064;Override
-			public Void call(DateTimeRange dateTimeRange)
-			{
-				return new Agenda.AppointmentImpl()
-					.withStartDateTime(dateTimeRange.start)
-					.withEndDateTime(dateTimeRange.end)
-					.withSummary("new")
-					.withDescription("new")
-					.withStyleClass("group1");
-			}
-		});
-	 * 
 	 */
 	public ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackProperty() { return newAppointmentCallbackObjectProperty; }
 	final private ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Appointment>>(this, "newAppointmentCallback", null);
