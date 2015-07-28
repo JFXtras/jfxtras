@@ -60,10 +60,12 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * The coder could provide all appointments in one big list, but that may be a bit memory heavy.
  * An alternative is to register to the displayedCalendar property and upon change update the appointment collection to match the time frame.
  * 
- * Agenda.Appointment can be used in three ways:
+ * Agenda.Appointment can be provided in three ways:
+ * 
  * - through Calendar values (by implementing the *StartTime methods or use the Agenda.AppointmentImpl class)
  * - through ZonedDateTime values (by implementing the *ZonedDateTime methods or use the Agenda.AppointmentImplZoned class)
  * - through LocalDateTime values (by implementing the *LocalDateTime methods or use the Agenda.AppointmentImplLocal class)
+ * 
  * Agenda uses LocalDateTime for render the appointments, the Agenda.Appointment interface contains default implementations for converting all the other presentations to LocalDateTime.
  * After all Agenda must display all appointments in the same "time scale", it simply is not possible to mix different time zones in one view.
  * Google Calendar does this by converting everything to UTC (Coordinated Universal Time, previously know as Greenwich Mean time, or GMT), Agenda does this by converting Calendars to ZonedDateTimes, and ZonedDateTimes to LocalDateTimes.
@@ -78,16 +80,28 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * This method should return a new appointment object, for example:
  * [source,java]
  * --
- *      agenda.newAppointmentCallbackProperty().set(new Callback<Agenda.LocalDateTimeRange, Agenda.Appointment>() {
+ *      agenda.newAppointmentCallbackProperty().set(new Callback<Agenda.CalendarRange, Agenda.Appointment>() {
  *           @Override
- *           public Agenda.Appointment call(Agenda.LocalDateTimeRange dateTimeRange) {
+ *           public Agenda.Appointment call(Agenda.CalendarRange calendarRange) {
  *               return new Agenda.AppointmentImpl()
- *                       .withStartLocalDateTime(dateTimeRange.getStartLocalDateTime())
- *                       .withEndLocalDateTime(dateTimeRange.getEndLocalDateTime())
+ *                       .withStartCalendar(calendarRange.getStartCalendar())
+ *                       .withEndCalendar(calendarRange.getEndCalendar())
  *                       .withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass("group1")); // it is better to have a map of appointment groups to get from
  *           }
  *       });
  * --
+ * 
+ * or in Java 8 style and using its Date API:
+ * [source,java]
+ * --
+ *      agenda.newAppointmentCallbackProperty().set( (localDateTimeRange) -> {
+ *           return new Agenda.AppointmentImplLocal()
+ *                   .withStartLocalDateTime(localDateTimeRange.getStartLocalDateTime())
+ *                   .withEndLocalDateTime(localDateTimeRange.getEndLocalDateTime())
+ *                   .withAppointmentGroup(new Agenda.AppointmentGroupImpl().withStyleClass("group1")); // it is better to have a map of appointment groups to get from
+ *       });
+ * --
+
  * 
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
