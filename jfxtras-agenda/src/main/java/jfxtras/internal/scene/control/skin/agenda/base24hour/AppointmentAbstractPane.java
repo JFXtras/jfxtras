@@ -59,7 +59,7 @@ abstract class AppointmentAbstractPane extends Pane {
 		
 		// for debugging setStyle("-fx-border-color:PINK;-fx-border-width:1px;");
 		getStyleClass().add("Appointment");
-		getStyleClass().add(appointment.getAppointmentGroup().getStyleClass());
+		getStyleClass().add(appointment.getAppointmentGroup() != null ? appointment.getAppointmentGroup().getStyleClass() : "group0");
 		
 		// historical visualizer
 		historyVisualizer = new HistoricalVisualizer(this);
