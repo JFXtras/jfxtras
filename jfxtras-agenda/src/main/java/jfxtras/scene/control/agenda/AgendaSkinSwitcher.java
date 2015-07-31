@@ -35,6 +35,22 @@ import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 import jfxtras.scene.control.ImageViewButton;
 import jfxtras.scene.layout.HBox;
 
+/**
+ * = AgendaSkinSwitcher
+ * 
+ * This controls renders a small icon menu, where the user can select which skin to use in the associated Agenda contro.
+ * [source,java]
+ * --
+ *     // create Agenda
+ *     Agenda agenda = new Agenda();
+ *     somePane.getChildren().add(agenda);
+ *
+ *     // create AgendaSkinSwitcher
+ *     AgendaSkinSwitcher agendaSkinSwitcher = new AgendaSkinSwitcher();
+ *     somePane.getChildren().add(agendaSkinSwitcher);
+ * --
+ * 
+ */
 public class AgendaSkinSwitcher extends HBox {
 
 	/**

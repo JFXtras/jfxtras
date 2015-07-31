@@ -49,7 +49,6 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * = Agenda
@@ -428,20 +427,20 @@ public class Agenda extends Control
 		
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
 		default Calendar getStartTime() {
-			throw new NotImplementedException();
+			throw new RuntimeException("Not implemented");
 		}
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
 		default void setStartTime(Calendar c) {
-			throw new NotImplementedException();
+			throw new RuntimeException("Not implemented");
 		}
 		
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
 		default Calendar getEndTime() {
-			throw new NotImplementedException();
+			throw new RuntimeException("Not implemented");
 		}
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
 		default void setEndTime(Calendar c) {
-			throw new NotImplementedException();
+			throw new RuntimeException("Not implemented");
 		}
 		
 		// ----
@@ -488,7 +487,7 @@ public class Agenda extends Control
 	}
 	
 	/**
-	 * A class to help you get going; all the required methods of the interface are implemented as JavaFX properties 
+	 * Implements the base properties used by all AppointmentImpl classes. 
 	 */
 	static public abstract class AppointmentImplBase<T> 
 	{
