@@ -38,7 +38,7 @@ import jfxtras.scene.layout.HBox;
 /**
  * = AgendaSkinSwitcher
  * 
- * This controls renders a small icon menu, where the user can select which skin to use in the associated Agenda contro.
+ * This controls renders a small icon menu, where the user can select which skin to use in the associated Agenda control.
  * [source,java]
  * --
  *     // create Agenda
