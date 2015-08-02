@@ -74,7 +74,7 @@ import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
  *    primaryStage.setScene(new Scene(agenda, 800, 600));
  *    primaryStage.show();
  * --
- *
+ * 
  * == Properties:
  * 
  * - appointments: a list of instances of the Appointment interface, to be rendered by Agenda.
@@ -139,6 +139,13 @@ import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
  * If so, you need to register to the editAppointmentCallback, and open your own popup.
  * Because Agenda does not dictate an event/callback mechanism in the implementation of Appointment, it has no way of being informed of changes on the appointment.
  * So when the custom edit is done, make sure that control gets updated (if this does not happen automatically through any of the existing listeners) by calling refresh(). 
+ *
+ * == Usage
+ * The three steps to get Agenda up and running completely:
+ * 
+ * 1. Implement the localDateTimeRangeCallback and populate the appointments list with the appropriate appointments from your domain.
+ * 2. Implement the newAppointmentCallback and create a new appointment, possibly saving the in your domain.
+ * 3. Monitor the appointments list for removals and remove them in your domain.
  * 
  * @author Tom Eugelink &lt;tbee@tbee.org&gt;
  */
