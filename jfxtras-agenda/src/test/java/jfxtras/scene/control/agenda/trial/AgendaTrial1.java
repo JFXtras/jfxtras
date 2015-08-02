@@ -72,7 +72,7 @@ public class AgendaTrial1 extends Application {
 //		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin(lAgenda));
 //		lAgenda.setAllowDragging(false);
 //		lAgenda.setAllowResize(false);
-		lAgenda.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+//		lAgenda.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
 		
 		// setup appointment groups
         final Map<String, Agenda.AppointmentGroup> lAppointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();

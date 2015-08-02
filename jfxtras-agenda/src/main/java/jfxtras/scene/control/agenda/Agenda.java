@@ -47,6 +47,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
+import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromTodaySkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 
@@ -188,6 +189,7 @@ public class Agenda extends Control
 	 */
 	@Override public Skin<?> createDefaultSkin() {
 		return new AgendaWeekSkin(this); 
+//		return new AgendaDaysFromTodaySkin(this); 
 	}
 
 	// ==================================================================================================================

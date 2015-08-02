@@ -42,7 +42,6 @@ import java.util.TimeZone;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.print.PageLayout;
 import javafx.print.PrinterJob;
@@ -85,6 +84,17 @@ implements AgendaSkin
 	}
 	protected final Agenda control;
 
+	/**
+	 * Reconstruct the UI part
+	 */
+	protected void reconstruct() {
+		// setup component
+		createNodes();
+		
+		// initial setup
+		refresh();
+	}
+	
 	/*
 	 * construct the component
 	 */
@@ -240,6 +250,9 @@ implements AgendaSkin
 	{
 		// when switching skin, remove any old stuff
 		getChildren().clear();
+		if (borderPane != null) {
+			layoutHelp.dragPane.getChildren().remove(borderPane);
+		}
 		
 		// we use a borderpane
 		borderPane = new BorderPane();
@@ -274,7 +287,7 @@ implements AgendaSkin
 		// style
 		getSkinnable().getStyleClass().add(getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
 	}
-	private BorderPane borderPane = null;
+	protected BorderPane borderPane = null;
 	private WeekHeaderPane weekHeaderPane = null;
 	private ScrollPane weekScrollPane = null;
 	private WeekBodyPane weekBodyPane = null;
