@@ -189,7 +189,6 @@ public class Agenda extends Control
 	 */
 	@Override public Skin<?> createDefaultSkin() {
 		return new AgendaWeekSkin(this); 
-//		return new AgendaDaysFromTodaySkin(this); 
 	}
 
 	// ==================================================================================================================

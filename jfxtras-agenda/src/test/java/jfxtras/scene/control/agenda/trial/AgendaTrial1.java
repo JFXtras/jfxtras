@@ -69,6 +69,7 @@ public class AgendaTrial1 extends Application {
         // add a node
 		final Agenda lAgenda = new Agenda();		
 //    	lAgenda.setLocale(new java.util.Locale("de")); // weeks starts on monday
+		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromTodaySkin(lAgenda));
 //		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin(lAgenda));
 //		lAgenda.setAllowDragging(false);
 //		lAgenda.setAllowResize(false);
