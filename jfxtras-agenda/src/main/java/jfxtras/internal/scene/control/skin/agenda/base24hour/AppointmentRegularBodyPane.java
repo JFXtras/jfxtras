@@ -33,6 +33,7 @@ import java.time.LocalDate;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.WeakInvalidationListener;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -73,9 +74,9 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 		getChildren().add(appointmentMenu);
 		
 		// add the duration dragger
-		layoutHelp.skinnable.allowResizeProperty().addListener( (observable) -> {
+		layoutHelp.skinnable.allowResizeProperty().addListener(new WeakInvalidationListener( (observable) -> {
 			setupDurationDragger();
-		});
+		}));
 		setupDurationDragger();
 	}
 	private String startAsString;

@@ -47,7 +47,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
-import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromTodaySkin;
+import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 

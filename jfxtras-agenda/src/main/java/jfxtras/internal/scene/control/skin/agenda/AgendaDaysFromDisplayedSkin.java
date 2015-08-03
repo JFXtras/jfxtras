@@ -50,12 +50,12 @@ import jfxtras.scene.control.agenda.Agenda;
 /**
  * @author Tom Eugelink
  */
-public class AgendaDaysFromTodaySkin extends AgendaSkinTimeScale24HourAbstract {
+public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstract {
 	
 	/**
 	 * 
 	 */
-	public AgendaDaysFromTodaySkin(Agenda control) {
+	public AgendaDaysFromDisplayedSkin(Agenda control) {
 		super(control);
 		
 		construct();
@@ -120,21 +120,29 @@ public class AgendaDaysFromTodaySkin extends AgendaSkinTimeScale24HourAbstract {
 	 */
 	protected List<LocalDate> determineDisplayedLocalDates()
 	{
-		// the result 
-		List<LocalDate> lLocalDates = new ArrayList<>();
-		
 		// get slider positions
 		int lStartOffset = (daysBackSlider == null ? daysBackDefault : (int)daysBackSlider.valueProperty().get()); 
 		int lEndOffset = (daysForwardSlider == null ? daysForwardDefault : (int)daysForwardSlider.valueProperty().get());
-		System.out.println("lStartOffset = "  + lStartOffset + "  lEndOffset = "  + lEndOffset);
-		LocalDate lStartLocalDate = LocalDate.now();
-		for (int i = lStartOffset; i < lEndOffset + 1; i++) { // + 1 = always show today
-			lLocalDates.add(lStartLocalDate.plusDays(i));
+		LocalDate lStartLocalDate = getSkinnable().getDisplayedLocalDateTime().toLocalDate();
+		
+		// determine displayed calendars
+		String lKey = lStartOffset + "/"  + lEndOffset + "/" + lStartLocalDate;
+		if (!lKey.equals(displayedLocalDatesKey)) {
+			
+			// determine displayed calendars
+			displayedLocalDates = new ArrayList<>();
+			System.out.println(lKey);
+			for (int i = lStartOffset; i < lEndOffset + 1; i++) { // + 1 = always show today
+				displayedLocalDates.add(lStartLocalDate.plusDays(i));
+			}
+			displayedLocalDatesKey = lKey;
 		}
 		
 		// done
-		return lLocalDates;
+		return displayedLocalDates;
 	}
+	private String displayedLocalDatesKey = "";
+	private List<LocalDate> displayedLocalDates;
 	
 	// ==================================================================================================================
 	// StyleableProperties
@@ -154,7 +162,7 @@ public class AgendaDaysFromTodaySkin extends AgendaSkinTimeScale24HourAbstract {
 	};
     public final void setDaysBeforeFurthest(int value) { daysBeforeFurthestProperty.set(value); }
     public final int getDaysBeforeFurthest() { return daysBeforeFurthestProperty.get(); }
-    public final AgendaDaysFromTodaySkin withDaysBeforeFurthest(int value) { setDaysBeforeFurthest(value); return this; }
+    public final AgendaDaysFromDisplayedSkin withDaysBeforeFurthest(int value) { setDaysBeforeFurthest(value); return this; }
     
     /**
      * daysAfterFurthestProperty
@@ -171,23 +179,23 @@ public class AgendaDaysFromTodaySkin extends AgendaSkinTimeScale24HourAbstract {
 	};
     public final void setDaysAfterFurthest(int value) { daysAfterFurthestProperty.set(value); }
     public final int getDaysAfterFurthest() { return daysAfterFurthestProperty.get(); }
-    public final AgendaDaysFromTodaySkin withDaysAfterFurthest(int value) { setDaysAfterFurthest(value); return this; }
+    public final AgendaDaysFromDisplayedSkin withDaysAfterFurthest(int value) { setDaysAfterFurthest(value); return this; }
     
 
     // -------------------------
         
     private static class StyleableProperties 
     {
-        private static final CssMetaData<Agenda, Integer> DAYS_BEFORE_FURTHEST_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaDaysFromTodaySkin, Integer>("-fxx-days-before-furthest", IntegerConverter.getInstance(), -20 ) {
+        private static final CssMetaData<Agenda, Integer> DAYS_BEFORE_FURTHEST_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaDaysFromDisplayedSkin, Integer>("-fxx-days-before-furthest", IntegerConverter.getInstance(), -9 ) {
         	@Override 
-        	protected ObjectProperty<Integer> getProperty(AgendaDaysFromTodaySkin s) {
+        	protected ObjectProperty<Integer> getProperty(AgendaDaysFromDisplayedSkin s) {
             	return s.daysBeforeFurthestProperty;
             }
         };
         
-        private static final CssMetaData<Agenda, Integer> DAYS_AFTER_FURTHEST_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaDaysFromTodaySkin, Integer>("-fxx-days-after-furthest", IntegerConverter.getInstance(), 20 ) {
+        private static final CssMetaData<Agenda, Integer> DAYS_AFTER_FURTHEST_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaDaysFromDisplayedSkin, Integer>("-fxx-days-after-furthest", IntegerConverter.getInstance(), 99 ) {
         	@Override 
-        	protected ObjectProperty<Integer> getProperty(AgendaDaysFromTodaySkin s) {
+        	protected ObjectProperty<Integer> getProperty(AgendaDaysFromDisplayedSkin s) {
             	return s.daysAfterFurthestProperty;
             }
         };

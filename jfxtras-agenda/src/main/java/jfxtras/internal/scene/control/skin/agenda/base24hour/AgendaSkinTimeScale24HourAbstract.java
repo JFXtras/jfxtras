@@ -88,8 +88,8 @@ implements AgendaSkin
 	 * Reconstruct the UI part
 	 */
 	protected void reconstruct() {
-		// setup component
-		createNodes();
+		weekBodyPane.reconstruct();
+		weekHeaderPane.reconstruct();
 		
 		// initial setup
 		refresh();
@@ -315,12 +315,14 @@ implements AgendaSkin
 	/**
 	 * Responsible for rendering the day headers within the week
 	 */
-	class WeekHeaderPane extends Pane
-	{
+	class WeekHeaderPane extends Pane {
 		final List<DayHeaderPane> dayHeaderPanes = new ArrayList<DayHeaderPane>();
 
-		public WeekHeaderPane(WeekBodyPane weekBodyPane)
-		{
+		public WeekHeaderPane(WeekBodyPane weekBodyPane) {
+			construct();
+		}
+		
+		private void construct() {
 			// one day header pane per day body pane 
 			for (DayBodyPane dayBodyPane : weekBodyPane.dayBodyPanes)
 			{
@@ -341,6 +343,12 @@ implements AgendaSkin
 			prefWidthProperty().bind(weekBodyPane.widthProperty()); // same width as the weekpane
 			prefHeightProperty().bind(layoutHelp.headerHeightProperty);
 		}
+		
+		private void reconstruct() {
+			dayHeaderPanes.clear();
+			getChildren().clear();
+			construct();
+		}
 	}
 
 	/**
@@ -350,11 +358,14 @@ implements AgendaSkin
 	{
 		final List<DayBodyPane> dayBodyPanes = new ArrayList<DayBodyPane>();
 
-		public WeekBodyPane()
-		{
+		public WeekBodyPane() {
 			getStyleClass().add("Week");
+			construct();
+		}
+		
+		private void construct() {
 			getChildren().add(new TimeScale24Hour(this, layoutHelp));
-
+			
 			int i = 0;
 			for (LocalDate localDate : determineDisplayedLocalDates())
 			{
@@ -370,6 +381,12 @@ implements AgendaSkin
 				localDate = localDate.plusDays(1);
 				i++;
 			}
+		}
+		
+		void reconstruct() {
+			dayBodyPanes.clear();
+			getChildren().clear();
+			construct();
 		}
 	}
 	

@@ -33,6 +33,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
 
+import javafx.collections.WeakListChangeListener;
 import javafx.scene.Cursor;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseButton;

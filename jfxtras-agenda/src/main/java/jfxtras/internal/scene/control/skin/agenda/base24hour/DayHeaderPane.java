@@ -76,12 +76,6 @@ public class DayHeaderPane extends Pane {
 		dayText.setY( dayText.prefHeight(0) );
 		getChildren().add(dayText);
 		
-		// for testing
-		localDateObjectProperty.addListener( (observable) -> {
-			setId("DayHeader" + localDateObjectProperty.get());
-		});
-		setId("DayHeader" + localDateObjectProperty.get());
-		
 		// clip the visible part
 		Rectangle lClip = new Rectangle(0,0,0,0);
 		lClip.widthProperty().bind(widthProperty().subtract(layoutHelp.paddingProperty.get()));
@@ -110,6 +104,9 @@ public class DayHeaderPane extends Pane {
 				      + localDateObjectProperty.get().format(layoutHelp.dateDateTimeFormatter)
 				      ;
 		dayText.setText(lLabel);
+		
+		// for testing
+		setId("DayHeader" + localDateObjectProperty.get());
 	}
 	private Text dayText = new Text("?");
 	
