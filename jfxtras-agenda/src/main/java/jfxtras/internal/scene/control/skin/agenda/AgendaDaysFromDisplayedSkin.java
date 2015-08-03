@@ -66,7 +66,8 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
 	 */
 	private void construct() {
 		// days back
-		daysBackSlider = new Slider(-20.0, 0.0, (double)daysBackDefault); // TBEERNOT: make the -20 CSS configurable
+		daysBackSlider = new Slider(-20.0, 0.0, (double)daysBackDefault); 
+		daysBackSlider.setId("daysBackSlider");
 		daysBackSlider.minProperty().bind(daysBeforeFurthestProperty);
 		daysBackSlider.snapToTicksProperty().set(true);
 		daysBackSlider.majorTickUnitProperty().set(1.0);
@@ -76,13 +77,14 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
 		daysBackSlider.valueProperty().addListener( (observable) -> {
 			System.out.println("back " + daysBackSlider.getValue());
 			if (daysBackSlider.valueChangingProperty().get() == false) {
-				System.out.println("back reconstruct");
+				System.out.println("back reconstruct"); // TBEERNOT: min and max slider positions are not processed
 				reconstruct();
 			}
 		});
 		
 		// days forward
-		daysForwardSlider = new Slider(0.0, 20.0, (double)daysForwardDefault); // TBEERNOT: make the 20 CSS configurable
+		daysForwardSlider = new Slider(0.0, 20.0, (double)daysForwardDefault); 
+		daysForwardSlider.setId("daysForwardSlider");
 		daysForwardSlider.maxProperty().bind(daysAfterFurthestProperty);
 		daysForwardSlider.snapToTicksProperty().set(true);
 		daysForwardSlider.majorTickUnitProperty().set(1.0);
@@ -92,7 +94,7 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
 		daysForwardSlider.valueProperty().addListener( (observable) -> {
 			System.out.println("forward " + daysForwardSlider.getValue());
 			if (daysForwardSlider.valueChangingProperty().get() == false) {
-				System.out.println("forward reconstruct");
+				System.out.println("forward reconstruct"); // TBEERNOT: min and max slider positions are not processed
 				reconstruct();
 			}
 		});
@@ -152,13 +154,13 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
      */
     public final ObjectProperty<Integer> daysBeforeFurthestProperty() { return daysBeforeFurthestProperty; }
     private ObjectProperty<Integer> daysBeforeFurthestProperty = new SimpleStyleableObjectProperty<Integer>(StyleableProperties.DAYS_BEFORE_FURTHEST_CSSMETADATA, StyleableProperties.DAYS_BEFORE_FURTHEST_CSSMETADATA.getInitialValue(null)) {
-		{ // anonymous constructor
-			addListener( (invalidationEvent) -> {
-				if (daysBeforeFurthestProperty.get() > 0) {
-					daysBeforeFurthestProperty.set(0);
-				}
-			});
-		}
+//		{ // anonymous constructor
+//			addListener( (invalidationEvent) -> {
+//				if (daysBeforeFurthestProperty.get() > 0) {
+//					daysBeforeFurthestProperty.set(0);
+//				}
+//			});
+//		}
 	};
     public final void setDaysBeforeFurthest(int value) { daysBeforeFurthestProperty.set(value); }
     public final int getDaysBeforeFurthest() { return daysBeforeFurthestProperty.get(); }
@@ -169,13 +171,13 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
      */
     public final ObjectProperty<Integer> daysAfterFurthestProperty() { return daysAfterFurthestProperty; }
     private ObjectProperty<Integer> daysAfterFurthestProperty = new SimpleStyleableObjectProperty<Integer>(StyleableProperties.DAYS_AFTER_FURTHEST_CSSMETADATA, StyleableProperties.DAYS_AFTER_FURTHEST_CSSMETADATA.getInitialValue(null)) {
-		{ // anonymous constructor
-			addListener( (invalidationEvent) -> {
-				if (daysAfterFurthestProperty.get() > 0) {
-					daysAfterFurthestProperty.set(0);
-				}
-			});
-		}
+//		{ // anonymous constructor
+//			addListener( (invalidationEvent) -> {
+//				if (daysAfterFurthestProperty.get() < 0) {
+//					daysAfterFurthestProperty.set(0);
+//				}
+//			});
+//		}
 	};
     public final void setDaysAfterFurthest(int value) { daysAfterFurthestProperty.set(value); }
     public final int getDaysAfterFurthest() { return daysAfterFurthestProperty.get(); }
@@ -193,7 +195,7 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
             }
         };
         
-        private static final CssMetaData<Agenda, Integer> DAYS_AFTER_FURTHEST_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaDaysFromDisplayedSkin, Integer>("-fxx-days-after-furthest", IntegerConverter.getInstance(), 99 ) {
+        private static final CssMetaData<Agenda, Integer> DAYS_AFTER_FURTHEST_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaDaysFromDisplayedSkin, Integer>("-fxx-days-after-furthest", IntegerConverter.getInstance(), 9 ) {
         	@Override 
         	protected ObjectProperty<Integer> getProperty(AgendaDaysFromDisplayedSkin s) {
             	return s.daysAfterFurthestProperty;

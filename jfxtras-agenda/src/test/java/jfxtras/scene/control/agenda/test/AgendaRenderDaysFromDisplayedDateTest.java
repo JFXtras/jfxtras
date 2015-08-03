@@ -1,5 +1,5 @@
 /**
- * AllTests.java
+ * AgendaRenderTest.java
  *
  * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
@@ -29,19 +29,61 @@
 
 package jfxtras.scene.control.agenda.test;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import javafx.scene.Parent;
+import javafx.scene.control.Slider;
+import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
+import jfxtras.test.TestUtil;
+import junit.framework.Assert;
 
-@RunWith(Suite.class)
-@SuiteClasses({ AgendaMouseManipulateTest.class
-    		  , AgendaRenderTest.class
-    		  , AgendaSelectTest.class
-    		  , AgendaMenuTest.class
-              , AgendaFXMLTest.class
-              , AgendaFXMLTest.class
-              , AgendaRenderDaysFromDisplayedDateTest.class
-	          })
-public class AllTests {
+import org.junit.Test;
 
+/**
+ * 
+ */
+public class AgendaRenderDaysFromDisplayedDateTest extends AbstractAgendaTestBase {
+
+	/**
+	 * 
+	 */
+	public Parent getRootNode()
+	{
+		Parent parent = super.getRootNode();
+//		agenda.setSkin(new AgendaDaysFromDisplayedSkin(agenda));
+		return parent;
+	}
+
+	@Test
+	public void dummy()
+	{
+	}
+	
+	/**
+	 * 
+	 */
+//	@Test
+	public void renderVanilla()
+	{
+		Slider daysBackSlider = (Slider)find("#daysBackSlider");
+		Assert.assertEquals(-1.0, daysBackSlider.getValue(), 0.0001);
+		Slider daysForwardSlider = (Slider)find("#daysForwardSlider");
+		Assert.assertEquals(6.0, daysForwardSlider.getValue(), 0.0001);
+		//TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+//	@Test
+	public void renderAfterCSS()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.setStyle("-fxx-days-before-furthest:-5; -fxx-days-after-furthest:20;");
+		});
+			
+		Slider daysBackSlider = (Slider)find("#daysBackSlider");
+		Assert.assertEquals(-5.0, daysBackSlider.getValue(), 0.0001);
+		Slider daysForwardSlider = (Slider)find("#daysForwardSlider");
+		Assert.assertEquals(20.0, daysForwardSlider.getValue(), 0.0001);
+		TestUtil.sleep(3000);
+	}
 }

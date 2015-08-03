@@ -31,6 +31,7 @@ package jfxtras.scene.control.agenda;
 
 import javafx.scene.control.Tooltip;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin;
+import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 import jfxtras.scene.control.ImageViewButton;
 import jfxtras.scene.layout.HBox;
@@ -62,6 +63,7 @@ public class AgendaSkinSwitcher extends HBox {
 		
 		getChildren().add(createWeekButton(agenda));
 		getChildren().add(createDayButton(agenda));
+//		getChildren().add(createDayDynamicButton(agenda));
 	}
 	final Agenda agenda;
 	
@@ -91,6 +93,18 @@ public class AgendaSkinSwitcher extends HBox {
 		});
 		return button;
 	}
+
+	/**
+	 * 
+	 */
+	private ImageViewButton createDayDynamicButton(Agenda agenda) {
+		ImageViewButton button = createIcon("dayDynamic", "Dynamic days view");
+		button.setOnMouseClicked( (actionEvent) -> {
+			agenda.setSkin(new AgendaDaysFromDisplayedSkin(agenda));
+		});
+		return button;
+	}
+	
 	
 	/**
 	 * 

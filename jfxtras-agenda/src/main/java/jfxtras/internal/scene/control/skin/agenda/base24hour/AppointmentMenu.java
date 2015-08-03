@@ -31,7 +31,6 @@ package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.LocalDateTime;
 
-import javafx.beans.value.WeakChangeListener;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -199,7 +198,7 @@ class AppointmentMenu extends Rectangle {
 		startTextField.setLocalDateTime(appointment.getStartLocalDateTime());
 		
 		// event handling
-		startTextField.localDateTimeProperty().addListener( new WeakChangeListener<LocalDateTime>( (observable, oldValue, newValue) ->  {
+		startTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
 			
 			// remember
 			LocalDateTime lOldStart = appointment.getStartLocalDateTime();
@@ -220,7 +219,7 @@ class AppointmentMenu extends Rectangle {
 			}
 
 			// refresh is done upon popup close
-		}));
+		});
 
 		return startTextField;
 	}
@@ -236,10 +235,10 @@ class AppointmentMenu extends Rectangle {
 		endTextField.setLocalDateTime(appointment.getEndLocalDateTime());
 		endTextField.setVisible(appointment.getEndLocalDateTime() != null);
 
-		endTextField.localDateTimeProperty().addListener( new WeakChangeListener<LocalDateTime>( (observable, oldValue, newValue) ->  {
+		endTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setEndLocalDateTime(newValue);
 			// refresh is done upon popup close
-		}));
+		});
 
 		return endTextField;
 	}
@@ -254,7 +253,7 @@ class AppointmentMenu extends Rectangle {
 		wholedayCheckBox.setId("wholeday-checkbox");
 		wholedayCheckBox.selectedProperty().set(appointment.isWholeDay());
 
-		wholedayCheckBox.selectedProperty().addListener( new WeakChangeListener<Boolean>( (observable, oldValue, newValue) ->  {
+		wholedayCheckBox.selectedProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setWholeDay(newValue);
 			if (newValue == true) {
 				appointment.setEndLocalDateTime(null);
@@ -266,7 +265,7 @@ class AppointmentMenu extends Rectangle {
 			}
 			endTextField.setVisible(appointment.getEndLocalDateTime() != null);
 			// refresh is done upon popup close
-		}));
+		});
 		
 		return wholedayCheckBox;
 	}
@@ -279,10 +278,10 @@ class AppointmentMenu extends Rectangle {
 	private TextField createSummaryTextField() {
 		summaryTextField = new TextField();
 		summaryTextField.setText(appointment.getSummary());
-		summaryTextField.textProperty().addListener( new WeakChangeListener<String>( (observable, oldValue, newValue) ->  {
+		summaryTextField.textProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setSummary(newValue);
 			// refresh is done upon popup close
-		}));
+		});
 		return summaryTextField;
 	}
 	private TextField summaryTextField = null;
@@ -294,10 +293,10 @@ class AppointmentMenu extends Rectangle {
 	private TextField createLocationTextField() {
 		locationTextField = new TextField();
 		locationTextField.setText( appointment.getLocation() == null ? "" : appointment.getLocation());
-		locationTextField.textProperty().addListener( new WeakChangeListener<String>( (observable, oldValue, newValue) ->  {
+		locationTextField.textProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setLocation(newValue);
 			// refresh is done upon popup close
-		}));
+		});
 		return locationTextField;
 	}
 	private TextField locationTextField = null;
