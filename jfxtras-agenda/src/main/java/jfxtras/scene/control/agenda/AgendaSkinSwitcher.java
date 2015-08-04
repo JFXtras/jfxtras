@@ -63,7 +63,7 @@ public class AgendaSkinSwitcher extends HBox {
 		
 		getChildren().add(createWeekButton(agenda));
 		getChildren().add(createDayButton(agenda));
-//		getChildren().add(createDayDynamicButton(agenda));
+		getChildren().add(createDayDynamicButton(agenda));
 	}
 	final Agenda agenda;
 	

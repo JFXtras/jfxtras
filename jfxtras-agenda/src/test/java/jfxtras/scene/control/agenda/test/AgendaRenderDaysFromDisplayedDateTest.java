@@ -48,42 +48,55 @@ public class AgendaRenderDaysFromDisplayedDateTest extends AbstractAgendaTestBas
 	public Parent getRootNode()
 	{
 		Parent parent = super.getRootNode();
-//		agenda.setSkin(new AgendaDaysFromDisplayedSkin(agenda));
+		agenda.setSkin(new AgendaDaysFromDisplayedSkin(agenda));
 		return parent;
 	}
 
-	@Test
-	public void dummy()
-	{
-	}
-	
 	/**
 	 * 
 	 */
-//	@Test
+	@Test
 	public void renderVanilla()
 	{
-		Slider daysBackSlider = (Slider)find("#daysBackSlider");
-		Assert.assertEquals(-1.0, daysBackSlider.getValue(), 0.0001);
-		Slider daysForwardSlider = (Slider)find("#daysForwardSlider");
-		Assert.assertEquals(6.0, daysForwardSlider.getValue(), 0.0001);
+		// GIVEN a default agenda
+		
+		// THEN the days before slider should be setup with its default values
+		Slider daysBeforeSlider = (Slider)find("#daysBeforeSlider");
+		Assert.assertEquals(-9.0, daysBeforeSlider.getMin(), 0.0001);
+		Assert.assertEquals(0.0, daysBeforeSlider.getMax(), 0.0001);
+		Assert.assertEquals(-1.0, daysBeforeSlider.getValue(), 0.0001);
+		
+		// AND the days after slider should be setup with its default values
+		Slider daysAfterSlider = (Slider)find("#daysAfterSlider");
+		Assert.assertEquals(0.0, daysAfterSlider.getMin(), 0.0001);
+		Assert.assertEquals(9.0, daysAfterSlider.getMax(), 0.0001);
+		Assert.assertEquals(6.0, daysAfterSlider.getValue(), 0.0001);
 		//TestUtil.sleep(3000);
 	}
 
 	/**
 	 * 
 	 */
-//	@Test
+	@Test
 	public void renderAfterCSS()
 	{
+		// GIVEN a default agenda
+		
+		// WHEN the days before and after slider extremes are set through CSS
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			agenda.setStyle("-fxx-days-before-furthest:-5; -fxx-days-after-furthest:20;");
 		});
 			
-		Slider daysBackSlider = (Slider)find("#daysBackSlider");
-		Assert.assertEquals(-5.0, daysBackSlider.getValue(), 0.0001);
-		Slider daysForwardSlider = (Slider)find("#daysForwardSlider");
-		Assert.assertEquals(20.0, daysForwardSlider.getValue(), 0.0001);
-		TestUtil.sleep(3000);
+		// THEN the days before slider should only have changed its extreme 
+		Slider daysBeforeSlider = (Slider)find("#daysBeforeSlider");
+		Assert.assertEquals(-5.0, daysBeforeSlider.getMin(), 0.0001);
+		Assert.assertEquals(0.0, daysBeforeSlider.getMax(), 0.0001);
+		Assert.assertEquals(-1.0, daysBeforeSlider.getValue(), 0.0001);
+		
+		// AND the days after slider should only have changed its extreme 
+		Slider daysAfterSlider = (Slider)find("#daysAfterSlider");
+		Assert.assertEquals(0.0, daysAfterSlider.getMin(), 0.0001);
+		Assert.assertEquals(20.0, daysAfterSlider.getMax(), 0.0001);
+		Assert.assertEquals(6.0, daysAfterSlider.getValue(), 0.0001);
 	}
 }

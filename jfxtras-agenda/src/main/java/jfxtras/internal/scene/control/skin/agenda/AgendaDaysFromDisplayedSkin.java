@@ -66,44 +66,57 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
 	 */
 	private void construct() {
 		// days back
-		daysBackSlider = new Slider(-20.0, 0.0, (double)daysBackDefault); 
-		daysBackSlider.setId("daysBackSlider");
-		daysBackSlider.minProperty().bind(daysBeforeFurthestProperty);
-		daysBackSlider.snapToTicksProperty().set(true);
-		daysBackSlider.majorTickUnitProperty().set(1.0);
-		daysBackSlider.minorTickCountProperty().set(0);
-		daysBackSlider.showTickLabelsProperty().set(true);
-		daysBackSlider.prefWidthProperty().bind(borderPane.widthProperty().divide(2.0));
-		daysBackSlider.valueProperty().addListener( (observable) -> {
-			System.out.println("back " + daysBackSlider.getValue());
-			if (daysBackSlider.valueChangingProperty().get() == false) {
-				System.out.println("back reconstruct"); // TBEERNOT: min and max slider positions are not processed
+		daysBeforeSlider = new Slider(-20.0, 0.0, (double)daysBackDefault); 
+		daysBeforeSlider.setId("daysBeforeSlider");
+		daysBeforeSlider.minProperty().bind(daysBeforeFurthestProperty);
+		daysBeforeSlider.snapToTicksProperty().set(true);
+		daysBeforeSlider.majorTickUnitProperty().set(1.0);
+		daysBeforeSlider.minorTickCountProperty().set(0);
+		daysBeforeSlider.showTickLabelsProperty().set(true);
+		daysBeforeSlider.prefWidthProperty().bind(borderPane.widthProperty().divide(2.0));
+// Until JDK-8133008 is fixed we use the valueChangingProperty and Math.round:		
+//		daysBeforeSlider.valueProperty().addListener( (observable) -> {
+//			System.out.println("back " + daysBeforeSlider.getValue());
+//			if (daysBeforeSlider.valueChangingProperty().get() == false) {
+//				System.out.println("back reconstruct"); // TBEERNOT: min and max slider positions are not processed
+//				reconstruct();
+//			}
+//		});
+		daysBeforeSlider.valueChangingProperty().addListener( (observable) -> {
+			if (!daysBeforeSlider.valueChangingProperty().get()) {
 				reconstruct();
 			}
 		});
+
 		
 		// days forward
-		daysForwardSlider = new Slider(0.0, 20.0, (double)daysForwardDefault); 
-		daysForwardSlider.setId("daysForwardSlider");
-		daysForwardSlider.maxProperty().bind(daysAfterFurthestProperty);
-		daysForwardSlider.snapToTicksProperty().set(true);
-		daysForwardSlider.majorTickUnitProperty().set(1.0);
-		daysForwardSlider.minorTickCountProperty().set(0);
-		daysForwardSlider.showTickLabelsProperty().set(true);
-		daysForwardSlider.prefWidthProperty().bind(borderPane.widthProperty().divide(2.0));
-		daysForwardSlider.valueProperty().addListener( (observable) -> {
-			System.out.println("forward " + daysForwardSlider.getValue());
-			if (daysForwardSlider.valueChangingProperty().get() == false) {
-				System.out.println("forward reconstruct"); // TBEERNOT: min and max slider positions are not processed
+		daysAfterSlider = new Slider(0.0, 20.0, (double)daysForwardDefault); 
+		daysAfterSlider.setId("daysAfterSlider");
+		daysAfterSlider.maxProperty().bind(daysAfterFurthestProperty);
+		daysAfterSlider.snapToTicksProperty().set(true);
+		daysAfterSlider.majorTickUnitProperty().set(1.0);
+		daysAfterSlider.minorTickCountProperty().set(0);
+		daysAfterSlider.showTickLabelsProperty().set(true);
+		daysAfterSlider.prefWidthProperty().bind(borderPane.widthProperty().divide(2.0));
+// Until JDK-8133008 is fixed we use the valueChangingProperty and Math.round:
+//		daysAfterSlider.valueProperty().addListener( (observable) -> {
+//			System.out.println("forward " + daysAfterSlider.getValue());
+//			if (daysAfterSlider.valueChangingProperty().get() == false) {
+//				System.out.println("forward reconstruct"); // TBEERNOT: min and max slider positions are not processed
+//				reconstruct();
+//			}
+//		});
+		daysAfterSlider.valueChangingProperty().addListener( (observable) -> {
+			if (!daysAfterSlider.valueChangingProperty().get()) {
 				reconstruct();
 			}
 		});
 		
 		// put the sliders at the bottom
-		borderPane.setBottom(new HBox(daysBackSlider, daysForwardSlider));
+		borderPane.setBottom(new HBox(daysBeforeSlider, daysAfterSlider));
 	}
-	private Slider daysBackSlider;
-	private Slider daysForwardSlider;
+	private Slider daysBeforeSlider;
+	private Slider daysAfterSlider;
 	final private int daysBackDefault = -1;
 	final private int daysForwardDefault = 6;
 	
@@ -114,7 +127,7 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
 		super.reconstruct();
 		
 		// put the sliders at the bottom
-		borderPane.setBottom(new HBox(daysBackSlider, daysForwardSlider));
+		borderPane.setBottom(new HBox(daysBeforeSlider, daysAfterSlider));
 	}
 
 	/**
@@ -123,17 +136,16 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
 	protected List<LocalDate> determineDisplayedLocalDates()
 	{
 		// get slider positions
-		int lStartOffset = (daysBackSlider == null ? daysBackDefault : (int)daysBackSlider.valueProperty().get()); 
-		int lEndOffset = (daysForwardSlider == null ? daysForwardDefault : (int)daysForwardSlider.valueProperty().get());
+		int lStartOffset = (daysBeforeSlider == null ? daysBackDefault : (int)Math.round(daysBeforeSlider.valueProperty().get())); // Until JDK-8133008 is fixed we use the valueChangingProperty and Math.round: 
+		int lEndOffset = (daysAfterSlider == null ? daysForwardDefault : (int)Math.round(daysAfterSlider.valueProperty().get())); // Until JDK-8133008 is fixed we use the valueChangingProperty and Math.round:
 		LocalDate lStartLocalDate = getSkinnable().getDisplayedLocalDateTime().toLocalDate();
 		
 		// determine displayed calendars
-		String lKey = lStartOffset + "/"  + lEndOffset + "/" + lStartLocalDate;
+		String lKey = lStartOffset + " / "  + lEndOffset + " / " + lStartLocalDate;
 		if (!lKey.equals(displayedLocalDatesKey)) {
 			
 			// determine displayed calendars
 			displayedLocalDates = new ArrayList<>();
-			System.out.println(lKey);
 			for (int i = lStartOffset; i < lEndOffset + 1; i++) { // + 1 = always show today
 				displayedLocalDates.add(lStartLocalDate.plusDays(i));
 			}
