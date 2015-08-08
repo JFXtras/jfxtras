@@ -59,12 +59,12 @@ class TimeScale24Hour extends Pane {
 	private void addTimeScale() {
 		
 		// draw hours
-		for (int lHour = 0; lHour < 24; lHour++)
+		for (int lHour = 0; lHour < DayBodyPane.defaultHoursInDay; lHour++)
 		{
 			// hour line
 			{
 				Line l = new Line(0,10,100,10);
-				l.setId("hourLine" + lHour);
+				l.setId("hourLine" + (lHour + DayBodyPane.defaultStartHour));
 				l.getStyleClass().add("HourLine");
 				l.startXProperty().set(0.0);
 				l.startYProperty().bind( NodeUtil.snapXY(layoutHelp.hourHeighProperty.multiply(lHour)) );
@@ -75,7 +75,7 @@ class TimeScale24Hour extends Pane {
 			// half hour line
 			for(int i = 1; i < 4; i++) {
 				Line l = new Line(0,10,100,10);
-				l.setId("halfHourLine" + lHour + "_" + i);
+				l.setId("halfHourLine" + (lHour + DayBodyPane.defaultStartHour) + "_" + i);
 				l.getStyleClass().add("HalfHourLine");
 				l.startXProperty().bind( NodeUtil.snapXY(layoutHelp.timeWidthProperty));
 				l.endXProperty().bind( NodeUtil.snapXY(pane.widthProperty()));
@@ -88,7 +88,7 @@ class TimeScale24Hour extends Pane {
 
 			// hour text
 			{
-				Text t = new Text(lHour + ":00");
+				Text t = new Text((lHour + DayBodyPane.defaultStartHour) + ":00");
 				t.xProperty().bind(layoutHelp.timeWidthProperty.subtract(t.getBoundsInParent().getWidth()).subtract(layoutHelp.timeColumnWhitespaceProperty.get() / 2));
 				t.yProperty().bind(layoutHelp.hourHeighProperty.multiply(lHour));
 				t.setTranslateY(t.getBoundsInParent().getHeight()); // move it under the line

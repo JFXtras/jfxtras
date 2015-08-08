@@ -257,7 +257,7 @@ abstract class AppointmentAbstractTrackedPane extends AppointmentAbstractPane {
 			// .N............. -> false    & Pe >= Ns -> no overlap
 			// .............N. -> Ps <= Ne & false	  -> no overlap
 			LocalDateTime lPlacedStart = lAppointmentPane.startDateTime;
-			LocalDateTime lPlacedEnd = (lAppointmentPane.endDateTime != null ? lAppointmentPane.endDateTime : lAppointmentPane.startDateTime.plusMinutes(10));
+			LocalDateTime lPlacedEnd = (lAppointmentPane.endDateTime != null ? lAppointmentPane.endDateTime.minusSeconds(10) : lAppointmentPane.startDateTime.plusMinutes(10));
 			LocalDateTime lNewStart = newAppointmentPane.startDateTime;
 			LocalDateTime lNewEnd = (newAppointmentPane.endDateTime != null ? newAppointmentPane.endDateTime : newAppointmentPane.startDateTime.plusMinutes(10));
 			if ( (lPlacedStart.isEqual(lNewStart) || lNewEnd == null || lPlacedStart.isBefore(lNewEnd)) 

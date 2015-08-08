@@ -63,14 +63,14 @@
 	-fx-stroke: transparent;
 }
 
-.group0 { -fx-background-color: #AC725E; }
-.group1 { -fx-background-color: #D06B64; }
-.group2 { -fx-background-color: #F83A22; }
-.group3 { -fx-background-color: #FA573C; }
-.group4 { -fx-background-color: #FF7537; }
-.group5 { -fx-background-color: #FFAD46; }
-.group6 { -fx-background-color: #42D692; }
-.group7 { -fx-background-color: #16A765; }
+.group0 { -fx-background-color: #D8D8D8; }
+.group1 { -fx-background-color: #9900FF; }
+.group2 { -fx-background-color: #FF00FF; }
+.group3 { -fx-background-color: #33FFFF; }
+.group4 { -fx-background-color: #FF9900; }
+.group5 { -fx-background-color: #339933; }
+.group6 { -fx-background-color: #0066FF; }
+.group7 { -fx-background-color: #FF0000; }
 .group8 { -fx-background-color: #7BD148; }
 .group9 { -fx-background-color: #B3DC6C; }
 .group10 { -fx-background-color: #FBE983; }

@@ -303,7 +303,7 @@ implements AgendaSkin
 		
 		// calculate the position of the scrollbar that matches that offset from midnight
 		double lScrollRange = weekScrollPane.getVmax() - weekScrollPane.getVmin();
-		double lValue = lScrollRange * lOffsetInMinutes / (24.0 * 60.0);
+		double lValue = lScrollRange * lOffsetInMinutes / (DayBodyPane.defaultHoursInDay * 60.0);
 		weekScrollPane.setVvalue(lValue);
 	}
 	
@@ -438,8 +438,8 @@ implements AgendaSkin
 					}
 
 					// place it
-					int lOffsetY = (lNow.getHour() * 60) + lNow.getMinute();
-					nowLine.setY(NodeUtil.snapXY(layoutHelp.dayHeightProperty.get() / (24 * 60) * lOffsetY) );
+					int lOffsetY = (lNow.getHour() * 60) + lNow.getMinute() - DayBodyPane.defaultStartHour * 60;
+					nowLine.setY(NodeUtil.snapXY(layoutHelp.dayHeightProperty.get() / (DayBodyPane.defaultHoursInDay * 60) * lOffsetY) );
 					if (nowLine.widthProperty().isBound() == false) {
 						nowLine.widthProperty().bind(layoutHelp.dayWidthProperty);	
 					}
@@ -510,10 +510,10 @@ implements AgendaSkin
 		
 		// hour height
 		double lScrollbarSize = new ScrollBar().getWidth();
-		layoutHelp.hourHeighProperty.set( layoutHelp.textHeightProperty.get() * 2 + 10 ); // 10 is padding
-		if (weekScrollPane.viewportBoundsProperty().get() != null && (weekScrollPane.viewportBoundsProperty().get().getHeight() - lScrollbarSize) > layoutHelp.hourHeighProperty.get() * 24) {
+		layoutHelp.hourHeighProperty.set( layoutHelp.textHeightProperty.get() * 2 + DayBodyPane.defaultStepSize ); // defaultStepSize is padding
+		if (weekScrollPane.viewportBoundsProperty().get() != null && (weekScrollPane.viewportBoundsProperty().get().getHeight() - lScrollbarSize) > layoutHelp.hourHeighProperty.get() * DayBodyPane.defaultHoursInDay) {
 			// if there is more room than absolutely required, let the height grow with the available room
-			layoutHelp.hourHeighProperty.set( (weekScrollPane.viewportBoundsProperty().get().getHeight() - lScrollbarSize) / 24 );
+			layoutHelp.hourHeighProperty.set( (weekScrollPane.viewportBoundsProperty().get().getHeight() - lScrollbarSize) / DayBodyPane.defaultHoursInDay );
 		}
 	}
 	private LayoutHelp layoutHelp = new LayoutHelp(getSkinnable(), this);
