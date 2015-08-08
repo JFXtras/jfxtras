@@ -134,9 +134,10 @@ class DayBodyPane extends Pane
 			
 			// - calculate the number of pixels from onscreen nodeY (layoutY) to onscreen mouseY					
 			double lHeight = mouseEvent.getScreenY() - NodeUtil.screenY(resizeRectangle);
-			if (lHeight < 5) {
-				lHeight = 5;
-			}
+//			if (lHeight < 15) {
+//				lHeight = 15;
+//			}
+			lHeight = (Math.round(lHeight / 15) + 1) * 15;
 			resizeRectangle.setHeight(lHeight);
 			
 			// no one else

@@ -151,7 +151,7 @@ class LayoutHelp {
 	{
 		localDateTime = localDateTime.withSecond(0).withNano(0);
 		int lMinutes = localDateTime.getMinute() % minutes;
-		if (lMinutes < (minutes/2)) {
+		if (lMinutes < Math.round(minutes/2)) {
 			localDateTime = localDateTime.plusMinutes(-1 * lMinutes);
 		}
 		else {
