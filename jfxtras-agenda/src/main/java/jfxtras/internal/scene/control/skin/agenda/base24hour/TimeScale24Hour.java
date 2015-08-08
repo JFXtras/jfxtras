@@ -44,16 +44,19 @@ public class TimeScale24Hour extends Pane {
 				getChildren().add(l);
 			}
 			// half hour line
-			{
+			for(int i = 1; i < 4; i++) {
 				Line l = new Line(0,10,100,10);
-				l.setId("halfHourLine" + lHour);
+				l.setId("halfHourLine" + lHour + "_" + i);
 				l.getStyleClass().add("HalfHourLine");
 				l.startXProperty().bind( NodeUtil.snapXY(layoutHelp.timeWidthProperty));
 				l.endXProperty().bind( NodeUtil.snapXY(pane.widthProperty()));
-				l.startYProperty().bind( NodeUtil.snapXY(layoutHelp.hourHeighProperty.multiply(lHour + 0.5)));
+				double offset = i / 4.0;
+				offset += lHour;
+				l.startYProperty().bind( NodeUtil.snapXY(layoutHelp.hourHeighProperty.multiply(offset)));
 				l.endYProperty().bind( NodeUtil.snapXY(l.startYProperty()));
 				getChildren().add(l);
 			}
+
 			// hour text
 			{
 				Text t = new Text(lHour + ":00");

@@ -86,7 +86,7 @@ class DayBodyPane extends Pane
 			}
 			
 			// show the rectangle
-			setCursor(Cursor.V_RESIZE);
+			//setCursor(Cursor.V_RESIZE);
 			double lY = NodeUtil.snapXY(mouseEvent.getScreenY() - NodeUtil.screenY(DayBodyPane.this));
 			resizeRectangle = new Rectangle(0, lY, layoutHelp.dayWidthProperty.get(), 10);
 			resizeRectangle.getStyleClass().add("GhostRectangle");
@@ -135,11 +135,11 @@ class DayBodyPane extends Pane
 			// calculate the starttime
 			LocalDateTime lStartDateTime = localDateObjectProperty.get().atStartOfDay();
 			lStartDateTime = lStartDateTime.plusSeconds( (int)(resizeRectangle.getY() * layoutHelp.durationInMSPerPixelProperty.get() / 1000) );
-			lStartDateTime = layoutHelp.roundTimeToNearestMinutes(lStartDateTime, 5);
+			lStartDateTime = layoutHelp.roundTimeToNearestMinutes(lStartDateTime, 15);
 			
 			// calculate the new end date for the appointment (recalculating the duration)
 			LocalDateTime lEndDateTime = lStartDateTime.plusSeconds( (int)(resizeRectangle.getHeight() * layoutHelp.durationInMSPerPixelProperty.get() / 1000) );
-			lEndDateTime = layoutHelp.roundTimeToNearestMinutes(lEndDateTime, 5);
+			lEndDateTime = layoutHelp.roundTimeToNearestMinutes(lEndDateTime, 15);
 			
 			// clean up
 			resizeRectangle = null;					
