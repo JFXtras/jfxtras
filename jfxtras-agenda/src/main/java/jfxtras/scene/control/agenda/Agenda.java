@@ -45,6 +45,7 @@ import javafx.collections.ObservableList;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import javafx.scene.image.Image;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
@@ -430,6 +431,9 @@ public class Agenda extends Control
 		AppointmentGroup getAppointmentGroup();
 		void setAppointmentGroup(AppointmentGroup s);
 		
+		default Image getImage(){
+		    return null;
+		}
 		// ----
 		// Calendar
 		
@@ -555,6 +559,11 @@ public class Agenda extends Control
 		public void setEndTime(Calendar value) { endTimeObjectProperty.setValue(value); }
 		public AppointmentImpl withEndTime(Calendar value) { setEndTime(value); return this; } 
 		
+		private ObjectProperty<Image> appImage = null;
+
+		public void setImage(Image img) {
+		    appImage = new SimpleObjectProperty<>(img);
+		}
 		public String toString()
 		{
 			return super.toString()
@@ -586,6 +595,11 @@ public class Agenda extends Control
 		public void setEndLocalDateTime(LocalDateTime value) { endLocalDateTimeProperty.setValue(value); }
 		public AppointmentImplLocal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
 		
+		private ObjectProperty<Image> appImage = null;
+
+		public void setImage(Image img) {
+		    appImage = new SimpleObjectProperty<>(img);
+		}
 		public String toString()
 		{
 			return super.toString()
@@ -617,6 +631,11 @@ public class Agenda extends Control
 		public void setEndZonedDateTime(ZonedDateTime value) { endZonedDateTimeProperty.setValue(value); }
 		public AppointmentImplZoned withEndZonedDateTime(ZonedDateTime value) { setEndZonedDateTime(value); return this; } 
 		
+		private ObjectProperty<Image> appImage = null;
+
+		public void setImage(Image img) {
+		    appImage = new SimpleObjectProperty<>(img);
+		}
 		public String toString()
 		{
 			return super.toString()

@@ -31,12 +31,12 @@ package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.LocalDate;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
-import javafx.geometry.NodeOrientation;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 
@@ -48,7 +48,16 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 		// strings
 		this.startAsString = layoutHelp.timeDateTimeFormatter.format(this.startDateTime);
 		this.endAsString = layoutHelp.timeDateTimeFormatter.format(this.endDateTime);
-
+		HBox head = new HBox();
+		head.setSpacing(5);
+		head.setPadding(new Insets(3));
+		head.setAlignment(Pos.CENTER_LEFT);
+		if(appointment.getImage() != null) {
+			ImageView img = new ImageView(appointment.getImage());
+			img.setFitHeight(16);
+			img.setFitWidth(16);
+			head.getChildren().add(img);
+		}
 		// add the duration as text
 		Text lTimeText = new Text((firstPaneOfAppointment ? startAsString : "") + "-" + (lastPaneOfAppointment ? endAsString : ""));
 		{
@@ -56,9 +65,9 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 			lTimeText.setX(layoutHelp.paddingProperty.get() );
 			lTimeText.setY(lTimeText.prefHeight(0));
 			layoutHelp.clip(this, lTimeText, widthProperty().subtract( layoutHelp.paddingProperty ), heightProperty().add(0.0), true, 0.0);
-			getChildren().add(lTimeText);
+			head.getChildren().add(lTimeText);
 		}
-		
+		getChildren().add(head);
 		// add summary
 		Text lSummaryText = new Text(appointment.getSummary());
 		{
@@ -67,11 +76,12 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 			lSummaryText.setY( lTimeText.getY() + layoutHelp.textHeightProperty.get());
 			lSummaryText.wrappingWidthProperty().bind(widthProperty().subtract( layoutHelp.paddingProperty.get() ));
 			layoutHelp.clip(this, lSummaryText, widthProperty().add(0.0), heightProperty().subtract( layoutHelp.paddingProperty ), false, 0.0);
-			getChildren().add(lSummaryText);			
+			getChildren().add(lSummaryText);
+			Tooltip.install(this, new Tooltip(appointment.getSummary()));	
 		}
 		
 		// add the menu header
-		getChildren().add(appointmentMenu);
+		//getChildren().add(appointmentMenu);
 		
 		// add the duration dragger
 		layoutHelp.skinnable.allowResizeProperty().addListener(new WeakInvalidationListener( (observable) -> {

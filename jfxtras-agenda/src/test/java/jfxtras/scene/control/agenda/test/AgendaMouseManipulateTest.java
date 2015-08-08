@@ -157,7 +157,8 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
-				
+		
+		Assert.assertEquals(1, agenda.appointments().size() );	
 		move("#AppointmentRegularBodyPane2014-01-01/0 .DurationDragger"); 
 		press(MouseButton.PRIMARY);
 		move("#hourLine15");

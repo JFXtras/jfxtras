@@ -70,7 +70,7 @@ class LayoutHelp {
 		dayContentWidthProperty.bind( dayWidthProperty.subtract(10) ); // the 10 is a margin at the right so that there is always room to start a new appointment
 		
 		// hour height
-		dayHeightProperty.bind(hourHeighProperty.multiply(24));
+		dayHeightProperty.bind(hourHeighProperty.multiply(DayBodyPane.defaultHoursInDay));
 		durationInMSPerPixelProperty.bind( msPerDayProperty.divide(dayHeightProperty) );
 		
 		// generic
@@ -83,7 +83,7 @@ class LayoutHelp {
 	final AgendaSkin skin;
 	final DragPane dragPane;
 	
-	final DoubleProperty msPerDayProperty = new SimpleDoubleProperty(24 * 60 * 60 * 1000);
+	final DoubleProperty msPerDayProperty = new SimpleDoubleProperty(DayBodyPane.defaultHoursInDay * 60 * 60 * 1000);
 	
 	final IntegerProperty highestNumberOfWholedayAppointmentsProperty = new SimpleIntegerProperty(0);
 	
@@ -151,7 +151,7 @@ class LayoutHelp {
 	{
 		localDateTime = localDateTime.withSecond(0).withNano(0);
 		int lMinutes = localDateTime.getMinute() % minutes;
-		if (lMinutes < (minutes/2)) {
+		if (lMinutes < Math.round(minutes/2)) {
 			localDateTime = localDateTime.plusMinutes(-1 * lMinutes);
 		}
 		else {

@@ -53,6 +53,11 @@ import jfxtras.util.NodeUtil;
  */
 class DayBodyPane extends Pane
 {
+	public static int defaultStepSize = 60;
+	public static int defaultStepSizeInMinutes = 15;
+	public static int defaultHoursInDay = 16;
+	public static int defaultStartHour = 7;
+    
 	/**
 	 * 
 	 */
@@ -115,15 +120,16 @@ class DayBodyPane extends Pane
 			}
 			
 			// show the rectangle
-			setCursor(Cursor.V_RESIZE);
+			//setCursor(Cursor.V_RESIZE);
 			double lY = NodeUtil.snapXY(mouseEvent.getScreenY() - NodeUtil.screenY(DayBodyPane.this));
-			resizeRectangle = new Rectangle(0, lY, layoutHelp.dayWidthProperty.get(), 10);
+			lY = ((int) (lY / layoutHelp.hourHeighProperty.divide(4).get())) * layoutHelp.hourHeighProperty.divide(4).get();
+			resizeRectangle = new Rectangle(0, lY, layoutHelp.dayWidthProperty.get(), layoutHelp.hourHeighProperty.divide(4).get());
 			resizeRectangle.getStyleClass().add("GhostRectangle");
 			getChildren().add(resizeRectangle);
 			
 			// this event should not be processed by the appointment area
 			mouseEvent.consume();
-			dragged = false;
+			dragged = true;
 			layoutHelp.skinnable.selectedAppointments().clear();
 		});
 		// visualize resize
@@ -134,9 +140,10 @@ class DayBodyPane extends Pane
 			
 			// - calculate the number of pixels from onscreen nodeY (layoutY) to onscreen mouseY					
 			double lHeight = mouseEvent.getScreenY() - NodeUtil.screenY(resizeRectangle);
-			if (lHeight < 5) {
-				lHeight = 5;
-			}
+//			if (lHeight < 15) {
+//				lHeight = 15;
+//			}
+			lHeight = ((int) (lHeight / layoutHelp.hourHeighProperty.divide(4).get()) + 1) * layoutHelp.hourHeighProperty.divide(4).get();
 			resizeRectangle.setHeight(lHeight);
 			
 			// no one else
@@ -163,12 +170,12 @@ class DayBodyPane extends Pane
 			
 			// calculate the starttime
 			LocalDateTime lStartDateTime = localDateObjectProperty.get().atStartOfDay();
-			lStartDateTime = lStartDateTime.plusSeconds( (int)(resizeRectangle.getY() * layoutHelp.durationInMSPerPixelProperty.get() / 1000) );
-			lStartDateTime = layoutHelp.roundTimeToNearestMinutes(lStartDateTime, 5);
-			
+			lStartDateTime = lStartDateTime.plusSeconds( (int)(DayBodyPane.defaultStartHour * 60 * 60 + (resizeRectangle.getY() * layoutHelp.durationInMSPerPixelProperty.get() / 1000)) );
+			lStartDateTime = layoutHelp.roundTimeToNearestMinutes(lStartDateTime, defaultStepSizeInMinutes);
+			    
 			// calculate the new end date for the appointment (recalculating the duration)
 			LocalDateTime lEndDateTime = lStartDateTime.plusSeconds( (int)(resizeRectangle.getHeight() * layoutHelp.durationInMSPerPixelProperty.get() / 1000) );
-			lEndDateTime = layoutHelp.roundTimeToNearestMinutes(lEndDateTime, 5);
+			lEndDateTime = layoutHelp.roundTimeToNearestMinutes(lEndDateTime, defaultStepSizeInMinutes);
 			
 			// clean up
 			resizeRectangle = null;					
@@ -199,7 +206,7 @@ class DayBodyPane extends Pane
 		double lAllFlagpolesWidth = layoutHelp.wholedayAppointmentFlagpoleWidthProperty.get() * lWholedayCnt;
 		double lDayWidth = layoutHelp.dayContentWidthProperty.get();
 		double lRemainingWidthForAppointments = lDayWidth - lAllFlagpolesWidth;
-		double lNumberOfPixelsPerMinute = layoutHelp.dayHeightProperty.get() / (24 * 60);
+		double lNumberOfPixelsPerMinute = layoutHelp.dayHeightProperty.get() / (defaultHoursInDay * 60);
 		
 		// then add all tracked appointments (regular & task) to the day
 		for (AppointmentAbstractTrackedPane lAppointmentAbstractTrackedPane : trackedAppointmentBodyPanes) {
@@ -214,7 +221,7 @@ class DayBodyPane extends Pane
 			lAppointmentAbstractTrackedPane.setLayoutX( NodeUtil.snapXY(lX));
 			
 			// the Y is determined by the start time in minutes projected onto the total day height (being 24 hours)
-			int lStartOffsetInMinutes = (lAppointmentAbstractTrackedPane.startDateTime.getHour() * 60) + lAppointmentAbstractTrackedPane.startDateTime.getMinute();
+			int lStartOffsetInMinutes = (lAppointmentAbstractTrackedPane.startDateTime.getHour() * 60) + lAppointmentAbstractTrackedPane.startDateTime.getMinute() - (defaultStartHour * 60);
 			double lY = lNumberOfPixelsPerMinute * lStartOffsetInMinutes;
 			lAppointmentAbstractTrackedPane.setLayoutY( NodeUtil.snapXY(lY) );
 			
@@ -236,8 +243,8 @@ class DayBodyPane extends Pane
 				lH = lNumberOfPixelsPerMinute * lHeightInMinutes;
 
 				// the height has a minimum size, in order to be able to render sensibly
-				if (lH < 2 * layoutHelp.paddingProperty.get()) {
-					lH = 2 * layoutHelp.paddingProperty.get(); 
+				if (lH < defaultStepSizeInMinutes) {
+					lH = defaultStepSizeInMinutes; 
 				}
 			}
 			lAppointmentAbstractTrackedPane.setPrefHeight( NodeUtil.snapWH(lAppointmentAbstractTrackedPane.getLayoutY(), lH) );
@@ -356,7 +363,7 @@ class DayBodyPane extends Pane
 		Rectangle r = new Rectangle(NodeUtil.sceneX(this), NodeUtil.sceneY(this), this.getWidth(), this.getHeight());
 		if (r.contains(x, y)) {
 			LocalDate localDate = localDateObjectProperty.get();
-			double lHeightOffset = (y -  r.getY());
+			double lHeightOffset = (y -  r.getY()) + (DayBodyPane.defaultStartHour * 60 * 60);
 			int ms = (int)(lHeightOffset * layoutHelp.durationInMSPerPixelProperty.get());
 			LocalDateTime localDateTime = localDate.atStartOfDay().plusSeconds(ms / 1000);
 			localDateTime = localDateTime.withNano(AppointmentAbstractPane.DRAG_DAY); // we abuse the nano second to deviate body panes from header panes
