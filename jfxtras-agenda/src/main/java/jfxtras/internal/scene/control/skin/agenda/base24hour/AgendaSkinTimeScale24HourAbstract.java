@@ -1,7 +1,7 @@
 /**
  * AgendaSkinTimeScale24HourAbstract.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -84,6 +84,17 @@ implements AgendaSkin
 	}
 	protected final Agenda control;
 
+	/**
+	 * Reconstruct the UI part
+	 */
+	protected void reconstruct() {
+		weekBodyPane.reconstruct();
+		weekHeaderPane.reconstruct();
+		
+		// initial setup
+		refresh();
+	}
+	
 	/*
 	 * construct the component
 	 */
@@ -117,6 +128,7 @@ implements AgendaSkin
 		@Override
 		public void invalidated(Observable arg0) {
 			assignDateToDayAndHeaderPanes();
+			scrollWeekpaneToShowDisplayedTime();
 			setupAppointments();
 		}
 	};
@@ -238,6 +250,9 @@ implements AgendaSkin
 	{
 		// when switching skin, remove any old stuff
 		getChildren().clear();
+		if (borderPane != null) {
+			layoutHelp.dragPane.getChildren().remove(borderPane);
+		}
 		
 		// we use a borderpane
 		borderPane = new BorderPane();
@@ -272,11 +287,26 @@ implements AgendaSkin
 		// style
 		getSkinnable().getStyleClass().add(getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
 	}
-	private BorderPane borderPane = null;
+	protected BorderPane borderPane = null;
 	private WeekHeaderPane weekHeaderPane = null;
 	private ScrollPane weekScrollPane = null;
 	private WeekBodyPane weekBodyPane = null;
 
+	
+	/**
+	 * 
+	 */
+	private void scrollWeekpaneToShowDisplayedTime() {
+		// calculate the offset of the displayed time from midnight
+		LocalDateTime lDisplayedLocalDateTime = getSkinnable().displayedLocalDateTime().get();
+		double lOffsetInMinutes = (lDisplayedLocalDateTime.getHour() * 60) + lDisplayedLocalDateTime.getMinute();
+		
+		// calculate the position of the scrollbar that matches that offset from midnight
+		double lScrollRange = weekScrollPane.getVmax() - weekScrollPane.getVmin();
+		double lValue = lScrollRange * lOffsetInMinutes / (24.0 * 60.0);
+		weekScrollPane.setVvalue(lValue);
+	}
+	
 	// ==================================================================================================================
 	// PANES
 	
@@ -285,12 +315,14 @@ implements AgendaSkin
 	/**
 	 * Responsible for rendering the day headers within the week
 	 */
-	class WeekHeaderPane extends Pane
-	{
+	class WeekHeaderPane extends Pane {
 		final List<DayHeaderPane> dayHeaderPanes = new ArrayList<DayHeaderPane>();
 
-		public WeekHeaderPane(WeekBodyPane weekBodyPane)
-		{
+		public WeekHeaderPane(WeekBodyPane weekBodyPane) {
+			construct();
+		}
+		
+		private void construct() {
 			// one day header pane per day body pane 
 			for (DayBodyPane dayBodyPane : weekBodyPane.dayBodyPanes)
 			{
@@ -311,6 +343,12 @@ implements AgendaSkin
 			prefWidthProperty().bind(weekBodyPane.widthProperty()); // same width as the weekpane
 			prefHeightProperty().bind(layoutHelp.headerHeightProperty);
 		}
+		
+		private void reconstruct() {
+			dayHeaderPanes.clear();
+			getChildren().clear();
+			construct();
+		}
 	}
 
 	/**
@@ -320,11 +358,14 @@ implements AgendaSkin
 	{
 		final List<DayBodyPane> dayBodyPanes = new ArrayList<DayBodyPane>();
 
-		public WeekBodyPane()
-		{
+		public WeekBodyPane() {
 			getStyleClass().add("Week");
+			construct();
+		}
+		
+		private void construct() {
 			getChildren().add(new TimeScale24Hour(this, layoutHelp));
-
+			
 			int i = 0;
 			for (LocalDate localDate : determineDisplayedLocalDates())
 			{
@@ -340,6 +381,12 @@ implements AgendaSkin
 				localDate = localDate.plusDays(1);
 				i++;
 			}
+		}
+		
+		void reconstruct() {
+			dayBodyPanes.clear();
+			getChildren().clear();
+			construct();
 		}
 	}
 	
@@ -474,20 +521,21 @@ implements AgendaSkin
 	
 
 	/**
-	 * 
+	 * @param x scene coordinate
+	 * @param y scene coordinate
 	 */
-	public LocalDateTime convertClickToDateTime(double x, double y) {
+	public LocalDateTime convertClickInSceneToDateTime(double x, double y) {
 		
 		// the click has only value in either the day panes 
 		for (DayBodyPane lDayPane : weekBodyPane.dayBodyPanes) {
-			LocalDateTime lLocalDateTime = lDayPane.convertClickToDateTime(x, y);
+			LocalDateTime lLocalDateTime = lDayPane.convertClickInSceneToDateTime(x, y);
 			if (lLocalDateTime != null) {
 				return lLocalDateTime;
 			}
 		}
 		// or the day header panes
 		for (DayHeaderPane lDayHeaderPane : weekHeaderPane.dayHeaderPanes) {
-			LocalDateTime lLocalDateTime = lDayHeaderPane.convertClickToDateTime(x, y);
+			LocalDateTime lLocalDateTime = lDayHeaderPane.convertClickInSceneToDateTime(x, y);
 			if (lLocalDateTime != null) {
 				return lLocalDateTime;
 			}

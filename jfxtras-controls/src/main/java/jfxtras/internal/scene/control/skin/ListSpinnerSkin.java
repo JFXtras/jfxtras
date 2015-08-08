@@ -1,7 +1,7 @@
 /**
  * ListSpinnerSkin.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -669,9 +669,13 @@ public class ListSpinnerSkin<T> extends SkinBase<ListSpinner<T>>
 		// strip
 		String lText = text;
 		String lPostfix = getSkinnable().getPostfix();
-		if (lPostfix.length() > 0 && lText.endsWith(lPostfix)) lText = lText.substring(0, lText.length() - lPostfix.length());
+		if (lPostfix.length() > 0 && lText.endsWith(lPostfix)) {
+			lText = lText.substring(0, lText.length() - lPostfix.length());
+		}
 		String lPrefix = getSkinnable().getPrefix();
-		if (lPrefix.length() > 0 && lText.startsWith(lPrefix)) lText = lText.substring(lPrefix.length());
+		if (lPrefix.length() > 0 && lText.startsWith(lPrefix)) {
+			lText = lText.substring(lPrefix.length());
+		}
 		
 		// convert from string to value
 		T lValue = getSkinnable().getStringConverter().fromString(lText);

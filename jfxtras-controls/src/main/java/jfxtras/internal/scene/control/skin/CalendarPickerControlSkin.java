@@ -1,7 +1,7 @@
 /**
  * CalendarPickerControlSkin.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -70,6 +70,8 @@ import jfxtras.scene.control.ListSpinnerIntegerList;
 import jfxtras.scene.layout.GridPane;
 
 import com.sun.javafx.css.converters.EnumConverter;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 
 /**
  * This skin uses regular JavaFX controls
@@ -314,16 +316,12 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		});
 		
 		// double click here to show today
-		todayLabel = new Label("   ");
-		todayLabel.onMouseClickedProperty().set(new EventHandler<MouseEvent>()
-		{
-			@Override
-			public void handle(MouseEvent event)
-			{
-				if (event.getClickCount() < 1) return;
-				setDisplayedCalendarToToday();
-			}
-		});
+		todayButton = new Button("   ");
+        todayButton.getStyleClass().add("today-button");
+        todayButton.setMinSize(16, 16);
+		todayButton.setOnAction((ActionEvent event) -> {
+            setDisplayedCalendarToToday();
+        });
 		
 		// weekday labels
 		for (int i = 0; i < 7; i++)
@@ -391,7 +389,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 	// the result
 	private ListSpinner<String> monthListSpinner = null;
 	private ListSpinner<Integer> yearListSpinner = null;
-	private Label todayLabel = new Label("   ");
+	private Button todayButton = new Button("   ");
 	final private List<Label> weekdayLabels = new ArrayList<Label>();
 	final private List<Label> weeknumberLabels = new ArrayList<Label>();
 	final private List<ToggleButton> dayButtons = new ArrayList<ToggleButton>();
@@ -518,7 +516,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		
 		// double click here to show today
 		if (lShowWeeknumbers) {
-			gridPane.add(todayLabel, new GridPane.C().col(0).row(1));
+			gridPane.add(todayButton, new GridPane.C().col(0).row(1));
 		}		
 		
 		// weekday labels

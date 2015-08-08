@@ -1,7 +1,7 @@
 /**
  * ListView.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -37,10 +37,8 @@ import javafx.collections.ObservableList;
 import jfxtras.internal.scene.control.skin.ListViewSkinJFXtras;
 
 /**
- * Drop in replacement for ListView. Adds some handy features like a two-way bindable selectedItem.
+ * Drop in replacement for ListView, adds a two-way bindable selectedItem property.
  * 
- * @author Tom Eugelink
- *
  * @param <T>
  */
 public class ListView<T> extends javafx.scene.control.ListView<T>
@@ -72,7 +70,7 @@ public class ListView<T> extends javafx.scene.control.ListView<T>
 	 */
 	private void construct()
 	{
-		// use a custom skin to enable refreshin
+		// use a custom skin to enable refreshing
 		setStyle("-fx-skin: \"jfxtras.internal.scene.control.skin.ListViewSkinJFXtras\";");
 		
 		// construct the properties

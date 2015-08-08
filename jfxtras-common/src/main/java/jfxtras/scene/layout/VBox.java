@@ -1,7 +1,7 @@
 /**
  * VBox.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -157,7 +157,7 @@ public class VBox extends javafx.scene.layout.VBox
 			super.apply(node);
 
 			// apply constraints
-			if (vgrow != null) GenericLayoutConstraints.overrideMaxWidth(node, this);
+			if (vgrow != null) GenericLayoutConstraints.overrideMaxHeight(node, this);
 			javafx.scene.layout.VBox.setVgrow(node, vgrow != null ? vgrow : vgrowReset);
 			javafx.scene.layout.VBox.setMargin(node, margin != null ? margin : marginReset);
 		}

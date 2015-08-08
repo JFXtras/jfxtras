@@ -1,7 +1,7 @@
 /**
  * CalendarTextFieldSkin.java
  *
- * Copyright (c) 2011, 2015 JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -336,8 +336,9 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		calendarPicker.localeProperty().set(getSkinnable().localeProperty().get());
 		calendarPicker.allowNullProperty().set(getSkinnable().allowNullProperty().get());
 		calendarPicker.calendarProperty().set(getSkinnable().calendarProperty().get());
-		calendarPicker.disabledCalendars().addAll(getSkinnable().disabledCalendars());
-		calendarPicker.highlightedCalendars().addAll(getSkinnable().highlightedCalendars());
+                DateTimeToCalendarHelper.sync(calendarPicker.disabledCalendars(), getSkinnable().disabledCalendars());
+                DateTimeToCalendarHelper.sync(calendarPicker.highlightedCalendars(), getSkinnable().highlightedCalendars());
+                calendarPicker.displayedCalendar().set(getSkinnable().getDisplayedCalendar());
 		calendarPicker.setCalendarRangeCallback(new Callback<CalendarRange,Void>() {
 			@Override
 			public Void call(CalendarRange calendarRange) {
@@ -346,6 +347,16 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 					return null;
 				}
 				return lCallback.call(calendarRange);
+			}
+		});
+		calendarPicker.setValueValidationCallback(new Callback<Calendar, Boolean>() {
+			@Override
+			public Boolean call(Calendar calendar) {
+				Callback<Calendar, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+				if (lCallback == null) {
+					return true;
+				}
+				return lCallback.call(calendar);
 			}
 		});
 		

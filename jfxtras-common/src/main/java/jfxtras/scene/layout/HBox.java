@@ -1,7 +1,7 @@
 /**
  * HBox.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -158,7 +158,7 @@ public class HBox extends javafx.scene.layout.HBox
 			super.apply(node);
 
 			// apply constraints
-			if (hgrow != null) GenericLayoutConstraints.overrideMaxHeight(node, this);
+			if (hgrow != null) GenericLayoutConstraints.overrideMaxWidth(node, this);
 			javafx.scene.layout.HBox.setHgrow(node, hgrow != null ? hgrow : hgrowReset);
 			javafx.scene.layout.HBox.setMargin(node, margin != null ? margin : marginReset);
 		}

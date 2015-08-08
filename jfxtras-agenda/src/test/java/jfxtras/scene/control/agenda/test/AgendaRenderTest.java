@@ -1,7 +1,7 @@
 /**
- * LocalDatePickerTest.java
+ * AgendaRenderTest.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -29,12 +29,14 @@
 
 package jfxtras.scene.control.agenda.test;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Locale;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.AssertNode;
@@ -255,6 +257,31 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		assertFind("#DayHeader2014-01-05");
 		Assert.assertTrue(find("#DayHeader2014-01-04").getStyleClass().contains("weekend"));
 		Assert.assertTrue(find("#DayHeader2014-01-05").getStyleClass().contains("weekend"));
+		//TestUtil.sleep(3000);
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void scrollToDisplayedTime()
+	{
+		// find the scrollpane
+		ScrollPane lScrollPane = (ScrollPane)find(".scroll-pane");
+		
+		// given that the scrollpane is all the way at the top
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			lScrollPane.setVvalue(0.0);
+		});
+		Assert.assertEquals(0.0, lScrollPane.getVvalue());
+		
+		// when the show a time all the way at the bottow
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.setDisplayedLocalDateTime(LocalDateTime.now().withHour(23).withMinute(59));
+		});
+		
+		// then the scrollpane must have scrolled down
+		Assert.assertTrue(lScrollPane.getVvalue() > 0.95); // we do not want to pinpoint it too hard, but somewhere way high is close enough to assert the behavior
 		//TestUtil.sleep(3000);
 	}
 }

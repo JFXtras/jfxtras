@@ -1,3 +1,32 @@
+/**
+ * DayHeaderPane.java
+ *
+ * Copyright (c) 2011-2015, JFXtras
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the organization nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.LocalDate;
@@ -47,12 +76,6 @@ public class DayHeaderPane extends Pane {
 		dayText.setY( dayText.prefHeight(0) );
 		getChildren().add(dayText);
 		
-		// for testing
-		localDateObjectProperty.addListener( (observable) -> {
-			setId("DayHeader" + localDateObjectProperty.get());
-		});
-		setId("DayHeader" + localDateObjectProperty.get());
-		
 		// clip the visible part
 		Rectangle lClip = new Rectangle(0,0,0,0);
 		lClip.widthProperty().bind(widthProperty().subtract(layoutHelp.paddingProperty.get()));
@@ -81,6 +104,9 @@ public class DayHeaderPane extends Pane {
 				      + localDateObjectProperty.get().format(layoutHelp.dateDateTimeFormatter)
 				      ;
 		dayText.setText(lLabel);
+		
+		// for testing
+		setId("DayHeader" + localDateObjectProperty.get());
 	}
 	private Text dayText = new Text("?");
 	
@@ -169,12 +195,12 @@ public class DayHeaderPane extends Pane {
 	
 	/**
 	 * 
-	 * @param x screen coordinate
-	 * @param y screen coordinate
+	 * @param x scene coordinate
+	 * @param y scene coordinate
 	 * @return a localDateTime where nano seconds == 0
 	 */
-	LocalDateTime convertClickToDateTime(double x, double y) {
-		Rectangle r = new Rectangle(NodeUtil.screenX(this), NodeUtil.screenY(this), this.getWidth(), this.getHeight());
+	LocalDateTime convertClickInSceneToDateTime(double x, double y) {
+		Rectangle r = new Rectangle(NodeUtil.sceneX(this), NodeUtil.sceneY(this), this.getWidth(), this.getHeight());
 		if (r.contains(x, y)) {
 			LocalDate localDate = localDateObjectProperty.get();
 			LocalDateTime localDateTime = localDate.atStartOfDay();

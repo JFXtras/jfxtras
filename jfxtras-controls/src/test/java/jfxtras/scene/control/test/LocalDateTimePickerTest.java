@@ -1,7 +1,7 @@
 /**
  * LocalDateTimePickerTest.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -138,7 +138,7 @@ public class LocalDateTimePickerTest extends JFXtrasGuiTest {
 		press(MouseButton.PRIMARY);
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
-		Assert.assertEquals("2013-01-01T20:23:56", localDateTimePicker.getLocalDateTime().toString());
+		Assert.assertEquals("2013-01-01T20:22:56", localDateTimePicker.getLocalDateTime().toString());
 	}
 	
 	

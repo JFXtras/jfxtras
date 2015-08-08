@@ -1,7 +1,7 @@
 /**
  * TestUtil.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -51,6 +51,7 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import com.sun.javafx.tk.Toolkit;
+import java.time.LocalDate;
 
 public class TestUtil {
 
@@ -164,6 +165,18 @@ public class TestUtil {
 		if (value == null) return "null";
 		SimpleDateFormat lSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		return value == null ? "null" : lSimpleDateFormat.format(value.getTime());
+	}
+        
+        static public String quickFormatLocalDateAsDate(LocalDate value) {
+		if (value == null) return "null";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		return value == null ? "null" : value.format(formatter);
+	}
+        
+        static public String quickFormatLocalDateTimeAsDate(LocalDateTime value) {
+		if (value == null) return "null";
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return value == null ? "null" : value.format(formatter);
 	}
 	
 	/**

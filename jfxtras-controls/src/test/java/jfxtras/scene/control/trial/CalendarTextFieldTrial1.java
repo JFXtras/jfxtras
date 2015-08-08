@@ -1,7 +1,7 @@
 /**
- * ListSpinnerTrial1.java
+ * CalendarTextFieldTrial1.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,7 @@ package jfxtras.scene.control.trial;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarTextField;
@@ -58,6 +59,7 @@ public class CalendarTextFieldTrial1 extends Application {
 			lCalendarTextField.focusedProperty().addListener( (observable) -> {
 				System.out.println("FOCUS " + lCalendarTextField.focusedProperty().get());
 			});
+			lCalendarTextField.tooltipProperty().set(new Tooltip("This is a custom tooltip"));
 		}
 		
 		Button lButton = new Button("dummy");

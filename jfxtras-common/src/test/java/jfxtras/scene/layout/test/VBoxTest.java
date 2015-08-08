@@ -1,7 +1,7 @@
 /**
- * HBoxTest.java
+ * VBoxTest.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -69,11 +69,11 @@ public class VBoxTest extends GuiTest {
 	@Test
 	public void checkPositions()
 	{
-		//AssertNode.generateSource("vbox", vbox.getChildren(), null, false, A.XYWH, A.CLASS);
-		new AssertNode(vbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 240.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(1)).assertXYWH(0.0, 30.0, 240.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		AssertNode.generateSource("vbox", vbox.getChildren(), null, false, A.XYWH, A.CLASS);
+		new AssertNode(vbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 44.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(1)).assertXYWH(0.0, 30.0, 97.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(2)).assertXYWH(0.0, 60.0, 240.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(3)).assertXYWH(5.0, 95.0, 230.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(3)).assertXYWH(5.0, 95.0, 94.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(4)).assertXYWH(0.0, 130.0, 61.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(5)).assertXYWH(20.0, 180.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(6)).assertXYWH(0.0, 230.0, 150.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);

@@ -1,22 +1,24 @@
 /**
  * NodeUtil.java
  *
- * Copyright (c) 2011-2014, JFXtras All rights reserved.
- *
+ * Copyright (c) 2011-2015, JFXtras
+ * All rights reserved.
+ * 
  * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met: *
- * Redistributions of source code must retain the above copyright notice, this
- * list of conditions and the following disclaimer. * Redistributions in binary
- * form must reproduce the above copyright notice, this list of conditions and
- * the following disclaimer in the documentation and/or other materials provided
- * with the distribution. * Neither the name of the organization nor the names
- * of its contributors may be used to endorse or promote products derived from
- * this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the organization nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -24,6 +26,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package jfxtras.util;
 
 import java.util.ArrayList;
@@ -57,13 +60,47 @@ public class NodeUtil {
         throw new AssertionError(); // not in this class either!
     }
 
+   /**
+    *
+    * @param node
+    * @return The X coordinate of the node within the parent.
+    */
+   static public double xInParent(Node node, Node parent) {
+	   double lX = 0;
+	   
+	   while (node != parent) {
+		   double lXDelta = node.getBoundsInParent().getMinX();
+		   lX += lXDelta;
+		   //System.out.println("xInParent " + node + " -> " + lXDelta + " " + lX);
+		   node = node.getParent();
+	   }
+       return lX;
+   }
+
+   /**
+   *
+   * @param node
+   * @return The Y coordinate of the node within the parent.
+   */
+  static public double yInParent(Node node, Node parent) {
+	   double lY = 0;
+	   
+	   while (node != parent) {
+		   double lYDelta = node.getBoundsInParent().getMinY();
+		   lY += lYDelta;
+		   //System.out.println("yInParent " + node + " -> " + lYDelta + " " + lY);
+		   node = node.getParent();
+	   }
+      return lY;
+  }
+
     /**
      *
      * @param node
      * @return The X screen coordinate of the node.
      */
     static public double screenX(Node node) {
-        return node.localToScene(node.getBoundsInLocal()).getMinX() + node.getScene().getX() + node.getScene().getWindow().getX();
+        return sceneX(node) + node.getScene().getWindow().getX();
     }
 
     /**
@@ -72,8 +109,26 @@ public class NodeUtil {
      * @return The Y screen coordinate of the node.
      */
     static public double screenY(Node node) {
-        return node.localToScene(node.getBoundsInLocal()).getMinY() + node.getScene().getY() + node.getScene().getWindow().getY();
+        return sceneY(node) + node.getScene().getWindow().getY();
     }
+
+    /**
+    *
+    * @param node
+    * @return The X scene coordinate of the node.
+    */
+   static public double sceneX(Node node) {
+       return node.localToScene(node.getBoundsInLocal()).getMinX() + node.getScene().getX();
+   }
+
+   /**
+    *
+    * @param node
+    * @return The Y scene coordinate of the node.
+    */
+   static public double sceneY(Node node) {
+       return node.localToScene(node.getBoundsInLocal()).getMinY() + node.getScene().getY();
+   }
 
     /**
      * Removes the specified node from its parent.

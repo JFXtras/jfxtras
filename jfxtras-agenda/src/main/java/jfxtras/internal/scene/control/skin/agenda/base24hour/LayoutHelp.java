@@ -1,3 +1,32 @@
+/**
+ * LayoutHelp.java
+ *
+ * Copyright (c) 2011-2015, JFXtras
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the organization nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.text.SimpleDateFormat;
@@ -7,13 +36,15 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ObservableValue;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
@@ -23,7 +54,7 @@ import jfxtras.scene.control.agenda.Agenda;
  * This class is not a class but a data holder, a record, all fields are accessed directly.
  * Its methods are utility methods, which normally would be statics in a util class. 
  */
-public class LayoutHelp {
+class LayoutHelp {
 	public LayoutHelp(Agenda skinnable, AgendaSkin skin) {
 		this.skinnable = skinnable;
 		this.skin = skin;
@@ -79,10 +110,13 @@ public class LayoutHelp {
 	DateTimeFormatter timeDateTimeFormatter = new DateTimeFormatterBuilder().appendPattern("HH:mm").toFormatter(Locale.getDefault());
 
 	/**
-	 * 
+	 * I have no clue why the wholeday appointment header needs an additional 10.0 px X offset in right-to-left mode
 	 */
-	public void clip(Text text, ObservableValue<? extends Number> width, ObservableValue<? extends Number> height) {
+	void clip(Pane pane, Text text, DoubleBinding width, DoubleBinding height, boolean mirrorWidth, double additionMirorXOffset) {
 		Rectangle lClip = new Rectangle(0,0,0,0);
+		if (mirrorWidth && skinnable.getNodeOrientation().equals(NodeOrientation.RIGHT_TO_LEFT)) {
+			lClip.xProperty().bind(pane.widthProperty().multiply(-1.0).add(text.getBoundsInParent().getWidth()).add(additionMirorXOffset));
+		}
 		lClip.widthProperty().bind(width);
 		lClip.heightProperty().bind(height);
 		text.setClip(lClip);
@@ -91,7 +125,7 @@ public class LayoutHelp {
 	/**
 	 * 
 	 */
-	public void setupMouseOverAsBusy(final Node node) {
+	void setupMouseOverAsBusy(final Node node) {
 		// play with the mouse pointer to show something can be done here
 		node.setOnMouseEntered( (mouseEvent) -> {
 			if (!mouseEvent.isPrimaryButtonDown()) {						
@@ -113,7 +147,7 @@ public class LayoutHelp {
 	 * @param minutes
 	 * @return
 	 */
-	public LocalDateTime roundTimeToNearestMinutes(LocalDateTime localDateTime, int minutes)
+	LocalDateTime roundTimeToNearestMinutes(LocalDateTime localDateTime, int minutes)
 	{
 		localDateTime = localDateTime.withSecond(0).withNano(0);
 		int lMinutes = localDateTime.getMinute() % minutes;

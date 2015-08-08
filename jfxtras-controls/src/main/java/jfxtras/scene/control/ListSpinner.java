@@ -1,7 +1,7 @@
 /**
  * ListSpinner.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -51,27 +51,41 @@ import javafx.util.StringConverter;
 
 /**
  * This is a spinner, showing one value at a time from a list.
- * This value is set and retrieved from the value property.
- * Basically a spinner shows a list of values and can do "next" or "previous" on this.
+ * This value is set and retrieved through the value property.
+ * Basically a spinner shows a list of values and can do a "next" or "previous".
  * 
  * A spinner can be editable, the user can then type a value instead of selecting it.
  * If the value exists in the list, the spinner will simply jump to it. 
- * If the value does not exist, if defined the AddCallback is called.
+ * If the value does not exist, the AddCallback is called if defined.
+ * 
  * - If the AddCallback returns null, spinner will only refresh the current index.
- * - If the AddCallback returns an Integer, spinner will jump to that index (usually the index where the new value was added).   
+ * - If the AddCallback returns an Integer, spinner will jump to that index (usually the index where the new value was added to the list).   
+ *
  * 
- * http://openjdk.java.net/projects/openjfx/ux/spinner/index.html
+ * '''
  * 
- * You can style the text in the control using CSS like so:
+ * In the default skin you can style the text in the control using CSS like so:
  * [source,css]
  * --
  * .ListSpinner .value { 
- *	-fx-font-weight: bold;
+ *     -fx-font-weight: bold;
  * }
  * --
  * 
- * The "value" class applies to the text in both readonly and editable spinners. Use "readonly" or "editable" to style either mode specifically.
- *    
+ * The "value" class applies to the text in both readonly and editable spinners, use the "readonly" or "editable" class to style either mode specifically.
+ * There is a left-arrow, right-arrow, up-arrow and down-arrow class that uses a SVG path to draw the arrow, this can be overridden with another SVG to draw a different shape.
+ * 
+ * The default skin has a number of styleable properies which use the text representation of an enum for their value:
+ * 
+ * [source,css]
+ * --
+ * .ListSpinner { 
+ *     -fxx-arrow-position: {LEADING, TRAILING, SPLIT}
+ *     -fxx-arrow-direction: {VERTICAL, HORIZONTAL}
+ *     -fxx-value-alignment: see javafx.geometry.Pos (https://docs.oracle.com/javase/8/javafx/api/javafx/geometry/Pos.html) 
+ * }
+ * --
+ * 
  * @author Tom Eugelink
  */
 public class ListSpinner<T> extends Control
@@ -249,7 +263,7 @@ public class ListSpinner<T> extends Control
 	/** Id */
 	public ListSpinner<T> withId(String value) { setId(value); return this; }
 
-	/** Value: */
+	/** Value: the currently show value of the list. */
 	public ObjectProperty<T> valueProperty() { return this.valueObjectProperty; }
 	final private ObjectProperty<T> valueObjectProperty = new SimpleObjectProperty<T>(this, "value", null)
 	{
@@ -264,7 +278,7 @@ public class ListSpinner<T> extends Control
 	public void setValue(T value) { this.valueObjectProperty.setValue(value); }
 	public ListSpinner<T> withValue(T value) { setValue(value); return this; }
 	
-	/** Index: */
+	/** Index: the currently show index in the list. */
 	public ObjectProperty<Integer> indexProperty() { return this.indexObjectProperty; }
 	final private ObjectProperty<Integer> indexObjectProperty = new SimpleObjectProperty<Integer>(this, "index", null)
 	{
@@ -279,7 +293,7 @@ public class ListSpinner<T> extends Control
 	public void setIndex(Integer value) { this.indexObjectProperty.setValue(value); }
 	public ListSpinner<T> withIndex(Integer value) { setIndex(value); return this; }
 	
-	/** Cyclic: */
+	/** Cyclic: what happens at the beginning or end of the list, stop or cycle to the other end. */
 	public ObjectProperty<Boolean> cyclicProperty() { return this.cyclicObjectProperty; }
 	final private ObjectProperty<Boolean> cyclicObjectProperty = new SimpleObjectProperty<Boolean>(this, "cyclic", false)
 	{
@@ -293,7 +307,7 @@ public class ListSpinner<T> extends Control
 	public void setCyclic(Boolean value) { this.cyclicObjectProperty.setValue(value); }
 	public ListSpinner<T> withCyclic(Boolean value) { setCyclic(value); return this; }
 
-	/** Editable: */
+	/** Editable: is the listspinner editable. It allows the user to type a value instead of only navigating to it, and if the AddCallback is defined, possibly also adding values. */
 	public ObjectProperty<Boolean> editableProperty() { return this.editableObjectProperty; }
 	final private ObjectProperty<Boolean> editableObjectProperty = new SimpleObjectProperty<Boolean>(this, "editable", false)
 	{
@@ -307,21 +321,21 @@ public class ListSpinner<T> extends Control
 	public void setEditable(Boolean value) { this.editableObjectProperty.setValue(value); }
 	public ListSpinner<T> withEditable(Boolean value) { setEditable(value); return this; }
 
-	/** Postfix: */
+	/** Postfix: a string to be placed after the value, this can for example be a unit like "kg" */
 	public ObjectProperty<String> postfixProperty() { return this.postfixObjectProperty; }
 	final private ObjectProperty<String> postfixObjectProperty = new SimpleObjectProperty<String>(this, "postfix", "");
 	public String getPostfix() { return this.postfixObjectProperty.getValue(); }
 	public void setPostfix(String value) { this.postfixObjectProperty.setValue(value); }
 	public ListSpinner<T> withPostfix(String value) { setPostfix(value); return this; }
 
-	/** Prefix: */
+	/** Prefix: a string to be placed before the list value, this can for example be a currency */
 	public ObjectProperty<String> prefixProperty() { return this.prefixObjectProperty; }
 	final private ObjectProperty<String> prefixObjectProperty = new SimpleObjectProperty<String>(this, "prefix", "");
 	public String getPrefix() { return this.prefixObjectProperty.getValue(); }
 	public void setPrefix(String value) { this.prefixObjectProperty.setValue(value); }
 	public ListSpinner<T> withPrefix(String value) { setPrefix(value); return this; }
 
-	/** Items: */
+	/** Items: the list. */
 	public ObjectProperty<ObservableList<T>> itemsProperty() { return this.itemsObjectProperty; }
 	final private ObjectProperty<ObservableList<T>> itemsObjectProperty = new SimpleObjectProperty<ObservableList<T>>(this, "items", null)
 	{
@@ -335,21 +349,24 @@ public class ListSpinner<T> extends Control
 	public void setItems(ObservableList<T> value) { this.itemsObjectProperty.setValue(value); }
 	public ListSpinner<T> withItems(ObservableList<T> value) { setItems(value); return this; }
 
-	/** CellFactory: */
+	/** CellFactory: generate the cell to render a value */
 	public ObjectProperty<Callback<ListSpinner<T>, Node>> cellFactoryProperty() { return this.cellFactoryObjectProperty; }
 	final private ObjectProperty<Callback<ListSpinner<T>, Node>> cellFactoryObjectProperty = new SimpleObjectProperty<Callback<ListSpinner<T>, Node>>(this, "cellFactory", new DefaultCellFactory());
 	public Callback<ListSpinner<T>, Node> getCellFactory() { return this.cellFactoryObjectProperty.getValue(); }
 	public void setCellFactory(Callback<ListSpinner<T>, Node> value) { this.cellFactoryObjectProperty.setValue(value); }
 	public ListSpinner<T> withCellFactory(Callback<ListSpinner<T>, Node> value) { setCellFactory(value); return this; }
 
-	/** StringConverter&lt;T&gt;: */
+	/** StringConverter&lt;T&gt;: convert a value in the list to its string representation and (when in edit mode) vice versa. */
 	public ObjectProperty<StringConverter<T>> stringConverterProperty() { return this.stringConverterObjectProperty; }
 	final private ObjectProperty<StringConverter<T>> stringConverterObjectProperty = new SimpleObjectProperty<StringConverter<T>>(this, "stringConverter", new DefaultStringConverter());
 	public StringConverter<T> getStringConverter() { return this.stringConverterObjectProperty.getValue(); }
 	public void setStringConverter(StringConverter<T> value) { this.stringConverterObjectProperty.setValue(value); }
 	public ListSpinner<T> withStringConverter(StringConverter<T> value) { setStringConverter(value); return this; }
 
-	/** AddCallback: */
+	/** AddCallback: this callback is called in editable mode when a value is entered that is not found in the list. 
+	 *  It is up to the coder to added it to the list or not.
+	 *  @return the index where of the position the ListSpinner must show or null (do nothing expect refresh the currently show index)
+	 */
 	public ObjectProperty<Callback<T, Integer>> addCallbackProperty() { return this.addCallbackObjectProperty; }
 	final private ObjectProperty<Callback<T, Integer>> addCallbackObjectProperty = new SimpleObjectProperty<Callback<T, Integer>>(this, "addCallback", null);
 	public Callback<T, Integer> getAddCallback() { return this.addCallbackObjectProperty.getValue(); }
@@ -407,7 +424,7 @@ public class ListSpinner<T> extends Control
 	// ==================================================================================================================
 	// EVENTS
 	
-	/** OnCycle: */
+	/** OnCycle: callback for when the list cycles to the other end in cyclic mode (for example to increase a year when a month ListSpinner skips from December to January) */
 	public ObjectProperty<EventHandler<CycleEvent>> onCycleProperty() { return iOnCycleObjectProperty; }
 	final private ObjectProperty<EventHandler<CycleEvent>> iOnCycleObjectProperty = new SimpleObjectProperty<EventHandler<CycleEvent>>(null);
 	// java bean API

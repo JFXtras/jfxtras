@@ -1,7 +1,7 @@
 /**
  * LocalDatePicker.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -43,10 +43,23 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDatePickerSkin;
 
 /**
- * LocalDate (JSR-310) picker component.<br>
- * This component allows selecting of one or many dates.
+ * // These are used for the includes
+ * :control: LocalDatePicker 
+ * :control_instance: localDatePicker 
+ * :calendar: localDate
+ * :calendars: localDates
+ * :calendar_class: LocalDate
+ * :calendars_class: LocalDates
  * 
- * @author Tom Eugelink
+ * = LocalDatePicker 
+ * LocalDatePicker is a control for selecting one, multiple or a range of dates. 
+ * The name LocalDatePicker is because it uses Java's LocalDate (JSR-310) (as opposed to Date) in its API to do so.
+ * 
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_modeProperty.adoc[]
+ * 
+ * == Callback
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  */
 public class LocalDatePicker extends Control
 {
@@ -102,14 +115,14 @@ public class LocalDatePicker extends Control
 	public void setMode(Mode value) { modeObjectProperty.setValue(value); }
 	public LocalDatePicker withMode(Mode value) { setMode(value); return this; } 
 
-	/** LocalDate: */
+	/** LocalDate: the selected date, or when in RANGE or MULTIPLE mode, the last selected date.*/
 	public ObjectProperty<LocalDate> localDateProperty() { return localDateObjectProperty; }
 	private final ObjectProperty<LocalDate> localDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "localDate");
 	public LocalDate getLocalDate() { return localDateObjectProperty.getValue(); }
 	public void setLocalDate(LocalDate value) { localDateObjectProperty.setValue(value); }
 	public LocalDatePicker withLocalDate(LocalDate value) { setLocalDate(value); return this; }
 
-	/** LocalDates: */
+	/** LocalDates: a list of all selected dates. */
 	public ObservableList<LocalDate> localDates() { return localDates; }
 	private final ObservableList<LocalDate> localDates =  javafx.collections.FXCollections.observableArrayList();
 
@@ -120,18 +133,18 @@ public class LocalDatePicker extends Control
 	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
 	public LocalDatePicker withLocale(Locale value) { setLocale(value); return this; } 
 
-	/** is null allowed */
-    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
+	/** AllowNull: indicates if no selected date (resulting in null in the localDate property) is an allowed state.*/
     public BooleanProperty allowNullProperty() { return allowNullProperty; }
+    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
     public boolean getAllowNull() { return allowNullProperty.get(); }
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public LocalDatePicker withAllowNull(boolean value) { setAllowNull(value); return this; }
 
-	/** highlightedLocalDates: */
+	/** highlightedLocalDates: a list of dates that are rendered with the highlight class added. This can then be styled using CSS. */
 	public ObservableList<LocalDate> highlightedLocalDates() { return highlightedLocalDates; }
 	private final ObservableList<LocalDate> highlightedLocalDates =  javafx.collections.FXCollections.observableArrayList();
 
-	/** disabledLocalDates: */
+	/** disabledLocalDates: a list of dates that cannot be selected. */
 	public ObservableList<LocalDate> disabledLocalDates() { return disabledLocalDates; }
 	private final ObservableList<LocalDate> disabledLocalDates =  javafx.collections.FXCollections.observableArrayList();
 

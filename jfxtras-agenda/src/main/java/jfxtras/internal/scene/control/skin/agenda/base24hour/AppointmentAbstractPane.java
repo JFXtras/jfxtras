@@ -1,3 +1,32 @@
+/**
+ * AppointmentAbstractPane.java
+ *
+ * Copyright (c) 2011-2015, JFXtras
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the organization nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.Duration;
@@ -16,13 +45,13 @@ import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
-abstract public class AppointmentAbstractPane extends Pane {
+abstract class AppointmentAbstractPane extends Pane {
 
 	/**
 	 * @param calendar
 	 * @param appointment
 	 */
-	public AppointmentAbstractPane(Agenda.Appointment appointment, LayoutHelp layoutHelp)
+	AppointmentAbstractPane(Agenda.Appointment appointment, LayoutHelp layoutHelp)
 	{
 		this.appointment = appointment;
 		this.layoutHelp = layoutHelp;
@@ -30,7 +59,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 		
 		// for debugging setStyle("-fx-border-color:PINK;-fx-border-width:1px;");
 		getStyleClass().add("Appointment");
-		getStyleClass().add(appointment.getAppointmentGroup().getStyleClass());
+		getStyleClass().add(appointment.getAppointmentGroup() != null ? appointment.getAppointmentGroup().getStyleClass() : "group0");
 		
 		// historical visualizer
 		historyVisualizer = new HistoricalVisualizer(this);
@@ -78,7 +107,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 	 * 
 	 * @param now
 	 */
-	public void determineHistoryVisualizer(LocalDateTime now) {
+	void determineHistoryVisualizer(LocalDateTime now) {
 		historyVisualizer.setVisible(appointment.getStartLocalDateTime().isBefore(now));
 	}
 
@@ -119,8 +148,9 @@ abstract public class AppointmentAbstractPane extends Pane {
 			}
 
 			// remember
-			startX = mouseEvent.getScreenX();
-			startY = mouseEvent.getScreenY();
+			startX = mouseEvent.getX();
+			startY = mouseEvent.getY();
+			dragPickupDateTime = layoutHelp.skin.convertClickInSceneToDateTime(mouseEvent.getSceneX(), mouseEvent.getSceneY());
 			mouseActuallyHasDragged = false;
 			dragging = true;
 		});
@@ -158,8 +188,8 @@ abstract public class AppointmentAbstractPane extends Pane {
 			}
 			
 			// move the drag rectangle
-			double lX = (NodeUtil.screenX(this) - NodeUtil.screenX(layoutHelp.dragPane)) + (mouseEvent.getScreenX() - startX); // top-left of pane + offset of drag rectangle
-			double lY = (NodeUtil.screenY(this) - NodeUtil.screenY(layoutHelp.dragPane)) + (mouseEvent.getScreenY() - startY); // top-left of pane + offset of drag rectangle
+			double lX = NodeUtil.xInParent(this, layoutHelp.dragPane) + (mouseEvent.getX() - startX); // top-left of the original appointment pane + offset of drag 
+			double lY = NodeUtil.yInParent(this, layoutHelp.dragPane) + (mouseEvent.getY() - startY); // top-left of the original appointment pane + offset of drag 
 			dragRectangle.setX(NodeUtil.snapXY(lX));
 			dragRectangle.setY(NodeUtil.snapXY(lY));
 			startTimeText.layoutXProperty().set(dragRectangle.getX()); 
@@ -173,12 +203,11 @@ abstract public class AppointmentAbstractPane extends Pane {
 			appointmentForDrag.setEndLocalDateTime(appointment.getEndLocalDateTime());
 			appointmentForDrag.setWholeDay(appointment.isWholeDay());
 			// determine start and end DateTime of the drag
-			LocalDateTime dragStartDateTime = layoutHelp.skin.convertClickToDateTime(startX, startY);
-			LocalDateTime dragEndDateTime = layoutHelp.skin.convertClickToDateTime(mouseEvent.getScreenX(), mouseEvent.getScreenY());
-			if (dragEndDateTime != null) { // not dropped somewhere outside
-				handleDrag(appointmentForDrag, dragStartDateTime, dragEndDateTime);					
+			LocalDateTime dragCurrentDateTime = layoutHelp.skin.convertClickInSceneToDateTime(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+			if (dragCurrentDateTime != null) { // not dropped somewhere outside
+				handleDrag(appointmentForDrag, dragPickupDateTime, dragCurrentDateTime);					
 				startTimeText.setText(appointmentForDrag.isWholeDay() ? "" : layoutHelp.timeDateTimeFormatter.format(appointmentForDrag.getStartLocalDateTime()));
-				endTimeText.setText(appointmentForDrag.isWholeDay() ? "" : layoutHelp.timeDateTimeFormatter.format(appointmentForDrag.getEndLocalDateTime()));
+				endTimeText.setText(appointmentForDrag.isWholeDay() || appointmentForDrag.getEndLocalDateTime() == null ? "" : layoutHelp.timeDateTimeFormatter.format(appointmentForDrag.getEndLocalDateTime()));
 			}
 			
 		});
@@ -212,10 +241,9 @@ abstract public class AppointmentAbstractPane extends Pane {
 			}
 			
 			// determine start and end DateTime of the drag
-			LocalDateTime dragStartDateTime = layoutHelp.skin.convertClickToDateTime(startX, startY);
-			LocalDateTime dragEndDateTime = layoutHelp.skin.convertClickToDateTime(mouseEvent.getScreenX(), mouseEvent.getScreenY());
-			if (dragEndDateTime != null) { // not dropped somewhere outside
-				handleDrag(appointment, dragStartDateTime, dragEndDateTime);					
+			LocalDateTime dragDropDateTime = layoutHelp.skin.convertClickInSceneToDateTime(mouseEvent.getSceneX(), mouseEvent.getSceneY());
+			if (dragDropDateTime != null) { // not dropped somewhere outside
+				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);					
 				
 				// relayout whole week
 				layoutHelp.skin.setupAppointments();
@@ -226,6 +254,7 @@ abstract public class AppointmentAbstractPane extends Pane {
 	private Rectangle dragRectangle = null;
 	private double startX = 0;
 	private double startY = 0;
+	private LocalDateTime dragPickupDateTime;
 	private boolean mouseActuallyHasDragged = false;
 	private final int roundToMinutes = 5;
 	private Text startTimeText = null;
@@ -243,24 +272,24 @@ abstract public class AppointmentAbstractPane extends Pane {
 	/**
 	 * 
 	 */
-	private void handleDrag(Agenda.Appointment appointment, LocalDateTime dragStartDateTime, LocalDateTime dragEndDateTime) {
+	private void handleDrag(Agenda.Appointment appointment, LocalDateTime dragPickupDateTime, LocalDateTime dragDropDateTime) {
 		
 		// drag start
-		boolean dragStartInDayBody = dragInDayBody(dragStartDateTime);
-		boolean dragStartInDayHeader = dragInDayHeader(dragStartDateTime);
-		dragStartDateTime = layoutHelp.roundTimeToNearestMinutes(dragStartDateTime, roundToMinutes);
+		boolean dragPickupInDayBody = dragInDayBody(dragPickupDateTime);
+		boolean dragPickupInDayHeader = dragInDayHeader(dragPickupDateTime);
+		dragPickupDateTime = layoutHelp.roundTimeToNearestMinutes(dragPickupDateTime, roundToMinutes);
 		
 		// drag end
-		boolean dragEndInDayBody = dragInDayBody(dragEndDateTime);
-		boolean dragEndInDayHeader = dragInDayHeader(dragEndDateTime);
-		dragEndDateTime = layoutHelp.roundTimeToNearestMinutes(dragEndDateTime, roundToMinutes);
+		boolean dragDropInDayBody = dragInDayBody(dragDropDateTime);
+		boolean dragDropInDayHeader = dragInDayHeader(dragDropDateTime);
+		dragDropDateTime = layoutHelp.roundTimeToNearestMinutes(dragDropDateTime, roundToMinutes);
 
 		// if dragged from day to day or header to header
-		if ( (dragStartInDayBody && dragEndInDayBody) 
-		  || (dragStartInDayHeader && dragEndInDayHeader)
+		if ( (dragPickupInDayBody && dragDropInDayBody) 
+		  || (dragPickupInDayHeader && dragDropInDayHeader)
 		) {				
 			// simply add the duration
-			Duration duration = Duration.between(dragStartDateTime, dragEndDateTime);
+			Duration duration = Duration.between(dragPickupDateTime, dragDropDateTime);
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(duration) );
 			}
@@ -270,12 +299,12 @@ abstract public class AppointmentAbstractPane extends Pane {
 		}
 		
 		// if dragged from day to header
-		else if ( (dragStartInDayBody && dragEndInDayHeader) ) {
+		else if ( (dragPickupInDayBody && dragDropInDayHeader) ) {
 			
 			appointment.setWholeDay(true);
 			
 			// simply add the duration, but without time
-			Period period = Period.between(dragStartDateTime.toLocalDate(), dragEndDateTime.toLocalDate());
+			Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(period) );
 			}
@@ -285,18 +314,18 @@ abstract public class AppointmentAbstractPane extends Pane {
 		}
 		
 		// if dragged from day to header
-		else if ( (dragStartInDayHeader && dragEndInDayBody) ) {
+		else if ( (dragPickupInDayHeader && dragDropInDayBody) ) {
 			
 			appointment.setWholeDay(false);
 
 			// if this is a task
 			if (appointment.getStartLocalDateTime() != null && appointment.getEndLocalDateTime() == null) {
 				// set the drop time as the task time
-				appointment.setStartLocalDateTime(dragEndDateTime );
+				appointment.setStartLocalDateTime(dragDropDateTime );
 			}
 			else {
 				// simply add the duration, but without time
-				Period period = Period.between(dragStartDateTime.toLocalDate(), dragEndDateTime.toLocalDate());
+				Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
 			}
@@ -351,8 +380,8 @@ abstract public class AppointmentAbstractPane extends Pane {
 	private boolean dragInDayHeader(LocalDateTime localDateTime) {
 		return localDateTime.getNano() == DRAG_DAYHEADER;
 	}
-	static public final int DRAG_DAY = 1;
-	static public final int DRAG_DAYHEADER = 0;
+	static final int DRAG_DAY = 1;
+	static final int DRAG_DAYHEADER = 0;
 	
 	/**
 	 * 

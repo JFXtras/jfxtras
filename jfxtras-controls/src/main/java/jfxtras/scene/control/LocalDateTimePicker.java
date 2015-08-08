@@ -1,7 +1,7 @@
 /**
  * LocalDateTimePicker.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -43,10 +43,22 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDateTimePickerSkin;
 
 /**
- * LocalDateTime (JSR-310) picker component.
- * This component allows selecting of one date time.
+ * // These are used for the includes 
+ * :control: LocalDateTimePicker 
+ * :control_instance: LocalDateTimePicker 
+ * :calendar: localDateTime
+ * :calendars: localDateTimes
+ * :calendar_class: LocalDateTime
+ * :calendars_class: LocalDateTimes
  * 
- * @author Tom Eugelink
+ * = LocalDateTimePicker 
+ * LocalDatePicker is a control for selecting one LocalDateTime (JSR-310). 
+ * The name LocalDatePicker is because it uses Java's LocalDateTime (JSR-310) (as opposed to Date) in its API to do so.
+ * 
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
+ * 
+ * == Callback
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  */
 public class LocalDateTimePicker extends Control
 {
@@ -106,18 +118,18 @@ public class LocalDateTimePicker extends Control
 	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
 	public LocalDateTimePicker withLocale(Locale value) { setLocale(value); return this; } 
 
-	/** is null allowed */
-    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
+	/** AllowNull: indicates if no selected date (resulting in null in the localDateTime property) is an allowed state. */
     public BooleanProperty allowNullProperty() { return allowNullProperty; }
+    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
     public boolean getAllowNull() { return allowNullProperty.get(); }
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public LocalDateTimePicker withAllowNull(boolean value) { setAllowNull(value); return this; }
 
-	/** highlightedLocalDateTimes: */
+	/** HighlightedLocalDateTimes: a list of dates that are rendered with the highlight class added. This can then be styled using CSS. */
 	public ObservableList<LocalDateTime> highlightedLocalDateTimes() { return highlightedLocalDateTimes; }
 	private final ObservableList<LocalDateTime> highlightedLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
 
-	/** disabledLocalDateTimes: */
+	/** DisabledLocalDateTimes: a list of dates that cannot be selected. */
 	public ObservableList<LocalDateTime> disabledLocalDateTimes() { return disabledLocalDateTimes; }
 	private final ObservableList<LocalDateTime> disabledLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
 
