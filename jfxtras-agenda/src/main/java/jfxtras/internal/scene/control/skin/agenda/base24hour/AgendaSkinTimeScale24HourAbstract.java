@@ -143,6 +143,7 @@ implements AgendaSkin
 	 * 
 	 */
 	public void dispose() {
+		
 		// remove listeners
 		getSkinnable().localeProperty().removeListener(localeInvalidationListener);
 		getSkinnable().displayedLocalDateTime().removeListener(displayedDateTimeInvalidationListener);

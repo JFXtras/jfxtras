@@ -31,12 +31,7 @@ package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.LocalDate;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
-import javafx.geometry.NodeOrientation;
-import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 
