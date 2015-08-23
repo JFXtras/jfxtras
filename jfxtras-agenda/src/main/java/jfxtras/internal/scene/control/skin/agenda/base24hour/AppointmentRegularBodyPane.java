@@ -31,6 +31,8 @@ package jfxtras.internal.scene.control.skin.agenda.base24hour;
 
 import java.time.LocalDate;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.beans.WeakInvalidationListener;
 import javafx.scene.text.Text;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
@@ -69,13 +71,17 @@ public class AppointmentRegularBodyPane extends AppointmentAbstractTrackedPane {
 		getChildren().add(appointmentMenu);
 		
 		// add the duration dragger
-		layoutHelp.skinnable.allowResizeProperty().addListener(new WeakInvalidationListener( (observable) -> {
-			setupDurationDragger();
-		}));
+		layoutHelp.skinnable.allowResizeProperty().addListener(new WeakInvalidationListener(allowResizeInvalidationListener));
 		setupDurationDragger();
 	}
 	private String startAsString;
 	private String endAsString;
+	final private InvalidationListener allowResizeInvalidationListener = new InvalidationListener() {
+		@Override
+		public void invalidated(Observable arg0) {
+			setupDurationDragger();
+		}
+	};
 	
 	/**
 	 * 

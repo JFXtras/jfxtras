@@ -302,6 +302,7 @@ public class AgendaTrial1 extends Application {
 						.withAppointmentGroup(lAppointmentGroupMap.get("group0" + (new Random().nextInt(10))));					
 					lAgenda.appointments().add(lAppointment);
 				}
+				System.out.println("dateTimeRangeCallback " + range + " created " + lAgenda.appointments().size() + " new appointments");
 			}
 			return null;
 		});

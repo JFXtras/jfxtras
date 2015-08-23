@@ -33,6 +33,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.WeakListChangeListener;
 import jfxtras.scene.control.agenda.Agenda;
@@ -51,12 +52,16 @@ public class AllAppointments {
 	public AllAppointments(ObservableList<Agenda.Appointment> appointments) {
 		this.appointments = appointments;
 		
-		appointments.addListener( new WeakListChangeListener<>( (javafx.collections.ListChangeListener.Change<? extends Appointment> change) -> {
-			fireOnChangeListener();
-		}));
+		appointments.addListener( new WeakListChangeListener<>(listChangeListener) );
 
 	}
-	final ObservableList<Agenda.Appointment> appointments;
+	final private ObservableList<Agenda.Appointment> appointments;
+	final private ListChangeListener<Appointment> listChangeListener = new ListChangeListener<Appointment>() {
+		@Override
+		public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes) {
+			fireOnChangeListener();
+		}
+	};
 	
 	/**
 	 * fires when something changes in the appointments 

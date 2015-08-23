@@ -33,6 +33,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
 
+import javafx.collections.ListChangeListener;
 import javafx.collections.WeakListChangeListener;
 import javafx.scene.Cursor;
 import javafx.scene.control.Tooltip;
@@ -75,15 +76,19 @@ abstract class AppointmentAbstractPane extends Pane {
 		setupDragging();
 		
 		// react to changes in the selected appointments
-		layoutHelp.skinnable.selectedAppointments().addListener( new WeakListChangeListener<>( (javafx.collections.ListChangeListener.Change<? extends Appointment> change) -> {
-			setOrRemoveSelected();
-		}));
+		layoutHelp.skinnable.selectedAppointments().addListener( new WeakListChangeListener<>(listChangeListener) );
 	}
 	final protected Agenda.Appointment appointment; 
 	final protected LayoutHelp layoutHelp;
 	final protected HistoricalVisualizer historyVisualizer;
 	final protected AppointmentMenu appointmentMenu;
-	
+	final private ListChangeListener<Appointment> listChangeListener = new ListChangeListener<Appointment>() {
+		@Override
+		public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes) {
+			setOrRemoveSelected();
+		}
+	};
+
 	/**
 	 * 
 	 */
