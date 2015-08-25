@@ -1,7 +1,3 @@
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
-}
-    
 buildscript {
     repositories {
         mavenLocal()
@@ -18,6 +14,7 @@ buildscript {
         classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
         classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
         classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
+        classpath 'me.tatarka:gradle-retrolambda:3.2.2'
     }
 }
 
@@ -127,6 +124,8 @@ project(':') {
 }
 
 subprojects {
+	apply plugin: 'me.tatarka.retrolambda'
+
     //Excluding internal classes from Javadoc
     javadoc {
         exclude 'jfxtras/internal/*'
