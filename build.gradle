@@ -11,7 +11,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:0.8'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.2'
         classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
         classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
         classpath 'me.tatarka:gradle-retrolambda:3.2.2'
@@ -104,18 +104,16 @@ project(':') {
         compile project(':jfxtras-agenda') // just add dependencies that will cause all the rest to be added
     }
 
-    apply plugin: 'shadow'
+    apply plugin: 'com.github.johnrengelman.shadow'
     
     // merge everything into one jar
     // https://github.com/johnrengelman/shadow
-    shadow {
-        filter(':jfxtras-*') {
-            include '*'
-        }        
+    shadowJar {
+        include(':jfxtras-*')
         //transformer(AppendingTransformer) {
         //    resource = 'META-INF/services/jfxtras.fxml.BuilderService'
         //}
-        artifactAttached = false
+        //artifactAttached = false
     }
     
     artifacts {
