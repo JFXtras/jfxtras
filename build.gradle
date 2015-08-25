@@ -122,7 +122,6 @@ project(':') {
 }
 
 subprojects {
-	apply plugin: 'me.tatarka.retrolambda'
 
     //Excluding internal classes from Javadoc
     javadoc {
@@ -184,6 +183,8 @@ project(':jfxtras-common') {
 }
 
 project(':jfxtras-controls') {
+	apply plugin: 'me.tatarka.retrolambda'
+
     dependencies {
         compile project(':jfxtras-common')
         compile project(':jfxtras-fxml')
