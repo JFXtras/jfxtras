@@ -141,15 +141,15 @@ abstract class AppointmentAbstractPane extends Pane {
 			// we handle this event
 			mouseEvent.consume();
 
-			// is dragging allowed
-			if (layoutHelp.skinnable.getAllowDragging() == false) {
-				handleSelect(mouseEvent);
-				return;
-			}
-
 			// if this an action
 			if (mouseEvent.getClickCount() > 1) {
 				handleAction();
+				return;
+			}
+
+			// is dragging allowed
+			if (layoutHelp.skinnable.getAllowDragging() == false) {
+				handleSelect(mouseEvent);
 				return;
 			}
 
