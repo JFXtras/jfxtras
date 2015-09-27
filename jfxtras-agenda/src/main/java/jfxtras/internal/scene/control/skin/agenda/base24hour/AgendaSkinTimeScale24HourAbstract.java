@@ -124,14 +124,21 @@ implements AgendaSkin
 			refresh();
 		}
 	};
-	private InvalidationListener displayedDateTimeInvalidationListener = new InvalidationListener() {
-		@Override
-		public void invalidated(Observable arg0) {
-			assignDateToDayAndHeaderPanes();
-			scrollWeekpaneToShowDisplayedTime();
-			setupAppointments();
-		}
-	};
+	// private InvalidationListener displayedDateTimeInvalidationListener = new InvalidationListener() {
+	// 	@Override
+	// 	public void invalidated(Observable arg0) {
+	// 		assignDateToDayAndHeaderPanes();
+	// 		scrollWeekpaneToShowDisplayedTime();
+	// 		setupAppointments();
+	// 	}
+	// };
+    // The invalidation listener was firing twice when the localDateTimeRangeCallback runs.  The change listener only fires once.
+    ChangeListener<? super LocalDateTime> displayedDateTimeInvalidationListener = (observable, oldSelection, newSelection)
+    -> {
+        assignDateToDayAndHeaderPanes();
+        scrollWeekpaneToShowDisplayedTime(); // this line is not in the verion I am using.  I hope it doesn't affect the behavior.
+        setupAppointments();
+    };
 	private ListChangeListener<Agenda.Appointment> appointmentsListChangeListener = new ListChangeListener<Agenda.Appointment>(){
 		@Override
 		public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes) {
