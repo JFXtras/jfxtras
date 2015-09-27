@@ -42,6 +42,7 @@ import java.util.TimeZone;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.print.PageLayout;
 import javafx.print.PrinterJob;
@@ -109,7 +110,7 @@ implements AgendaSkin
 		getSkinnable().localeProperty().addListener(localeInvalidationListener);
 		 
 		// react to changes in the displayed calendar 
-		getSkinnable().displayedLocalDateTime().addListener(displayedDateTimeInvalidationListener);
+		getSkinnable().displayedLocalDateTime().addListener(displayedDateTimeChangeListener);
 		
 		// react to changes in the appointments 
 		getSkinnable().appointments().addListener(appointmentsListChangeListener);
@@ -118,25 +119,16 @@ implements AgendaSkin
 		refresh();
 	}
 	AllAppointments appointments = null;	
-	private InvalidationListener localeInvalidationListener = new InvalidationListener() {
-		@Override
-		public void invalidated(Observable arg0) {
-			refresh();
-		}
+	private InvalidationListener localeInvalidationListener = (observable) -> {
+		refresh();
 	};
-	private InvalidationListener displayedDateTimeInvalidationListener = new InvalidationListener() {
-		@Override
-		public void invalidated(Observable arg0) {
-			assignDateToDayAndHeaderPanes();
-			scrollWeekpaneToShowDisplayedTime();
-			setupAppointments();
-		}
+	private ChangeListener<? super LocalDateTime> displayedDateTimeChangeListener = (observable, oldSelection, newSelection) -> {
+		assignDateToDayAndHeaderPanes();
+		scrollWeekpaneToShowDisplayedTime();
+		setupAppointments();
 	};
-	private ListChangeListener<Agenda.Appointment> appointmentsListChangeListener = new ListChangeListener<Agenda.Appointment>(){
-		@Override
-		public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes) {
-			setupAppointments();
-		}
+	private ListChangeListener<Agenda.Appointment> appointmentsListChangeListener = (changes) -> {
+		setupAppointments();
 	};
 	
 	/**
@@ -146,7 +138,7 @@ implements AgendaSkin
 		
 		// remove listeners
 		getSkinnable().localeProperty().removeListener(localeInvalidationListener);
-		getSkinnable().displayedLocalDateTime().removeListener(displayedDateTimeInvalidationListener);
+		getSkinnable().displayedLocalDateTime().removeListener(displayedDateTimeChangeListener);
 		getSkinnable().appointments().removeListener(appointmentsListChangeListener);
 		
 		// reset style classes

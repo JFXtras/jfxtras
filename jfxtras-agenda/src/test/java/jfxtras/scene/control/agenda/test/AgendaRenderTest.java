@@ -29,6 +29,7 @@
 
 package jfxtras.scene.control.agenda.test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -77,6 +78,30 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
 		//TestUtil.sleep(3000);
 	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void displayedDateTime()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().add( new Agenda.AppointmentImplLocal()
+	            .withStartLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+		});
+				
+		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
+		
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.setDisplayedLocalDateTime(LocalDate.of(2015, 1, 1).atStartOfDay());
+		});
+		
+		assertNotFind("#AppointmentRegularBodyPane2014-01-01/0");
+	}
+
 
 	/**
 	 * 
