@@ -83,6 +83,33 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 	 * 
 	 */
 	@Test
+	public void renderTwoConsequetiveRegularAppointment()
+	{
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			agenda.appointments().addAll( new Agenda.AppointmentImplLocal()
+	            .withStartLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"))
+	            .withEndLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+	        ,  new Agenda.AppointmentImplLocal()
+	            .withStartLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"))
+	            .withEndLocalDateTime(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T13:00"))
+	            .withAppointmentGroup(appointmentGroupMap.get("group02"))
+	        );
+		});
+				
+		Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/0");
+		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+		n = (Node)find("#AppointmentRegularBodyPane2014-01-01/1");
+		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 503.5, 125.0, 42.0, 0.01);
+//		TestUtil.sleep(3000);
+	}
+
+	/**
+	 * 
+	 */
+	@Test
 	public void displayedDateTime()
 	{
 		TestUtil.runThenWaitForPaintPulse( () -> {

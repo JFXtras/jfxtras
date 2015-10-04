@@ -248,7 +248,7 @@ abstract class AppointmentAbstractTrackedPane extends AppointmentAbstractPane {
 		{
 			// There is an overlap:
 			// if the start time of the already placed appointment is before or equals the new appointment's end time 
-			// and the end time of the already placed appointment is after or equals the new appointment's start time
+			// and the end time of the already placed appointment is after the new appointment's start time (equals will put two consequative appointments into separate tracks) 
 			// ...PPPPPPPPP...    
 			// .NNNN.......... -> Ps <= Ne & Pe >= Ns -> overlap
 			// .....NNNNN..... -> Ps <= Ne & Pe >= Ns -> overlap
@@ -261,7 +261,7 @@ abstract class AppointmentAbstractTrackedPane extends AppointmentAbstractPane {
 			LocalDateTime lNewStart = newAppointmentPane.startDateTime;
 			LocalDateTime lNewEnd = (newAppointmentPane.endDateTime != null ? newAppointmentPane.endDateTime : newAppointmentPane.startDateTime.plusMinutes(10));
 			if ( (lPlacedStart.isEqual(lNewStart) || lNewEnd == null || lPlacedStart.isBefore(lNewEnd)) 
-			  && lPlacedEnd != null && (lPlacedEnd.isEqual(lNewStart) || lPlacedEnd.isAfter(lNewStart))
+			  && lPlacedEnd != null && lPlacedEnd.isAfter(lNewStart)
 			   )
 			{
 				// overlap
