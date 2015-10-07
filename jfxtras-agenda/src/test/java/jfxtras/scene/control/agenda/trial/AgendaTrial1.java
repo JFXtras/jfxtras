@@ -70,7 +70,8 @@ public class AgendaTrial1 extends Application {
 		final Agenda lAgenda = new Agenda();		
 //    	lAgenda.setLocale(new java.util.Locale("de")); // weeks starts on monday
 		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin(lAgenda));
-		lAgenda.setStyle("-fxx-days-after-furthest:99;");
+//		lAgenda.setStyle("-fxx-days-after-furthest:99;");
+		lAgenda.setStyle("-fxx-snap-to-minutes:30;");
 //		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin(lAgenda));
 //		lAgenda.setAllowDragging(false);
 //		lAgenda.setAllowResize(false);

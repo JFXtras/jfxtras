@@ -50,7 +50,7 @@ import jfxtras.scene.control.agenda.Agenda;
 /**
  * @author Tom Eugelink
  */
-public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstract {
+public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstract<AgendaDaysFromDisplayedSkin> {
 	
 	/**
 	 * 
@@ -216,10 +216,10 @@ public class AgendaDaysFromDisplayedSkin extends AgendaSkinTimeScale24HourAbstra
         
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
         static  {
-            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
-            styleables.add(DAYS_BEFORE_FURTHEST_CSSMETADATA);
-            styleables.add(DAYS_AFTER_FURTHEST_CSSMETADATA);
-            STYLEABLES = Collections.unmodifiableList(styleables);                
+            final List<CssMetaData<? extends Styleable, ?>> classCssMetaData = new ArrayList<CssMetaData<? extends Styleable, ?>>(AgendaSkinTimeScale24HourAbstract.getClassCssMetaData());
+        	classCssMetaData.add(DAYS_BEFORE_FURTHEST_CSSMETADATA);
+        	classCssMetaData.add(DAYS_AFTER_FURTHEST_CSSMETADATA);
+            STYLEABLES = Collections.unmodifiableList(classCssMetaData);                
         }
     }
     

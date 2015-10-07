@@ -1,5 +1,5 @@
 /**
- * AgendaDaySkin.java
+ * SimpleDateFormatConverter.java
  *
  * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
@@ -27,39 +27,27 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package jfxtras.internal.scene.control.skin.agenda;
+package jfxtras.css.converters;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import javafx.css.ParsedValue;
+import javafx.css.StyleConverter;
+import javafx.scene.text.Font;
 
-import jfxtras.internal.scene.control.skin.agenda.base24hour.AgendaSkinTimeScale24HourAbstract;
-import jfxtras.scene.control.agenda.Agenda;
+public class DoubleConverter extends StyleConverter<String, Double> {
 
-/**
- * @author Tom Eugelink
- */
-public class AgendaDaySkin extends AgendaSkinTimeScale24HourAbstract<AgendaDaySkin> {
-	
-	/**
-	 * 
-	 */
-	public AgendaDaySkin(Agenda control) {
-		super(control);
+    @Override
+    public Double convert(ParsedValue<String, Double> value, Font not_used) {
+        String str = value.getValue();
+        return Double.parseDouble(str);
+    }
+
+    @Override
+    public String toString() {
+        return DoubleConverter.class.getSimpleName();
+    }
+
+	public static StyleConverter<?, Double> getInstance() {
+		return cDoubleConverter;
 	}
-	
-	/**
-	 * Assign a calendar to each day, so it knows what it must draw.
-	 */
-	protected List<LocalDate> determineDisplayedLocalDates()
-	{
-		// the result 
-		List<LocalDate> lLocalDates = new ArrayList<>();
-		
-		// only the display date
-		lLocalDates.add(control.getDisplayedLocalDateTime().toLocalDate());
-		
-		// done
-		return lLocalDates;
-	}
+	final static private DoubleConverter cDoubleConverter = new DoubleConverter();
 }

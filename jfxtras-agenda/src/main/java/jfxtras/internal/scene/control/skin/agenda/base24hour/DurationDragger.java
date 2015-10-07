@@ -54,7 +54,7 @@ class DurationDragger extends Rectangle
 		yProperty().bind( NodeUtil.snapXY(appointmentPane.heightProperty().subtract(5)) );
 		widthProperty().bind( appointmentPane.widthProperty().multiply(0.5) );
 		setHeight(3);
-		minimumHeight = (roundToMinutes * 60 * 1000) / layoutHelp.durationInMSPerPixelProperty.get();
+		minimumHeight = ( ((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes() * 60 * 1000) / layoutHelp.durationInMSPerPixelProperty.get();
 		
 		// styling
 		getStyleClass().add("DurationDragger");
@@ -66,7 +66,6 @@ class DurationDragger extends Rectangle
 	private final AppointmentRegularBodyPane appointmentPane;
 	private final Appointment appointment;
 	private final LayoutHelp layoutHelp;
-	private final int roundToMinutes = 5;
 	private double minimumHeight = 5;
 	
 	private void setupMouseDrag() {
@@ -154,7 +153,7 @@ class DurationDragger extends Rectangle
 		LocalDateTime endLocalDateTime = appointmentPane.startDateTime.plusSeconds(ms / 1000);					
 		
 		// round to X minutes accuracy
-		endLocalDateTime = layoutHelp.roundTimeToNearestMinutes(endLocalDateTime, roundToMinutes);
+		endLocalDateTime = layoutHelp.roundTimeToNearestMinutes(endLocalDateTime, ((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes());
 		return endLocalDateTime;
 	}
 }

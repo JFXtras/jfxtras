@@ -36,14 +36,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
+import javafx.css.CssMetaData;
+import javafx.css.SimpleStyleableObjectProperty;
+import javafx.css.Styleable;
 import javafx.print.PageLayout;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
@@ -57,18 +61,21 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
+import jfxtras.css.CssMetaDataForSkinProperty;
+import jfxtras.css.converters.DoubleConverter;
+import jfxtras.css.converters.IntegerConverter;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
+import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
-import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
 /**
  * @author Tom Eugelink
  */
 // TODO: number of call to determineDisplayedLocalDates, can we cache? 
-abstract public class AgendaSkinTimeScale24HourAbstract extends SkinBase<Agenda>
+abstract public class AgendaSkinTimeScale24HourAbstract<T> extends SkinBase<Agenda>
 implements AgendaSkin
 {
 	// ==================================================================================================================
@@ -233,6 +240,61 @@ implements AgendaSkin
 		nowUpdateRunnable.run(); 
 	}
 	
+	// ==================================================================================================================
+	// StyleableProperties
+	
+    /**
+     * snapToMinutes
+     * I am clueless why the Integer version of this property gets a double pushed in (which results in a ClassCastException)
+     */
+	// TBEERNOT: reattempt converting this to Integer 
+    public final ObjectProperty<Double> snapToMinutesProperty() { return snapToMinutesProperty; }
+    private ObjectProperty<Double> snapToMinutesProperty = new SimpleStyleableObjectProperty<Double>(StyleableProperties.SNAPTOMINUTES_CSSMETADATA, StyleableProperties.SNAPTOMINUTES_CSSMETADATA.getInitialValue(null));
+    public final void setSnapToMinutes(int value) { snapToMinutesProperty().set((double)value); }
+    public final int getSnapToMinutes() {
+    	System.out.println("TBEE " + snapToMinutesProperty);
+    	return snapToMinutesProperty.get().intValue(); }
+    public final T withSnapToMinutes(int value) { setSnapToMinutes(value); return (T)this; }
+
+    // -------------------------
+        
+    private static class StyleableProperties 
+    {
+        private static final CssMetaData<Agenda, Double> SNAPTOMINUTES_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaSkinTimeScale24HourAbstract<?>, Double>("-fxx-snap-to-minutes", DoubleConverter.getInstance(), 5.0 ) {
+        	@Override 
+        	protected ObjectProperty<Double> getProperty(AgendaSkinTimeScale24HourAbstract<?> s) {
+            	return s.snapToMinutesProperty;
+            }
+        };
+        
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
+        static  {
+            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
+            styleables.add(SNAPTOMINUTES_CSSMETADATA);
+            STYLEABLES = Collections.unmodifiableList(styleables);                
+        }
+    }
+    
+    /** 
+     * @return The CssMetaData associated with this class, which may include the
+     * CssMetaData of its super classes.
+     */    
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.STYLEABLES;
+    }
+
+    /**
+     * This method should delegate to {@link Node#getClassCssMetaData()} so that
+     * a Node's CssMetaData can be accessed without the need for reflection.
+     * @return The CssMetaData associated with this node, which may include the
+     * CssMetaData of its super classes.
+     */
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return getClassCssMetaData();
+    }
+        
+
+
 	// ==================================================================================================================
 	// DRAW
 	
