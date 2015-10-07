@@ -164,11 +164,11 @@ class DayBodyPane extends Pane
 			// calculate the starttime
 			LocalDateTime lStartDateTime = localDateObjectProperty.get().atStartOfDay();
 			lStartDateTime = lStartDateTime.plusSeconds( (int)(resizeRectangle.getY() * layoutHelp.durationInMSPerPixelProperty.get() / 1000) );
-			lStartDateTime = layoutHelp.roundTimeToNearestMinutes(lStartDateTime, ((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes());
+			lStartDateTime = layoutHelp.roundTimeToNearestMinutes(lStartDateTime, (int)((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes());
 			
 			// calculate the new end date for the appointment (recalculating the duration)
 			LocalDateTime lEndDateTime = lStartDateTime.plusSeconds( (int)(resizeRectangle.getHeight() * layoutHelp.durationInMSPerPixelProperty.get() / 1000) );
-			lEndDateTime = layoutHelp.roundTimeToNearestMinutes(lEndDateTime, ((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes());
+			lEndDateTime = layoutHelp.roundTimeToNearestMinutes(lEndDateTime, (int)((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes());
 			
 			// clean up
 			resizeRectangle = null;					

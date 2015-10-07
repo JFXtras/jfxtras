@@ -153,7 +153,7 @@ class DurationDragger extends Rectangle
 		LocalDateTime endLocalDateTime = appointmentPane.startDateTime.plusSeconds(ms / 1000);					
 		
 		// round to X minutes accuracy
-		endLocalDateTime = layoutHelp.roundTimeToNearestMinutes(endLocalDateTime, ((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes());
+		endLocalDateTime = layoutHelp.roundTimeToNearestMinutes(endLocalDateTime, (int)((AgendaSkinTimeScale24HourAbstract<?>)layoutHelp.skin).getSnapToMinutes());
 		return endLocalDateTime;
 	}
 }

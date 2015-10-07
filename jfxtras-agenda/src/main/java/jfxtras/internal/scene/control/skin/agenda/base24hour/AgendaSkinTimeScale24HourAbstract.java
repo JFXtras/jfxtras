@@ -250,11 +250,9 @@ implements AgendaSkin
 	// TBEERNOT: reattempt converting this to Integer 
     public final ObjectProperty<Double> snapToMinutesProperty() { return snapToMinutesProperty; }
     private ObjectProperty<Double> snapToMinutesProperty = new SimpleStyleableObjectProperty<Double>(StyleableProperties.SNAPTOMINUTES_CSSMETADATA, StyleableProperties.SNAPTOMINUTES_CSSMETADATA.getInitialValue(null));
-    public final void setSnapToMinutes(int value) { snapToMinutesProperty().set((double)value); }
-    public final int getSnapToMinutes() {
-    	System.out.println("TBEE " + snapToMinutesProperty);
-    	return snapToMinutesProperty.get().intValue(); }
-    public final T withSnapToMinutes(int value) { setSnapToMinutes(value); return (T)this; }
+    public final void setSnapToMinutes(double value) { snapToMinutesProperty().set(value); }
+    public final double getSnapToMinutes() { return snapToMinutesProperty.get().intValue(); }
+    public final T withSnapToMinutes(double value) { setSnapToMinutes(value); return (T)this; }
 
     // -------------------------
         
