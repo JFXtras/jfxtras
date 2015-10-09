@@ -1,7 +1,7 @@
 /**
  * LocalDateTextField.java
  *
- * Copyright (c) 2011, 2015 JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -51,10 +51,24 @@ import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
 
 
 /**
- * LocalDate (JSR-310) text field component.
- * This component allows selecting of one date.
+ * // These are used for the includes
+ * :control: LocalDateTextField 
+ * :control_instance: localDateTextField 
+ * :calendar: localDate
+ * :calendars: localDates
+ * :calendar_class: LocalDate
+ * :calendars_class: LocalDates
+ * :dateFormat: dateTimeFormatter
+ * :dateFormats: dateTimeFormaters
  * 
- * @author Tom Eugelink
+ * = LocalDateTextField
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ * 
+ * == Callback
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
+ * 
+ * == Icon
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
  */
 public class LocalDateTextField extends Control
 {
@@ -95,7 +109,7 @@ public class LocalDateTextField extends Control
 	// ==================================================================================================================
 	// PROPERTIES
 	
-	/** LocalDate: */
+	/** LocalDate: the selected date. */
 	public ObjectProperty<LocalDate> localDateProperty() { return localDateObjectProperty; }
 	private final ObjectProperty<LocalDate> localDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "localDate");
 	public LocalDate getLocalDate() { return localDateObjectProperty.getValue(); }
@@ -159,16 +173,16 @@ public class LocalDateTextField extends Control
 	public void setParseErrorCallback(Callback<Throwable, Void> value) { this.parseErrorCallbackObjectProperty.setValue(value); }
 	public LocalDateTextField withParseErrorCallback(Callback<Throwable, Void> value) { setParseErrorCallback(value); return this; }
 	
-	/** highlightedLocalDateTimes: */
+	/** highlightedLocalDateTimes: a list of dates that are rendered with the highlight class added. This can then be styled using CSS. */
 	public ObservableList<LocalDate> highlightedLocalDates() { return highlightedLocalDates; }
 	private final ObservableList<LocalDate> highlightedLocalDates =  javafx.collections.FXCollections.observableArrayList();
 
-	/** disabledLocalDates: */
+	/** disabledLocalDates: a list of dates that cannot be selected. */
 	public ObservableList<LocalDate> disabledLocalDates() { return disabledLocalDates; }
 	private final ObservableList<LocalDate> disabledLocalDates =  javafx.collections.FXCollections.observableArrayList();
 	
 	/** localDateRangeCallback: 
-	 * This callback allows a developer to limit the amount of calendars put in any of the collections.
+	 * This callback allows a developer to limit the amount of LocalDateTimeRanges put in any of the collections.
 	 * It is called just before a new range is being displayed, so the developer can change the values in the collections like highlighted or disabled. 
 	 */
 	public ObjectProperty<Callback<LocalDateRange, Void>> LocalDateRangeCallbackProperty() { return localDateRangeCallbackObjectProperty; }
@@ -176,26 +190,36 @@ public class LocalDateTextField extends Control
 	public Callback<LocalDateRange, Void> getLocalDateRangeCallback() { return this.localDateRangeCallbackObjectProperty.getValue(); }
 	public void setLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { this.localDateRangeCallbackObjectProperty.setValue(value); }
 	public LocalDateTextField withLocalDateRangeCallback(Callback<LocalDateRange, Void> value) { setLocalDateRangeCallback(value); return this; }
+	
+	/** valueValidationCallback: 
+	 * This callback allows a developer deny or accept a value just prior before it gets added.
+	 * Returning true will allow the value.
+	 */
+	public ObjectProperty<Callback<LocalDate, Boolean>> valueValidationCallbackProperty() { return valueValidationCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDate, Boolean>> valueValidationCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDate, Boolean>>(this, "valueValidationCallback", null);
+	public Callback<LocalDate, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
+	public void setValueValidationCallback(Callback<LocalDate, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
+	public LocalDateTextField withValueValidationCallback(Callback<LocalDate, Boolean> value) { setValueValidationCallback(value); return this; }
 
-        /**
+    /**
 	 * DisplayedLocalDate:
 	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
 	 * The localDate should not be modified using any of its add or set methods (it should be considered immutable)
 	 */
 	public ObjectProperty<LocalDate> displayedLocalDate() { return displayedLocalDateObjectProperty; }
-	volatile private ObjectProperty<LocalDate> displayedLocalDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "displayedCalendar");
+	volatile private ObjectProperty<LocalDate> displayedLocalDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "displayedLocalDate");
 	public LocalDate getDisplayedLocalDate() { return displayedLocalDateObjectProperty.getValue(); }
 	public void setDisplayedLocalDate(LocalDate value) { displayedLocalDateObjectProperty.setValue(value); }
 	public LocalDateTextField withDisplayedLocalDate(LocalDate value) { setDisplayedLocalDate(value); return this; }
 	private void constructDisplayedLocalDate()
 	{
-		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
+		// init here, so deriveDisplayedLocalDate in the skin will modify it accordingly
 		setDisplayedLocalDate(LocalDate.now());
 	}
         
-	/** is null allowed */
-    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
+	/** AllowNull: indicates if no selected date (resulting in null in the calendar property) is an allowed state. */
     public BooleanProperty allowNullProperty() { return allowNullProperty; }
+    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
     public boolean getAllowNull() { return allowNullProperty.get(); }
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public LocalDateTextField withAllowNull(boolean value) { setAllowNull(value); return this; }

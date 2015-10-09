@@ -1,0 +1,7 @@
+
+- The {calendar} property holds the selected {calendar_class}. 
+- The control can be set to allow no selection at all through the allowNull property.
+- There is a disabled{calendars_class} list that will allow specifying {calendars} that are not selectable (see callback below). 
+- There is a highlighted{calendars_class} list that will allow specifying {calendars} that are hightlighted (see callback below).  
+- The displayed{Calendar} property indicates what moment in time is displayed by the control.
+- The locale property configures which language but also first day of week, etc is used. 

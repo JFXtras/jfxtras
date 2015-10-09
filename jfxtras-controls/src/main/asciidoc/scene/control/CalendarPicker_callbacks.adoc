@@ -1,0 +1,35 @@
+
+=== {calendar}RangeCallback
+The user is allowed to navigate through all eternity. 
+So if there are many possible meaningful dates, all have to be fetched and populated in the {calendars}, disabledCalenders and highlighted{Calendars_class} lists.
+This could become quite a performance and memory issue.
+In order to deal with this situation, the {calendar}RangeCallback property can be used.
+
+The {calendar}RangeCallback is called each time a different range is shown in the picker and the {Calendar_class}Range parameter has the begin and end of the range that is going to be shown. 
+By registering to the {calendar}RangeCallback, it is possible to populate the lists with the values relevant to the range.
+
+==== Example
+[source,java,subs="attributes+"]
+--
+    {control_instance}.set{Calendar_class}RangeCallback( (range) -> {
+        {calendar}Picker.disabledCalenders().clear;
+        {calendar}Picker.disabledCalenders.addAll( BusinessModel.findDisabled{Calendars_class}In(range.getStart{Calendar_class}(), range.getEnd{Calendar_class}() );
+    });
+--
+
+=== valueValidationCallback
+Using the disabled{Calendars_class} collection only makes sense in non-time mode. 
+When time is shown, a lot of possibles times (up to milliseconds) can be selected on a single date, so populating the disabled{Calendars_class} list with all possible values is practically impossible.
+To still be able to prevent certain {Calendars_class} to be selected, the valueValidationCallback is an alternative.      
+It allows, prior to a {Calendar_class} being selected, to check if it is allowed.
+
+==== Example
+[source,java,subs="attributes+"]
+--
+    {control_instance}.valueValidationCallback( ({calendar}) -> {
+        if (some_condition({calendar})) {
+            return false; // not allowed
+        }
+        return true; // allowed
+    });
+--

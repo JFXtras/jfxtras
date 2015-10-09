@@ -1,0 +1,14 @@
+
+A textField which displays a {calendar_class} (date) with a icon to pop up a {calendar_class}Picker.
+Features relative mutation options, like typing -1 or -1d for plus or minus a day, -1m for minus one month, +1w, +2y, etc. 
+Typing # will set now / today.
+
+This control allows selecting of one {calendar}.
+A lot of the properties are mirrors of the ones in the {calendar_class}Picker. 
+include::CalendarPicker_properties.adoc[]
+
+- The {dateFormat} property specifies how a date is rendered in the textfield.
+- The {dateFormats} list contains all formats how a typed text is interpreted to convert to a {calendar_class}  
+- The pickerShowing property is an indicator if the picker is currently active or not.
+- The promptText property specifies the text that is shown when nothing is typed in the textfield.
+- The text property returns the content of the textfield as-is (as opposed to the {calendar} property).

@@ -1,7 +1,7 @@
 /**
  * AgendaTrial1.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -69,10 +69,13 @@ public class AgendaTrial1 extends Application {
         // add a node
 		final Agenda lAgenda = new Agenda();		
 //    	lAgenda.setLocale(new java.util.Locale("de")); // weeks starts on monday
+		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin(lAgenda));
+//		lAgenda.setStyle("-fxx-days-after-furthest:99;");
+		lAgenda.setStyle("-fxx-snap-to-minutes:30;");
 //		lAgenda.setSkin(new jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin(lAgenda));
 //		lAgenda.setAllowDragging(false);
 //		lAgenda.setAllowResize(false);
-		lAgenda.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
+//		lAgenda.setNodeOrientation(javafx.geometry.NodeOrientation.RIGHT_TO_LEFT);
 		
 		// setup appointment groups
         final Map<String, Agenda.AppointmentGroup> lAppointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
@@ -300,6 +303,7 @@ public class AgendaTrial1 extends Application {
 						.withAppointmentGroup(lAppointmentGroupMap.get("group0" + (new Random().nextInt(10))));					
 					lAgenda.appointments().add(lAppointment);
 				}
+				System.out.println("dateTimeRangeCallback " + range + " created " + lAgenda.appointments().size() + " new appointments");
 			}
 			return null;
 		});

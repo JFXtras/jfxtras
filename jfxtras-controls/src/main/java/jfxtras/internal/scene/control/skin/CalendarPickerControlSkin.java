@@ -1,7 +1,7 @@
 /**
  * CalendarPickerControlSkin.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -104,8 +104,10 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		// start listening to changes
 		// if the calendar changes, the display calendar will jump to show that
 		getSkinnable().calendarProperty().addListener( (InvalidationListener) observable -> {
-			if (getSkinnable().getCalendar() != null) {
-				getSkinnable().setDisplayedCalendar(getSkinnable().getCalendar());
+			Calendar calendar = getSkinnable().getCalendar();
+			Calendar displayedCalendar = getSkinnable().getDisplayedCalendar();
+			if (calendar != null && (displayedCalendar == null || calendar.get(Calendar.YEAR) != displayedCalendar.get(Calendar.YEAR) || calendar.get(Calendar.MONTH) != displayedCalendar.get(Calendar.MONTH)) ) {
+				getSkinnable().setDisplayedCalendar(calendar);
 			}
 		});
 		if (getSkinnable().getCalendar() != null) {
@@ -317,11 +319,11 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		
 		// double click here to show today
 		todayButton = new Button("   ");
-                todayButton.getStyleClass().add("today-button");
-                todayButton.setMinSize(16, 16);
+        todayButton.getStyleClass().add("today-button");
+        todayButton.setMinSize(16, 16);
 		todayButton.setOnAction((ActionEvent event) -> {
-                    setDisplayedCalendarToToday();
-                });
+            setDisplayedCalendarToToday();
+        });
 		
 		// weekday labels
 		for (int i = 0; i < 7; i++)
@@ -363,7 +365,6 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 			ToggleButton lToggleButton = new ToggleButton("" + i);
 			lToggleButton.setId("day" + i);
 			lToggleButton.getStyleClass().add("day-button");
-			lToggleButton.selectedProperty().addListener(toggleButtonSelectedPropertyChangeListener); // for minimal memory usage, use a single listener
 			lToggleButton.onMouseReleasedProperty().set(toggleButtonMouseReleasedPropertyEventHandler); // for minimal memory usage, use a single listener
 			lToggleButton.onKeyReleasedProperty().set(toggleButtonKeyReleasedPropertyEventHandler); // for minimal memory usage, use a single listener
 			
@@ -395,14 +396,6 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 	final private List<ToggleButton> dayButtons = new ArrayList<ToggleButton>();
 	final private CalendarTimePicker timePicker = new CalendarTimePicker();
 	final private Map<BooleanProperty, ToggleButton> booleanPropertyToDayToggleButtonMap = new WeakHashMap<BooleanProperty, ToggleButton>();
-	final private ChangeListener<Boolean> toggleButtonSelectedPropertyChangeListener = new ChangeListener<Boolean>()
-	{
-		@Override
-		public void changed(ObservableValue<? extends Boolean> observableValue, Boolean oldValue, Boolean newValue)
-		{
-			refreshDayButtonToggleState();
-		}
-	};
 	final private EventHandler<MouseEvent> toggleButtonMouseReleasedPropertyEventHandler = new EventHandler<MouseEvent>()
 	{
 		@Override
@@ -894,7 +887,10 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 	
 				// is selected
 				boolean lSelected = (find(lCalendars, lCalendar) != null);  
-				dayButtons.get(lIdx).setSelected( lSelected );
+				ToggleButton lToggleButton = dayButtons.get(lIdx);
+				if (lSelected != lToggleButton.isSelected()) {
+					lToggleButton.setSelected( lSelected );
+				}
 			}
 		}
 		finally

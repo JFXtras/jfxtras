@@ -1,7 +1,7 @@
 /**
  * AgendaWeekSkin.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,7 @@ import jfxtras.scene.control.agenda.Agenda;
 /**
  * @author Tom Eugelink
  */
-public class AgendaWeekSkin extends AgendaSkinTimeScale24HourAbstract {
+public class AgendaWeekSkin extends AgendaSkinTimeScale24HourAbstract<AgendaWeekSkin> {
 	
 	/**
 	 * 

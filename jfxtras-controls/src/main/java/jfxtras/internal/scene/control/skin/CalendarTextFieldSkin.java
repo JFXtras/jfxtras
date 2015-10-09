@@ -1,7 +1,7 @@
 /**
  * CalendarTextFieldSkin.java
  *
- * Copyright (c) 2011, 2015 JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -347,6 +347,16 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 					return null;
 				}
 				return lCallback.call(calendarRange);
+			}
+		});
+		calendarPicker.setValueValidationCallback(new Callback<Calendar, Boolean>() {
+			@Override
+			public Boolean call(Calendar calendar) {
+				Callback<Calendar, Boolean> lCallback = getSkinnable().getValueValidationCallback();
+				if (lCallback == null) {
+					return true;
+				}
+				return lCallback.call(calendar);
 			}
 		});
 		

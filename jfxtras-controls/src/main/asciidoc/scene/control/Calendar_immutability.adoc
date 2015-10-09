@@ -1,0 +1,4 @@
+Important note:
+The calendar is treated (and should have been implemented in Java) as immutable. 
+That means the properties of Calendar are not used to modify its value or listen for changes.
+{control} will create a new instance (clone) each time a new value is put in the calendar property.

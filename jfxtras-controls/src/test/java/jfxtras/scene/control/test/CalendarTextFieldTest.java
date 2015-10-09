@@ -30,10 +30,8 @@
 package jfxtras.scene.control.test;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,8 +41,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
-import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
@@ -107,26 +103,67 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(calendarTextField.isPickerShowing());
 	}
 
-       @Test
-    public void disabledDateRuntime() {
-        calendarTextField.setCalendarRangeCallback(new Callback<CalendarPicker.CalendarRange, Void>() {
-
-            @Override
-            public Void call(CalendarPicker.CalendarRange param) {
-
-                List<Calendar> calendars = new ArrayList<>();
-                for (Calendar current = param.getStartCalendar(); current.compareTo(param.getEndCalendar()) <= 0; current.add(Calendar.MONTH, 1)) {
-                    calendars.add((Calendar) current.clone());
-                }
-                calendarTextField.disabledCalendars().setAll(calendars);
-                return null;
-            }
-        });
+    @Test
+    public void checkIfDisabledDateIsForwardedToThePicker() {
+    	// make today disabled   
+       calendarTextField.disabledCalendars().add(Calendar.getInstance());
+        
+        // open the picker
         click(".icon");
 
+        // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").isDisabled());
     }
-	/**
+
+    @Test
+    public void checkIfDisabledDateIsForwardedToThePickerAtRuntime() {
+        // open the picker
+        click(".icon");
+        TestUtil.waitForPaintPulse();
+        
+        // make sure that today in the picker is enabled
+        Assert.assertFalse(find(".today").isDisabled());
+        
+    	// make today highlighted   
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	calendarTextField.disabledCalendars().add(Calendar.getInstance());
+        });
+        
+        // make sure that today in the picker is highlighted
+        Assert.assertTrue(find(".today").isDisabled());
+    }
+
+    @Test
+    public void checkIfHighlightedDateIsForwardedToThePicker() {
+    	// make today highlighted   
+       calendarTextField.highlightedCalendars().add(Calendar.getInstance());
+        
+        // open the picker
+        click(".icon");
+
+        // make sure that today in the picker is highlighted
+        Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
+    }
+
+    @Test
+    public void checkIfHighlightedDateIsForwardedToThePickerAtRuntime() {
+        // open the picker
+        click(".icon");
+        TestUtil.waitForPaintPulse();
+        
+        // make sure that today in the picker is enabled
+        Assert.assertFalse(find(".today").getStyleClass().contains("highlight"));
+        
+    	// make today disabled   
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	calendarTextField.highlightedCalendars().add(Calendar.getInstance());
+        });
+        
+        // make sure that today in the picker is disabled
+        Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
+    }
+
+    /**
 	 * 
 	 */
 	@Test

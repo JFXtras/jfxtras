@@ -1,7 +1,7 @@
 /**
  * LocalDateTimeTextField.java
  *
- * Copyright (c) 2011, 2015 JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -51,10 +51,24 @@ import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 
 
 /**
- * LocalDateTime (JSR-310) text field component.
- * This component allows selecting of one date time.
+ * // These are used for the includes (shared with LocalDatePicker and LocalDateTimePicker) 
+ * :control: LocalDateTimeTextField 
+ * :control_instance: localDateTimeTextField 
+ * :calendar: localDateTime
+ * :calendars: localDateTimes
+ * :calendar_class: LocalDateTime
+ * :calendars_class: LocalDateTimes
+ * :dateFormat: dateTimeFormatter
+ * :dateFormats: dateTimeFormaters
  * 
- * @author Tom Eugelink
+ * = LocalDateTimeTextField
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ * 
+ * == Callback
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
+ * 
+ * == Icon
+ * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
  */
 public class LocalDateTimeTextField extends Control
 {
@@ -94,7 +108,7 @@ public class LocalDateTimeTextField extends Control
 	// ==================================================================================================================
 	// PROPERTIES
 	
-	/** LocalDateTime: */
+	/** LocalDateTime: the selected date. */
 	public ObjectProperty<LocalDateTime> localDateTimeProperty() { return localDateTimeObjectProperty; }
 	private final ObjectProperty<LocalDateTime> localDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "localDateTime");
 	public LocalDateTime getLocalDateTime() { return localDateTimeObjectProperty.getValue(); }
@@ -156,11 +170,11 @@ public class LocalDateTimeTextField extends Control
 	public void setParseErrorCallback(Callback<Throwable, Void> value) { this.parseErrorCallbackObjectProperty.setValue(value); }
 	public LocalDateTimeTextField withParseErrorCallback(Callback<Throwable, Void> value) { setParseErrorCallback(value); return this; }
 	
-	/** highlightedLocalDateTimes: */
+	/** highlightedLocalDateTimes: a list of dates that are rendered with the highlight class added. This can then be styled using CSS. */
 	public ObservableList<LocalDateTime> highlightedLocalDateTimes() { return highlightedLocalDateTimes; }
 	private final ObservableList<LocalDateTime> highlightedLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
 
-	/** disabledLocalDateTimes: */
+	/** disabledLocalDateTimes: a list of dates that cannot be selected. */
 	public ObservableList<LocalDateTime> disabledLocalDateTimes() { return disabledLocalDateTimes; }
 	private final ObservableList<LocalDateTime> disabledLocalDateTimes =  javafx.collections.FXCollections.observableArrayList();
 	
@@ -173,26 +187,36 @@ public class LocalDateTimeTextField extends Control
 	public Callback<LocalDateTimeRange, Void> getLocalDateTimeRangeCallback() { return this.localDateTimeRangeCallbackObjectProperty.getValue(); }
 	public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
 	public LocalDateTimeTextField withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
+	
+	/** valueValidationCallback: 
+	 * This callback allows a developer deny or accept a value just prior before it gets added.
+	 * Returning true will allow the value.
+	 */
+	public ObjectProperty<Callback<LocalDateTime, Boolean>> valueValidationCallbackProperty() { return valueValidationCallbackObjectProperty; }
+	final private ObjectProperty<Callback<LocalDateTime, Boolean>> valueValidationCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTime, Boolean>>(this, "valueValidationCallback", null);
+	public Callback<LocalDateTime, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
+	public void setValueValidationCallback(Callback<LocalDateTime, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
+	public LocalDateTimeTextField withValueValidationCallback(Callback<LocalDateTime, Boolean> value) { setValueValidationCallback(value); return this; }
 
-        /**
+    /**
 	 * DisplayedLocalDateTime:
 	 * You may set this value, but it is also overwritten by other logic and the skin. Do not assume you have total control.
 	 * The localDateTime should not be modified using any of its add or set methods (it should be considered immutable)
 	 */
 	public ObjectProperty<LocalDateTime> displayedLocalDateTime() { return displayedLocalDateTimeObjectProperty; }
-	volatile private ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedCalendar");
+	volatile private ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedLocalDateTimeRange");
 	public LocalDateTime getDisplayedLocalDateTime() { return displayedLocalDateTimeObjectProperty.getValue(); }
 	public void setDisplayedLocalDateTime(LocalDateTime value) { displayedLocalDateTimeObjectProperty.setValue(value); }
 	public LocalDateTimeTextField withDisplayedLocalDateTime(LocalDateTime value) { setDisplayedLocalDateTime(value); return this; }
 	private void constructDisplayedLocalDateTime()
 	{
-		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
+		// init here, so deriveDisplayedLocalDateTimeRange in the skin will modify it accordingly
 		setDisplayedLocalDateTime(LocalDateTime.now());
 	}
         
-	/** is null allowed */
-    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
+	/** AllowNull: indicates if no selected date (resulting in null in the calendar property) is an allowed state. */
     public BooleanProperty allowNullProperty() { return allowNullProperty; }
+    volatile private BooleanProperty allowNullProperty = new SimpleBooleanProperty(this, "allowNull", true);
     public boolean getAllowNull() { return allowNullProperty.get(); }
     public void setAllowNull(boolean allowNull) { allowNullProperty.set(allowNull); }
     public LocalDateTimeTextField withAllowNull(boolean value) { setAllowNull(value); return this; }

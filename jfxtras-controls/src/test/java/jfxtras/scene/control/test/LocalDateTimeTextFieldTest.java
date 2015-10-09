@@ -1,7 +1,7 @@
 /**
- * LocalDateTimeTextField.java
+ * LocalDateTimeTextFieldTest.java
  *
- * Copyright (c) 2015, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -29,6 +29,7 @@
 
 package jfxtras.scene.control.test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import static org.loadui.testfx.GuiTest.find;
 
 /**
@@ -210,23 +212,63 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
     }
 
     @Test
-    public void disabledDateRuntime() {
-        localDateTimeTextField.setLocalDateTimeRangeCallback(new Callback<LocalDateTimePicker.LocalDateTimeRange, Void>() {
-
-            @Override
-            public Void call(LocalDateTimePicker.LocalDateTimeRange param) {
-
-                List<LocalDateTime> calendars = new ArrayList<>();
-                for (LocalDateTime current = param.getStartLocalDateTime(); current.compareTo(param.getEndLocalDateTime()) <= 0; current = current.plusDays(1)) {
-                    calendars.add(current);
-                }
-                localDateTimeTextField.disabledLocalDateTimes().setAll(calendars);
-                return null;
-            }
-        });
+    public void checkIfDisabledDateIsForwardedToThePicker() {
+    	// make today disabled   
+    	localDateTimeTextField.disabledLocalDateTimes().add(LocalDateTime.now());
+        
+        // open the picker
         click(".icon");
 
+        // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").isDisabled());
+    }
+
+    @Test
+    public void checkIfDisabledDateIsForwardedToThePickerAtRuntime() {
+        // open the picker
+        click(".icon");
+        TestUtil.waitForPaintPulse();
+        
+        // make sure that today in the picker is enabled
+        Assert.assertFalse(find(".today").isDisabled());
+        
+    	// make today disabled   
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	localDateTimeTextField.disabledLocalDateTimes().add(LocalDateTime.now());
+        });
+        
+        // make sure that today in the picker is disabled
+        Assert.assertTrue(find(".today").isDisabled());
+    }
+
+    @Test
+    public void checkIfHighlightedDateIsForwardedToThePicker() {
+    	// make today highlighted   
+    	localDateTimeTextField.highlightedLocalDateTimes().add(LocalDateTime.now());
+        
+        // open the picker
+        click(".icon");
+
+        // make sure that today in the picker is highlighted
+        Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
+    }
+
+    @Test
+    public void checkIfHighlightedDateIsForwardedToThePickerAtRuntime() {
+        // open the picker
+        click(".icon");
+        TestUtil.waitForPaintPulse();
+        
+        // make sure that today in the picker is enabled
+        Assert.assertFalse(find(".today").getStyleClass().contains("highlight"));
+        
+    	// make today highlighted   
+        TestUtil.runThenWaitForPaintPulse(() -> {
+        	localDateTimeTextField.highlightedLocalDateTimes().add(LocalDateTime.now());
+        });
+        
+        // make sure that today in the picker is highlighted
+        Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
     }
     
     /**

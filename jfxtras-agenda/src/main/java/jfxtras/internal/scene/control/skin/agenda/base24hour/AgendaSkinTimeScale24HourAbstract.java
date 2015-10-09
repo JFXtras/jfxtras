@@ -1,7 +1,7 @@
 /**
  * AgendaSkinTimeScale24HourAbstract.java
  *
- * Copyright (c) 2011-2014, JFXtras
+ * Copyright (c) 2011-2015, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -36,13 +36,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
+import javafx.css.CssMetaData;
+import javafx.css.SimpleStyleableObjectProperty;
+import javafx.css.Styleable;
 import javafx.print.PageLayout;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
@@ -56,18 +61,21 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
+import jfxtras.css.CssMetaDataForSkinProperty;
+import jfxtras.css.converters.DoubleConverter;
+import jfxtras.css.converters.IntegerConverter;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
+import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
-import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
 /**
  * @author Tom Eugelink
  */
 // TODO: number of call to determineDisplayedLocalDates, can we cache? 
-abstract public class AgendaSkinTimeScale24HourAbstract extends SkinBase<Agenda>
+abstract public class AgendaSkinTimeScale24HourAbstract<T> extends SkinBase<Agenda>
 implements AgendaSkin
 {
 	// ==================================================================================================================
@@ -84,6 +92,17 @@ implements AgendaSkin
 	}
 	protected final Agenda control;
 
+	/**
+	 * Reconstruct the UI part
+	 */
+	protected void reconstruct() {
+		weekBodyPane.reconstruct();
+		weekHeaderPane.reconstruct();
+		
+		// initial setup
+		refresh();
+	}
+	
 	/*
 	 * construct the component
 	 */
@@ -98,7 +117,7 @@ implements AgendaSkin
 		getSkinnable().localeProperty().addListener(localeInvalidationListener);
 		 
 		// react to changes in the displayed calendar 
-		getSkinnable().displayedLocalDateTime().addListener(displayedDateTimeInvalidationListener);
+		getSkinnable().displayedLocalDateTime().addListener(displayedDateTimeChangeListener);
 		
 		// react to changes in the appointments 
 		getSkinnable().appointments().addListener(appointmentsListChangeListener);
@@ -107,33 +126,26 @@ implements AgendaSkin
 		refresh();
 	}
 	AllAppointments appointments = null;	
-	private InvalidationListener localeInvalidationListener = new InvalidationListener() {
-		@Override
-		public void invalidated(Observable arg0) {
-			refresh();
-		}
+	private InvalidationListener localeInvalidationListener = (observable) -> {
+		refresh();
 	};
-	private InvalidationListener displayedDateTimeInvalidationListener = new InvalidationListener() {
-		@Override
-		public void invalidated(Observable arg0) {
-			assignDateToDayAndHeaderPanes();
-			setupAppointments();
-		}
+	private ChangeListener<? super LocalDateTime> displayedDateTimeChangeListener = (observable, oldSelection, newSelection) -> {
+		assignDateToDayAndHeaderPanes();
+		scrollWeekpaneToShowDisplayedTime();
+		setupAppointments();
 	};
-	private ListChangeListener<Agenda.Appointment> appointmentsListChangeListener = new ListChangeListener<Agenda.Appointment>(){
-		@Override
-		public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes) {
-			setupAppointments();
-		}
+	private ListChangeListener<Agenda.Appointment> appointmentsListChangeListener = (changes) -> {
+		setupAppointments();
 	};
 	
 	/**
 	 * 
 	 */
 	public void dispose() {
+		
 		// remove listeners
 		getSkinnable().localeProperty().removeListener(localeInvalidationListener);
-		getSkinnable().displayedLocalDateTime().removeListener(displayedDateTimeInvalidationListener);
+		getSkinnable().displayedLocalDateTime().removeListener(displayedDateTimeChangeListener);
 		getSkinnable().appointments().removeListener(appointmentsListChangeListener);
 		
 		// reset style classes
@@ -229,6 +241,59 @@ implements AgendaSkin
 	}
 	
 	// ==================================================================================================================
+	// StyleableProperties
+	
+    /**
+     * snapToMinutes
+     * I am clueless why the Integer version of this property gets a double pushed in (which results in a ClassCastException)
+     */
+	// TBEERNOT: reattempt converting this to Integer 
+    public final ObjectProperty<Double> snapToMinutesProperty() { return snapToMinutesProperty; }
+    private ObjectProperty<Double> snapToMinutesProperty = new SimpleStyleableObjectProperty<Double>(StyleableProperties.SNAPTOMINUTES_CSSMETADATA, StyleableProperties.SNAPTOMINUTES_CSSMETADATA.getInitialValue(null));
+    public final void setSnapToMinutes(double value) { snapToMinutesProperty().set(value); }
+    public final double getSnapToMinutes() { return snapToMinutesProperty.get().intValue(); }
+    public final T withSnapToMinutes(double value) { setSnapToMinutes(value); return (T)this; }
+
+    // -------------------------
+        
+    private static class StyleableProperties 
+    {
+        private static final CssMetaData<Agenda, Double> SNAPTOMINUTES_CSSMETADATA = new CssMetaDataForSkinProperty<Agenda, AgendaSkinTimeScale24HourAbstract<?>, Double>("-fxx-snap-to-minutes", DoubleConverter.getInstance(), 5.0 ) {
+        	@Override 
+        	protected ObjectProperty<Double> getProperty(AgendaSkinTimeScale24HourAbstract<?> s) {
+            	return s.snapToMinutesProperty;
+            }
+        };
+        
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
+        static  {
+            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<CssMetaData<? extends Styleable, ?>>(SkinBase.getClassCssMetaData());
+            styleables.add(SNAPTOMINUTES_CSSMETADATA);
+            STYLEABLES = Collections.unmodifiableList(styleables);                
+        }
+    }
+    
+    /** 
+     * @return The CssMetaData associated with this class, which may include the
+     * CssMetaData of its super classes.
+     */    
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.STYLEABLES;
+    }
+
+    /**
+     * This method should delegate to {@link Node#getClassCssMetaData()} so that
+     * a Node's CssMetaData can be accessed without the need for reflection.
+     * @return The CssMetaData associated with this node, which may include the
+     * CssMetaData of its super classes.
+     */
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return getClassCssMetaData();
+    }
+        
+
+
+	// ==================================================================================================================
 	// DRAW
 	
 	/**
@@ -238,6 +303,9 @@ implements AgendaSkin
 	{
 		// when switching skin, remove any old stuff
 		getChildren().clear();
+		if (borderPane != null) {
+			layoutHelp.dragPane.getChildren().remove(borderPane);
+		}
 		
 		// we use a borderpane
 		borderPane = new BorderPane();
@@ -272,11 +340,26 @@ implements AgendaSkin
 		// style
 		getSkinnable().getStyleClass().add(getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control		
 	}
-	private BorderPane borderPane = null;
+	protected BorderPane borderPane = null;
 	private WeekHeaderPane weekHeaderPane = null;
 	private ScrollPane weekScrollPane = null;
 	private WeekBodyPane weekBodyPane = null;
 
+	
+	/**
+	 * 
+	 */
+	private void scrollWeekpaneToShowDisplayedTime() {
+		// calculate the offset of the displayed time from midnight
+		LocalDateTime lDisplayedLocalDateTime = getSkinnable().displayedLocalDateTime().get();
+		double lOffsetInMinutes = (lDisplayedLocalDateTime.getHour() * 60) + lDisplayedLocalDateTime.getMinute();
+		
+		// calculate the position of the scrollbar that matches that offset from midnight
+		double lScrollRange = weekScrollPane.getVmax() - weekScrollPane.getVmin();
+		double lValue = lScrollRange * lOffsetInMinutes / (24.0 * 60.0);
+		weekScrollPane.setVvalue(lValue);
+	}
+	
 	// ==================================================================================================================
 	// PANES
 	
@@ -285,12 +368,14 @@ implements AgendaSkin
 	/**
 	 * Responsible for rendering the day headers within the week
 	 */
-	class WeekHeaderPane extends Pane
-	{
+	class WeekHeaderPane extends Pane {
 		final List<DayHeaderPane> dayHeaderPanes = new ArrayList<DayHeaderPane>();
 
-		public WeekHeaderPane(WeekBodyPane weekBodyPane)
-		{
+		public WeekHeaderPane(WeekBodyPane weekBodyPane) {
+			construct();
+		}
+		
+		private void construct() {
 			// one day header pane per day body pane 
 			for (DayBodyPane dayBodyPane : weekBodyPane.dayBodyPanes)
 			{
@@ -311,6 +396,12 @@ implements AgendaSkin
 			prefWidthProperty().bind(weekBodyPane.widthProperty()); // same width as the weekpane
 			prefHeightProperty().bind(layoutHelp.headerHeightProperty);
 		}
+		
+		private void reconstruct() {
+			dayHeaderPanes.clear();
+			getChildren().clear();
+			construct();
+		}
 	}
 
 	/**
@@ -320,11 +411,14 @@ implements AgendaSkin
 	{
 		final List<DayBodyPane> dayBodyPanes = new ArrayList<DayBodyPane>();
 
-		public WeekBodyPane()
-		{
+		public WeekBodyPane() {
 			getStyleClass().add("Week");
+			construct();
+		}
+		
+		private void construct() {
 			getChildren().add(new TimeScale24Hour(this, layoutHelp));
-
+			
 			int i = 0;
 			for (LocalDate localDate : determineDisplayedLocalDates())
 			{
@@ -340,6 +434,12 @@ implements AgendaSkin
 				localDate = localDate.plusDays(1);
 				i++;
 			}
+		}
+		
+		void reconstruct() {
+			dayBodyPanes.clear();
+			getChildren().clear();
+			construct();
 		}
 	}
 	

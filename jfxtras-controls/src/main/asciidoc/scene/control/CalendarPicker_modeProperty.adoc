@@ -1,0 +1,3 @@
+- Whether one, multiple or more dates can be selected is specified using the mode property.
+- The {calendars} list holds all selected dates. 
+- In multiple or range mode, the {calendar} property holds the last selected {calendar}. 
