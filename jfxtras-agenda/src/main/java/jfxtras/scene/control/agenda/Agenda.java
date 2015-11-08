@@ -434,20 +434,20 @@ public class Agenda extends Control
 		// Calendar
 		
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		public default Calendar getStartTime() {
+		default Calendar getStartTime() {
 			throw new RuntimeException("Not implemented");
 		}
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		public default void setStartTime(Calendar c) {
+		default void setStartTime(Calendar c) {
 			throw new RuntimeException("Not implemented");
 		}
 		
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		public default Calendar getEndTime() {
+		default Calendar getEndTime() {
 			throw new RuntimeException("Not implemented");
 		}
 		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		public default void setEndTime(Calendar c) {
+		default void setEndTime(Calendar c) {
 			throw new RuntimeException("Not implemented");
 		}
 		
@@ -455,20 +455,20 @@ public class Agenda extends Control
 		// ZonedDateTime
 		
 		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
-		public default ZonedDateTime getStartZonedDateTime() {
+		default ZonedDateTime getStartZonedDateTime() {
 			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime());
 	    }
 		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
-		public default void setStartZonedDateTime(ZonedDateTime v) {
+		default void setStartZonedDateTime(ZonedDateTime v) {
 			setStartTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
 		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
-		public default ZonedDateTime getEndZonedDateTime() {
+		default ZonedDateTime getEndZonedDateTime() {
 			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getEndTime());
 	    }
 		/** End is exclusive */
-		public default void setEndZonedDateTime(ZonedDateTime v) {
+		default void setEndZonedDateTime(ZonedDateTime v) {
 			setEndTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
 	    }
 		
@@ -476,20 +476,20 @@ public class Agenda extends Control
 		// LocalDateTime 
 		
 		/** This is what Agenda uses to render the appointments */
-		public default LocalDateTime getStartLocalDateTime() {
+		default LocalDateTime getStartLocalDateTime() {
 			return getStartZonedDateTime().toLocalDateTime();
 	    }
 		/** This is what Agenda uses to render the appointments */
-		public default void setStartLocalDateTime(LocalDateTime v) {
+		default void setStartLocalDateTime(LocalDateTime v) {
 			setStartZonedDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 		
 		/** This is what Agenda uses to render the appointments */
-		public default LocalDateTime getEndLocalDateTime() {
+		default LocalDateTime getEndLocalDateTime() {
 			return getEndZonedDateTime() == null ? null : getEndZonedDateTime().toLocalDateTime();
 	    }
 		/** End is exclusive */
-		public default void setEndLocalDateTime(LocalDateTime v) {
+		default void setEndLocalDateTime(LocalDateTime v) {
 			setEndZonedDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
 	    }
 	}
