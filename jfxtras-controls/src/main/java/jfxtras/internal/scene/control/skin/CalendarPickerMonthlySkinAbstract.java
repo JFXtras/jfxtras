@@ -31,8 +31,10 @@ package jfxtras.internal.scene.control.skin;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.beans.InvalidationListener;
@@ -49,6 +51,11 @@ import jfxtras.scene.control.CalendarPicker;
  */
 abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<CalendarPicker>
 {
+    private static final List<String> sunWeekendDaysCountries = Arrays.asList(new String[]{"GQ", "IN", "TH", "UG"});
+    private static final List<String> fryWeekendDaysCountries = Arrays.asList(new String[]{"DJ", "IR"});
+    private static final List<String> frySunWeekendDaysCountries = Arrays.asList(new String[]{"BN"});
+    private static final List<String> thuFryWeekendDaysCountries = Arrays.asList(new String[]{"AF"});
+    private static final List<String> frySatWeekendDaysCountries = Arrays.asList(new String[]{"AE", "DZ", "BH", "BD", "EG", "IQ", "IL", "JO", "KW", "LY", "MV", "MR", "OM", "PS", "QA", "SA", "SD", "SY", "YE"});
 	// ==================================================================================================================
 	// CONSTRUCTOR
 	
@@ -265,7 +272,20 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 	 */
 	protected boolean isWeekdayWeekend(int idx) 
 	{
-		return (isWeekday(idx, java.util.Calendar.SATURDAY) || isWeekday(idx, java.util.Calendar.SUNDAY));
+            Locale locale = getSkinnable().getLocale();
+            if (thuFryWeekendDaysCountries.contains(locale.getCountry())) {
+                return (isWeekday(idx, java.util.Calendar.THURSDAY) || isWeekday(idx, java.util.Calendar.FRIDAY));
+            } else if (frySunWeekendDaysCountries.contains(locale.getCountry())) {
+                return (isWeekday(idx, java.util.Calendar.FRIDAY) || isWeekday(idx, java.util.Calendar.SUNDAY));
+            } else if (fryWeekendDaysCountries.contains(locale.getCountry())) {
+                return isWeekday(idx, java.util.Calendar.FRIDAY);
+            } else if (sunWeekendDaysCountries.contains(locale.getCountry())) {
+                return isWeekday(idx, java.util.Calendar.SUNDAY);
+            } else if (frySatWeekendDaysCountries.contains(locale.getCountry())) {
+                return (isWeekday(idx, java.util.Calendar.FRIDAY) || isWeekday(idx, java.util.Calendar.SATURDAY));
+            } else {
+                return (isWeekday(idx, java.util.Calendar.SATURDAY) || isWeekday(idx, java.util.Calendar.SUNDAY));
+            }
 	}
 	
 	/**
