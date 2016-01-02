@@ -74,10 +74,14 @@ class LayoutHelp {
 		durationInMSPerPixelProperty.bind( msPerDayProperty.divide(dayHeightProperty) );
 		
 		// generic
-		textHeightProperty.set( new Text("X").getBoundsInParent().getHeight() );
+		Text textHeight = new Text("X");
+		textHeight.getStyleClass().add("Agenda");		
+		textHeightProperty.set( textHeight.getBoundsInParent().getHeight() );
 		
 		// time column
-		timeWidthProperty.bind( timeColumnWhitespaceProperty.add( new Text("88:88").getBoundsInParent().getWidth() )  );
+		Text textWidth = new Text("88:88");
+		textWidth.getStyleClass().add("Agenda");		
+		timeWidthProperty.bind( timeColumnWhitespaceProperty.add( textWidth.getBoundsInParent().getWidth() )  );
 	}
 	final Agenda skinnable;
 	final AgendaSkin skin;

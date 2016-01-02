@@ -1,4 +1,9 @@
+@font-face {
+	src: url("/roboto/RobotoCondensed-Light.ttf");
+}
+
 .Agenda { 
+	-fx-font-family: "Roboto Condensed Light"; 	
 }
 
 .Agenda .Week {
