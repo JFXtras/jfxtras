@@ -1,75 +1,54 @@
 package jfxtras.resources;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.File;
-import java.io.IOException;
-
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JFXtrasFontRoboto {
-	private static String cssPath() {
-		return JFXtrasFontRoboto.class.getResource("/jfxtras-font-roboto.css").toExternalForm();
-	}
 	
-	private static void addCSSPathToStylesheets(Stage stage) {
-		addCSSPathToStylesheets(stage.getScene());
-	}
-	
-	private static void addCSSPathToStylesheets(Scene scene) {
-		String cssPath = cssPath();
-	    ObservableList<String> stylesheets = scene.getStylesheets();
-	    if (!stylesheets.contains(cssPath)) {
-	    	stylesheets.add(cssPath());
-	    }
-	    for (String familyName : javafx.scene.text.Font.getFamilies()) {
-	    	System.out.println("TBEE family " + familyName);
-	    }
-	    for (String familyName : javafx.scene.text.Font.getFontNames()) {
-	    	System.out.println("TBEE font " + familyName);
+	/**
+	 * Load all available fonts
+	 */
+	public static void loadAll() {
+	    for (AvailableFonts f : AvailableFonts.values()) {
+	    	load(f);
 	    }
 	}
 	
-	public static void load() {
-		if (javafx.scene.text.Font.getFontNames("Roboto").isEmpty()) {
-		    for (AvailableFaces f : AvailableFaces.values()) {
-			    javafx.scene.text.Font.loadFont(JFXtrasFontRoboto.class.getResource("/" + f.getFilename()).toExternalForm(), 12);
-		    }
-		    for (String familyName : javafx.scene.text.Font.getFamilies()) {
-		    	System.out.println("TBEE family " + familyName);
-		    }
-		    for (String familyName : javafx.scene.text.Font.getFontNames()) {
-		    	System.out.println("TBEE font " + familyName);
-		    }
+	/**
+	 * Load a single font (if not already loaded)
+	 * @param font
+	 */
+	synchronized public static void load(AvailableFonts font) {
+		if (!loadedFonts.contains(font)) {
+			javafx.scene.text.Font.loadFont(JFXtrasFontRoboto.class.getResource("/" + font.getFilename()).toExternalForm(), 12);
+			loadedFonts.add(font);
 		}
 	}
+	static private final Set<AvailableFonts> loadedFonts = Collections.synchronizedSet(new HashSet<>()); 
 	
-	public enum AvailableFaces {
-		// TBEERNOT The commented out fonts have the same family name and then are not accessible for JavaFX
+	public enum AvailableFonts {
+		RobotoItalic("Roboto Italic", "Roboto-Italic.ttf"),
+		RobotoRegular("Roboto Regular", "Roboto-Regular.ttf"),
 		RobotoBlack("Roboto Black", "Roboto-Black.ttf"),
-		//RobotoBlackItalic("Roboto Black Italic", "Roboto-BlackItalic.ttf"),
-		RobotoBold("Roboto", "Roboto-Bold.ttf"),
-		//RobotoBoldItalic("Roboto Bold Italic", "Roboto-BoldItalic.ttf"),
-		//RobotoItalic("Roboto Italic", "Roboto-Italic.ttf"),
+		RobotoBlackItalic("Roboto Black Italic", "Roboto-BlackItalic.ttf"),
+		RobotoBold("Roboto Bold", "Roboto-Bold.ttf"),
+		RobotoBoldItalic("Roboto Bold Italic", "Roboto-BoldItalic.ttf"),
 		RobotoLight("Roboto Light", "Roboto-Light.ttf"),
-		RobotoLightItalic("Roboto Black", "Roboto-LightItalic.ttf"),
+		RobotoLightItalic("Roboto Light Italic", "Roboto-LightItalic.ttf"),
 		RobotoMedium("Roboto Medium", "Roboto-Medium.ttf"),
-		//RobotoMediumItalic("Roboto Medium Italic", "Roboto-MediumItalic.ttf"),
-		//RobotoRegular("Roboto Regular", "Roboto-Regular.ttf"),
+		RobotoMediumItalic("Roboto Medium Italic", "Roboto-MediumItalic.ttf"),
 		RobotoThin("Roboto Thin", "Roboto-Thin.ttf"),
-		//RobotoThinItalic("Roboto Thin Italic", "Roboto-ThinItalic.ttf"),
-		RobotoCondensedBold("Roboto Condensed", "RobotoCondensed-Bold.ttf"),
-		//RobotoCondensedBoldItalic("Roboto Condensed Bold Italic", "RobotoCondensed-BoldItalic.ttf"),
-		//RobotoCondensedItalic("Roboto Condensed Italic", "RobotoCondensed-Italic.ttf"),
+		RobotoThinItalic("Roboto Thin Italic", "Roboto-ThinItalic.ttf"),
+		RobotoCondensedBold("Roboto Condensed Bold", "RobotoCondensed-Bold.ttf"),
+		RobotoCondensedBoldItalic("Roboto Condensed Bold Italic", "RobotoCondensed-BoldItalic.ttf"),
+		RobotoCondensedItalic("Roboto Condensed Italic", "RobotoCondensed-Italic.ttf"),
 		RobotoCondensedLight("Roboto Condensed Light", "RobotoCondensed-Light.ttf"),
-		//RobotoCondensedLightItalic("Roboto Condensed Light Italic", "RobotoCondensed-LightItalic.ttf"),
-		//RobotoCondensedRegular("Roboto Condensed Regular", "RobotoCondensed-Regular.ttf")
+		RobotoCondensedLightItalic("Roboto Condensed Light Italic", "RobotoCondensed-LightItalic.ttf"),
+		RobotoCondensedRegular("Roboto Condensed Regular", "RobotoCondensed-Regular.ttf")
 		;
 		
-		AvailableFaces(String fontname, String filename) {
+		AvailableFonts(String fontname, String filename) {
 			this.fontname = fontname;
 			this.filename = filename;
 		}
