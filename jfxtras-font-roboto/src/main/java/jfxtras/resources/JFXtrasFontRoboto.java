@@ -14,7 +14,6 @@ import java.util.Set;
  * --
  * JFXtrasFontRoboto.loadAll();
  * text.setStyle("-fx-font-family: '" + JFXtrasFontRoboto.AvailableFonts.RobotoMedium.getFamilyName() + "';");
- * }
  * --
  *
  * [source,css]
