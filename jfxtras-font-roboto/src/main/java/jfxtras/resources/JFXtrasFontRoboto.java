@@ -4,6 +4,27 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This class loads Google's Roboto font and make it available in CSS files and style properties.
+ * You can load all available fonts or individual fonts.
+ * The to-be-used family name for -fx-font-family (between quotes) is available as a property on the AvailableFonts.
+ *
+ * Example
+ * [source,java]
+ * --
+ * text.setStyle("-fx-font-family: '" + JFXtrasFontRoboto.AvailableFonts.RobotoMedium.getFamilyName() + "';");
+ * }
+ * --
+ *
+ * [source,css]
+ * --
+ * .label {
+ *     -fx-font-family: 'Roboto Light';
+ * }
+ * --
+*
+ *
+ */
 public class JFXtrasFontRoboto {
 	
 	/**
@@ -48,17 +69,17 @@ public class JFXtrasFontRoboto {
 		RobotoCondensedRegular("Roboto Condensed Regular", "RobotoCondensed-Regular.ttf")
 		;
 		
-		AvailableFonts(String fontname, String filename) {
-			this.fontname = fontname;
+		AvailableFonts(String familyName, String filename) {
+			this.familyName = familyName;
 			this.filename = filename;
 		}
-		final private String fontname;
+		final private String familyName;
 		final private String filename;
 		
-		public String getFontname() {
-			return this.fontname;
+		public String getFamilyName() {
+			return this.familyName;
 		}
-		String getFilename() {
+		private String getFilename() {
 			return this.filename;
 		}
 	}

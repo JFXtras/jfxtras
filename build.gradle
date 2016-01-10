@@ -203,6 +203,9 @@ project(':jfxtras-menu') {
 }
 
 project(':jfxtras-font-roboto') {
+    dependencies {
+        testCompile project(':jfxtras-test-support')
+    }
 }
 
 project(':jfxtras-test-support') {
