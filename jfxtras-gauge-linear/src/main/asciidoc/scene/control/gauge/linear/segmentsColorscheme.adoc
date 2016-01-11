@@ -1,0 +1,22 @@
+The CSS defines a number of default colorschemes for the segments, some of which already were shown in the examples.
+These can be loaded into a scene using:
+[source,java]
+--
+    scene.getStylesheets().add(LinearGauge.segmentColorschemeCSSPath());
+--
+ 
+The numeric suffix denotes the number of segments the colorschema is for.
+
+- colorscheme-blue-to-red-5
+- colorscheme-red-to-blue-5
+- colorscheme-green-to-darkgreen-6
+- colorscheme-green-to-red-6 
+- colorscheme-red-to-green-6 
+- colorscheme-purple-to-red-6 
+- colorscheme-blue-to-red-6 
+- colorscheme-green-to-red-7 
+- colorscheme-red-to-green-7 
+- colorscheme-green-to-red-10 
+- colorscheme-red-to-green-10 
+- colorscheme-purple-to-cyan-10 
+- colorscheme-first-grey-rest-transparent-10

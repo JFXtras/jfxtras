@@ -1,0 +1,9 @@
+The labels collection holds a list of all labels and each of their respective values where they are rendered.
+
+=== Example
+[source,java]
+--
+    gauge.labels().clear(); // remove the default labels
+    labels().add(new AbsoluteLabel(33.0, "33%"));
+    labels().add(new AbsoluteLabel(66.0, "66%"));
+--
