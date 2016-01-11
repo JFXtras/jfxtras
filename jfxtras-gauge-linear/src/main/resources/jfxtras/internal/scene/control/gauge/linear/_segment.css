@@ -1,0 +1,134 @@
+
+/***************************************************************************************************************
+ * Color schemes, these assign different values to the variables.
+ */
+
+/* for 5 segments */
+.colorscheme-blue-to-red-5 {
+    -fxx-segment0-color: #2976fa;
+    -fxx-segment1-color: #29c0fa;
+    -fxx-segment2-color: #29fa3d;
+    -fxx-segment3-color: #ffd82a;
+    -fxx-segment4-color: #ff312a;
+}
+.colorscheme-red-to-blue-5 {
+    -fxx-segment0-color: #ff312a;
+    -fxx-segment1-color: #ffd82a;
+    -fxx-segment2-color: #29fa3d;
+    -fxx-segment3-color: #29c0fa;
+    -fxx-segment4-color: #2976fa;
+}
+
+
+/* for 6 segments */
+.colorscheme-green-to-darkgreen-6 {
+    -fxx-segment0-color: #badf8d;
+    -fxx-segment1-color: #95c262;
+    -fxx-segment2-color: #80b940;
+    -fxx-segment3-color: #67a328;
+    -fxx-segment4-color: #36843d;
+    -fxx-segment5-color: #11632f;
+}
+.colorscheme-green-to-red-6 {
+    -fxx-segment0-color: #11632f;
+    -fxx-segment1-color: #36843d;
+    -fxx-segment2-color: #80b940;
+    -fxx-segment3-color: #f5982b;
+    -fxx-segment4-color: #f06129;
+    -fxx-segment5-color: #b61f25;
+}
+.colorscheme-red-to-green-6 {
+    -fxx-segment0-color: #b61f25;
+    -fxx-segment1-color: #f06129;
+    -fxx-segment2-color: #f5982b;
+    -fxx-segment3-color: #80b940;
+    -fxx-segment4-color: #36843d;
+    -fxx-segment5-color: #11632f;
+}
+.colorscheme-purple-to-red-6 {
+    -fxx-segment0-color: #64266b;
+    -fxx-segment1-color: #74255e;
+    -fxx-segment2-color: #842551;
+    -fxx-segment3-color: #922545;
+    -fxx-segment4-color: #a12538;
+    -fxx-segment5-color: #b61f25;
+}
+.colorscheme-blue-to-red-6 {
+    -fxx-segment0-color: #20bafb;
+    -fxx-segment1-color: #23d8a6;
+    -fxx-segment2-color: #29fa3d;
+    -fxx-segment3-color: #ebfb37;
+    -fxx-segment4-color: #fdb42a;
+    -fxx-segment5-color: #fb4a1c;
+}
+
+/* for 7 segments */
+.colorscheme-green-to-red-7 {
+    -fxx-segment0-color: #0b480d;
+    -fxx-segment1-color: #177416;
+    -fxx-segment2-color: #77a922;
+    -fxx-segment3-color: #f0df31;
+    -fxx-segment4-color: #fd8d24;
+    -fxx-segment5-color: #fc4a1c;
+    -fxx-segment6-color: #fb1419;
+}
+.colorscheme-red-to-green-7 {
+    -fxx-segment0-color: #fb1419;
+    -fxx-segment1-color: #fc4a1c;
+    -fxx-segment2-color: #fd8d24;
+    -fxx-segment3-color: #f0df31;
+    -fxx-segment4-color: #77a922;
+    -fxx-segment5-color: #177416;
+    -fxx-segment6-color: #0b480d;
+}
+
+/* for 10 segments */
+.colorscheme-green-to-red-10 {
+    -fxx-segment0-color: #97b329;
+    -fxx-segment1-color: #aacc2a;
+    -fxx-segment2-color: #d4ea35;
+    -fxx-segment3-color: #f2de31;
+    -fxx-segment4-color: #fccb2e;
+    -fxx-segment5-color: #f3a429;
+    -fxx-segment6-color: #f18c23;
+    -fxx-segment7-color: #f65821;
+    -fxx-segment8-color: #f3351f;
+    -fxx-segment9-color: #f61319;
+}
+.colorscheme-red-to-green-10 {
+    -fxx-segment0-color: #f61319;
+    -fxx-segment1-color: #f3351f;
+    -fxx-segment2-color: #f65821;
+    -fxx-segment3-color: #f18c23;
+    -fxx-segment4-color: #f3a429;
+    -fxx-segment5-color: #fccb2e;
+    -fxx-segment6-color: #f2de31;
+    -fxx-segment7-color: #d4ea35;
+    -fxx-segment8-color: #aacc2a;
+    -fxx-segment9-color: #97b329;
+}
+.colorscheme-purple-to-cyan-10 {
+    -fxx-segment0-color: #5b27c8;
+    -fxx-segment1-color: #9622b6;
+    -fxx-segment2-color: #cc1760;
+    -fxx-segment3-color: #c7151a;
+    -fxx-segment4-color: #f37e23;
+    -fxx-segment5-color: #f6c52d;
+    -fxx-segment6-color: #bdd62d;
+    -fxx-segment7-color: #5bcc28;
+    -fxx-segment8-color: #25cf90;
+    -fxx-segment9-color: #22b4c5;
+}
+.colorscheme-first-grey-rest-transparent-10 {
+    -fxx-segment0-color: #888888;
+    -fxx-segment1-color: transparent;
+    -fxx-segment2-color: transparent;
+    -fxx-segment3-color: transparent;
+    -fxx-segment4-color: transparent;
+    -fxx-segment5-color: transparent;
+    -fxx-segment6-color: transparent;
+    -fxx-segment7-color: transparent;
+    -fxx-segment8-color: transparent;
+    -fxx-segment9-color: transparent;
+}
+

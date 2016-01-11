@@ -1,0 +1,219 @@
+@font-face {
+	src: url("/roboto/Roboto-Medium.ttf");
+}
+
+.SimpleMetroArcGauge {
+    /* These are the variables with their default values (colors), but they're just a mix of colors. Logic can be applied by assigning on of the colorschemes */    
+    -fxx-segment0-color: #888888;
+    -fxx-segment1-color: #f3622d;
+    -fxx-segment2-color: #fba71b;
+    -fxx-segment3-color: #57b757;
+    -fxx-segment4-color: #41a9c9;
+    -fxx-segment5-color: #4258c9;
+    -fxx-segment6-color: #9a42c8;
+    -fxx-segment7-color: #c84164;
+    -fxx-segment8-color: #ffffff;
+    -fxx-segment9-color: #aaaaaa;
+    -fxx-marker0-color: #222222;
+    -fxx-marker1-color: #222222;
+    -fxx-marker2-color: #222222;
+    -fxx-marker3-color: #222222;
+    -fxx-marker4-color: #222222;
+    -fxx-marker5-color: #222222;
+    -fxx-marker6-color: #222222;
+    -fxx-marker7-color: #222222;
+    -fxx-marker8-color: #222222;
+    -fxx-marker9-color: #222222;
+	-fxx-needle-color: #5a615f;
+	/* predefined indicators */
+	-fxx-error-indicator-visibility: hidden; 
+	-fxx-error-indicator-color: red; 
+	-fxx-warning-indicator-visibility: hidden; 
+	-fxx-warning-indicator-color: orange; 
+}
+
+.SimpleMetroArcGauge .needle {
+    -fx-fill:-fxx-needle-color;
+    -fx-stroke: white;
+    -fx-stroke-line-cap: round;
+    -fx-stroke-line-join: bevel;
+}
+
+.SimpleMetroArcGauge .value {
+    -fx-fill: white;
+	-fx-font-family: "Roboto Medium"; 
+    -fx-font-size: 64px;
+    -fx-font-weight: bold;
+}
+
+/***************************************************************************************************************
+/* predefined indicators http://www.w3.org/TR/SVG/paths.html */
+/* drawing circles in SVG: http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334 */
+
+.SimpleMetroArcGauge .error-indicator {
+	visibility: -fxx-error-indicator-visibility;
+	-fx-background-color: -fxx-error-indicator-color;
+	-fx-shape: 'M 50, 50 m -50, 0 a 50,50 0 1,0 100,0 a 50,50 0 1,0 -100,0'; 
+	-fx-scale-shape: false; 
+}
+
+.SimpleMetroArcGauge .warning-indicator {
+	visibility: -fxx-warning-indicator-visibility;
+	-fx-background-color: -fxx-warning-indicator-color;
+	-fx-shape: 'M 50, 50 m -50, 0 a 50,50 0 1,0 100,0 a 50,50 0 1,0 -100,0'; 
+	-fx-scale-shape: false; 
+}
+
+/***************************************************************************************************************
+ * This are the actual classes being assigned to the segments, they use the variables to obtain their color.
+ */ 
+
+.SimpleMetroArcGauge .segment {
+    -fx-stroke: #888888;
+    -fx-fill: #888888;
+}
+
+.SimpleMetroArcGauge .segment0 {
+    -fx-stroke: -fxx-segment0-color;
+    -fx-fill: -fxx-segment0-color;
+}
+
+.SimpleMetroArcGauge .segment1 {
+    -fx-stroke: -fxx-segment1-color;
+    -fx-fill: -fxx-segment1-color;
+}
+
+.SimpleMetroArcGauge .segment2 {
+    -fx-stroke: -fxx-segment2-color;
+    -fx-fill: -fxx-segment2-color;
+}
+
+.SimpleMetroArcGauge .segment3 {
+    -fx-stroke: -fxx-segment3-color;
+    -fx-fill: -fxx-segment3-color;
+}
+
+.SimpleMetroArcGauge .segment4 {
+    -fx-stroke: -fxx-segment4-color;
+    -fx-fill: -fxx-segment4-color;
+}
+
+.SimpleMetroArcGauge .segment5 {
+    -fx-stroke: -fxx-segment5-color;
+    -fx-fill: -fxx-segment5-color;
+}
+
+.SimpleMetroArcGauge .segment6 {
+    -fx-stroke: -fxx-segment6-color;
+    -fx-fill: -fxx-segment6-color;
+}
+
+.SimpleMetroArcGauge .segment7 {
+    -fx-stroke: -fxx-segment7-color;
+    -fx-fill: -fxx-segment7-color;
+}
+
+.SimpleMetroArcGauge .segment8 {
+    -fx-stroke: -fxx-segment8-color;
+    -fx-fill: -fxx-segment8-color;
+}
+
+.SimpleMetroArcGauge .segment9 {
+    -fx-stroke: -fxx-segment9-color;
+    -fx-fill: -fxx-segment9-color;
+}
+
+/**
+ * The segment-active class can be used to modify an segment that is under the needle (this can be more than if the segments are setup in such a way).
+ */
+ 
+.SimpleMetroArcGauge .segment-active {
+}
+
+/**
+ * The segmentX-active are assigned corresponding to the segment that is under the needle (this can be more than if the segments are setup in such a way).
+ * This is the place to associate an indicator with a segment, by adding one of these line to the appropriate class:
+ *     -fxx-error-indicator-visibility: visible; 
+ *     -fxx-warning-indicator-visibility: visible; 
+ * Interesting is it to have transparent segments, while not visible, these can become active and show an indicator.
+ 
+.SimpleMetroArcGauge .segment0-active {
+}
+
+.SimpleMetroArcGauge .segment1-active {
+}
+
+.SimpleMetroArcGauge .segment2-active {
+}
+
+.SimpleMetroArcGauge .segment3-active {
+}
+
+.SimpleMetroArcGauge .segment4-active {
+}
+
+.SimpleMetroArcGauge .segment5-active {
+}
+
+.SimpleMetroArcGauge .segment6-active {
+}
+
+.SimpleMetroArcGauge .segment7-active {
+}
+
+.SimpleMetroArcGauge .segment8-active {
+}
+
+.SimpleMetroArcGauge .segment9-active {
+}
+ */
+
+/***************************************************************************************************************
+ * This are the actual classes being assigned to the marker, they use the variables to obtain their color.
+ */ 
+
+.SimpleMetroArcGauge .marker {
+	-fx-background-color: #222222;
+	-fx-shape: 'M 0 0 L -3 -6 L 3 -6 Z'; 
+	-fx-scale-shape: false; 
+}
+
+.SimpleMetroArcGauge .marker0 {
+    -fx-background-color: -fxx-marker0-color;
+}
+
+.SimpleMetroArcGauge .marker1 {
+    -fx-background-color: -fxx-marker1-color;
+}
+
+.SimpleMetroArcGauge .marker2 {
+    -fx-background-color: -fxx-marker2-color;
+}
+
+.SimpleMetroArcGauge .marker3 {
+    -fx-background-color: -fxx-marker3-color;
+}
+
+.SimpleMetroArcGauge .marker4 {
+    -fx-background-color: -fxx-marker4-color;
+}
+
+.SimpleMetroArcGauge .marker5 {
+    -fx-background-color: -fxx-marker5-color;
+}
+
+.SimpleMetroArcGauge .marker6 {
+    -fx-background-color: -fxx-marker6-color;
+}
+
+.SimpleMetroArcGauge .marker7 {
+    -fx-background-color: -fxx-marker7-color;
+}
+
+.SimpleMetroArcGauge .marker8 {
+    -fx-background-color: -fxx-marker8-color;
+}
+
+.SimpleMetroArcGauge .marker9 {
+    -fx-background-color: -fxx-marker9-color;
+}

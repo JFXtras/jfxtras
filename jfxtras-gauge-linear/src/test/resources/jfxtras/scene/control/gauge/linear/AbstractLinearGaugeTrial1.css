@@ -1,0 +1,23 @@
+.segment1-activex {
+	-fxx-warning-indicator-visibility: visible; 
+}
+
+.segment2-activex {
+	-fxx-error-indicator-visibility: visible; 
+}
+
+.segment-warningSegment-active {
+	-fxx-warning-indicator-visibility: visible; 
+}
+
+.segment-errorSegment-active {
+	-fxx-error-indicator-visibility: visible; 
+}
+
+.SimpleMetroArcGaugex {
+	-fxx-value-format:' ##0.0C';	
+}
+
+.BasicArcGaugex {
+	-fxx-value-format:' ##0.0C';	
+}

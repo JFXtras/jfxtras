@@ -202,6 +202,13 @@ project(':jfxtras-menu') {
     }
 }
 
+project(':jfxtras-gauge-linear') {
+    dependencies {
+        compile project(':jfxtras-common')
+        testCompile project(':jfxtras-test-support')
+    }
+}
+
 project(':jfxtras-font-roboto') {
     dependencies {
         testCompile project(':jfxtras-test-support')
