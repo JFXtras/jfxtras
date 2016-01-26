@@ -47,7 +47,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
-import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 
@@ -348,7 +347,30 @@ public class Agenda extends Control
 	public Callback<Appointment, Void> getEditAppointmentCallback() { return this.editAppointmentCallbackObjectProperty.getValue(); }
 	public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
 	public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
-	
+
+    /** drawnAppointmentCallback:
+     * Agenda has a no popup appear after a new appointment is drawn, but maybe
+     * you want to do something yourself.  If so, you need to set this callback method and open your own window.
+     */
+    public ObjectProperty<Callback<Appointment, Void>> drawnAppointmentCallbackProperty() { return drawnAppointmentCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> drawnAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "editAppointmentCallback", null);
+    public Callback<Appointment, Void> getDrawnAppointmentCallback() { return this.drawnAppointmentCallbackObjectProperty.getValue(); }
+    public void setDrawnAppointmentCallback(Callback<Appointment, Void> value) { this.drawnAppointmentCallbackObjectProperty.setValue(value); }
+    public Agenda withDrawnAppointmentCallback(Callback<Appointment, Void> value) { setDrawnAppointmentCallback(value); return this; }
+
+    /** dragAppointmentCallback:
+     * This callback can have two functions.  First, it can be used to maintain the client domain
+     * consistent with the dragging time/date change.  This is necessary because the change listener
+     * only fires on deletions or additions, not on edit changes to its elements.
+     * Second, a popup can appear after a repeatable appointment is dragged to prompt a user if the 
+     * change is change is for one, this-and-future or all events.
+     */
+    public ObjectProperty<Callback<Appointment, Void>> dragAppointmentCallbackProperty() { return dragAppointmentCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> dragAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "editAppointmentCallback", null);
+    public Callback<Appointment, Void> getDragAppointmentCallback() { return this.dragAppointmentCallbackObjectProperty.getValue(); }
+    public void setDragAppointmentCallback(Callback<Appointment, Void> value) { this.dragAppointmentCallbackObjectProperty.setValue(value); }
+    public Agenda withDragAppointmentCallback(Callback<Appointment, Void> value) { setDragAppointmentCallback(value); return this; }
+    
 	/** actionCallback:
 	 * This triggered when the action is called on an appointment, usually this is a double click
 	 */
