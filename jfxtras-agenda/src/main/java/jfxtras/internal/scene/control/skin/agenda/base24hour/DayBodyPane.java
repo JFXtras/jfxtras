@@ -42,6 +42,7 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
@@ -184,6 +185,11 @@ class DayBodyPane extends Pane
 			if (lAppointment != null) {
 				layoutHelp.skinnable.appointments().add(lAppointment); // the appointments collection is listened to, so they will automatically be refreshed
 			}
+	          // has the client done his own popup?
+            Callback<Appointment, Void> lDrawnCallback = layoutHelp.skinnable.getDrawnAppointmentCallback();
+            if (lDrawnCallback != null) {
+                lDrawnCallback.call(lAppointment);
+            }
 		});
 	}
 	private Rectangle resizeRectangle = null;
