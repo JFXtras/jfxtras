@@ -36,6 +36,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
@@ -138,6 +139,12 @@ class DurationDragger extends Rectangle
 			
 			// set the new enddate
 			appointmentPane.appointment.setEndLocalDateTime(endLocalDateTime);
+			
+            // has the client added a callback to process the change?
+            Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getAppointmentChangedCallback();
+            if (lChangedCallback != null) {
+                lChangedCallback.call(appointment);
+            }
 			
 			// relayout the entire skin
 			layoutHelp.skin.setupAppointments();

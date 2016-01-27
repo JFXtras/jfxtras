@@ -47,7 +47,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
-import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 
@@ -348,7 +347,19 @@ public class Agenda extends Control
 	public Callback<Appointment, Void> getEditAppointmentCallback() { return this.editAppointmentCallbackObjectProperty.getValue(); }
 	public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
 	public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
-	
+
+	   /** appointmentChangedCallback:
+     * When an appointment is changed by Agenda (e.g. drag-n-drop to new time) the change listeners will not fire.
+     * This callback will be called when these changes occur.  For a repeatable appointment, this can be used to
+     * prompt the user if they want the change to occur to one, this-and-future or all events in series.
+     * If so, you need to set this callback method and open your own window.
+     */
+    public ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackProperty() { return appointmentChangedCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "editAppointmentCallback", null);
+    public Callback<Appointment, Void> getAppointmentChangedCallback() { return this.appointmentChangedCallbackObjectProperty.getValue(); }
+    public void setAppointmentChangedCallback(Callback<Appointment, Void> value) { this.appointmentChangedCallbackObjectProperty.setValue(value); }
+    public Agenda withAppointmentChangedCallback(Callback<Appointment, Void> value) { setAppointmentChangedCallback(value); return this; }
+    
 	/** actionCallback:
 	 * This triggered when the action is called on an appointment, usually this is a double click
 	 */
