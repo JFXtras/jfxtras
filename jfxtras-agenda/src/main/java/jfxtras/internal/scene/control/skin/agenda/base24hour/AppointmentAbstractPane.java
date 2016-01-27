@@ -251,6 +251,12 @@ abstract class AppointmentAbstractPane extends Pane {
 			if (dragDropDateTime != null) { // not dropped somewhere outside
 				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);					
 				
+		        // has the client added a callback to process the change?
+		        Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getAppointmentChangedCallback();
+		        if (lChangedCallback != null) {
+		            lChangedCallback.call(appointment);
+		        }
+		        
 				// relayout whole week
 				layoutHelp.skin.setupAppointments();
 			}

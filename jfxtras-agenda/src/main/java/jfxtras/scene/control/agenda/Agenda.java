@@ -47,7 +47,6 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
-import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 
@@ -151,89 +150,89 @@ import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
  */
 public class Agenda extends Control
 {
-	// ==================================================================================================================
-	// CONSTRUCTOR
-	
-	/**
-	 * 
-	 */
-	public Agenda()
-	{
-		construct();
-	}
-	
-	/*
-	 * 
-	 */
-	private void construct()
-	{
-		// pref size
-		setPrefSize(1000, 800);
-		
-		// setup the CSS
-		this.getStyleClass().add(Agenda.class.getSimpleName());
-		
-		// handle deprecated
-		DateTimeToCalendarHelper.syncLocalDateTime(displayedCalendarObjectProperty, displayedLocalDateTimeObjectProperty, localeObjectProperty);
+    // ==================================================================================================================
+    // CONSTRUCTOR
+    
+    /**
+     * 
+     */
+    public Agenda()
+    {
+        construct();
+    }
+    
+    /*
+     * 
+     */
+    private void construct()
+    {
+        // pref size
+        setPrefSize(1000, 800);
+        
+        // setup the CSS
+        this.getStyleClass().add(Agenda.class.getSimpleName());
+        
+        // handle deprecated
+        DateTimeToCalendarHelper.syncLocalDateTime(displayedCalendarObjectProperty, displayedLocalDateTimeObjectProperty, localeObjectProperty);
 
-		// appointmentGroups
-		constructAppointmentGroups();
-		
-		// appointments
-		constructAppointments();
-	}
+        // appointmentGroups
+        constructAppointmentGroups();
+        
+        // appointments
+        constructAppointments();
+    }
 
-	/**
-	 * Return the path to the CSS file so things are setup right
-	 */
-	@Override public String getUserAgentStylesheet()
-	{
-		return Agenda.class.getResource("/jfxtras/internal/scene/control/skin/agenda/" + Agenda.class.getSimpleName() + ".css").toExternalForm();
-	}
-	
-	/**
-	 * 
-	 */
-	@Override public Skin<?> createDefaultSkin() {
-		return new AgendaWeekSkin(this); 
-	}
+    /**
+     * Return the path to the CSS file so things are setup right
+     */
+    @Override public String getUserAgentStylesheet()
+    {
+        return Agenda.class.getResource("/jfxtras/internal/scene/control/skin/agenda/" + Agenda.class.getSimpleName() + ".css").toExternalForm();
+    }
+    
+    /**
+     * 
+     */
+    @Override public Skin<?> createDefaultSkin() {
+        return new AgendaWeekSkin(this); 
+    }
 
-	// ==================================================================================================================
-	// PROPERTIES
+    // ==================================================================================================================
+    // PROPERTIES
 
-	/** Id */
-	public Agenda withId(String value) { setId(value); return this; }
+    /** Id */
+    public Agenda withId(String value) { setId(value); return this; }
 
-	/** Appointments: */
-	public ObservableList<Appointment> appointments() { return appointments; }
-	final private ObservableList<Appointment> appointments =  javafx.collections.FXCollections.observableArrayList();
-	private void constructAppointments()
-	{
-		// when appointments are removed, they can't be selected anymore
-		appointments.addListener(new ListChangeListener<Agenda.Appointment>() 
-		{
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes)
-			{
-				while (changes.next())
-				{
-					for (Appointment lAppointment : changes.getRemoved())
-					{
-						selectedAppointments.remove(lAppointment);
-					}
-				}
-			} 
-		});
-	}
-	
-	/** AppointmentGroups: */
-	public ObservableList<AppointmentGroup> appointmentGroups() { return appointmentGroups; }
-	final private ObservableList<AppointmentGroup> appointmentGroups =  javafx.collections.FXCollections.observableArrayList();
-	private void constructAppointmentGroups() {
-		// setup appointment groups as predefined in the CSS
+    /** Appointments: */
+    public ObservableList<Appointment> appointments() { return appointments; }
+    final private ObservableList<Appointment> appointments =  javafx.collections.FXCollections.observableArrayList();
+    private void constructAppointments()
+    {
+        // when appointments are removed, they can't be selected anymore
+        appointments.addListener(new ListChangeListener<Agenda.Appointment>() 
+        {
+            @Override
+            public void onChanged(javafx.collections.ListChangeListener.Change<? extends Appointment> changes)
+            {
+                while (changes.next())
+                {
+                    for (Appointment lAppointment : changes.getRemoved())
+                    {
+                        selectedAppointments.remove(lAppointment);
+                    }
+                }
+            } 
+        });
+    }
+    
+    /** AppointmentGroups: */
+    public ObservableList<AppointmentGroup> appointmentGroups() { return appointmentGroups; }
+    final private ObservableList<AppointmentGroup> appointmentGroups =  javafx.collections.FXCollections.observableArrayList();
+    private void constructAppointmentGroups() {
+        // setup appointment groups as predefined in the CSS
         final Map<String, Agenda.AppointmentGroup> lAppointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
         for (int i = 0; i < 24; i++) {
-        	lAppointmentGroupMap.put("group" + (i < 10 ? "0" : "") + i, new Agenda.AppointmentGroupImpl().withStyleClass("group" + i));
+            lAppointmentGroupMap.put("group" + (i < 10 ? "0" : "") + i, new Agenda.AppointmentGroupImpl().withStyleClass("group" + i));
         }
         for (String lId : lAppointmentGroupMap.keySet())
         {
@@ -241,434 +240,446 @@ public class Agenda extends Control
             lAppointmentGroup.setDescription(lId);
             appointmentGroups().add(lAppointmentGroup);
         }
-	}
+    }
 
-	/** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
-	public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
-	final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(this, "locale", Locale.getDefault());
-	public Locale getLocale() { return localeObjectProperty.getValue(); }
-	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
-	public Agenda withLocale(Locale value) { setLocale(value); return this; } 
+    /** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
+    public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }
+    final private ObjectProperty<Locale> localeObjectProperty = new SimpleObjectProperty<Locale>(this, "locale", Locale.getDefault());
+    public Locale getLocale() { return localeObjectProperty.getValue(); }
+    public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
+    public Agenda withLocale(Locale value) { setLocale(value); return this; } 
 
-	/** AllowDragging: allow appointments being dragged by the mouse */
-	public SimpleBooleanProperty allowDraggingProperty() { return allowDraggingObjectProperty; }
-	final private SimpleBooleanProperty allowDraggingObjectProperty = new SimpleBooleanProperty(this, "allowDragging", true);
-	public boolean getAllowDragging() { return allowDraggingObjectProperty.getValue(); }
-	public void setAllowDragging(boolean value) { allowDraggingObjectProperty.setValue(value); }
-	public Agenda withAllowDragging(boolean value) { setAllowDragging(value); return this; } 
+    /** AllowDragging: allow appointments being dragged by the mouse */
+    public SimpleBooleanProperty allowDraggingProperty() { return allowDraggingObjectProperty; }
+    final private SimpleBooleanProperty allowDraggingObjectProperty = new SimpleBooleanProperty(this, "allowDragging", true);
+    public boolean getAllowDragging() { return allowDraggingObjectProperty.getValue(); }
+    public void setAllowDragging(boolean value) { allowDraggingObjectProperty.setValue(value); }
+    public Agenda withAllowDragging(boolean value) { setAllowDragging(value); return this; } 
 
-	/** AllowResize: allow appointments to be resized using the mouse */
-	public SimpleBooleanProperty allowResizeProperty() { return allowResizeObjectProperty; }
-	final private SimpleBooleanProperty allowResizeObjectProperty = new SimpleBooleanProperty(this, "allowResize", true);
-	public boolean getAllowResize() { return allowResizeObjectProperty.getValue(); }
-	public void setAllowResize(boolean value) { allowResizeObjectProperty.setValue(value); }
-	public Agenda withAllowResize(boolean value) { setAllowResize(value); return this; } 
+    /** AllowResize: allow appointments to be resized using the mouse */
+    public SimpleBooleanProperty allowResizeProperty() { return allowResizeObjectProperty; }
+    final private SimpleBooleanProperty allowResizeObjectProperty = new SimpleBooleanProperty(this, "allowResize", true);
+    public boolean getAllowResize() { return allowResizeObjectProperty.getValue(); }
+    public void setAllowResize(boolean value) { allowResizeObjectProperty.setValue(value); }
+    public Agenda withAllowResize(boolean value) { setAllowResize(value); return this; } 
 
-	/** 
-	 * DisplayedCalendar: this calendar denotes the timeframe being displayed. 
-	 * If the agenda is in week skin, it will display the week containing this date. (Things like FirstDayOfWeek are taken into account.)
-	 * In month skin, the month containing this date.
-	 */
-	@Deprecated public ObjectProperty<Calendar> displayedCalendar() { return displayedCalendarObjectProperty; }
-	private final ObjectProperty<Calendar> displayedCalendarObjectProperty = new SimpleObjectProperty<Calendar>(this, "displayedCalendar", Calendar.getInstance());
-	@Deprecated public Calendar getDisplayedCalendar() { return displayedCalendarObjectProperty.getValue(); }
-	@Deprecated public void setDisplayedCalendar(Calendar value) { displayedCalendarObjectProperty.setValue(value); }
-	@Deprecated public Agenda withDisplayedCalendar(Calendar value) { setDisplayedCalendar(value); return this; }
-	
-	/** 
-	 * The skin will use this date and time to determine what to display.
-	 * Each skin determines what interval suites best; for example the week skin will find the week where this LocalDateTime falls in using the Locale to decide on what day a week starts, the day skin will render the date.
-	 * Possibly in the future there may be skins that render part of a day, that simply is not known, hence this is a LocalDateTime instead of a LocalDate. 
-	 */
-	public ObjectProperty<LocalDateTime> displayedLocalDateTime() { return displayedLocalDateTimeObjectProperty; }
-	private final ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedLocalDateTime", LocalDateTime.now());
-	public LocalDateTime getDisplayedLocalDateTime() { return displayedLocalDateTimeObjectProperty.getValue(); }
-	public void setDisplayedLocalDateTime(LocalDateTime value) { displayedLocalDateTimeObjectProperty.setValue(value); }
-	public Agenda withDisplayedLocalDateTime(LocalDateTime value) { setDisplayedLocalDateTime(value); return this; }
-	
-	/** selectedAppointments: a list of selected appointments */
-	public ObservableList<Appointment> selectedAppointments() { return selectedAppointments; }
-	final private ObservableList<Appointment> selectedAppointments =  javafx.collections.FXCollections.observableArrayList();
+    /** 
+     * DisplayedCalendar: this calendar denotes the timeframe being displayed. 
+     * If the agenda is in week skin, it will display the week containing this date. (Things like FirstDayOfWeek are taken into account.)
+     * In month skin, the month containing this date.
+     */
+    @Deprecated public ObjectProperty<Calendar> displayedCalendar() { return displayedCalendarObjectProperty; }
+    private final ObjectProperty<Calendar> displayedCalendarObjectProperty = new SimpleObjectProperty<Calendar>(this, "displayedCalendar", Calendar.getInstance());
+    @Deprecated public Calendar getDisplayedCalendar() { return displayedCalendarObjectProperty.getValue(); }
+    @Deprecated public void setDisplayedCalendar(Calendar value) { displayedCalendarObjectProperty.setValue(value); }
+    @Deprecated public Agenda withDisplayedCalendar(Calendar value) { setDisplayedCalendar(value); return this; }
+    
+    /** 
+     * The skin will use this date and time to determine what to display.
+     * Each skin determines what interval suites best; for example the week skin will find the week where this LocalDateTime falls in using the Locale to decide on what day a week starts, the day skin will render the date.
+     * Possibly in the future there may be skins that render part of a day, that simply is not known, hence this is a LocalDateTime instead of a LocalDate. 
+     */
+    public ObjectProperty<LocalDateTime> displayedLocalDateTime() { return displayedLocalDateTimeObjectProperty; }
+    private final ObjectProperty<LocalDateTime> displayedLocalDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "displayedLocalDateTime", LocalDateTime.now());
+    public LocalDateTime getDisplayedLocalDateTime() { return displayedLocalDateTimeObjectProperty.getValue(); }
+    public void setDisplayedLocalDateTime(LocalDateTime value) { displayedLocalDateTimeObjectProperty.setValue(value); }
+    public Agenda withDisplayedLocalDateTime(LocalDateTime value) { setDisplayedLocalDateTime(value); return this; }
+    
+    /** selectedAppointments: a list of selected appointments */
+    public ObservableList<Appointment> selectedAppointments() { return selectedAppointments; }
+    final private ObservableList<Appointment> selectedAppointments =  javafx.collections.FXCollections.observableArrayList();
 
-	/** calendarRangeCallback: 
-	 * Appointments should match:
-	 * - start date &gt;= range start
-	 * - end date &lt;= range end
-	 */
-	@Deprecated public ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackProperty() { return calendarRangeCallbackObjectProperty; }
-	@Deprecated final private ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<CalendarRange, Void>>(this, "calendarRangeCallback", null);
-	@Deprecated public Callback<CalendarRange, Void> getCalendarRangeCallback() { return this.calendarRangeCallbackObjectProperty.getValue(); }
-	@Deprecated public void setCalendarRangeCallback(Callback<CalendarRange, Void> value) { this.calendarRangeCallbackObjectProperty.setValue(value); }
-	@Deprecated public Agenda withCalendarRangeCallback(Callback<CalendarRange, Void> value) { setCalendarRangeCallback(value); return this; }
-	
-	/** localDateTimeRangeCallback: 
-	 * Appointments should match:
-	 * - start date &gt;= range start
-	 * - end date &lt;= range end
-	 */
-	public ObjectProperty<Callback<LocalDateTimeRange, Void>> localDateTimeRangeCallbackProperty() { return localDateTimeRangeCallbackObjectProperty; }
-	final private ObjectProperty<Callback<LocalDateTimeRange, Void>> localDateTimeRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Void>>(this, "localDateTimeRangeCallback", null);
-	public Callback<LocalDateTimeRange, Void> getLocalDateTimeRangeCallback() { return this.localDateTimeRangeCallbackObjectProperty.getValue(); }
-	public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
-	public Agenda withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
-	
-	/** addAppointmentCallback:
-	 * Since the Agenda is not the owner of the appointments but only dictates an interface, it does not know how to create a new one.
-	 * So you need to implement this callback and create an appointment.
-	 * The calendars in the provided range specify the start and end times, they can be used to create the new appointment (they do not need to be cloned).
-	 * Null may be returned to indicate that no appointment was created.
-	 * 
-	 */
-	@Deprecated public ObjectProperty<Callback<CalendarRange, Appointment>> createAppointmentCallbackProperty() { return createAppointmentCallbackObjectProperty; }
-	@Deprecated final private ObjectProperty<Callback<CalendarRange, Appointment>> createAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<CalendarRange, Appointment>>(this, "createAppointmentCallback", null);
-	@Deprecated public Callback<CalendarRange, Appointment> getCreateAppointmentCallback() { return this.createAppointmentCallbackObjectProperty.getValue(); }
-	@Deprecated public void setCreateAppointmentCallback(Callback<CalendarRange, Appointment> value) { this.createAppointmentCallbackObjectProperty.setValue(value); }
-	@Deprecated public Agenda withCreateAppointmentCallback(Callback<CalendarRange, Appointment> value) { setCreateAppointmentCallback(value); return this; }
-	
-	/** addAppointmentCallback:
-	 * Since the Agenda is not the owner of the appointments but only dictates an interface, it does not know how to create a new one.
-	 * So you need to implement this callback and create an appointment.
-	 * The calendars in the provided range specify the start and end times, they can be used to create the new appointment (they do not need to be cloned).
-	 * Null may be returned to indicate that no appointment was created.
-	 */
-	public ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackProperty() { return newAppointmentCallbackObjectProperty; }
-	final private ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Appointment>>(this, "newAppointmentCallback", null);
-	public Callback<LocalDateTimeRange, Appointment> getNewAppointmentCallback() { return this.newAppointmentCallbackObjectProperty.getValue(); }
-	public void setNewAppointmentCallback(Callback<LocalDateTimeRange, Appointment> value) { this.newAppointmentCallbackObjectProperty.setValue(value); }
-	public Agenda withNewAppointmentCallback(Callback<LocalDateTimeRange, Appointment> value) { setNewAppointmentCallback(value); return this; }
+    /** calendarRangeCallback: 
+     * Appointments should match:
+     * - start date &gt;= range start
+     * - end date &lt;= range end
+     */
+    @Deprecated public ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackProperty() { return calendarRangeCallbackObjectProperty; }
+    @Deprecated final private ObjectProperty<Callback<CalendarRange, Void>> calendarRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<CalendarRange, Void>>(this, "calendarRangeCallback", null);
+    @Deprecated public Callback<CalendarRange, Void> getCalendarRangeCallback() { return this.calendarRangeCallbackObjectProperty.getValue(); }
+    @Deprecated public void setCalendarRangeCallback(Callback<CalendarRange, Void> value) { this.calendarRangeCallbackObjectProperty.setValue(value); }
+    @Deprecated public Agenda withCalendarRangeCallback(Callback<CalendarRange, Void> value) { setCalendarRangeCallback(value); return this; }
+    
+    /** localDateTimeRangeCallback: 
+     * Appointments should match:
+     * - start date &gt;= range start
+     * - end date &lt;= range end
+     */
+    public ObjectProperty<Callback<LocalDateTimeRange, Void>> localDateTimeRangeCallbackProperty() { return localDateTimeRangeCallbackObjectProperty; }
+    final private ObjectProperty<Callback<LocalDateTimeRange, Void>> localDateTimeRangeCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Void>>(this, "localDateTimeRangeCallback", null);
+    public Callback<LocalDateTimeRange, Void> getLocalDateTimeRangeCallback() { return this.localDateTimeRangeCallbackObjectProperty.getValue(); }
+    public void setLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { this.localDateTimeRangeCallbackObjectProperty.setValue(value); }
+    public Agenda withLocalDateTimeRangeCallback(Callback<LocalDateTimeRange, Void> value) { setLocalDateTimeRangeCallback(value); return this; }
+    
+    /** addAppointmentCallback:
+     * Since the Agenda is not the owner of the appointments but only dictates an interface, it does not know how to create a new one.
+     * So you need to implement this callback and create an appointment.
+     * The calendars in the provided range specify the start and end times, they can be used to create the new appointment (they do not need to be cloned).
+     * Null may be returned to indicate that no appointment was created.
+     * 
+     */
+    @Deprecated public ObjectProperty<Callback<CalendarRange, Appointment>> createAppointmentCallbackProperty() { return createAppointmentCallbackObjectProperty; }
+    @Deprecated final private ObjectProperty<Callback<CalendarRange, Appointment>> createAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<CalendarRange, Appointment>>(this, "createAppointmentCallback", null);
+    @Deprecated public Callback<CalendarRange, Appointment> getCreateAppointmentCallback() { return this.createAppointmentCallbackObjectProperty.getValue(); }
+    @Deprecated public void setCreateAppointmentCallback(Callback<CalendarRange, Appointment> value) { this.createAppointmentCallbackObjectProperty.setValue(value); }
+    @Deprecated public Agenda withCreateAppointmentCallback(Callback<CalendarRange, Appointment> value) { setCreateAppointmentCallback(value); return this; }
+    
+    /** addAppointmentCallback:
+     * Since the Agenda is not the owner of the appointments but only dictates an interface, it does not know how to create a new one.
+     * So you need to implement this callback and create an appointment.
+     * The calendars in the provided range specify the start and end times, they can be used to create the new appointment (they do not need to be cloned).
+     * Null may be returned to indicate that no appointment was created.
+     */
+    public ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackProperty() { return newAppointmentCallbackObjectProperty; }
+    final private ObjectProperty<Callback<LocalDateTimeRange, Appointment>> newAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<LocalDateTimeRange, Appointment>>(this, "newAppointmentCallback", null);
+    public Callback<LocalDateTimeRange, Appointment> getNewAppointmentCallback() { return this.newAppointmentCallbackObjectProperty.getValue(); }
+    public void setNewAppointmentCallback(Callback<LocalDateTimeRange, Appointment> value) { this.newAppointmentCallbackObjectProperty.setValue(value); }
+    public Agenda withNewAppointmentCallback(Callback<LocalDateTimeRange, Appointment> value) { setNewAppointmentCallback(value); return this; }
 
-	/** editAppointmentCallback:
-	 * Agenda has a default popup, but maybe you want to do something yourself.
-	 * If so, you need to set this callback method and open your own window.
-	 * Because Agenda does not dictate a event/callback in the implementation of appointment, it has no way of being informed of changes on the appointment.
-	 * So when the custom edit is done, make sure that control gets updated, if this does not happen automatically through any of the existing listeners, then call refresh(). 
-	 */
-	public ObjectProperty<Callback<Appointment, Void>> editAppointmentCallbackProperty() { return editAppointmentCallbackObjectProperty; }
-	final private ObjectProperty<Callback<Appointment, Void>> editAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "editAppointmentCallback", null);
-	public Callback<Appointment, Void> getEditAppointmentCallback() { return this.editAppointmentCallbackObjectProperty.getValue(); }
-	public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
-	public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
-	
-	/** actionCallback:
-	 * This triggered when the action is called on an appointment, usually this is a double click
-	 */
-	public ObjectProperty<Callback<Appointment, Void>> actionCallbackProperty() { return actionCallbackObjectProperty; }
-	final private ObjectProperty<Callback<Appointment, Void>> actionCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "actionCallback", null);
-	public Callback<Appointment, Void> getActionCallback() { return this.actionCallbackObjectProperty.getValue(); }
-	public void setActionCallback(Callback<Appointment, Void> value) { this.actionCallbackObjectProperty.setValue(value); }
-	public Agenda withActionCallback(Callback<Appointment, Void> value) { setActionCallback(value); return this; }
-	
-	/**
-	 * A Calendar range, for callbacks
-	 */
-	@Deprecated static public class CalendarRange
-	{
-		public CalendarRange(Calendar start, Calendar end)
-		{
-			this.start = start;
-			this.end = end;
-		}
-		
-		public Calendar getStartCalendar() { return start; }
-		final Calendar start;
-		
-		public Calendar getEndCalendar() { return end; }
-		final Calendar end; 
-	}
-	
-	/**
-	 * A Datetime range, for callbacks
-	 */
-	static public class LocalDateTimeRange
-	{
-		public LocalDateTimeRange(LocalDateTime start, LocalDateTime end)
-		{
-			this.start = start;
-			this.end = end;
-		}
-		
-		public LocalDateTime getStartLocalDateTime() { return start; }
-		final LocalDateTime start;
-		
-		public LocalDateTime getEndLocalDateTime() { return end; }
-		final LocalDateTime end; 
-		
-		public String toString() {
-			return super.toString() + " " + start + " to " + end;
-		}
-	}
-	
-	/**
-	 * Force the agenda to completely refresh itself
-	 */
-	public void refresh()
-	{
-		((AgendaSkin)getSkin()).refresh();
-	}
-	
-	// ==================================================================================================================
-	// Appointment
-	
-	/**
-	 * The interface that all appointments must adhere to; you can provide your own implementation.
-	 * You must either implement the Start & End using the Calendar based or LocalDateTime based methods
-	 */
-	static public interface Appointment
-	{
-		Boolean isWholeDay();
-		void setWholeDay(Boolean b);
-		
-		String getSummary();
-		void setSummary(String s);
-		
-		String getDescription();
-		void setDescription(String s);
-		
-		String getLocation();
-		void setLocation(String s);
-		
-		AppointmentGroup getAppointmentGroup();
-		void setAppointmentGroup(AppointmentGroup s);
-		
-		// ----
-		// Calendar
-		
-		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		default Calendar getStartTime() {
-			throw new RuntimeException("Not implemented");
-		}
-		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		default void setStartTime(Calendar c) {
-			throw new RuntimeException("Not implemented");
-		}
-		
-		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		default Calendar getEndTime() {
-			throw new RuntimeException("Not implemented");
-		}
-		/** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
-		default void setEndTime(Calendar c) {
-			throw new RuntimeException("Not implemented");
-		}
-		
-		// ----
-		// ZonedDateTime
-		
-		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
-		default ZonedDateTime getStartZonedDateTime() {
-			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime());
-	    }
-		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
-		default void setStartZonedDateTime(ZonedDateTime v) {
-			setStartTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
-	    }
-		
-		/** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
-		default ZonedDateTime getEndZonedDateTime() {
-			return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getEndTime());
-	    }
-		/** End is exclusive */
-		default void setEndZonedDateTime(ZonedDateTime v) {
-			setEndTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
-	    }
-		
-		// ----
-		// LocalDateTime 
-		
-		/** This is what Agenda uses to render the appointments */
-		default LocalDateTime getStartLocalDateTime() {
-			return getStartZonedDateTime().toLocalDateTime();
-	    }
-		/** This is what Agenda uses to render the appointments */
-		default void setStartLocalDateTime(LocalDateTime v) {
-			setStartZonedDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
-	    }
-		
-		/** This is what Agenda uses to render the appointments */
-		default LocalDateTime getEndLocalDateTime() {
-			return getEndZonedDateTime() == null ? null : getEndZonedDateTime().toLocalDateTime();
-	    }
-		/** End is exclusive */
-		default void setEndLocalDateTime(LocalDateTime v) {
-			setEndZonedDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
-	    }
-	}
-	
-	/**
-	 * Implements the base properties used by all AppointmentImpl classes. 
-	 */
-	static public abstract class AppointmentImplBase<T> 
-	{
-		/** WholeDay: */
-		public ObjectProperty<Boolean> wholeDayProperty() { return wholeDayObjectProperty; }
-		final private ObjectProperty<Boolean> wholeDayObjectProperty = new SimpleObjectProperty<Boolean>(this, "wholeDay", false);
-		public Boolean isWholeDay() { return wholeDayObjectProperty.getValue(); }
-		public void setWholeDay(Boolean value) { wholeDayObjectProperty.setValue(value); }
-		public T withWholeDay(Boolean value) { setWholeDay(value); return (T)this; } 
-		
-		/** Summary: */
-		public ObjectProperty<String> summaryProperty() { return summaryObjectProperty; }
-		final private ObjectProperty<String> summaryObjectProperty = new SimpleObjectProperty<String>(this, "summary");
-		public String getSummary() { return summaryObjectProperty.getValue(); }
-		public void setSummary(String value) { summaryObjectProperty.setValue(value); }
-		public T withSummary(String value) { setSummary(value); return (T)this; } 
-		
-		/** Description: */
-		public ObjectProperty<String> descriptionProperty() { return descriptionObjectProperty; }
-		final private ObjectProperty<String> descriptionObjectProperty = new SimpleObjectProperty<String>(this, "description");
-		public String getDescription() { return descriptionObjectProperty.getValue(); }
-		public void setDescription(String value) { descriptionObjectProperty.setValue(value); }
-		public T withDescription(String value) { setDescription(value); return (T)this; } 
-		
-		/** Location: */
-		public ObjectProperty<String> locationProperty() { return locationObjectProperty; }
-		final private ObjectProperty<String> locationObjectProperty = new SimpleObjectProperty<String>(this, "location");
-		public String getLocation() { return locationObjectProperty.getValue(); }
-		public void setLocation(String value) { locationObjectProperty.setValue(value); }
-		public T withLocation(String value) { setLocation(value); return (T)this; } 
-		
-		/** AppointmentGroup: */
-		public ObjectProperty<AppointmentGroup> appointmentGroupProperty() { return appointmentGroupObjectProperty; }
-		final private ObjectProperty<AppointmentGroup> appointmentGroupObjectProperty = new SimpleObjectProperty<AppointmentGroup>(this, "appointmentGroup");
-		public AppointmentGroup getAppointmentGroup() { return appointmentGroupObjectProperty.getValue(); }
-		public void setAppointmentGroup(AppointmentGroup value) { appointmentGroupObjectProperty.setValue(value); }
-		public T withAppointmentGroup(AppointmentGroup value) { setAppointmentGroup(value); return (T)this; }
-	}
-	
-	/**
-	 * A class to help you get going using Calendar; all the required methods of the interface are implemented as JavaFX properties 
-	 */
-	static public class AppointmentImpl extends AppointmentImplBase<AppointmentImpl> 
-	implements Appointment
-	{
-		/** StartTime: */
-		public ObjectProperty<Calendar> startTimeProperty() { return startTimeObjectProperty; }
-		final private ObjectProperty<Calendar> startTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "startTime");
-		public Calendar getStartTime() { return startTimeObjectProperty.getValue(); }
-		public void setStartTime(Calendar value) { startTimeObjectProperty.setValue(value); }
-		public AppointmentImpl withStartTime(Calendar value) { setStartTime(value); return this; }
-		
-		/** EndTime: */
-		public ObjectProperty<Calendar> endTimeProperty() { return endTimeObjectProperty; }
-		final private ObjectProperty<Calendar> endTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "endTime");
-		public Calendar getEndTime() { return endTimeObjectProperty.getValue(); }
-		public void setEndTime(Calendar value) { endTimeObjectProperty.setValue(value); }
-		public AppointmentImpl withEndTime(Calendar value) { setEndTime(value); return this; } 
-		
-		public String toString()
-		{
-			return super.toString()
-				 + ", "
-				 + DateTimeToCalendarHelper.quickFormatCalendar(this.getStartTime())
-				 + " - "
-				 + DateTimeToCalendarHelper.quickFormatCalendar(this.getEndTime())
-				 ;
-		}
-	}
-	
-	/**
-	 * A class to help you get going using LocalDateTime; all the required methods of the interface are implemented as JavaFX properties 
-	 */
-	static public class AppointmentImplLocal extends AppointmentImplBase<AppointmentImplLocal> 
-	implements Appointment
-	{
-		/** StartDateTime: */
-		public ObjectProperty<LocalDateTime> startLocalDateTime() { return startLocalDateTime; }
-		final private ObjectProperty<LocalDateTime> startLocalDateTime = new SimpleObjectProperty<LocalDateTime>(this, "startLocalDateTime");
-		public LocalDateTime getStartLocalDateTime() { return startLocalDateTime.getValue(); }
-		public void setStartLocalDateTime(LocalDateTime value) { startLocalDateTime.setValue(value); }
-		public AppointmentImplLocal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
-		
-		/** EndDateTime: */
-		public ObjectProperty<LocalDateTime> endLocalDateTimeProperty() { return endLocalDateTimeProperty; }
-		final private ObjectProperty<LocalDateTime> endLocalDateTimeProperty = new SimpleObjectProperty<LocalDateTime>(this, "endLocalDateTimeProperty");
-		public LocalDateTime getEndLocalDateTime() { return endLocalDateTimeProperty.getValue(); }
-		public void setEndLocalDateTime(LocalDateTime value) { endLocalDateTimeProperty.setValue(value); }
-		public AppointmentImplLocal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
-		
-		public String toString()
-		{
-			return super.toString()
-				 + ", "
-				 + this.getStartLocalDateTime()
-				 + " - "
-				 + this.getEndLocalDateTime()
-				 ;
-		}
-	}
-	
-	/**
-	 * A class to help you get going using ZonedDateTime; all the required methods of the interface are implemented as JavaFX properties 
-	 */
-	static public class AppointmentImplZoned extends AppointmentImplBase<AppointmentImplZoned> 
-	implements Appointment
-	{
-		/** StartDateTime: */
-		public ObjectProperty<ZonedDateTime> startZonedDateTime() { return startZonedDateTime; }
-		final private ObjectProperty<ZonedDateTime> startZonedDateTime = new SimpleObjectProperty<ZonedDateTime>(this, "startZonedDateTime");
-		public ZonedDateTime getStartZonedDateTime() { return startZonedDateTime.getValue(); }
-		public void setStartZonedDateTime(ZonedDateTime value) { startZonedDateTime.setValue(value); }
-		public AppointmentImplZoned withStartZonedDateTime(ZonedDateTime value) { setStartZonedDateTime(value); return this; }
-		
-		/** EndDateTime: */
-		public ObjectProperty<ZonedDateTime> endZonedDateTimeProperty() { return endZonedDateTimeProperty; }
-		final private ObjectProperty<ZonedDateTime> endZonedDateTimeProperty = new SimpleObjectProperty<ZonedDateTime>(this, "endZonedDateTimeProperty");
-		public ZonedDateTime getEndZonedDateTime() { return endZonedDateTimeProperty.getValue(); }
-		public void setEndZonedDateTime(ZonedDateTime value) { endZonedDateTimeProperty.setValue(value); }
-		public AppointmentImplZoned withEndZonedDateTime(ZonedDateTime value) { setEndZonedDateTime(value); return this; } 
-		
-		public String toString()
-		{
-			return super.toString()
-				 + ", "
-				 + this.getStartZonedDateTime()
-				 + " - "
-				 + this.getEndZonedDateTime()
-				 ;
-		}
-	}
-	
-	
-	// ==================================================================================================================
-	// AppointmentGroup
-	
-	/**
-	 * The interface that appointment groups must adhere to; you can provide your own implementation.
-	 * An appointment group is a binding element between appointments; it contains information about visualization, and in the future reminders, etc.
-	 */
-	static public interface AppointmentGroup
-	{
-		public String getDescription();
-		public void setDescription(String s);
-		
-		public String getStyleClass(); // this is the CSS class being assigned
-		public void setStyleClass(String s);
-	}
-	
-	/**
-	 * A class to help you get going; all the required methods of the interface are implemented as JavaFX properties 
-	 */
-	static public class AppointmentGroupImpl 
-	implements AppointmentGroup
-	{
-		/** Description: */
-		public ObjectProperty<String> descriptionProperty() { return descriptionObjectProperty; }
-		final private ObjectProperty<String> descriptionObjectProperty = new SimpleObjectProperty<String>(this, "description");
-		public String getDescription() { return descriptionObjectProperty.getValue(); }
-		public void setDescription(String value) { descriptionObjectProperty.setValue(value); }
-		public AppointmentGroupImpl withDescription(String value) { setDescription(value); return this; } 
-				
-		/** StyleClass: */
-		public ObjectProperty<String> styleClassProperty() { return styleClassObjectProperty; }
-		final private ObjectProperty<String> styleClassObjectProperty = new SimpleObjectProperty<String>(this, "styleClass");
-		public String getStyleClass() { return styleClassObjectProperty.getValue(); }
-		public void setStyleClass(String value) { styleClassObjectProperty.setValue(value); }
-		public AppointmentGroupImpl withStyleClass(String value) { setStyleClass(value); return this; }
-	}
-	
-	
-	// ==================================================================================================================
-	// Print
+    /** editAppointmentCallback:
+     * Agenda has a default popup, but maybe you want to do something yourself.
+     * If so, you need to set this callback method and open your own window.
+     * Because Agenda does not dictate a event/callback in the implementation of appointment, it has no way of being informed of changes on the appointment.
+     * So when the custom edit is done, make sure that control gets updated, if this does not happen automatically through any of the existing listeners, then call refresh(). 
+     */
+    public ObjectProperty<Callback<Appointment, Void>> editAppointmentCallbackProperty() { return editAppointmentCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> editAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "editAppointmentCallback", null);
+    public Callback<Appointment, Void> getEditAppointmentCallback() { return this.editAppointmentCallbackObjectProperty.getValue(); }
+    public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
+    public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
+
+       /** appointmentChangedCallback:
+     * When an appointment is changed by Agenda (e.g. drag-n-drop to new time) the change listeners will not fire.
+     * This callback will be called when these changes occur.  For a repeatable appointment, this can be used to
+     * prompt the user if they want the change to occur to one, this-and-future or all events in series.
+     * If so, you need to set this callback method and open your own window.
+     */
+    public ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackProperty() { return appointmentChangedCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "appointmentChangedCallback", null);
+    public Callback<Appointment, Void> getAppointmentChangedCallback() { return this.appointmentChangedCallbackObjectProperty.getValue(); }
+    public void setAppointmentChangedCallback(Callback<Appointment, Void> value) { this.appointmentChangedCallbackObjectProperty.setValue(value); }
+    public Agenda withAppointmentChangedCallback(Callback<Appointment, Void> value) { setAppointmentChangedCallback(value); return this; }
+    
+    /** actionCallback:
+     * This triggered when the action is called on an appointment, usually this is a double click
+     */
+    public ObjectProperty<Callback<Appointment, Void>> actionCallbackProperty() { return actionCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> actionCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "actionCallback", null);
+    public Callback<Appointment, Void> getActionCallback() { return this.actionCallbackObjectProperty.getValue(); }
+    public void setActionCallback(Callback<Appointment, Void> value) { this.actionCallbackObjectProperty.setValue(value); }
+    public Agenda withActionCallback(Callback<Appointment, Void> value) { setActionCallback(value); return this; }
+    
+    /**
+     * A Calendar range, for callbacks
+     */
+    @Deprecated static public class CalendarRange
+    {
+        public CalendarRange(Calendar start, Calendar end)
+        {
+            this.start = start;
+            this.end = end;
+        }
+        
+        public Calendar getStartCalendar() { return start; }
+        final Calendar start;
+        
+        public Calendar getEndCalendar() { return end; }
+        final Calendar end; 
+    }
+    
+    /**
+     * A Datetime range, for callbacks
+     */
+    static public class LocalDateTimeRange
+    {
+        public LocalDateTimeRange(LocalDateTime start, LocalDateTime end)
+        {
+            this.start = start;
+            this.end = end;
+        }
+        
+        public LocalDateTime getStartLocalDateTime() { return start; }
+        final LocalDateTime start;
+        
+        public LocalDateTime getEndLocalDateTime() { return end; }
+        final LocalDateTime end; 
+        
+        public String toString() {
+            return super.toString() + " " + start + " to " + end;
+        }
+    }
+    
+    /**
+     * Force the agenda to completely refresh itself
+     */
+    public void refresh()
+    {
+        ((AgendaSkin)getSkin()).refresh();
+    }
+    
+    // ==================================================================================================================
+    // Appointment
+    
+    /**
+     * The interface that all appointments must adhere to; you can provide your own implementation.
+     * You must either implement the Start & End using the Calendar based or LocalDateTime based methods
+     */
+    static public interface Appointment
+    {
+        Boolean isWholeDay();
+        void setWholeDay(Boolean b);
+        
+        String getSummary();
+        void setSummary(String s);
+        
+        String getDescription();
+        void setDescription(String s);
+        
+        String getLocation();
+        void setLocation(String s);
+        
+        AppointmentGroup getAppointmentGroup();
+        void setAppointmentGroup(AppointmentGroup s);
+        
+        // ----
+        // Calendar
+        
+        /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+        default Calendar getStartTime() {
+            throw new RuntimeException("Not implemented");
+        }
+        /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+        default void setStartTime(Calendar c) {
+            throw new RuntimeException("Not implemented");
+        }
+        
+        /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+        default Calendar getEndTime() {
+            throw new RuntimeException("Not implemented");
+        }
+        /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+        default void setEndTime(Calendar c) {
+            throw new RuntimeException("Not implemented");
+        }
+        
+        // ----
+        // ZonedDateTime
+        
+        /** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
+        default ZonedDateTime getStartZonedDateTime() {
+            return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getStartTime());
+        }
+        /** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
+        default void setStartZonedDateTime(ZonedDateTime v) {
+            setStartTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
+        }
+        
+        /** This is the replacement of Calendar, if you use ZonedDateTime be aware that the default implementations of the LocalDateTime methods in this interface convert LocalDateTime to ZonedDateTime using a rather crude approach */
+        default ZonedDateTime getEndZonedDateTime() {
+            return DateTimeToCalendarHelper.createZonedDateTimeFromCalendar(getEndTime());
+        }
+        /** End is exclusive */
+        default void setEndZonedDateTime(ZonedDateTime v) {
+            setEndTime(DateTimeToCalendarHelper.createCalendarFromZonedDateTime(v));
+        }
+        
+        // ----
+        // LocalDateTime 
+        
+        /** This is what Agenda uses to render the appointments */
+        default LocalDateTime getStartLocalDateTime() {
+            return getStartZonedDateTime().toLocalDateTime();
+        }
+        /** This is what Agenda uses to render the appointments */
+        default void setStartLocalDateTime(LocalDateTime v) {
+            setStartZonedDateTime(ZonedDateTime.of(v, ZoneId.systemDefault()));
+        }
+        
+        /** This is what Agenda uses to render the appointments */
+        default LocalDateTime getEndLocalDateTime() {
+            return getEndZonedDateTime() == null ? null : getEndZonedDateTime().toLocalDateTime();
+        }
+        /** End is exclusive */
+        default void setEndLocalDateTime(LocalDateTime v) {
+            setEndZonedDateTime(v == null ? null : ZonedDateTime.of(v, ZoneId.systemDefault()));
+        }
+    }
+    
+    /**
+     * Implements the base properties used by all AppointmentImpl classes. 
+     */
+    static public abstract class AppointmentImplBase<T> 
+    {
+        /** WholeDay: */
+        public ObjectProperty<Boolean> wholeDayProperty() { return wholeDayObjectProperty; }
+        final private ObjectProperty<Boolean> wholeDayObjectProperty = new SimpleObjectProperty<Boolean>(this, "wholeDay", false);
+        public Boolean isWholeDay() { return wholeDayObjectProperty.getValue(); }
+        public void setWholeDay(Boolean value) { wholeDayObjectProperty.setValue(value); }
+        public T withWholeDay(Boolean value) { setWholeDay(value); return (T)this; } 
+        
+        /** Summary: */
+        public ObjectProperty<String> summaryProperty() { return summaryObjectProperty; }
+        final private ObjectProperty<String> summaryObjectProperty = new SimpleObjectProperty<String>(this, "summary");
+        public String getSummary() { return summaryObjectProperty.getValue(); }
+        public void setSummary(String value) { summaryObjectProperty.setValue(value); }
+        public T withSummary(String value) { setSummary(value); return (T)this; } 
+        
+        /** Description: */
+        public ObjectProperty<String> descriptionProperty() { return descriptionObjectProperty; }
+        final private ObjectProperty<String> descriptionObjectProperty = new SimpleObjectProperty<String>(this, "description");
+        public String getDescription() { return descriptionObjectProperty.getValue(); }
+        public void setDescription(String value) { descriptionObjectProperty.setValue(value); }
+        public T withDescription(String value) { setDescription(value); return (T)this; } 
+        
+        /** Location: */
+        public ObjectProperty<String> locationProperty() { return locationObjectProperty; }
+        final private ObjectProperty<String> locationObjectProperty = new SimpleObjectProperty<String>(this, "location");
+        public String getLocation() { return locationObjectProperty.getValue(); }
+        public void setLocation(String value) { locationObjectProperty.setValue(value); }
+        public T withLocation(String value) { setLocation(value); return (T)this; } 
+        
+        /** AppointmentGroup: */
+        public ObjectProperty<AppointmentGroup> appointmentGroupProperty() { return appointmentGroupObjectProperty; }
+        final private ObjectProperty<AppointmentGroup> appointmentGroupObjectProperty = new SimpleObjectProperty<AppointmentGroup>(this, "appointmentGroup");
+        public AppointmentGroup getAppointmentGroup() { return appointmentGroupObjectProperty.getValue(); }
+        public void setAppointmentGroup(AppointmentGroup value) { appointmentGroupObjectProperty.setValue(value); }
+        public T withAppointmentGroup(AppointmentGroup value) { setAppointmentGroup(value); return (T)this; }
+    }
+    
+    /**
+     * A class to help you get going using Calendar; all the required methods of the interface are implemented as JavaFX properties 
+     */
+    static public class AppointmentImpl extends AppointmentImplBase<AppointmentImpl> 
+    implements Appointment
+    {
+        /** StartTime: */
+        public ObjectProperty<Calendar> startTimeProperty() { return startTimeObjectProperty; }
+        final private ObjectProperty<Calendar> startTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "startTime");
+        public Calendar getStartTime() { return startTimeObjectProperty.getValue(); }
+        public void setStartTime(Calendar value) { startTimeObjectProperty.setValue(value); }
+        public AppointmentImpl withStartTime(Calendar value) { setStartTime(value); return this; }
+        
+        /** EndTime: */
+        public ObjectProperty<Calendar> endTimeProperty() { return endTimeObjectProperty; }
+        final private ObjectProperty<Calendar> endTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "endTime");
+        public Calendar getEndTime() { return endTimeObjectProperty.getValue(); }
+        public void setEndTime(Calendar value) { endTimeObjectProperty.setValue(value); }
+        public AppointmentImpl withEndTime(Calendar value) { setEndTime(value); return this; } 
+        
+        public String toString()
+        {
+            return super.toString()
+                 + ", "
+                 + DateTimeToCalendarHelper.quickFormatCalendar(this.getStartTime())
+                 + " - "
+                 + DateTimeToCalendarHelper.quickFormatCalendar(this.getEndTime())
+                 ;
+        }
+    }
+    
+    /**
+     * A class to help you get going using LocalDateTime; all the required methods of the interface are implemented as JavaFX properties 
+     */
+    static public class AppointmentImplLocal extends AppointmentImplBase<AppointmentImplLocal> 
+    implements Appointment
+    {
+        /** StartDateTime: */
+        public ObjectProperty<LocalDateTime> startLocalDateTime() { return startLocalDateTime; }
+        final private ObjectProperty<LocalDateTime> startLocalDateTime = new SimpleObjectProperty<LocalDateTime>(this, "startLocalDateTime");
+        public LocalDateTime getStartLocalDateTime() { return startLocalDateTime.getValue(); }
+        public void setStartLocalDateTime(LocalDateTime value) { startLocalDateTime.setValue(value); }
+        public AppointmentImplLocal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
+        
+        /** EndDateTime: */
+        public ObjectProperty<LocalDateTime> endLocalDateTimeProperty() { return endLocalDateTimeProperty; }
+        final private ObjectProperty<LocalDateTime> endLocalDateTimeProperty = new SimpleObjectProperty<LocalDateTime>(this, "endLocalDateTimeProperty");
+        public LocalDateTime getEndLocalDateTime() { return endLocalDateTimeProperty.getValue(); }
+        public void setEndLocalDateTime(LocalDateTime value) { endLocalDateTimeProperty.setValue(value); }
+        public AppointmentImplLocal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
+        
+        public String toString()
+        {
+            return super.toString()
+                 + ", "
+                 + this.getStartLocalDateTime()
+                 + " - "
+                 + this.getEndLocalDateTime()
+                 ;
+        }
+    }
+    
+    /**
+     * A class to help you get going using ZonedDateTime; all the required methods of the interface are implemented as JavaFX properties 
+     */
+    static public class AppointmentImplZoned extends AppointmentImplBase<AppointmentImplZoned> 
+    implements Appointment
+    {
+        /** StartDateTime: */
+        public ObjectProperty<ZonedDateTime> startZonedDateTime() { return startZonedDateTime; }
+        final private ObjectProperty<ZonedDateTime> startZonedDateTime = new SimpleObjectProperty<ZonedDateTime>(this, "startZonedDateTime");
+        public ZonedDateTime getStartZonedDateTime() { return startZonedDateTime.getValue(); }
+        public void setStartZonedDateTime(ZonedDateTime value) { startZonedDateTime.setValue(value); }
+        public AppointmentImplZoned withStartZonedDateTime(ZonedDateTime value) { setStartZonedDateTime(value); return this; }
+        
+        /** EndDateTime: */
+        public ObjectProperty<ZonedDateTime> endZonedDateTimeProperty() { return endZonedDateTimeProperty; }
+        final private ObjectProperty<ZonedDateTime> endZonedDateTimeProperty = new SimpleObjectProperty<ZonedDateTime>(this, "endZonedDateTimeProperty");
+        public ZonedDateTime getEndZonedDateTime() { return endZonedDateTimeProperty.getValue(); }
+        public void setEndZonedDateTime(ZonedDateTime value) { endZonedDateTimeProperty.setValue(value); }
+        public AppointmentImplZoned withEndZonedDateTime(ZonedDateTime value) { setEndZonedDateTime(value); return this; } 
+        
+        public String toString()
+        {
+            return super.toString()
+                 + ", "
+                 + this.getStartZonedDateTime()
+                 + " - "
+                 + this.getEndZonedDateTime()
+                 ;
+        }
+    }
+    
+    
+    // ==================================================================================================================
+    // AppointmentGroup
+    
+    /**
+     * The interface that appointment groups must adhere to; you can provide your own implementation.
+     * An appointment group is a binding element between appointments; it contains information about visualization, and in the future reminders, etc.
+     */
+    static public interface AppointmentGroup
+    {
+        public String getDescription();
+        public void setDescription(String s);
+        
+        public String getStyleClass(); // this is the CSS class being assigned
+        public void setStyleClass(String s);
+    }
+    
+    /**
+     * A class to help you get going; all the required methods of the interface are implemented as JavaFX properties 
+     */
+    static public class AppointmentGroupImpl 
+    implements AppointmentGroup
+    {
+        /** Description: */
+        public ObjectProperty<String> descriptionProperty() { return descriptionObjectProperty; }
+        final private ObjectProperty<String> descriptionObjectProperty = new SimpleObjectProperty<String>(this, "description");
+        public String getDescription() { return descriptionObjectProperty.getValue(); }
+        public void setDescription(String value) { descriptionObjectProperty.setValue(value); }
+        public AppointmentGroupImpl withDescription(String value) { setDescription(value); return this; } 
+                
+        /** StyleClass: */
+        public ObjectProperty<String> styleClassProperty() { return styleClassObjectProperty; }
+        final private ObjectProperty<String> styleClassObjectProperty = new SimpleObjectProperty<String>(this, "styleClass");
+        public String getStyleClass() { return styleClassObjectProperty.getValue(); }
+        public void setStyleClass(String value) { styleClassObjectProperty.setValue(value); }
+        public AppointmentGroupImpl withStyleClass(String value) { setStyleClass(value); return this; }
+    }
+    
+    
+    // ==================================================================================================================
+    // Print
 
     /**
      * Prints the current agenda using the given printer job.
@@ -680,6 +691,6 @@ public class Agenda extends Control
      * @param job printer job used for printing
      */
     public void print(PrinterJob job) {
-    	((AgendaSkin)getSkin()).print(job);
+        ((AgendaSkin)getSkin()).print(job);
     }
 }
