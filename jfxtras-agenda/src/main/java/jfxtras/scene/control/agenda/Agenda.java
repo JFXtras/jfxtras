@@ -355,7 +355,7 @@ public class Agenda extends Control
      * If so, you need to set this callback method and open your own window.
      */
     public ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackProperty() { return appointmentChangedCallbackObjectProperty; }
-    final private ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "editAppointmentCallback", null);
+    final private ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "appointmentChangedCallback", null);
     public Callback<Appointment, Void> getAppointmentChangedCallback() { return this.appointmentChangedCallbackObjectProperty.getValue(); }
     public void setAppointmentChangedCallback(Callback<Appointment, Void> value) { this.appointmentChangedCallbackObjectProperty.setValue(value); }
     public Agenda withAppointmentChangedCallback(Callback<Appointment, Void> value) { setAppointmentChangedCallback(value); return this; }
