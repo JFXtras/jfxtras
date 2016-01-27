@@ -348,7 +348,19 @@ public class Agenda extends Control
 	public Callback<Appointment, Void> getEditAppointmentCallback() { return this.editAppointmentCallbackObjectProperty.getValue(); }
 	public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
 	public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
-	
+
+   /** appointmentChangedCallback:
+     * When an appointment is changed by Agenda (e.g. drag-n-drop to new time) change listeners will not fire.
+     * To enable the client to process those changes this callback can be used.  Additionally, for a repeatable
+     * appointment, this can be used to prompt the user if they want the change to occur to one, this-and-future
+     * or all events in series.
+     */
+    public ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackProperty() { return appointmentChangedCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "appointmentChangedCallback", null);
+    public Callback<Appointment, Void> getAppointmentChangedCallback() { return this.appointmentChangedCallbackObjectProperty.getValue(); }
+    public void setAppointmentChangedCallback(Callback<Appointment, Void> value) { this.appointmentChangedCallbackObjectProperty.setValue(value); }
+    public Agenda withAppointmentChangedCallback(Callback<Appointment, Void> value) { setAppointmentChangedCallback(value); return this; }
+
 	/** actionCallback:
 	 * This triggered when the action is called on an appointment, usually this is a double click
 	 */

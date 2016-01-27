@@ -249,9 +249,15 @@ abstract class AppointmentAbstractPane extends Pane {
 			// determine start and end DateTime of the drag
 			LocalDateTime dragDropDateTime = layoutHelp.skin.convertClickInSceneToDateTime(mouseEvent.getSceneX(), mouseEvent.getSceneY());
 			if (dragDropDateTime != null) { // not dropped somewhere outside
-				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);					
+				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);
 				
-				// relayout whole week
+                // has the client added a callback to process the change?
+                Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getAppointmentChangedCallback();
+                if (lChangedCallback != null) {
+                    lChangedCallback.call(appointment);
+                }
+                
+                // relayout whole week
 				layoutHelp.skin.setupAppointments();
 			}
 		});
