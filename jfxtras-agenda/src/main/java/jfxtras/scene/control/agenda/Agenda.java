@@ -607,6 +607,30 @@ public class Agenda extends Control
 				 + this.getEndLocalDateTime()
 				 ;
 		}
+		
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if((obj == null) || (obj.getClass() != getClass())) {
+                return false;
+            }
+            AppointmentImplLocal testObj = (AppointmentImplLocal) obj;
+
+            boolean startEquals = getStartLocalDateTime().equals(testObj.getStartLocalDateTime());
+            boolean endEquals = getEndLocalDateTime().equals(testObj.getEndLocalDateTime());
+            boolean wholeDayEquals = isWholeDay().equals(testObj.isWholeDay());
+            boolean descriptionEquals = (getDescription() == null) ?
+                    (testObj.getDescription() == null) : getDescription().equals(testObj.getDescription());
+            boolean locationEquals = (getLocation() == null) ?
+                    (testObj.getLocation() == null) : getLocation().equals(testObj.getLocation());
+            boolean summaryEquals = (getSummary() == null) ?
+                    (testObj.getSummary() == null) : getSummary().equals(testObj.getSummary());
+            boolean appointmentGroupEquals = (getAppointmentGroup() == null) ?
+                    (testObj.getAppointmentGroup() == null) : getAppointmentGroup().equals(testObj.getAppointmentGroup());
+                    
+            return startEquals && endEquals && wholeDayEquals && descriptionEquals && locationEquals
+                    && summaryEquals && appointmentGroupEquals;
+        }
 	}
 	
 	/**
