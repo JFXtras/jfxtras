@@ -251,12 +251,15 @@ abstract class AppointmentAbstractPane extends Pane {
 			if (dragDropDateTime != null) { // not dropped somewhere outside
 				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);
 				
+<<<<<<< HEAD
                 // has the client added a callback to process the change?
                 Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getChangedAppointmentCallback();
                 if (lChangedCallback != null) {
                     lChangedCallback.call(appointment);
                 }
                 
+=======
+>>>>>>> added appointmentChangedCallback
                 // relayout whole week
 				layoutHelp.skin.setupAppointments();
 			}
@@ -304,9 +307,11 @@ abstract class AppointmentAbstractPane extends Pane {
 			Duration duration = Duration.between(dragPickupDateTime, dragDropDateTime);
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(duration) );
+				layoutHelp.callAppointmentChangedCallback(appointment);
 			}
 			if (appointment.getEndLocalDateTime() != null) {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(duration) );
+				layoutHelp.callAppointmentChangedCallback(appointment);
 			}
 		}
 		
@@ -319,9 +324,11 @@ abstract class AppointmentAbstractPane extends Pane {
 			Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(period) );
+				layoutHelp.callAppointmentChangedCallback(appointment);
 			}
 			if (appointment.getEndLocalDateTime() != null) {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(period) );
+				layoutHelp.callAppointmentChangedCallback(appointment);
 			}
 		}
 		
@@ -334,12 +341,14 @@ abstract class AppointmentAbstractPane extends Pane {
 			if (appointment.getStartLocalDateTime() != null && appointment.getEndLocalDateTime() == null) {
 				// set the drop time as the task time
 				appointment.setStartLocalDateTime(dragDropDateTime );
+				layoutHelp.callAppointmentChangedCallback(appointment);
 			}
 			else {
 				// simply add the duration, but without time
 				Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
+				layoutHelp.callAppointmentChangedCallback(appointment);
 			}
 		}
 	}

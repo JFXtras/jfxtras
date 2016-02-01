@@ -35,6 +35,7 @@ import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.TestUtil;
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -49,7 +50,7 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 	{
 		return super.getRootNode();
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -109,8 +110,11 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 				
 		move("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
 		press(MouseButton.PRIMARY);
+		appointmentChangedCallbackCount = 0;
 		move("#hourLine15");
 		release(MouseButton.PRIMARY);
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
+
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
@@ -135,9 +139,11 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 				
 		move("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
 		press(MouseButton.PRIMARY);
+		appointmentChangedCallbackCount = 0;
 		moveBy(100, 0);
 		release(MouseButton.PRIMARY);
-		
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
+
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
 		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
@@ -160,9 +166,11 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 				
 		move("#AppointmentRegularBodyPane2014-01-01/0 .DurationDragger"); 
 		press(MouseButton.PRIMARY);
+		appointmentChangedCallbackCount = 0;
 		move("#hourLine15");
 		release(MouseButton.PRIMARY);
-		
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
+
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
 		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
@@ -223,9 +231,11 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		// drag from header to body
 		move("#AppointmentWholedayHeaderPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
+		appointmentChangedCallbackCount = 0;
 		move("#hourLine10");
 		release(MouseButton.PRIMARY);
-		
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
+
 		// now there should be a regular appointment
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
@@ -255,8 +265,10 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		// drag from header to body
 		move("#AppointmentWholedayHeaderPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
+		appointmentChangedCallbackCount = 0;
 		move("#hourLine10");
 		release(MouseButton.PRIMARY);
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
 		
 		// now there should be a regular appointment
 		assertFind("#AppointmentTaskBodyPane2014-01-01/0");
@@ -286,8 +298,10 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		// drag from header to body
 		move("#AppointmentRegularBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
+		appointmentChangedCallbackCount = 0;
 		move("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
 		
 		// now there should be a regular appointment
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
@@ -317,8 +331,10 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		// drag from header to body
 		move("#AppointmentTaskBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
+		appointmentChangedCallbackCount = 0;
 		move("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
 		
 		// now there should be a regular appointment
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
