@@ -356,6 +356,15 @@ abstract class AppointmentAbstractPane extends Pane {
 		// add to selection if not already added
 		if (layoutHelp.skinnable.selectedAppointments().contains(appointment) == false) {
 			layoutHelp.skinnable.selectedAppointments().add(appointment);
+			if (layoutHelp.skinnable.selectedAppointments().size() == 1)
+			{
+	            // has the client added a callback to process the change?
+	            System.out.println("select only one:");
+	            Callback<Appointment, Void> lSelectedCallback = layoutHelp.skinnable.getOneAppointmentSelectedCallback();
+	            if (lSelectedCallback != null) {
+	                lSelectedCallback.call(appointment);
+	            }
+			}
 		}
 		// pressing control allows to toggle
 		else if (mouseEvent.isControlDown()) {
