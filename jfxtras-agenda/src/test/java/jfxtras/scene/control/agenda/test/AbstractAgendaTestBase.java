@@ -75,11 +75,17 @@ public class AbstractAgendaTestBase extends JFXtrasGuiTest {
             }
         });
         
+        // tick callbacks
+        agenda.appointmentChangedCallbackProperty().set( appointment -> {
+        	appointmentChangedCallbackCount++;
+			return null;
+		});
+        
 		vbox.getChildren().add(agenda);
 		return vbox;
 	}
 	protected VBox vbox = null; // cannot make this final and assign upon construction
     final protected Map<String, Agenda.AppointmentGroup> appointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
     protected Agenda agenda = null; // cannot make this final and assign upon construction
-
+    protected int appointmentChangedCallbackCount = 0;
 }

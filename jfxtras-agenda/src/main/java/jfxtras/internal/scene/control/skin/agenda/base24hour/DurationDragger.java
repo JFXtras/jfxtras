@@ -139,13 +139,8 @@ class DurationDragger extends Rectangle
 			
 			// set the new enddate
 			appointmentPane.appointment.setEndLocalDateTime(endLocalDateTime);
+			layoutHelp.callAppointmentChangedCallback(appointment);
 
-            // has the client added a callback to process the change?
-            Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getAppointmentChangedCallback();
-            if (lChangedCallback != null) {
-                lChangedCallback.call(appointment);
-            }
-			
 			// relayout the entire skin
 			layoutHelp.skin.setupAppointments();
 		});

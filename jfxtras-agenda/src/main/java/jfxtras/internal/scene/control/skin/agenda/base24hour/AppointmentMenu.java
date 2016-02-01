@@ -219,6 +219,7 @@ class AppointmentMenu extends Rectangle {
 			}
 
 			// refresh is done upon popup close
+			layoutHelp.callAppointmentChangedCallback(appointment);
 		});
 
 		return startTextField;
@@ -238,6 +239,7 @@ class AppointmentMenu extends Rectangle {
 		endTextField.localDateTimeProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setEndLocalDateTime(newValue);
 			// refresh is done upon popup close
+			layoutHelp.callAppointmentChangedCallback(appointment);
 		});
 
 		return endTextField;
@@ -265,6 +267,7 @@ class AppointmentMenu extends Rectangle {
 			}
 			endTextField.setVisible(appointment.getEndLocalDateTime() != null);
 			// refresh is done upon popup close
+			layoutHelp.callAppointmentChangedCallback(appointment);
 		});
 		
 		return wholedayCheckBox;
@@ -281,6 +284,7 @@ class AppointmentMenu extends Rectangle {
 		summaryTextField.textProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setSummary(newValue);
 			// refresh is done upon popup close
+			layoutHelp.callAppointmentChangedCallback(appointment);
 		});
 		return summaryTextField;
 	}
@@ -296,6 +300,7 @@ class AppointmentMenu extends Rectangle {
 		locationTextField.textProperty().addListener( (observable, oldValue, newValue) ->  {
 			appointment.setLocation(newValue);
 			// refresh is done upon popup close
+			layoutHelp.callAppointmentChangedCallback(appointment);
 		});
 		return locationTextField;
 	}
@@ -380,6 +385,7 @@ class AppointmentMenu extends Rectangle {
 				appointment.setAppointmentGroup(lAppointmentGroup);
 
 				// refresh is done upon popup close
+				layoutHelp.callAppointmentChangedCallback(appointment);
 				popup.hide();
 			});
 		}

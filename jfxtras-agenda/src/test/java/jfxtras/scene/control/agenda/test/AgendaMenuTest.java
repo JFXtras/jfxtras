@@ -146,9 +146,11 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
             );
 		});
 
+		appointmentChangedCallbackCount = 0;
 		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
 		click("#wholeday-checkbox");
 		click(".close-icon");
+		Assert.assertTrue(appointmentChangedCallbackCount > 0);
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals(true, agenda.appointments().get(0).isWholeDay().booleanValue() );
 

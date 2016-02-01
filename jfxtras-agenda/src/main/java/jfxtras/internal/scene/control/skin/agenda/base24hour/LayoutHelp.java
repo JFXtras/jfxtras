@@ -47,8 +47,10 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.scene.control.agenda.Agenda;
+import jfxtras.scene.control.agenda.Agenda.Appointment;
 
 /**
  * This class is not a class but a data holder, a record, all fields are accessed directly.
@@ -163,4 +165,16 @@ class LayoutHelp {
 		}
 		return localDateTime;
 	}
+	
+    /**
+     * Has the client added a callback to process the change?
+     * @param appointment
+     */
+	void callAppointmentChangedCallback(Appointment appointment) {
+	    Callback<Appointment, Void> lChangedCallback = skinnable.getAppointmentChangedCallback();
+	    if (lChangedCallback != null) {
+	        lChangedCallback.call(appointment);
+	    }
+	}
+
 }
