@@ -280,6 +280,7 @@ class DayBodyPane extends Pane
 			// create pane
 			AppointmentWholedayBodyPane lAppointmentPane = new AppointmentWholedayBodyPane(localDateObjectProperty.get(), lAppointment, layoutHelp);
 			wholedayAppointmentBodyPanes.add(lAppointmentPane);
+			layoutHelp.skinnable.appointmentBodyPaneMap().put(lAppointment, lAppointmentPane);
 			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
 			
 			// position by binding
@@ -311,6 +312,7 @@ class DayBodyPane extends Pane
 		for (Appointment lAppointment : taskAppointments) {
 			AppointmentTaskBodyPane lAppointmentPane = new AppointmentTaskBodyPane(lAppointment, layoutHelp);
 			taskAppointmentBodyPanes.add(lAppointmentPane);
+	        layoutHelp.skinnable.appointmentBodyPaneMap().put(lAppointment, lAppointmentPane);
 			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
 			
 			lCnt++;
@@ -336,6 +338,7 @@ class DayBodyPane extends Pane
 		for (Appointment lAppointment : regularAppointments) {
 			AppointmentRegularBodyPane lAppointmentPane = new AppointmentRegularBodyPane(localDateObjectProperty.get(), lAppointment, layoutHelp);
 			regularAppointmentBodyPanes.add(lAppointmentPane);
+			layoutHelp.skinnable.appointmentBodyPaneMap().put(lAppointment, lAppointmentPane);
 			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
 			
 			lCnt++;

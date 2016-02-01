@@ -359,7 +359,6 @@ abstract class AppointmentAbstractPane extends Pane {
 			if (layoutHelp.skinnable.selectedAppointments().size() == 1)
 			{
 	            // has the client added a callback to process the change?
-	            System.out.println("select only one:");
 	            Callback<Appointment, Void> lSelectedCallback = layoutHelp.skinnable.getOneAppointmentSelectedCallback();
 	            if (lSelectedCallback != null) {
 	                lSelectedCallback.call(appointment);
