@@ -356,27 +356,27 @@ public class Agenda extends Control
 	public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
 	public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
 
-   /** appointmentChangedCallback:
+   /** changedAppointmentCallback:
      * When an appointment is changed by Agenda (e.g. drag-n-drop to new time) change listeners will not fire.
      * To enable the client to process those changes this callback can be used.  Additionally, for a repeatable
      * appointment, this can be used to prompt the user if they want the change to occur to one, this-and-future
      * or all events in series.
      */
-    public ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackProperty() { return appointmentChangedCallbackObjectProperty; }
-    final private ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "appointmentChangedCallback", null);
-    public Callback<Appointment, Void> getAppointmentChangedCallback() { return this.appointmentChangedCallbackObjectProperty.getValue(); }
-    public void setAppointmentChangedCallback(Callback<Appointment, Void> value) { this.appointmentChangedCallbackObjectProperty.setValue(value); }
-    public Agenda withAppointmentChangedCallback(Callback<Appointment, Void> value) { setAppointmentChangedCallback(value); return this; }
+    public ObjectProperty<Callback<Appointment, Void>> changedAppointmentCallbackProperty() { return changedAppointmentCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> changedAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "changedAppointmentCallback", null);
+    public Callback<Appointment, Void> getChangedAppointmentCallback() { return this.changedAppointmentCallbackObjectProperty.getValue(); }
+    public void setChangedAppointmentCallback(Callback<Appointment, Void> value) { this.changedAppointmentCallbackObjectProperty.setValue(value); }
+    public Agenda withChangedAppointmentCallback(Callback<Appointment, Void> value) { setChangedAppointmentCallback(value); return this; }
 
-    /** oneAppointmentSelectedCallback:
+    /** selectOneAppointmentCallback:
      * When one appointment is selected this callback is run.  It can be used to open a popup to provide edit,
      * delete or other edit options.
      */
-    public ObjectProperty<Callback<Appointment, Void>> oneAppointmentSelectedCallbackProperty() { return appointmentChangedCallbackObjectProperty; }
-    final private ObjectProperty<Callback<Appointment, Void>> oneAppointmentSelectedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "oneAppointmentSelectedCallback", null);
-    public Callback<Appointment, Void> getOneAppointmentSelectedCallback() { return this.oneAppointmentSelectedCallbackObjectProperty.getValue(); }
-    public void setOneAppointmentSelectedCallback(Callback<Appointment, Void> value) { this.oneAppointmentSelectedCallbackObjectProperty.setValue(value); }
-    public Agenda withOneAppointmentSelectedCallback(Callback<Appointment, Void> value) { setOneAppointmentSelectedCallback(value); return this; }
+    public ObjectProperty<Callback<Appointment, Void>> selectOneAppointmentCallbackProperty() { return changedAppointmentCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> selectOneAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "selectOneAppointmentCallback", null);
+    public Callback<Appointment, Void> getSelectOneAppointmentCallback() { return this.selectOneAppointmentCallbackObjectProperty.getValue(); }
+    public void setSelectOneAppointmentCallback(Callback<Appointment, Void> value) { this.selectOneAppointmentCallbackObjectProperty.setValue(value); }
+    public Agenda withSelectOneAppointmentCallback(Callback<Appointment, Void> value) { setSelectOneAppointmentCallback(value); return this; }
 
 	/** actionCallback:
 	 * This triggered when the action is called on an appointment, usually this is a double click

@@ -252,7 +252,7 @@ abstract class AppointmentAbstractPane extends Pane {
 				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);
 				
                 // has the client added a callback to process the change?
-                Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getAppointmentChangedCallback();
+                Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getChangedAppointmentCallback();
                 if (lChangedCallback != null) {
                     lChangedCallback.call(appointment);
                 }
@@ -359,7 +359,7 @@ abstract class AppointmentAbstractPane extends Pane {
 			if (layoutHelp.skinnable.selectedAppointments().size() == 1)
 			{
 	            // has the client added a callback to process the change?
-	            Callback<Appointment, Void> lSelectedCallback = layoutHelp.skinnable.getOneAppointmentSelectedCallback();
+	            Callback<Appointment, Void> lSelectedCallback = layoutHelp.skinnable.getSelectOneAppointmentCallback();
 	            if (lSelectedCallback != null) {
 	                lSelectedCallback.call(appointment);
 	            }
