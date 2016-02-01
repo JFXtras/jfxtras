@@ -348,7 +348,19 @@ public class Agenda extends Control
 	public Callback<Appointment, Void> getEditAppointmentCallback() { return this.editAppointmentCallbackObjectProperty.getValue(); }
 	public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
 	public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
-	
+
+   /** appointmentChangedCallback:
+     * When an appointment is changed by Agenda (e.g. drag-n-drop to new time) change listeners will not fire.
+     * To enable the client to process those changes this callback can be used.  Additionally, for a repeatable
+     * appointment, this can be used to prompt the user if they want the change to occur to one, this-and-future
+     * or all events in series.
+     */
+    public ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackProperty() { return appointmentChangedCallbackObjectProperty; }
+    final private ObjectProperty<Callback<Appointment, Void>> appointmentChangedCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "appointmentChangedCallback", null);
+    public Callback<Appointment, Void> getAppointmentChangedCallback() { return this.appointmentChangedCallbackObjectProperty.getValue(); }
+    public void setAppointmentChangedCallback(Callback<Appointment, Void> value) { this.appointmentChangedCallbackObjectProperty.setValue(value); }
+    public Agenda withAppointmentChangedCallback(Callback<Appointment, Void> value) { setAppointmentChangedCallback(value); return this; }
+
 	/** actionCallback:
 	 * This triggered when the action is called on an appointment, usually this is a double click
 	 */
@@ -595,6 +607,30 @@ public class Agenda extends Control
 				 + this.getEndLocalDateTime()
 				 ;
 		}
+		
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) return true;
+            if((obj == null) || (obj.getClass() != getClass())) {
+                return false;
+            }
+            AppointmentImplLocal testObj = (AppointmentImplLocal) obj;
+
+            boolean startEquals = getStartLocalDateTime().equals(testObj.getStartLocalDateTime());
+            boolean endEquals = getEndLocalDateTime().equals(testObj.getEndLocalDateTime());
+            boolean wholeDayEquals = isWholeDay().equals(testObj.isWholeDay());
+            boolean descriptionEquals = (getDescription() == null) ?
+                    (testObj.getDescription() == null) : getDescription().equals(testObj.getDescription());
+            boolean locationEquals = (getLocation() == null) ?
+                    (testObj.getLocation() == null) : getLocation().equals(testObj.getLocation());
+            boolean summaryEquals = (getSummary() == null) ?
+                    (testObj.getSummary() == null) : getSummary().equals(testObj.getSummary());
+            boolean appointmentGroupEquals = (getAppointmentGroup() == null) ?
+                    (testObj.getAppointmentGroup() == null) : getAppointmentGroup().equals(testObj.getAppointmentGroup());
+                    
+            return startEquals && endEquals && wholeDayEquals && descriptionEquals && locationEquals
+                    && summaryEquals && appointmentGroupEquals;
+        }
 	}
 	
 	/**
