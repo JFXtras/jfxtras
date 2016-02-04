@@ -361,16 +361,6 @@ public class Agenda extends Control
     public void setChangedAppointmentCallback(Callback<Appointment, Void> value) { this.changedAppointmentCallbackObjectProperty.setValue(value); }
     public Agenda withChangedAppointmentCallback(Callback<Appointment, Void> value) { setChangedAppointmentCallback(value); return this; }
 
-    /** selectOneAppointmentCallback:
-     * When one appointment is selected this callback is run.  It can be used to open a popup to provide edit,
-     * delete or other edit options.
-     */
-    public ObjectProperty<Callback<Appointment, Void>> selectOneAppointmentCallbackProperty() { return changedAppointmentCallbackObjectProperty; }
-    final private ObjectProperty<Callback<Appointment, Void>> selectOneAppointmentCallbackObjectProperty = new SimpleObjectProperty<Callback<Appointment, Void>>(this, "selectOneAppointmentCallback", null);
-    public Callback<Appointment, Void> getSelectOneAppointmentCallback() { return this.selectOneAppointmentCallbackObjectProperty.getValue(); }
-    public void setSelectOneAppointmentCallback(Callback<Appointment, Void> value) { this.selectOneAppointmentCallbackObjectProperty.setValue(value); }
-    public Agenda withSelectOneAppointmentCallback(Callback<Appointment, Void> value) { setSelectOneAppointmentCallback(value); return this; }
-
 	/** actionCallback:
 	 * This triggered when the action is called on an appointment, usually this is a double click
 	 */
