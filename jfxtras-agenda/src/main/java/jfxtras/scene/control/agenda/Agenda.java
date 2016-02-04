@@ -36,7 +36,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.WeakHashMap;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -46,7 +45,6 @@ import javafx.collections.ObservableList;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
-import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
