@@ -244,11 +244,6 @@ public class Agenda extends Control
             appointmentGroups().add(lAppointmentGroup);
         }
 	}
-	
-	/** Appointment body pane map: matches up Appointment to its body pane.  Used to place
-	 * popups when some callbacks are run */
-	public Map<Appointment, Pane> appointmentBodyPaneMap() { return appointmentBodyPaneMap; }
-	private Map<Appointment, Pane> appointmentBodyPaneMap = new WeakHashMap<>();
 
 	/** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
 	public ObjectProperty<Locale> localeProperty() { return localeObjectProperty; }

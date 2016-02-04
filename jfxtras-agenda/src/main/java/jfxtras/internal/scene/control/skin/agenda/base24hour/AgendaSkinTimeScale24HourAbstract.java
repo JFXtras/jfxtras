@@ -39,7 +39,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
+import java.util.WeakHashMap;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
@@ -69,6 +71,7 @@ import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
+import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
 /**
@@ -239,6 +242,14 @@ implements AgendaSkin
 		setupAppointments();
 		nowUpdateRunnable.run(); 
 	}
+
+	/**
+	 * 
+	 */
+	@Override
+    public Pane getNodeForPopup(Appointment appointment) { return appointmentNodeMap.get(appointment); }
+    final private Map<Appointment, Pane> appointmentNodeMap = new WeakHashMap<>();
+    Map<Appointment, Pane> appointmentNodeMap() { return appointmentNodeMap; }
 	
 	// ==================================================================================================================
 	// StyleableProperties

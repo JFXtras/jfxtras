@@ -3,8 +3,10 @@ package jfxtras.internal.scene.control.skin.agenda;
 import java.time.LocalDateTime;
 
 import javafx.print.PrinterJob;
+import javafx.scene.Node;
 import javafx.scene.control.SkinBase;
 import jfxtras.scene.control.agenda.Agenda;
+import jfxtras.scene.control.agenda.Agenda.Appointment;
 
 public class AgendaDayListSkin extends SkinBase<Agenda>
 implements AgendaSkin {
@@ -37,5 +39,11 @@ implements AgendaSkin {
 		// TODO Auto-generated method stub
 		
 	}
+
+    @Override
+    public Node getNodeForPopup(Appointment appointment) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
