@@ -190,7 +190,7 @@ abstract class AppointmentAbstractPane extends Pane {
 					layoutHelp.dragPane.getChildren().add(endTimeText);
 				}
 				// we use a clone for calculating the current time during the drag
-				appointmentForDrag = new Agenda.AppointmentImplLocal();
+				appointmentForDrag = new AppointmentForDrag();
 			}
 			
 			// move the drag rectangle
@@ -276,6 +276,10 @@ abstract class AppointmentAbstractPane extends Pane {
 	private Text endTimeText = null;
 	private Agenda.Appointment appointmentForDrag = null;
 
+	public static class AppointmentForDrag extends Agenda.AppointmentImplLocal {
+		
+	}
+	
 	protected  boolean showStartTimeText() {
 		return true;
 	}

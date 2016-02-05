@@ -49,6 +49,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
+import jfxtras.internal.scene.control.skin.agenda.base24hour.AppointmentAbstractPane.AppointmentForDrag;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 
@@ -171,10 +172,13 @@ class LayoutHelp {
      * @param appointment
      */
 	void callAppointmentChangedCallback(Appointment appointment) {
-	    Callback<Appointment, Void> lChangedCallback = skinnable.getAppointmentChangedCallback();
-	    if (lChangedCallback != null) {
-	        lChangedCallback.call(appointment);
-	    }
+		// ignore temp appointments
+		if (!(appointment instanceof AppointmentAbstractPane.AppointmentForDrag)) {
+		    Callback<Appointment, Void> lChangedCallback = skinnable.getAppointmentChangedCallback();
+		    if (lChangedCallback != null) {
+		        lChangedCallback.call(appointment);
+		    }
+		}
 	}
 
 }
