@@ -545,6 +545,30 @@ public class Agenda extends Control
 		public AppointmentGroup getAppointmentGroup() { return appointmentGroupObjectProperty.getValue(); }
 		public void setAppointmentGroup(AppointmentGroup value) { appointmentGroupObjectProperty.setValue(value); }
 		public T withAppointmentGroup(AppointmentGroup value) { setAppointmentGroup(value); return (T)this; }
+		
+        public boolean equalsPartial(Object obj) {
+            if (obj == null || obj.getClass() != getClass()) {
+                return false;
+            }
+        	AppointmentImplBase appointmentImplBase = (AppointmentImplBase)obj;
+            boolean wholeDayEquals = isWholeDay().equals(appointmentImplBase.isWholeDay());
+            boolean descriptionEquals = (getDescription() == null) ? (appointmentImplBase.getDescription() == null) : getDescription().equals(appointmentImplBase.getDescription());
+            boolean locationEquals = (getLocation() == null) ? (appointmentImplBase.getLocation() == null) : getLocation().equals(appointmentImplBase.getLocation());
+            boolean summaryEquals = (getSummary() == null) ? (appointmentImplBase.getSummary() == null) : getSummary().equals(appointmentImplBase.getSummary());
+            boolean appointmentGroupEquals = (getAppointmentGroup() == null) ? (appointmentImplBase.getAppointmentGroup() == null) : getAppointmentGroup().equals(appointmentImplBase.getAppointmentGroup());
+                    
+            return wholeDayEquals && descriptionEquals && locationEquals && summaryEquals && appointmentGroupEquals;
+        }
+        
+        public int hashCodePartial() {
+        	int hash = 7;
+        	hash = (31 * hash) + isWholeDay().hashCode();
+        	hash = (31 * hash) + (getDescription() == null ? 0 : getDescription().hashCode());
+        	hash = (31 * hash) + (getLocation() == null ? 0 : getLocation().hashCode());
+        	hash = (31 * hash) + (getSummary() == null ? 0 : getSummary().hashCode());
+        	hash = (31 * hash) + (getAppointmentGroup() == null ? 0 : getAppointmentGroup().hashCode());
+        	return hash;
+        }
 	}
 	
 	/**
@@ -576,6 +600,28 @@ public class Agenda extends Control
 				 + DateTimeToCalendarHelper.quickFormatCalendar(this.getEndTime())
 				 ;
 		}
+		
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+            	return true;
+            }
+            if (!equalsPartial(obj)) { 
+            	return false;
+            }
+            AppointmentImpl appointmentImpl = (AppointmentImpl)obj;
+            boolean startEquals = getStartTime().equals(appointmentImpl.getStartTime());
+            boolean endEquals = (getEndTime() == null) ? (appointmentImpl.getEndTime() == null) : getEndTime().equals(appointmentImpl.getEndTime());
+            return startEquals && endEquals;
+        }
+        
+        @Override
+        public int hashCode() {
+        	int hash = hashCodePartial();
+        	hash = (31 * hash) + getStartTime().hashCode();
+        	hash = (31 * hash) + (getEndTime() == null ? 0 : getEndTime().hashCode());
+        	return hash;
+        }
 	}
 	
 	/**
@@ -613,32 +659,20 @@ public class Agenda extends Control
             if (obj == this) {
             	return true;
             }
-            if (obj == null || obj.getClass() != getClass()) {
-                return false;
+            if (!equalsPartial(obj)) { 
+            	return false;
             }
             AppointmentImplLocal appointmentImplLocal = (AppointmentImplLocal)obj;
-
             boolean startEquals = getStartLocalDateTime().equals(appointmentImplLocal.getStartLocalDateTime());
             boolean endEquals = (getEndLocalDateTime() == null) ? (appointmentImplLocal.getEndLocalDateTime() == null) : getEndLocalDateTime().equals(appointmentImplLocal.getEndLocalDateTime());
-            boolean wholeDayEquals = isWholeDay().equals(appointmentImplLocal.isWholeDay());
-            boolean descriptionEquals = (getDescription() == null) ? (appointmentImplLocal.getDescription() == null) : getDescription().equals(appointmentImplLocal.getDescription());
-            boolean locationEquals = (getLocation() == null) ? (appointmentImplLocal.getLocation() == null) : getLocation().equals(appointmentImplLocal.getLocation());
-            boolean summaryEquals = (getSummary() == null) ? (appointmentImplLocal.getSummary() == null) : getSummary().equals(appointmentImplLocal.getSummary());
-            boolean appointmentGroupEquals = (getAppointmentGroup() == null) ? (appointmentImplLocal.getAppointmentGroup() == null) : getAppointmentGroup().equals(appointmentImplLocal.getAppointmentGroup());
-                    
-            return startEquals && endEquals && wholeDayEquals && descriptionEquals && locationEquals && summaryEquals && appointmentGroupEquals;
+            return startEquals && endEquals;
         }
         
         @Override
         public int hashCode() {
-        	int hash = 7;
+        	int hash = hashCodePartial();
         	hash = (31 * hash) + getStartLocalDateTime().hashCode();
         	hash = (31 * hash) + (getEndLocalDateTime() == null ? 0 : getEndLocalDateTime().hashCode());
-        	hash = (31 * hash) + isWholeDay().hashCode();
-        	hash = (31 * hash) + (getDescription() == null ? 0 : getDescription().hashCode());
-        	hash = (31 * hash) + (getLocation() == null ? 0 : getLocation().hashCode());
-        	hash = (31 * hash) + (getSummary() == null ? 0 : getSummary().hashCode());
-        	hash = (31 * hash) + (getAppointmentGroup() == null ? 0 : getAppointmentGroup().hashCode());
         	return hash;
         }
 	}
@@ -672,6 +706,28 @@ public class Agenda extends Control
 				 + this.getEndZonedDateTime()
 				 ;
 		}
+		
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+            	return true;
+            }
+            if (!equalsPartial(obj)) { 
+            	return false;
+            }
+            AppointmentImpl appointmentImpl = (AppointmentImpl)obj;
+            boolean startEquals = getStartZonedDateTime().equals(appointmentImpl.getStartZonedDateTime());
+            boolean endEquals = (getEndZonedDateTime() == null) ? (appointmentImpl.getEndZonedDateTime() == null) : getEndZonedDateTime().equals(appointmentImpl.getEndZonedDateTime());
+            return startEquals && endEquals;
+        }
+        
+        @Override
+        public int hashCode() {
+        	int hash = hashCodePartial();
+        	hash = (31 * hash) + getStartZonedDateTime().hashCode();
+        	hash = (31 * hash) + (getEndZonedDateTime() == null ? 0 : getEndZonedDateTime().hashCode());
+        	return hash;
+        }
 	}
 	
 	
