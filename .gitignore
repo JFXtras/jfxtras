@@ -20,4 +20,3 @@ screenshot*.png
 /gradlew_assemble.cmd
 *.iml
 .idea
-/bin/
