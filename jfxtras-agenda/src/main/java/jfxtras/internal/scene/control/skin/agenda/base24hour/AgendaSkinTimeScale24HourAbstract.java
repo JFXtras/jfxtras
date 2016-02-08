@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.WeakHashMap;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
