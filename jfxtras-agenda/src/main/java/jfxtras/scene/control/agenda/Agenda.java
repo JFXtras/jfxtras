@@ -356,7 +356,7 @@ public class Agenda extends Control
 	public void setEditAppointmentCallback(Callback<Appointment, Void> value) { this.editAppointmentCallbackObjectProperty.setValue(value); }
 	public Agenda withEditAppointmentCallback(Callback<Appointment, Void> value) { setEditAppointmentCallback(value); return this; }
 
-   /** appointmentChangedCallback:
+    /** appointmentChangedCallback:
      * When an appointment is changed by Agenda (e.g. drag-n-drop to new time) change listeners will not fire.
      * To enable the client to process those changes this callback can be used.  Additionally, for a repeatable
      * appointment, this can be used to prompt the user if they want the change to occur to one, this-and-future

@@ -250,17 +250,8 @@ abstract class AppointmentAbstractPane extends Pane {
 			LocalDateTime dragDropDateTime = layoutHelp.skin.convertClickInSceneToDateTime(mouseEvent.getSceneX(), mouseEvent.getSceneY());
 			if (dragDropDateTime != null) { // not dropped somewhere outside
 				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);
-				
-<<<<<<< HEAD
-                // has the client added a callback to process the change?
-                Callback<Appointment, Void> lChangedCallback = layoutHelp.skinnable.getChangedAppointmentCallback();
-                if (lChangedCallback != null) {
-                    lChangedCallback.call(appointment);
-                }
-                
-=======
->>>>>>> added appointmentChangedCallback
-                // relayout whole week
+
+				// relayout whole week
 				layoutHelp.skin.setupAppointments();
 			}
 		});
@@ -369,17 +360,6 @@ abstract class AppointmentAbstractPane extends Pane {
 		// add to selection if not already added
 		if (layoutHelp.skinnable.selectedAppointments().contains(appointment) == false) {
 			layoutHelp.skinnable.selectedAppointments().add(appointment);
-<<<<<<< HEAD
-=======
-			if (layoutHelp.skinnable.selectedAppointments().size() == 1)
-			{
-	            // has the client added a callback to process the change?
-	            Callback<Appointment, Void> lSelectedCallback = layoutHelp.skinnable.getOneAppointmentSelectedCallback();
-	            if (lSelectedCallback != null) {
-	                lSelectedCallback.call(appointment);
-	            }
-			}
->>>>>>> new select one appointment callback
 		}
 		// pressing control allows to toggle
 		else if (mouseEvent.isControlDown()) {

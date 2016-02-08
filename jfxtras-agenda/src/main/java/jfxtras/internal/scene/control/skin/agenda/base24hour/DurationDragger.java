@@ -140,6 +140,7 @@ class DurationDragger extends Rectangle
 			// set the new enddate
 			appointmentPane.appointment.setEndLocalDateTime(endLocalDateTime);
 			layoutHelp.callAppointmentChangedCallback(appointment);
+
 			// relayout the entire skin
 			layoutHelp.skin.setupAppointments();
 		});
