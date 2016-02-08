@@ -37,6 +37,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -124,7 +125,10 @@ implements AgendaSkin
 		
 		// react to changes in the appointments 
 		getSkinnable().appointments().addListener(appointmentsListChangeListener);
-		
+
+      // clean up removed appointments from appointmentNodeMap
+        getSkinnable().appointments().addListener(appointmentNodeMapCleanUpListChangeListener);
+
 		// initial setup
 		refresh();
 	}
@@ -140,6 +144,14 @@ implements AgendaSkin
 	private ListChangeListener<Agenda.Appointment> appointmentsListChangeListener = (changes) -> {
 		setupAppointments();
 	};
+    private ListChangeListener<Agenda.Appointment> appointmentNodeMapCleanUpListChangeListener = (changes) -> {
+        while (changes.next()) {
+            if (changes.wasRemoved()) {
+                changes.getRemoved().stream().forEach(a -> appointmentNodeMap().remove(System.identityHashCode(a)));
+            }
+        }
+    };
+
 	
 	/**
 	 * 
@@ -150,6 +162,7 @@ implements AgendaSkin
 		getSkinnable().localeProperty().removeListener(localeInvalidationListener);
 		getSkinnable().displayedLocalDateTime().removeListener(displayedDateTimeChangeListener);
 		getSkinnable().appointments().removeListener(appointmentsListChangeListener);
+        getSkinnable().appointments().removeListener(appointmentNodeMapCleanUpListChangeListener);
 		
 		// reset style classes
 		getSkinnable().getStyleClass().clear();
@@ -247,9 +260,9 @@ implements AgendaSkin
 	 * 
 	 */
 	@Override
-    public Pane getNodeForPopup(Appointment appointment) { return appointmentNodeMap.get(appointment); }
-    final private Map<Appointment, Pane> appointmentNodeMap = new WeakHashMap<>();
-    Map<Appointment, Pane> appointmentNodeMap() { return appointmentNodeMap; }
+    public Pane getNodeForPopup(Appointment appointment) { return appointmentNodeMap.get(System.identityHashCode(appointment)); }
+    final private Map<Integer, Pane> appointmentNodeMap = new HashMap<>();
+    Map<Integer, Pane> appointmentNodeMap() { return appointmentNodeMap; }
 	
 	// ==================================================================================================================
 	// StyleableProperties
