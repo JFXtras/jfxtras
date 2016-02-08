@@ -125,7 +125,7 @@ implements AgendaSkin
 		// react to changes in the appointments 
 		getSkinnable().appointments().addListener(appointmentsListChangeListener);
 
-      // clean up removed appointments from appointmentNodeMap
+        // clean up removed appointments from appointmentNodeMap
         getSkinnable().appointments().addListener(appointmentNodeMapCleanUpListChangeListener);
 
 		// initial setup
