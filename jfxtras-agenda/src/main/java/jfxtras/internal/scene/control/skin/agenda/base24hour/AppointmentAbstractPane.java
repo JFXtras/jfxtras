@@ -309,7 +309,9 @@ abstract class AppointmentAbstractPane extends Pane {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(duration) );
 				changed = true;
 			}
-			if (changed) layoutHelp.callAppointmentChangedCallback(appointment);
+			if (changed) {
+				layoutHelp.callAppointmentChangedCallback(appointment);
+			}
 		}
 		
 		// if dragged from day to header
@@ -328,7 +330,9 @@ abstract class AppointmentAbstractPane extends Pane {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(period) );
                 changed = true;
 			}
-            if (changed) layoutHelp.callAppointmentChangedCallback(appointment);
+            if (changed) {
+            	layoutHelp.callAppointmentChangedCallback(appointment);
+            }
 		}
 		
 		// if dragged from day to header
@@ -350,7 +354,9 @@ abstract class AppointmentAbstractPane extends Pane {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
                 changed = true;
 			}
-            if (changed) layoutHelp.callAppointmentChangedCallback(appointment);
+            if (changed) {
+            	layoutHelp.callAppointmentChangedCallback(appointment);
+            }
 		}
 	}
 
