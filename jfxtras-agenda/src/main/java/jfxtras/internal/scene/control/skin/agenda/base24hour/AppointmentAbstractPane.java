@@ -250,8 +250,8 @@ abstract class AppointmentAbstractPane extends Pane {
 			LocalDateTime dragDropDateTime = layoutHelp.skin.convertClickInSceneToDateTime(mouseEvent.getSceneX(), mouseEvent.getSceneY());
 			if (dragDropDateTime != null) { // not dropped somewhere outside
 				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);
-				
-                // relayout whole week
+
+				// relayout whole week
 				layoutHelp.skin.setupAppointments();
 			}
 		});
@@ -299,15 +299,17 @@ abstract class AppointmentAbstractPane extends Pane {
 		  || (dragPickupInDayHeader && dragDropInDayHeader)
 		) {				
 			// simply add the duration
+            boolean changed = false;
 			Duration duration = Duration.between(dragPickupDateTime, dragDropDateTime);
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(duration) );
-				layoutHelp.callAppointmentChangedCallback(appointment);
+                changed = true;
 			}
 			if (appointment.getEndLocalDateTime() != null) {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(duration) );
-				layoutHelp.callAppointmentChangedCallback(appointment);
+				changed = true;
 			}
+			if (changed) layoutHelp.callAppointmentChangedCallback(appointment);
 		}
 		
 		// if dragged from day to header
@@ -316,15 +318,17 @@ abstract class AppointmentAbstractPane extends Pane {
 			appointment.setWholeDay(true);
 			
 			// simply add the duration, but without time
+            boolean changed = false;
 			Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(period) );
-				layoutHelp.callAppointmentChangedCallback(appointment);
+                changed = true;
 			}
 			if (appointment.getEndLocalDateTime() != null) {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(period) );
-				layoutHelp.callAppointmentChangedCallback(appointment);
+                changed = true;
 			}
+            if (changed) layoutHelp.callAppointmentChangedCallback(appointment);
 		}
 		
 		// if dragged from day to header
@@ -333,18 +337,20 @@ abstract class AppointmentAbstractPane extends Pane {
 			appointment.setWholeDay(false);
 
 			// if this is a task
+            boolean changed = false;
 			if (appointment.getStartLocalDateTime() != null && appointment.getEndLocalDateTime() == null) {
 				// set the drop time as the task time
 				appointment.setStartLocalDateTime(dragDropDateTime );
-				layoutHelp.callAppointmentChangedCallback(appointment);
+                changed = true;
 			}
 			else {
 				// simply add the duration, but without time
 				Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
-				layoutHelp.callAppointmentChangedCallback(appointment);
+                changed = true;
 			}
+            if (changed) layoutHelp.callAppointmentChangedCallback(appointment);
 		}
 	}
 

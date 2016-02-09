@@ -68,30 +68,30 @@
 	-fx-stroke: transparent;
 }
 
-.group0 { -fx-background-color: #AC725E; }
-.group1 { -fx-background-color: #D06B64; }
-.group2 { -fx-background-color: #F83A22; }
-.group3 { -fx-background-color: #FA573C; }
-.group4 { -fx-background-color: #FF7537; }
-.group5 { -fx-background-color: #FFAD46; }
-.group6 { -fx-background-color: #42D692; }
-.group7 { -fx-background-color: #16A765; }
-.group8 { -fx-background-color: #7BD148; }
-.group9 { -fx-background-color: #B3DC6C; }
-.group10 { -fx-background-color: #FBE983; }
-.group11 { -fx-background-color: #FAD165; }
-.group12 { -fx-background-color: #92E1C0; }
-.group13 { -fx-background-color: #9FE1E7; }
-.group14 { -fx-background-color: #9FC6E7; }
-.group15 { -fx-background-color: #4986E7; }
-.group16 { -fx-background-color: #9A9CFF; }
-.group17 { -fx-background-color: #B99AFF; }
-.group18 { -fx-background-color: #C2C2C2; }
-.group19 { -fx-background-color: #CABDBF; }
-.group20 { -fx-background-color: #CCA6AC; }
-.group21 { -fx-background-color: #F691B2; }
-.group22 { -fx-background-color: #CD74E6; }
-.group23 { -fx-background-color: #A47AE2; }
+.group0 { -fx-background-color: #AC725E; -fx-fill: #AC725E; }
+.group1 { -fx-background-color: #D06B64; -fx-fill: #D06B64; }
+.group2 { -fx-background-color: #F83A22; -fx-fill: #F83A22; }
+.group3 { -fx-background-color: #FA573C; -fx-fill: #FA573C; }
+.group4 { -fx-background-color: #FF7537; -fx-fill: #FF7537; }
+.group5 { -fx-background-color: #FFAD46; -fx-fill: #FFAD46; }
+.group6 { -fx-background-color: #42D692; -fx-fill: #42D692; }
+.group7 { -fx-background-color: #16A765; -fx-fill: #16A765; }
+.group8 { -fx-background-color: #7BD148; -fx-fill: #7BD148; }
+.group9 { -fx-background-color: #B3DC6C; -fx-fill: #B3DC6C; }
+.group10 { -fx-background-color: #FBE983; -fx-fill: #FBE983; }
+.group11 { -fx-background-color: #FAD165; -fx-fill: #FAD165; }
+.group12 { -fx-background-color: #92E1C0; -fx-fill: #92E1C0; }
+.group13 { -fx-background-color: #9FE1E7; -fx-fill: #9FE1E7; }
+.group14 { -fx-background-color: #9FC6E7; -fx-fill: #9FC6E7; }
+.group15 { -fx-background-color: #4986E7; -fx-fill: #4986E7; }
+.group16 { -fx-background-color: #9A9CFF; -fx-fill: #9A9CFF; }
+.group17 { -fx-background-color: #B99AFF; -fx-fill: #B99AFF; }
+.group18 { -fx-background-color: #C2C2C2; -fx-fill: #C2C2C2; }
+.group19 { -fx-background-color: #CABDBF; -fx-fill: #CABDBF; }
+.group20 { -fx-background-color: #CCA6AC; -fx-fill: #CCA6AC; }
+.group21 { -fx-background-color: #F691B2; -fx-fill: #F691B2; }
+.group22 { -fx-background-color: #CD74E6; -fx-fill: #CD74E6; }
+.group23 { -fx-background-color: #A47AE2; -fx-fill: #A47AE2; }
 
 /* same colors as the bar chart
 .group0 { -fx-background-color: #f9d900; }
