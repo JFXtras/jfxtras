@@ -488,7 +488,7 @@ public class Agenda extends Control
 		
 		/** This is what Agenda uses to render the appointments */
 		default LocalDateTime getStartLocalDateTime() {
-			return getStartZonedDateTime().toLocalDateTime();
+			return getStartZonedDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 	    }
 		/** This is what Agenda uses to render the appointments */
 		default void setStartLocalDateTime(LocalDateTime v) {
@@ -497,7 +497,7 @@ public class Agenda extends Control
 		
 		/** This is what Agenda uses to render the appointments */
 		default LocalDateTime getEndLocalDateTime() {
-			return getEndZonedDateTime() == null ? null : getEndZonedDateTime().toLocalDateTime();
+			return getEndZonedDateTime() == null ? null : getEndZonedDateTime().withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
 	    }
 		/** End is exclusive */
 		default void setEndLocalDateTime(LocalDateTime v) {
