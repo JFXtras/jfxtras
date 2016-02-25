@@ -29,10 +29,16 @@
 
 package jfxtras.scene.control.agenda;
 
+import java.time.DateTimeException;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoField;
+import java.time.temporal.Temporal;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -49,6 +55,7 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
+import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 
 /**
  * = Agenda
@@ -417,6 +424,212 @@ public class Agenda extends Control
 		((AgendaSkin)getSkin()).refresh();
 	}
 	
+	/**
+	 * Stores date-time as a Temporal.  This allows any class implementing Temporal, that can
+	 * be converted to a LocalDateTime, to be displayed in Agenda.
+	 * 
+	 * @author David Bal
+	 *
+	 */
+	public interface Appointment
+	{
+	    Boolean isWholeDay();
+	    void setWholeDay(Boolean b);
+	    
+	    String getSummary();
+	    void setSummary(String s);
+	    
+	    String getDescription();
+	    void setDescription(String s);
+	    
+	    String getLocation();
+	    void setLocation(String s);
+	    
+	    AppointmentGroup getAppointmentGroup();
+	    void setAppointmentGroup(AppointmentGroup s);
+	    
+	    // ----
+	    // Calendar
+	    
+	    /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+	    default Calendar getStartTime() {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+	    default void setStartTime(Calendar c) {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    
+	    /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+	    default Calendar getEndTime() {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    /** This method is not used by the control, it can only be called when implemented by the user through the default Datetime methods on this interface **/  
+	    default void setEndTime(Calendar c) {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    
+	    /*
+	     * Temporal - backs LocalDateTime
+	     * If implementing Temporal instead of Calendar, override these default methods.
+	     */
+	    default Temporal getStartTemporal() {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    
+	    default void setStartTemporal(Temporal t) {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    
+	    default Temporal getEndTemporal() {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    
+	    default void setEndTemporal(Temporal t) {
+	        throw new RuntimeException("Not implemented");
+	    }
+	    
+	    // ----
+	    // LocalDateTime
+	    // If implementing Temporal instead of Calendar, override these default methods.
+	    
+	    /** This is what Agenda uses to render the appointments */
+	    default LocalDateTime getStartLocalDateTime() {
+	        return LocalDateTime.ofInstant(getStartTime().toInstant(), ZoneId.systemDefault());
+	    }
+	    /** This is what Agenda uses to render the appointments */
+	    default void setStartLocalDateTime(LocalDateTime v) {
+	        setStartTime(GregorianCalendar.from(v.atZone(ZoneId.systemDefault())));
+	    }
+	    
+	    /** This is what Agenda uses to render the appointments */
+	    default LocalDateTime getEndLocalDateTime() {
+	        return (getEndTime() == null) ? null : LocalDateTime.ofInstant(getEndTime().toInstant(), ZoneId.systemDefault());
+	    }
+	    
+	    /** End is exclusive */
+	    default void setEndLocalDateTime(LocalDateTime v) {
+	        setEndTime(GregorianCalendar.from(v.atZone(ZoneId.systemDefault())));
+	    }
+	}
+	
+	static public abstract class AppointmentBaseAbstract<T> implements Appointment
+	{
+	    /** WholeDay: */
+	    public ObjectProperty<Boolean> wholeDayProperty() { return wholeDayObjectProperty; }
+	    final private ObjectProperty<Boolean> wholeDayObjectProperty = new SimpleObjectProperty<Boolean>(this, "wholeDay", false);
+	    @Override public Boolean isWholeDay() { return wholeDayObjectProperty.getValue(); }
+	    @Override public void setWholeDay(Boolean value) { wholeDayObjectProperty.setValue(value); }
+	    public T withWholeDay(Boolean value) { setWholeDay(value); return (T)this; } 
+	    
+	    /** Summary: */
+	    public ObjectProperty<String> summaryProperty() { return summaryObjectProperty; }
+	    final private ObjectProperty<String> summaryObjectProperty = new SimpleObjectProperty<String>(this, "summary");
+	    @Override public String getSummary() { return summaryObjectProperty.getValue(); }
+	    @Override public void setSummary(String value) { summaryObjectProperty.setValue(value); }
+	    public T withSummary(String value) { setSummary(value); return (T)this; } 
+	    
+	    /** Description: */
+	    public ObjectProperty<String> descriptionProperty() { return descriptionObjectProperty; }
+	    final private ObjectProperty<String> descriptionObjectProperty = new SimpleObjectProperty<String>(this, "description");
+	    @Override public String getDescription() { return descriptionObjectProperty.getValue(); }
+	    @Override public void setDescription(String value) { descriptionObjectProperty.setValue(value); }
+	    public T withDescription(String value) { setDescription(value); return (T)this; } 
+	    
+	    /** Location: */
+	    public ObjectProperty<String> locationProperty() { return locationObjectProperty; }
+	    final private ObjectProperty<String> locationObjectProperty = new SimpleObjectProperty<String>(this, "location");
+	    @Override public String getLocation() { return locationObjectProperty.getValue(); }
+	    @Override public void setLocation(String value) { locationObjectProperty.setValue(value); }
+	    public T withLocation(String value) { setLocation(value); return (T)this; } 
+	    
+	    /** AppointmentGroup: */
+	    public ObjectProperty<AppointmentGroup> appointmentGroupProperty() { return appointmentGroupObjectProperty; }
+	    final private ObjectProperty<AppointmentGroup> appointmentGroupObjectProperty = new SimpleObjectProperty<AppointmentGroup>(this, "appointmentGroup");
+	    @Override public AppointmentGroup getAppointmentGroup() { return appointmentGroupObjectProperty.getValue(); }
+	    @Override public void setAppointmentGroup(AppointmentGroup value) { appointmentGroupObjectProperty.setValue(value); }
+	    public T withAppointmentGroup(AppointmentGroup value) { setAppointmentGroup(value); return (T)this; }
+	}
+	
+    /**
+     * A class to help you get going using Temporal; all the required methods of the interface are implemented as JavaFX properties 
+     */
+    static public class AppointmentImplTemporal extends AppointmentBaseAbstract<AppointmentImplTemporal> 
+    implements Appointment
+    {
+        /** StartDateTime: Temporal */
+        public ObjectProperty<Temporal> startTemporal() { return startTemporalProperty; }
+        final private ObjectProperty<Temporal> startTemporalProperty = new SimpleObjectProperty<>(this, "startTemporal");
+        @Override public Temporal getStartTemporal() { return startTemporalProperty.getValue(); }
+        @Override public void setStartTemporal(Temporal value) { startTemporalProperty.setValue(value); }
+        public AppointmentImplTemporal withStartTemporal(Temporal value) { setStartTemporal(value); return this; }
+        
+        /** StartDateTime: LocalDateTime */
+        @Override public LocalDateTime getStartLocalDateTime() { return makeLocalDateTime(getStartTemporal()); }
+        @Override public void setStartLocalDateTime(LocalDateTime value) { setStartTemporal(value); }
+        public AppointmentImplTemporal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
+        
+        /** EndDateTime: Temporal */
+        public ObjectProperty<Temporal> endTemporal() { return endTemporalProperty; }
+        final private ObjectProperty<Temporal> endTemporalProperty = new SimpleObjectProperty<>(this, "endTemporal");
+        @Override public Temporal getEndTemporal() { return endTemporalProperty.getValue(); }
+        @Override public void setEndTemporal(Temporal value) { endTemporalProperty.setValue(value); }
+        public AppointmentImplTemporal withEndTemporal(Temporal value) { setEndTemporal(value); return this; }
+        
+        /** EndDateTime: LocalDateTime */
+        @Override public LocalDateTime getEndLocalDateTime() { return makeLocalDateTime(getEndTemporal()); }
+        @Override public void setEndLocalDateTime(LocalDateTime value) { setEndTemporal(value); }
+        public AppointmentImplTemporal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
+        
+        @Override
+        public String toString()
+        {
+            return super.toString()
+                 + ", "
+                 + this.getStartLocalDateTime()
+                 + " - "
+                 + this.getEndLocalDateTime()
+                 ;
+        }
+     
+        /** If possible, converts a Temporal object into LocalDateTime 
+         * For Temporals that do not support time, atStartOfDay is used for the time portion */
+        private static LocalDateTime makeLocalDateTime(Temporal t)
+        {
+            boolean supportsDayOfMonth = t.isSupported(ChronoField.DAY_OF_MONTH);
+            boolean supportsMonthOfYear = t.isSupported(ChronoField.MONTH_OF_YEAR);
+            boolean supportsYear = t.isSupported(ChronoField.YEAR);
+            if (supportsDayOfMonth && supportsMonthOfYear && supportsYear)
+            {
+                boolean supportsSecondOfDay = t.isSupported(ChronoField.SECOND_OF_DAY);
+                boolean supportsOffsetSeconds = t.isSupported(ChronoField.OFFSET_SECONDS);
+                if (supportsSecondOfDay)
+                { // LocalDateTime or equivalent
+                    if (supportsOffsetSeconds)
+                    { // ZonedDateTime or equivalent
+                        return ZonedDateTime.from(t).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+                    } else
+                    {
+                        return LocalDateTime.from(t);
+                    }
+                } else
+                { // LocalDate or equivalent
+                    return LocalDate.from(t).atStartOfDay();
+                }
+            } else
+            {
+                boolean supportsInstantSeconds = t.isSupported(ChronoField.INSTANT_SECONDS);
+                if (supportsInstantSeconds)
+                { // Instant or equivalent
+                    return LocalDateTime.ofInstant(Instant.from(t), ZoneId.systemDefault());
+                } else
+                {
+                    throw new DateTimeException("Unsuported Temporal class ( " + t.getClass().getSimpleName() + ") .  Class must convertable to LocalDate or LocalDateTime");
+                }
+            }
+        }
+    }
+	
 	// ==================================================================================================================
 	// Appointment
 	
@@ -424,7 +637,7 @@ public class Agenda extends Control
 	 * The interface that all appointments must adhere to; you can provide your own implementation.
 	 * You must either implement the Start & End using the Calendar based or LocalDateTime based methods
 	 */
-	static public interface Appointment
+	static public interface AppointmentOld
 	{
 		Boolean isWholeDay();
 		void setWholeDay(Boolean b);
@@ -508,7 +721,7 @@ public class Agenda extends Control
 	/**
 	 * Implements the base properties used by all AppointmentImpl classes. 
 	 */
-	static public abstract class AppointmentImplBase<T> 
+	static public abstract class AppointmentImplBaseOld<T> 
 	{
 		/** WholeDay: */
 		public ObjectProperty<Boolean> wholeDayProperty() { return wholeDayObjectProperty; }
@@ -549,7 +762,7 @@ public class Agenda extends Control
 	/**
 	 * A class to help you get going using Calendar; all the required methods of the interface are implemented as JavaFX properties 
 	 */
-	static public class AppointmentImpl extends AppointmentImplBase<AppointmentImpl> 
+	static public class AppointmentImpl extends AppointmentImplBaseOld<AppointmentImpl> 
 	implements Appointment
 	{
 		/** StartTime: */
@@ -580,7 +793,7 @@ public class Agenda extends Control
 	/**
 	 * A class to help you get going using LocalDateTime; all the required methods of the interface are implemented as JavaFX properties 
 	 */
-	static public class AppointmentImplLocal extends AppointmentImplBase<AppointmentImplLocal> 
+	static public class AppointmentImplLocal extends AppointmentImplBaseOld<AppointmentImplLocal> 
 	implements Appointment
 	{
 		/** StartDateTime: */
@@ -611,7 +824,7 @@ public class Agenda extends Control
 	/**
 	 * A class to help you get going using ZonedDateTime; all the required methods of the interface are implemented as JavaFX properties 
 	 */
-	static public class AppointmentImplZoned extends AppointmentImplBase<AppointmentImplZoned> 
+	static public class AppointmentImplZoned extends AppointmentImplBaseOld<AppointmentImplZoned> 
 	implements Appointment
 	{
 		/** StartDateTime: */
