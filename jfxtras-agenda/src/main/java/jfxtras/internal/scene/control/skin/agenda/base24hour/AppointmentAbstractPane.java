@@ -267,7 +267,7 @@ abstract class AppointmentAbstractPane extends Pane {
 	private Text endTimeText = null;
 	private Agenda.Appointment appointmentForDrag = null;
 
-	public static class AppointmentForDrag extends Agenda.AppointmentImplLocal {
+	public static class AppointmentForDrag extends Agenda.AppointmentImplTemporal {
 		
 	}
 	
