@@ -564,7 +564,10 @@ public class Agenda extends Control
         
         /** StartDateTime: LocalDateTime */
         @Override public LocalDateTime getStartLocalDateTime() { return makeLocalDateTime(getStartTemporal()); }
-        @Override public void setStartLocalDateTime(LocalDateTime value) { setStartTemporal(value); }
+        @Override public void setStartLocalDateTime(LocalDateTime value) { 
+            Temporal start = (getStartTemporal() == null) ? value : getStartTemporal().with(value);  // getStartTemporal is null for clone used by AppointmentForDrag
+            setStartTemporal(start); 
+        }
         public AppointmentImplTemporal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
         
         /** EndDateTime: Temporal */
@@ -576,7 +579,10 @@ public class Agenda extends Control
         
         /** EndDateTime: LocalDateTime */
         @Override public LocalDateTime getEndLocalDateTime() { return makeLocalDateTime(getEndTemporal()); }
-        @Override public void setEndLocalDateTime(LocalDateTime value) { setEndTemporal(value); }
+        @Override public void setEndLocalDateTime(LocalDateTime value) {
+            Temporal end = (getEndTemporal() == null) ? value : getEndTemporal().with(value); // getEndTemporal is null for clone used by AppointmentForDrag
+            setEndTemporal(end); 
+        }
         public AppointmentImplTemporal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
         
         @Override
