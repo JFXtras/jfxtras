@@ -511,7 +511,7 @@ public class Agenda extends Control
 	    }
 	}
 	
-	static public abstract class AppointmentBaseAbstract<T> implements Appointment
+	static public abstract class AppointmentImplBase<T> implements Appointment
 	{
 	    /** WholeDay: */
 	    public ObjectProperty<Boolean> wholeDayProperty() { return wholeDayObjectProperty; }
@@ -549,10 +549,73 @@ public class Agenda extends Control
 	    public T withAppointmentGroup(AppointmentGroup value) { setAppointmentGroup(value); return (T)this; }
 	}
 	
-    /**
-     * A class to help you get going using Temporal; all the required methods of the interface are implemented as JavaFX properties 
+	   /**
+     * A class to help you get going using Calendar; all the required methods of the interface are implemented as JavaFX properties 
      */
-    static public class AppointmentImplTemporal extends AppointmentBaseAbstract<AppointmentImplTemporal> 
+    static public class AppointmentImpl extends AppointmentImplBase<AppointmentImpl> 
+    implements Appointment
+    {
+        /** StartTime: */
+        public ObjectProperty<Calendar> startTimeProperty() { return startTimeObjectProperty; }
+        final private ObjectProperty<Calendar> startTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "startTime");
+        public Calendar getStartTime() { return startTimeObjectProperty.getValue(); }
+        public void setStartTime(Calendar value) { startTimeObjectProperty.setValue(value); }
+        public AppointmentImpl withStartTime(Calendar value) { setStartTime(value); return this; }
+        
+        /** EndTime: */
+        public ObjectProperty<Calendar> endTimeProperty() { return endTimeObjectProperty; }
+        final private ObjectProperty<Calendar> endTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "endTime");
+        public Calendar getEndTime() { return endTimeObjectProperty.getValue(); }
+        public void setEndTime(Calendar value) { endTimeObjectProperty.setValue(value); }
+        public AppointmentImpl withEndTime(Calendar value) { setEndTime(value); return this; } 
+        
+        public String toString()
+        {
+            return super.toString()
+                 + ", "
+                 + DateTimeToCalendarHelper.quickFormatCalendar(this.getStartTime())
+                 + " - "
+                 + DateTimeToCalendarHelper.quickFormatCalendar(this.getEndTime())
+                 ;
+        }
+    }
+    
+    /**
+     * A class to help you get going using LocalDateTime; all the required methods of the interface are implemented as JavaFX properties 
+     */
+    static public class AppointmentImplLocal extends AppointmentImplBase<AppointmentImplLocal> 
+    implements Appointment
+    {
+        /** StartDateTime: */
+        public ObjectProperty<LocalDateTime> startLocalDateTime() { return startLocalDateTime; }
+        final private ObjectProperty<LocalDateTime> startLocalDateTime = new SimpleObjectProperty<LocalDateTime>(this, "startLocalDateTime");
+        public LocalDateTime getStartLocalDateTime() { return startLocalDateTime.getValue(); }
+        public void setStartLocalDateTime(LocalDateTime value) { startLocalDateTime.setValue(value); }
+        public AppointmentImplLocal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
+        
+        /** EndDateTime: */
+        public ObjectProperty<LocalDateTime> endLocalDateTimeProperty() { return endLocalDateTimeProperty; }
+        final private ObjectProperty<LocalDateTime> endLocalDateTimeProperty = new SimpleObjectProperty<LocalDateTime>(this, "endLocalDateTimeProperty");
+        public LocalDateTime getEndLocalDateTime() { return endLocalDateTimeProperty.getValue(); }
+        public void setEndLocalDateTime(LocalDateTime value) { endLocalDateTimeProperty.setValue(value); }
+        public AppointmentImplLocal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
+        
+        public String toString()
+        {
+            return super.toString()
+                 + ", "
+                 + this.getStartLocalDateTime()
+                 + " - "
+                 + this.getEndLocalDateTime()
+                 ;
+        }
+    }
+	
+    /**
+     * A class to help you get going using Temporal (such as LocalDate, LocalDateTime, ZonedDateTime, Instant, etc)
+     * ; all the required methods of the interface are implemented as JavaFX properties 
+     */
+    static public class AppointmentImplTemporal extends AppointmentImplBase<AppointmentImplTemporal> 
     implements Appointment
     {
         /** StartDateTime: Temporal */
@@ -596,8 +659,9 @@ public class Agenda extends Control
                  ;
         }
      
-        /** If possible, converts a Temporal object into LocalDateTime 
-         * For Temporals that do not support time, atStartOfDay is used for the time portion */
+        /** Used by AppointmentImplTemporal.  If possible, converts a Temporal object into LocalDateTime 
+         * For Temporals that do not support time, atStartOfDay is used for the time portion
+         * If conversion is not possible throws an exception. */
         private static LocalDateTime makeLocalDateTime(Temporal t)
         {
             boolean supportsDayOfMonth = t.isSupported(ChronoField.DAY_OF_MONTH);
