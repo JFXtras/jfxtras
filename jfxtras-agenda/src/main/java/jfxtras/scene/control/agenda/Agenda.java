@@ -29,13 +29,8 @@
 
 package jfxtras.scene.control.agenda;
 
-import java.time.DateTimeException;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -55,7 +50,6 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
-import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 
 /**
  * = Agenda
@@ -619,17 +613,22 @@ public class Agenda extends Control
     implements Appointment
     {
         /** StartDateTime: Temporal */
+        private TemporalType startTemporalType;
         public ObjectProperty<Temporal> startTemporal() { return startTemporalProperty; }
         final private ObjectProperty<Temporal> startTemporalProperty = new SimpleObjectProperty<>(this, "startTemporal");
         @Override public Temporal getStartTemporal() { return startTemporalProperty.getValue(); }
-        @Override public void setStartTemporal(Temporal value) { startTemporalProperty.setValue(value); }
+        @Override public void setStartTemporal(Temporal value)
+        {
+            startTemporalProperty.setValue(value);
+            startTemporalType = TemporalType.from(value.getClass());
+        }
         public AppointmentImplTemporal withStartTemporal(Temporal value) { setStartTemporal(value); return this; }
         
         /** StartDateTime: LocalDateTime */
-        @Override public LocalDateTime getStartLocalDateTime() { return makeLocalDateTime(getStartTemporal()); }
-        @Override public void setStartLocalDateTime(LocalDateTime value) { 
-            Temporal start = (getStartTemporal() == null) ? value : getStartTemporal().with(value);  // getStartTemporal is null for clone used by AppointmentForDrag
-            setStartTemporal(start); 
+        @Override public LocalDateTime getStartLocalDateTime() { return startTemporalType.toLocalDateTime(getStartTemporal()); } //return makeLocalDateTime(getStartTemporal()); }
+        @Override public void setStartLocalDateTime(LocalDateTime value) {
+            Temporal start = (getStartTemporal() == null) ? value : startTemporalType.combine(getStartTemporal(), value);
+            setStartTemporal(start);
         }
         public AppointmentImplTemporal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
         
@@ -641,10 +640,10 @@ public class Agenda extends Control
         public AppointmentImplTemporal withEndTemporal(Temporal value) { setEndTemporal(value); return this; }
         
         /** EndDateTime: LocalDateTime */
-        @Override public LocalDateTime getEndLocalDateTime() { return makeLocalDateTime(getEndTemporal()); }
+        @Override public LocalDateTime getEndLocalDateTime() { return startTemporalType.toLocalDateTime(getEndTemporal()); }
         @Override public void setEndLocalDateTime(LocalDateTime value) {
-            Temporal end = (getEndTemporal() == null) ? value : getEndTemporal().with(value); // getEndTemporal is null for clone used by AppointmentForDrag
-            setEndTemporal(end); 
+            Temporal end = (getEndTemporal() == null) ? value : startTemporalType.combine(getEndTemporal(), value);
+            setEndTemporal(end);
         }
         public AppointmentImplTemporal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
         
@@ -657,44 +656,6 @@ public class Agenda extends Control
                  + " - "
                  + this.getEndLocalDateTime()
                  ;
-        }
-     
-        /** Used by AppointmentImplTemporal.  If possible, converts a Temporal object into LocalDateTime 
-         * For Temporals that do not support time, atStartOfDay is used for the time portion
-         * If conversion is not possible throws an exception. */
-        private static LocalDateTime makeLocalDateTime(Temporal t)
-        {
-            boolean supportsDayOfMonth = t.isSupported(ChronoField.DAY_OF_MONTH);
-            boolean supportsMonthOfYear = t.isSupported(ChronoField.MONTH_OF_YEAR);
-            boolean supportsYear = t.isSupported(ChronoField.YEAR);
-            if (supportsDayOfMonth && supportsMonthOfYear && supportsYear)
-            {
-                boolean supportsSecondOfDay = t.isSupported(ChronoField.SECOND_OF_DAY);
-                boolean supportsOffsetSeconds = t.isSupported(ChronoField.OFFSET_SECONDS);
-                if (supportsSecondOfDay)
-                { // LocalDateTime or equivalent
-                    if (supportsOffsetSeconds)
-                    { // ZonedDateTime or equivalent
-                        return ZonedDateTime.from(t).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
-                    } else
-                    {
-                        return LocalDateTime.from(t);
-                    }
-                } else
-                { // LocalDate or equivalent
-                    return LocalDate.from(t).atStartOfDay();
-                }
-            } else
-            {
-                boolean supportsInstantSeconds = t.isSupported(ChronoField.INSTANT_SECONDS);
-                if (supportsInstantSeconds)
-                { // Instant or equivalent
-                    return LocalDateTime.ofInstant(Instant.from(t), ZoneId.systemDefault());
-                } else
-                {
-                    throw new DateTimeException("Unsuported Temporal class ( " + t.getClass().getSimpleName() + ") .  Class must convertable to LocalDate or LocalDateTime");
-                }
-            }
         }
     }
 	
