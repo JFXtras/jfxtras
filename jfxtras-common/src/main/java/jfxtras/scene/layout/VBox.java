@@ -83,6 +83,25 @@ public class VBox extends javafx.scene.layout.VBox
 
 	/**
 	 * 
+	 * @param spacing
+	 * @param nodes
+	 */
+	public VBox(double spacing, Node... nodes) {
+		super(spacing, nodes);
+		construct();
+	}
+
+	/**
+	 * 
+	 * @param nodes
+	 */
+	public VBox(Node... nodes) {
+		super(nodes);
+		construct();
+	}
+
+	/**
+	 * 
 	 */
 	private void construct()
 	{

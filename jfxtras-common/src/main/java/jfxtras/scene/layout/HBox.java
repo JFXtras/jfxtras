@@ -83,6 +83,25 @@ public class HBox extends javafx.scene.layout.HBox
 
 	/**
 	 * 
+	 * @param spacing
+	 * @param nodes
+	 */
+	public HBox(double spacing, Node... nodes) {
+		super(spacing, nodes);
+		construct();
+	}
+
+	/**
+	 * 
+	 * @param nodes
+	 */
+	public HBox(Node... nodes) {
+		super(nodes);
+		construct();
+	}
+
+	/**
+	 * 
 	 */
 	private void construct()
 	{
