@@ -652,9 +652,9 @@ public class Agenda extends Control
         {
             return super.toString()
                  + ", "
-                 + this.getStartLocalDateTime()
+                 + this.getStartTemporal()
                  + " - "
-                 + this.getEndLocalDateTime()
+                 + this.getEndTemporal()
                  ;
         }
     }
