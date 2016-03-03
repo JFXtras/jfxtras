@@ -29,10 +29,18 @@
 
 package jfxtras.scene.control.agenda.test;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.chrono.HijrahDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.util.Date;
 import java.util.Locale;
 
 import javafx.scene.Node;
@@ -153,22 +161,103 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 	/**
 	 * 
 	 */
-	@Test
-	public void renderRegularAppointmentZoned()
-	{
-		TestUtil.runThenWaitForPaintPulse( () -> {
-			agenda.appointments().add( new Agenda.AppointmentImplZoned()
-	            .withStartZonedDateTime(ZonedDateTime.of(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T10:00"), ZoneId.systemDefault()))
-	            .withEndZonedDateTime(ZonedDateTime.of(TestUtil.quickParseLocalDateTimeYMDhm("2014-01-01T12:00"), ZoneId.systemDefault()))
-	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
+    @Test
+    public void renderRegularAppointmentZoned()
+    {
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            agenda.appointments().add( new Agenda.AppointmentImplTemporal()
+                .withStartTemporal(ZonedDateTime.of(LocalDateTime.of(2014, 1, 1, 10, 0), ZoneId.systemDefault()))
+                .withEndTemporal(ZonedDateTime.of(LocalDateTime.of(2014, 1, 1, 12, 0), ZoneId.systemDefault()))
+                .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
-		});
-				
-		Node n = (Node)find("#AppointmentRegularBodyPane2014-01-01/0");
-		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
-		//TestUtil.sleep(3000);
-	}
+        });
+
+        Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
+        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+        new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+        //TestUtil.sleep(3000);
+    }
+    
+    @Test
+    public void renderWholeDayAppointmentLocalDate()
+    {
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            agenda.appointments().add( new Agenda.AppointmentImplTemporal()
+                .withStartTemporal(LocalDate.of(2014, 1, 1))
+                .withEndTemporal(LocalDate.of(2014, 1, 2))
+                .withWholeDay(true)
+                .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+        });
+
+        Node n = find("#AppointmentWholedayBodyPane2014-01-01/0");
+        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+        new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.125, 0.01);
+        //TestUtil.sleep(3000);
+    }
+    
+    @Test
+    public void renderWholeDayAppointmentHijrahDate()
+    {
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            Temporal h = HijrahDate.from(LocalDate.of(2014, 1, 1));
+            agenda.appointments().add( new Agenda.AppointmentImplTemporal()
+                .withStartTemporal(h)
+                .withEndTemporal(h.plus(1, ChronoUnit.DAYS))
+                .withWholeDay(true)
+                .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+        });
+
+        Node n = find("#AppointmentWholedayBodyPane2014-01-01/0");
+        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+        new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.125, 0.01);
+        //TestUtil.sleep(3000);
+    }
+    
+    @Test
+    public void renderRegularAppointmentOffset()
+    {
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            ZoneOffset offset = ZonedDateTime.now().getOffset();
+            agenda.appointments().add( new Agenda.AppointmentImplTemporal()
+                .withStartTemporal(OffsetDateTime.of(LocalDateTime.of(2014, 1, 1, 10, 0), offset))
+                .withEndTemporal(OffsetDateTime.of(LocalDateTime.of(2014, 1, 1, 12, 0), offset))
+                .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+        });
+
+        Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
+        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+        new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+        //TestUtil.sleep(3000);
+    }
+    
+    @Test
+    public void renderRegularAppointmentInstant()
+    {
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
+            String dateInString = "2014-1-1 10:00:00";
+            Date date = null;
+            try {
+                date = sdf.parse(dateInString);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Instant instant = date.toInstant();
+            agenda.appointments().add( new Agenda.AppointmentImplTemporal()
+                .withStartTemporal(instant)
+                .withEndTemporal(instant.plus(2, ChronoUnit.HOURS))
+                .withAppointmentGroup(appointmentGroupMap.get("group01"))
+            );
+        });
+
+        Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
+        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+        new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+        //TestUtil.sleep(3000);
+    }
 
 	/**
 	 * Since day skin uses 99.999% of the week skin's code, we just test if it renders a single appointment as expected.
