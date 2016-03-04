@@ -29,9 +29,11 @@
 
 package jfxtras.scene.control.agenda;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAdjuster;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -607,7 +609,7 @@ public class Agenda extends Control
 	
     /**
      * A class to help you get going using Temporal (such as LocalDate, LocalDateTime, ZonedDateTime, Instant, etc)
-     * ; all the required methods of the interface are implemented as JavaFX properties 
+     * all the required methods of the interface are implemented as JavaFX properties 
      */
     static public class AppointmentImplTemporal extends AppointmentImplBase<AppointmentImplTemporal> 
     implements Appointment
@@ -627,7 +629,9 @@ public class Agenda extends Control
         /** StartDateTime: LocalDateTime */
         @Override public LocalDateTime getStartLocalDateTime() { return startTemporalType.toLocalDateTime(getStartTemporal()); } //return makeLocalDateTime(getStartTemporal()); }
         @Override public void setStartLocalDateTime(LocalDateTime value) {
-            Temporal start = (getStartTemporal() == null) ? value : startTemporalType.combine(getStartTemporal(), value);
+            TemporalAdjuster adjuster = (isWholeDay()) ? LocalDate.from(value) : value;
+            Temporal start = (getStartTemporal() == null) ? value : startTemporalType.combine(getStartTemporal(), adjuster);
+            System.out.println("new start agenda:" + start + " " + value);
             setStartTemporal(start);
         }
         public AppointmentImplTemporal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
