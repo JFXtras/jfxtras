@@ -119,7 +119,7 @@ public enum TemporalType
             return initialTemporal.with(adjuster);
         } else if (adjuster instanceof LocalDateTime)
         {
-            return ((LocalDateTime) adjuster).atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")); // upgrade to ZonedDateTime with UTC
+            return (LocalDateTime) adjuster;
         } else
         {
             throw new DateTimeException("Unsupported TemporalAdjuster:" + adjuster);

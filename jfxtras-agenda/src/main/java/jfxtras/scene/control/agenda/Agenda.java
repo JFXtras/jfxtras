@@ -637,16 +637,23 @@ public class Agenda extends Control
         public AppointmentImplTemporal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
         
         /** EndDateTime: Temporal */
+        private TemporalType endTemporalType;
         public ObjectProperty<Temporal> endTemporal() { return endTemporalProperty; }
         final private ObjectProperty<Temporal> endTemporalProperty = new SimpleObjectProperty<>(this, "endTemporal");
         @Override public Temporal getEndTemporal() { return endTemporalProperty.getValue(); }
-        @Override public void setEndTemporal(Temporal value) { endTemporalProperty.setValue(value); }
+        @Override public void setEndTemporal(Temporal value)
+        {
+            endTemporalProperty.setValue(value);
+            endTemporalType = TemporalType.from(value.getClass());
+        }
         public AppointmentImplTemporal withEndTemporal(Temporal value) { setEndTemporal(value); return this; }
         
+        
         /** EndDateTime: LocalDateTime */
-        @Override public LocalDateTime getEndLocalDateTime() { return startTemporalType.toLocalDateTime(getEndTemporal()); }
+        @Override public LocalDateTime getEndLocalDateTime() { return endTemporalType.toLocalDateTime(getEndTemporal()); }
         @Override public void setEndLocalDateTime(LocalDateTime value) {
-            Temporal end = (getEndTemporal() == null) ? value : startTemporalType.combine(getEndTemporal(), value);
+            TemporalAdjuster adjuster = (isWholeDay()) ? LocalDate.from(value) : value;
+            Temporal end = (getEndTemporal() == null) ? value : endTemporalType.combine(getEndTemporal(), adjuster);
             setEndTemporal(end);
         }
         public AppointmentImplTemporal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
