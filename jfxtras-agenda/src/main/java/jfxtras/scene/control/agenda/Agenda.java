@@ -52,6 +52,7 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
+import jfxtras.scene.control.agenda.TemporalUtilities.TemporalType;
 
 /**
  * = Agenda
@@ -627,10 +628,10 @@ public class Agenda extends Control
         public AppointmentImplTemporal withStartTemporal(Temporal value) { setStartTemporal(value); return this; }
         
         /** StartDateTime: LocalDateTime */
-        @Override public LocalDateTime getStartLocalDateTime() { return startTemporalType.toLocalDateTime(getStartTemporal()); } //return makeLocalDateTime(getStartTemporal()); }
+        @Override public LocalDateTime getStartLocalDateTime() { return startTemporalType.toLocalDateTimeByType(getStartTemporal()); } //return makeLocalDateTime(getStartTemporal()); }
         @Override public void setStartLocalDateTime(LocalDateTime value) {
             TemporalAdjuster adjuster = (isWholeDay()) ? LocalDate.from(value) : value;
-            Temporal start = (getStartTemporal() == null) ? value : startTemporalType.combine(getStartTemporal(), adjuster);
+            Temporal start = (getStartTemporal() == null) ? value : TemporalUtilities.combine(getStartTemporal(), adjuster);
             System.out.println("new start agenda:" + start + " " + value);
             setStartTemporal(start);
         }
@@ -650,10 +651,10 @@ public class Agenda extends Control
         
         
         /** EndDateTime: LocalDateTime */
-        @Override public LocalDateTime getEndLocalDateTime() { return endTemporalType.toLocalDateTime(getEndTemporal()); }
+        @Override public LocalDateTime getEndLocalDateTime() { return endTemporalType.toLocalDateTimeByType(getEndTemporal()); }
         @Override public void setEndLocalDateTime(LocalDateTime value) {
             TemporalAdjuster adjuster = (isWholeDay()) ? LocalDate.from(value) : value;
-            Temporal end = (getEndTemporal() == null) ? value : endTemporalType.combine(getEndTemporal(), adjuster);
+            Temporal end = (getEndTemporal() == null) ? value : TemporalUtilities.combine(getEndTemporal(), adjuster);
             setEndTemporal(end);
         }
         public AppointmentImplTemporal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
