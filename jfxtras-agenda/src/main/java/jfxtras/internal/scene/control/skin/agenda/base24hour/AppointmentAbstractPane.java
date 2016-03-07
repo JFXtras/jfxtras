@@ -335,7 +335,7 @@ abstract class AppointmentAbstractPane extends Pane {
             }
 		}
 		
-		// if dragged from day to header
+		// if dragged from header to day
 		else if ( (dragPickupInDayHeader && dragDropInDayBody) ) {
 			
 			appointment.setWholeDay(false);
@@ -348,10 +348,11 @@ abstract class AppointmentAbstractPane extends Pane {
                 changed = true;
 			}
 			else {
-				// simply add the duration, but without time
-				Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
-				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
-				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
+				// simply add the duration - default to 1 hour duration
+			    // TODO - the time and the graphic location during dragging do not agree - it appears the width of the header is the same as the error
+				Duration duration = Duration.between(dragPickupDateTime, dragDropDateTime);
+                appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(duration) );
+                appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(duration).minusHours(23) );
                 changed = true;
 			}
             if (changed) {
