@@ -388,6 +388,7 @@ public class ListSpinnerSkin<T> extends SkinBase<ListSpinner<T>>
 		
 		// add to self
 		getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control
+		getSkinnable().getStyleClass().add("button"); // use the styling of button
 		getChildren().add(skinNode);
 	}
 	private Region decrementArrow = null;
