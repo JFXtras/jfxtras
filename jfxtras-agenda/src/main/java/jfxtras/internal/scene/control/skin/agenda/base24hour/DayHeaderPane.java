@@ -186,7 +186,6 @@ public class DayHeaderPane extends Pane {
 			}
 			if (lAppointment != null) {
 				lAppointment.setWholeDay(true);
-				layoutHelp.callAppointmentChangedCallback(lAppointment);
 				layoutHelp.skinnable.appointments().add(lAppointment); // the appointments collection is listened to, so they will automatically be refreshed
 			}
 		});

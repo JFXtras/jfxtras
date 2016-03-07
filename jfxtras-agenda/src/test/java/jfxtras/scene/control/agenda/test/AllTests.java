@@ -41,6 +41,7 @@ import org.junit.runners.Suite.SuiteClasses;
               , AgendaFXMLTest.class
               , AgendaFXMLTest.class
               , AgendaRenderDaysFromDisplayedDateTest.class
+              , AgendaTemporalConversionTest.class
 	          })
 public class AllTests {
 
