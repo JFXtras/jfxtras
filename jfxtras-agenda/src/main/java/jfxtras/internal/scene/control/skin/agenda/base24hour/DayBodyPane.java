@@ -359,7 +359,7 @@ class DayBodyPane extends Pane
 		Rectangle r = new Rectangle(NodeUtil.sceneX(this), NodeUtil.sceneY(this), this.getWidth(), this.getHeight());
 		if (r.contains(x, y)) {
 			LocalDate localDate = localDateObjectProperty.get();
-			double lHeightOffset = (y -  r.getY());
+			double lHeightOffset = (y -  r.getY()); 
 			int ms = (int)(lHeightOffset * layoutHelp.durationInMSPerPixelProperty.get());
 			LocalDateTime localDateTime = localDate.atStartOfDay().plusSeconds(ms / 1000);
 			localDateTime = localDateTime.withNano(AppointmentAbstractPane.DRAG_DAY); // we abuse the nano second to deviate body panes from header panes

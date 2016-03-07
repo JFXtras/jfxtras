@@ -344,7 +344,7 @@ abstract class AppointmentAbstractPane extends Pane {
             boolean changed = false;
 			if (appointment.getStartLocalDateTime() != null && appointment.getEndLocalDateTime() == null) {
 				// set the drop time as the task time
-				appointment.setStartLocalDateTime(dragDropDateTime );
+				appointment.setStartLocalDateTime(dragDropDateTime);
                 changed = true;
 			}
 			else {
@@ -352,6 +352,12 @@ abstract class AppointmentAbstractPane extends Pane {
 				Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
+//=======
+//				// simply add the duration - default to 1 hour duration
+//			    // TODO - the time and the graphic location during dragging do not agree - it appears the width of the header is the same as the error
+//				appointment.setStartLocalDateTime(dragDropDateTime);
+//				appointment.setEndLocalDateTime(dragDropDateTime.plusHours(1));
+//>>>>>>> 56732ac... fixed the header to body drag
                 changed = true;
 			}
             if (changed) {
