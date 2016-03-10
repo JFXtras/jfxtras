@@ -41,9 +41,6 @@ public final class TemporalUtilities
      * and adjuster represents 2007-12-05T10:12:30 then the returned Temporal will be
      * 2007-12-05
      * 
-     * For example, If initialTemporal is a LocalDate object representing 2007-12-03
-     * and adjuster represents 2007-12-03T10:15:30+01:00Z then the returned Temporal will be
-     * 2007-12-03T10:15:30+01:00Z
      */
     public static Temporal combine(Temporal initialTemporal, TemporalAdjuster adjuster)
     {
@@ -151,7 +148,7 @@ public final class TemporalUtilities
                 return initialTemporal.with(adjuster);
             } else if (adjuster instanceof LocalDateTime)
             {
-                return (LocalDateTime) adjuster;
+                return (LocalDateTime) adjuster; // adding time to initialTemporal
             } else
             {
                 throw new DateTimeException("Unsupported TemporalAdjuster:" + adjuster);
@@ -169,18 +166,16 @@ public final class TemporalUtilities
     
         /** applies the parameter adjuster to the initialTemporal
          * adjuster must be either LocalDate or LocalDateTime
-         * 
+         * If adjuster contains time, but initialTemporal doesn't, then the returned Temporal
+         * will be changed to contain time (as LocalDateTime).
+         * <br>
          * For example, If initialTemporal is a ZonedDateTime object representing 2007-12-03T10:15:30+01:00 Europe/Paris
          * and adjuster represents 2007-12-05T10:12:30 then the returned Temporal will be
          * 2007-12-05T10:12:30+01:00 Europe/Paris
-         *
+         * <br>
          * Another example, if initialTemporal is a LocalDate object representing 2007-12-03
          * and adjuster represents 2007-12-05T10:12:30 then the returned Temporal will be
-         * 2007-12-05
-         * 
-         * For example, If initialTemporal is a LocalDate object representing 2007-12-03
-         * and adjuster represents 2007-12-03T10:15:30+01:00Z then the returned Temporal will be
-         * 2007-12-03T10:15:30+01:00Z
+         * 2007-12-05T10:12:30
          */
         protected abstract Temporal combineByType(Temporal initialTemporal, TemporalAdjuster adjuster);
     }
