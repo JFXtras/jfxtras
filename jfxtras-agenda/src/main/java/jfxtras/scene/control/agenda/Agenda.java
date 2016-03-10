@@ -632,7 +632,6 @@ public class Agenda extends Control
         @Override public void setStartLocalDateTime(LocalDateTime value) {
             TemporalAdjuster adjuster = (isWholeDay()) ? LocalDate.from(value) : value;
             Temporal start = (getStartTemporal() == null) ? value : TemporalUtilities.combine(getStartTemporal(), adjuster);
-            System.out.println("new start agenda:" + start + " " + value);
             setStartTemporal(start);
         }
         public AppointmentImplTemporal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
