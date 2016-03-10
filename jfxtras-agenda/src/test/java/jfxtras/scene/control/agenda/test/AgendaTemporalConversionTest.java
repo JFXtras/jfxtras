@@ -34,6 +34,7 @@ import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.TemporalType;
+import jfxtras.scene.control.agenda.TemporalUtilities;
 import jfxtras.test.AssertNode;
 import jfxtras.test.TestUtil;
 import junit.framework.Assert;
@@ -56,9 +57,9 @@ import org.junit.Test;
 public class AgendaTemporalConversionTest
 {
     /*
-     * t is Temporal from startTemporal or endTemporal
-     * a is the argument passed to setStartLocalDateTime and setEndLocalDateTime.
-     * a is modified to be LocalDate if Appointment isWholeDay and LocalDateTime otherwise.
+     * initialTemporal is Temporal from startTemporal or endTemporal
+     * adjuster is the argument passed to setStartLocalDateTime and setEndLocalDateTime.
+     * adjuster is modified to be LocalDate if Appointment isWholeDay and LocalDateTime otherwise.
      * actual is the value to be put into startTemporal or endTemporal
      */
 
@@ -67,9 +68,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDate into LocalDate
         {
-            Temporal t = LocalDate.of(2015, 11, 18);
-            TemporalAdjuster a = LocalDate.of(2015, 11, 19);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = LocalDate.of(2015, 11, 18);
+            TemporalAdjuster adjuster = LocalDate.of(2015, 11, 19);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             assertEquals(LocalDate.of(2015, 11, 19), actual);
         }
     }
@@ -79,9 +80,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDate into ThaiBuddhistDate
         {
-            Temporal t = ThaiBuddhistDate.from(LocalDate.of(2015, 11, 18));
-            TemporalAdjuster a = LocalDate.of(2015, 11, 19);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = ThaiBuddhistDate.from(LocalDate.of(2015, 11, 18));
+            TemporalAdjuster adjuster = LocalDate.of(2015, 11, 19);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             Temporal expected = ThaiBuddhistDate.from(LocalDate.of(2015, 11, 19));
             assertEquals(expected, actual);
         }
@@ -92,9 +93,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDate into ZonedDateTime
         {
-            Temporal t = ZonedDateTime.of(LocalDateTime.of(2015, 11, 18, 5, 0), ZoneId.of("Japan"));
-            TemporalAdjuster a = LocalDate.of(2015, 11, 19);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = ZonedDateTime.of(LocalDateTime.of(2015, 11, 18, 5, 0), ZoneId.of("Japan"));
+            TemporalAdjuster adjuster = LocalDate.of(2015, 11, 19);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             Temporal expected = ZonedDateTime.of(LocalDateTime.of(2015, 11, 19, 5, 0), ZoneId.of("Japan"));
             assertEquals(expected, actual);
         }
@@ -105,9 +106,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDate into LocalDateTime
         {
-            Temporal t = LocalDateTime.of(2015, 11, 19, 5, 30);
-            TemporalAdjuster a = LocalDate.of(2015, 11, 18);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = LocalDateTime.of(2015, 11, 19, 5, 30);
+            TemporalAdjuster adjuster = LocalDate.of(2015, 11, 18);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             Temporal expected = LocalDateTime.of(2015, 11, 18, 5, 30);
             assertEquals(expected, actual);
         }
@@ -118,9 +119,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDateTime into LocalDateTime
         {
-            Temporal t = LocalDateTime.of(2015, 11, 19, 5, 30);
-            TemporalAdjuster a = LocalDateTime.of(2015, 11, 22, 11, 30);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = LocalDateTime.of(2015, 11, 19, 5, 30);
+            TemporalAdjuster adjuster = LocalDateTime.of(2015, 11, 22, 11, 30);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             Temporal expected = LocalDateTime.of(2015, 11, 22, 11, 30);
             assertEquals(expected, actual);
         }
@@ -131,9 +132,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDateTime into LocalDate
         {
-            Temporal t = LocalDate.of(2015, 11, 18);
-            TemporalAdjuster a = LocalDateTime.of(2015, 11, 19, 5, 30);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = LocalDate.of(2015, 11, 18);
+            TemporalAdjuster adjuster = LocalDateTime.of(2015, 11, 19, 5, 30);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             Temporal expected = LocalDateTime.of(2015, 11, 19, 5, 30);
             assertEquals(expected, actual);
         }
@@ -144,9 +145,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDateTime into ZonedDateTime
         {
-            Temporal t = ZonedDateTime.of(LocalDateTime.of(2015, 11, 18, 5, 0), ZoneId.of("Japan"));
-            TemporalAdjuster a = LocalDateTime.of(2015, 11, 19, 5, 30);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = ZonedDateTime.of(LocalDateTime.of(2015, 11, 18, 5, 0), ZoneId.of("Japan"));
+            TemporalAdjuster adjuster = LocalDateTime.of(2015, 11, 19, 5, 30);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             Temporal expected = ZonedDateTime.of(LocalDateTime.of(2015, 11, 19, 5, 30), ZoneId.of("Japan"));
             assertEquals(expected, actual);
         }
@@ -157,9 +158,9 @@ public class AgendaTemporalConversionTest
     {
         // LocalDateTime into ThaiBuddhistDate
         {
-            Temporal t = ThaiBuddhistDate.from(LocalDate.of(2015, 11, 18));
-            TemporalAdjuster a = LocalDateTime.of(2015, 11, 19, 5, 30);
-            Temporal actual = TemporalType.from(t.getClass()).combine(t, a);
+            Temporal initialTemporal = ThaiBuddhistDate.from(LocalDate.of(2015, 11, 18));
+            TemporalAdjuster adjuster = LocalDateTime.of(2015, 11, 19, 5, 30);
+            Temporal actual = TemporalUtilities.combine(initialTemporal, adjuster);
             Temporal expected = LocalDateTime.of(2015, 11, 19, 5, 30);
             assertEquals(expected, actual);
         }
