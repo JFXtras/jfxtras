@@ -29,17 +29,7 @@
 
 package jfxtras.scene.control.agenda.test;
 
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.input.MouseButton;
-import jfxtras.scene.control.agenda.Agenda;
-import jfxtras.scene.control.agenda.TemporalType;
-import jfxtras.scene.control.agenda.TemporalUtilities;
-import jfxtras.test.AssertNode;
-import jfxtras.test.TestUtil;
-import junit.framework.Assert;
-
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -50,6 +40,8 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjuster;
 
 import org.junit.Test;
+
+import jfxtras.scene.control.agenda.TemporalUtilities;
 
 /**
  * 
