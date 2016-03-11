@@ -52,6 +52,7 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
+import jfxtras.scene.control.agenda.TemporalUtilities.TemporalType;
 
 /**
  * = Agenda
@@ -615,45 +616,33 @@ public class Agenda extends Control
     implements Appointment
     {
         /** StartDateTime: Temporal */
-        private TemporalType startTemporalType;
         public ObjectProperty<Temporal> startTemporal() { return startTemporalProperty; }
         final private ObjectProperty<Temporal> startTemporalProperty = new SimpleObjectProperty<>(this, "startTemporal");
         @Override public Temporal getStartTemporal() { return startTemporalProperty.getValue(); }
-        @Override public void setStartTemporal(Temporal value)
-        {
-            startTemporalProperty.setValue(value);
-            startTemporalType = TemporalType.from(value.getClass());
-        }
+        @Override public void setStartTemporal(Temporal value) { startTemporalProperty.setValue(value); }
         public AppointmentImplTemporal withStartTemporal(Temporal value) { setStartTemporal(value); return this; }
         
         /** StartDateTime: LocalDateTime */
-        @Override public LocalDateTime getStartLocalDateTime() { return startTemporalType.toLocalDateTime(getStartTemporal()); } //return makeLocalDateTime(getStartTemporal()); }
+        @Override public LocalDateTime getStartLocalDateTime() { return TemporalUtilities.toLocalDateTime(getStartTemporal()); } //return makeLocalDateTime(getStartTemporal()); }
         @Override public void setStartLocalDateTime(LocalDateTime value) {
             TemporalAdjuster adjuster = (isWholeDay()) ? LocalDate.from(value) : value;
-            Temporal start = (getStartTemporal() == null) ? value : startTemporalType.combine(getStartTemporal(), adjuster);
-            System.out.println("new start agenda:" + start + " " + value);
+            Temporal start = (getStartTemporal() == null) ? value : TemporalUtilities.combine(getStartTemporal(), adjuster);
             setStartTemporal(start);
         }
         public AppointmentImplTemporal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
         
         /** EndDateTime: Temporal */
-        private TemporalType endTemporalType;
         public ObjectProperty<Temporal> endTemporal() { return endTemporalProperty; }
         final private ObjectProperty<Temporal> endTemporalProperty = new SimpleObjectProperty<>(this, "endTemporal");
         @Override public Temporal getEndTemporal() { return endTemporalProperty.getValue(); }
-        @Override public void setEndTemporal(Temporal value)
-        {
-            endTemporalProperty.setValue(value);
-            endTemporalType = TemporalType.from(value.getClass());
-        }
+        @Override public void setEndTemporal(Temporal value) { endTemporalProperty.setValue(value); }
         public AppointmentImplTemporal withEndTemporal(Temporal value) { setEndTemporal(value); return this; }
         
-        
         /** EndDateTime: LocalDateTime */
-        @Override public LocalDateTime getEndLocalDateTime() { return endTemporalType.toLocalDateTime(getEndTemporal()); }
+        @Override public LocalDateTime getEndLocalDateTime() { return TemporalUtilities.toLocalDateTime(getEndTemporal()); }
         @Override public void setEndLocalDateTime(LocalDateTime value) {
             TemporalAdjuster adjuster = (isWholeDay()) ? LocalDate.from(value) : value;
-            Temporal end = (getEndTemporal() == null) ? value : endTemporalType.combine(getEndTemporal(), adjuster);
+            Temporal end = (getEndTemporal() == null) ? value : TemporalUtilities.combine(getEndTemporal(), adjuster);
             setEndTemporal(end);
         }
         public AppointmentImplTemporal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
