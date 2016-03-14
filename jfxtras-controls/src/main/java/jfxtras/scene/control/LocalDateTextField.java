@@ -62,13 +62,13 @@ import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
  * :dateFormats: dateTimeFormaters
  * 
  * = LocalDateTextField
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
  * 
  * == Callback
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
  * 
  * == Icon
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
  */
 public class LocalDateTextField extends Control
 {

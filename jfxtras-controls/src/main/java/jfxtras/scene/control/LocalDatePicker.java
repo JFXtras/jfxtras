@@ -55,11 +55,11 @@ import jfxtras.internal.scene.control.skin.LocalDatePickerSkin;
  * LocalDatePicker is a control for selecting one, multiple or a range of dates. 
  * The name LocalDatePicker is because it uses Java's LocalDate (JSR-310) (as opposed to Date) in its API to do so.
  * 
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_modeProperty.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarPicker_modeProperty.adoc[]
  * 
  * == Callback
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  */
 public class LocalDatePicker extends Control
 {

@@ -58,15 +58,15 @@ import javafx.util.Callback;
  * CalendarPicker is a control for selecting one, multiple or a range of dates, possibly including time. 
  * The name CalendarPicker is because it uses Java's Calendar (as opposed to Date) in its API to do so, mainly because Calendar holds Locale information and thus the days of the week can be rendered correctly.
  * 
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_modeProperty.adoc[]
+ * include::src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
+ * include::src/main/asciidoc/scene/control/CalendarPicker_modeProperty.adoc[]
  * - The showTime property enables the embedded time picker, so the time part of a Calendar can be set as well. This is only possible in SINGLE mode.
  * 
  * == Callback
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
+ * include::src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  * 
  * == Immutability
- * include::jfxtras-controls/src/main/asciidoc/scene/control/Calendar_immutability.adoc[]
+ * include::src/main/asciidoc/scene/control/Calendar_immutability.adoc[]
  * 
  * @author Tom Eugelink
  */
