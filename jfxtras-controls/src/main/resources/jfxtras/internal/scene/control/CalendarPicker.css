@@ -9,6 +9,9 @@
 	-fx-alignment: CENTER;
 }
 
+.CalendarPickerControlSkin .weeknumber {
+}
+
 .CalendarPickerControlSkin .non-weekend { 
 }
 
