@@ -78,39 +78,6 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 			refreshLocale();
 		});
 		refreshLocale();
-
-		// modify the calendar the way we like it
-		derivedDisplayedCalendar(); // this must be done before installing the listener, otherwise the refresh will be called to early
-		getSkinnable().displayedCalendar().addListener( (InvalidationListener) observable -> {
-			// adapt to our needs
-			Calendar lDisplayedCalendar = getSkinnable().getDisplayedCalendar();
-			if ((myDisplayedCalendar == null && lDisplayedCalendar != null)
-				|| myDisplayedCalendar.equals(lDisplayedCalendar) == false
-				) {
-				derivedDisplayedCalendar();
-
-				// wait for this change to report itself (but then not enter this if statement)
-				return;
-			}
-
-			// update
-			refresh();
-		});
-	}
-	private Calendar myDisplayedCalendar = null;
-
-	/**
-	 *
-	 */
-	private void derivedDisplayedCalendar() {
-		// modify the calender the way we like it
-		Calendar lDisplayedCalendar = getSkinnable().getDisplayedCalendar();
-		Calendar lCalendar = deriveDisplayedCalendar(lDisplayedCalendar);
-
-		// assign it
-		myDisplayedCalendar = lCalendar;
-		getSkinnable().displayedCalendar().set(lCalendar);
-
 	}
 
 	// ==================================================================================================================
@@ -129,9 +96,6 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 
 	// ==================================================================================================================
 	// SUPPORT
-
-	// modify the displayed date to match our requirements (meaning same locale, etc)
-	abstract protected Calendar deriveDisplayedCalendar(Calendar displayedCalendar);
 
 	// refresh the skin
 	abstract protected void refresh();

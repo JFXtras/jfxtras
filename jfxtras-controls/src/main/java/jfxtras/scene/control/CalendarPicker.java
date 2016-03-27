@@ -103,7 +103,7 @@ public class CalendarPicker extends Control
 	 */
 	@Override public String getUserAgentStylesheet()
 	{
-		return  CalendarPicker.class.getResource("/jfxtras/internal/scene/control/" + CalendarPicker.class.getSimpleName() + ".css").toExternalForm();
+		return CalendarPicker.class.getResource("/jfxtras/internal/scene/control/" + CalendarPicker.class.getSimpleName() + ".css").toExternalForm();
 	}
 	
 	@Override public Skin<?> createDefaultSkin() {
