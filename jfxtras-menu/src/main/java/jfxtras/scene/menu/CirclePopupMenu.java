@@ -89,7 +89,7 @@ public class CirclePopupMenu {
     	this.node = node;
     	
     	// setup popup
-    	popup.setAutoHide(true);
+    	// autohiding causes problems in the sample: popup.setAutoHide(true);
     	popup.setHideOnEscape(true);
     	popup.setOnHiding( windowEvent -> {
     		hide();
