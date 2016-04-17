@@ -70,6 +70,7 @@ import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.scene.control.ListSpinner;
 import jfxtras.scene.control.ListSpinnerIntegerList;
 import jfxtras.scene.layout.GridPane;
+import jfxtras.test.TestUtil;
 import jfxtras.util.NodeUtil;
 
 /**

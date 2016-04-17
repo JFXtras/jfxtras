@@ -138,11 +138,11 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         // click today
         click(".today");
 
-        // click today
+        // close popup
         click(".accept-icon");
 
         // now should be the value in the textfield
-        Assert.assertEquals(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0), localDateTimeTextField.getLocalDateTime());
+		Assert.assertEquals(LocalDateTime.now().withSecond(0).withNano(0), localDateTimeTextField.getLocalDateTime().withSecond(0).withNano(0)); // this fails when a new minute turns between .today and this assert
         Assert.assertFalse(find(".text-field").isDisabled());
         Assert.assertFalse(localDateTimeTextField.isPickerShowing());
     }

@@ -41,11 +41,14 @@ import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 	public Parent getRootNode()
@@ -65,6 +68,17 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 		return box;
 	}
 	private ListSpinner<String> spinner = null;
+
+	@Test
+	public void _forSomeReasonTheFirstTestOftenFails()
+	{		
+		// non cyclic is the default
+		spinner.cyclicProperty().set(true);
+		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		click(".right-arrow");
+		click(".left-arrow");
+	}
+
 
 	@Test
 	public void navigateUpDownThroughTheValuesCyclic()

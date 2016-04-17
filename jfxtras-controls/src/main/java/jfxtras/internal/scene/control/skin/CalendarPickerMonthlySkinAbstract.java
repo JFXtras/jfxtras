@@ -40,6 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javafx.beans.InvalidationListener;
 import javafx.scene.control.SkinBase;
 import jfxtras.scene.control.CalendarPicker;
+import jfxtras.test.TestUtil;
 
 /**
  * This class contains common code to support skins that shows a month at once.
@@ -253,14 +254,15 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 	}
 	
 	/**
-	 * determine on which day of week idx the first of the months is
+	 * determine on which day of week idx is the first of the month
 	 */
 	protected int determineFirstOfMonthDayOfWeek()
 	{
-		// determine with which button to start
-		int lFirstDayOfWeek = getSkinnable().getDisplayedCalendar().getFirstDayOfWeek();
-		int lFirstOfMonthIdx = getSkinnable().getDisplayedCalendar().get(java.util.Calendar.DAY_OF_WEEK) - lFirstDayOfWeek;
-		if (lFirstOfMonthIdx < 0) lFirstOfMonthIdx += 7;
+		Calendar lCalendar = (Calendar)getSkinnable().getDisplayedCalendar().clone();
+		lCalendar.set(Calendar.DATE, 1);
+		int lDayOfWeek = lCalendar.get(java.util.Calendar.DAY_OF_WEEK);
+		int lFirstDayOfWeek = lCalendar.getFirstDayOfWeek();
+		int lFirstOfMonthIdx = lDayOfWeek - lFirstDayOfWeek;
 		return lFirstOfMonthIdx;
 	}
 	
