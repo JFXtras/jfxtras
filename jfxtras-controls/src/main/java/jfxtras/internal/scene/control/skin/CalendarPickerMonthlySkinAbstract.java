@@ -40,7 +40,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javafx.beans.InvalidationListener;
 import javafx.scene.control.SkinBase;
 import jfxtras.scene.control.CalendarPicker;
-import jfxtras.test.TestUtil;
 
 /**
  * This class contains common code to support skins that shows a month at once.
