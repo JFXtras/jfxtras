@@ -29,6 +29,7 @@
 
 package jfxtras.scene.control.test;
 
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -675,4 +676,21 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("[2013-01-02T08:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
 	}
 
+	
+	/**
+	 * As reported in
+	 * https://groups.google.com/forum/#!topic/jfxtras-dev/Qpip31DsciA
+	 */
+	@Test
+	public void arrayIndexOutOfBounds()
+	{
+		// setup to may 2016
+		// The exception will occur during rendering and will be asserted in the configured Thread.currentThread().setDefaultUncaughtExceptionHandler
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			Calendar lCalendar = Calendar.getInstance(Locale.GERMANY);
+			lCalendar.set(2016, 5-1, 1);
+			calendarPicker.setDisplayedCalendar(lCalendar);
+			calendarPicker.setLocale(Locale.GERMANY);
+		});
+	}
 }

@@ -62,6 +62,15 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 		
 		// default we're in US locale: keep (re)setting this for each test
 		Locale.setDefault(Locale.US);
+
+		// catch any exception during rendering
+		Thread.currentThread().setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				Assert.fail("This should not occur\n" + e);
+			}
+		});
 	}
 	
 	@After

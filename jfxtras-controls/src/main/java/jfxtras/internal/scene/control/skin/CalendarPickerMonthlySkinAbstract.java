@@ -262,6 +262,9 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 		int lDayOfWeek = lCalendar.get(java.util.Calendar.DAY_OF_WEEK);
 		int lFirstDayOfWeek = lCalendar.getFirstDayOfWeek();
 		int lFirstOfMonthIdx = lDayOfWeek - lFirstDayOfWeek;
+		if (lFirstOfMonthIdx < 0) {
+			lFirstOfMonthIdx += 7;
+		}
 		return lFirstOfMonthIdx;
 	}
 	
