@@ -12,6 +12,9 @@ buildscript {
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
+plugins {
+  id "com.github.johnrengelman.shadow" version "1.2.3"
+}
 
 allprojects {
     apply plugin: 'java'
@@ -95,6 +98,20 @@ allprojects {
 }
 
 project(':') {
+	// these dependencies are needed to the shadow plugin knows what to include
+    dependencies {
+        compile project(':jfxtras-agenda')
+        compile project(':jfxtras-common')
+        compile project(':jfxtras-controls')
+        compile project(':jfxtras-menu')
+        compile project(':jfxtras-gauge-linear')
+        compile project(':jfxtras-font-roboto')
+    }
+}
+
+// configure shadowJar
+shadowJar {
+   classifier = null // do not append "-all", so the generated shadow jar replaces the existing jfxtras-all.jar (instead of generating jfxtras-all-all.jar)
 }
 
 subprojects {
