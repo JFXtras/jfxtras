@@ -103,6 +103,7 @@ project(':') {
         compile project(':jfxtras-agenda')
         compile project(':jfxtras-common')
         compile project(':jfxtras-controls')
+        compile project(':jfxtras-icalendarfx')
         compile project(':jfxtras-menu')
         compile project(':jfxtras-gauge-linear')
         compile project(':jfxtras-font-roboto')
@@ -172,6 +173,7 @@ subprojects {
 project(':jfxtras-agenda') {
     dependencies {
         compile project(':jfxtras-controls')
+        compile project(':jfxtras-icalendarfx')
         testCompile project(':jfxtras-test-support')
     }
 }
@@ -186,6 +188,12 @@ project(':jfxtras-controls') {
     dependencies {
         compile project(':jfxtras-common')
         compile project(':jfxtras-fxml')
+        testCompile project(':jfxtras-test-support')
+    }
+}
+
+project(':jfxtras-icalendarfx') {
+    dependencies {
         testCompile project(':jfxtras-test-support')
     }
 }

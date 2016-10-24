@@ -52,7 +52,6 @@ import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.DateTimeToCalendarHelper;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
-import jfxtras.scene.control.agenda.TemporalUtilities.TemporalType;
 
 /**
  * = Agenda
@@ -408,7 +407,8 @@ public class Agenda extends Control
 		public LocalDateTime getEndLocalDateTime() { return end; }
 		final LocalDateTime end; 
 		
-		public String toString() {
+		@Override
+        public String toString() {
 			return super.toString() + " " + start + " to " + end;
 		}
 	}
@@ -555,17 +555,22 @@ public class Agenda extends Control
         /** StartTime: */
         public ObjectProperty<Calendar> startTimeProperty() { return startTimeObjectProperty; }
         final private ObjectProperty<Calendar> startTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "startTime");
+        @Override
         public Calendar getStartTime() { return startTimeObjectProperty.getValue(); }
+        @Override
         public void setStartTime(Calendar value) { startTimeObjectProperty.setValue(value); }
         public AppointmentImpl withStartTime(Calendar value) { setStartTime(value); return this; }
         
         /** EndTime: */
         public ObjectProperty<Calendar> endTimeProperty() { return endTimeObjectProperty; }
         final private ObjectProperty<Calendar> endTimeObjectProperty = new SimpleObjectProperty<Calendar>(this, "endTime");
+        @Override
         public Calendar getEndTime() { return endTimeObjectProperty.getValue(); }
+        @Override
         public void setEndTime(Calendar value) { endTimeObjectProperty.setValue(value); }
         public AppointmentImpl withEndTime(Calendar value) { setEndTime(value); return this; } 
         
+        @Override
         public String toString()
         {
             return super.toString()
@@ -586,17 +591,22 @@ public class Agenda extends Control
         /** StartDateTime: */
         public ObjectProperty<LocalDateTime> startLocalDateTime() { return startLocalDateTime; }
         final private ObjectProperty<LocalDateTime> startLocalDateTime = new SimpleObjectProperty<LocalDateTime>(this, "startLocalDateTime");
+        @Override
         public LocalDateTime getStartLocalDateTime() { return startLocalDateTime.getValue(); }
+        @Override
         public void setStartLocalDateTime(LocalDateTime value) { startLocalDateTime.setValue(value); }
         public AppointmentImplLocal withStartLocalDateTime(LocalDateTime value) { setStartLocalDateTime(value); return this; }
         
         /** EndDateTime: */
         public ObjectProperty<LocalDateTime> endLocalDateTimeProperty() { return endLocalDateTimeProperty; }
         final private ObjectProperty<LocalDateTime> endLocalDateTimeProperty = new SimpleObjectProperty<LocalDateTime>(this, "endLocalDateTimeProperty");
+        @Override
         public LocalDateTime getEndLocalDateTime() { return endLocalDateTimeProperty.getValue(); }
+        @Override
         public void setEndLocalDateTime(LocalDateTime value) { endLocalDateTimeProperty.setValue(value); }
         public AppointmentImplLocal withEndLocalDateTime(LocalDateTime value) { setEndLocalDateTime(value); return this; } 
         
+        @Override
         public String toString()
         {
             return super.toString()
@@ -684,15 +694,19 @@ public class Agenda extends Control
 		/** Description: */
 		public ObjectProperty<String> descriptionProperty() { return descriptionObjectProperty; }
 		final private ObjectProperty<String> descriptionObjectProperty = new SimpleObjectProperty<String>(this, "description");
-		public String getDescription() { return descriptionObjectProperty.getValue(); }
-		public void setDescription(String value) { descriptionObjectProperty.setValue(value); }
+		@Override
+        public String getDescription() { return descriptionObjectProperty.getValue(); }
+		@Override
+        public void setDescription(String value) { descriptionObjectProperty.setValue(value); }
 		public AppointmentGroupImpl withDescription(String value) { setDescription(value); return this; } 
 				
 		/** StyleClass: */
 		public ObjectProperty<String> styleClassProperty() { return styleClassObjectProperty; }
 		final private ObjectProperty<String> styleClassObjectProperty = new SimpleObjectProperty<String>(this, "styleClass");
-		public String getStyleClass() { return styleClassObjectProperty.getValue(); }
-		public void setStyleClass(String value) { styleClassObjectProperty.setValue(value); }
+		@Override
+        public String getStyleClass() { return styleClassObjectProperty.getValue(); }
+		@Override
+        public void setStyleClass(String value) { styleClassObjectProperty.setValue(value); }
 		public AppointmentGroupImpl withStyleClass(String value) { setStyleClass(value); return this; }
 	}
 	

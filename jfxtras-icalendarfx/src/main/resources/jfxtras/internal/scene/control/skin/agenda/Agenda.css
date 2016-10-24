@@ -1,0 +1,164 @@
+@font-face {
+	src: url("/roboto/RobotoCondensed-Light.ttf");
+}
+
+.Agenda { 
+	-fx-font-family: "Roboto Condensed Light"; 	
+}
+
+.Agenda .Week {
+	-fx-background-color: WHITE;
+}
+
+.Agenda .HourLabel {
+	-fx-fill: BLACK;
+	-fx-stroke: transparent;
+}
+
+.Agenda .HourLine {
+	-fx-fill: transparent;
+	-fx-stroke: LIGHTGRAY;
+}
+
+.Agenda .HalfHourLine {
+	-fx-fill: transparent;
+	-fx-stroke: LIGHTGRAY;
+	-fx-stroke-dash-array: 4 4 4 4;
+}
+
+.Agenda .DayHeader {
+	-fx-border-color:LIGHTGRAY;
+	-fx-border-width: 0px 0px 0px 1px;
+}
+
+/*
+.Agenda .DayHeader .weekend { 
+	-fx-text-fill: BLACK;
+	-fx-font-weight: bold;
+}
+*/
+
+.Agenda .Day {
+	-fx-fill: transparent;
+	-fx-stroke: transparent;
+	-fx-border-color:LIGHTGRAY;
+	-fx-border-width: 0px 0px 0px 1px;
+}
+
+.Agenda .weekend {
+	-fx-background-color: #eeeeee90;
+}
+
+.Agenda .today {
+}
+
+.Agenda .Appointment {
+	-fx-border-color: WHITE;
+	-fx-border-width: 1px;
+}
+
+.Agenda .AppointmentTimeLabel {
+	-fx-fill: BLACK;
+	-fx-stroke: transparent;
+	-fx-font-size: 0.8em;
+}
+
+.Agenda .AppointmentLabel {
+	-fx-fill: BLACK;
+	-fx-stroke: transparent;
+}
+
+.group0 { -fx-background-color: #AC725E; -fx-fill: #AC725E; }
+.group1 { -fx-background-color: #D06B64; -fx-fill: #D06B64; }
+.group2 { -fx-background-color: #F83A22; -fx-fill: #F83A22; }
+.group3 { -fx-background-color: #FA573C; -fx-fill: #FA573C; }
+.group4 { -fx-background-color: #FF7537; -fx-fill: #FF7537; }
+.group5 { -fx-background-color: #FFAD46; -fx-fill: #FFAD46; }
+.group6 { -fx-background-color: #42D692; -fx-fill: #42D692; }
+.group7 { -fx-background-color: #16A765; -fx-fill: #16A765; }
+.group8 { -fx-background-color: #7BD148; -fx-fill: #7BD148; }
+.group9 { -fx-background-color: #B3DC6C; -fx-fill: #B3DC6C; }
+.group10 { -fx-background-color: #FBE983; -fx-fill: #FBE983; }
+.group11 { -fx-background-color: #FAD165; -fx-fill: #FAD165; }
+.group12 { -fx-background-color: #92E1C0; -fx-fill: #92E1C0; }
+.group13 { -fx-background-color: #9FE1E7; -fx-fill: #9FE1E7; }
+.group14 { -fx-background-color: #9FC6E7; -fx-fill: #9FC6E7; }
+.group15 { -fx-background-color: #4986E7; -fx-fill: #4986E7; }
+.group16 { -fx-background-color: #9A9CFF; -fx-fill: #9A9CFF; }
+.group17 { -fx-background-color: #B99AFF; -fx-fill: #B99AFF; }
+.group18 { -fx-background-color: #C2C2C2; -fx-fill: #C2C2C2; }
+.group19 { -fx-background-color: #CABDBF; -fx-fill: #CABDBF; }
+.group20 { -fx-background-color: #CCA6AC; -fx-fill: #CCA6AC; }
+.group21 { -fx-background-color: #F691B2; -fx-fill: #F691B2; }
+.group22 { -fx-background-color: #CD74E6; -fx-fill: #CD74E6; }
+.group23 { -fx-background-color: #A47AE2; -fx-fill: #A47AE2; }
+
+/* same colors as the bar chart
+.group0 { -fx-background-color: #f9d900; }
+.group1 { -fx-background-color: #a9e200; }
+.group2 { -fx-background-color: #22bad9; }
+.group3 { -fx-background-color: #0181e2; }
+.group4 { -fx-background-color: #2f357f; }
+.group5 { -fx-background-color: #860061; }
+.group6 { -fx-background-color: #c62b00; }
+.group7 { -fx-background-color: #ff5700; } 
+ */
+ 
+.Agenda .DurationDragger {
+	-fx-fill: #00000040;	
+}
+
+.Agenda .MenuIcon {
+	-fx-fill: #00000040;	
+}
+
+.Agenda .GhostRectangle {
+	-fx-fill: transparent;
+	-fx-stroke: #00000080;
+    -fx-stroke-width: 1;
+    -fx-stroke-dash-array: 4 4 4 4;
+}
+
+.Agenda .Selected { 
+	-xfx-color: -fx-focused-base;
+	-fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+	-fx-background-insets: -1.4, 0, 1, 2;
+	-fx-background-radius: 6.4, 5, 4, 3;
+}
+
+.Agenda .Now {
+	-fx-fill: #FF000088;
+	-fx-stroke: WHITE;
+}
+.Agenda .History {
+	-fx-stroke: transparent;
+	-fx-fill: #FFFFFF70;
+}
+
+.AgendaPopup {
+	-fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+	-fx-background-insets: 0 0 -1 0,0,1,2;
+	-fx-background-radius: 5,5,4,3;
+	-fx-padding: 0.766667em 0.733333em 0.75em 0.733333em;
+	-fx-text-fill: -fx-text-base-color;
+}
+
+.AgendaPopup .AppointmentGroups {
+}
+
+.AgendaPopup .AppointmentGroup {
+	-fx-border-color: WHITE;
+	-fx-border-width: 1px;
+}
+
+.AgendaPopup .close-icon  {
+    -fx-image: url("AgendaWeekSkinPopupCloseWindowIcon.png");
+}
+
+.AgendaPopup .delete-icon  {
+    -fx-image: url("AgendaWeekSkinDeleteIcon.png");
+}
+
+.AgendaPopup .action-icon  {
+    -fx-image: url("AgendaWeekSkinActionIcon.png");
+}

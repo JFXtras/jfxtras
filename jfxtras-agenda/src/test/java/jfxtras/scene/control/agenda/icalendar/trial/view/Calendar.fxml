@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="agendaBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfxtras.labs.icalendaragenda.trial.controller.CalendarController">
+   <top>
+      <HBox styleClass="simple-border2" stylesheets="@../main.css" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#handleToday" text="today">
+               <HBox.margin>
+                  <Insets right="15.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#handleDateDecrement" text="&lt;" />
+            <Button mnemonicParsing="false" onAction="#handleDateIncrement" text="&gt;" />
+            <VBox alignment="CENTER_LEFT">
+               <children>
+                  <Label fx:id="dateLabel" contentDisplay="TOP" text="the date" />
+               </children>
+               <HBox.margin>
+                  <Insets left="15.0" />
+               </HBox.margin>
+            </VBox>
+            <HBox prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <HBox spacing="5.0">
+               <children>
+                  <ToggleButton fx:id="daySkinButton" mnemonicParsing="false" onAction="#handleDaySkin" text="day" />
+                  <ToggleButton fx:id="weekSkinButton" mnemonicParsing="false" onAction="#handleWeekSkin" text="week" />
+                  <ToggleButton fx:id="monthSkinButton" disable="true" mnemonicParsing="false" text="month" />
+                  <ToggleButton fx:id="agendaSkinButton" disable="true" mnemonicParsing="false" text="agenda" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </top>
+</BorderPane>

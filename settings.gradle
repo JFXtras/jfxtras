@@ -1,5 +1,6 @@
 rootProject.name = 'jfxtras-all'
 
+include 'jfxtras-icalendarfx'
 include 'jfxtras-agenda'
 include 'jfxtras-controls'
 include 'jfxtras-common'
