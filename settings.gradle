@@ -1,10 +1,11 @@
 rootProject.name = 'jfxtras-all'
 
-include 'jfxtras-icalendarfx'
 include 'jfxtras-agenda'
 include 'jfxtras-controls'
 include 'jfxtras-common'
 include 'jfxtras-fxml'
+include 'jfxtras-icalendarfx'
+include 'jfxtras-icalendaragenda'
 include 'jfxtras-window'
 include 'jfxtras-menu'
 include 'jfxtras-gauge-linear'

@@ -1,0 +1,102 @@
+.background-gradient {
+	-fx-background-color:
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+}
+
+.leftBox {
+	-fx-background-color:
+        linear-gradient(#38424b 0%, #1f2429 20%, #191d22 100%),
+        linear-gradient(#20262b, #191d22),
+        radial-gradient(center 50% 0%, radius 100%, rgba(114,131,148,0.9), rgba(255,255,255,0));
+}
+
+.button-not-now {
+    -fx-background-color:
+        linear-gradient(
+            derive(grey, 120%), 
+            derive(grey, 90%)
+        ),
+        radial-gradient(
+            center 50% -40%, 
+            radius 180%, 
+            derive(grey, 95%) 55%, 
+            derive(grey, 75%) 55%
+        );
+    -fx-background-radius: 4, 3;
+    -fx-background-insets: 0, 1;
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.55) , 5, 0.0 , 0 , 1 );
+    -fx-text-fill: derive(grey, -60%);
+    -fx-padding: 3 11 3 11;
+
+}
+
+
+.background-grid {
+    -fx-background-image: url("CoarseGrid.png");
+    -fx-background-repeat: repeat;
+}
+
+.background3 {
+    -fx-background-color: gainsboro;
+    -fx-fill: #AC725E;
+}
+
+.simple-border {
+  -fx-border-color: black;
+  -fx-border-width: 1;
+  -fx-padding: 0 10 10 10;
+}
+
+.simple-border:disabled {
+  -fx-border-color: grey;
+}
+
+.simple-border2 {
+  -fx-border-color: black;
+  -fx-border-width: 1;
+  -fx-padding: 5 5 5 5;
+}
+
+.bordered-titled-border {
+  -fx-content-display: top;
+  -fx-padding: 0 10 10 10;
+  -fx-background-color: transparent;
+  -fx-border-color: black;
+  -fx-border-width: 1;
+}
+
+.bordered-titled-border:disabled {
+  -fx-border-color: transparent;
+}
+
+.bordered-titled-title {
+  -fx-translate-y: -8;
+  -fx-font-size: 10;
+  -fx-padding: 0 5 0 5;
+}
+
+
+.title-font {
+	-fx-font-size: 24;
+}
+
+.table-view .column-header .label {
+  -fx-text-alignment: center;
+ }
+  
+ .centered-column {
+ 	-fx-alignment: CENTER
+ }
+
+.Popup {
+	-fx-background-insets: 0 0 -1 0,0,1,2;
+	-fx-background-radius: 5,5,4,3;
+	-fx-padding: 0.766667em 0.733333em 0.75em 0.733333em;
+	-fx-text-fill: -fx-text-base-color;
+}
+
+.check-icon {
+	-fx-image: url("check.png");
+}

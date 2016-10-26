@@ -200,7 +200,6 @@ project(':jfxtras-icalendarfx') {
 
 project(':jfxtras-icalendaragenda') {
     dependencies {
-        compile project(':jfxtras-agenda')
         compile project(':jfxtras-controls')
         compile project(':jfxtras-icalendarfx')
         testCompile project(':jfxtras-test-support')
