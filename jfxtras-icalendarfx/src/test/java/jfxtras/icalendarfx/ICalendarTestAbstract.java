@@ -8,13 +8,10 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.temporal.Temporal;
-import java.util.Comparator;
 
 import jfxtras.icalendarfx.components.DaylightSavingTime;
 import jfxtras.icalendarfx.components.StandardTime;
 import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.components.VPrimary;
 import jfxtras.icalendarfx.components.VTimeZone;
 import jfxtras.icalendarfx.properties.component.descriptive.Status.StatusType;
 import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
@@ -22,27 +19,26 @@ import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonth;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonthDay;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByWeekNumber;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransparencyType;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 
 public abstract class ICalendarTestAbstract
 {
-    /** Sorts by DTSTART, then by the string content */
-    public final static Comparator<VPrimary<?>> VCOMPONENT_COMPARATOR = (VPrimary<?> v1, VPrimary<?> v2) ->
-    {
-        if ((v1.getDateTimeStart() != null) && (v2.getDateTimeStart() != null))
-        {
-            Temporal t1 = v1.getDateTimeStart().getValue();
-            Temporal t2 = v2.getDateTimeStart().getValue();
-            int dtstartCompare = DateTimeUtilities.TEMPORAL_COMPARATOR2.compare(t1, t2);
-            if (dtstartCompare != 0) return dtstartCompare;
-        }
-        return v1.toContent().compareTo(v2.toContent());
-    };
+//    /** Sorts by DTSTART, then by the string content */
+//    public final static Comparator<VPrimary<?>> VCOMPONENT_COMPARATOR = (VPrimary<?> v1, VPrimary<?> v2) ->
+//    {
+//        if ((v1.getDateTimeStart() != null) && (v2.getDateTimeStart() != null))
+//        {
+//            Temporal t1 = v1.getDateTimeStart().getValue();
+//            Temporal t2 = v2.getDateTimeStart().getValue();
+//            int dtstartCompare = DateTimeUtilities.TEMPORAL_COMPARATOR2.compare(t1, t2);
+//            if (dtstartCompare != 0) return dtstartCompare;
+//        }
+//        return v1.toContent().compareTo(v2.toContent());
+//    };
     
     /** FREQ=YEARLY; */
     protected VEvent getYearly1()

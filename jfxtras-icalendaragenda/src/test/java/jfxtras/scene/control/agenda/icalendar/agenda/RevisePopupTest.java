@@ -60,7 +60,7 @@ public class RevisePopupTest extends AgendaTestAbstract
                 );
         assertEquals(expectedSummaries, summaries);
         assertEquals(2, agenda.getVCalendar().getVEvents().size());
-        agenda.getVCalendar().getVEvents().sort(VPrimary.VPRIMARY_COMPARATOR);
+        agenda.getVCalendar().getVEvents().sort(VPrimary.DTSTART_COMPARATOR);
         VEvent vComponentOriginal = agenda.getVCalendar().getVEvents().get(0);
         VEvent vComponentIndividual = agenda.getVCalendar().getVEvents().get(1);
 

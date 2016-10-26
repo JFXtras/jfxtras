@@ -185,7 +185,7 @@ public class SimplePublishTest
         mainVCalendar.processITIPMessage(iTIPMessage);
         
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentRepeats = vComponents.get(0);
 
         // confirm change
@@ -299,7 +299,7 @@ public class SimplePublishTest
         mainVCalendar.processITIPMessage(VCalendar.parse(publish));
         
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         
         VEvent expectedVComponent = ICalendarStaticComponents.getDaily1()
                 .withSummary("Edited summary")
@@ -353,7 +353,7 @@ public class SimplePublishTest
                 "END:VCALENDAR";
         mainVCalendar.processITIPMessage(iTIPMessage);
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentFuture = vComponents.get(1);
         VEvent myComponentOriginal = vComponents.get(0);
         assertEquals(LocalDateTime.of(2016, 5, 16, 9, 0), myComponentFuture.getDateTimeStart().getValue());        
@@ -409,7 +409,7 @@ public class SimplePublishTest
         mainVCalendar.processITIPMessage(iTIPMessage);
                 
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentFuture = vComponents.get(1);
         VEvent myComponentOriginal = vComponents.get(0);
         assertEquals(LocalDateTime.of(2016, 5, 16, 9, 0), myComponentFuture.getDateTimeStart().getValue());        

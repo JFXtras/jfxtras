@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VPrimary;
@@ -55,7 +54,7 @@ public class ReviseThisAndFutureTest
                 .withVComponentOriginal(vComponentOriginal);
         List<VCalendar> iTIPMessages = reviser.revise();
         iTIPMessages.forEach(message -> mainVCalendar.processITIPMessage(message));
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentFuture = vComponents.get(1);
         
         String expectediTIPMessage =
@@ -142,7 +141,7 @@ public class ReviseThisAndFutureTest
                 .collect(Collectors.joining(System.lineSeparator()));
         
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent newVComponentFuture = vComponents.get(1);
         
         String expectediTIPMessage =
@@ -236,7 +235,7 @@ public class ReviseThisAndFutureTest
                 .collect(Collectors.joining(System.lineSeparator()));
 
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent newVComponentFuture = vComponents.get(2);
 
         String expectediTIPMessage =
@@ -321,7 +320,7 @@ public class ReviseThisAndFutureTest
 
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent newVComponentFuture = vComponents.get(1);
         
         String expectediTIPMessage =
@@ -407,7 +406,7 @@ public class ReviseThisAndFutureTest
 
         mainVCalendar.processITIPMessage(iTIPMessage);
         assertEquals(3, vComponents.size());
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent newVComponentFuture = vComponents.get(1);
         VEvent newVComponentRecurrence = vComponents.get(2);
         
@@ -491,7 +490,7 @@ public class ReviseThisAndFutureTest
         List<VCalendar> iTIPMessages = reviser.revise();
         
         iTIPMessages.forEach(message -> mainVCalendar.processITIPMessage(message));
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentFuture = vComponents.get(1);
         
         String iTIPMessage = iTIPMessages.stream()

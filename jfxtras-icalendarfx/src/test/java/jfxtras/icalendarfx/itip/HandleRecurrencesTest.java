@@ -12,9 +12,9 @@ import org.junit.Test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.ICalendarStaticComponents;
-import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VPrimary;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
@@ -241,7 +241,7 @@ public class HandleRecurrencesTest
                 "END:VEVENT";
         mainVCalendar.processITIPMessage(iTIPMessage);
 
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         assertEquals(3, vComponents.size());
         VEvent myComponent1 = vComponents.get(0);
         VEvent myComponent2 = vComponents.get(1);
@@ -323,7 +323,7 @@ public class HandleRecurrencesTest
         mainVCalendar.processITIPMessage(iTIPMessage);
 
         assertEquals(2, vComponents.size());
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentFuture = vComponents.get(1);
         VEvent myComponentOriginal = vComponents.get(0);
         
@@ -420,7 +420,7 @@ public class HandleRecurrencesTest
                 "END:VCALENDAR";
         mainVCalendar.processITIPMessage(iTIPMessage);
         assertEquals(4, vComponents.size());
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentOriginal = vComponents.get(0);
         // vComponent #1 is recurrence before (unchanged)
         VEvent myComponentFuture = vComponents.get(2);
@@ -517,7 +517,7 @@ public class HandleRecurrencesTest
         mainVCalendar.processITIPMessage(iTIPMessage);
 
         assertEquals(3, vComponents.size());
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentOriginal = vComponents.get(0);
         VEvent newVComponentFuture = vComponents.get(1);
         VEvent myComponentRecurrence = vComponents.get(2);

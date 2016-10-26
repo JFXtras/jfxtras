@@ -52,7 +52,7 @@ public class ReviseOneTest
         List<VCalendar> iTIPMessages = reviser.revise();
 
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         vComponents.forEach(System.out::println);
         VEvent myComponentIndividual = vComponents.get(1);
         
@@ -150,7 +150,7 @@ public class ReviseOneTest
         
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent individualComponent = vComponents.get(1);
         
         String expectediTIPMessage =
@@ -209,7 +209,7 @@ public class ReviseOneTest
         
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent individualComponent = vComponents.get(1);
         
         String expectediTIPMessage =

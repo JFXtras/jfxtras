@@ -13,7 +13,6 @@ import org.junit.Test;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.ICalendarStaticComponents;
-import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VPrimary;
@@ -135,7 +134,7 @@ public class WholeDayTest
 
 
         assertEquals(2, vComponents.size());
-        Collections.sort(vComponents, VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent newVComponentOriginal = vComponents.get(0);
         VEvent newVComponentFuture = vComponents.get(1);
 
@@ -221,7 +220,7 @@ public class WholeDayTest
         mainVCalendar.processITIPMessage(iTIPMessage);
         
         assertEquals(3, vComponents.size());
-        FXCollections.sort(vComponents, ICalendarTestAbstract.VCOMPONENT_COMPARATOR);
+        FXCollections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentOriginal = vComponents.get(0);
         VEvent newVComponentFuture = vComponents.get(1);
         VEvent myComponentRecurrence = vComponents.get(2);

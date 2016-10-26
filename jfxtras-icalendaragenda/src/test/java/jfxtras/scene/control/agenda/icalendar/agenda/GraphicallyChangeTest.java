@@ -99,7 +99,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         assertEquals(expectedStarts, starts);
         
         // check VEvent
-        Collections.sort(agenda.getVCalendar().getVEvents(), VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(agenda.getVCalendar().getVEvents(), VPrimary.DTSTART_COMPARATOR);
         assertEquals(2, agenda.getVCalendar().getAllVComponents().size());
         VEvent expectedVEvent0 = ICalendarStaticComponents.getDaily1();
         VEvent editedVEvent0 = agenda.getVCalendar().getVEvents().get(0);
@@ -204,7 +204,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         assertEquals(expectedStarts, starts);
         
         // check VEvent
-        Collections.sort(agenda.getVCalendar().getVEvents(), VPrimary.VPRIMARY_COMPARATOR);
+        Collections.sort(agenda.getVCalendar().getVEvents(), VPrimary.DTSTART_COMPARATOR);
         assertEquals(2, agenda.getVCalendar().getAllVComponents().size());
         VEvent expectedVEvent0 = ICalendarStaticComponents.getDaily1()
                 .withRecurrenceRule(new RecurrenceRule2()
