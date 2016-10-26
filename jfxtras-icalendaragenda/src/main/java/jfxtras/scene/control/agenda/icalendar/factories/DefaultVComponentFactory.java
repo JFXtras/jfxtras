@@ -41,30 +41,52 @@ public class DefaultVComponentFactory extends VComponentFactory<Appointment>
         boolean hasEnd = appointment.getEndTemporal() != null;
         if (hasEnd)
         {
-            newVComponent = new VEvent()
-                    .withOrganizer(organizer)
-                    .withSummary(summary)
-                    .withCategories(category)
-                    .withDateTimeStart(dtstart)
-                    .withDateTimeEnd(dtend)
-                    .withDescription(description)
-                    .withLocation(location)
-                    .withDateTimeCreated(dtCreated)
-                    .withDateTimeStamp(dtCreated)
-                    .withUniqueIdentifier(); // using default UID generator
-//            System.out.println("newVComponent" + newVComponent);
+            newVComponent = new VEvent();
+            newVComponent.withOrganizer(organizer);
+            newVComponent.withSummary(summary);
+            newVComponent.withCategories(category);
+            newVComponent.withDateTimeStart(dtstart);
+            ((VEvent) newVComponent).withDateTimeEnd(dtend);
+            ((VEvent) newVComponent).withDescription(description);
+            ((VEvent) newVComponent).setLocation(location);
+            newVComponent.setDateTimeCreated(dtCreated);
+            newVComponent.setDateTimeStamp(dtCreated);
+            newVComponent.setUniqueIdentifier(); // using default UID generator
+            // TODO - GRADLE WON'T ALLOW CHAINING AS SEEN BELOW.  WHY???
+//            newVComponent = new VEvent()
+//                    .withOrganizer(organizer)
+//                    .withSummary(summary)
+//                    .withCategories(category)
+//                    .withDateTimeStart(dtstart)
+//                    .withDateTimeEnd(dtend)
+//                    .withDescription(description)
+//                    .withLocation(location)
+//                    .withDateTimeCreated(dtCreated)
+//                    .withDateTimeStamp(dtCreated)
+//                    .withUniqueIdentifier(); // using default UID generator
         } else
         {
-            newVComponent = new VTodo()
-                    .withOrganizer(organizer)
-                    .withSummary(summary)
-                    .withCategories(category)
-                    .withDateTimeStart(dtstart)
-                    .withDescription(description)
-                    .withLocation(location)
-                    .withDateTimeCreated(dtCreated)
-                    .withDateTimeStamp(dtCreated)
-                    .withUniqueIdentifier();
+            newVComponent = new VTodo();
+            newVComponent.withOrganizer(organizer);
+            newVComponent.withSummary(summary);
+            newVComponent.withCategories(category);
+            newVComponent.withDateTimeStart(dtstart);
+            ((VTodo) newVComponent).withDescription(description);
+            ((VTodo) newVComponent).setLocation(location);
+            newVComponent.setDateTimeCreated(dtCreated);
+            newVComponent.setDateTimeStamp(dtCreated);
+            newVComponent.setUniqueIdentifier(); // using default UID generator
+            // TODO - GRADLE WON'T ALLOW CHAINING AS SEEN BELOW.  WHY???
+//          newVComponent = new VTodo()
+//          .withOrganizer(organizer)
+//          .withSummary(summary)
+//          .withCategories(category)
+//          .withDateTimeStart(dtstart)
+//          .withDescription(description)
+//          .withLocation(location)
+//          .withDateTimeCreated(dtCreated)
+//          .withDateTimeStamp(dtCreated)
+//          .withUniqueIdentifier();
         }
         /* Note: If other VComponents are to be supported then other tests to determine
          * which type of VComponent the Appointment represents will need to be created.

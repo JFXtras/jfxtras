@@ -6,6 +6,7 @@ import java.time.temporal.Temporal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javafx.util.Pair;
 import jfxtras.icalendarfx.components.VDisplayable;
@@ -51,7 +52,10 @@ public enum ChangeDialogOption
        }
         
        Temporal lastRecurrence = vComponentEdited.lastRecurrence();
-       Temporal firstRecurrence = vComponentEdited.streamRecurrences().findFirst().get();
+       // TODO - Gradle requires variable s.  I can't inline it or I get a compile error.
+       Stream<Temporal> s = vComponentEdited.streamRecurrences();
+       Temporal firstRecurrence = s.findFirst().get();
+//       Temporal firstRecurrence = vComponentEdited.streamRecurrences().findFirst().get();
        boolean isLastRecurrence = (lastRecurrence == null) ? false : startRecurrence.equals(lastRecurrence);
        boolean isAfterLastRecurrence = (lastRecurrence == null) ? false : DateTimeUtilities.isAfter(startRecurrence, lastRecurrence);
        boolean isFirstRecurrence = startRecurrence.equals(firstRecurrence);

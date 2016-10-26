@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -66,7 +67,9 @@ public abstract class RecurrenceFactory<R>
             endRange2 = vComponent.getDateTimeStart().getValue().with(getEndRange());            
         }
         // make recurrences
-        vComponent.streamRecurrences(startRange2, endRange2)
+//        vComponent.streamRecurrences(startRange2, endRange2) // Gradle won't compile with this line.  I don't understand why.
+        Stream<Temporal> streamRecurrences = vComponent.streamRecurrences(startRange2, endRange2);
+        streamRecurrences
             .forEach(startTemporal -> 
             {
                 R recurrence = makeRecurrence(vComponent, startTemporal);
