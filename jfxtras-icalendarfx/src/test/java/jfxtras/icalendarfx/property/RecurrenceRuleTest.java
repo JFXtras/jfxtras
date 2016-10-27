@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -202,5 +203,14 @@ public class RecurrenceRuleTest
         property1.getValue().setUntil((Until) null);
         RecurrenceRule expectedProperty = RecurrenceRule.parse("FREQ=DAILY;INTERVAL=2");
         assertEquals(expectedProperty, property1);
+    }
+    
+    @Test
+    public void canDetectErrors()
+    {
+        RecurrenceRule r = new RecurrenceRule(); // value can't be null
+        List<String> errors = r.errors();
+        List<String> expected = Arrays.asList("RRULE value is null.  The property MUST have a value.");
+        assertEquals(expected, errors);
     }
 }

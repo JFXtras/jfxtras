@@ -1,4 +1,4 @@
-package jfxtras.icalendarfx.property.rrule;
+package jfxtras.icalendarfx.parameter.rrule;
 
 import static org.junit.Assert.assertEquals;
 
@@ -14,37 +14,37 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByHour;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.BySecond;
 
-public class ByHourTest
+public class BySecondTest
 {
     @Test
-    public void canParseByHour()
+    public void canParseBySecond()
     {
-        ByHour element = new ByHour(10,20);
+        BySecond element = new BySecond(10,20);
         assertEquals(Arrays.asList(10,20), element.getValue());
-        assertEquals("BYHOUR=10,20", element.toContent());
+        assertEquals("BYSECOND=10,20", element.toContent());
     }
     
     /*
-    DTSTART:20160104T000000
-    RRULE:FREQ=MINUTELY;BYHOUR=10,12
+    DTSTART:20160101T100000
+    RRULE:FREQ=SECONDLY;BYSECOND=10,15,20
      */
     @Test
-    public void canStreamByHour()
+    public void canStreamBySecond()
     {
-        ByHour element = new ByHour(10,12);
-        LocalDateTime dateTimeStart = LocalDateTime.of(2016, 1, 4, 10, 0);
-        ChronoUnit frequency = ChronoUnit.MINUTES;
-        TemporalAdjuster adjuster = (temporal) -> temporal.plus(30, frequency);
+        BySecond element = new BySecond(10,15,20);
+        LocalDateTime dateTimeStart = LocalDateTime.of(2016, 1, 1, 10, 10);
+        ChronoUnit frequency = ChronoUnit.SECONDS;
+        TemporalAdjuster adjuster = (temporal) -> temporal.plus(1, frequency);
         Stream<Temporal> inStream = Stream.iterate(dateTimeStart, a -> a.with(adjuster));
         Stream<Temporal> recurrenceStream = element.streamRecurrences(inStream, frequency, dateTimeStart);
         List<LocalDateTime> expectedRecurrences = new ArrayList<>(Arrays.asList(
-                LocalDateTime.of(2016, 1, 4, 10, 0)
-              , LocalDateTime.of(2016, 1, 4, 10, 30)
-              , LocalDateTime.of(2016, 1, 4, 12, 0)
-              , LocalDateTime.of(2016, 1, 4, 12, 30)
-              , LocalDateTime.of(2016, 1, 5, 10, 0)
+                LocalDateTime.of(2016, 1, 1, 10, 10, 10)
+              , LocalDateTime.of(2016, 1, 1, 10, 10, 15)
+              , LocalDateTime.of(2016, 1, 1, 10, 10, 20)
+              , LocalDateTime.of(2016, 1, 1, 10, 11, 10)
+              , LocalDateTime.of(2016, 1, 1, 10, 11, 15)
                 ));
         List<Temporal> madeRecurrences = recurrenceStream.limit(5).collect(Collectors.toList());
         assertEquals(expectedRecurrences, madeRecurrences);
@@ -52,31 +52,31 @@ public class ByHourTest
     
     /*
     DTSTART:20160505T100000
-    RRULE:FREQ=YEARLY;BYMONTH=4,5
+    RRULE:FREQ=DAILY;BYSECOND=1,2,3
      */
     @Test
-    public void canStreamByHour2()
+    public void canStreamBySecond2()
     {
-        ByHour element = new ByHour(10,11,12);
-        LocalDateTime dateTimeStart = LocalDateTime.of(2016, 5, 5, 10, 0);
-        ChronoUnit frequency = ChronoUnit.YEARS;
+        BySecond element = new BySecond(10,20);
+        LocalDateTime dateTimeStart = LocalDateTime.of(2016, 5, 5, 10, 10);
+        ChronoUnit frequency = ChronoUnit.DAYS;
         TemporalAdjuster adjuster = (temporal) -> temporal.plus(1, frequency);
         Stream<Temporal> inStream = Stream.iterate(dateTimeStart, a -> a.with(adjuster));
         Stream<Temporal> recurrenceStream = element.streamRecurrences(inStream, frequency, dateTimeStart);
         List<LocalDateTime> expectedRecurrences = new ArrayList<>(Arrays.asList(
-                LocalDateTime.of(2016, 5, 5, 10, 0)
-              , LocalDateTime.of(2016, 5, 5, 11, 0)
-              , LocalDateTime.of(2016, 5, 5, 12, 0)
-              , LocalDateTime.of(2017, 5, 5, 10, 0)
-              , LocalDateTime.of(2017, 5, 5, 11, 0)
+                LocalDateTime.of(2016, 5, 5, 10, 10, 10)
+              , LocalDateTime.of(2016, 5, 5, 10, 10, 20)
+              , LocalDateTime.of(2016, 5, 6, 10, 10, 10)
+              , LocalDateTime.of(2016, 5, 6, 10, 10, 20)
+              , LocalDateTime.of(2016, 5, 7, 10, 10, 10)
                 ));
         List<Temporal> madeRecurrences = recurrenceStream.limit(5).collect(Collectors.toList());
         assertEquals(expectedRecurrences, madeRecurrences);
     }
     
     @Test  (expected = IllegalArgumentException.class)
-    public void canCatchOutOfRangeByHour()
+    public void canCatchOutOfRangeBySecond()
     {
-        new ByHour(1100,200,300);
+        new BySecond(1100,200,300);
     }
 }

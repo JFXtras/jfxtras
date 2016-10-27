@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAccessor;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -253,7 +254,13 @@ public enum ValueType
         @Override
         public <T> List<String> createErrorList(T value)
         {
-            return ((RecurrenceRule2) value).errors();
+            if (value != null)
+            {
+                return ((RecurrenceRule2) value).errors();
+            } else
+            {
+                return Collections.emptyList();
+            }
         }
     },
     /* Note: This string converter is only acceptable for values converted to Stings

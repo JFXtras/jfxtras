@@ -150,6 +150,7 @@ public class ProcessCancel implements Processable
                         List<VDisplayable<?>> relatedVComponents = mainVCalendar.uidComponentsMap().get(uid);
                         List<? extends VComponent> vComponents = mainVCalendar.getVComponents(c.getClass());
                         vComponents.removeAll(relatedVComponents);
+                        log.add("SUCCESS: canceled " + vDisplayable.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue());
                     } else
                     {
                         VDisplayable<?> matchingVComponent = mainVCalendar.uidComponentsMap().get(uid)
@@ -170,6 +171,7 @@ public class ProcessCancel implements Processable
                             {
                                 List<? extends VComponent> vComponents = mainVCalendar.getVComponents(c.getClass());
                                 vComponents.remove(matchingVComponent);
+                                log.add("SUCCESS: canceled " + c.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue());
                             } else
                             {
                                 throw new RuntimeException("Can't cancel because SEQUENCE in cancel message(" + newSequence +
@@ -207,6 +209,7 @@ public class ProcessCancel implements Processable
                                         } else
                                         {
                                             parentVComponent.getExceptionDates().get(0).getValue().add(recurrenceID.getValue());
+                                            log.add("SUCCESS: canceled " + recurrenceID.getValue() + " for "+ parentVComponent.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue());
 //                                            parentVComponent.getExceptionDates().add(new ExceptionDates(recurrenceID.getValue()));
                                         }
                                     // Delete THIS-AND-FUTURE
@@ -223,6 +226,7 @@ public class ProcessCancel implements Processable
                                             until = LocalDate.from(previous);                    
                                         }
                                         parentVComponent.getRecurrenceRule().getValue().setUntil(until);
+                                        log.add("SUCCESS: canceled recurrences after " + until + " for "+ parentVComponent.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue());
                                         
                                         // Remove orphaned recurrence children
                                         List<VDisplayable<?>> orphanedChildren = parentVComponent.orphanedRecurrenceChildren();

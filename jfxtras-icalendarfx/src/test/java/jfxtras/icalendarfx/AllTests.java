@@ -47,6 +47,14 @@ import jfxtras.icalendarfx.parameter.ParseDateTest;
 import jfxtras.icalendarfx.parameter.ParseParameterTest;
 import jfxtras.icalendarfx.parameter.ParticipationRoleTest;
 import jfxtras.icalendarfx.parameter.RelationshipTypeTest;
+import jfxtras.icalendarfx.parameter.rrule.ByDayTest;
+import jfxtras.icalendarfx.parameter.rrule.ByMonthTest;
+import jfxtras.icalendarfx.parameter.rrule.ByWeekNumberTest;
+import jfxtras.icalendarfx.parameter.rrule.ByYearDayTest;
+import jfxtras.icalendarfx.parameter.rrule.FrequencyTest;
+import jfxtras.icalendarfx.parameter.rrule.RRuleErrorTest;
+import jfxtras.icalendarfx.parameter.rrule.RecurrenceRuleParseTest;
+import jfxtras.icalendarfx.parameter.rrule.RecurrenceRuleStreamTest;
 import jfxtras.icalendarfx.property.ActionTest;
 import jfxtras.icalendarfx.property.AttachmentTest;
 import jfxtras.icalendarfx.property.AttendeeTest;
@@ -88,14 +96,6 @@ import jfxtras.icalendarfx.property.TriggerTest;
 import jfxtras.icalendarfx.property.URLTest;
 import jfxtras.icalendarfx.property.UniqueIdentifierTest;
 import jfxtras.icalendarfx.property.calendar.MethodTest;
-import jfxtras.icalendarfx.property.rrule.ByDayTest;
-import jfxtras.icalendarfx.property.rrule.ByMonthTest;
-import jfxtras.icalendarfx.property.rrule.ByWeekNumberTest;
-import jfxtras.icalendarfx.property.rrule.ByYearDayTest;
-import jfxtras.icalendarfx.property.rrule.FrequencyTest;
-import jfxtras.icalendarfx.property.rrule.RRuleErrorTest;
-import jfxtras.icalendarfx.property.rrule.RecurrenceRuleParseTest;
-import jfxtras.icalendarfx.property.rrule.RecurrenceRuleStreamTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
