@@ -1,7 +1,7 @@
 package jfxtras.icalendarfx;
 
 /**
- * Interface for a child calendar component that has a {@link VParent}
+ * A child calendar component that has a {@link VParent}
  * 
  * @author David Bal
  *

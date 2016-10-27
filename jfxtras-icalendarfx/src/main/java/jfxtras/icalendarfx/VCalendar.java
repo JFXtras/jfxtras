@@ -37,9 +37,9 @@ import jfxtras.icalendarfx.itip.Processable;
 import jfxtras.icalendarfx.properties.PropertyType;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.Method;
+import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
 import jfxtras.icalendarfx.properties.calendar.Version;
-import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
 import jfxtras.icalendarfx.properties.component.misc.RequestStatus;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
@@ -282,70 +282,7 @@ public class VCalendar extends VParentBase
         setNonStandard(FXCollections.observableArrayList(nonStandardProps));
         return this;
     }
-    
-//    /**
-//     *<p>Allows other properties registered
-//     * with IANA to be specified in any calendar components.</p>
-//     */
-//    public ObjectProperty<ObservableList<IANAProperty>> ianaProperty()
-//    {
-//        if (ianaProps == null)
-//        {
-//            ianaProps = new SimpleObjectProperty<>(this, PropertyType.IANA_PROPERTY.toString());
-//        }
-//        return ianaProps;
-//    }
-//    public ObservableList<IANAProperty> getIana()
-//    {
-//        return (ianaProps == null) ? null : ianaProps.get();
-//    }
-//    private ObjectProperty<ObservableList<IANAProperty>> ianaProps;
-//    public void setIana(ObservableList<IANAProperty> ianaProps)
-//    {
-//        if (ianaProps != null)
-//        {
-//            orderer().registerSortOrderProperty(ianaProps);
-//        } else
-//        {
-//            orderer().unregisterSortOrderProperty(ianaProperty().get());
-//        }
-//        ianaProperty().set(ianaProps);
-//    }
-//    /**
-//     * Sets the value of the {@link #IANAProperty()} by parsing a vararg of
-//     * iCalendar content text representing individual {@link IANAProperty} objects.
-//     * 
-//     * @return - this class for chaining
-//     */
-//    public VCalendar withIana(String...ianaProps)
-//    {
-//        List<IANAProperty> a = Arrays.stream(ianaProps)
-//                .map(c -> IANAProperty.parse(c))
-//                .collect(Collectors.toList());
-//        setIana(FXCollections.observableArrayList(a));
-//        return this;
-//    }
-//    /**
-//     * Sets the value of the {@link #IANAProperty()}
-//     * 
-//     * @return - this class for chaining
-//     */
-//    public VCalendar withIana(ObservableList<IANAProperty> ianaProps)
-//    {
-//        setIana(ianaProps);
-//        return this;
-//    }
-//    /**
-//     * Sets the value of the {@link #IANAProperty()} from a vararg of {@link IANAProperty} objects.
-//     * 
-//     * @return - this class for chaining
-//     */ 
-//    public VCalendar withIana(IANAProperty...ianaProps)
-//    {
-//        setIana(FXCollections.observableArrayList(ianaProps));
-//        return this;
-//    }
-//    
+   
     /*
      * Calendar Components
      */

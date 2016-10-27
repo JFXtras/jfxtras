@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import jfxtras.labs.samples.repeatagenda.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root prefHeight="530.0" prefWidth="392.0" spacing="7.0" stylesheets="@PopupStyles.css" type="javafx.scene.layout.VBox" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox>
+         <children>
+            <CheckBox fx:id="repeatableCheckBox" alignment="TOP_LEFT" contentDisplay="TOP" mnemonicParsing="false" text="%repeatable" textAlignment="RIGHT">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </CheckBox>
+         </children>
+         <VBox.margin>
+            <Insets left="10.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+      <VBox styleClass="simple-border">
+         <children>
+            <Label text="%repeat.rules">
+               <styleClass>
+                  <String fx:value="bordered-titled-title" />
+                  <String fx:value="background3" />
+               </styleClass>
+            </Label>
+            <GridPane fx:id="repeatableGridPane" disable="true" hgap="4.0" vgap="4.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.0" minWidth="10.0" percentWidth="28.0" prefWidth="82.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="%repeats" GridPane.halignment="RIGHT">
+                     <GridPane.margin>
+                        <Insets bottom="8.0" />
+                     </GridPane.margin></Label>
+                  <ComboBox fx:id="frequencyComboBox" prefWidth="150.0" GridPane.columnIndex="1">
+                     <GridPane.margin>
+                        <Insets bottom="8.0" />
+                     </GridPane.margin></ComboBox>
+                  <Label text="%repeat.every" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                  <HBox alignment="CENTER_LEFT" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <Spinner fx:id="intervalSpinner" />
+                        <Label fx:id="frequencyLabel" text="%events" />
+                     </children>
+                  </HBox>
+                  <Label fx:id="weeklyLabel" text="%repeats.on" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                  <Label text="%starts.on" GridPane.halignment="RIGHT" GridPane.rowIndex="5" />
+                  <Label text="%ends" GridPane.halignment="RIGHT" GridPane.rowIndex="6" />
+                  <Label text="%summary" GridPane.halignment="RIGHT" GridPane.rowIndex="14" GridPane.rowSpan="2" />
+                  <DatePicker fx:id="startDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <Label fx:id="repeatSummaryLabel" style="-fx-font-weight: bold;" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="14" GridPane.rowSpan="2" />
+                  <HBox fx:id="weeklyHBox" alignment="CENTER" spacing="5.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <CheckBox fx:id="sundayCheckBox" mnemonicParsing="false" text="%sunday.letter" />
+                        <CheckBox fx:id="mondayCheckBox" mnemonicParsing="false" text="%monday.letter" />
+                        <CheckBox fx:id="tuesdayCheckBox" mnemonicParsing="false" text="%tuesday.letter" />
+                        <CheckBox fx:id="wednesdayCheckBox" mnemonicParsing="false" text="%wednesday.letter" />
+                        <CheckBox fx:id="thursdayCheckBox" mnemonicParsing="false" text="%thursday.letter" />
+                        <CheckBox fx:id="fridayCheckBox" mnemonicParsing="false" text="%friday.letter" />
+                        <CheckBox fx:id="saturdayCheckBox" mnemonicParsing="false" text="%saturday.letter" />
+                     </children>
+                  </HBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="6" GridPane.rowSpan="3">
+                     <children>
+                        <RadioButton fx:id="endNeverRadioButton" mnemonicParsing="false" text="%never" />
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <RadioButton fx:id="endAfterRadioButton" mnemonicParsing="false" text="%after" />
+                              <Spinner fx:id="endAfterEventsSpinner" disable="true" prefHeight="26.0" prefWidth="105.0" />
+                              <Label fx:id="eventLabel" disable="true" text="%events" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                           <children>
+                              <RadioButton fx:id="untilRadioButton" mnemonicParsing="false" text="%on" />
+                              <DatePicker fx:id="untilDatePicker" disable="true" />
+                           </children>
+                        </HBox>
+                     </children>
+                     <GridPane.margin>
+                        <Insets top="5.0" />
+                     </GridPane.margin>
+                  </VBox>
+                  <VBox fx:id="monthlyVBox" spacing="5.0" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3" GridPane.rowSpan="2">
+                     <children>
+                        <RadioButton fx:id="dayOfMonthRadioButton" mnemonicParsing="false" text="%day.of.month" />
+                        <RadioButton fx:id="dayOfWeekRadioButton" mnemonicParsing="false" text="%day.of.week" />
+                     </children>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets top="4.0" />
+                     </padding>
+                  </VBox>
+                  <Label fx:id="monthlyLabel" text="%repeat.by" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                  <VBox spacing="5.0" GridPane.columnIndex="1" GridPane.rowIndex="9" GridPane.rowSpan="5">
+                     <children>
+                        <HBox spacing="5.0">
+                           <children>
+                              <ComboBox fx:id="exceptionComboBox" prefWidth="200.0" />
+                              <Button fx:id="addExceptionButton" disable="true" mnemonicParsing="false" onAction="#handleAddException" text="%add" />
+                           </children>
+                        </HBox>
+                        <VBox alignment="CENTER" spacing="5.0">
+                           <children>
+                              <ListView fx:id="exceptionsListView" prefHeight="200.0" prefWidth="175.0" />
+                              <Button fx:id="removeExceptionButton" disable="true" mnemonicParsing="false" onAction="#handleRemoveException" text="%remove" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <GridPane.margin>
+                        <Insets top="5.0" />
+                     </GridPane.margin>
+                  </VBox>
+                  <Label text="%exceptions" GridPane.halignment="RIGHT" GridPane.rowIndex="9">
+                     <GridPane.margin>
+                        <Insets top="10.0" />
+                     </GridPane.margin>
+                  </Label>
+               </children>
+            </GridPane>
+         </children>
+         <VBox.margin>
+            <Insets top="5.0" />
+         </VBox.margin>
+      </VBox>
+      <VBox prefHeight="200.0" prefWidth="100.0" />
+   </children>
+   <styleClass>
+      <String fx:value="simple-border2" />
+      <String fx:value="background3" />
+   </styleClass>
+</fx:root>

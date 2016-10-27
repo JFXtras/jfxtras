@@ -138,13 +138,13 @@ public abstract class VPrimary<T> extends VCommon<T>
     public void setDateTimeStart(DateTimeStart dtStart) { dateTimeStartProperty().set(dtStart); }
     public void setDateTimeStart(Temporal temporal)
     {
-        if (getDateTimeStart() == null)
-        {
-            setDateTimeStart(new DateTimeStart(temporal));
-        } else
-        {
-            getDateTimeStart().setValue(temporal);
-        }
+//        if (getDateTimeStart() == null)
+//        {
+        setDateTimeStart(new DateTimeStart(temporal));
+//        } else
+//        {
+//            getDateTimeStart().setValue(temporal);
+//        }
     }
     public T withDateTimeStart(DateTimeStart dtStart)
     {

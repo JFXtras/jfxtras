@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import jfxtras.scene.control.*?>
+
+<fx:root fx:id="editDisplayableTabPane" onKeyPressed="#handlePressEnter" prefHeight="570.0" prefWidth="400.0" styleClass="background3" stylesheets="@PopupStyles.css" tabClosingPolicy="UNAVAILABLE" type="javafx.scene.control.TabPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+  <tabs>
+    <Tab fx:id="descriptiveTab" closable="false" text="%appointment">
+      <content>
+        <AnchorPane fx:id="descriptiveAnchorPane">
+               <children>
+                  <HBox alignment="CENTER" spacing="5.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Button fx:id="cancelComponentButton" mnemonicParsing="false" onAction="#handleCancelButton" text="%cancel" />
+                        <Button fx:id="saveComponentButton" layoutX="170.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleSaveButton" text="%save" />
+                        <Button fx:id="deleteComponentButton" mnemonicParsing="false" onAction="#handleDeleteButton" text="%delete" />
+                     </children>
+                  </HBox>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+    <Tab fx:id="recurrenceRuleTab" closable="false" text="%repeatable">
+         <content>
+            <AnchorPane fx:id="recurrenceRuleAnchorPane">
+               <children>
+                  <HBox alignment="CENTER" spacing="5.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Button fx:id="cancelRepeatButton" mnemonicParsing="false" onAction="#handleCancelButton" text="%cancel" />
+                        <Button fx:id="saveRepeatButton" layoutX="170.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleSaveButton" text="%save" />
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </content>
+    </Tab>
+  </tabs>
+</fx:root>

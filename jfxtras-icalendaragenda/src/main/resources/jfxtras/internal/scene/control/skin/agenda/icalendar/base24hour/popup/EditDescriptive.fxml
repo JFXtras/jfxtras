@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import jfxtras.labs.samples.repeatagenda.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import jfxtras.scene.control.*?>
+<?import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.*?>
+
+<fx:root fx:id="componentEditVBox" prefHeight="495.0" prefWidth="400.0" spacing="7.0" styleClass="background3" stylesheets="@PopupStyles.css" type="javafx.scene.layout.VBox" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="5.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox styleClass="simple-border">
+         <children>
+            <Label text="%time">
+               <styleClass>
+                  <String fx:value="bordered-titled-title" />
+                  <String fx:value="background3" />
+               </styleClass>
+            </Label>
+            <GridPane fx:id="timeGridPane">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="%start.time" GridPane.halignment="RIGHT" />
+                  <Label fx:id="endLabel" text="%end.time" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="wholeDayCheckBox" mnemonicParsing="false" text="%whole.day" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+         </children>
+         <VBox.margin>
+            <Insets top="2.0" />
+         </VBox.margin>
+      </VBox>
+      <VBox styleClass="simple-border">
+         <children>
+            <Label text="%details">
+               <styleClass>
+                  <String fx:value="bordered-titled-title" />
+                  <String fx:value="background3" />
+               </styleClass>
+            </Label>
+            <GridPane hgap="4.0" vgap="4.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="%summary" GridPane.halignment="RIGHT" />
+                  <Label text="%description" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                  <TextField fx:id="summaryTextField" GridPane.columnIndex="1" />
+                  <TextArea fx:id="descriptionTextArea" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+                  <Label fx:id="locationLabel" text="%location" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                  <TextField fx:id="locationTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               </children>
+               <VBox.margin>
+                  <Insets top="3.0" />
+               </VBox.margin>
+            </GridPane>
+         </children>
+      </VBox>
+      <VBox prefHeight="120.0" prefWidth="100.0" spacing="5.0" styleClass="simple-border">
+         <children>
+            <Label text="%category">
+               <styleClass>
+                  <String fx:value="bordered-titled-title" />
+                  <String fx:value="background3" />
+               </styleClass>
+            </Label>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="25.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="%name" GridPane.halignment="RIGHT" />
+                  <TextField fx:id="categoryTextField" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+            <HBox alignment="CENTER">
+               <children>
+                 <CategorySelectionGridPane fx:id="categorySelectionGridPane" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</fx:root>
