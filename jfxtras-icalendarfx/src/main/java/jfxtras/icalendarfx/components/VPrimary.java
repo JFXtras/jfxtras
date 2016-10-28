@@ -118,24 +118,27 @@ public abstract class VPrimary<T> extends VCommon<T>
     
     public DateTimeStart getDateTimeStart() { return (dateTimeStart == null) ? null : dateTimeStartProperty().get(); }
     private ObjectProperty<DateTimeStart> dateTimeStart;
+    public void setDateTimeStart(DateTimeStart dtStart)
+    {
+        dateTimeStartProperty().set(dtStart);
+    }
     public void setDateTimeStart(String dtStart)
     {
-        if (getDateTimeStart() == null)
-        {
+//        if (getDateTimeStart() == null)
+//        {
             setDateTimeStart(DateTimeStart.parse(dtStart));
-        } else
-        {
-            DateTimeStart temp = DateTimeStart.parse(dtStart);
-            if (temp.getValue().getClass().equals(getDateTimeStart().getValue().getClass()))
-            {
-                getDateTimeStart().setValue(temp.getValue());
-            } else
-            {
-                setDateTimeStart(temp);
-            }
-        }
+//        } else
+//        {
+//            DateTimeStart temp = DateTimeStart.parse(dtStart);
+//            if (temp.getValue().getClass().equals(getDateTimeStart().getValue().getClass()))
+//            {
+//                getDateTimeStart().setValue(temp.getValue());
+//            } else
+//            {
+//                setDateTimeStart(temp);
+//            }
+//        }
     }
-    public void setDateTimeStart(DateTimeStart dtStart) { dateTimeStartProperty().set(dtStart); }
     public void setDateTimeStart(Temporal temporal)
     {
 //        if (getDateTimeStart() == null)

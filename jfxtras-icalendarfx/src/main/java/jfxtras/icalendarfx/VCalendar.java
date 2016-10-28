@@ -1010,10 +1010,26 @@ public class VCalendar extends VParentBase
         });
     }
     
+    @Override
+    public List<String> errors()
+    {
+        List<String> errors = super.errors();
+        if (getProductIdentifier() == null)
+        {
+            errors.add("PRODID is not present.  PRODID is REQUIRED and MUST NOT occur more than once");
+        }
+        if (getVersion() == null)
+        {
+            errors.add("VERSION is not present.  VERSION is REQUIRED and MUST NOT occur more than once");
+        }
+        return errors;
+    }
+
+    
     /*
      * CONSTRUCTORS
      */
-    
+    /** Creates an empty VCalendar */
     public VCalendar()
     {
         setMethodProcessFactory(new DefaultITIPFactory());
@@ -1030,8 +1046,7 @@ public class VCalendar extends VParentBase
     public VCalendar(VCalendar source)
     {
         this();
-        source.copyInto(this);
-//        copyChildrenFrom(source);    
+        source.copyInto(this);  
     }
 
     /*

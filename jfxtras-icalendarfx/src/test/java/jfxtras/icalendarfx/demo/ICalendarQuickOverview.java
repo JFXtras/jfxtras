@@ -18,8 +18,11 @@ import org.junit.Test;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.VChild;
+import jfxtras.icalendarfx.VParent;
 import jfxtras.icalendarfx.components.DaylightSavingTime;
 import jfxtras.icalendarfx.components.StandardTime;
 import jfxtras.icalendarfx.components.VEvent;
@@ -28,6 +31,7 @@ import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
 import jfxtras.icalendarfx.properties.calendar.Version;
+import jfxtras.icalendarfx.properties.component.descriptive.Comment;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
@@ -37,15 +41,13 @@ import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 
 public class ICalendarQuickOverview
 {
-    // Different ways to create calendar objects and add children properties
-    
     @Test
     public void canCreateEmptyVCalendar()
     {
-        // create empty VCalendar - top-level object stores all calendar information
+        // Create top-level calendar element
         VCalendar c = new VCalendar();
         
-        // Show content. All calendar elements have toContent method - to produce text  like what is shown in RFC 5545
+        // Produce text like what is shown in RFC 5545
         String content = c.toContent();
         System.out.println(content);
     }
@@ -53,19 +55,45 @@ public class ICalendarQuickOverview
     @Test
     public void canAddElementsWithSetters()
     {
-        VCalendar c = new VCalendar();
-        c.setProductIdentifier("-//jfxtras/iCalendarFx//EN"); // PRODID calendar property
+        VCalendar calendar = new VCalendar();
         
-        VEvent e = new VEvent();
+        VEvent event = new VEvent();
         // Properties can be set a number of ways
-        e.setDateTimeStart(new DateTimeStart(LocalDateTime.of(2007, 11, 4, 20, 0))); // most explicit - reference to new property
-        e.setDateTimeStart("DTSTART:20071104T020000"); // by parsing iCalendar content
-        e.setDateTimeStart("20071104T020000"); // parsing iCalendar value (tag omitted)
-        e.setDateTimeStart(LocalDateTime.of(2007, 11, 4, 20, 0)); // passing value of property object
+        event.setDateTimeStart(new DateTimeStart(LocalDateTime.of(2007, 11, 4, 20, 0))); // most explicit - reference to new property
+        event.setDateTimeStart(LocalDateTime.of(2007, 11, 4, 20, 0)); // passing value of property object
+        event.setDateTimeStart("DTSTART:20071104T020000"); // by parsing iCalendar content
+        event.setDateTimeStart("20071104T020000"); // parsing iCalendar value (tag omitted)
         // the last three setters the API builds new DateTimeStart objects for you.
-        c.getVEvents().add(e);
+        calendar.getVEvents().add(event); // add the event to the calendar
+        calendar.setProductIdentifier("-//jfxtras/iCalendarFx//EN"); // PRODID calendar property
                 
-        System.out.println(c.toContent());
+        System.out.println(calendar.toContent());
+    }
+    
+    @Test
+    public void canAddElementsWithListSetters()
+    {
+        VEvent event = new VEvent();
+        Comment comment = Comment.parse("A comment");
+        ObservableList<Comment> comments = FXCollections.observableArrayList(comment);
+        event.setComments(comments);
+    }
+    
+    @Test // parse a string
+    public void canCreateVCalendarByChaining2()
+    {
+        
+VEvent event = new VEvent()
+    .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC)) // DTSTAMP component property
+    .withDateTimeStart(LocalDateTime.of(2015, 11, 3, 10, 0)) // DTSTART component property
+    .withDuration(Duration.ofMinutes(90)) // DURATION component property
+    .withRecurrenceRule(new RecurrenceRule2() // RRULE component property
+            .withFrequency(FrequencyType.MONTHLY) // FREQ rrule value element 
+            .withByRules(new ByMonth(Month.NOVEMBER, Month.DECEMBER),  // BYMONTH rrule value element 
+                    new ByDay(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))) // BYDAY rrule value element 
+    .withUniqueIdentifier("20150110T080000-0@jfxtras.org"); // UID component property
+String content = event.toContent();
+System.out.println(content);
     }
     
     @Test
@@ -149,24 +177,25 @@ public class ICalendarQuickOverview
                     .withUniqueIdentifier("20150110T080000-0@jfxtras.org")); // UID component property
         System.out.println(c.toContent());
     }
-    
+        
     @Test // parse a string
     public void canCreateVCalendarByParsing()
     {
-        String content =
-                "BEGIN:VCALENDAR" + System.lineSeparator() +
-                "VERSION:2.0" + System.lineSeparator() +
-                "PRODID:-//hacksw/handcal//NONSGML v1.0//EN" + System.lineSeparator() +
-                "BEGIN:VEVENT" + System.lineSeparator() +
-                "UID:19970610T172345Z-AF23B2@example.com" + System.lineSeparator() +
-                "DTSTAMP:19970610T172345Z" + System.lineSeparator() +
-                "DTSTART:19970714T170000Z" + System.lineSeparator() +
-                "DTEND:19970715T040000Z" + System.lineSeparator() +
-                "SUMMARY:Bastille Day Party" + System.lineSeparator() +
-                "END:VEVENT" + System.lineSeparator() +
-                "END:VCALENDAR";
-        VCalendar c = VCalendar.parse(content); // Note: can also parse files and readers
-        System.out.println(c.toContent());
+String nl = System.lineSeparator();
+String content =
+        "BEGIN:VCALENDAR" + nl +
+        "VERSION:2.0" + nl +
+        "PRODID:-//jfxtras/iCalendarFx//EN" + nl +
+        "BEGIN:VEVENT" + nl +
+        "UID:19970610T172345Z@jfxtras.org" + nl +
+        "DTSTAMP:19970610T172345Z" + nl +
+        "DTSTART:19970714T170000Z" + nl +
+        "DTEND:19970715T040000Z" + nl +
+        "SUMMARY:Bastille Day Party" + nl +
+        "END:VEVENT" + nl +
+        "END:VCALENDAR";
+VCalendar c = VCalendar.parse(content); // Note: can also parse files and readers
+System.out.println(c.toContent());
     }
     
     @Test // Can check if RFC 5545 rules are followed.
@@ -175,7 +204,7 @@ public class ICalendarQuickOverview
         VEvent e = new VEvent();
         List<String> errors = e.errors();
         errors.forEach(System.out::println);
-        System.out.println("isValid:" + e.isValid());
+        System.out.println("VEvent isValid:" + e.isValid());
         
         String content =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -191,7 +220,7 @@ public class ICalendarQuickOverview
                 "END:VCALENDAR";
         VCalendar c = VCalendar.parse(content); // Note: can also parse files and readers
         System.out.println(c.errors());
-        System.out.println("isValid:" + c.isValid());
+        System.out.println("VCalendar isValid:" + c.isValid());
     }
     
     // iCalendar Transport-Independent Interoperability Protocol (iTIP) message defined in RFC 5546
@@ -263,14 +292,14 @@ public class ICalendarQuickOverview
                 "DTEND;VALUE=DATE:19970715" + System.lineSeparator() +
                 "SUMMARY:Bastille Day Party" + System.lineSeparator() +
                 "END:VEVENT";
-        VEvent e = VEvent.parse(content); // Note: can also parse files and readers
+        VParent e = VEvent.parse(content); // Note: can also parse files and readers
 
         // children are component properties
         List<VChild> vEventChildren = e.childrenUnmodifiable();
         vEventChildren.forEach(System.out::println);   
         System.out.println();
 
-        DateTimeStart dtstart = e.getDateTimeStart();
+        VParent dtstart = ((VEvent) e).getDateTimeStart();
         // children are property parameters
         List<VChild> dtStartChildren = dtstart.childrenUnmodifiable();
         dtStartChildren.forEach(System.out::println);
@@ -288,9 +317,9 @@ public class ICalendarQuickOverview
     {
         String s = "RRULE:FREQ=DAILY;COUNT=10";
         RecurrenceRule rRule = RecurrenceRule.parse(s);
-        Temporal dateTimeStart = ZonedDateTime.of(LocalDateTime.of(1997, 9, 2, 9, 0), ZoneId.of("America/New_York"));
+        Temporal start = ZonedDateTime.of(LocalDateTime.of(1997, 9, 2, 9, 0), ZoneId.of("America/New_York"));
         rRule.getValue()
-                .streamRecurrences(dateTimeStart) // Make stream of date/time values here
+                .streamRecurrences(start) // Make stream of date/time values here
                 .forEach(System.out::println);
     }
     
@@ -314,7 +343,7 @@ public class ICalendarQuickOverview
                 .limit(5) // get only the quantity you want
                 .forEach(System.out::println);
     }
-
+    
     @Test // Bind two properties to synchronize data (e.g. between display control and application data)
     public void canBindProperties()
     {
@@ -339,5 +368,4 @@ public class ICalendarQuickOverview
         
         e.setDateTimeStart(new DateTimeStart(LocalDateTime.now())); // fires listener
     }
-    
 }
