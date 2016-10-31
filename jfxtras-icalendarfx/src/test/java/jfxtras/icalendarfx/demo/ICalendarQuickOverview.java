@@ -7,7 +7,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
@@ -15,14 +14,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import javafx.beans.InvalidationListener;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.VChild;
-import jfxtras.icalendarfx.VParent;
 import jfxtras.icalendarfx.components.DaylightSavingTime;
 import jfxtras.icalendarfx.components.StandardTime;
 import jfxtras.icalendarfx.components.VEvent;
@@ -32,6 +30,7 @@ import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.descriptive.Comment;
+import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
@@ -82,18 +81,17 @@ public class ICalendarQuickOverview
     @Test // parse a string
     public void canCreateVCalendarByChaining2()
     {
-        
-VEvent event = new VEvent()
-    .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC)) // DTSTAMP component property
-    .withDateTimeStart(LocalDateTime.of(2015, 11, 3, 10, 0)) // DTSTART component property
-    .withDuration(Duration.ofMinutes(90)) // DURATION component property
-    .withRecurrenceRule(new RecurrenceRule2() // RRULE component property
-            .withFrequency(FrequencyType.MONTHLY) // FREQ rrule value element 
-            .withByRules(new ByMonth(Month.NOVEMBER, Month.DECEMBER),  // BYMONTH rrule value element 
-                    new ByDay(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))) // BYDAY rrule value element 
-    .withUniqueIdentifier("20150110T080000-0@jfxtras.org"); // UID component property
-String content = event.toContent();
-System.out.println(content);
+        VEvent event = new VEvent()
+            .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC)) // DTSTAMP component property
+            .withDateTimeStart(LocalDateTime.of(2015, 11, 3, 10, 0)) // DTSTART component property
+            .withDuration(Duration.ofMinutes(90)) // DURATION component property
+            .withRecurrenceRule(new RecurrenceRule2() // RRULE component property
+                    .withFrequency(FrequencyType.MONTHLY) // FREQ rrule value element 
+                    .withByRules(new ByMonth(Month.NOVEMBER, Month.DECEMBER),  // BYMONTH rrule value element 
+                            new ByDay(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))) // BYDAY rrule value element 
+            .withUniqueIdentifier("20150110T080000-0@jfxtras.org"); // UID component property
+        String content = event.toContent();
+        System.out.println(content);
     }
     
     @Test
@@ -181,21 +179,21 @@ System.out.println(content);
     @Test // parse a string
     public void canCreateVCalendarByParsing()
     {
-String nl = System.lineSeparator();
-String content =
-        "BEGIN:VCALENDAR" + nl +
-        "VERSION:2.0" + nl +
-        "PRODID:-//jfxtras/iCalendarFx//EN" + nl +
-        "BEGIN:VEVENT" + nl +
-        "UID:19970610T172345Z@jfxtras.org" + nl +
-        "DTSTAMP:19970610T172345Z" + nl +
-        "DTSTART:19970714T170000Z" + nl +
-        "DTEND:19970715T040000Z" + nl +
-        "SUMMARY:Bastille Day Party" + nl +
-        "END:VEVENT" + nl +
-        "END:VCALENDAR";
-VCalendar c = VCalendar.parse(content); // Note: can also parse files and readers
-System.out.println(c.toContent());
+        String nl = System.lineSeparator();
+        String content =
+                "BEGIN:VCALENDAR" + nl +
+                "VERSION:2.0" + nl +
+                "PRODID:-//jfxtras/iCalendarFx//EN" + nl +
+                "BEGIN:VEVENT" + nl +
+                "UID:19970610T172345Z@jfxtras.org" + nl +
+                "DTSTAMP:19970610T172345Z" + nl +
+                "DTSTART:19970714T170000Z" + nl +
+                "DTEND:19970715T040000Z" + nl +
+                "SUMMARY:Bastille Day Party" + nl +
+                "END:VEVENT" + nl +
+                "END:VCALENDAR";
+        VCalendar c = VCalendar.parse(content); // Note: can also parse files and readers
+        System.out.println(c.toContent());
     }
     
     @Test // Can check if RFC 5545 rules are followed.
@@ -204,9 +202,13 @@ System.out.println(c.toContent());
         VEvent e = new VEvent();
         List<String> errors = e.errors();
         errors.forEach(System.out::println);
-        System.out.println("VEvent isValid:" + e.isValid());
         
-        String content =
+        String content = "SUMMARY;LANGUAGE=en:Party";
+        Summary summary = Summary.parse(content);
+        boolean b = summary.isValid();
+        System.out.println("isSumValid:" + b);
+        
+        String content2 =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "VERSION:2.0" + System.lineSeparator() +
                 "PRODID:-//hacksw/handcal//NONSGML v1.0//EN" + System.lineSeparator() +
@@ -218,7 +220,7 @@ System.out.println(c.toContent());
                 "SUMMARY:Bastille Day Party" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
-        VCalendar c = VCalendar.parse(content); // Note: can also parse files and readers
+        VCalendar c = VCalendar.parse(content2); // Note: can also parse files and readers
         System.out.println(c.errors());
         System.out.println("VCalendar isValid:" + c.isValid());
     }
@@ -229,22 +231,23 @@ System.out.println(c.toContent());
     @Test
     public void canProcessPublishiTIPMessage()
     {
+        String ls = System.lineSeparator();
         VCalendar main = new VCalendar();
-        String publish = "BEGIN:VCALENDAR" + System.lineSeparator() + 
-              "METHOD:PUBLISH" + System.lineSeparator() + 
-              "PRODID:-//Example/ExampleCalendarClient//EN" + System.lineSeparator() + 
-              "VERSION:2.0" + System.lineSeparator() + 
-              "BEGIN:VEVENT" + System.lineSeparator() + 
-              "ORGANIZER:mailto:a@example.com" + System.lineSeparator() + 
-              "DTSTART:19970701T200000Z" + System.lineSeparator() + 
-              "DTSTAMP:19970611T190000Z" + System.lineSeparator() + 
-              "SUMMARY:ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES" + System.lineSeparator() + 
-              "UID:0981234-1234234-23@example.com" + System.lineSeparator() + 
-              "END:VEVENT" + System.lineSeparator() + 
-              "END:VCALENDAR";
+        String publish = "BEGIN:VCALENDAR"+ls+
+         "METHOD:PUBLISH"+ls+
+         "PRODID:-//jfxtras/iCalendarFx//EN"+ls+
+         "VERSION:2.0"+ls+
+         "BEGIN:VEVENT"+ls+
+         "ORGANIZER:mailto:a@example.com"+ls+
+         "DTSTART:19970701T200000Z"+ls+
+         "DTSTAMP:19970611T190000Z"+ls+
+         "SUMMARY:Jim' Birthday Party"+ls+
+         "UID:1234234-23@example.com"+ls+
+         "END:VEVENT"+ls+
+         "END:VCALENDAR";
         List<String> log = main.processITIPMessage(publish);
+        System.out.println(main.toContent()+ls);
         log.forEach(System.out::println);
-        System.out.println(main.toContent());
     }
     
     @Test
@@ -284,25 +287,24 @@ System.out.println(c.toContent());
     @Test // parent-child hierarchy (e.g. find properties in a VEvent)
     public void canCreateChildrenList()
     {
-        String content =
-                "BEGIN:VEVENT" + System.lineSeparator() +
-                "UID:19970610T172345Z-AF23B2@example.com" + System.lineSeparator() +
-                "DTSTAMP:19970610T172345Z" + System.lineSeparator() +
-                "DTSTART;VALUE=DATE:19970714" + System.lineSeparator() +
-                "DTEND;VALUE=DATE:19970715" + System.lineSeparator() +
-                "SUMMARY:Bastille Day Party" + System.lineSeparator() +
-                "END:VEVENT";
-        VParent e = VEvent.parse(content); // Note: can also parse files and readers
-
-        // children are component properties
-        List<VChild> vEventChildren = e.childrenUnmodifiable();
-        vEventChildren.forEach(System.out::println);   
-        System.out.println();
-
-        VParent dtstart = ((VEvent) e).getDateTimeStart();
-        // children are property parameters
-        List<VChild> dtStartChildren = dtstart.childrenUnmodifiable();
-        dtStartChildren.forEach(System.out::println);
+        String ls = System.lineSeparator();
+        String content = "BEGIN:VEVENT"+ls+
+         "UID:AF23B2@example.com"+ls+
+         "DTSTAMP:19970610T172345Z"+ls+
+         "DTSTART;VALUE=DATE:19970714"+ls+
+         "SUMMARY:Bastille Day Party"+ls+
+         "END:VEVENT";
+        VEvent e = VEvent.parse(content);
+        
+        List<VChild> eChildren = e.childrenUnmodifiable();
+        eChildren.stream().map(c -> c.name())
+         .forEach(System.out::println);   
+        
+        DateTimeStart d = e.getDateTimeStart();
+        List<VChild> dChildren = d.childrenUnmodifiable();
+        dChildren.stream().map(c -> c.name())
+         .forEach(System.out::println);
+        System.out.println(d.getParent().name());
     }
     
     // A number of calendar components (e.g. VEVENT) can be repeatable - done by the recurrence rule property.
@@ -317,9 +319,9 @@ System.out.println(c.toContent());
     {
         String s = "RRULE:FREQ=DAILY;COUNT=10";
         RecurrenceRule rRule = RecurrenceRule.parse(s);
-        Temporal start = ZonedDateTime.of(LocalDateTime.of(1997, 9, 2, 9, 0), ZoneId.of("America/New_York"));
+        Temporal start = LocalDateTime.of(1997, 9, 2, 9, 0);
         rRule.getValue()
-                .streamRecurrences(start) // Make stream of date/time values here
+                .streamRecurrences(start)
                 .forEach(System.out::println);
     }
     
@@ -340,32 +342,28 @@ System.out.println(c.toContent());
         rRule.getValue()
                 .streamRecurrences(dateTimeStart) // infinite steam make here
                 .filter(t -> ((LocalDate) t).isAfter(LocalDate.of(2016, 1, 1)))
-                .limit(5) // get only the quantity you want
+                .limit(5) // must limit or goes forever
                 .forEach(System.out::println);
     }
     
     @Test // Bind two properties to synchronize data (e.g. between display control and application data)
     public void canBindProperties()
     {
-        VEvent applicationVEvent = new VEvent()
-                .withSummary("initial summary");
-                
-        StringProperty displayProperty = new SimpleStringProperty(); // make "display" property
-        applicationVEvent.getSummary().valueProperty().bind(displayProperty); // bind "application" property to "display" property
-        displayProperty.set("new summary"); // change "display" property and automatically change "application" property as well
-
-        System.out.println(applicationVEvent.toContent());
+        Summary s = Summary.parse("initial summary");
+        ObjectProperty<String> appProperty = s.valueProperty();
+        StringProperty displayProperty = new SimpleStringProperty();
+        appProperty.bind(displayProperty);
+        displayProperty.set("new summary");
+        System.out.println(s.toContent());
     }
     
     @Test
     public void canAttachListenerToProperties()
     {
         VEvent e = new VEvent()
-                .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 20, 0));
-        
-        InvalidationListener listener = (obs) -> System.out.println("Yikes! DTSTART changed.");
-        e.dateTimeStartProperty().addListener(listener);
-        
-        e.setDateTimeStart(new DateTimeStart(LocalDateTime.now())); // fires listener
+                .withDateTimeStart("19970611T190000Z");
+        e.dateTimeStartProperty().addListener((obs) -> 
+         System.out.println("Yikes! DTSTART changed." + obs));
+        e.setDateTimeStart("19970612T190000Z");
     }
 }

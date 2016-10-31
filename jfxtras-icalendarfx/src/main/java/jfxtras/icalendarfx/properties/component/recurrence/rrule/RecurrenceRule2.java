@@ -38,8 +38,8 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.BySecond;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByWeekNumber;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByYearDay;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
-import jfxtras.icalendarfx.utilities.ICalendarUtilities;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
+import jfxtras.icalendarfx.utilities.ICalendarUtilities;
 
 /**
  * RRULE
@@ -596,8 +596,9 @@ public class RecurrenceRule2 extends VParentBase implements VChild
     @Override
     public String toContent()
     {
-        return orderer().sortedContent().stream()
-              .collect(Collectors.joining(";"));
+        return childrenUnmodifiable().stream()
+                .map(c -> c.toContent())
+                .collect(Collectors.joining(";"));
     }
     
     @Override

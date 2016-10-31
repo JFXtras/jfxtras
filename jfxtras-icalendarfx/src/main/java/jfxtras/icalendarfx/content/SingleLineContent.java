@@ -24,11 +24,9 @@ public class SingleLineContent extends ContentLineBase
     public String execute()
     {
         StringBuilder builder = new StringBuilder(builderSize);
-//        if (name != null)
-//        {
-            builder.append(name.get());
-//        }
-        String elements = orderer().sortedContent().stream()
+        builder.append(name.get());
+        String elements = orderer().childrenUnmodifiable().stream()
+                .map(c -> c.toContent())
                 .collect(Collectors.joining(";"));
         if (! elements.isEmpty())
         {

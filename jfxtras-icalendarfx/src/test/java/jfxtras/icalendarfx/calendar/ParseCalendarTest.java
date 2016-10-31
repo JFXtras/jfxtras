@@ -158,13 +158,16 @@ public class ParseCalendarTest extends ICalendarTestAbstract
                 + "TRANSP:OPAQUE" + System.lineSeparator() // currently not supported
                 + "END:VEVENT";
         
-        VCalendar c = new VCalendar();
-        c.importVComponent(vEventString1);
-        c.importVComponent(vEventString2);
-        c.importVComponent(vEventString3);
+        VCalendar c = new VCalendar()
+                .withProductIdentifier("")
+                .withVersion(new Version());
+        c.addVComponent(vEventString1);
+        c.addVComponent(vEventString2);
+        c.addVComponent(vEventString3);
         assertEquals(3, c.getVEvents().size());
         assertEquals(1, c.getVEvents().get(0).recurrenceChildren().size());
         assertEquals(c.getVEvents().get(0), c.getVEvents().get(2).recurrenceParent());
+        System.out.println(c.errors());
         assertTrue(c.isValid());
     }
     

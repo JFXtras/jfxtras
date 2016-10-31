@@ -27,8 +27,9 @@ public class MultiLineContent extends ContentLineBase
     {
         StringBuilder builder = new StringBuilder(builderSize);
         builder.append(firstContentLine + System.lineSeparator());
-        String content = orderer().sortedContent().stream()
-              .collect(Collectors.joining(System.lineSeparator()));
+        String content = orderer().childrenUnmodifiable().stream()
+                .map(c -> c.toContent())
+                .collect(Collectors.joining(System.lineSeparator()));
         if (! content.isEmpty())
         {
             builder.append(content + System.lineSeparator());

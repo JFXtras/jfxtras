@@ -1,17 +1,13 @@
 package jfxtras.icalendarfx;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import javafx.util.Callback;
 import jfxtras.icalendarfx.content.ContentLineStrategy;
 import jfxtras.icalendarfx.utilities.Orderer;
-import jfxtras.icalendarfx.utilities.OrdererBase;
 
 /**
  * <p>Base class for parent calendar components.</p>
@@ -29,7 +25,7 @@ public abstract class VParentBase implements VParent
     /*
      * HANDLE SORT ORDER FOR CHILD ELEMENTS
      */
-    final private Orderer orderer = new OrdererBase(this);
+    final private Orderer orderer = new Orderer(this);
     /** Return the {@link Orderer} for this {@link VParent} */
     public Orderer orderer() { return orderer; }
     
@@ -51,12 +47,13 @@ public abstract class VParentBase implements VParent
     @Override
     public List<VChild> childrenUnmodifiable()
     {
-        return Collections.unmodifiableList(
-                orderer().elementSortOrderMap().entrySet().stream()
-                .sorted((Comparator<? super Entry<VChild, Integer>>) (e1, e2) -> e1.getValue().compareTo(e2.getValue()))
-                .map(e -> e.getKey())
-                .collect(Collectors.toList())
-                );
+        return orderer().childrenUnmodifiable();
+//        return Collections.unmodifiableList(
+//                orderer().elementSortOrderMap().entrySet().stream()
+//                .sorted((Comparator<? super Entry<VChild, Integer>>) (e1, e2) -> e1.getValue().compareTo(e2.getValue()))
+//                .map(e -> e.getKey())
+//                .collect(Collectors.toList())
+//                );
     }
     
 //    /** Copy parameters, properties, and subcomponents from source into this component,

@@ -14,13 +14,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.VChild;
 import jfxtras.icalendarfx.VParent;
 import jfxtras.icalendarfx.components.VComponentBase;
 import jfxtras.icalendarfx.properties.PropertyBase;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
 
-/** Maintains a sort order of {@link VChild} elements of a {@link VParent}
+/** Maintains a sort order of {@link C} elements of a {@link VParent}
  * 
  * @see VParent
  * @see VCalendar
@@ -28,43 +27,43 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2
  * @see PropertyBase
  * @see RecurrenceRule2
  *  */ 
-public class Orderer
+public class Orderer2<P, C>
 {
     final private VParent parent;
     
     /** 
-     * <p>Sort order map for {@link VChild} elements of a {@link VParent}.</p>
+     * <p>Sort order map for {@link C} elements of a {@link VParent}.</p>
      * 
-     * <p>The map key is a {@link VChild}.  The map value is its sort order.</p>
+     * <p>The map key is a {@link C}.  The map value is its sort order.</p>
      * 
      * <p>Under normal conditions, this map shouldn't be modified.  Only modify it when you want to force
      * a specific sort order.</p>
      * 
      * @return  the sort order map
      */
-    public Map<VChild, Integer> elementSortOrderMap() { return elementSortOrderMap; }
-    final private Map<VChild, Integer> elementSortOrderMap = new HashMap<>();
+    public Map<C, Integer> elementSortOrderMap() { return elementSortOrderMap; }
+    final private Map<C, Integer> elementSortOrderMap = new HashMap<>();
     private volatile Integer sortOrderCounter = 0;
 
     /*
      * CONSTRUCTOR
      */
     /** Create an {@link OrdererBase} for the {@link VParent} parameter */
-    public Orderer(VParent aParent)
+    public Orderer2(VParent aParent)
     {
         this.parent = aParent;
-        sortOrderListChangeListener = (ListChangeListener.Change<? extends VChild> change) ->
+        sortOrderListChangeListener = (ListChangeListener.Change<? extends C> change) ->
         {
             while (change.next())
             {
                 if (change.wasAdded())
                 {
-                    change.getAddedSubList().forEach(vChild ->  
+                    change.getAddedSubList().forEach(C ->  
                     {
-                        if (vChild != null)
+                        if (C != null)
                         {
-                            elementSortOrderMap.put(vChild, sortOrderCounter);
-                            vChild.setParent(parent);
+                            elementSortOrderMap.put(C, sortOrderCounter);
+//                            C.setParent(parent);
                             sortOrderCounter += 100;
                         }
                     });
@@ -98,7 +97,7 @@ public class Orderer
             {
                 elementSortOrderMap.put(newValue, sortOrder);
 //                System.out.println("add to map:" + newValue.toContent() + " " + elementSortOrderMap.size()+ " " + System.identityHashCode(parent));
-                newValue.setParent(parent);                
+//                newValue.setParent(parent);
             }
         };
     }
@@ -107,88 +106,88 @@ public class Orderer
      * Sort order listener for properties containing an ObservableList to 
      * maintains the {@link #elementSortOrderMap}
      */
-    final private ListChangeListener<VChild> sortOrderListChangeListener;
+    final private ListChangeListener<C> sortOrderListChangeListener;
 
     /**
-     * <p>Register an ObservableList with the {@link Orderer}.</p>
+     * <p>Register an ObservableList with the {@link Orderer2}.</p>
      * <p>Enables maintaining automatic sort order.</p>
      * 
      * @param list  ObservableList from a property containing an ObservableList
      */
-    public void registerSortOrderProperty(ObservableList<? extends VChild> list)
+    public void registerSortOrderProperty(ObservableList<? extends C> list)
     {
         list.addListener(sortOrderListChangeListener);
         if (! list.isEmpty())
         { // add existing elements to sort order
-            list.forEach(vChild ->  
+            list.forEach(C ->  
             {
-                if (elementSortOrderMap.get(vChild) == null)
+                if (elementSortOrderMap.get(C) == null)
                 {
-                    elementSortOrderMap.put(vChild, sortOrderCounter);
-                    vChild.setParent(parent);
+                    elementSortOrderMap.put(C, sortOrderCounter);
+//                    C.setParent(parent);
                     sortOrderCounter += 100;
                 }
             });
         }
     }
-    /** Unregister an ObservableList with the {@link Orderer} */
-    public void unregisterSortOrderProperty(ObservableList<? extends VChild> list)
+    /** Unregister an ObservableList with the {@link Orderer2} */
+    public void unregisterSortOrderProperty(ObservableList<? extends C> list)
     {
         if ((list != null) && ! list.isEmpty())
         { // remove existing elements to sort order
-            list.forEach(vChild -> elementSortOrderMap.remove(vChild));
+            list.forEach(C -> elementSortOrderMap.remove(C));
         }
     }
     
     /** Sort order listener for object properties to 
      * maintains the {@link #elementSortOrderMap}
      */
-    final private ChangeListener<? super VChild> sortOrderChangeListener;
+    final private ChangeListener<? super C> sortOrderChangeListener;
 
     /**
-     * <p>Register an ObjectProperty with the {@link Orderer}.</p>
+     * <p>Register an ObjectProperty with the {@link Orderer2}.</p>
      * <p>Enables maintaining automatic sort order.</p>
      * 
      * @param list  the property to be registered
      */
-    public void registerSortOrderProperty(ObjectProperty<? extends VChild> property)
+    public void registerSortOrderProperty(ObjectProperty<? extends C> property)
     {
         property.addListener(sortOrderChangeListener);
         if (property.get() != null)
         { // add existing element to sort order
             elementSortOrderMap.put(property.get(), sortOrderCounter);
-            property.get().setParent(parent);
+//            property.get().setParent(parent);
             sortOrderCounter += 100;
         }
     }
-    /** Unregister an ObjectProperty with the {@link Orderer} */
-    public void unregisterSortOrderProperty(ObjectProperty<? extends VChild> property)
+    /** Unregister an ObjectProperty with the {@link Orderer2} */
+    public void unregisterSortOrderProperty(ObjectProperty<? extends C> property)
     {
         elementSortOrderMap.remove(property);
     }
     
-    public List<VChild> childrenUnmodifiable()
+    public List<C> childrenUnmodifiable()
     {
         return Collections.unmodifiableList(
                 elementSortOrderMap().entrySet().stream()
-                .sorted((Comparator<? super Entry<VChild, Integer>>) (e1, e2) -> e1.getValue().compareTo(e2.getValue()))
+                .sorted((Comparator<? super Entry<C, Integer>>) (e1, e2) -> e1.getValue().compareTo(e2.getValue()))
                 .map(e -> e.getKey())
                 .collect(Collectors.toList())
                 );
     }
     
 //    /**
-//     * <p>The list of sorted content text for {@link VChild} elements.
+//     * <p>The list of sorted content text for {@link C} elements.
 //     * 
 //     * @return - unmodifiable list of sorted content lines
 //     * @see VElement#toContent()
 //     */
-//    public List<String> sortedContent()
+//    public List<C> sortedContent()
 //    {        
 //        List<String> content = new ArrayList<>();
 //        // apply sort order (if element doesn't exist in map, don't sort)
 //        elementSortOrderMap.entrySet().stream()
-//                .sorted((Comparator<? super Entry<VChild, Integer>>) (e1, e2) -> 
+//                .sorted((Comparator<? super Entry<C, Integer>>) (e1, e2) -> 
 //                {
 //                    return e1.getValue().compareTo(e2.getValue());
 //                })
@@ -196,7 +195,7 @@ public class Orderer
 //                {
 //                    if (p.getKey() != null)
 //                    {
-//                        content.add(p.getKey().toContent());
+//                        content.add(p.getKey());
 //                    }
 //                });
 //        
@@ -213,12 +212,12 @@ public class Orderer
      * <p>If the number of elements in the oldList is greater than the number of elements in the newList then only the
      * number of elements in the oldList have their sort order copied to the newList elements.  Remaining newList elements
      * will get new sort order values when they are added.</p>
-     * @param <T> class of VChild in the lists
+     * @param <T> class of C in the lists
      * 
      * @param oldList
      * @param newList
      */
-    public <T extends VChild> void replaceList(ObservableList<T> oldList, ObservableList<T> newList)
+    public <T extends C> void replaceList(ObservableList<T> oldList, ObservableList<T> newList)
     {
         Iterator<T> newItemIterator = newList.iterator();
         Iterator<Integer> oldSortValueIterator = oldList.stream()

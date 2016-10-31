@@ -459,7 +459,6 @@ public class VCalendar extends VParentBase
     
     /** Create a VComponent by parsing component text and add it to the appropriate list 
      * @see #addVComponent(VComponent)*/
-    @Deprecated // not worth having
     public void addVComponent(String contentText)
     {
         VComponent vComponent = SimpleVComponentFactory.emptyVComponent(contentText);
