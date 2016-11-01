@@ -18,7 +18,7 @@ import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
@@ -179,7 +179,7 @@ public class ReviseAllTest
         vComponents.add(vComponentEdited);
         
         vComponentEdited.setSummary("Edited summary");
-        vComponentEdited.setRecurrenceRule(new RecurrenceRule2()
+        vComponentEdited.setRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withByRules(new ByDay(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)));
 
@@ -232,7 +232,7 @@ public class ReviseAllTest
         vComponents.add(vComponentOriginal);
         // make recurrence instances
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule((RecurrenceRule2) null)
+                .withRecurrenceRule((RecurrenceRuleValue) null)
                 .withRecurrenceId(LocalDateTime.of(2016, 5, 17, 10, 0))
                 .withSummary("recurrence summary")
                 .withDateTimeStart(LocalDateTime.of(2016, 5, 17, 8, 30))
@@ -240,7 +240,7 @@ public class ReviseAllTest
         vComponents.add(vComponentRecurrence);
         
         VEvent vComponentRecurrence2 = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule((RecurrenceRule2) null)
+                .withRecurrenceRule((RecurrenceRuleValue) null)
                 .withRecurrenceId(LocalDateTime.of(2016, 5, 19, 10, 0))
                 .withSummary("recurrence summary2")
                 .withDateTimeStart(LocalDateTime.of(2016, 5, 19, 7, 30))
@@ -325,7 +325,7 @@ public class ReviseAllTest
         
         // make recurrence instances
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule((RecurrenceRule2) null)
+                .withRecurrenceRule((RecurrenceRuleValue) null)
                 .withRecurrenceId(LocalDateTime.of(2016, 5, 17, 10, 0))
                 .withSummary("recurrence summary")
                 .withDateTimeStart(LocalDateTime.of(2016, 5, 17, 8, 30))
@@ -333,7 +333,7 @@ public class ReviseAllTest
         vComponents.add(vComponentRecurrence);
         
         VEvent vComponentRecurrence2 = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule((RecurrenceRule2) null)
+                .withRecurrenceRule((RecurrenceRuleValue) null)
                 .withRecurrenceId(LocalDateTime.of(2016, 5, 19, 10, 0))
                 .withSummary("recurrence summary2")
                 .withDateTimeStart(LocalDateTime.of(2016, 5, 19, 7, 30))

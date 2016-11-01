@@ -32,7 +32,7 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup.EditRecurrenceRuleVBox;
 import jfxtras.scene.control.LocalDateTextField;
@@ -314,7 +314,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         VCalendar message = messages.get(0);
         assertEquals(1, message.getVEvents().size());
         VEvent newVEvent = message.getVEvents().get(0);
-        RecurrenceRule2 rrule = newVEvent.getRecurrenceRule().getValue();
+        RecurrenceRuleValue rrule = newVEvent.getRecurrenceRule().getValue();
         ByDay rule = (ByDay) rrule.lookupByRule(ByDay.class);
         
         List<DayOfWeek> expectedDaysOfWeek = Arrays.asList(

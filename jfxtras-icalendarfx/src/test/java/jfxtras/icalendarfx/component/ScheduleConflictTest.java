@@ -15,7 +15,7 @@ import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransparencyType;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
@@ -37,12 +37,12 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 10, 30))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
         assertEquals("20161109T100000", conflict);
@@ -54,29 +54,29 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent1 = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         VEvent existingVEvent2 = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2016, 5, 9, 9, 0))
                 .withDuration(Duration.ofHours(3))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY)
                         .withInterval(5));
         VEvent existingVEvent3 = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2016, 5, 9, 7, 0))
                 .withDuration(Duration.ofHours(1))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         VEvent existingVEvent4 = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2016, 1, 1, 10, 0))
                 .withDuration(Duration.ofHours(1))
                 .withTimeTransparency(TimeTransparencyType.TRANSPARENT)
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         List<VEvent> list = Arrays.asList(existingVEvent1, existingVEvent2, existingVEvent3, existingVEvent4);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 27, 10, 30))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withByRules(new ByDay(DayOfWeek.FRIDAY)));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
@@ -89,13 +89,13 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 9, 30))
                 .withDuration(Duration.ofHours(1))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
         assertEquals("20161109T100000", conflict);
@@ -107,13 +107,13 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 10, 30))
                 .withDuration(Duration.ofMinutes(20))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
         assertEquals("20161109T100000", conflict);
@@ -125,13 +125,13 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 10, 30))
                 .withDuration(Duration.ofHours(1))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
         assertEquals("20161109T100000", conflict);
@@ -143,7 +143,7 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.DAILY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
@@ -160,13 +160,13 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 9, 30))
                 .withDuration(Duration.ofHours(2))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
         assertEquals("20161109T100000", conflict);
@@ -178,7 +178,7 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.DAILY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
@@ -194,13 +194,13 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 7, 30))
                 .withDuration(Duration.ofHours(1))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
         assertNull(conflict);
@@ -212,13 +212,13 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
         VEvent existingVEvent = new VEvent()
             .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
             .withDuration(Duration.ofHours(1))
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY));
         List<VEvent> list = Arrays.asList(existingVEvent);
         VEvent newVEvent = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 9, 0))
                 .withDuration(Duration.ofHours(1))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         String conflict = DateTimeUtilities.checkScheduleConflict(newVEvent, list);
         assertNull(conflict);

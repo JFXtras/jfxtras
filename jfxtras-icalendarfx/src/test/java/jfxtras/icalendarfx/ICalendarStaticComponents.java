@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 
 /**
@@ -41,7 +41,7 @@ public final class ICalendarStaticComponents
                 .withDuration(Duration.ofHours(1))
                 .withDescription("Yearly1 Description")
                 .withSummary("Yearly1 Summary")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.YEARLY));
     }
         
@@ -50,7 +50,7 @@ public final class ICalendarStaticComponents
     {
         return new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.MONTHLY));
     }
     
@@ -63,7 +63,7 @@ public final class ICalendarStaticComponents
                 .withUniqueIdentifier("20150110T080000-002@jfxtras.org")
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.MONTHLY)
                         .withByRules(new ByDay(new ByDay.ByDayPair(DayOfWeek.MONDAY, 3))));
     }
@@ -73,7 +73,7 @@ public final class ICalendarStaticComponents
     {
         return new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY));
     }
 
@@ -87,7 +87,7 @@ public final class ICalendarStaticComponents
                 .withSummary("Weekly1 Summary")
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withUniqueIdentifier("20150110T080000-002@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withInterval(2)
                         .withByRules(new ByDay(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)));
@@ -102,7 +102,7 @@ public final class ICalendarStaticComponents
                 .withUniqueIdentifier("20150110T080000-002@jfxtras.org")
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withByRules(new ByDay(DayOfWeek.MONDAY)));
     }
@@ -123,7 +123,7 @@ public final class ICalendarStaticComponents
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 8, 0), ZoneOffset.UTC))
                 .withDateTimeStart(ZonedDateTime.of(LocalDateTime.of(2015, 11, 9, 10, 0), ZoneId.of("America/Los_Angeles")))
                 .withDescription("WeeklyZoned Description")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withByRules(new ByDay(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)))
                 .withSummary("WeeklyZoned Summary")
@@ -142,7 +142,7 @@ public final class ICalendarStaticComponents
                 .withSummary("Daily1 Summary")
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withUniqueIdentifier("20150110T080000-004@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY))
                 .withOrganizer("ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org");
     }
@@ -159,7 +159,7 @@ public final class ICalendarStaticComponents
                 .withSummary("Daily2 Summary")
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withUniqueIdentifier("20150110T080000-005@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withCount(6)
                         .withFrequency(FrequencyType.DAILY)
                         .withInterval(3))
@@ -177,7 +177,7 @@ public final class ICalendarStaticComponents
                 .withSummary("Daily6 Summary")
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withUniqueIdentifier("20150110T080000-006@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withUntil(ZonedDateTime.of(LocalDateTime.of(2015, 12, 1, 9, 59, 59), ZoneOffset.systemDefault())
                                 .withZoneSameInstant(ZoneId.of("Z")))
                         .withFrequency(FrequencyType.DAILY)
@@ -236,7 +236,7 @@ public final class ICalendarStaticComponents
                 .withCategories(DEFAULT_APPOINTMENT_GROUPS.get(6))
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withUniqueIdentifier("20150110T080000-010@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY))
                 .withDateTimeStart(LocalDate.of(2015, 11, 8))
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
@@ -250,7 +250,7 @@ public final class ICalendarStaticComponents
                 .withCategories(DEFAULT_APPOINTMENT_GROUPS.get(6))
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withUniqueIdentifier("20150110T080000-010@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withUntil(LocalDate.of(2015, 11, 23))
                         .withFrequency(FrequencyType.DAILY)
                         .withInterval(3))
@@ -265,7 +265,7 @@ public final class ICalendarStaticComponents
                 .withCategories(DEFAULT_APPOINTMENT_GROUPS.get(6))
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
                 .withUniqueIdentifier("20150110T080000-010@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withUntil(LocalDate.of(2017, 11, 24))
                         .withFrequency(FrequencyType.DAILY)
                         .withInterval(3))

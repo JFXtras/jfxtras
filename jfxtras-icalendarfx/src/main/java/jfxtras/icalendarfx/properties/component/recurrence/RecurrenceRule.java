@@ -6,7 +6,7 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropertyBase;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 /**
  * RRULE
@@ -25,9 +25,9 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2
  * @see DaylightSavingTime
  * @see StandardTime
  */
-public class RecurrenceRule extends PropertyBase<RecurrenceRule2, RecurrenceRule>
+public class RecurrenceRule extends PropertyBase<RecurrenceRuleValue, RecurrenceRule>
 {
-    public RecurrenceRule(RecurrenceRule2 value)
+    public RecurrenceRule(RecurrenceRuleValue value)
     {
         super(value);
     }
@@ -50,8 +50,8 @@ public class RecurrenceRule extends PropertyBase<RecurrenceRule2, RecurrenceRule
     }
     
     @Override
-    protected RecurrenceRule2 copyValue(RecurrenceRule2 source)
+    protected RecurrenceRuleValue copyValue(RecurrenceRuleValue source)
     {
-        return new RecurrenceRule2(source);
+        return new RecurrenceRuleValue(source);
     }
 }

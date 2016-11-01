@@ -29,7 +29,7 @@ import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.descriptive.Categories;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Frequency;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.CategorySelectionGridPane;
@@ -268,7 +268,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         VCalendar message = messages.get(0);
         assertEquals(1, message.getVEvents().size());
         VEvent revisedVEvent = message.getVEvents().get(0);
-        RecurrenceRule2 rrule = revisedVEvent.getRecurrenceRule().getValue();
+        RecurrenceRuleValue rrule = revisedVEvent.getRecurrenceRule().getValue();
         
         // check frequency
         Frequency f = rrule.getFrequency();
@@ -494,7 +494,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 8, 0, 30))
                 .withDateTimeStamp("20150110T080000Z")
                 .withSummary("Example Daily Event")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY)
                         .withUntil(until))
                 .withOrganizer("mailto:david@balsoftware.net")
@@ -544,7 +544,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
     public void canChangeCountToForever()
     {
         VEvent vevent = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY)
                         .withCount(10));
         TestUtil.runThenWaitForPaintPulse( () ->

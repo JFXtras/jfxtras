@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
@@ -70,7 +70,7 @@ public class DeleteOneTest
         
         // make recurrence
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule((RecurrenceRule2) null)
+                .withRecurrenceRule((RecurrenceRuleValue) null)
                 .withRecurrenceId(LocalDateTime.of(2016, 5, 17, 10, 0))
                 .withSummary("recurrence summary")
                 .withDateTimeStart(LocalDateTime.of(2016, 5, 17, 8, 30))

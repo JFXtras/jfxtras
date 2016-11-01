@@ -21,7 +21,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Count;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.WeekStart;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
@@ -59,7 +59,7 @@ public class RecurrenceRuleTest
         RecurrenceRule madeProperty = RecurrenceRule.parse(content);
         assertEquals(content, madeProperty.toContent());
         RecurrenceRule expectedProperty = new RecurrenceRule(
-                new RecurrenceRule2()
+                new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.YEARLY)
                     .withUntil("19730429T070000Z")
                     .withByRules(new ByMonth(Month.APRIL),
@@ -74,7 +74,7 @@ public class RecurrenceRuleTest
         String content = "RRULE:BYDAY=-1SU;UNTIL=19730429T070000Z;BYMONTH=4;FREQ=YEARLY";
         RecurrenceRule madeProperty = RecurrenceRule.parse(content);
         RecurrenceRule expectedProperty = new RecurrenceRule(
-                new RecurrenceRule2()
+                new RecurrenceRuleValue()
                     .withByRules(new ByDay(new ByDay.ByDayPair(DayOfWeek.SUNDAY, -1)))
                     .withUntil("19730429T070000Z")
                     .withByRules(new ByMonth(Month.APRIL))
@@ -162,7 +162,7 @@ public class RecurrenceRuleTest
     public void canDetectErrors1()
     {
         RecurrenceRule expectedProperty = new RecurrenceRule(
-                new RecurrenceRule2()
+                new RecurrenceRuleValue()
                     .withUntil("19730429T070000Z")
                     .withFrequency(FrequencyType.YEARLY)
                     .withByRules(new ByDay()));
@@ -173,7 +173,7 @@ public class RecurrenceRuleTest
     public void canDetectErrors2()
     {
         RecurrenceRule madeProperty = new RecurrenceRule(
-                new RecurrenceRule2()
+                new RecurrenceRuleValue()
                 .withUntil("19730429T070000Z")
                 .withByRules(new ByMonth(Month.APRIL),
                             new ByDay(new ByDay.ByDayPair(DayOfWeek.SUNDAY, -1))));
@@ -194,7 +194,7 @@ public class RecurrenceRuleTest
     public void canRemoveParameter2()
     {
         Until until = new Until(ZonedDateTime.of(LocalDateTime.of(2015, 11, 19, 23, 30), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
-        RecurrenceRule property1 = new RecurrenceRule(new RecurrenceRule2()
+        RecurrenceRule property1 = new RecurrenceRule(new RecurrenceRuleValue()
             .withFrequency(FrequencyType.DAILY)
             .withUntil(until)
             .withInterval(2));

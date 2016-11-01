@@ -18,7 +18,7 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VPrimary;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.relationship.RelatedTo;
 import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
 
@@ -139,7 +139,7 @@ public class WholeDayTest
         VEvent newVComponentFuture = vComponents.get(1);
 
         VEvent expectedVComponentOriginal = ICalendarStaticComponents.getWholeDayDaily1();
-        RecurrenceRule2 rrule = expectedVComponentOriginal.getRecurrenceRule().getValue();
+        RecurrenceRuleValue rrule = expectedVComponentOriginal.getRecurrenceRule().getValue();
         rrule.setUntil(LocalDate.of(2016, 5, 15));
         
         assertEquals(expectedVComponentOriginal, newVComponentOriginal);
@@ -168,7 +168,7 @@ public class WholeDayTest
 
         // make recurrence
         VEvent vComponentRecurrence = ICalendarStaticComponents.getWholeDayDaily1();
-        vComponentRecurrence.setRecurrenceRule((RecurrenceRule2) null);
+        vComponentRecurrence.setRecurrenceRule((RecurrenceRuleValue) null);
         vComponentRecurrence.setRecurrenceId(LocalDate.of(2016, 5, 17));
         vComponentRecurrence.setSummary("recurrence summary");
         vComponentRecurrence.setDateTimeStart(ZonedDateTime.of(LocalDateTime.of(2016, 5, 17, 8, 30), ZoneId.of("Europe/London")));
@@ -241,7 +241,7 @@ public class WholeDayTest
                 .withDateTimeStamp(new DateTimeStamp(newVComponentFuture.getDateTimeStamp()));
 
         VEvent expectedvComponentRecurrence = ICalendarStaticComponents.getWholeDayDaily1()
-                .withRecurrenceRule((RecurrenceRule2) null)
+                .withRecurrenceRule((RecurrenceRuleValue) null)
                 .withRecurrenceId(ZonedDateTime.of(LocalDateTime.of(2016, 5, 17, 9, 0), ZoneId.of("Europe/London")))
                 .withSummary("recurrence summary")
                 .withDateTimeStart(ZonedDateTime.of(LocalDateTime.of(2016, 5, 17, 8, 30), ZoneId.of("Europe/London")))

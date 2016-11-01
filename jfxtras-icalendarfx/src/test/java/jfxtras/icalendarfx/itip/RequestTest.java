@@ -14,7 +14,7 @@ import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 
 public class RequestTest
@@ -50,7 +50,7 @@ public class RequestTest
         VEvent expectedVComponent = ICalendarStaticComponents.getWeekly3()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 9, 0))
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 10, 10, 30))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                                 .withFrequency(FrequencyType.WEEKLY)
                                 .withByRules(new ByDay(DayOfWeek.TUESDAY)))
                 .withSummary("Edited summary")
@@ -89,7 +89,7 @@ public class RequestTest
         VEvent expectedVComponent = ICalendarStaticComponents.getWeekly3()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 10, 9, 0))
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 10, 10, 30))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                                 .withFrequency(FrequencyType.MONTHLY)
                                 .withByRules(new ByDay(new ByDay.ByDayPair(DayOfWeek.TUESDAY, 3))))
                 .withSummary("Edited summary")

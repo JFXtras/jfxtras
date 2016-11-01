@@ -16,7 +16,7 @@ import jfxtras.icalendarfx.components.DaylightSavingTime;
 import jfxtras.icalendarfx.components.StandardOrDaylight;
 import jfxtras.icalendarfx.components.StandardTime;
 import jfxtras.icalendarfx.components.VComponent;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class StandardOrDaylightTimeTest
 {
@@ -56,7 +56,7 @@ public class StandardOrDaylightTimeTest
     {
         StandardTime e = new StandardTime()
                 .withDateTimeStart("19961027T020000")
-                .withRecurrenceRule(RecurrenceRule2.parse("FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU"));
+                .withRecurrenceRule(RecurrenceRuleValue.parse("FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU"));
         List<LocalDateTime> expectedDates = new ArrayList<LocalDateTime>(Arrays.asList(
                 LocalDateTime.of(1996, 10, 27, 2, 0)
               , LocalDateTime.of(1997, 10, 26, 2, 0)

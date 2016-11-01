@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class VTodoTest
 {
@@ -43,7 +43,7 @@ public class VTodoTest
         VTodo e = new VTodo()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 20, 0))
                 .withDateTimeDue(LocalDateTime.of(2015, 11, 10, 2, 0))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withCount(6)
                         .withFrequency("DAILY")
                         .withInterval(3));
@@ -64,7 +64,7 @@ public class VTodoTest
         VTodo e = new VTodo()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 20, 0))
                 .withDuration(Duration.ofHours(6))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency("DAILY")
                         .withInterval(3));
         List<LocalDateTime> expectedDates = new ArrayList<LocalDateTime>(Arrays.asList(

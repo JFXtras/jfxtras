@@ -147,7 +147,7 @@ public class Frequency extends RRuleElementBase<FrequencyType, Frequency>
 //    public FrequencyType frequencyType() { return frequencyType; }
 //    private FrequencyType frequencyType;
     
-    /** TemporalAdjuster to enable frequency stream in {@link RecurrenceRule2#streamRecurrences(Temporal)} */
+    /** TemporalAdjuster to enable frequency stream in {@link RecurrenceRuleValue#streamRecurrences(Temporal)} */
     TemporalAdjuster adjuster(int interval)
     {
         return (temporal) -> temporal.plus(interval, getValue().getChronoUnit());

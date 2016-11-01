@@ -22,13 +22,13 @@ public enum RRuleElementType
 {
     FREQUENCY ("FREQ", Frequency.class, 0, null) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.getFrequency();
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.getFrequency() == null)
             {
@@ -47,7 +47,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             Frequency childCopy = new Frequency((Frequency) child);
             destination.setFrequency(childCopy);
@@ -55,13 +55,13 @@ public enum RRuleElementType
     },
     INTERVAL ("INTERVAL", Interval.class, 0, null) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.getInterval();
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.getInterval() == null)
             {
@@ -79,7 +79,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             Interval childCopy = new Interval((Interval) child);
             destination.setInterval(childCopy);
@@ -87,13 +87,13 @@ public enum RRuleElementType
     },
     UNTIL ("UNTIL", Until.class, 0, null) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.getUntil();
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.getUntil() == null)
             {
@@ -111,7 +111,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             Until childCopy = new Until((Until) child);
             destination.setUntil(childCopy);
@@ -119,13 +119,13 @@ public enum RRuleElementType
     },
     COUNT ("COUNT", Count.class, 0, null) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.getCount();
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.getCount() == null)
             {
@@ -143,7 +143,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             Count childCopy = new Count((Count) child);
             destination.setCount(childCopy);
@@ -151,13 +151,13 @@ public enum RRuleElementType
     },
     WEEK_START ("WKST", WeekStart.class, 0, null) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.getWeekStart();
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.getWeekStart() == null)
             {
@@ -176,7 +176,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             WeekStart childCopy = new WeekStart((WeekStart) child);
             destination.setWeekStart(childCopy);
@@ -184,13 +184,13 @@ public enum RRuleElementType
     },
     BY_MONTH ("BYMONTH", ByMonth.class, 100, ChronoUnit.MONTHS) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(ByMonth.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(ByMonth.class) == null)
             {
@@ -208,7 +208,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             ByMonth childCopy = new ByMonth((ByMonth) child);
             destination.byRules().add(childCopy);
@@ -216,13 +216,13 @@ public enum RRuleElementType
     },
     BY_WEEK_NUMBER ("BYWEEKNO", ByWeekNumber.class, 110, ChronoUnit.DAYS) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(ByWeekNumber.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(ByWeekNumber.class) == null)
             {
@@ -240,7 +240,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             ByWeekNumber childCopy = new ByWeekNumber((ByWeekNumber) child);
             destination.byRules().add(childCopy);
@@ -248,13 +248,13 @@ public enum RRuleElementType
     },
     BY_YEAR_DAY ("BYYEARDAY", ByYearDay.class, 120, ChronoUnit.DAYS) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(ByYearDay.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(ByYearDay.class) == null)
             {
@@ -272,7 +272,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             ByYearDay childCopy = new ByYearDay((ByYearDay) child);
             destination.byRules().add(childCopy);
@@ -280,13 +280,13 @@ public enum RRuleElementType
     },
     BY_MONTH_DAY ("BYMONTHDAY", ByMonthDay.class, 130, ChronoUnit.DAYS) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(ByMonthDay.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(ByMonthDay.class) == null)
             {
@@ -304,7 +304,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             ByMonthDay childCopy = new ByMonthDay((ByMonthDay) child);
             destination.byRules().add(childCopy);
@@ -312,13 +312,13 @@ public enum RRuleElementType
     },
     BY_DAY ("BYDAY", ByDay.class, 140, ChronoUnit.DAYS) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(ByDay.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(ByDay.class) == null)
             {
@@ -336,7 +336,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             ByDay childCopy = new ByDay((ByDay) child);
             destination.byRules().add(childCopy);
@@ -344,13 +344,13 @@ public enum RRuleElementType
     },
     BY_HOUR ("BYHOUR", ByHour.class, 150, ChronoUnit.HOURS) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(ByHour.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(ByHour.class) == null)
             {
@@ -368,7 +368,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             ByHour childCopy = new ByHour((ByHour) child);
             destination.byRules().add(childCopy);
@@ -376,13 +376,13 @@ public enum RRuleElementType
     },
     BY_MINUTE ("BYMINUTE", ByMinute.class, 160, ChronoUnit.MINUTES) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(ByMinute.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(ByMinute.class) == null)
             {
@@ -400,7 +400,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             ByMinute childCopy = new ByMinute((ByMinute) child);
             destination.byRules().add(childCopy);
@@ -408,13 +408,13 @@ public enum RRuleElementType
     },
     BY_SECOND ("BYSECOND", BySecond.class, 170, ChronoUnit.SECONDS) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(BySecond.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(BySecond.class) == null)
             {
@@ -432,7 +432,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             BySecond childCopy = new BySecond((BySecond) child);
             destination.byRules().add(childCopy);
@@ -440,13 +440,13 @@ public enum RRuleElementType
     },
     BY_SET_POSITION ("BYSETPOS", BySetPosition.class, 180, null) {
         @Override
-        public RRuleElement<?> getElement(RecurrenceRule2 rrule)
+        public RRuleElement<?> getElement(RecurrenceRuleValue rrule)
         {
             return rrule.lookupByRule(BySetPosition.class);
         }
 
         @Override
-        public void parse(RecurrenceRule2 recurrenceRule, String content)
+        public void parse(RecurrenceRuleValue recurrenceRule, String content)
         {
             if (recurrenceRule.lookupByRule(BySetPosition.class) == null)
             {
@@ -464,7 +464,7 @@ public enum RRuleElementType
 //        }
 
         @Override
-        public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination)
+        public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination)
         {
             BySetPosition childCopy = new BySetPosition((BySetPosition) child);
             destination.byRules().add(childCopy);
@@ -537,13 +537,13 @@ public enum RRuleElementType
     /** Returns associated Element 
      * @deprecated  not needed due to addition of Orderer, may be deleted */
     @Deprecated
-    abstract public RRuleElement<?> getElement(RecurrenceRule2 rrule);
+    abstract public RRuleElement<?> getElement(RecurrenceRuleValue rrule);
     
-    abstract public void parse(RecurrenceRule2 recurrenceRule, String content);
+    abstract public void parse(RecurrenceRuleValue recurrenceRule, String content);
     
     /** copies the associated element from the source RecurrenceRule to the destination RecurrenceRule */
 //    abstract public void copyElement(RecurrenceRule2 source, RecurrenceRule2 destination);
-    abstract public void copyElement(RRuleElement<?> child, RecurrenceRule2 destination);
+    abstract public void copyElement(RRuleElement<?> child, RecurrenceRuleValue destination);
 //    {
 //        throw new RuntimeException("not implemented");
 //        throw new RuntimeException("not implemented");

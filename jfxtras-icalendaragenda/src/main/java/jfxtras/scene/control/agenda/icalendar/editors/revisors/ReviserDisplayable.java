@@ -23,7 +23,7 @@ import jfxtras.icalendarfx.components.VDisplayable;
 import jfxtras.icalendarfx.properties.Property;
 import jfxtras.icalendarfx.properties.PropertyType;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
 import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
@@ -398,7 +398,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
     /** Make changes necessary for making a repeating component into a non-repeating component */
     void becomeNonRecurring(U vComponentEditedCopy)
     {
-        vComponentEditedCopy.setRecurrenceRule((RecurrenceRule2) null);
+        vComponentEditedCopy.setRecurrenceRule((RecurrenceRuleValue) null);
         vComponentEditedCopy.setRecurrenceDates(null);
         vComponentEditedCopy.setExceptionDates(null);
     }

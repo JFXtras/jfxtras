@@ -5,17 +5,17 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class IntervalTest
 {
     @Test
     public void canRemoveInterval()
     {
-        RecurrenceRule2 r = RecurrenceRule2.parse("FREQ=DAILY;INTERVAL=2");
+        RecurrenceRuleValue r = RecurrenceRuleValue.parse("FREQ=DAILY;INTERVAL=2");
         r.setInterval((Interval) null);
         String expectedContent = "FREQ=DAILY";
-        RecurrenceRule2 expectedVEvent = RecurrenceRule2.parse(expectedContent);
+        RecurrenceRuleValue expectedVEvent = RecurrenceRuleValue.parse(expectedContent);
         assertEquals(expectedVEvent, r);
         assertEquals(expectedContent, r.toContent());
     }
@@ -23,7 +23,7 @@ public class IntervalTest
     @Test
     public void canChangeInterval()
     {
-        RecurrenceRule2 r = RecurrenceRule2.parse("FREQ=DAILY;INTERVAL=2");
+        RecurrenceRuleValue r = RecurrenceRuleValue.parse("FREQ=DAILY;INTERVAL=2");
         r.setInterval(new Interval(3));
         String expectedContent = "FREQ=DAILY;INTERVAL=3";
         assertEquals(expectedContent, r.toContent());

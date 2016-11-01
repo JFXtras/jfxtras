@@ -20,7 +20,7 @@ import jfxtras.icalendarfx.components.VPrimary;
 import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
@@ -207,7 +207,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         Collections.sort(agenda.getVCalendar().getVEvents(), VPrimary.DTSTART_COMPARATOR);
         assertEquals(2, agenda.getVCalendar().getAllVComponents().size());
         VEvent expectedVEvent0 = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY)
                         .withUntil(ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 10, 0), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z"))))
                 .withSequence(1);

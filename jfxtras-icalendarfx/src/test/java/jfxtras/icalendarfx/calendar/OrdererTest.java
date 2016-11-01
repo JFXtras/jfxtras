@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class OrdererTest
 {
@@ -15,7 +15,7 @@ public class OrdererTest
         VEvent vComponent = new VEvent()
                 .withSummary("example")
                 .withRecurrenceRule("RRULE:FREQ=DAILY");
-        vComponent.setRecurrenceRule((RecurrenceRule2) null); // remove Recurrence Rule
+        vComponent.setRecurrenceRule((RecurrenceRuleValue) null); // remove Recurrence Rule
         assertEquals(1, vComponent.childrenUnmodifiable().size());
         String expectedContent = "BEGIN:VEVENT" + System.lineSeparator() +
                                  "SUMMARY:example" + System.lineSeparator() +
@@ -41,7 +41,7 @@ public class OrdererTest
     public void canRemoveEmptyProperty()
     {
         VEvent vComponent = new VEvent();
-        vComponent.setRecurrenceRule((RecurrenceRule2) null); // remove null Recurrence Rule
+        vComponent.setRecurrenceRule((RecurrenceRuleValue) null); // remove null Recurrence Rule
         assertEquals(0, vComponent.childrenUnmodifiable().size());
         String expectedContent = "BEGIN:VEVENT" + System.lineSeparator() +
                                  "END:VEVENT";

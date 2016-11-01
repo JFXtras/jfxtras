@@ -12,7 +12,7 @@ import jfxtras.icalendarfx.properties.component.descriptive.Description;
 import jfxtras.icalendarfx.properties.component.descriptive.Location;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.EditChoiceDialog;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
 import javafx.scene.control.ButtonType;
@@ -38,7 +38,7 @@ public abstract class EditLocatableTabPane<T extends VLocatable<T>> extends Edit
         super.handleSaveButton();
         if (vComponentCopy.getRecurrenceRule() != null)
         {
-            RecurrenceRule2 rrule = vComponentCopy.getRecurrenceRule().getValue();
+            RecurrenceRuleValue rrule = vComponentCopy.getRecurrenceRule().getValue();
             if (rrule.getFrequency().getValue() == FrequencyType.WEEKLY)
             {
                 if (recurrenceRuleVBox.dayOfWeekList.isEmpty())

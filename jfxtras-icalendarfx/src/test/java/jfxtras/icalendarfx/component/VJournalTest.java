@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.components.VJournal;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class VJournalTest
 {
@@ -40,7 +40,7 @@ public class VJournalTest
     {
         VJournal e = new VJournal()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 20, 0))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency("DAILY")
                         .withInterval(3));
         List<LocalDateTime> expectedDates = new ArrayList<LocalDateTime>(Arrays.asList(

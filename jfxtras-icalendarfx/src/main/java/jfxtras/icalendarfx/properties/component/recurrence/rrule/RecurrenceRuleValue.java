@@ -78,7 +78,7 @@ import jfxtras.icalendarfx.utilities.ICalendarUtilities;
  *
  */
 // TODO - LISTENER TO PREVENT COUNT AND UNTIL FROM BOTH BEING SET
-public class RecurrenceRule2 extends VParentBase implements VChild
+public class RecurrenceRuleValue extends VParentBase implements VChild
 {
     private VParent myParent;
     @Override public void setParent(VParent parent) { myParent = parent; }
@@ -103,7 +103,7 @@ public class RecurrenceRule2 extends VParentBase implements VChild
     final private ObservableList<ByRule<?>> byRules; // = FXCollections.observableArrayList();
 //    public void setByRules(ObservableList<ByRule<?>> byRules) { this.byRules = byRules; }
 //    public RecurrenceRule3 withByRules(ObservableList<ByRule<?>> byRules) { setByRules(byRules); return this; }
-    public RecurrenceRule2 withByRules(ByRule<?>...byRules)
+    public RecurrenceRuleValue withByRules(ByRule<?>...byRules)
     {
         for (ByRule<?> myByRule : byRules)
         {
@@ -111,7 +111,7 @@ public class RecurrenceRule2 extends VParentBase implements VChild
         }
         return this;
     }
-    public RecurrenceRule2 withByRules(String...byRules)
+    public RecurrenceRuleValue withByRules(String...byRules)
     {
         Arrays.stream(byRules).forEach(c -> parseContent(c));
         return this;
@@ -151,12 +151,12 @@ public class RecurrenceRule2 extends VParentBase implements VChild
     public Count getCount() { return (count == null) ? null : countProperty().get(); }
     public void setCount(Count count) { countProperty().set(count); }
     public void setCount(int count) { setCount(new Count(count)); }
-    public RecurrenceRule2 withCount(Count count)
+    public RecurrenceRuleValue withCount(Count count)
     {
         setCount(count);
         return this;
     }
-    public RecurrenceRule2 withCount(int count)
+    public RecurrenceRuleValue withCount(int count)
     {
         setCount(count);
         return this;
@@ -187,17 +187,17 @@ public class RecurrenceRule2 extends VParentBase implements VChild
     public void setFrequency(Frequency frequency) { frequencyProperty().set(frequency); }
     public void setFrequency(String frequency) { setFrequency(Frequency.parse(frequency)); }
     public void setFrequency(FrequencyType frequency) { setFrequency(new Frequency(frequency)); }
-    public RecurrenceRule2 withFrequency(Frequency frequency)
+    public RecurrenceRuleValue withFrequency(Frequency frequency)
     {
         setFrequency(frequency);
         return this;
     }
-    public RecurrenceRule2 withFrequency(String frequency)
+    public RecurrenceRuleValue withFrequency(String frequency)
     {
         setFrequency(frequency);
         return this;
     }
-    public RecurrenceRule2 withFrequency(FrequencyType frequency)
+    public RecurrenceRuleValue withFrequency(FrequencyType frequency)
     {
         setFrequency(frequency);
         return this;
@@ -237,12 +237,12 @@ public class RecurrenceRule2 extends VParentBase implements VChild
     {
         setInterval(new Interval(interval));
     }
-    public RecurrenceRule2 withInterval(int interval)
+    public RecurrenceRuleValue withInterval(int interval)
     {
         setInterval(interval);
         return this;
     }
-    public RecurrenceRule2 withInterval(Interval interval)
+    public RecurrenceRuleValue withInterval(Interval interval)
     {
         setInterval(interval);
         return this;
@@ -299,17 +299,17 @@ public class RecurrenceRule2 extends VParentBase implements VChild
 //        }
     }
     public void setUntil(String until) { setUntil(DateTimeUtilities.temporalFromString(until)); }
-    public RecurrenceRule2 withUntil(Temporal until)
+    public RecurrenceRuleValue withUntil(Temporal until)
     {
         setUntil(until);
         return this;
     }
-    public RecurrenceRule2 withUntil(String until)
+    public RecurrenceRuleValue withUntil(String until)
     {
         setUntil(until);
         return this;
     }
-    public RecurrenceRule2 withUntil(Until until)
+    public RecurrenceRuleValue withUntil(Until until)
     {
         setUntil(until);
         return this;
@@ -346,8 +346,8 @@ public class RecurrenceRule2 extends VParentBase implements VChild
     public WeekStart getWeekStart() { return (weekStart == null) ? null : weekStartProperty().get(); }
     public void setWeekStart(WeekStart weekStart) { weekStartProperty().set(weekStart); }
     public void setWeekStart(DayOfWeek weekStart) { weekStartProperty().set(new WeekStart(weekStart)); }
-    public RecurrenceRule2 withWeekStart(WeekStart weekStart) { setWeekStart(weekStart); return this; }
-    public RecurrenceRule2 withWeekStart(DayOfWeek weekStart) { setWeekStart(weekStart); return this; }
+    public RecurrenceRuleValue withWeekStart(WeekStart weekStart) { setWeekStart(weekStart); return this; }
+    public RecurrenceRuleValue withWeekStart(DayOfWeek weekStart) { setWeekStart(weekStart); return this; }
     
    // bind to values in the Byxxx rules that use Week Start
     private void addWeekStartBindings(ByRule<?> rule)
@@ -417,7 +417,7 @@ public class RecurrenceRule2 extends VParentBase implements VChild
             RRuleElementType type = RRuleElementType.enumFromClass(childSource.getClass());
             if (type != null)
             {
-                type.copyElement((RRuleElement<?>) childSource, (RecurrenceRule2) destination);
+                type.copyElement((RRuleElement<?>) childSource, (RecurrenceRuleValue) destination);
             } 
         });
     }
@@ -443,7 +443,7 @@ public class RecurrenceRule2 extends VParentBase implements VChild
      * CONSTRUCTORS
      */
     
-    public RecurrenceRule2()
+    public RecurrenceRuleValue()
     {
         frequency = new SimpleObjectProperty<>(this, RRuleElementType.FREQUENCY.toString());
         orderer().registerSortOrderProperty(frequencyProperty());
@@ -482,7 +482,7 @@ public class RecurrenceRule2 extends VParentBase implements VChild
     }
 
     // Copy constructor
-    public RecurrenceRule2(RecurrenceRule2 source)
+    public RecurrenceRuleValue(RecurrenceRuleValue source)
     {
         this();
         source.copyInto(this);
@@ -706,9 +706,9 @@ public class RecurrenceRule2 extends VParentBase implements VChild
 //        return result;
 //    }
     
-    public static RecurrenceRule2 parse(String propertyContent)
+    public static RecurrenceRuleValue parse(String propertyContent)
     {
-        RecurrenceRule2 property = new RecurrenceRule2();
+        RecurrenceRuleValue property = new RecurrenceRuleValue();
         property.parseContent(propertyContent);
         return property;
     }

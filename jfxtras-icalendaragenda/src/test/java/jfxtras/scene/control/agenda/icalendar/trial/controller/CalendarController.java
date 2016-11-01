@@ -30,7 +30,7 @@ import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin;
@@ -136,7 +136,7 @@ public class CalendarController
                 .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 8, 0), ZoneOffset.UTC))
                 .withDateTimeStart(ZonedDateTime.of(LocalDateTime.of(startDate.plusDays(1), LocalTime.of(8, 15)), ZoneId.of("America/Los_Angeles")))
                 .withDescription("WeeklyZoned Description")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withUntil(ZonedDateTime.of(LocalDateTime.of(startDate.plusDays(15), LocalTime.of(8, 15)), ZoneId.of("America/Los_Angeles")).withZoneSameInstant(ZoneId.of("Z")))
                         .withFrequency(FrequencyType.WEEKLY)
                         .withByRules(new ByDay(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)))
@@ -151,7 +151,7 @@ public class CalendarController
             .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 8, 0), ZoneOffset.UTC))
             .withDateTimeStart(ZonedDateTime.of(LocalDateTime.of(startDate.plusDays(1), LocalTime.of(7, 30)), ZoneId.of("America/Los_Angeles")))
             .withDescription("WeeklyZoned Description")
-            .withRecurrenceRule(new RecurrenceRule2()
+            .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.WEEKLY)
                     .withByRules(new ByDay(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)))
             .withSummary(Summary.parse("WeeklyZoned Infinite"))
@@ -168,7 +168,7 @@ public class CalendarController
                 .withSummary(Summary.parse("LocalDate"))
                 .withUniqueIdentifier("20150110T080000-3@jfxtras.org")
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withInterval(3));
         agenda.getVCalendar().getVEvents().add(vEventLocalDate);
@@ -182,7 +182,7 @@ public class CalendarController
                 .withSummary(Summary.parse("LocalDateTime Daily"))
                 .withUniqueIdentifier("20150110T080000-4@jfxtras.org")
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
         agenda.getVCalendar().getVEvents().add(vEventLocalDateTime); 
         
@@ -195,7 +195,7 @@ public class CalendarController
                 .withSummary(Summary.parse("Monthly"))
                 .withUniqueIdentifier("20150110T080000-5@jfxtras.org")
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.MONTHLY));
         agenda.getVCalendar().getVEvents().add(vEventLocalDateTimeMonthly); 
         
@@ -210,7 +210,7 @@ public class CalendarController
                 .withSummary(Summary.parse("Monthly Ordinal"))
                 .withUniqueIdentifier("20150110T080000-6@jfxtras.org")
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.MONTHLY)
                         .withByRules(new ByDay(new ByDay.ByDayPair(dayOfWeek, ordinalWeekNumber))));
         agenda.getVCalendar().getVEvents().add(vEventLocalDateMonthlyOrdinal);

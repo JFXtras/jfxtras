@@ -23,7 +23,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.PropertyBaseRecurrenc
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRuleCache;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.icalendarfx.utilities.ICalendarUtilities;
@@ -261,7 +261,7 @@ public interface VRepeatable<T> extends VComponent
     ObjectProperty<RecurrenceRule> recurrenceRuleProperty();
     RecurrenceRule getRecurrenceRule();
     default void setRecurrenceRule(RecurrenceRule recurrenceRule) { recurrenceRuleProperty().set(recurrenceRule); }
-    default void setRecurrenceRule(RecurrenceRule2 rrule)
+    default void setRecurrenceRule(RecurrenceRuleValue rrule)
     {
         if (getRecurrenceRule() == null && rrule != null)
         {
@@ -298,7 +298,7 @@ public interface VRepeatable<T> extends VComponent
         setRecurrenceRule(rrule);
         return (T) this;
     }
-    default T withRecurrenceRule(RecurrenceRule2 rrule)
+    default T withRecurrenceRule(RecurrenceRuleValue rrule)
     {
         setRecurrenceRule(rrule);
         return (T) this;

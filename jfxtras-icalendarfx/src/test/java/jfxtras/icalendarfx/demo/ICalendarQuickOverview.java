@@ -1,7 +1,5 @@
 package jfxtras.icalendarfx.demo;
 
-import static org.junit.Assert.assertEquals;
-
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -33,7 +31,7 @@ import jfxtras.icalendarfx.properties.component.descriptive.Comment;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonth;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
@@ -85,7 +83,7 @@ public class ICalendarQuickOverview
             .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC)) // DTSTAMP component property
             .withDateTimeStart(LocalDateTime.of(2015, 11, 3, 10, 0)) // DTSTART component property
             .withDuration(Duration.ofMinutes(90)) // DURATION component property
-            .withRecurrenceRule(new RecurrenceRule2() // RRULE component property
+            .withRecurrenceRule(new RecurrenceRuleValue() // RRULE component property
                     .withFrequency(FrequencyType.MONTHLY) // FREQ rrule value element 
                     .withByRules(new ByMonth(Month.NOVEMBER, Month.DECEMBER),  // BYMONTH rrule value element 
                             new ByDay(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))) // BYDAY rrule value element 
@@ -160,7 +158,7 @@ public class ICalendarQuickOverview
                         .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 10, 0)) // DTSTART component property
                         .withDuration(Duration.ofHours(1)) // DURATION component property
                         .withDateTimeLastModified(ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 18, 30), ZoneOffset.UTC)) // LAST-MODIFIED component property
-                        .withRecurrenceRule(new RecurrenceRule2() // RRULE component property
+                        .withRecurrenceRule(new RecurrenceRuleValue() // RRULE component property
                                 .withFrequency(FrequencyType.YEARLY)) // FREQ rrule value element 
                         .withSummary("Yearly1 Summary") // SUMMARY component property
                         .withUniqueIdentifier("20151109T082900-0@jfxtras.org"), // UID component property
@@ -168,7 +166,7 @@ public class ICalendarQuickOverview
                         .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC)) // DTSTAMP component property
                         .withDateTimeStart(LocalDateTime.of(2015, 11, 3, 10, 0)) // DTSTART component property
                         .withDuration(Duration.ofMinutes(90)) // DURATION component property
-                        .withRecurrenceRule(new RecurrenceRule2() // RRULE component property
+                        .withRecurrenceRule(new RecurrenceRuleValue() // RRULE component property
                                 .withFrequency(FrequencyType.MONTHLY) // FREQ rrule value element 
                                 .withByRules(new ByMonth(Month.NOVEMBER, Month.DECEMBER),  // BYMONTH rrule value element 
                                         new ByDay(DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY))) // BYDAY rrule value element 
@@ -335,13 +333,11 @@ public class ICalendarQuickOverview
     @Test
     public void canStreamRRule2()
     {
-        String s = "RRULE:FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13";
+        String s = "FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13";
         RecurrenceRule rRule = RecurrenceRule.parse(s);
-        assertEquals(rRule.toContent(), s);
-        Temporal dateTimeStart = LocalDate.of(1998, 2, 13);
+        Temporal dateTimeStart = LocalDate.of(2016, 5, 13);
         rRule.getValue()
                 .streamRecurrences(dateTimeStart) // infinite steam make here
-                .filter(t -> ((LocalDate) t).isAfter(LocalDate.of(2016, 1, 1)))
                 .limit(5) // must limit or goes forever
                 .forEach(System.out::println);
     }

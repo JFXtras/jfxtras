@@ -16,7 +16,7 @@ import javafx.collections.ObservableSet;
 import jfxtras.icalendarfx.components.DaylightSavingTime;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class DaylightSavingsTimeTest
 {
@@ -72,7 +72,7 @@ public class DaylightSavingsTimeTest
     {
         DaylightSavingTime builtComponent = new DaylightSavingTime()
                 .withRecurrenceDates("RDATE;VALUE=DATE:19970304,19970504,19970704,19970904")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                     .withFrequency(FrequencyType.DAILY)
                     .withInterval(4));
         String componentName = builtComponent.name();

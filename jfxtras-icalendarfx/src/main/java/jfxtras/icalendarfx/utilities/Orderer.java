@@ -18,7 +18,7 @@ import jfxtras.icalendarfx.VChild;
 import jfxtras.icalendarfx.VParent;
 import jfxtras.icalendarfx.components.VComponentBase;
 import jfxtras.icalendarfx.properties.PropertyBase;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 /** Maintains a sort order of {@link VChild} elements of a {@link VParent}
  * 
@@ -26,7 +26,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2
  * @see VCalendar
  * @see VComponentBase
  * @see PropertyBase
- * @see RecurrenceRule2
+ * @see RecurrenceRuleValue
  *  */ 
 public class Orderer
 {

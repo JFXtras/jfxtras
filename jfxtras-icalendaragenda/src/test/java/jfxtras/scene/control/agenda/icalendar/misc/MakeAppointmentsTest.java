@@ -22,7 +22,7 @@ import org.junit.Test;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
@@ -84,7 +84,7 @@ public class MakeAppointmentsTest
               .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 8, 0), ZoneOffset.UTC))
               .withDateTimeStart(ZonedDateTime.of(LocalDateTime.of(startDate.plusDays(1), LocalTime.of(8, 15)), ZoneId.of("America/Los_Angeles")))
               .withDescription("WeeklyZoned Description")
-              .withRecurrenceRule(new RecurrenceRule2()
+              .withRecurrenceRule(new RecurrenceRuleValue()
                       .withUntil(ZonedDateTime.of(LocalDateTime.of(startDate.plusDays(15), LocalTime.of(8, 15)), ZoneId.of("America/Los_Angeles")).withZoneSameInstant(ZoneId.of("Z")))
                       .withFrequency(FrequencyType.WEEKLY)
                       .withByRules(new ByDay(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)))
@@ -129,7 +129,7 @@ public class MakeAppointmentsTest
                 .withDescription("LocalDate Description")
                 .withSummary("LocalDate")
                 .withUniqueIdentifier("20150110T080000-3@jfxtras.org")
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withInterval(3));
         RecurrenceFactory<Appointment> recurrenceFactory = new DefaultRecurrenceFactory(DEFAULT_APPOINTMENT_GROUPS);

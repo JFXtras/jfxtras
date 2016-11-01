@@ -17,15 +17,16 @@ import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.VParent;
 import jfxtras.icalendarfx.components.VComponentBase;
 import jfxtras.icalendarfx.properties.PropertyBase;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
-/** Maintains a sort order of {@link C} elements of a {@link VParent}
+/** Generic version of orderer - for blog 
+ * Maintains a sort order of {@link C} elements of a {@link VParent}
  * 
  * @see VParent
  * @see VCalendar
  * @see VComponentBase
  * @see PropertyBase
- * @see RecurrenceRule2
+ * @see RecurrenceRuleValue
  *  */ 
 public class Orderer2<P, C>
 {

@@ -24,7 +24,7 @@ import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 import jfxtras.icalendarfx.VElement;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.icalendarfx.utilities.StringConverters;
 
@@ -230,7 +230,7 @@ public enum ValueType
             };
         }
     },
-    RECURRENCE_RULE ("RECUR", Arrays.asList(RecurrenceRule2.class))
+    RECURRENCE_RULE ("RECUR", Arrays.asList(RecurrenceRuleValue.class))
     {
         @Override
         public <T> StringConverter<T> getConverter()
@@ -246,7 +246,7 @@ public enum ValueType
                 @Override
                 public T fromString(String string)
                 {
-                    return (T) RecurrenceRule2.parse(string);
+                    return (T) RecurrenceRuleValue.parse(string);
                 }
             };
         }
@@ -256,7 +256,7 @@ public enum ValueType
         {
             if (value != null)
             {
-                return ((RecurrenceRule2) value).errors();
+                return ((RecurrenceRuleValue) value).errors();
             } else
             {
                 return Collections.emptyList();

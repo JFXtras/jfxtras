@@ -20,7 +20,7 @@ import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.components.VComponentBase;
 import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransparencyType;
@@ -98,7 +98,7 @@ public class VEventTest extends ICalendarTestAbstract
         VEvent e = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 20, 0))
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 10, 2, 0))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withCount(6)
                         .withFrequency("DAILY")
                         .withInterval(3));
@@ -119,7 +119,7 @@ public class VEventTest extends ICalendarTestAbstract
         VEvent e = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 20, 0))
                 .withDuration(Duration.ofHours(6))
-                .withRecurrenceRule(new RecurrenceRule2()
+                .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency("DAILY")
                         .withInterval(3));
         List<LocalDateTime> expectedDates = new ArrayList<LocalDateTime>(Arrays.asList(

@@ -65,7 +65,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElementType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRule2;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRule;
@@ -91,8 +91,8 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
     final public static Period DEFAULT_UNTIL_PERIOD = Period.ofMonths(1); // amount of time beyond start default for UNTIL (ends on)
         
     T vComponent;
-    private RecurrenceRule2 rrule;
-    private RecurrenceRule2 oldRRule; // previous rrule from toggling repeatableCheckBox
+    private RecurrenceRuleValue rrule;
+    private RecurrenceRuleValue oldRRule; // previous rrule from toggling repeatableCheckBox
     private ObjectProperty<Temporal> dateTimeStartRecurrenceNew;
 
     @FXML private ResourceBundle resources; // ResourceBundle that was given to the FXMLLoader
@@ -409,7 +409,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         Temporal timeAdjustedSelection = vComponent.getDateTimeStart().getValue().with(initialUntilDate);
 
         // find last recurrence that is not after initialUntilDate
-        RecurrenceRule2 rruleCopy = new RecurrenceRule2(rrule);
+        RecurrenceRuleValue rruleCopy = new RecurrenceRuleValue(rrule);
         rruleCopy.setUntil((Until) null);
         Iterator<Temporal> i = rruleCopy.streamRecurrences(vComponent.getDateTimeStart().getValue()).iterator();
         Temporal until = i.next();
@@ -497,7 +497,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
                     } else
                     {
                         // setup new default RRule
-                        rrule = new RecurrenceRule2()
+                        rrule = new RecurrenceRuleValue()
                                 .withFrequency(FrequencyType.WEEKLY)
                                 .withByRules(new ByDay(DayOfWeek.from(dateTimeStartRecurrenceNew.get())));
                         vComponent.setRecurrenceRule(rrule);
@@ -1035,7 +1035,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
 
     /** Set day of week properties if FREQ=WEEKLY and has BYDAY rule 
      * This method is called only during setup */
-    private void setDayOfWeek(RecurrenceRule2 rRule)
+    private void setDayOfWeek(RecurrenceRuleValue rRule)
     {
         // Set day of week properties
         if (rRule.getFrequency().getValue() == FrequencyType.WEEKLY)
@@ -1267,7 +1267,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
      * @param startTemporal LocalDate or LocalDateTime of start date/time (DTSTART)
      * @return Easy to read summary of repeat rule
      */
-    public static String makeSummary(RecurrenceRule2 rRule, Temporal startTemporal)
+    public static String makeSummary(RecurrenceRuleValue rRule, Temporal startTemporal)
     {
         if (! rRule.isValid())
         {
