@@ -91,7 +91,9 @@ public class CalendarTimePicker extends Control
 	{
 		public void set(Calendar value)
 		{
+			value = CalendarTimePickerSkin.blockHoursToStep(value, getMinuteStep());
 			value = CalendarTimePickerSkin.blockMinutesToStep(value, getMinuteStep());
+			value = CalendarTimePickerSkin.blockSecondsToStep(value, getSecondStep());
 			super.set(value);
 		}		
 	};
@@ -105,6 +107,23 @@ public class CalendarTimePicker extends Control
 	public Locale getLocale() { return localeObjectProperty.getValue(); }
 	public void setLocale(Locale value) { localeObjectProperty.setValue(value); }
 	public CalendarTimePicker withLocale(Locale value) { setLocale(value); return this; } 
+
+	/** HourStep */
+	public ObjectProperty<Integer> hourStepProperty() { return hourStepProperty; }
+	final private SimpleObjectProperty<Integer> hourStepProperty = new SimpleObjectProperty<Integer>(this, "hourStep", 1)
+	{
+		public void set(Integer value)
+		{
+			if (value == null || value.intValue() < 0 || value.intValue() > 23) {
+				throw new IllegalArgumentException("null or outside [0-23] is not allowed");
+			}
+			super.set(value);
+			setCalendar( CalendarTimePickerSkin.blockHoursToStep(getCalendar(), getHourStep()) );
+		}		
+	};
+	public Integer getHourStep() { return hourStepProperty.getValue(); }
+	public void setHourStep(Integer value) { hourStepProperty.setValue(value); }
+	public CalendarTimePicker withHourStep(Integer value) { setHourStep(value); return this; } 
 
 	/** MinuteStep */
 	public ObjectProperty<Integer> minuteStepProperty() { return minuteStepProperty; }

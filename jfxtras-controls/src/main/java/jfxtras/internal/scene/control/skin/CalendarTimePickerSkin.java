@@ -39,6 +39,8 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.sun.javafx.css.converters.EnumConverter;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.css.CssMetaData;
 import javafx.css.SimpleStyleableObjectProperty;
@@ -57,8 +59,6 @@ import javafx.util.Callback;
 import jfxtras.css.CssMetaDataForSkinProperty;
 import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarTimePicker;
-
-import com.sun.javafx.css.converters.EnumConverter;
 
 /**
  * @author Tom Eugelink
@@ -91,13 +91,19 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			refresh();
 		});
 
+		// react to changes in the hourStep 
+		getSkinnable().hourStepProperty().addListener( (observable) -> {
+			hourScrollSlider.setBlockIncrement(getSkinnable().getHourStep().doubleValue());
+		});
+		hourScrollSlider.setBlockIncrement(getSkinnable().getHourStep().doubleValue());
+		
 		// react to changes in the minuteStep 
 		getSkinnable().minuteStepProperty().addListener( (observable) -> {
 			minuteScrollSlider.setBlockIncrement(getSkinnable().getMinuteStep().doubleValue());
 		});
 		minuteScrollSlider.setBlockIncrement(getSkinnable().getMinuteStep().doubleValue());
 		
-		// react to changes in the minuteStep 
+		// react to changes in the secondStep 
 		getSkinnable().secondStepProperty().addListener( (observable) -> {
 			secondScrollSlider.setBlockIncrement(getSkinnable().getSecondStep().doubleValue());
 		});
@@ -223,7 +229,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	 */
 	private void createNodes()
 	{
-		// sliders
+		// hour slider
 		hourScrollSlider.setId("hourSlider");
 		hourScrollSlider.minProperty().set(00);
 		hourScrollSlider.maxProperty().set(23);
@@ -247,6 +253,8 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 			acceptChangingCalendar();
 		});
+		
+		// minutes slider
 		minuteScrollSlider.setId("minuteSlider");
 		minuteScrollSlider.minProperty().set(00);
 		minuteScrollSlider.maxProperty().set(59);
@@ -269,6 +277,8 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 			acceptChangingCalendar();
 		});
+		
+		// seconds slider
 		secondScrollSlider.setId("secondSlider");
 		secondScrollSlider.minProperty().set(00);
 		secondScrollSlider.maxProperty().set(59);
@@ -295,6 +305,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		// add label
 		timeText.setDisable(true);
 		timeText.getStyleClass().add("timeLabel");
+		timeText.setMouseTransparent(true);
 
 		// layout
 		refreshLayout();
@@ -321,7 +332,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			if (seconds > 59) seconds -= lSecondStep;
 		}
 		lCalendar.set(Calendar.SECOND, seconds);
-		lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getMinuteStep());
+		lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getSecondStep());
 		setChangingCalendar(lCalendar);
 	}
 
@@ -349,7 +360,15 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	public void modifyChangingCalendarHour(int hour) {
 		Calendar lCalendar = getChangingCalendar();
 		lCalendar = (lCalendar == null ? Calendar.getInstance() : (Calendar)lCalendar.clone());
+				
+		// in order not to first set a non stepsize calendar, we step the hours here 
+		int lHourStep = getSkinnable().getHourStep();
+		if (lHourStep > 1) {
+			hour += getSkinnable().getHourStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
+			if (hour > 23) hour -= lHourStep;
+		}
 		lCalendar.set(Calendar.HOUR_OF_DAY, hour);
+		lCalendar = blockHoursToStep(lCalendar, getSkinnable().getHourStep());
 		setChangingCalendar(lCalendar);
 	}
 
@@ -427,7 +446,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			double lLabelWidthPlusWhitespace = lLabelWidth + lWhitespace;
 			double lScrollSliderOuterPadding = 5;
 
-			// add a dummy rectangle to make sure the are has enough height
+			// add a dummy rectangle to make sure the area has enough height
 			if (getShowTickLabels() == ShowTickLabels.YES)  {
 				Text lText = new Text("0");
 				Rectangle lRectangle = new Rectangle(0,0, minuteScrollSlider.getWidth(), lText.prefHeight(0));
@@ -436,7 +455,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 
 			// now we're going to play with some numbers
-			// given the available width, how many labels cold we place (rounded down)
+			// given the available width, how many labels could we place (rounded down)
 			int lNumberOfLabels = (int)(this.getWidth()  / lLabelWidthPlusWhitespace) + 2;
 			int lStep = 60;
 			if (lNumberOfLabels >= 60/1) lStep = 1; 
@@ -525,6 +544,27 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	}
 	final private AtomicInteger refreshingAtomicInteger = new AtomicInteger(0);
 	
+	/**
+	 * hours fit in the hour steps
+	 */
+	static public Calendar blockHoursToStep(Calendar calendar, Integer stepSize)
+	{
+		if (stepSize == null || calendar == null) return calendar;
+			
+		// set the hours to match the step size
+		int lValue = calendar.get(Calendar.HOUR_OF_DAY);
+		if (stepSize == 1) return calendar;
+		lValue = lValue / stepSize; // trunk
+		lValue *= stepSize;
+		if (calendar.get(Calendar.HOUR_OF_DAY) != lValue)
+		{
+			Calendar lCalendar = (Calendar)calendar.clone();
+			lCalendar.set(Calendar.HOUR_OF_DAY, lValue);
+			calendar = lCalendar;
+		}
+		return calendar;
+	}
+
 	/**
 	 * minutes fit in the minute steps
 	 */
