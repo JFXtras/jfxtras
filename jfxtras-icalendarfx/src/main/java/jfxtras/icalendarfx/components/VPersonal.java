@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -49,15 +51,15 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
      *  :mailto:jdoe@example.com
      */
     @Override
-    public ObjectProperty<ObservableList<Attendee>> attendeesProperty()
+    public ListProperty<Attendee> attendeesProperty()
     {
         if (attendees == null)
         {
-            attendees = new SimpleObjectProperty<>(this, PropertyType.ATTENDEE.toString());
+            attendees = new SimpleListProperty<>(this, PropertyType.ATTENDEE.toString());
         }
         return attendees;
     }
-    private ObjectProperty<ObservableList<Attendee>> attendees;
+    private ListProperty<Attendee> attendees;
     @Override
     public ObservableList<Attendee> getAttendees()
     {

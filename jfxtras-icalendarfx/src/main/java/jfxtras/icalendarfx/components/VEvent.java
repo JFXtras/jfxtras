@@ -101,7 +101,24 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
         {
             dateTimeEnd = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_END.toString());
             orderer().registerSortOrderProperty(dateTimeEnd);
-            dateTimeEnd.addListener((observable, oldValue, newValue) -> checkDateTimeEndConsistency());
+            dateTimeEnd.addListener((observable, oldValue, newValue) -> 
+            {
+                try
+                {
+                    checkDateTimeEndConsistency();
+                } catch (DateTimeException e)
+                {
+                    System.out.println("old value back:" + oldValue);
+                    if (oldValue != null)
+                    {
+                        setDateTimeEnd(oldValue);                        
+                    } else
+                    {
+                        setDateTimeEnd((DateTimeEnd) null);
+                    }
+                    throw e;
+                }
+            });
             dateTimeEnd.addListener((obs) ->
             {
                 if ((getDateTimeEnd() != null) && (getDuration() != null))
@@ -116,16 +133,17 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
     public DateTimeEnd getDateTimeEnd() { return (dateTimeEnd == null) ? null : dateTimeEndProperty().get(); }
     private ObjectProperty<DateTimeEnd> dateTimeEnd;
     
-    @Override
-    void dateTimeStartListenerHook()
-    {
-        super.dateTimeStartListenerHook();
-        String dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
-        if (dtendError != null)
-        {
-            throw new DateTimeException(dtendError);
-        }
-    }
+//    @Override // this functionality is handled by DTEND listener (I hope)
+//    void dateTimeStartListenerHook()
+//    {
+//        super.dateTimeStartListenerHook();
+//        List<String> dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
+//        if (! dtendError.isEmpty())
+//        {
+//            String errors = dtendError.stream().collect(Collectors.joining(System.lineSeparator()));
+//            throw new DateTimeException(errors);
+//        }
+//    }
     
     /** add listener to Duration to ensure both DURATION and DTEND are not both set */
     @Override public ObjectProperty<DurationProp> durationProperty()
@@ -251,33 +269,15 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
         // TODO - GET ERRORS FROM CHILDREN?
         // REMOVE DTEND LISTENERS??  WHAT ABOUT RDATE AND EXDATE LISTENERS???
         List<String> errors = super.errors();
-        String dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
-        if (dtendError != null)
-        {
-            errors.add(dtendError);
-        }
-        boolean isDateTimeEndMatch = dtendError != null;
+        List<String> dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
+        errors.addAll(dtendError);
+//        boolean isDateTimeEndMatch = dtendError.isEmpty();
         if (getDateTimeStart() == null)
         {
             errors.add("DTSTART is not present.  DTSTART is REQUIRED and MUST NOT occur more than once");
         }
         boolean isDateTimeEndPresent = getDateTimeEnd() != null;
         boolean isDurationPresent = getDuration() != null;       
-
-//        boolean isDateTimeEndMatch = true;
-//        if (isDateTimeEndPresent)
-//        {
-//            if (getDateTimeStart() != null)
-//            {
-//                DateTimeType startType = DateTimeUtilities.DateTimeType.of(getDateTimeStart().getValue());
-//                DateTimeType endType = DateTimeUtilities.DateTimeType.of(getDateTimeEnd().getValue());
-//                isDateTimeEndMatch = startType == endType;
-//                if (! isDateTimeEndMatch)
-//                {
-//                    errors.add("The value type of DTEND MUST be the same as the DTSTART property (" + endType + ", " + startType + ")");
-//                }
-//            }
-//        }
         
         if (! isDateTimeEndPresent && ! isDurationPresent)
         {
@@ -285,19 +285,6 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
         } else if (isDateTimeEndPresent && isDurationPresent)
         {
             errors.add("Both DTEND and DURATION are present.  DTEND or DURATION MAY appear, but both MUST NOT occur in the same " + name());
-        } else if (isDateTimeEndPresent && isDateTimeEndMatch)
-        {
-            if (! DateTimeUtilities.isAfter(getDateTimeEnd().getValue(), getDateTimeStart().getValue()))
-            {
-                errors.add("DTEND is not after DTSTART.  DTEND MUST be after DTSTART");                
-            }
-        } else if (isDurationPresent) // duration is present
-        {
-            Temporal actualEnd = getDateTimeStart().getValue().plus(getDuration().getValue());
-            if (! DateTimeUtilities.isAfter(actualEnd, getDateTimeStart().getValue()))
-            {
-                errors.add("DURATION is negative.  DURATION MUST be positive");                
-            }            
         }
         
         return Collections.unmodifiableList(errors);

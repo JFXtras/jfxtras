@@ -1,5 +1,6 @@
 package jfxtras.icalendarfx.demo;
 
+import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
@@ -194,33 +195,25 @@ public class ICalendarQuickOverview
         System.out.println(c.toContent());
     }
     
-    @Test // Can check if RFC 5545 rules are followed.
+    @Test (expected = DateTimeException.class)// Can check if RFC 5545 rules are followed.
     public void canValidate()
     {
+//        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
+//        {
+//            throw (RuntimeException) e;
+//        });
+        
+        VEvent vEvent = new VEvent()
+                .withDateTimeStart(LocalDate.of(2016, 3, 7))
+                .withDateTimeEnd(LocalDate.of(2016, 3, 8));
+        vEvent.setDateTimeEnd(LocalDateTime.of(2016, 3, 6, 12, 0)); // throws exception
+        System.out.println(vEvent.toContent());
+                
         VEvent e = new VEvent();
         List<String> errors = e.errors();
         errors.forEach(System.out::println);
-        
-        String content = "SUMMARY;LANGUAGE=en:Party";
-        Summary summary = Summary.parse(content);
-        boolean b = summary.isValid();
-        System.out.println("isSumValid:" + b);
-        
-        String content2 =
-                "BEGIN:VCALENDAR" + System.lineSeparator() +
-                "VERSION:2.0" + System.lineSeparator() +
-                "PRODID:-//hacksw/handcal//NONSGML v1.0//EN" + System.lineSeparator() +
-                "BEGIN:VEVENT" + System.lineSeparator() +
-                "UID:19970610T172345Z-AF23B2@example.com" + System.lineSeparator() +
-                "DTSTAMP:19970610T172345Z" + System.lineSeparator() +
-                "DTSTART:19970714T170000Z" + System.lineSeparator() +
-                "DTEND:19970715T040000Z" + System.lineSeparator() +
-                "SUMMARY:Bastille Day Party" + System.lineSeparator() +
-                "END:VEVENT" + System.lineSeparator() +
-                "END:VCALENDAR";
-        VCalendar c = VCalendar.parse(content2); // Note: can also parse files and readers
-        System.out.println(c.errors());
-        System.out.println("VCalendar isValid:" + c.isValid());
+        System.out.println("isValid:" + e.isValid());
+//        System.out.println(e.toContent());
     }
     
     // iCalendar Transport-Independent Interoperability Protocol (iTIP) message defined in RFC 5546
@@ -333,13 +326,13 @@ public class ICalendarQuickOverview
     @Test
     public void canStreamRRule2()
     {
-        String s = "FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13";
-        RecurrenceRule rRule = RecurrenceRule.parse(s);
-        Temporal dateTimeStart = LocalDate.of(2016, 5, 13);
-        rRule.getValue()
-                .streamRecurrences(dateTimeStart) // infinite steam make here
-                .limit(5) // must limit or goes forever
-                .forEach(System.out::println);
+String s = "FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13";
+RecurrenceRule rRule = RecurrenceRule.parse(s);
+Temporal dateTimeStart = LocalDate.of(2016, 5, 13);
+rRule.getValue()
+        .streamRecurrences(dateTimeStart)
+        .limit(5) // must limit or goes forever
+        .forEach(System.out::println);
     }
     
     @Test // Bind two properties to synchronize data (e.g. between display control and application data)

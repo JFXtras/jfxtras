@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.properties.PropertyType;
 import jfxtras.icalendarfx.properties.component.alarm.Action;
+import jfxtras.icalendarfx.properties.component.alarm.Action.ActionType;
 import jfxtras.icalendarfx.properties.component.alarm.RepeatCount;
 import jfxtras.icalendarfx.properties.component.alarm.Trigger;
-import jfxtras.icalendarfx.properties.component.alarm.Action.ActionType;
 import jfxtras.icalendarfx.properties.component.descriptive.Attachment;
 import jfxtras.icalendarfx.properties.component.descriptive.Description;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
@@ -282,15 +284,15 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
      *  :mailto:jdoe@example.com
      */
     @Override
-    public ObjectProperty<ObservableList<Attendee>> attendeesProperty()
+    public ListProperty<Attendee> attendeesProperty()
     {
         if (attendees == null)
         {
-            attendees = new SimpleObjectProperty<>(this, PropertyType.ATTENDEE.toString());
+            attendees = new SimpleListProperty<>(this, PropertyType.ATTENDEE.toString());
         }
         return attendees;
     }
-    private ObjectProperty<ObservableList<Attendee>> attendees;
+    private ListProperty<Attendee> attendees;
     @Override
     public ObservableList<Attendee> getAttendees() { return (attendees == null) ? null : attendees.get(); }
     @Override

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.properties.component.relationship.Attendee;
@@ -31,7 +31,7 @@ public interface VAttendee<T> extends VComponent
      *  </ul>
      *  </p>
      */
-    ObjectProperty<ObservableList<Attendee>> attendeesProperty();
+    ListProperty<Attendee> attendeesProperty();
     ObservableList<Attendee> getAttendees();
     void setAttendees(ObservableList<Attendee> properties);
     /**
