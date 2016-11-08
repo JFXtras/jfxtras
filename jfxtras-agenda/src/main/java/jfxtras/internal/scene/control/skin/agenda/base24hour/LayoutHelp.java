@@ -1,7 +1,7 @@
 /**
  * LayoutHelp.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -47,8 +47,11 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
+import jfxtras.internal.scene.control.skin.agenda.base24hour.AppointmentAbstractPane.AppointmentForDrag;
 import jfxtras.scene.control.agenda.Agenda;
+import jfxtras.scene.control.agenda.Agenda.Appointment;
 
 /**
  * This class is not a class but a data holder, a record, all fields are accessed directly.
@@ -74,10 +77,14 @@ class LayoutHelp {
 		durationInMSPerPixelProperty.bind( msPerDayProperty.divide(dayHeightProperty) );
 		
 		// generic
-		textHeightProperty.set( new Text("X").getBoundsInParent().getHeight() );
+		Text textHeight = new Text("X");
+		textHeight.getStyleClass().add("Agenda");		
+		textHeightProperty.set( textHeight.getBoundsInParent().getHeight() );
 		
 		// time column
-		timeWidthProperty.bind( timeColumnWhitespaceProperty.add( new Text("88:88").getBoundsInParent().getWidth() )  );
+		Text textWidth = new Text("88:88");
+		textWidth.getStyleClass().add("Agenda");		
+		timeWidthProperty.bind( timeColumnWhitespaceProperty.add( textWidth.getBoundsInParent().getWidth() )  );
 	}
 	final Agenda skinnable;
 	final AgendaSkin skin;
@@ -159,4 +166,19 @@ class LayoutHelp {
 		}
 		return localDateTime;
 	}
+	
+    /**
+     * Has the client added a callback to process the change?
+     * @param appointment
+     */
+	void callAppointmentChangedCallback(Appointment appointment) {
+		// ignore temp appointments
+		if (!(appointment instanceof AppointmentAbstractPane.AppointmentForDrag)) {
+		    Callback<Appointment, Void> lChangedCallback = skinnable.getAppointmentChangedCallback();
+		    if (lChangedCallback != null) {
+		        lChangedCallback.call(appointment);
+		    }
+		}
+	}
+
 }

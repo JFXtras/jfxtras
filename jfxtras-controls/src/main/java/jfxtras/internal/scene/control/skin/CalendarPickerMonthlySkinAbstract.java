@@ -1,7 +1,7 @@
 /**
  * CalendarPickerMonthlySkinAbstract.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -78,39 +78,6 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 			refreshLocale();
 		});
 		refreshLocale();
-
-		// modify the calendar the way we like it
-		derivedDisplayedCalendar(); // this must be done before installing the listener, otherwise the refresh will be called to early
-		getSkinnable().displayedCalendar().addListener( (InvalidationListener) observable -> {
-			// adapt to our needs
-			Calendar lDisplayedCalendar = getSkinnable().getDisplayedCalendar();
-			if ((myDisplayedCalendar == null && lDisplayedCalendar != null)
-				|| myDisplayedCalendar.equals(lDisplayedCalendar) == false
-				) {
-				derivedDisplayedCalendar();
-
-				// wait for this change to report itself (but then not enter this if statement)
-				return;
-			}
-
-			// update
-			refresh();
-		});
-	}
-	private Calendar myDisplayedCalendar = null;
-
-	/**
-	 *
-	 */
-	private void derivedDisplayedCalendar() {
-		// modify the calender the way we like it
-		Calendar lDisplayedCalendar = getSkinnable().getDisplayedCalendar();
-		Calendar lCalendar = deriveDisplayedCalendar(lDisplayedCalendar);
-
-		// assign it
-		myDisplayedCalendar = lCalendar;
-		getSkinnable().displayedCalendar().set(lCalendar);
-
 	}
 
 	// ==================================================================================================================
@@ -129,9 +96,6 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 
 	// ==================================================================================================================
 	// SUPPORT
-
-	// modify the displayed date to match our requirements (meaning same locale, etc)
-	abstract protected Calendar deriveDisplayedCalendar(Calendar displayedCalendar);
 
 	// refresh the skin
 	abstract protected void refresh();
@@ -289,14 +253,18 @@ abstract public class CalendarPickerMonthlySkinAbstract<S> extends SkinBase<Cale
 	}
 	
 	/**
-	 * determine on which day of week idx the first of the months is
+	 * determine on which day of week idx is the first of the month
 	 */
 	protected int determineFirstOfMonthDayOfWeek()
 	{
-		// determine with which button to start
-		int lFirstDayOfWeek = getSkinnable().getDisplayedCalendar().getFirstDayOfWeek();
-		int lFirstOfMonthIdx = getSkinnable().getDisplayedCalendar().get(java.util.Calendar.DAY_OF_WEEK) - lFirstDayOfWeek;
-		if (lFirstOfMonthIdx < 0) lFirstOfMonthIdx += 7;
+		Calendar lCalendar = (Calendar)getSkinnable().getDisplayedCalendar().clone();
+		lCalendar.set(Calendar.DATE, 1);
+		int lDayOfWeek = lCalendar.get(java.util.Calendar.DAY_OF_WEEK);
+		int lFirstDayOfWeek = lCalendar.getFirstDayOfWeek();
+		int lFirstOfMonthIdx = lDayOfWeek - lFirstDayOfWeek;
+		if (lFirstOfMonthIdx < 0) {
+			lFirstOfMonthIdx += 7;
+		}
 		return lFirstOfMonthIdx;
 	}
 	

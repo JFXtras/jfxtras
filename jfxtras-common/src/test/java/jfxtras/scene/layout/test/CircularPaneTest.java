@@ -1,7 +1,7 @@
 /**
  * CircularPaneTest.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -31,18 +31,19 @@ package jfxtras.scene.layout.test;
 
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import jfxtras.test.JFXtrasGuiTest;
+import javafx.util.Duration;
 import jfxtras.scene.layout.CircularPane;
 import jfxtras.test.AssertNode;
 import jfxtras.test.AssertNode.A;
+import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * TestFX is able to layout in the getRootNode() method a single node per class.
@@ -330,11 +331,69 @@ public class CircularPaneTest extends JFXtrasGuiTest {
 		new AssertNode(circularPane.getChildren().get(7)).assertXYWH(27.20446647341555, 6.2132034355964265, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
 	}
 
+	@Test
+	public void animateFromTheOrigin() {
+		setLabel("animateFromTheOrigin");
+
+		// insert 8 circles
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			for (int i = 0; i < 5; i++) {
+				javafx.scene.shape.Rectangle c = new javafx.scene.shape.Rectangle(30,30);
+				circularPane.getChildren().add(c);
+			}
+			circularPane.setAnimationInterpolation(CircularPane::animateFromTheOrigin);
+			circularPane.setAnimationDuration(Duration.millis(500));
+		});
+
+		// start animation
+		circularPane.animateIn();
+		
+		// wait for the animation to finish
+		sleep(1000); 
+
+		//generateSource(circularPane);
+		assertWH(circularPane, 111.07377520931499, 107.71393385567751);
+		new AssertNode(circularPane.getChildren().get(0)).assertXYWH(61.75009104025391, 6.2132034355964265, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(1)).assertXYWH(74.86057177371856, 46.563114153433865, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(2)).assertXYWH(40.53688760465749, 71.50073042008108, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(3)).assertXYWH(6.2132034355964265, 46.563114153433865, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(4)).assertXYWH(19.32368416906106, 6.213203435596434, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+	}
+
+
+	@Test
+	public void animateOverTheArc() {
+		setLabel("animateOverTheArc");
+
+		// insert 8 circles
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			for (int i = 0; i < 5; i++) {
+				javafx.scene.shape.Rectangle c = new javafx.scene.shape.Rectangle(30,30);
+				circularPane.getChildren().add(c);
+			}
+			circularPane.setAnimationInterpolation(CircularPane::animateOverTheArc);
+			circularPane.setAnimationDuration(Duration.millis(500));
+		});
+
+		// start animation
+		circularPane.animateIn();
+		
+		// wait for the animation to finish
+		sleep(1000); 
+
+		//generateSource(circularPane);
+		assertWH(circularPane, 111.07377520931499, 107.71393385567751);
+		new AssertNode(circularPane.getChildren().get(0)).assertXYWH(61.75009104025391, 6.2132034355964265, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(1)).assertXYWH(74.86057177371856, 46.563114153433865, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(2)).assertXYWH(40.53688760465749, 71.50073042008108, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(3)).assertXYWH(6.2132034355964265, 46.563114153433865, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+		new AssertNode(circularPane.getChildren().get(4)).assertXYWH(19.32368416906106, 6.213203435596434, 30.0, 30.0, 0.01).assertClass(javafx.scene.shape.Rectangle.class);
+	}
 
 	// =============================================================================================================================================================================================================================
 	// SUPPORT
 
-	List<String> EXCLUDED_CLASSES = java.util.Arrays.asList("jfxtras.labs.scene.layout.CircularPane$Bead", "jfxtras.labs.scene.layout.CircularPane$Connector");
+	List<String> EXCLUDED_CLASSES = java.util.Arrays.asList("jfxtras.scene.layout.CircularPane$Bead", "jfxtras.scene.layout.CircularPane$Connector");
 	
 	private void assertWH(CircularPane pane, double w, double h) {
 		Assert.assertEquals(w, pane.getWidth(), 0.01);

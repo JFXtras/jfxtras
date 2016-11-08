@@ -1,7 +1,7 @@
 /**
  * AgendaMenuTest.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -149,6 +149,8 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
 		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
 		click("#wholeday-checkbox");
 		click(".close-icon");
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals(true, agenda.appointments().get(0).isWholeDay().booleanValue() );
 

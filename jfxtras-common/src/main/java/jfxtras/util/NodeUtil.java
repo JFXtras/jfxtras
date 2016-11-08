@@ -1,7 +1,7 @@
 /**
  * NodeUtil.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -288,4 +288,25 @@ public class NodeUtil {
             }
         };
     }
+	
+	/**
+	 * This method is used to prevent the remove-add constructs on styleclasses.
+	 * This prevents CSS reprocessed unnecessary, because that is a time consuming process. 
+	 * @param node
+	 * @param styleclass
+	 */
+	static public void addStyleClass(Node node, String styleclass) {
+		if (!node.getStyleClass().contains(styleclass)) {
+			node.getStyleClass().add(styleclass);
+		}
+	}
+	
+	/**
+	 * The remove operation is already "cheap", so this method is here to only mirror the addStyleClass (which is not cheap)
+	 * @param node
+	 * @param styleclass
+	 */
+	static public void removeStyleClass(Node node, String styleclass) {
+		node.getStyleClass().remove(styleclass);
+	}
 }

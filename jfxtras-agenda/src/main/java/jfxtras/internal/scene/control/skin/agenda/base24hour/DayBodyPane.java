@@ -1,7 +1,7 @@
 /**
  * DayBodyPane.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -280,6 +280,7 @@ class DayBodyPane extends Pane
 			// create pane
 			AppointmentWholedayBodyPane lAppointmentPane = new AppointmentWholedayBodyPane(localDateObjectProperty.get(), lAppointment, layoutHelp);
 			wholedayAppointmentBodyPanes.add(lAppointmentPane);
+			((AgendaSkinTimeScale24HourAbstract<Appointment>) layoutHelp.skin).appointmentNodeMap().put(System.identityHashCode(lAppointment), lAppointmentPane);
 			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
 			
 			// position by binding
@@ -311,6 +312,7 @@ class DayBodyPane extends Pane
 		for (Appointment lAppointment : taskAppointments) {
 			AppointmentTaskBodyPane lAppointmentPane = new AppointmentTaskBodyPane(lAppointment, layoutHelp);
 			taskAppointmentBodyPanes.add(lAppointmentPane);
+            ((AgendaSkinTimeScale24HourAbstract<Appointment>) layoutHelp.skin).appointmentNodeMap().put(System.identityHashCode(lAppointment), lAppointmentPane);
 			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
 			
 			lCnt++;
@@ -336,6 +338,7 @@ class DayBodyPane extends Pane
 		for (Appointment lAppointment : regularAppointments) {
 			AppointmentRegularBodyPane lAppointmentPane = new AppointmentRegularBodyPane(localDateObjectProperty.get(), lAppointment, layoutHelp);
 			regularAppointmentBodyPanes.add(lAppointmentPane);
+            ((AgendaSkinTimeScale24HourAbstract<Appointment>) layoutHelp.skin).appointmentNodeMap().put(System.identityHashCode(lAppointment), lAppointmentPane);
 			lAppointmentPane.setId(lAppointmentPane.getClass().getSimpleName() + localDateObjectProperty.get() + "/" + lCnt); // for testing
 			
 			lCnt++;
@@ -356,7 +359,7 @@ class DayBodyPane extends Pane
 		Rectangle r = new Rectangle(NodeUtil.sceneX(this), NodeUtil.sceneY(this), this.getWidth(), this.getHeight());
 		if (r.contains(x, y)) {
 			LocalDate localDate = localDateObjectProperty.get();
-			double lHeightOffset = (y -  r.getY());
+			double lHeightOffset = (y -  r.getY()); 
 			int ms = (int)(lHeightOffset * layoutHelp.durationInMSPerPixelProperty.get());
 			LocalDateTime localDateTime = localDate.atStartOfDay().plusSeconds(ms / 1000);
 			localDateTime = localDateTime.withNano(AppointmentAbstractPane.DRAG_DAY); // we abuse the nano second to deviate body panes from header panes

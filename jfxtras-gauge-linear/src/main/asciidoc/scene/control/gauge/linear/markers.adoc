@@ -1,0 +1,23 @@
+This gauge supports markers, which are tiny notches on the arc to mark special values:
+
+- Marker styling can be set using CSS classes like "marker0", "marker1", ... , the numeric suffix is the index of the marker in the markers list.
+- Another option is to specify an marker ID, which can then be used to style the marker in CSS.
+- The gauge's css per default supports marker classes marker0 - marker9.
+- A shortcut is available through -fxx-marker0-color, ..., which can be set in any styleclass (this is used in the colorschemes).
+
+=== Example
+[source,java]
+--
+    for (int i = 0; i <= 20; i++) {
+        gauge.markers().add(new PercentMarker(gauge, i * 5.0));
+    }
+--
+
+Markers can be custom shaped using a SVG shape:
+[source,css]
+--
+    .marker1 {
+        -fx-shape: 'M 0 0 L -3 -6 L 3 -6 Z'; 
+    } 
+--
+

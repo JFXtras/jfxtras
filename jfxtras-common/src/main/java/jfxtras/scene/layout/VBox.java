@@ -1,7 +1,7 @@
 /**
  * VBox.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -78,6 +78,25 @@ public class VBox extends javafx.scene.layout.VBox
 	public VBox(double spacing)
 	{
 		super(spacing);
+		construct();
+	}
+
+	/**
+	 * 
+	 * @param spacing
+	 * @param nodes
+	 */
+	public VBox(double spacing, Node... nodes) {
+		super(spacing, nodes);
+		construct();
+	}
+
+	/**
+	 * 
+	 * @param nodes
+	 */
+	public VBox(Node... nodes) {
+		super(nodes);
 		construct();
 	}
 

@@ -1,7 +1,7 @@
 /**
  * CirclePopupMenu.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -89,7 +89,7 @@ public class CirclePopupMenu {
     	this.node = node;
     	
     	// setup popup
-    	popup.setAutoHide(true);
+    	// autohiding causes problems in the sample: popup.setAutoHide(true);
     	popup.setHideOnEscape(true);
     	popup.setOnHiding( windowEvent -> {
     		hide();

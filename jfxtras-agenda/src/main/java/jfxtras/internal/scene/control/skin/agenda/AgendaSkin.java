@@ -1,7 +1,7 @@
 /**
  * AgendaSkin.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,8 @@ package jfxtras.internal.scene.control.skin.agenda;
 import java.time.LocalDateTime;
 
 import javafx.print.PrinterJob;
+import javafx.scene.Node;
+import jfxtras.scene.control.agenda.Agenda.Appointment;
 
 public interface AgendaSkin {
 	/**
@@ -51,6 +53,15 @@ public interface AgendaSkin {
 	 * @return a localDateTime equivalent of the click location, where a drop in the day section has nano seconds == 1, and a drop in a header (wholeday) section has nano seconds == 0
 	 */
 	LocalDateTime convertClickInSceneToDateTime(double x, double y);
+	
+	/**
+	 * Finds rendered node for appointment.  The node can be used as the owner for a popup.
+	 * or finding its x, y coordinates.
+	 * 
+	 * @param appointment
+	 * @return rendered node that represents appointment
+	 */
+	Node getNodeForPopup(Appointment appointment);
 	
 	public void print(PrinterJob job);
 }

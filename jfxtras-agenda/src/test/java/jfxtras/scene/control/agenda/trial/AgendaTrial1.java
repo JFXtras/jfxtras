@@ -1,7 +1,7 @@
 /**
  * AgendaTrial1.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -176,9 +176,9 @@ public class AgendaTrial1 extends Application {
 				.withDescription("Calendar based")
 				.withAppointmentGroup(lAppointmentGroupMap.get("group08"))
 		// ZonedDateTime: there is no additional value in using ZonedDateTime everywhere, so we just have one test appointment
-		, 	new Agenda.AppointmentImplZoned()
-				.withStartZonedDateTime(ZonedDateTime.of(lTodayLocalDate, LocalTime.of(2, 00), ZoneId.systemDefault()) )
-				.withEndZonedDateTime(ZonedDateTime.of(lTodayLocalDate, LocalTime.of(3, 30), ZoneId.systemDefault()) )
+		, 	new Agenda.AppointmentImplTemporal()
+				.withStartTemporal(ZonedDateTime.of(lTodayLocalDate, LocalTime.of(2, 00), ZoneId.systemDefault()) )
+				.withEndTemporal(ZonedDateTime.of(lTodayLocalDate, LocalTime.of(3, 30), ZoneId.systemDefault()) )
 				.withSummary("Zoned")
 				.withDescription("Zoned based")
 				.withAppointmentGroup(lAppointmentGroupMap.get("group08"))

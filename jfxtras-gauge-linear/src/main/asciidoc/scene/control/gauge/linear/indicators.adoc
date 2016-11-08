@@ -1,0 +1,63 @@
+Indicators can be assigned to these position as follows:
+[source,java]
+--
+    gauge.indicators().add(new Indicator(0, "warning"));
+    gauge.indicators().add(new Indicator(1, "error"));
+--
+
+This enables (but does not show!) the indicator at the corresponding locations, the example uses the two predefined indicators "error" and "warning".
+Indicators can be made visible by assigning "visible" to the corresponding -fxx-INDICATORID-indicator-visibility variable in CSS, like so:
+[source,css]
+--
+    -fxx-warning-indicator-visibility: visible; 
+    -fxx-error-indicator-visibility: visible;
+--
+
+It is possible to have indicators become visible based on the needle's value, by means of the segments.
+Suppose the needle is over segment1, then a CSS class named "segment1-active" is added to the node.
+Using this CSS class an indicator can be made visible, for example:
+[source,css]
+--
+   .segment1-active {
+       -fxx-warning-indicator-visibility: visible; 
+    }
+   .segment2-active {
+       -fxx-error-indicator-visibility: visible; 
+    }
+--
+Segments may overlap and can be transparent, there is a special "colorscheme-first-grey-rest-transparent-10" colorscheme.
+Segments could be setup solely to show indicators, for example segment1 could run from 50% to 100% and segment2 from 75% to 100%.
+If the needle is over segment2, both the warning and error indicator will be visible.
+
+=== Example (using the CSS above)
+[source,java]
+--
+    gauge.getStyleClass().add("colorscheme-first-grey-rest-transparent-10");
+    gauge.segments().add(new CompleteSegment(gauge));
+    gauge.segments().add(new PercentSegment(gauge, 50.0, 100.0, "warningSegment"));
+    gauge.segments().add(new PercentSegment(gauge, 75.0, 100.0, "errorSegment"));
+--
+
+Given that the segements have id's, you can also use active classes based on these id's: 
+[source,css]
+--
+   .segment-warningSegment-active {
+       -warning-indicator-visibility: visible; 
+    }
+   .segment-errorSegment-active {
+       -error-indicator-visibility: visible; 
+    }
+--
+
+This should not be confused with the CSS rules based on the id of the segments (in the example: #warningSegment and #errorSegment).
+
+Custom indicators can be created in CSS by defining a 100x100 SVG shape in CSS, with 0,0 being in the center, and assign an id to it. Similar to the default error indicator:.
+[source,css]
+--
+   .error-indicator {
+       visibility: -fxx-error-indicator-visibility;
+       -fx-background-color: -fxx-error-indicator-color;
+       -fx-shape: 'M-50,0 a50,50 0 1,0 100,0 a50,50 0 1,0 -100,0'; 
+       -fx-scale-shape: false; 
+   }
+--

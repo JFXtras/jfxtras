@@ -1,7 +1,7 @@
 /**
  * HBox.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -78,6 +78,25 @@ public class HBox extends javafx.scene.layout.HBox
 	public HBox(double spacing)
 	{
 		super(spacing);
+		construct();
+	}
+
+	/**
+	 * 
+	 * @param spacing
+	 * @param nodes
+	 */
+	public HBox(double spacing, Node... nodes) {
+		super(spacing, nodes);
+		construct();
+	}
+
+	/**
+	 * 
+	 * @param nodes
+	 */
+	public HBox(Node... nodes) {
+		super(nodes);
 		construct();
 	}
 

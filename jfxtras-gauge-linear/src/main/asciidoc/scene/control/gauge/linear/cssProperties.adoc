@@ -1,0 +1,14 @@
+The gauge supports the following CSS styleable properties:
+
+- -fxx-animated: is the gauge animated, YES or NO.
+- -fxx-value-format: a DecimalFormat pattern for rendering the label inside the needle
+
+=== Example 
+[source,css]
+--
+    #myGauge {
+       -fxx-animated: YES; 
+       -fxx-value-format:' ##0.0W';
+    }
+--
+

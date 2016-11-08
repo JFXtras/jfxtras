@@ -1,7 +1,7 @@
 /**
  * ToggleGroupValueTest.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -112,7 +112,7 @@ public class ToggleGroupValueTest extends JFXtrasGuiTest {
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			toggleGroupValue.setValue("value2");
 		});
-		Assert.assertEquals(toggles.get(2), toggleGroupValue.getSelectedToggle());
+		Assert.assertEquals(toggles.get(2).getText(), ((ToggleButton)toggleGroupValue.getSelectedToggle()).getText());
 		
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			toggleGroupValue.setValue(null);

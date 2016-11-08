@@ -1,7 +1,7 @@
 /**
  * AgendaMouseManipulateTest.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,7 @@ import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.TestUtil;
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -49,7 +50,7 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 	{
 		return super.getRootNode();
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -111,6 +112,8 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		press(MouseButton.PRIMARY);
 		move("#hourLine15");
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals("2014-01-01T14:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
@@ -137,7 +140,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		press(MouseButton.PRIMARY);
 		moveBy(100, 0);
 		release(MouseButton.PRIMARY);
-		
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
+
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals("2014-01-02T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
 		Assert.assertEquals("2014-01-02T12:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
@@ -162,7 +167,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		press(MouseButton.PRIMARY);
 		move("#hourLine15");
 		release(MouseButton.PRIMARY);
-		
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
+
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
 		Assert.assertEquals("2014-01-01T15:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
@@ -225,12 +232,15 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		press(MouseButton.PRIMARY);
 		move("#hourLine10");
 		release(MouseButton.PRIMARY);
-		
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
+
 		// now there should be a regular appointment
+		System.out.println(agenda.appointments());
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 		Assert.assertEquals(1, agenda.appointments().size() );
-		Assert.assertEquals("2014-01-01T00:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
-		Assert.assertEquals("2014-01-02T00:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T10:00", agenda.appointments().get(0).getStartLocalDateTime().toString() );
+		Assert.assertEquals("2014-01-01T11:00", agenda.appointments().get(0).getEndLocalDateTime().toString() );
 		//TestUtil.sleep(3000);
 	}
 
@@ -257,6 +267,8 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		press(MouseButton.PRIMARY);
 		move("#hourLine10");
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
 		
 		// now there should be a regular appointment
 		assertFind("#AppointmentTaskBodyPane2014-01-01/0");
@@ -288,6 +300,8 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		press(MouseButton.PRIMARY);
 		move("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
 		
 		// now there should be a regular appointment
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
@@ -319,7 +333,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		press(MouseButton.PRIMARY);
 		move("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
-		
+		Assert.assertEquals(1, appointmentChangedCallbackList.size());
+		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
+
 		// now there should be a regular appointment
 		assertFind("#AppointmentWholedayBodyPane2014-01-02/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-02/0");

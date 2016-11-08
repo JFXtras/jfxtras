@@ -1,7 +1,7 @@
 /**
  * DurationDragger.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.util.NodeUtil;
 
@@ -138,7 +139,8 @@ class DurationDragger extends Rectangle
 			
 			// set the new enddate
 			appointmentPane.appointment.setEndLocalDateTime(endLocalDateTime);
-			
+			layoutHelp.callAppointmentChangedCallback(appointment);
+
 			// relayout the entire skin
 			layoutHelp.skin.setupAppointments();
 		});

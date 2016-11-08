@@ -1,7 +1,7 @@
 /**
  * AppointmentAbstractPane.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -190,7 +190,7 @@ abstract class AppointmentAbstractPane extends Pane {
 					layoutHelp.dragPane.getChildren().add(endTimeText);
 				}
 				// we use a clone for calculating the current time during the drag
-				appointmentForDrag = new Agenda.AppointmentImplLocal();
+				appointmentForDrag = new AppointmentForDrag();
 			}
 			
 			// move the drag rectangle
@@ -249,8 +249,8 @@ abstract class AppointmentAbstractPane extends Pane {
 			// determine start and end DateTime of the drag
 			LocalDateTime dragDropDateTime = layoutHelp.skin.convertClickInSceneToDateTime(mouseEvent.getSceneX(), mouseEvent.getSceneY());
 			if (dragDropDateTime != null) { // not dropped somewhere outside
-				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);					
-				
+				handleDrag(appointment, dragPickupDateTime, dragDropDateTime);
+
 				// relayout whole week
 				layoutHelp.skin.setupAppointments();
 			}
@@ -267,6 +267,10 @@ abstract class AppointmentAbstractPane extends Pane {
 	private Text endTimeText = null;
 	private Agenda.Appointment appointmentForDrag = null;
 
+	public static class AppointmentForDrag extends Agenda.AppointmentImplLocal {
+		
+	}
+	
 	protected  boolean showStartTimeText() {
 		return true;
 	}
@@ -295,12 +299,18 @@ abstract class AppointmentAbstractPane extends Pane {
 		  || (dragPickupInDayHeader && dragDropInDayHeader)
 		) {				
 			// simply add the duration
+            boolean changed = false;
 			Duration duration = Duration.between(dragPickupDateTime, dragDropDateTime);
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(duration) );
+                changed = true;
 			}
 			if (appointment.getEndLocalDateTime() != null) {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(duration) );
+				changed = true;
+			}
+			if (changed) {
+				layoutHelp.callAppointmentChangedCallback(appointment);
 			}
 		}
 		
@@ -310,31 +320,42 @@ abstract class AppointmentAbstractPane extends Pane {
 			appointment.setWholeDay(true);
 			
 			// simply add the duration, but without time
+            boolean changed = false;
 			Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
 			if (appointment.getStartLocalDateTime() != null) {
 				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().plus(period) );
+                changed = true;
 			}
 			if (appointment.getEndLocalDateTime() != null) {
 				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().plus(period) );
+                changed = true;
 			}
+            if (changed) {
+            	layoutHelp.callAppointmentChangedCallback(appointment);
+            }
 		}
 		
-		// if dragged from day to header
+		// if dragged from header to day
 		else if ( (dragPickupInDayHeader && dragDropInDayBody) ) {
 			
 			appointment.setWholeDay(false);
 
 			// if this is a task
+            boolean changed = false;
 			if (appointment.getStartLocalDateTime() != null && appointment.getEndLocalDateTime() == null) {
 				// set the drop time as the task time
-				appointment.setStartLocalDateTime(dragDropDateTime );
+				appointment.setStartLocalDateTime(dragDropDateTime);
+                changed = true;
 			}
 			else {
-				// simply add the duration, but without time
-				Period period = Period.between(dragPickupDateTime.toLocalDate(), dragDropDateTime.toLocalDate());
-				appointment.setStartLocalDateTime( appointment.getStartLocalDateTime().toLocalDate().plus(period).atStartOfDay() );
-				appointment.setEndLocalDateTime( appointment.getEndLocalDateTime().toLocalDate().plus(period).plusDays(1).atStartOfDay() );
+				// simply add the duration - default to 1 hour duration
+				appointment.setStartLocalDateTime(dragDropDateTime);
+				appointment.setEndLocalDateTime(dragDropDateTime.plusHours(1));
+                changed = true;
 			}
+            if (changed) {
+            	layoutHelp.callAppointmentChangedCallback(appointment);
+            }
 		}
 	}
 

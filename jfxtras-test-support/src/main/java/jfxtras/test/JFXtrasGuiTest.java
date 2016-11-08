@@ -1,7 +1,7 @@
 /**
  * JFXtrasGuiTest.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -54,15 +54,23 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 	
 	@Rule public TestName testName = new TestName();
 	
-	public JFXtrasGuiTest() {
-	}
-	
 	@Before
-	public void before() {
+	public void before() throws Throwable {
 		System.out.println("========================================================================\n" + this.getClass().getSimpleName() + "." + testName.getMethodName());
+		
+		super.setupStage();
 		
 		// default we're in US locale: keep (re)setting this for each test
 		Locale.setDefault(Locale.US);
+
+		// catch any exception during rendering
+		Thread.currentThread().setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			
+			@Override
+			public void uncaughtException(Thread t, Throwable e) {
+				Assert.fail("This should not occur\n" + e);
+			}
+		});
 	}
 	
 	@After

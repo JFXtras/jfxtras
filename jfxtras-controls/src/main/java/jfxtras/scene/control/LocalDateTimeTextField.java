@@ -1,7 +1,7 @@
 /**
  * LocalDateTimeTextField.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -62,13 +62,13 @@ import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
  * :dateFormats: dateTimeFormaters
  * 
  * = LocalDateTimeTextField
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarTextField_properties.adoc[]
  * 
  * == Callback
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarTextField_callbacks.adoc[]
  * 
  * == Icon
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarTextField_icon.adoc[]
  */
 public class LocalDateTimeTextField extends Control
 {

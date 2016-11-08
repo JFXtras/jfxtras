@@ -1,0 +1,19 @@
+
+- Segment styling can be set using CSS classes like "segment0", "segment1", ... , the numeric suffix is the index of the segment in the segments list.
+- Another option is to specify an segment ID, which can then be used to style the segment in CSS.
+- The gauge's css per default supports segment classes segment0 - segment9.
+- A shortcut is available through -fxx-segment0-color, ..., which can be set in any styleclass (this is used in the colorschemes).
+- The CSS also contains a number of colorschemes, like "colorscheme-green-to-red-10" (for 10 segments) which can be activated by assigning the colorscheme class to the gauge.
+- If no segments are specified a single segment will automatically be drawn.
+- If segments are specified, the user is fully responsible for convering the whole range.
+
+=== Example
+[source,java]
+--
+    gauge.getStyleClass().add("colorscheme-green-to-red-10");
+    for (int i = 0; i < 10; i++) {
+        Segment lSegment = new PercentSegment(gauge, i10.0, (i+1)10.0);
+        gauge.segments().add(lSegment);
+    }
+--
+Note: the colorscheme CSS must be manually loaded in the scene! See below.

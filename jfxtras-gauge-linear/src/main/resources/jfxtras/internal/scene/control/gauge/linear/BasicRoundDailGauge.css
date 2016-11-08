@@ -1,0 +1,311 @@
+@font-face {
+	src: url("/roboto/Roboto-Medium.ttf");
+}
+
+@import "_segment.css"
+
+.BasicRoundDailGauge {
+
+    /* These are the variables with their default values (colors), special combinations can be set by assigning one of the colorschemes */    
+    -fxx-backplate-color: #f0f0f0;
+	-fxx-needle-color: #F8907D;
+	-fxx-tick-color: black;
+	-fxx-value-color: #101010;
+	-fxx-knob-color: grey;
+    -fxx-segment0-color: #f61319;
+    -fxx-segment1-color: #f3351f;
+    -fxx-segment2-color: #f65821;
+    -fxx-segment3-color: #f18c23;
+    -fxx-segment4-color: #f3a429;
+    -fxx-segment5-color: #fccb2e;
+    -fxx-segment6-color: #f2de31;
+    -fxx-segment7-color: #d4ea35;
+    -fxx-segment8-color: #aacc2a;
+    -fxx-segment9-color: #97b329;
+    -fxx-marker0-color: -fxx-tick-color;
+    -fxx-marker1-color: -fxx-tick-color;
+    -fxx-marker2-color: -fxx-tick-color;
+    -fxx-marker3-color: -fxx-tick-color;
+    -fxx-marker4-color: -fxx-tick-color;
+    -fxx-marker5-color: -fxx-tick-color;
+    -fxx-marker6-color: -fxx-tick-color;
+    -fxx-marker7-color: -fxx-tick-color;
+    -fxx-marker8-color: -fxx-tick-color;
+    -fxx-marker9-color: -fxx-tick-color;
+	/* predefined indicators */
+	-fxx-error-indicator-visibility: hidden; 
+	-fxx-error-indicator-color: red; 
+	-fxx-warning-indicator-visibility: hidden; 
+	-fxx-warning-indicator-color: orange; 
+}
+
+.BasicRoundDailGauge .backplate {
+	-fx-fill: -fxx-backplate-color;
+}
+
+.BasicRoundDailGauge .tick {
+}
+
+.BasicRoundDailGauge .value {
+    -fx-fill: -fxx-value-color;
+	-fx-font-family: "Roboto Medium"; 
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+}
+
+
+.BasicRoundDailGauge .needle-standard {
+    -fx-background-color : derive(-fxx-needle-color, -30%),
+    	linear-gradient(to left,
+            derive(-fxx-needle-color, 15%) 0%,
+            derive(-fxx-needle-color, -15%) 100%);
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0em;
+    -fx-padding: 0;
+    -fx-stroke: transparent;
+    -fx-scale-shape: false;
+    -fx-shape: "M -4 0 L 4 0 L 1 95 L -1 95 Z";
+    
+}
+
+.BasicRoundDailGauge .knob {
+    -fx-background-color : linear-gradient(to bottom,
+                                           derive(-fxx-knob-color, 80%) 0%,
+                                           derive(-fxx-knob-color, 40%) 52%,
+                                           derive(-fxx-knob-color, 0%) 100%),
+                           linear-gradient(to bottom,
+                                           derive(-fxx-knob-color, 70%) 0%,
+                                           derive(-fxx-knob-color, 30%) 45%,
+                                           derive(-fxx-knob-color, 0%) 100%);
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 0em;
+    -fx-scale-shape      : false;
+    -fx-shape            : "M 0 100 C 0 44.7708 44.7708 0 100 0 C 155.2292 0 200 44.7708 200 100 C 200 155.2292 155.2292 200 100 200 C 44.7708 200 0 155.2292 0 100 Z";
+}
+
+.BasicRoundDailGauge .outerring {
+	-fx-fill: transparent;
+    -fx-stroke: linear-gradient(to bottom,
+                                         rgb(204,204,204) 0%,
+                                         rgb(133,133,133) 26%,
+                                         rgb(84,84,84) 100%);
+}
+
+.BasicRoundDailGauge .innerring {
+	-fx-fill: transparent;
+    -fx-stroke: linear-gradient(to bottom,
+                                         rgb(71,72,72) 0%,
+                                         rgb(110,106,107) 50%,
+                                         rgb(186,185,187) 100%);
+}
+
+.BasicRoundDailGauge .GlassPlatePane {                                         
+    -fx-effect: dropshadow(two-pass-box, rgba(0, 0, 0, 0.3), 30, 0.3, 0, 10);
+}
+
+
+/***************************************************************************************************************
+/* predefined indicators http://www.w3.org/TR/SVG/paths.html */
+/* drawing circles in SVG: http://stackoverflow.com/questions/5737975/circle-drawing-with-svgs-arc-path/10477334#10477334 */
+
+.BasicRoundDailGauge .error-indicator {
+	visibility: -fxx-error-indicator-visibility;
+	-fx-background-color: -fxx-error-indicator-color;
+	-fx-shape: 'M 50, 50 m -50, 0 a 50,50 0 1,0 100,0 a 50,50 0 1,0 -100,0'; 
+	-fx-scale-shape: false; 
+}
+
+.BasicRoundDailGauge .warning-indicator {
+	visibility: -fxx-warning-indicator-visibility;
+	-fx-background-color: -fxx-warning-indicator-color;
+	-fx-shape: 'M 10 100  L 90 100  S 100 100 95 90  L 55 15  S 50 10 45 15  L 5 90  S 0 100 10 100 Z'; 
+	-fx-scale-shape: false; 
+}
+
+/***************************************************************************************************************
+ * This are the actual classes being assigned to the segments, they use the variables to obtain their color.
+ */ 
+
+.BasicRoundDailGauge .segment {
+    -fx-stroke: #888888;
+    -fx-fill: #888888;
+}
+
+.BasicRoundDailGauge .segment0 {
+    -fx-stroke: -fxx-segment0-color;
+    -fx-fill: -fxx-segment0-color;
+}
+
+.BasicRoundDailGauge .segment1 {
+    -fx-stroke: -fxx-segment1-color;
+    -fx-fill: -fxx-segment1-color;
+}
+
+.BasicRoundDailGauge .segment2 {
+    -fx-stroke: -fxx-segment2-color;
+    -fx-fill: -fxx-segment2-color;
+}
+
+.BasicRoundDailGauge .segment3 {
+    -fx-stroke: -fxx-segment3-color;
+    -fx-fill: -fxx-segment3-color;
+}
+
+.BasicRoundDailGauge .segment4 {
+    -fx-stroke: -fxx-segment4-color;
+    -fx-fill: -fxx-segment4-color;
+}
+
+.BasicRoundDailGauge .segment5 {
+    -fx-stroke: -fxx-segment5-color;
+    -fx-fill: -fxx-segment5-color;
+}
+
+.BasicRoundDailGauge .segment6 {
+    -fx-stroke: -fxx-segment6-color;
+    -fx-fill: -fxx-segment6-color;
+}
+
+.BasicRoundDailGauge .segment7 {
+    -fx-stroke: -fxx-segment7-color;
+    -fx-fill: -fxx-segment7-color;
+}
+
+.BasicRoundDailGauge .segment8 {
+    -fx-stroke: -fxx-segment8-color;
+    -fx-fill: -fxx-segment8-color;
+}
+
+.BasicRoundDailGauge .segment9 {
+    -fx-stroke: -fxx-segment9-color;
+    -fx-fill: -fxx-segment9-color;
+}
+
+/**
+ * The segment-active class can be used to modify an segment that is under the needle (this can be more than if the segments are setup in such a way).
+ */
+ 
+.BasicRoundDailGauge .segment-active {
+}
+
+/**
+ * The segmentX-active are assigned corresponding to the segment that is under the needle (this can be more than if the segments are setup in such a way).
+ * This is the place to associate an indicator with a segment, by adding one of these line to the appropriate class:
+ *     -fxx-error-indicator-visibility: visible; 
+ *     -fxx-warning-indicator-visibility: visible; 
+ * Interesting is it to have transparent segments, while not visible, these can become active and show an indicator.
+ 
+.BasicRoundDailGauge .segment0-active {
+}
+
+.BasicRoundDailGauge .segment1-active {
+}
+
+.BasicRoundDailGauge .segment2-active {
+}
+
+.BasicRoundDailGauge .segment3-active {
+}
+
+.BasicRoundDailGauge .segment4-active {
+}
+
+.BasicRoundDailGauge .segment5-active {
+}
+
+.BasicRoundDailGauge .segment6-active {
+}
+
+.BasicRoundDailGauge .segment7-active {
+}
+
+.BasicRoundDailGauge .segment8-active {
+}
+
+.BasicRoundDailGauge .segment9-active {
+}
+ */
+
+/***************************************************************************************************************
+ * This are the actual classes being assigned to the marker, they use the variables to obtain their color.
+ */ 
+
+.BasicRoundDailGauge .marker {
+	-fx-background-color: -fxx-tick-color;
+	-fx-shape: 'M 0 0 L -3 -6 L 3 -6 Z'; 
+	-fx-scale-shape: false; 
+}
+
+.BasicRoundDailGauge .marker0 {
+    -fx-background-color: -fxx-marker0-color;
+}
+
+.BasicRoundDailGauge .marker1 {
+    -fx-background-color: -fxx-marker1-color;
+}
+
+.BasicRoundDailGauge .marker2 {
+    -fx-background-color: -fxx-marker2-color;
+}
+
+.BasicRoundDailGauge .marker3 {
+    -fx-background-color: -fxx-marker3-color;
+}
+
+.BasicRoundDailGauge .marker4 {
+    -fx-background-color: -fxx-marker4-color;
+}
+
+.BasicRoundDailGauge .marker5 {
+    -fx-background-color: -fxx-marker5-color;
+}
+
+.BasicRoundDailGauge .marker6 {
+    -fx-background-color: -fxx-marker6-color;
+}
+
+.BasicRoundDailGauge .marker7 {
+    -fx-background-color: -fxx-marker7-color;
+}
+
+.BasicRoundDailGauge .marker8 {
+    -fx-background-color: -fxx-marker8-color;
+}
+
+.BasicRoundDailGauge .marker9 {
+    -fx-background-color: -fxx-marker9-color;
+}
+
+/***************************************************************************************************************
+ * Color schemes, these assign different values to the variables.
+ */
+
+.colorscheme-light {
+    -fxx-backplate-color: #f0f0f0;
+	-fxx-needle-color: #F8907D;
+	-fxx-tick-color: black;
+	-fxx-value-color: #101010;
+}
+
+.colorscheme-dark {
+    -fxx-backplate-color: #2f2f2f;
+	-fxx-needle-color: #F8907D;
+	-fxx-tick-color: white;
+	-fxx-value-color: #F0F0F0;
+}
+
+.colorscheme-green {
+    -fxx-backplate-color: #46934E;
+	-fxx-needle-color: white;
+	-fxx-knob-color: #b0b0b0;
+	-fxx-tick-color: #e0e0e0;
+	-fxx-value-color: #e0e0e0;
+}
+
+.colorscheme-red {
+    -fxx-backplate-color: #AF0000;
+	-fxx-needle-color: white;
+	-fxx-knob-color: #b0b0b0;
+	-fxx-tick-color: #e0e0e0;
+	-fxx-value-color: #e0e0e0;
+}

@@ -1,7 +1,7 @@
 /**
  * AbstractAgendaTestBase.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -30,14 +30,20 @@
 package jfxtras.scene.control.agenda.test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
+import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.test.JFXtrasGuiTest;
 
 public class AbstractAgendaTestBase extends JFXtrasGuiTest {
@@ -75,11 +81,25 @@ public class AbstractAgendaTestBase extends JFXtrasGuiTest {
             }
         });
         
+        // tick callbacks
+        agenda.appointmentChangedCallbackProperty().set( appointment -> {
+        	if (!appointmentChangedCallbackList.contains(appointment)) {
+        		appointmentChangedCallbackList.add(appointment);
+        	}
+        	int identityHashCode = System.identityHashCode(appointment);
+        	if (!appointmentChangedCallbackMap.containsKey(identityHashCode)) {
+        		appointmentChangedCallbackMap.put(identityHashCode, 0);
+        	}
+        	appointmentChangedCallbackMap.put(identityHashCode, appointmentChangedCallbackMap.get(identityHashCode) + 1);
+			return null;
+		});
+        
 		vbox.getChildren().add(agenda);
 		return vbox;
 	}
 	protected VBox vbox = null; // cannot make this final and assign upon construction
     final protected Map<String, Agenda.AppointmentGroup> appointmentGroupMap = new TreeMap<String, Agenda.AppointmentGroup>();
     protected Agenda agenda = null; // cannot make this final and assign upon construction
-
+    final protected List<Appointment> appointmentChangedCallbackList = new ArrayList<>();
+    final protected Map<Integer, Integer> appointmentChangedCallbackMap = new LinkedHashMap<>();
 }

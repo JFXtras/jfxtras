@@ -1,7 +1,7 @@
 /**
  * CirclePopupMenuTest.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -32,6 +32,9 @@ package jfxtras.scene.menu.test;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -45,17 +48,15 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Popup;
 import javafx.stage.Window;
-import jfxtras.test.JFXtrasGuiTest;
+import javafx.util.Duration;
 import jfxtras.scene.layout.CircularPane;
 import jfxtras.scene.menu.CirclePopupMenu;
 import jfxtras.test.AssertNode;
 import jfxtras.test.AssertNode.A;
+import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 import jfxtras.util.Implements;
 import jfxtras.util.NodeUtil;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * 

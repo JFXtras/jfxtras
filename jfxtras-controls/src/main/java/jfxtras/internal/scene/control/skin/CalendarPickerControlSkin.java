@@ -1,7 +1,7 @@
 /**
  * CalendarPickerControlSkin.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -39,19 +39,22 @@ import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.sun.javafx.css.converters.EnumConverter;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.css.CssMetaData;
 import javafx.css.SimpleStyleableObjectProperty;
 import javafx.css.Styleable;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.ToggleButton;
@@ -65,13 +68,9 @@ import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.scene.control.ListSpinner;
-import jfxtras.scene.control.ListSpinner.CycleEvent;
 import jfxtras.scene.control.ListSpinnerIntegerList;
 import jfxtras.scene.layout.GridPane;
-
-import com.sun.javafx.css.converters.EnumConverter;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
+import jfxtras.util.NodeUtil;
 
 /**
  * This skin uses regular JavaFX controls
@@ -166,7 +165,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 	 * @param displayedCalendar
 	 * @return
 	 */
-	protected Calendar deriveDisplayedCalendar(Calendar displayedCalendar)
+	private Calendar deriveDisplayedCalendar(Calendar displayedCalendar)
 	{
 		// always the 1st of the month, without time
 		Calendar lCalendar = Calendar.getInstance(getSkinnable().getLocale());
@@ -277,44 +276,28 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		monthListSpinner = new ListSpinner<String>(lMonthLabels).withIndex(Calendar.getInstance().get(Calendar.MONTH)).withCyclic(Boolean.TRUE);
 		monthListSpinner.setId("monthListSpinner");
 		// on cycle overflow to year
-		monthListSpinner.setOnCycle(new EventHandler<ListSpinner.CycleEvent>()
-		{
-			@Override
-			public void handle(CycleEvent evt)
+		monthListSpinner.setOnCycle( (cycleEvent) -> {
+			// if we've cycled down
+			if (cycleEvent.cycledDown()) 
 			{
-				// if we've cycled down
-				if (evt.cycledDown()) 
-				{
-					yearListSpinner.increment();
-				}
-				else 
-				{
-					yearListSpinner.decrement();				
-				}
-					 
+				yearListSpinner.increment();
+			}
+			else 
+			{
+				yearListSpinner.decrement();				
 			}
 		});
 		// if the value changed, update the displayed calendar
-		monthListSpinner.valueProperty().addListener(new ChangeListener<String>()
-		{
-			@Override
-			public void changed(ObservableValue arg0, String arg1, String arg2)
-			{
-				setDisplayedCalendarFromSpinners();
-			}
+		monthListSpinner.valueProperty().addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+			setDisplayedCalendarFromSpinners();
 		});
 		
 		// year spinner
 		yearListSpinner = new ListSpinner<Integer>(new ListSpinnerIntegerList()).withValue(Calendar.getInstance().get(Calendar.YEAR));
 		yearListSpinner.setId("yearListSpinner");
 		// if the value changed, update the displayed calendar
-		yearListSpinner.valueProperty().addListener(new ChangeListener<Integer>()
-		{
-			@Override
-			public void changed(ObservableValue observableValue, Integer oldValue, Integer newValue)
-			{
-				setDisplayedCalendarFromSpinners();
-			}
+		yearListSpinner.valueProperty().addListener( (ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) -> {
+			setDisplayedCalendarFromSpinners();
 		});
 		
 		// double click here to show today
@@ -684,6 +667,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		Calendar lCalendar = (Calendar)getSkinnable().getDisplayedCalendar().clone();
 		lCalendar.set(Calendar.YEAR, lYear);
 		lCalendar.set(Calendar.MONTH, lMonth);
+		lCalendar = deriveDisplayedCalendar(lCalendar);
 		
 		// set it
 		getSkinnable().setDisplayedCalendar(lCalendar);
@@ -737,8 +721,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		monthListSpinner.setValue( lMonthLabel );
 		
 		// set value
-		yearListSpinner.setValue(lCalendar.get(Calendar.YEAR));
-		
+		yearListSpinner.setValue(lCalendar.get(Calendar.YEAR));		
 	}
 	
 	/*
@@ -757,8 +740,14 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		{
 			Label lLabel = weekdayLabels.get(i);
 			lLabel.setText( lWeekdayLabels.get(i) );
-			lLabel.getStyleClass().removeAll("weekend", "weekday");
-			lLabel.getStyleClass().add(isWeekdayWeekend(i) ? "weekend" : "weekday");
+			if (isWeekdayWeekend(i)) {
+				NodeUtil.removeStyleClass(lLabel, "weekday");
+				NodeUtil.addStyleClass(lLabel, "weekend");
+			}
+			else {
+				NodeUtil.removeStyleClass(lLabel, "weekend");
+				NodeUtil.addStyleClass(lLabel, "weekday");
+			}
 		}
 	}
 	
@@ -827,25 +816,33 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 			lToggleButton.setVisible(true);
 			lToggleButton.setText(getLabelDateFormat().format(lCalendar.getTime()));
 			lToggleButton.setAlignment(Pos.BASELINE_CENTER);
-			lToggleButton.getStyleClass().removeAll("weekend", "weekday");
-			lToggleButton.getStyleClass().add(isWeekdayWeekend(lIdx % 7) ? "weekend" : "weekday"); 
+			if (isWeekdayWeekend(lIdx % 7)) {
+				NodeUtil.addStyleClass(lToggleButton, "weekend");
+				NodeUtil.removeStyleClass(lToggleButton, "weekday");
+			}
+			else {
+				NodeUtil.addStyleClass(lToggleButton, "weekday");
+				NodeUtil.removeStyleClass(lToggleButton, "weekend");				
+			}
 			lToggleButton.setDisable( disabledCalendars != null && find(disabledCalendars, lCalendar) != null );
 			
 			// make the corresponding weeklabel visible
 			weeknumberLabels.get(lIdx / 7).setVisible(true);
 
 			// highlight today
-			lToggleButton.getStyleClass().remove("today");
-			if (isToday(lCalendar))
-			{
-				lToggleButton.getStyleClass().add("today");
-			}	
+			if (isToday(lCalendar)) {
+				NodeUtil.addStyleClass(lToggleButton, "today");
+			}
+			else {
+				NodeUtil.removeStyleClass(lToggleButton, "today");				
+			}
 
 			// highlight
-			lToggleButton.getStyleClass().remove("highlight");
-			if (highlightedCalendars != null && find(highlightedCalendars, lCalendar) != null)
-			{
-				lToggleButton.getStyleClass().add("highlight");
+			if (highlightedCalendars != null && find(highlightedCalendars, lCalendar) != null) {
+				NodeUtil.addStyleClass(lToggleButton, "highlight");
+			}
+			else {
+				NodeUtil.removeStyleClass(lToggleButton, "highlight");				
 			}
 		}
 

@@ -1,7 +1,7 @@
 /**
  * LocalDateTimePicker.java
  *
- * Copyright (c) 2011-2015, JFXtras
+ * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -55,10 +55,10 @@ import jfxtras.internal.scene.control.skin.LocalDateTimePickerSkin;
  * LocalDatePicker is a control for selecting one LocalDateTime (JSR-310). 
  * The name LocalDatePicker is because it uses Java's LocalDateTime (JSR-310) (as opposed to Date) in its API to do so.
  * 
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarPicker_properties.adoc[]
  * 
  * == Callback
- * include::jfxtras-controls/src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
+ *include::src/main/asciidoc/scene/control/CalendarPicker_callbacks.adoc[]
  */
 public class LocalDateTimePicker extends Control
 {
