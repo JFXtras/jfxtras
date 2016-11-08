@@ -397,7 +397,8 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
         }
         // show it just below the textfield
         calendarTimePicker.calendarProperty().set(getSkinnable().calendarProperty().get());
-        popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
+        double height = textField.getHeight() == 0.0 ? textField.prefHeight(-1): textField.getHeight();
+        popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + height);
 
 		// move the focus over
         // TODO: not working
