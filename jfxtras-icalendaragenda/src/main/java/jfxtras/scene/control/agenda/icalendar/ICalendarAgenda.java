@@ -585,8 +585,6 @@ public class ICalendarAgenda extends Agenda
                                 VCalendar message = Reviser.emptyPublishiTIPMessage();
                                 message.addVComponent(newVComponent);
                                 getVCalendar().processITIPMessage(message);
-                                // TODO - MAKE PUBLISH, PROCESS ITIP MESSAGE
-//                                getVCalendar().addVComponent(newVComponent);
                                 break;
                             }
                         case OTHER: // Advanced Edit
@@ -605,7 +603,10 @@ public class ICalendarAgenda extends Agenda
                 {
                     change.getRemoved().forEach(appointment ->
                     {
-                        VDisplayable<?> vComponent = appointmentVComponentMap.get(System.identityHashCode(appointment));
+                    	// get appointment's vComponent and update maps
+                        VDisplayable<?> vComponent = appointmentVComponentMap.remove(System.identityHashCode(appointment));
+                        List<Appointment> mappedAppointments = vComponentAppointmentMap.get(System.identityHashCode(vComponent));
+                    	mappedAppointments.remove(appointment);
                         // make copy for deleter
                         VDisplayable<?> vComponentCopy = null;
                         try
@@ -625,6 +626,8 @@ public class ICalendarAgenda extends Agenda
                     });
                 }
             }
+            // TODO - on Linux refresh is sometimes not done - refresh() doesn't fix problem - any change in 
+            // focus causes the refresh.  Forcing focus change doesn't fix problem.  Problem not observed in Windows.
         };
         appointments().addListener(appointmentsListChangeListener);
         
@@ -689,7 +692,10 @@ public class ICalendarAgenda extends Agenda
                         .forEach(v -> 
                         {
                             List<Appointment> remove = vComponentAppointmentMap.get(System.identityHashCode(v));
-                            appointments().removeAll(remove);
+                            if (! remove.isEmpty())
+                            {
+                            	appointments().removeAll(remove);
+                            }
                         });
                 }
             }
