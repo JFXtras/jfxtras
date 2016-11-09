@@ -1019,7 +1019,7 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
             return recurrenceCache().makeCache(stream3);  // make cache of start date/times
     	} else
     	{ // if RRULE has COUNT must start at DTSTART
-    		return getRecurrenceRule().getValue().streamRecurrences(getDateTimeStart().getValue());
+    		return stream3;
     	}
     }
 
