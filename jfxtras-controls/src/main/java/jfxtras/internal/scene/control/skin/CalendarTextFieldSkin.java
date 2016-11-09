@@ -475,8 +475,8 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
         if(popup == null){
             setupPopup();
         }
-        
-        popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + textField.getHeight());
+        double height = textField.getHeight() == 0.0 ? textField.prefHeight(-1): textField.getHeight();
+        popup.show(textField, NodeUtil.screenX(getSkinnable()), NodeUtil.screenY(getSkinnable()) + height);
 
         // move the focus over		
         calendarPicker.requestFocus(); // TODO: not working
