@@ -563,7 +563,6 @@ public class ICalendarAgenda extends Agenda
          */
         ListChangeListener<Appointment> appointmentsListChangeListener = (ListChangeListener.Change<? extends Appointment> change) ->
         {
-//            System.out.println("newVComponent1:");
             while (change.next())
             {
                 if (change.wasAdded())
@@ -592,12 +591,7 @@ public class ICalendarAgenda extends Agenda
                             }
                         case OTHER: // Advanced Edit
                             {
-//                                VComponent newVComponent = getVComponentFactory().createVComponent(appointment);
-//                                getVCalendar().addVComponent(newVComponent); // when newVComponent is added, the vComponentsChangeListener fires and its associated appointment is made
-//                                Appointment newAppointment = vComponentAppointmentMap.get(System.identityHashCode(newVComponent)).get(0);
-//                                newAppointmentMap.put(newAppointment, true);
                                 editAppointmentCallback.call(appointment);
-//                                System.out.println("newVComponent:" + newVComponent);
                                 break;
                             }
                         default:

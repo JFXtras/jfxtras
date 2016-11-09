@@ -101,31 +101,12 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
     public DateTimeStamp getDateTimeStamp() { return dateTimeStampProperty().get(); }
     public void setDateTimeStamp(String dtStamp)
     {
-        if (getDateTimeStamp() == null)
-        {
-            setDateTimeStamp(DateTimeStamp.parse(dtStamp));
-        } else
-        {
-            DateTimeStamp temp = DateTimeStamp.parse(dtStamp);
-            if (temp.getValue().getClass().equals(getDateTimeStamp().getValue().getClass()))
-            {
-                getDateTimeStamp().setValue(temp.getValue());
-            } else
-            {
-                setDateTimeStamp(temp);
-            }
-        }
+        setDateTimeStamp(DateTimeStamp.parse(dtStamp));
     }
     public void setDateTimeStamp(DateTimeStamp dtStamp) { dateTimeStampProperty().set(dtStamp); }
     public void setDateTimeStamp(ZonedDateTime dtStamp)
     {
-        if (getDateTimeStamp() == null)
-        {
-            setDateTimeStamp(new DateTimeStamp(dtStamp));
-        } else
-        {
-            getDateTimeStamp().setValue(dtStamp);
-        }
+        setDateTimeStamp(new DateTimeStamp(dtStamp));
     }
     public T withDateTimeStamp(ZonedDateTime dtStamp)
     {
