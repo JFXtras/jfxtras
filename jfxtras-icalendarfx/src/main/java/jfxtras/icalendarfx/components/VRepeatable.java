@@ -352,8 +352,14 @@ public interface VRepeatable<T> extends VComponent
             stream1 = Arrays.asList(getDateTimeStart().getValue()).stream();
         } else
         {
-            Temporal cacheStart = recurrenceCache().getClosestStart(start);
-            stream1 = getRecurrenceRule().getValue().streamRecurrences(cacheStart);
+        	if (getRecurrenceRule().getValue().getCount() == null)
+        	{
+	            Temporal cacheStart = recurrenceCache().getClosestStart(start);
+	            stream1 = getRecurrenceRule().getValue().streamRecurrences(cacheStart);
+        	} else
+        	{ // if RRULE has COUNT must start at DTSTART
+        		stream1 = getRecurrenceRule().getValue().streamRecurrences(getDateTimeStart().getValue());
+        	}
         }
         
         // assign temporal comparator to match start type
