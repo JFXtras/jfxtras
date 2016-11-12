@@ -1,6 +1,7 @@
 package jfxtras.scene.control.agenda.icalendar;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
@@ -49,6 +50,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.icalendarfx.properties.component.relationship.Organizer;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.AgendaDateTimeUtilities;
@@ -242,7 +244,7 @@ public class ICalendarAgenda extends Agenda
         this.organizer.set(organizer);
         if (vComponentFactory instanceof DefaultVComponentFactory)
         {
-            vComponentFactory = new DefaultVComponentFactory(getOrganizer());
+            vComponentFactory = new DefaultVComponentFactory(getOrganizer(), getUidGeneratorCallback());
         }
         // Note: if not using the default VComponent factory, and the organizer is set to a non-default
         // value, and the vComponentFactory uses the organizer property, then the vComponentFactory
@@ -261,6 +263,39 @@ public class ICalendarAgenda extends Agenda
     public ICalendarAgenda withOrganizer(String organizer)
     {
         setOrganizer(organizer);
+        return this;
+    }
+    
+    /* UID Generator Callback */
+    private static Integer nextKey = 0;
+    private Callback<Void, String> uidGeneratorCallback = (Void) ->
+    { // default UID generator callback
+        String dateTime = DateTimeUtilities.LOCAL_DATE_TIME_FORMATTER.format(LocalDateTime.now());
+        String domain = "jfxtras.org";
+        return dateTime + "-" + nextKey++ + domain;
+    };
+    /** set UID callback generator.  It makes UID values for new components. */
+    public Callback<Void, String> getUidGeneratorCallback()
+    {
+    	return uidGeneratorCallback;
+	}
+    /** set UID callback generator. It makes UID values for new components. */
+    public void setUidGeneratorCallback(Callback<Void, String> uidCallback)
+    {
+    	this.uidGeneratorCallback = uidCallback;
+        if (vComponentFactory instanceof DefaultVComponentFactory)
+        {
+            vComponentFactory = new DefaultVComponentFactory(getOrganizer(), getUidGeneratorCallback());
+        }
+        // Note: if not using the default VComponent factory, and the organizer is set to a non-default
+        // value, and the vComponentFactory uses the organizer property, then the vComponentFactory
+        // must be replaced with a new one with the new organizer property.
+        // The code here only replaces the default vcomponent factory automatically.
+	}
+    /** set UID callback generator.  Return itself for chaining. */
+    public ICalendarAgenda withUidGeneratorCallback(Callback<Void, String> uidCallback)
+    {
+        setUidGeneratorCallback(uidCallback);
         return this;
     }
 
@@ -423,7 +458,7 @@ public class ICalendarAgenda extends Agenda
         // Default recurrence factory
         recurrenceFactory = new DefaultRecurrenceFactory(appointmentGroups());
         // Default VComponent factory
-        vComponentFactory = new DefaultVComponentFactory(getOrganizer());
+        vComponentFactory = new DefaultVComponentFactory(getOrganizer(), getUidGeneratorCallback());
         
         // setup i18n resource bundle
         Locale myLocale = Locale.getDefault();

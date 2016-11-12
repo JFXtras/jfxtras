@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 
+import javafx.util.Callback;
 import jfxtras.icalendarfx.components.VDisplayable;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTodo;
@@ -20,10 +21,12 @@ import jfxtras.scene.control.agenda.Agenda.Appointment;
 public class DefaultVComponentFactory extends VComponentFactory<Appointment>
 {
     final private Organizer organizer;
+    final private Callback<Void, String> uidGeneratorCallback;
     
-    public DefaultVComponentFactory(Organizer organizer)
+    public DefaultVComponentFactory(Organizer organizer, Callback<Void, String> uidGeneratorCallback)
     {
         this.organizer = organizer;
+        this.uidGeneratorCallback = uidGeneratorCallback;
     }
     
     @Override
@@ -51,7 +54,8 @@ public class DefaultVComponentFactory extends VComponentFactory<Appointment>
             ((VEvent) newVComponent).setLocation(location);
             newVComponent.setDateTimeCreated(dtCreated);
             newVComponent.setDateTimeStamp(dtCreated);
-            newVComponent.setUniqueIdentifier(); // using default UID generator
+            newVComponent.setUidGeneratorCallback(uidGeneratorCallback);
+            newVComponent.setUniqueIdentifier();
             // TODO - GRADLE WON'T ALLOW CHAINING AS SEEN BELOW.  WHY???
 //            newVComponent = new VEvent()
 //                    .withOrganizer(organizer)
@@ -75,7 +79,8 @@ public class DefaultVComponentFactory extends VComponentFactory<Appointment>
             ((VTodo) newVComponent).setLocation(location);
             newVComponent.setDateTimeCreated(dtCreated);
             newVComponent.setDateTimeStamp(dtCreated);
-            newVComponent.setUniqueIdentifier(); // using default UID generator
+            newVComponent.setUidGeneratorCallback(uidGeneratorCallback);
+            newVComponent.setUniqueIdentifier();
             // TODO - GRADLE WON'T ALLOW CHAINING AS SEEN BELOW.  WHY???
 //          newVComponent = new VTodo()
 //          .withOrganizer(organizer)

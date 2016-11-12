@@ -293,15 +293,21 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
     
    
     /** Callback for creating unique uid values  */
-    public Callback<Void, String> getUidGeneratorCallback() { return uidGeneratorCallback; }
-    private static Integer nextKey = 0; // TODO - FIND WAY TO UPDATE WHEN PARSING A CALENDAR, USE X-PROP?
+    public Callback<Void, String> getUidGeneratorCallback()
+    {
+    	return uidGeneratorCallback;
+	}
+    private static Integer nextKey = 0;
     private Callback<Void, String> uidGeneratorCallback = (Void) ->
     { // default UID generator callback
         String dateTime = DateTimeUtilities.LOCAL_DATE_TIME_FORMATTER.format(LocalDateTime.now());
         String domain = "jfxtras.org";
         return dateTime + "-" + nextKey++ + domain;
     };
-    public void setUidGeneratorCallback(Callback<Void, String> uidCallback) { this.uidGeneratorCallback = uidCallback; }
+    public void setUidGeneratorCallback(Callback<Void, String> uidCallback)
+    {
+    	this.uidGeneratorCallback = uidCallback;
+	}
     /** set UID callback generator.  This MUST be set before using the no-arg withUniqueIdentifier if
      * not using default callback.
      */
