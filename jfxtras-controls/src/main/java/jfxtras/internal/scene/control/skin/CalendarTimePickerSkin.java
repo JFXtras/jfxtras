@@ -549,11 +549,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	 */
 	static public Calendar blockHoursToStep(Calendar calendar, Integer stepSize)
 	{
-		if (stepSize == null || calendar == null) return calendar;
+		if (stepSize == null || calendar == null || stepSize == 1) return calendar;
 			
 		// set the hours to match the step size
 		int lValue = calendar.get(Calendar.HOUR_OF_DAY);
-		if (stepSize == 1) return calendar;
 		lValue = lValue / stepSize; // trunk
 		lValue *= stepSize;
 		if (calendar.get(Calendar.HOUR_OF_DAY) != lValue)
@@ -570,11 +569,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	 */
 	static public Calendar blockMinutesToStep(Calendar calendar, Integer stepSize)
 	{
-		if (stepSize == null || calendar == null) return calendar;
+		if (stepSize == null || calendar == null || stepSize == 1) return calendar;
 			
 		// set the minutes to match the step size
 		int lValue = calendar.get(Calendar.MINUTE);
-		if (stepSize == 1) return calendar;
 		lValue = lValue / stepSize; // trunk
 		lValue *= stepSize;
 		if (calendar.get(Calendar.MINUTE) != lValue)
@@ -591,11 +589,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	 */
 	static public Calendar blockSecondsToStep(Calendar calendar, Integer stepSize)
 	{
-		if (stepSize == null || calendar == null) return calendar;
+		if (stepSize == null || calendar == null || stepSize == 1) return calendar;
 			
 		// set the minutes to match the step size
 		int lValue = calendar.get(Calendar.SECOND);
-		if (stepSize == 1) return calendar;
 		lValue = lValue / stepSize; // trunk
 		lValue *= stepSize;
 		if (calendar.get(Calendar.SECOND) != lValue)

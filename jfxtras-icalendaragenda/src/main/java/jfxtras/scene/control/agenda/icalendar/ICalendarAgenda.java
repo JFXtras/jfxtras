@@ -1,6 +1,7 @@
 package jfxtras.scene.control.agenda.icalendar;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
@@ -49,6 +50,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.icalendarfx.properties.component.relationship.Organizer;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.AgendaDateTimeUtilities;
@@ -242,7 +244,7 @@ public class ICalendarAgenda extends Agenda
         this.organizer.set(organizer);
         if (vComponentFactory instanceof DefaultVComponentFactory)
         {
-            vComponentFactory = new DefaultVComponentFactory(getOrganizer());
+            vComponentFactory = new DefaultVComponentFactory(getOrganizer(), getUidGeneratorCallback());
         }
         // Note: if not using the default VComponent factory, and the organizer is set to a non-default
         // value, and the vComponentFactory uses the organizer property, then the vComponentFactory
@@ -261,6 +263,39 @@ public class ICalendarAgenda extends Agenda
     public ICalendarAgenda withOrganizer(String organizer)
     {
         setOrganizer(organizer);
+        return this;
+    }
+    
+    /* UID Generator Callback */
+    private static Integer nextKey = 0;
+    private Callback<Void, String> uidGeneratorCallback = (Void) ->
+    { // default UID generator callback
+        String dateTime = DateTimeUtilities.LOCAL_DATE_TIME_FORMATTER.format(LocalDateTime.now());
+        String domain = "jfxtras.org";
+        return dateTime + "-" + nextKey++ + domain;
+    };
+    /** set UID callback generator.  It makes UID values for new components. */
+    public Callback<Void, String> getUidGeneratorCallback()
+    {
+    	return uidGeneratorCallback;
+	}
+    /** set UID callback generator. It makes UID values for new components. */
+    public void setUidGeneratorCallback(Callback<Void, String> uidCallback)
+    {
+    	this.uidGeneratorCallback = uidCallback;
+        if (vComponentFactory instanceof DefaultVComponentFactory)
+        {
+            vComponentFactory = new DefaultVComponentFactory(getOrganizer(), getUidGeneratorCallback());
+        }
+        // Note: if not using the default VComponent factory, and the organizer is set to a non-default
+        // value, and the vComponentFactory uses the organizer property, then the vComponentFactory
+        // must be replaced with a new one with the new organizer property.
+        // The code here only replaces the default vcomponent factory automatically.
+	}
+    /** set UID callback generator.  Return itself for chaining. */
+    public ICalendarAgenda withUidGeneratorCallback(Callback<Void, String> uidCallback)
+    {
+        setUidGeneratorCallback(uidCallback);
         return this;
     }
 
@@ -423,7 +458,7 @@ public class ICalendarAgenda extends Agenda
         // Default recurrence factory
         recurrenceFactory = new DefaultRecurrenceFactory(appointmentGroups());
         // Default VComponent factory
-        vComponentFactory = new DefaultVComponentFactory(getOrganizer());
+        vComponentFactory = new DefaultVComponentFactory(getOrganizer(), getUidGeneratorCallback());
         
         // setup i18n resource bundle
         Locale myLocale = Locale.getDefault();
@@ -563,7 +598,6 @@ public class ICalendarAgenda extends Agenda
          */
         ListChangeListener<Appointment> appointmentsListChangeListener = (ListChangeListener.Change<? extends Appointment> change) ->
         {
-//            System.out.println("newVComponent1:");
             while (change.next())
             {
                 if (change.wasAdded())
@@ -586,18 +620,11 @@ public class ICalendarAgenda extends Agenda
                                 VCalendar message = Reviser.emptyPublishiTIPMessage();
                                 message.addVComponent(newVComponent);
                                 getVCalendar().processITIPMessage(message);
-                                // TODO - MAKE PUBLISH, PROCESS ITIP MESSAGE
-//                                getVCalendar().addVComponent(newVComponent);
                                 break;
                             }
                         case OTHER: // Advanced Edit
                             {
-//                                VComponent newVComponent = getVComponentFactory().createVComponent(appointment);
-//                                getVCalendar().addVComponent(newVComponent); // when newVComponent is added, the vComponentsChangeListener fires and its associated appointment is made
-//                                Appointment newAppointment = vComponentAppointmentMap.get(System.identityHashCode(newVComponent)).get(0);
-//                                newAppointmentMap.put(newAppointment, true);
                                 editAppointmentCallback.call(appointment);
-//                                System.out.println("newVComponent:" + newVComponent);
                                 break;
                             }
                         default:
@@ -611,7 +638,10 @@ public class ICalendarAgenda extends Agenda
                 {
                     change.getRemoved().forEach(appointment ->
                     {
-                        VDisplayable<?> vComponent = appointmentVComponentMap.get(System.identityHashCode(appointment));
+                    	// get appointment's vComponent and update maps
+                        VDisplayable<?> vComponent = appointmentVComponentMap.remove(System.identityHashCode(appointment));
+                        List<Appointment> mappedAppointments = vComponentAppointmentMap.get(System.identityHashCode(vComponent));
+                    	mappedAppointments.remove(appointment);
                         // make copy for deleter
                         VDisplayable<?> vComponentCopy = null;
                         try
@@ -631,6 +661,8 @@ public class ICalendarAgenda extends Agenda
                     });
                 }
             }
+            // TODO - on Linux refresh is sometimes not done - refresh() doesn't fix problem - any change in 
+            // focus causes the refresh.  Forcing focus change doesn't fix problem.  Problem not observed in Windows.
         };
         appointments().addListener(appointmentsListChangeListener);
         
@@ -645,8 +677,6 @@ public class ICalendarAgenda extends Agenda
                 {
                     if (event.getCode().equals(KeyCode.DELETE) && (! selectedAppointments().isEmpty()))
                     {
-//                        System.out.println("selectedAppointments():" + selectedAppointments().size());
-//                        VComponent<?> v = appointmentVComponentMap.get(System.identityHashCode(selectedAppointments().get(0)));
                         appointments().removeAll(selectedAppointments());
                     }
                 });
@@ -695,7 +725,10 @@ public class ICalendarAgenda extends Agenda
                         .forEach(v -> 
                         {
                             List<Appointment> remove = vComponentAppointmentMap.get(System.identityHashCode(v));
-                            appointments().removeAll(remove);
+                            if (! remove.isEmpty())
+                            {
+                            	appointments().removeAll(remove);
+                            }
                         });
                 }
             }

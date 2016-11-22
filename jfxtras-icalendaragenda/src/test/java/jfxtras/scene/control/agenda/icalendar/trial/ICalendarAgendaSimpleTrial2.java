@@ -30,7 +30,8 @@ public class ICalendarAgendaSimpleTrial2 extends Application
         // setup control
         BorderPane root = new BorderPane();
         VCalendar vCalendar = new VCalendar(); // iCalendarFx model - contains calendaring information
-        ICalendarAgenda agenda = new ICalendarAgenda(vCalendar); // Agenda - displays the VCalendar information
+        ICalendarAgenda agenda = new ICalendarAgenda(vCalendar); // Agenda - displays and edits the VCalendar information
+        agenda.setOrganizer("ORGANIZER;CN=David Bal:mailto:david.bal37@gmail.com");
         root.setCenter(agenda);
         
         // weekly increase/decrease buttons

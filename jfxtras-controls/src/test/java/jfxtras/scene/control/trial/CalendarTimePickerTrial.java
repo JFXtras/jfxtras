@@ -29,6 +29,8 @@
 
 package jfxtras.scene.control.trial;
 
+import java.util.GregorianCalendar;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -54,7 +56,11 @@ public class CalendarTimePickerTrial extends Application {
 		
 		{
 			CalendarTimePicker lCalendarTimePicker = new CalendarTimePicker();
-			//lCalendarTimePicker.setHourStep(4);
+			lCalendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));
+//			lCalendarTimePicker.setHourStep(1);
+			lCalendarTimePicker.setMinuteStep(15);
+//			lCalendarTimePicker.setSecondStep(15);
+			lCalendarTimePicker.setStyle("-fxx-label-dateformat:\"HH:mm:ss\";");
 			lFlowPane.getChildren().add(lCalendarTimePicker);
 		}
 		
