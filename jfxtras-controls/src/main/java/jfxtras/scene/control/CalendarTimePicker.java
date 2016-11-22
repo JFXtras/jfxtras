@@ -91,7 +91,7 @@ public class CalendarTimePicker extends Control
 	{
 		public void set(Calendar value)
 		{
-			value = CalendarTimePickerSkin.blockHoursToStep(value, getMinuteStep());
+			value = CalendarTimePickerSkin.blockHoursToStep(value, getHourStep());
 			value = CalendarTimePickerSkin.blockMinutesToStep(value, getMinuteStep());
 			value = CalendarTimePickerSkin.blockSecondsToStep(value, getSecondStep());
 			super.set(value);
