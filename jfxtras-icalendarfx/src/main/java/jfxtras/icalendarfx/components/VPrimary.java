@@ -5,7 +5,9 @@ import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,11 +41,11 @@ public abstract class VPrimary<T> extends VCommon<T>
          As a matter of fact\, the venue for the meeting ought to be at
          their site. - - John
      * */
-    public ObjectProperty<ObservableList<Comment>> commentsProperty()
+    public ListProperty<Comment> commentsProperty()
     {
         if (comments == null)
         {
-            comments = new SimpleObjectProperty<>(this, PropertyType.COMMENT.toString());
+            comments = new SimpleListProperty<>(this, PropertyType.COMMENT.toString());
         }
         return comments;
     }
@@ -51,7 +53,7 @@ public abstract class VPrimary<T> extends VCommon<T>
     {
         return (comments == null) ? null : comments.get();
     }
-    private ObjectProperty<ObservableList<Comment>> comments;
+    private ListProperty<Comment> comments;
     public void setComments(ObservableList<Comment> comments)
     {
         if (comments != null)

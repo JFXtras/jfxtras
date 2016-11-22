@@ -3,6 +3,7 @@ package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour;
 import java.util.ResourceBundle;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
@@ -32,9 +33,6 @@ public class OneAppointmentSelectedAlert extends Alert
         ButtonType deleteButtonType = new ButtonType(resources.getString("delete"));
         ButtonType cancelButtonType = ButtonType.CANCEL;
         getButtonTypes().setAll(editButtonType, deleteButtonType, cancelButtonType);
-//        getDialogPane().lookupButton(editButtonType).setId("oneSelectedEditButton");
-//        getDialogPane().lookupButton(deleteButtonType).setId("oneSelectedDeleteButton");
-//        getDialogPane().lookupButton(ButtonType.CANCEL).setId("oneSelectedCancelButton");
         
         // set id
         getDialogPane().setId("newAppointmentDialog");
@@ -47,5 +45,13 @@ public class OneAppointmentSelectedAlert extends Alert
         String appointmentTime = AgendaDateTimeUtilities.formatRange(appointment.getStartTemporal(), appointment.getEndTemporal());
         setHeaderText(appointment.getSummary() + System.lineSeparator() + appointmentTime);
         setContentText(resources.getString("alert.one.appointment.content"));
+        
+        /*
+         * Listener to delete selected appointments when delete key is pressed
+         */
+        getDialogPane().setOnKeyPressed((event) ->
+        {
+        	((Button) getDialogPane().lookupButton(deleteButtonType)).fire();
+        });
     }
 }

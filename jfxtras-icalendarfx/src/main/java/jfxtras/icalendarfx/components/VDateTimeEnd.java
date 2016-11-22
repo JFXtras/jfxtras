@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
@@ -50,20 +53,20 @@ public interface VDateTimeEnd<T> extends VComponent
             }
         }
     }
-    default void setDateTimeEnd(DateTimeEnd dtEnd) { dateTimeEndProperty().set(dtEnd); }
+    default void setDateTimeEnd(DateTimeEnd dtEnd)
+    {
+        dateTimeEndProperty().set(dtEnd);
+    }
     default void setDateTimeEnd(Temporal temporal)
     {
         if ((getDateTimeEnd() == null) || ! getDateTimeEnd().getValue().getClass().equals(temporal.getClass()))
         {
-            if (temporal instanceof LocalDate)
+            boolean t1 = temporal instanceof LocalDate;
+            boolean t2 = temporal instanceof LocalDateTime;
+            boolean t3 = temporal instanceof ZonedDateTime;
+            if (t1 || t2 || t3)
             {
-                setDateTimeEnd(new DateTimeEnd(temporal));            
-            } else if (temporal instanceof LocalDateTime)
-            {
-                setDateTimeEnd(new DateTimeEnd(temporal));            
-            } else if (temporal instanceof ZonedDateTime)
-            {
-                setDateTimeEnd(new DateTimeEnd(temporal));            
+                setDateTimeEnd(new DateTimeEnd(temporal));
             } else
             {
                 throw new DateTimeException("Only LocalDate, LocalDateTime and ZonedDateTime supported. "
@@ -71,7 +74,7 @@ public interface VDateTimeEnd<T> extends VComponent
             }
         } else
         {
-            getDateTimeEnd().setValue(temporal);
+            setDateTimeEnd(new DateTimeEnd(temporal));
         }
     }
     /**
@@ -108,19 +111,32 @@ public interface VDateTimeEnd<T> extends VComponent
     DateTimeStart getDateTimeStart();
     
     /** Ensures DateTimeEnd has same date-time type as DateTimeStart.  Should be called by listener
-     *  after dateTimeEndProperty() is initialized.  Intended for internal use only. */
+     *  after dateTimeEndProperty() is initialized.  Intended for internal use only. 
+     * @return */
     default void checkDateTimeEndConsistency()
     {
-        if ((getDateTimeEnd() != null) && (getDateTimeStart() != null))
+        List<String> errors = errorsDateTimeEnd(this);
+        if (! errors.isEmpty())
         {
-            DateTimeType dateTimeEndType = DateTimeUtilities.DateTimeType.of(getDateTimeEnd().getValue());
-            DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(getDateTimeStart().getValue());
-            if (dateTimeEndType != dateTimeStartType)
-            {
-                throw new DateTimeException("DateTimeEnd DateTimeType (" + dateTimeEndType +
-                        ") must be same as the DateTimeType of DateTimeStart (" + dateTimeStartType + ")");
-            }
+            String message = errors.stream().collect(Collectors.joining(System.lineSeparator()));
+            throw new DateTimeException(message);
         }
+//        if ((getDateTimeEnd() != null) && (getDateTimeStart() != null))
+//        {
+//            DateTimeType dateTimeEndType = DateTimeUtilities.DateTimeType.of(getDateTimeEnd().getValue());
+//            DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(getDateTimeStart().getValue());
+//            if (dateTimeEndType != dateTimeStartType)
+//            {
+//                throw new DateTimeException("DTEND value type (" + dateTimeEndType +
+//                        ") must be same as the value type of DTSTART (" + dateTimeStartType + ")");
+//            }
+//            int after = DateTimeUtilities.TEMPORAL_COMPARATOR2.compare(getDateTimeEnd().getValue(), getDateTimeStart().getValue());
+//            if (after == -1)
+//            {
+//                throw new DateTimeException("DTEND is not after DTSTART.  DTEND MUST be after DTSTART ("
+//                        + getDateTimeEnd().getValue() + "," + getDateTimeStart().getValue() + ")");
+//            }
+//        }
     }
     
     /**
@@ -129,21 +145,29 @@ public interface VDateTimeEnd<T> extends VComponent
      * @param testObj  {@link VDateTimeEnd} to be tested.
      * @return  Error string or null if no error.
      */
-    static String errorsDateTimeEnd(VDateTimeEnd<?> testObj)
+    static List<String> errorsDateTimeEnd(VDateTimeEnd<?> testObj)
     {
+        List<String> errors = new ArrayList<>();
         if (testObj.getDateTimeEnd() != null)
         {
             if (testObj.getDateTimeStart() != null)
             {
-                DateTimeType startType = DateTimeUtilities.DateTimeType.of(testObj.getDateTimeStart().getValue());
-                DateTimeType endType = DateTimeUtilities.DateTimeType.of(testObj.getDateTimeEnd().getValue());
-                boolean isDateTimeEndMatch = startType == endType;
+                DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(testObj.getDateTimeStart().getValue());
+                DateTimeType dateTimeEndType = DateTimeUtilities.DateTimeType.of(testObj.getDateTimeEnd().getValue());
+                boolean isDateTimeEndMatch = dateTimeStartType == dateTimeEndType;
                 if (! isDateTimeEndMatch)
                 {
-                     return "The value type of DTEND MUST be the same as the DTSTART property (" + endType + ", " + startType + ")";
+                    errors.add("DTEND value type (" + dateTimeEndType +
+                    ") must be the same value type as DTSTART (" + dateTimeStartType + ")");
+                }
+                int after = DateTimeUtilities.TEMPORAL_COMPARATOR2.compare(testObj.getDateTimeEnd().getValue(), testObj.getDateTimeStart().getValue());
+                if (after == -1)
+                {
+                    errors.add("DTEND is not after DTSTART.  DTEND MUST be after DTSTART ("
+                            + testObj.getDateTimeEnd().getValue() + ", " + testObj.getDateTimeStart().getValue() + ")");
                 }
             }
         }
-        return null;
+        return errors;
     }
 }

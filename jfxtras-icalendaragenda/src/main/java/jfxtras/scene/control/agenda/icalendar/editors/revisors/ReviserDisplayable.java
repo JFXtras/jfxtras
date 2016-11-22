@@ -213,6 +213,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                 message = Reviser.emptyRequestiTIPMessage();
             }
             adjustStartAndEnd(vComponentEditedCopy, vComponentOriginal);
+            vComponentEditedCopy.setDateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z")));
             message.addVComponent(vComponentEditedCopy);
             itipMessages.add(message);
             break;
@@ -425,6 +426,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
             }
         }
         vComponentEditedCopy.setDateTimeStart(new DateTimeStart(newStart));
+        vComponentEditedCopy.setDateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z")));
     }
     
     /**

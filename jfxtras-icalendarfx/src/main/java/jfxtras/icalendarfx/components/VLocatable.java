@@ -1,5 +1,7 @@
 package jfxtras.icalendarfx.components;
 
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
@@ -19,6 +21,7 @@ import jfxtras.icalendarfx.properties.component.descriptive.GeographicPosition;
 import jfxtras.icalendarfx.properties.component.descriptive.Location;
 import jfxtras.icalendarfx.properties.component.descriptive.Priority;
 import jfxtras.icalendarfx.properties.component.descriptive.Resources;
+import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.DurationProp;
 
 public abstract class VLocatable<T> extends VDisplayable<T> implements VDescribable2<T>, VDuration<T>
@@ -66,6 +69,37 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
         {
             duration = new SimpleObjectProperty<>(this, PropertyType.DURATION.toString());
             orderer().registerSortOrderProperty(duration);
+            duration.addListener((observable, oldValue, newValue) -> 
+            {
+                if (newValue != null)
+                {
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime adjustedNow = now.plus(newValue.getValue());
+                    
+                    if (adjustedNow.isBefore(now))
+                    {
+                        if (oldValue != null)
+                        {
+                            setDuration(oldValue);                        
+                        } else
+                        {
+                            setDuration((DurationProp) null);
+                        }
+                        throw new DateTimeException("DURATION is negative (" + newValue + "). DURATION MUST be positive.");
+                    }
+                }
+            });
+            duration.addListener((obs) ->
+            {
+                if (this instanceof VDateTimeEnd)
+                {
+                    DateTimeEnd dtend = ((VDateTimeEnd<T>) this).getDateTimeEnd();
+                    if ((dtend != null) && (getDuration() != null))
+                    {
+                        throw new DateTimeException("DURATION and DTEND can't both be set");
+                    }
+                }
+            });
         }
         return duration;
     }
@@ -462,6 +496,16 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
         if (getVAlarms() != null)
         {
             getVAlarms().forEach(v -> errors.addAll(v.errors()));
+        }
+        boolean isDurationPresent = getDuration() != null;
+        if (isDurationPresent) // duration is present
+        {
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime adjustedNow = now.plus(getDuration().getValue());
+            if (adjustedNow.isBefore(now))
+            {
+                errors.add("DURATION is negative (" + getDuration().getValue() + "). DURATION MUST be positive.");                
+            }
         }
         return errors;
     }

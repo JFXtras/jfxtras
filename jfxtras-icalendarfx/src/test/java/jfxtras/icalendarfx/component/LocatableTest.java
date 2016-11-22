@@ -1,7 +1,9 @@
 package jfxtras.icalendarfx.component;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
+import java.time.DateTimeException;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
@@ -114,5 +116,20 @@ public class LocatableTest
             assertEquals(parsedComponent, builtComponent);
             assertEquals(expectedContent, builtComponent.toContent());            
         }
+    }
+    
+    @Test (expected = DateTimeException.class)
+    public void canCatchNegativeDuration()
+    {
+        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
+        {
+            throw (RuntimeException) e;
+        });
+        VEvent vEvent = new VEvent()
+                .withDuration(Duration.ofHours(-1))
+                .withSummary("test");
+        vEvent.errors().forEach(System.out::println);
+        assertNull(vEvent.getDuration());
+        assertEquals("test", vEvent.getSummary().getValue());
     }
 }

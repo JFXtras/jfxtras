@@ -273,13 +273,6 @@ public class VTodo extends VLocatable<VTodo> implements VDescribable2<VTodo>
             {
                 errors.add("DUE is not after DTSTART.  DUE MUST be after DTSTART");                
             }
-        } else // duration is present
-        {
-            Temporal actualEnd = getDateTimeStart().getValue().plus(getDuration().getValue());
-            if (! DateTimeUtilities.isAfter(actualEnd, getDateTimeStart().getValue()))
-            {
-                errors.add("DURATION is negative.  DURATION MUST be positive");                
-            }            
         }
             
         return Collections.unmodifiableList(errors);

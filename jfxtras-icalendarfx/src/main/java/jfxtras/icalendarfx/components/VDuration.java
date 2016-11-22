@@ -27,7 +27,10 @@ public interface VDuration<T> extends VComponent
     /** Gets the value of the {@link DurationProp} */
     default DurationProp getDuration() { return durationProperty().get(); }
     /** Sets the value of the {@link DurationProp} */
-    default void setDuration(DurationProp duration) { durationProperty().set(duration); }
+    default void setDuration(DurationProp duration)
+    {
+        durationProperty().set(duration);
+    }
     /** Sets the value of the {@link DurationProp} by parsing iCalendar content text */
     default void setDuration(String duration)
     {
@@ -49,13 +52,7 @@ public interface VDuration<T> extends VComponent
     /** Sets the value of the {@link DurationProp} by creating new {@link DurationProp} from the TemporalAmount parameter */
     default void setDuration(TemporalAmount duration)
     {
-        if (getDuration() == null)
-        {
-            setDuration(new DurationProp(duration));
-        } else
-        {
-            getDuration().setValue(duration);
-        }
+        setDuration(new DurationProp(duration));
     }
     /**
      * <p>Sets the value of the {@link DurationProp} property } by creating a new {@link DurationProp} from
@@ -65,14 +62,8 @@ public interface VDuration<T> extends VComponent
      */
     default T withDuration(TemporalAmount duration)
     {
-        if (getDuration() == null)
-        {
-            setDuration(duration);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setDuration(duration);
+        return (T) this;
     }
     /**
      * <p>Sets the value of the {@link DurationProp} property } by parsing iCalendar content text</p>
@@ -81,14 +72,8 @@ public interface VDuration<T> extends VComponent
      */
     default T withDuration(String duration)
     {
-        if (getDuration() == null)
-        {
-            setDuration(duration);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setDuration(duration);
+        return (T) this;
     }
     /**
      * <p>Sets the value of the {@link DurationProp} property}</p>
@@ -97,13 +82,7 @@ public interface VDuration<T> extends VComponent
      */
     default T withDuration(DurationProp duration)
     {
-        if (getDuration() == null)
-        {
-            setDuration(duration);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setDuration(duration);
+        return (T) this;
     }
 }

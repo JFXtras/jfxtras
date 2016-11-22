@@ -212,11 +212,8 @@ public class VFreeBusy extends VPersonal<VFreeBusy> implements VDateTimeEnd<VFre
     public List<String> errors()
     {
         List<String> errors = super.errors();
-        String dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
-        if (dtendError != null)
-        {
-            errors.add(dtendError);
-        }
+        List<String> dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
+        errors.addAll(dtendError);
 //
 //        if (getDateTimeEnd() != null)
 //        {

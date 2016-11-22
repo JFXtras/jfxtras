@@ -3,6 +3,7 @@ package jfxtras.icalendarfx.component;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.DateTimeException;
 import java.time.Duration;
@@ -140,7 +141,6 @@ public class VEventTest extends ICalendarTestAbstract
         VEvent e = getYearly1();
         VEvent e2 = new VEvent();
         e.copyInto(e2);
-//        e2.copyChildrenFrom(e);
         assertEquals(e, e2);
     }
 
@@ -161,12 +161,61 @@ public class VEventTest extends ICalendarTestAbstract
         {
             VComponent e2 = e.getClass().newInstance();
             e.copyInto(e2);
-//            e2.copyChildrenFrom(e);
             assertEquals(e, e2);
             assertFalse(e == e2);
         } catch (InstantiationException | IllegalAccessException e1)
         {
             e1.printStackTrace();
         }
-    }    
+    }
+    
+    @Test
+    public void canChangeLocalDateToLocalDateTime()
+    {
+        VEvent vEvent = new VEvent()
+                .withDateTimeEnd(LocalDate.of(2016, 3, 7))
+                .withDateTimeStart(LocalDate.of(2016, 3, 6));
+        vEvent.setDateTimeStart(LocalDateTime.of(2016, 3, 6, 4, 30));// NOTE: this allows a temporary invalid state
+        String expectedError = "DTEND value type (DATE) must be the same value type as DTSTART (DATE_WITH_LOCAL_TIME)";
+        boolean errorFound = vEvent.errors().stream().anyMatch(s -> s.equals(expectedError));
+        assertTrue(errorFound);
+    }
+
+    @Test
+    public void canCatchTooEarlyDTEND()
+    {
+        VEvent vEvent = new VEvent()
+                .withDateTimeEnd(LocalDate.of(2016, 3, 5))
+                .withDateTimeStart(LocalDate.of(2016, 3, 6)); // makes DTEND too early
+        String expectedError = "DTEND is not after DTSTART.  DTEND MUST be after DTSTART (2016-03-05, 2016-03-06)";
+        vEvent.errors().forEach(System.out::println);
+        boolean errorFound = vEvent.errors().stream().anyMatch(s -> s.equals(expectedError));
+        assertTrue(errorFound);
+    }
+    
+    @Test (expected = DateTimeException.class)
+    public void canCatchTooEarlyDTEND2()
+    {
+        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
+        {
+            throw (RuntimeException) e;
+        });
+        VEvent vEvent = new VEvent()
+                .withDateTimeStart(LocalDate.of(2016, 3, 6));
+        vEvent.setDateTimeEnd(LocalDate.of(2016, 3, 5)); // can't set an invalid DTEND
+        assertNull(vEvent.getDateTimeEnd());
+    }
+    
+    @Test (expected = DateTimeException.class)
+    public void canCatchWrongDTENDType()
+    {
+        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
+        {
+            throw (RuntimeException) e;
+        });
+        VEvent vEvent = new VEvent()
+                .withDateTimeStart(LocalDate.of(2016, 3, 6));
+        vEvent.setDateTimeEnd(LocalDateTime.of(2016, 3, 6, 4, 30));
+    }
+    
 }
