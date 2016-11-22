@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -46,6 +47,7 @@ import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.loadui.testfx.GuiTest.find;
 
 /**
  * Created by Samir Hadzic on 21-05-14.
@@ -450,5 +452,40 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         });
 
         assertFind("#2013-01-01");
+    }
+    
+    @Test
+    public void requestFocus() {
+        //Give focus to the icon
+        TestUtil.runAndWait(() -> {
+            find(".icon").requestFocus();
+        });
+
+        //TextField should not be focused
+        Assert.assertFalse(find(".text-field").isFocused());
+        
+        TestUtil.runAndWait(() -> {
+            localDateTextField.requestFocus();
+        });
+
+        //TextField should be now
+        Assert.assertTrue(find(".text-field").isFocused());
+    }
+    
+    @Test
+    public void selectAll() {
+        LocalDate localDate = LocalDate.of(2013, 1, 1);
+
+        // set a value
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            localDateTextField.setLocalDate(localDate);
+        });
+        
+        TextField textField = find(".text-field");
+        Assert.assertFalse(textField.getText().isEmpty());
+
+        localDateTextField.selectAll();
+
+        Assert.assertEquals(textField.getText(), textField.getSelectedText());
     }
 }

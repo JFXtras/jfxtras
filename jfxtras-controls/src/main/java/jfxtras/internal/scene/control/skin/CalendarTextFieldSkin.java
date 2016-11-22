@@ -33,7 +33,6 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -66,7 +65,7 @@ import jfxtras.util.NodeUtil;
  * 
  * Possible extension: drop down list or grid for quick selection
  */
-public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
+public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implements TextFieldSkin
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -133,15 +132,16 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	 */
     private void initFocusSimulation() 
     {
-    	getSkinnable().focusedProperty().addListener( (observableValue, wasFocused, isFocused) -> {
-			if (isFocused) {
-            	Platform.runLater( () -> {
-					textField.requestFocus();
-				});
-			}
-		});
+    	   getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
+            if (isFocused) {
+                textField.requestFocus();
+            }
+        });
     }
-	
+        @Override
+	public void selectAll(){
+            textField.selectAll();
+        }
 
 	// ==================================================================================================================
 	// DRAW

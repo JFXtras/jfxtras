@@ -48,6 +48,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
+import jfxtras.internal.scene.control.skin.TextFieldSkin;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 
 /**
@@ -128,6 +129,15 @@ public class CalendarTextField extends Control
 	@Override public Skin<?> createDefaultSkin() {
 		return new jfxtras.internal.scene.control.skin.CalendarTextFieldSkin(this); 
 	}
+        /**
+     * Make the call to {@link TextField#selectAll() }.
+     */
+    public void selectAll() {
+        //Verify the skin is there and implement our interface.
+        if (getSkin() != null && getSkin() instanceof TextFieldSkin) {
+            ((TextFieldSkin) getSkin()).selectAll();
+        }
+    }
 
 	// ==================================================================================================================
 	// PROPERTIES
@@ -291,7 +301,7 @@ public class CalendarTextField extends Control
      * currently visible on screen.
      */
     public BooleanProperty pickerShowingProperty() { return pickerShowingProperty; }
-    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
+    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty(false);
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
 	public CalendarTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }

@@ -47,6 +47,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDateTextFieldSkin;
+import jfxtras.internal.scene.control.skin.TextFieldSkin;
 import jfxtras.scene.control.LocalDatePicker.LocalDateRange;
 
 
@@ -105,10 +106,18 @@ public class LocalDateTextField extends Control
 		return new LocalDateTextFieldSkin(this);
 	}
 
-	
-	// ==================================================================================================================
+
+        // ==================================================================================================================
 	// PROPERTIES
-	
+	/**
+     * Make the call to {@link TextField#selectAll() }.
+     */
+    public void selectAll() {
+        //Verify the skin is there and implement our interface.
+        if (getSkin() != null && getSkin() instanceof TextFieldSkin) {
+            ((TextFieldSkin) getSkin()).selectAll();
+        }
+    }
 	/** LocalDate: the selected date. */
 	public ObjectProperty<LocalDate> localDateProperty() { return localDateObjectProperty; }
 	private final ObjectProperty<LocalDate> localDateObjectProperty = new SimpleObjectProperty<LocalDate>(this, "localDate");
@@ -236,8 +245,8 @@ public class LocalDateTextField extends Control
      * currently visible on screen.
      */
     public BooleanProperty pickerShowingProperty() { return pickerShowingProperty; }
-    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
+    final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty(false);
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
-	public LocalDateTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }
+    public LocalDateTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }
 }
