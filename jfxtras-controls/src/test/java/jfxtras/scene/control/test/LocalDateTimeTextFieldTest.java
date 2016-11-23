@@ -524,4 +524,57 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
 
         Assert.assertEquals(textField.getText(), textField.getSelectedText());
     }
+    
+    @Test
+    public void inputAfterEscape() {
+        // open the popup
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            localDateTimeTextField.setPickerShowing(true);
+        });
+        type(KeyCode.ESCAPE);
+
+        type(KeyCode.NUMPAD2);
+
+        //TextField should be focused
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        Assert.assertEquals("2", ((TextField) find(".text-field")).getText());
+    }
+    
+     @Test
+    public void textFieldGetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        // Type 2
+        type(KeyCode.NUMPAD2);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
+        Assert.assertEquals("2", localDateTimeTextField.getText());
+    }
+    
+    @Test
+    public void textFieldSetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        localDateTimeTextField.setText("2");
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
+        Assert.assertEquals("2", localDateTimeTextField.getText());
+    }
+    
+     @Test
+    public void textFieldSetTextEnter() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        localDateTimeTextField.setText("2");
+        
+        //We try to validate
+        type(KeyCode.ENTER);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
+        Assert.assertTrue(localDateTimeTextField.getText().isEmpty());
+    }
 }

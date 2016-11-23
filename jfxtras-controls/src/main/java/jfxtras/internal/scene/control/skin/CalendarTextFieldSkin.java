@@ -90,9 +90,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
         getSkinnable().dateFormatProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
-        getSkinnable().textProperty().addListener( (observable) -> {
-        	parse(getSkinnable().getText());
-        });
+            textField.textProperty().bindBidirectional(getSkinnable().textProperty());
 		refreshValue();
 		
 		// focus
@@ -408,9 +406,11 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
 			lAcceptIconImageView.getStyleClass().addAll("accept-icon");
 			lAcceptIconImageView.setPickOnBounds(true);
 			lAcceptIconImageView.setOnMouseClicked( (mouseEvent) ->  {
-				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
-				popup.hide(); 
-			});
+			getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+                        if (popup != null) {
+                            popup.hide();
+                        }
+                    });
 			lVBox.add(lAcceptIconImageView);
 			
 			ImageView lCloseIconImageView = new ImageViewButton();
@@ -437,6 +437,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
 			}
 			// but at least the textfield must be enabled again
 			textField.setDisable(false);
+                        textField.requestFocus();
 		});
 		
 		// add to popup
