@@ -47,6 +47,7 @@ import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalDateTimeTextFieldSkin;
+import jfxtras.internal.scene.control.skin.TextFieldSkin;
 import jfxtras.scene.control.LocalDateTimePicker.LocalDateTimeRange;
 
 
@@ -107,7 +108,15 @@ public class LocalDateTimeTextField extends Control
 
 	// ==================================================================================================================
 	// PROPERTIES
-	
+	/**
+     * Make the call to {@link TextField#selectAll() }.
+     */
+    public void selectAll() {
+        //Verify the skin is there and implement our interface.
+        if (getSkin() != null && getSkin() instanceof TextFieldSkin) {
+            ((TextFieldSkin) getSkin()).selectAll();
+        }
+    }
 	/** LocalDateTime: the selected date. */
 	public ObjectProperty<LocalDateTime> localDateTimeProperty() { return localDateTimeObjectProperty; }
 	private final ObjectProperty<LocalDateTime> localDateTimeObjectProperty = new SimpleObjectProperty<LocalDateTime>(this, "localDateTime");

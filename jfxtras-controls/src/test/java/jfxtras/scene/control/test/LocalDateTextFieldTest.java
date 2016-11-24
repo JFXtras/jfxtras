@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -46,6 +47,7 @@ import jfxtras.test.TestUtil;
 
 import org.junit.Assert;
 import org.junit.Test;
+import static org.loadui.testfx.GuiTest.find;
 
 /**
  * Created by Samir Hadzic on 21-05-14.
@@ -450,5 +452,93 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         });
 
         assertFind("#2013-01-01");
+    }
+    
+    @Test
+    public void requestFocus() {
+        //Give focus to the icon
+        TestUtil.runAndWait(() -> {
+            find(".icon").requestFocus();
+        });
+
+        //TextField should not be focused
+        Assert.assertFalse(find(".text-field").isFocused());
+        
+        TestUtil.runAndWait(() -> {
+            localDateTextField.requestFocus();
+        });
+
+        //TextField should be now
+        Assert.assertTrue(find(".text-field").isFocused());
+    }
+    
+    @Test
+    public void selectAll() {
+        LocalDate localDate = LocalDate.of(2013, 1, 1);
+
+        // set a value
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            localDateTextField.setLocalDate(localDate);
+        });
+        
+        TextField textField = find(".text-field");
+        Assert.assertFalse(textField.getText().isEmpty());
+
+        localDateTextField.selectAll();
+
+        Assert.assertEquals(textField.getText(), textField.getSelectedText());
+    }
+    
+    @Test
+    public void inputAfterEscape() {
+        // open the popup
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            localDateTextField.setPickerShowing(true);
+        });
+        type(KeyCode.ESCAPE);
+
+        type(KeyCode.NUMPAD2);
+
+        //TextField should be focused
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        Assert.assertEquals("2", ((TextField) find(".text-field")).getText());
+    }
+    
+    @Test
+    public void textFieldGetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        // Type 2
+        type(KeyCode.NUMPAD2);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTextField.getText());
+        Assert.assertEquals("2", localDateTextField.getText());
+    }
+    
+    @Test
+    public void textFieldSetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        localDateTextField.setText("2");
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTextField.getText());
+        Assert.assertEquals("2", localDateTextField.getText());
+    }
+    
+     @Test
+    public void textFieldSetTextEnter() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        localDateTextField.setText("2");
+        
+        //We try to validate
+        type(KeyCode.ENTER);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTextField.getText());
+        Assert.assertTrue(localDateTextField.getText().isEmpty());
     }
 }

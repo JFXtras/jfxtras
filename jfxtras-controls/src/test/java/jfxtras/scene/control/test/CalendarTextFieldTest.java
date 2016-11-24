@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -636,5 +637,93 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         });
 
         assertFind("#2013-01-01");
+    }
+     
+    @Test
+    public void requestFocus() {
+        //Give focus to the icon
+        TestUtil.runAndWait(() -> {
+            find(".icon").requestFocus();
+        });
+
+        //TextField should not be focused
+        Assert.assertFalse(find(".text-field").isFocused());
+        
+        TestUtil.runAndWait(() -> {
+            calendarTextField.requestFocus();
+        });
+
+        //TextField should be now
+        Assert.assertTrue(find(".text-field").isFocused());
+    }
+    
+    @Test
+    public void inputAfterEscape() {
+        // open the popup
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            calendarTextField.setPickerShowing(true);
+        });
+        type(KeyCode.ESCAPE);
+
+        type(KeyCode.NUMPAD2);
+
+        //TextField should be focused
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        Assert.assertEquals("2", ((TextField) find(".text-field")).getText());
+    }
+
+    @Test
+    public void textFieldGetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        // Type 2
+        type(KeyCode.NUMPAD2);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), calendarTextField.getText());
+        Assert.assertEquals("2", calendarTextField.getText());
+    }
+    
+    @Test
+    public void textFieldSetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        calendarTextField.setText("2");
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), calendarTextField.getText());
+        Assert.assertEquals("2", calendarTextField.getText());
+    }
+    
+    @Test
+    public void textFieldSetTextEnter() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        calendarTextField.setText("2");
+        
+        //We try to validate
+        type(KeyCode.ENTER);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), calendarTextField.getText());
+        Assert.assertTrue(calendarTextField.getText().isEmpty());
+    }
+    
+    @Test
+    public void selectAll() {
+        Calendar lCalendar = new GregorianCalendar(2013, 0, 1, 12, 00, 00);
+
+        // set a value
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            calendarTextField.setCalendar(lCalendar);
+        });
+        
+        TextField textField = find(".text-field");
+        Assert.assertFalse(textField.getText().isEmpty());
+
+        calendarTextField.selectAll();
+
+        Assert.assertEquals(textField.getText(), textField.getSelectedText());
     }
 }

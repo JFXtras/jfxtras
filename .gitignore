@@ -18,6 +18,5 @@ screenshot*.png
 
 /jfxtras-test-support/bin
 /gradlew_assemble.cmd
-*.iml
-.idea
-/bin/
+/.nb-gradle/private/
+/.nb-gradle/profiles/private/

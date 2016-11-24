@@ -33,7 +33,6 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -66,7 +65,7 @@ import jfxtras.util.NodeUtil;
  * 
  * Possible extension: drop down list or grid for quick selection
  */
-public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
+public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implements TextFieldSkin
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -91,9 +90,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
         getSkinnable().dateFormatProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
-        getSkinnable().textProperty().addListener( (observable) -> {
-        	parse(getSkinnable().getText());
-        });
+            textField.textProperty().bindBidirectional(getSkinnable().textProperty());
 		refreshValue();
 		
 		// focus
@@ -133,15 +130,16 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 	 */
     private void initFocusSimulation() 
     {
-    	getSkinnable().focusedProperty().addListener( (observableValue, wasFocused, isFocused) -> {
-			if (isFocused) {
-            	Platform.runLater( () -> {
-					textField.requestFocus();
-				});
-			}
-		});
+    	   getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
+            if (isFocused) {
+                textField.requestFocus();
+            }
+        });
     }
-	
+        @Override
+	public void selectAll(){
+            textField.selectAll();
+        }
 
 	// ==================================================================================================================
 	// DRAW
@@ -211,7 +209,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 		gridPane.setHgap(3);
 		gridPane.add(textField, 0, 0);
 		gridPane.add(imageView, 1, 0);
-		ColumnConstraints column0 = new ColumnConstraints(100, 10, Double.MAX_VALUE);
+		ColumnConstraints column0 = new ColumnConstraints(20, 100, Double.MAX_VALUE);
 		column0.setHgrow(Priority.ALWAYS);
 		gridPane.getColumnConstraints().addAll(column0); // first column gets any extra width
 		
@@ -408,9 +406,11 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			lAcceptIconImageView.getStyleClass().addAll("accept-icon");
 			lAcceptIconImageView.setPickOnBounds(true);
 			lAcceptIconImageView.setOnMouseClicked( (mouseEvent) ->  {
-				getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
-				popup.hide(); 
-			});
+			getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
+                        if (popup != null) {
+                            popup.hide();
+                        }
+                    });
 			lVBox.add(lAcceptIconImageView);
 			
 			ImageView lCloseIconImageView = new ImageViewButton();
@@ -437,6 +437,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField>
 			}
 			// but at least the textfield must be enabled again
 			textField.setDisable(false);
+                        textField.requestFocus();
 		});
 		
 		// add to popup

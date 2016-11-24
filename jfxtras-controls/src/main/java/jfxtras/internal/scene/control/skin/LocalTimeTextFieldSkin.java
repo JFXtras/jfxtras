@@ -44,7 +44,7 @@ import jfxtras.scene.control.LocalTimeTextField;
  * @author Tom Eugelink
  *
  */
-public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField>
+public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField> implements TextFieldSkin
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -58,6 +58,10 @@ public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField>
 		construct();
 	}
 
+        @Override
+	public void selectAll(){
+            calendarTimeTextField.selectAll();
+        }
 	/*
 	 * construct the component
 	 */
@@ -73,6 +77,11 @@ public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField>
 		calendarTimeTextField.tooltipProperty().bindBidirectional( getSkinnable().tooltipProperty() ); 
                 calendarTimeTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
 
+                getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
+                if (isFocused) {
+                    calendarTimeTextField.requestFocus();
+                }
+            });
 		// bind it up
 		calendarTimeTextField.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
 		calendarTimeTextField.promptTextProperty().bindBidirectional( getSkinnable().promptTextProperty() );
