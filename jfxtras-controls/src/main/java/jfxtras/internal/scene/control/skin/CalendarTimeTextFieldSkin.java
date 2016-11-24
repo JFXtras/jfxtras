@@ -221,7 +221,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 		gridPane.setHgap(3);
 		gridPane.add(textField, 0, 0);
 		gridPane.add(imageView, 1, 0);
-		ColumnConstraints column0 = new ColumnConstraints(100, 10, Double.MAX_VALUE);
+		ColumnConstraints column0 = new ColumnConstraints(20, 100, Double.MAX_VALUE);
 		column0.setHgrow(Priority.ALWAYS);
 		gridPane.getColumnConstraints().addAll(column0); // first column gets any extra width
 		

@@ -5,9 +5,7 @@
 .CalendarPickerControlSkin { 
 }
 
-.CalendarPickerControlSkin .weekday-label {
-	-fx-alignment: CENTER;
-}
+
 
 .CalendarPickerControlSkin .weeknumber {
 }
@@ -24,7 +22,7 @@
 
 /* highlight today */
 .CalendarPickerControlSkin .today { 
-	-fx-color: DARKGRAY; 
+    -fx-color: DARKGRAY; 
 }
 
 .CalendarPickerControlSkin .today-button { 
@@ -40,7 +38,7 @@
 }
 
 .CalendarPicker .ListSpinner { 
-/*	-fxx-arrow-position:SPLIT; */
-/*	-fxx-arrow-direction:VERTICAL; */
-/*	-fxx-value-alignment:CENTER; */
+    /*	-fxx-arrow-position:SPLIT; */
+    /*	-fxx-arrow-direction:VERTICAL; */
+    /*	-fxx-value-alignment:CENTER; */
 }
