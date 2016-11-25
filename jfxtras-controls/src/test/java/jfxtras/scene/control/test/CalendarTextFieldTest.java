@@ -63,6 +63,11 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		HBox box = new HBox();
 		calendarTextField = new CalendarTextField();
+		calendarTextField.setParseErrorCallback( throwable -> { 
+        	parseErrorThrowable = throwable;
+        	System.out.println("Parse exception caught: " + throwable);
+        	return null;
+        });
 		box.getChildren().add(calendarTextField);
 		Button lButton = new Button("focus helper");
 		lButton.setId("focusHelper");
@@ -71,6 +76,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		return box;
 	}
 	private CalendarTextField calendarTextField = null;
+    private Throwable parseErrorThrowable = null;
 
 	/**
 	 * 
@@ -691,6 +697,9 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 
         calendarTextField.setText("2");
 
+        // no error should have been thrown
+        Assert.assertNull(parseErrorThrowable);
+        
         //We should have the same value everywhere.
         Assert.assertEquals(((TextField) find(".text-field")).getText(), calendarTextField.getText());
         Assert.assertEquals("2", calendarTextField.getText());
@@ -705,6 +714,9 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         //We try to validate
         type(KeyCode.ENTER);
 
+        // an error should have been thrown
+        Assert.assertTrue(parseErrorThrowable.getMessage().contains("Unparseable date: \"2\""));
+        
         //We should have the same value everywhere.
         Assert.assertEquals(((TextField) find(".text-field")).getText(), calendarTextField.getText());
         Assert.assertTrue(calendarTextField.getText().isEmpty());

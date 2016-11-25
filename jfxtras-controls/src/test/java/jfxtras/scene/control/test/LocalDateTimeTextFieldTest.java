@@ -63,6 +63,11 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
 
         HBox box = new HBox();
         localDateTimeTextField = new LocalDateTimeTextField();
+        localDateTimeTextField.setParseErrorCallback( throwable -> { 
+        	parseErrorThrowable = throwable;
+        	System.out.println("Parse exception caught: " + throwable);
+        	return null;
+        });
         box.getChildren().add(localDateTimeTextField);
         Button lButton = new Button("focus helper");
         lButton.setId("focusHelper");
@@ -71,6 +76,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         return box;
     }
     private LocalDateTimeTextField localDateTimeTextField = null;
+    private Throwable parseErrorThrowable = null;
 
     /**
      *
@@ -559,6 +565,9 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
 
         localDateTimeTextField.setText("2");
 
+        // no error should have been thrown
+        Assert.assertNull(parseErrorThrowable);
+        
         //We should have the same value everywhere.
         Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
         Assert.assertEquals("2", localDateTimeTextField.getText());
@@ -573,6 +582,9 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         //We try to validate
         type(KeyCode.ENTER);
 
+        // an error should have been thrown
+        Assert.assertTrue(parseErrorThrowable.getMessage().contains("Text '2' could not be parsed"));
+        
         //We should have the same value everywhere.
         Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
         Assert.assertTrue(localDateTimeTextField.getText().isEmpty());
