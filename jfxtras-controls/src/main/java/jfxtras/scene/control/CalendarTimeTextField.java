@@ -47,6 +47,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.util.Callback;
+import jfxtras.internal.scene.control.skin.TextFieldSkin;
 
 /**
  * A textField with displays a calendar (time) with a icon to popup the CalendarTimePicker
@@ -100,6 +101,15 @@ public class CalendarTimeTextField extends Control
 	// ==================================================================================================================
 	// PROPERTIES
 
+        /**
+     * Make the call to {@link TextField#selectAll() }.
+     */
+    public void selectAll() {
+        //Verify the skin is there and implement our interface.
+        if (getSkin() != null && getSkin() instanceof TextFieldSkin) {
+            ((TextFieldSkin) getSkin()).selectAll();
+        }
+    }
 	/** Id */
 	public CalendarTimeTextField withId(String value) { setId(value); return this; }
 

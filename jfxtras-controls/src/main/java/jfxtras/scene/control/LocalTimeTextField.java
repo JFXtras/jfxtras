@@ -44,8 +44,10 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
+import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import jfxtras.internal.scene.control.skin.LocalTimeTextFieldSkin;
+import jfxtras.internal.scene.control.skin.TextFieldSkin;
 
 /**
  * LocalTime (JSR-310) text field component.
@@ -88,7 +90,15 @@ public class LocalTimeTextField extends Control
 	
 	// ==================================================================================================================
 	// PROPERTIES
-	
+       /**
+     * Make the call to {@link TextField#selectAll() }.
+     */
+    public void selectAll() {
+        //Verify the skin is there and implement our interface.
+        if (getSkin() != null && getSkin() instanceof TextFieldSkin) {
+            ((TextFieldSkin) getSkin()).selectAll();
+        }
+    }
 	/** LocalTime: */
 	public ObjectProperty<LocalTime> localTimeProperty() { return localTimeObjectProperty; }
 	private final ObjectProperty<LocalTime> localTimeObjectProperty = new SimpleObjectProperty<LocalTime>(this, "localTime");

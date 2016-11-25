@@ -1,5 +1,5 @@
 /**
- * CalendarPickerTrial.java
+ * TextFieldSkin.java
  *
  * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
@@ -26,56 +26,20 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package jfxtras.internal.scene.control.skin;
 
-package jfxtras.scene.control.trial;
-
-import java.util.GregorianCalendar;
-
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
-import javafx.stage.Stage;
-import jfxtras.scene.control.CalendarTimePicker;
+import javafx.scene.control.TextField;
 
 /**
- * 
- * @author Tom Eugelink
+ * Interface for all skin using a TextField in order to allow controls to select
+ * all characters.
  *
+ * @author samir.hadzic
  */
-public class CalendarTimePickerTrial extends Application {
-	
-    public static void main(String[] args) {
-        launch(args);       
-    }
+public interface TextFieldSkin {
 
-	@Override
-	public void start(Stage stage) {
-		
-		FlowPane lFlowPane = new FlowPane();
-		
-		{
-			CalendarTimePicker lCalendarTimePicker = new CalendarTimePicker();
-			lCalendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));
-//			lCalendarTimePicker.setHourStep(1);
-			lCalendarTimePicker.setMinuteStep(15);
-//			lCalendarTimePicker.setSecondStep(15);
-			lCalendarTimePicker.setStyle("-fxx-label-dateformat:\"HH:mm:ss\";");
-			lFlowPane.getChildren().add(lCalendarTimePicker);
-		}
-		
-		Button lButton = new Button("dummy");
-		lFlowPane.getChildren().add(lButton);
-		
-		// create scene
-        Scene scene = new Scene(lFlowPane, 800, 800);
-        
-		// load custom CSS
-        //scene.getStylesheets().addAll(this.getClass().getResource(this.getClass().getSimpleName() + ".css").toExternalForm());
-		
-        // create stage
-        stage.setTitle(this.getClass().getSimpleName());
-        stage.setScene(scene);
-        stage.show();
-    }
+    /**
+     * Make the call to {@link TextField#selectAll() }.
+     */
+    public void selectAll();
 }

@@ -29,22 +29,18 @@
 
 package jfxtras.scene.control.test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.util.Callback;
-import jfxtras.scene.control.LocalDateTimePicker;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
@@ -491,5 +487,94 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         });
 
         assertFind("#2013-01-01");
+    }
+    
+     
+    @Test
+    public void requestFocus() {
+        //Give focus to the icon
+        TestUtil.runAndWait(() -> {
+            find(".icon").requestFocus();
+        });
+
+        //TextField should not be focused
+        Assert.assertFalse(find(".text-field").isFocused());
+        
+        TestUtil.runAndWait(() -> {
+            localDateTimeTextField.requestFocus();
+        });
+
+        //TextField should be now
+        Assert.assertTrue(find(".text-field").isFocused());
+    }
+    
+    @Test
+    public void selectAll() {
+        LocalDateTime lCalendar = LocalDateTime.of(2013, 1, 1, 12, 00, 00);
+
+        // set a value
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            localDateTimeTextField.setLocalDateTime(lCalendar);
+        });
+        
+        TextField textField = find(".text-field");
+        Assert.assertFalse(textField.getText().isEmpty());
+
+        localDateTimeTextField.selectAll();
+
+        Assert.assertEquals(textField.getText(), textField.getSelectedText());
+    }
+    
+    @Test
+    public void inputAfterEscape() {
+        // open the popup
+        TestUtil.runThenWaitForPaintPulse(() -> {
+            localDateTimeTextField.setPickerShowing(true);
+        });
+        type(KeyCode.ESCAPE);
+
+        type(KeyCode.NUMPAD2);
+
+        //TextField should be focused
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        Assert.assertEquals("2", ((TextField) find(".text-field")).getText());
+    }
+    
+     @Test
+    public void textFieldGetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        // Type 2
+        type(KeyCode.NUMPAD2);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
+        Assert.assertEquals("2", localDateTimeTextField.getText());
+    }
+    
+    @Test
+    public void textFieldSetText() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        localDateTimeTextField.setText("2");
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
+        Assert.assertEquals("2", localDateTimeTextField.getText());
+    }
+    
+     @Test
+    public void textFieldSetTextEnter() {
+        Assert.assertTrue(find(".text-field").isFocused());
+
+        localDateTimeTextField.setText("2");
+        
+        //We try to validate
+        type(KeyCode.ENTER);
+
+        //We should have the same value everywhere.
+        Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
+        Assert.assertTrue(localDateTimeTextField.getText().isEmpty());
     }
 }

@@ -33,7 +33,6 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
@@ -63,7 +62,7 @@ import jfxtras.util.NodeUtil;
  * Format is hardcoded to HH:MM:SS.mmm, but  
  * @author Tom Eugelink
  */
-public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
+public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> implements TextFieldSkin
 {
 	// ==================================================================================================================
 	// CONSTRUCTOR
@@ -128,17 +127,18 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 	/**
 	 * When the control is focus, forward the focus to the textfield
 	 */
-    private void initFocusSimulation() 
-    {
-    	getSkinnable().focusedProperty().addListener( (observable, wasFocused, isFocused) -> {
-			if (isFocused) {
-            	Platform.runLater( () ->  {
-					textField.requestFocus();
-				});
-			}
-		});
+    private void initFocusSimulation() {
+        getSkinnable().focusedProperty().addListener((observable, wasFocused, isFocused) -> {
+            if (isFocused) {
+                textField.requestFocus();
+            }
+        });
     }
 	
+    @Override
+	public void selectAll(){
+            textField.selectAll();
+        }
 
 	// ==================================================================================================================
 	// DRAW
@@ -221,7 +221,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField>
 		gridPane.setHgap(3);
 		gridPane.add(textField, 0, 0);
 		gridPane.add(imageView, 1, 0);
-		ColumnConstraints column0 = new ColumnConstraints(100, 10, Double.MAX_VALUE);
+		ColumnConstraints column0 = new ColumnConstraints(20, 100, Double.MAX_VALUE);
 		column0.setHgrow(Priority.ALWAYS);
 		gridPane.getColumnConstraints().addAll(column0); // first column gets any extra width
 		
