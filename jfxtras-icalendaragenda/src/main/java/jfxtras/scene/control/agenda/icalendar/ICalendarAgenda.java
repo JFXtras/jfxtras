@@ -451,6 +451,11 @@ public class ICalendarAgenda extends Agenda
     /*
      * CONSTRUCTOR
      */
+    public ICalendarAgenda()
+    {
+        this(new VCalendar()); // create empty VCalendar
+    }
+    
     public ICalendarAgenda(VCalendar vCalendar)
     {
         super();
