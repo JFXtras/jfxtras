@@ -530,7 +530,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
-	public void typeValueUsingAdditonalDateFormatter()
+	public void typeValueUsingAdditionalDateFormatter()
 	{
 		// default value is null
 		Assert.assertNull(calendarTextField.getCalendar());

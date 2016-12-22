@@ -47,7 +47,7 @@ import org.junit.Test;
 
 /**
  * We use a single FXML to minimize the number of files.
- * But in order to prevent that the window becomes too width or heigh, tabs are used to separate the test cases
+ * But in order to prevent that the window becomes too width or height, tabs are used to separate the test cases
  * 
  */
 public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
@@ -99,7 +99,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
-	public void atributesAreSet2()
+	public void attributesAreSet2()
 	{
 		// show the correct tab
 		click("#atributesAreSet2");
@@ -117,7 +117,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
-	public void atributesAreSet3()
+	public void attributesAreSet3()
 	{
 		// show the correct tab
 		click("#atributesAreSet3");
@@ -135,7 +135,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
-	public void atributesAreSet4()
+	public void attributesAreSet4()
 	{
 		// show the correct tab
 		click("#atributesAreSet4");
