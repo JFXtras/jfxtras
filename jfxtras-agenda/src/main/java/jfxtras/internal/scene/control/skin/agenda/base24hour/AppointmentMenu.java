@@ -173,8 +173,6 @@ class AppointmentMenu extends Rectangle {
 	private Popup popup;
 	
 	/**
-	 * 
-	 * @param popup
 	 * @return
 	 */
 	private ImageViewButton createCloseIcon() {

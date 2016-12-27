@@ -469,7 +469,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
 
     /**
      * This is either called by the user clicking on the button, or
-     * programmaticaly with {@link CalendarTextField#setPickerShowing(boolean)
+     * programmatically with {@link CalendarTextField#setPickerShowing(boolean)
      * }.
      */
     private void showPopup() {

@@ -48,7 +48,7 @@ import org.junit.Test;
 
 /**
  * We use a single FXML to minimize the number of files.
- * But in order to prevent that the window becomes too width or heigh, tabs are used to separate the test cases
+ * But in order to prevent that the window becomes too width or height, tabs are used to separate the test cases
  * 
  */
 public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {

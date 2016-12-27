@@ -20,7 +20,7 @@ public class CalendarScaleTest
     }
     
     @Test (expected = IllegalArgumentException.class)
-    public void canCatchInvlidCalendarScale()
+    public void canCatchInvalidCalendarScale()
     {
         CalendarScale.parse("INVALID");;
     }

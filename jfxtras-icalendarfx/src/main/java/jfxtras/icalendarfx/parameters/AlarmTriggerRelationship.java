@@ -21,7 +21,7 @@ import jfxtras.icalendarfx.parameters.AlarmTriggerRelationship.AlarmTriggerRelat
 
   <p>Format Definition:  This property parameter is defined by the following notation::
   <ul>
-  <li>trigrelparam
+  <li>triggerparam
     <ul>
     <li>"RELATED" "="
     <li>("START"       ; Trigger off of start
