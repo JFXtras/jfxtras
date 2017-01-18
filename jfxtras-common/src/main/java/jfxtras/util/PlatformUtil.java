@@ -35,8 +35,6 @@ import java.util.concurrent.FutureTask;
 
 import javafx.application.Platform;
 
-import com.sun.javafx.tk.Toolkit;
-
 /**
  * Created by Tom Eugelink on 26-12-13.
  */
@@ -99,15 +97,6 @@ public class PlatformUtil {
 		catch (InterruptedException | ExecutionException e) {
 			throw new RuntimeException(e);
 		}
-	}
-	
-	/**
-	 * 
-	 */
-	static public void waitForPaintPulse() {
-		PlatformUtil.runAndWait( () -> {
-			Toolkit.getToolkit().firePulse();
-		});
 	}
 }
 

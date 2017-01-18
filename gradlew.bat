@@ -1,3 +1,7 @@
+@rem Gradle under Java 9
+set _JAVA_OPTIONS=-Dsun.reflect.debugModuleAccessChecks=true --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.text=ALL-UNNAMED
+
+
 @if "%DEBUG%" == "" @echo off
 @rem ##########################################################################
 @rem

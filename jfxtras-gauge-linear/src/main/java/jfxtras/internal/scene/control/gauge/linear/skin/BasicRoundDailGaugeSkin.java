@@ -73,7 +73,7 @@ import jfxtras.scene.control.gauge.linear.elements.Label;
 import jfxtras.scene.control.gauge.linear.elements.Marker;
 import jfxtras.scene.control.gauge.linear.elements.Segment;
 
-import com.sun.javafx.css.converters.PaintConverter;
+import javafx.css.converter.PaintConverter;
 
 /**
  * 
