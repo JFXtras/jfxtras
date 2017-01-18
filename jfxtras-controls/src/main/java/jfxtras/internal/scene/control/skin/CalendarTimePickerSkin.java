@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.sun.javafx.css.converters.EnumConverter;
+import javafx.css.converter.EnumConverter;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.css.CssMetaData;

@@ -7,13 +7,15 @@ buildscript {
         }
     }
     dependencies {
-        classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
-        classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
+// TODOJAVA9	
+//        classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
+//        classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
 plugins {
-  id "com.github.johnrengelman.shadow" version "1.2.3"
+// TODOJAVA9
+//  id "com.github.johnrengelman.shadow" version "1.2.3"
 }
 
 allprojects {
@@ -22,13 +24,14 @@ allprojects {
     apply plugin: 'signing'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
-    
-    // apply vrl license header plugin
-    if (!project.plugins.findPlugin(eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)) {
-        project.apply(plugin: eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)
-    }
-    // license template (will be used as header in all Java source files)
-    repairHeaders.licenseHeaderText = new File(projectDir,"../license-template.txt")
+
+// TODOJAVA9    
+//    // apply vrl license header plugin
+//    if (!project.plugins.findPlugin(eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)) {
+//        project.apply(plugin: eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)
+//    }
+//    // license template (will be used as header in all Java source files)
+//    repairHeaders.licenseHeaderText = new File(projectDir,"../license-template.txt")
 
     repositories {
         mavenLocal()
@@ -112,25 +115,27 @@ project(':') {
 }
 
 // configure shadowJar
-shadowJar {
-   classifier = null // do not append "-all", so the generated shadow jar replaces the existing jfxtras-all.jar (instead of generating jfxtras-all-all.jar)
-}
+// TODOJAVA9
+// shadowJar {
+//   classifier = null // do not append "-all", so the generated shadow jar replaces the existing jfxtras-all.jar (instead of generating jfxtras-all-all.jar)
+//}
 
 subprojects {
-	apply plugin: 'me.tatarka.retrolambda'
-	retrolambda {
-		defaultMethods true		
-		javaVersion JavaVersion.VERSION_1_7
-		oldJdk System.properties.'java.home'
-		exclude 'Test'
-	}
+//	apply plugin: 'me.tatarka.retrolambda'
+
+//	retrolambda {
+//		defaultMethods true		
+//		javaVersion JavaVersion.VERSION_1_7
+//		oldJdk System.properties.'java.home'
+//		exclude 'Test'
+//	}
 
     //Excluding internal classes from Javadoc
     javadoc {
         exclude 'jfxtras/internal/*'
     }
     // all projects must be compatible with the java version specified here
-    sourceCompatibility = '1.8'
+    sourceCompatibility = '1.9'
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     // Needed until Gradle supports class-scanning for Java 8
@@ -239,4 +244,9 @@ project(':jfxtras-test-support') {
 task copyToLib(type: Copy) {
     into "_lib"
     from project(':jfxtras-test-support').configurations.testCompile
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
 }

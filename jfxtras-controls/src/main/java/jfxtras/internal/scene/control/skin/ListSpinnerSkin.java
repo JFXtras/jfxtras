@@ -65,7 +65,7 @@ import jfxtras.scene.layout.HBox;
 import jfxtras.scene.layout.VBox;
 import jfxtras.util.NodeUtil;
 
-import com.sun.javafx.css.converters.EnumConverter;
+import javafx.css.converter.EnumConverter;
 
 /**
  * 

@@ -57,8 +57,8 @@ import jfxtras.scene.control.gauge.linear.elements.Indicator;
 import jfxtras.scene.control.gauge.linear.elements.Marker;
 import jfxtras.scene.control.gauge.linear.elements.Segment;
 
-import com.sun.javafx.css.converters.EnumConverter;
-import com.sun.javafx.css.converters.StringConverter;
+import javafx.css.converter.EnumConverter;
+import javafx.css.converter.StringConverter;
 
 /**
  * 
