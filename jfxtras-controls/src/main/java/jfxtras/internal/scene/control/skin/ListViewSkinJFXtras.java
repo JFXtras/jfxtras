@@ -29,23 +29,21 @@
 
 package jfxtras.internal.scene.control.skin;
 
-import com.sun.javafx.scene.control.skin.ListViewSkin;
-
 /**
  * We need to use a custom skin, so we can access the protected flow variable.
  * @author Tom Eugelink
  *
  */
-public class ListViewSkinJFXtras<T> extends ListViewSkin<T>
+public class ListViewSkinJFXtras<T> // TODOJAVA9 extends ListViewSkin<T>
 {
 	public ListViewSkinJFXtras(javafx.scene.control.ListView<T> skinnable)
 	{
-		super(skinnable);
+		// TODOJAVA9 super(skinnable);
 	}
 
 	public void refresh()
 	{
 		// make the skin recreate all the cells
-		flow.recreateCells();
+		// TODOJAVA9 flow.recreateCells();
 	}
 }

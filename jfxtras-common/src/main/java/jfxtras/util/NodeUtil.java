@@ -284,7 +284,7 @@ public class NodeUtil {
             public ObservableList<?> getDependencies() {
                 return (dependencies.length == 1)? 
                         FXCollections.singletonObservableList(dependencies[0]) 
-                        : new ImmutableObservableList<Observable>(dependencies);
+                        : FXCollections.unmodifiableObservableList(FXCollections.observableArrayList(dependencies));
             }
         };
     }
