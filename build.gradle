@@ -10,6 +10,7 @@ buildscript {
 // TODOJAVA9	
 //        classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
 //        classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
+        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
 plugins {
@@ -120,6 +121,14 @@ project(':') {
 //}
 
 subprojects {
+//	apply plugin: 'me.tatarka.retrolambda'
+
+//	retrolambda {
+//		defaultMethods true		
+//		javaVersion JavaVersion.VERSION_1_7
+//		oldJdk System.properties.'java.home'
+//		exclude 'Test'
+//	}
 
     //Excluding internal classes from Javadoc
     javadoc {
@@ -227,11 +236,8 @@ project(':jfxtras-test-support') {
     dependencies {
         compile 'junit:junit:4.12'
         compile 'org.mockito:mockito-all:1.9.5'
-		compile "org.testfx:testfx-core:4.0.8-alpha"
-		compile "org.testfx:testfx-junit:4.0.8-alpha", {
-			exclude group: "junit", module: "junit"
-		}
-	}
+        compile 'org.loadui:testFx:3.1.2'
+    }
 }
 
 // TODO: _lib folder per project?
