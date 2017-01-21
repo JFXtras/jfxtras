@@ -96,11 +96,11 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(localDateTextField.isPickerShowing());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(find(".text-field").isDisabled());
 
         // click today
-        click(".today");
+        clickOn(".today");
 
         // now should be the value in the textfield
         Assert.assertFalse(find(".text-field").isDisabled());
@@ -117,13 +117,13 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(localDateTextField.isPickerShowing());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
 
         //The popup should be displayed.
         Assert.assertTrue(localDateTextField.isPickerShowing());
 
         // click today
-        click(".today");
+        clickOn(".today");
 
         // now should be the value in the textfield
         Assert.assertEquals(LocalDate.now(), localDateTextField.getLocalDate());
@@ -138,7 +138,7 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
     	localDateTextField.disabledLocalDates().add(LocalDate.now());
         
         // open the picker
-        click(".icon");
+        clickOn(".icon");
 
         // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").isDisabled());
@@ -147,7 +147,7 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
     @Test
     public void checkIfDisabledDateIsForwardedToThePickerAtRuntime() {
         // open the picker
-        click(".icon");
+        clickOn(".icon");
         TestUtil.waitForPaintPulse();
         
         // make sure that today in the picker is enabled
@@ -168,7 +168,7 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
     	localDateTextField.highlightedLocalDates().add(LocalDate.now());
         
         // open the picker
-        click(".icon");
+        clickOn(".icon");
 
         // make sure that today in the picker is Highlighted
         Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
@@ -177,7 +177,7 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
     @Test
     public void checkIfHighlightedDateIsForwardedToThePickerAtRuntime() {
         // open the picker
-        click(".icon");
+        clickOn(".icon");
         TestUtil.waitForPaintPulse();
         
         // make sure that today in the picker is enabled
@@ -205,7 +205,7 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         });
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(localDateTextField.isPickerShowing());
 
         // assert that the popup shows January 1st 2013 
@@ -224,7 +224,7 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(localDateTextField.isPickerShowing());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(localDateTextField.isPickerShowing());
 
         // popup should be open
@@ -272,7 +272,7 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         clear(localDateTextField);
 
         // move focus away
-        click("#focusHelper");
+        clickOn("#focusHelper");
 
         // check for result
         Assert.assertTrue(lParseErrorCallbackWasCalled.get());
@@ -293,10 +293,10 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertEquals(localDate, localDateTextField.getLocalDate());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
 
         // click the 1st of January
-        click("#2013-01-01");
+        clickOn("#2013-01-01");
 
         // value is null
         Assert.assertNull(localDateTextField.getLocalDate());
@@ -318,10 +318,10 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertEquals(localDate, localDateTextField.getLocalDate());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
 
         // click the 1st of January
-        click("#2013-01-01");
+        clickOn("#2013-01-01");
 
         // value is still not null
         Assert.assertEquals(localDate, localDateTextField.getLocalDate());
@@ -336,10 +336,10 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertNull(localDateTextField.getLocalDate());
 
         // type value
-        click(localDateTextField).type(localDateTextField.getDateTimeFormatter().format(LocalDate.of(2014, 12, 31)));
+        clickOn(localDateTextField).type(localDateTextField.getDateTimeFormatter().format(LocalDate.of(2014, 12, 31)));
 
         // move focus away
-        click("#focusHelper");
+        clickOn("#focusHelper");
 
         // now should be the value in the textfield
         Assert.assertEquals("2014-12-31", TestUtil.quickFormatLocalDateAsDate(localDateTextField.getLocalDate()));
@@ -357,13 +357,13 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         localDateTextField.dateTimeFormattersProperty().add(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         // type value
-        click(localDateTextField).type("2014-12-31");
+        clickOn(localDateTextField).type("2014-12-31");
 
         // move focus away
-        click("#focusHelper");
+        clickOn("#focusHelper");
         // for some reason the focus is not moved always
-        click(".CalendarTextField");
-        click("#focusHelper");
+        clickOn(".CalendarTextField");
+        clickOn("#focusHelper");
 
         // now should be the value in the textfield
         Assert.assertEquals("2014-12-31", TestUtil.quickFormatLocalDateAsDate(localDateTextField.getLocalDate()));
@@ -405,14 +405,14 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(localDateTextField.isPickerShowing());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
 
         // popup should be closed
         assertPopupIsVisible(find(".text-field"));
         Assert.assertTrue(localDateTextField.isPickerShowing());
 
         // reselect 1st of January
-        click("#2013-01-01");
+        clickOn("#2013-01-01");
 
         // popup should be closed
         assertPopupIsNotVisible(find(".text-field"));

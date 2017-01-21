@@ -79,7 +79,7 @@ public class LocalDateTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void defaultPicker()
 	{
 		// show the correct tab
-		click("#defaultPicker");
+		clickOn("#defaultPicker");
 		
 		// get the node
 		LocalDateTimePicker lLocalDateTimePicker = (LocalDateTimePicker)find("#id1"); // TODO: these should match on #.LocalDateTimePicker, but the CalendarPicker does
@@ -88,7 +88,7 @@ public class LocalDateTimePickerFXMLTest extends JFXtrasGuiTest {
 		Assert.assertNull(lLocalDateTimePicker.getLocalDateTime());
 
 		// click the first of the displayed month		
-		click("#id1 #" + lLocalDateTimePicker.getDisplayedLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-01")));
+		clickOn("#id1 #" + lLocalDateTimePicker.getDisplayedLocalDateTime().format(DateTimeFormatter.ofPattern("yyyy-MM-01")));
 		
 		// default value is not null
 		Assert.assertNotNull(lLocalDateTimePicker.getLocalDateTime());
@@ -101,7 +101,7 @@ public class LocalDateTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void atributesAreSet2()
 	{
 		// show the correct tab
-		click("#atributesAreSet2");
+		clickOn("#atributesAreSet2");
 		
 		// get the node
 		LocalDateTimePicker lLocalDateTimePicker = (LocalDateTimePicker)find("#id2"); // TODO: these should match on #.LocalDateTimePicker, but the CalendarPicker does
@@ -118,7 +118,7 @@ public class LocalDateTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void atributesAreSet3()
 	{
 		// show the correct tab
-		click("#atributesAreSet3");
+		clickOn("#atributesAreSet3");
 				
 		// get the node
 		LocalDateTimePicker lLocalDateTimePicker = (LocalDateTimePicker)find("#id3"); // TODO: these should match on #.LocalDateTimePicker, but the CalendarPicker does
@@ -134,7 +134,7 @@ public class LocalDateTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void atributesAreSet4()
 	{
 		// show the correct tab
-		click("#atributesAreSet4");
+		clickOn("#atributesAreSet4");
 				
 		// get the node
 		LocalDateTimePicker lLocalDateTimePicker = (LocalDateTimePicker)find("#id4"); // TODO: these should match on #.LocalDateTimePicker, but the CalendarPicker does

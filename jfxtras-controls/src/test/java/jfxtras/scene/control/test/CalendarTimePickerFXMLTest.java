@@ -79,7 +79,7 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void defaultControl()
 	{
 		// show the correct tab
-		click("#defaultControl");
+		clickOn("#defaultControl");
 		
 		// get the node
 		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
@@ -105,7 +105,7 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void slideStep15()
 	{
 		// show the correct tab
-		click("#slideStep15");
+		clickOn("#slideStep15");
 		
 		// get the node
 		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
@@ -122,7 +122,7 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void locale()
 	{
 		// show the correct tab
-		click("#locale");
+		clickOn("#locale");
 		
 		// get the node
 		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");

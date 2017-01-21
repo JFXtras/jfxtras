@@ -93,14 +93,14 @@ public class ToggleGroupValueTest extends JFXtrasGuiTest {
 	}
 
 	@Test
-	public void selectByClick()
+	public void selectByclickOn()
 	{
 		Assert.assertNull(toggleGroupValue.getValue());
-		click("#button0");
+		clickOn("#button0");
 		Assert.assertEquals("value0", toggleGroupValue.getValue());
-		click("#button3");
+		clickOn("#button3");
 		Assert.assertEquals("value3", toggleGroupValue.getValue());
-		click("#button3");
+		clickOn("#button3");
 		Assert.assertNull(toggleGroupValue.getValue());
 	}
 

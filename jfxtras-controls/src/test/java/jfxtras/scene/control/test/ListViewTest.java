@@ -73,10 +73,10 @@ public class ListViewTest extends JFXtrasGuiTest {
 	}
 
 	@Test
-	public void selectByClick()
+	public void selectByclickOn()
 	{
 		Assert.assertNull(listView.getSelectedItem());
-		click("#MyListView");
+		clickOn("#MyListView");
 		Assert.assertEquals("A list item numbered 8", listView.getSelectedItem());
 	}
 

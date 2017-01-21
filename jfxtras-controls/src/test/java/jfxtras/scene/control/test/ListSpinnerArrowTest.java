@@ -74,9 +74,9 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 	{		
 		// non cyclic is the default
 		spinner.cyclicProperty().set(true);
-		click(".button"); // we need to move the focus first, otherwise the test will fail at random
-		click(".right-arrow");
-		click(".left-arrow");
+		clickOn(".button"); // we need to move the focus first, otherwise the test will fail at random
+		clickOn(".right-arrow");
+		clickOn(".left-arrow");
 	}
 
 
@@ -98,41 +98,41 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// ----
 		// move to next until we cycle over
-		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		clickOn(".button"); // we need to move the focus first, otherwise the test will fail at random
 		
 		// select next
-		click(".up-arrow");
+		clickOn(".up-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select next
-		click(".up-arrow");
+		clickOn(".up-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select next (cyclic)
-		click(".up-arrow");
+		clickOn(".up-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 
 		// ----
 		// now move backwards, cycling back
 
 		// select prev (cyclic)
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select prev
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select prev
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 
 		// select prev (cyclic)
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select prev
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 	}
 
@@ -151,33 +151,33 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// ----
 		// move forward, non cyclic
-		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		clickOn(".button"); // we need to move the focus first, otherwise the test will fail at random
 		
 		// select next
-		click(".up-arrow");
+		clickOn(".up-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select next
-		click(".up-arrow");
+		clickOn(".up-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select next (stick)
-		click(".up-arrow");
+		clickOn(".up-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// ----
 		// move back, non cyclic
 
 		// select prev
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select prev
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 
 		// select prev (stick)
-		click(".down-arrow");
+		clickOn(".down-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 	}
 
@@ -192,41 +192,41 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 
 		// ----
 		// move to next until we cycle over
-		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		clickOn(".button"); // we need to move the focus first, otherwise the test will fail at random
 
 		// select next
-		click(".right-arrow");
+		clickOn(".right-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select next
-		click(".right-arrow");
+		clickOn(".right-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select next (cyclic)
-		click(".right-arrow");
+		clickOn(".right-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 
 		// ----
 		// now move backwards, cycling back
 
 		// select prev (cyclic)
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select prev
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select prev
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 
 		// select prev (cyclic)
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select prev
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 	}
 
@@ -236,36 +236,36 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 		// check to see what the current value is
 		Assert.assertEquals("a", spinner.getValue());
 
-		click(".button"); // we need to move the focus first, otherwise the test will fail at random
+		clickOn(".button"); // we need to move the focus first, otherwise the test will fail at random
 		
 		// ----
 		// move forward, non cyclic
 
 		// select next
-		click(".right-arrow");
+		clickOn(".right-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select next
-		click(".right-arrow");
+		clickOn(".right-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// select next (stick)
-		click(".right-arrow");
+		clickOn(".right-arrow");
 		Assert.assertEquals("c", spinner.getValue());
 
 		// ----
 		// move back, non cyclic
 
 		// select prev
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("b", spinner.getValue());
 
 		// select prev
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 
 		// select prev (stick)
-		click(".left-arrow");
+		clickOn(".left-arrow");
 		Assert.assertEquals("a", spinner.getValue());
 	}
 
@@ -276,7 +276,7 @@ public class ListSpinnerArrowTest extends JFXtrasGuiTest {
 		Assert.assertEquals("a", spinner.getValue());
 
 		// we need to move the focus first, otherwise the test will fail at random
-		click(".button"); 
+		clickOn(".button"); 
 
 		// ----
 		

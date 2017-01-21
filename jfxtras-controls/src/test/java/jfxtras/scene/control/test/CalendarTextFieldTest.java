@@ -35,6 +35,9 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,12 +45,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
@@ -99,11 +100,11 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
 		
 		// click today
-		click(".today");
+		clickOn(".today");
 		
 		// now should be the value in the textfield
 		Assert.assertFalse(find(".text-field").isDisabled());
@@ -116,7 +117,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
        calendarTextField.disabledCalendars().add(Calendar.getInstance());
         
         // open the picker
-        click(".icon");
+        clickOn(".icon");
 
         // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").isDisabled());
@@ -125,7 +126,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
     @Test
     public void checkIfDisabledDateIsForwardedToThePickerAtRuntime() {
         // open the picker
-        click(".icon");
+        clickOn(".icon");
         TestUtil.waitForPaintPulse();
         
         // make sure that today in the picker is enabled
@@ -146,7 +147,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
        calendarTextField.highlightedCalendars().add(Calendar.getInstance());
         
         // open the picker
-        click(".icon");
+        clickOn(".icon");
 
         // make sure that today in the picker is highlighted
         Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
@@ -155,7 +156,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
     @Test
     public void checkIfHighlightedDateIsForwardedToThePickerAtRuntime() {
         // open the picker
-        click(".icon");
+        clickOn(".icon");
         TestUtil.waitForPaintPulse();
         
         // make sure that today in the picker is enabled
@@ -187,14 +188,14 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
 		
 		// click today
-		click(".today");
+		clickOn(".today");
 		
 		// click today
-		click(".accept-icon");
+		clickOn(".accept-icon");
 		
 		// now should be the value in the textfield
 		Assert.assertFalse(find(".text-field").isDisabled());
@@ -212,13 +213,13 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
                 
                 //The popup should be displayed.
 		Assert.assertTrue(calendarTextField.isPickerShowing());
                 
 		// click today
-		click(".today");
+		clickOn(".today");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
@@ -244,17 +245,17 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertFalse(find(".text-field").isDisabled());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
                 
                 //The popup should be displayed.
 		Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
-		click(".today");
+		clickOn(".today");
 		
 		// click today
-		click(".accept-icon");
+		clickOn(".accept-icon");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(Calendar.getInstance()), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
@@ -279,17 +280,17 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertFalse(find(".text-field").isDisabled());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
                 
                 //The popup should be displayed.
 		Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
-		click(".today");
+		clickOn(".today");
 		
 		// click close
-		click(".close-icon");
+		clickOn(".close-icon");
 		
 		// should still be null
 		Assert.assertNull(calendarTextField.getCalendar());
@@ -314,12 +315,12 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertFalse(find(".text-field").isDisabled());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
 		Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
-		click(".today");
+		clickOn(".today");
 		
 		// send esc
 		press(KeyCode.ESCAPE);
@@ -348,15 +349,15 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertFalse(find(".text-field").isDisabled());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 		Assert.assertTrue(find(".text-field").isDisabled());
         Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// click today
-		click(".today");
+		clickOn(".today");
 		
 		// move focus away
-		click("#focusHelper");
+		clickOn("#focusHelper");
 		
 		// should still be null
 		Assert.assertNull(calendarTextField.getCalendar());
@@ -378,7 +379,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		});
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
         Assert.assertTrue(calendarTextField.isPickerShowing());
 
 		// assert that the popup shows January 1st 2013 
@@ -398,7 +399,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
         Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// popup should be open
@@ -450,7 +451,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		clear(calendarTextField);
 		
 		// move focus away
-		click("#focusHelper");
+		clickOn("#focusHelper");
 		
 		// check for result
 		Assert.assertTrue(lParseErrorCallbackWasCalled.get());
@@ -472,10 +473,10 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(lCalendar), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 		
 		// value is null
 		Assert.assertNull(calendarTextField.getCalendar());
@@ -498,10 +499,10 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(lCalendar), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
 
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 		
 		// value is still not null
 		Assert.assertEquals(TestUtil.quickFormatCalendarAsDate(lCalendar), TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
@@ -517,10 +518,10 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		Assert.assertNull(calendarTextField.getCalendar());
 		
 		// type value
-		click(calendarTextField).type(calendarTextField.getDateFormat().format(new GregorianCalendar(2014, 11, 31).getTime()));
+		clickOn(calendarTextField).write(calendarTextField.getDateFormat().format(new GregorianCalendar(2014, 11, 31).getTime()));
 		
 		// move focus away
-		click("#focusHelper");
+		clickOn("#focusHelper");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals("2014-12-31", TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
@@ -539,13 +540,13 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		calendarTextField.dateFormatsProperty().add(new SimpleDateFormat("yyyy-MM-dd"));
 		
 		// type value
-		click(calendarTextField).type("2014-12-31");
+		clickOn(calendarTextField).write("2014-12-31");
 		
 		// move focus away
-		click("#focusHelper");
+		clickOn("#focusHelper");
 		// for some reason the focus is not moved always
-		click(".CalendarTextField");
-		click("#focusHelper");
+		clickOn(".CalendarTextField");
+		clickOn("#focusHelper");
 		
 		// now should be the value in the textfield
 		Assert.assertEquals("2014-12-31", TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
@@ -589,14 +590,14 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(calendarTextField.isPickerShowing());
 		
 		// open the popup
-		click(".icon");
+		clickOn(".icon");
 		
 		// popup should be closed
 		assertPopupIsVisible(find(".text-field"));
         Assert.assertTrue(calendarTextField.isPickerShowing());
 		
 		// reselect 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 		
 		// popup should be closed
 		assertPopupIsNotVisible(find(".text-field"));
@@ -731,11 +732,12 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
             calendarTextField.setCalendar(lCalendar);
         });
         
-        TextField textField = find(".text-field");
+        TextField textField = (TextField)find(".text-field");
         Assert.assertFalse(textField.getText().isEmpty());
 
         calendarTextField.selectAll();
 
         Assert.assertEquals(textField.getText(), textField.getSelectedText());
     }
+
 }

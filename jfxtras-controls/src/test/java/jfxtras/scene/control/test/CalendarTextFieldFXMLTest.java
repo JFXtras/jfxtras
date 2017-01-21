@@ -84,7 +84,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 	public void defaultControl()
 	{
 		// show the correct tab
-		click("#defaultControl");
+		clickOn("#defaultControl");
 		
 		// get the node
 		CalendarTextField lCalendarTextField = (CalendarTextField)find(".CalendarTextField");
@@ -93,10 +93,10 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 		Assert.assertNull(lCalendarTextField.getCalendar());
 
 		// popup the picker
-		click(".icon");
+		clickOn(".icon");
 
 		// click the last day in the first week (this button is always visible)
-		click("#" + new SimpleDateFormat("yyyy-MM-01").format(Calendar.getInstance().getTime()));
+		clickOn("#" + new SimpleDateFormat("yyyy-MM-01").format(Calendar.getInstance().getTime()));
 
 		// default value is not null
 		Assert.assertNotNull(lCalendarTextField.getCalendar());
@@ -109,7 +109,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet2()
 	{
 		// show the correct tab
-		click("#atributesAreSet2");
+		clickOn("#atributesAreSet2");
 		
 		// get the node
 		CalendarTextField lCalendarTextField = (CalendarTextField)find(".CalendarTextField");
@@ -119,27 +119,27 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 		Assert.assertEquals("2013-01-01 22:33:44", lCalendarTextField.getDateFormat().format(new GregorianCalendar(2013, 1-1, 1, 22, 33, 44).getTime()));
 		
 		// type value
-		click(".CalendarTextField .text-field");
+		clickOn(".CalendarTextField .text-field");
 		type("2010");
-		click(".button"); //just to move the focus
+		clickOn(".button"); //just to move the focus
 		Assert.assertEquals("2010-01-01T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			lTextField.clear();
 		});
 		
 		// type value
-		click(".CalendarTextField .text-field");
+		clickOn(".CalendarTextField .text-field");
 		type("2010-06");
-		click(".button"); //just to move the focus
+		clickOn(".button"); //just to move the focus
 		Assert.assertEquals("2010-06-01T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			lTextField.clear();
 		});
 		
 		// type value
-		click(".CalendarTextField .text-field");
+		clickOn(".CalendarTextField .text-field");
 		type("2010-06-12");
-		click(".button"); //just to move the focus
+		clickOn(".button"); //just to move the focus
 		Assert.assertEquals("2010-06-12T00:00:00.000", TestUtil.quickFormatCalendarAsDateTime(lCalendarTextField.getCalendar()) );
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			lTextField.clear();
@@ -153,7 +153,7 @@ public class CalendarTextFieldFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet3()
 	{
 		// show the correct tab
-		click("#atributesAreSet3");
+		clickOn("#atributesAreSet3");
 		
 		// get the node
 		CalendarTextField lCalendarTextField = (CalendarTextField)find(".CalendarTextField");		

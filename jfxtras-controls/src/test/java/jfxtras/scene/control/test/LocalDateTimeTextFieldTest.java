@@ -102,14 +102,14 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(localDateTimeTextField.isPickerShowing());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(find(".text-field").isDisabled());
 
         // click today
-        click(".today");
+        clickOn(".today");
 
         // click today
-        click(".accept-icon");
+        clickOn(".accept-icon");
 
         // now should be the value in the textfield
         Assert.assertFalse(find(".text-field").isDisabled());
@@ -131,17 +131,17 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".text-field").isDisabled());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(find(".text-field").isDisabled());
 
         //The popup should be displayed.
         Assert.assertTrue(localDateTimeTextField.isPickerShowing());
 
         // click today
-        click(".today");
+        clickOn(".today");
 
         // close popup
-        click(".accept-icon");
+        clickOn(".accept-icon");
 
         // now should be the value in the textfield
 		Assert.assertEquals(LocalDateTime.now().withSecond(0).withNano(0), localDateTimeTextField.getLocalDateTime().withSecond(0).withNano(0)); // this fails when a new minute turns between .today and this assert
@@ -164,17 +164,17 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".text-field").isDisabled());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(find(".text-field").isDisabled());
 
         //The popup should be displayed.
         Assert.assertTrue(localDateTimeTextField.isPickerShowing());
 
         // click today
-        click(".today");
+        clickOn(".today");
 
         // click close
-        click(".close-icon");
+        clickOn(".close-icon");
 
         // should still be null
         Assert.assertNull(localDateTimeTextField.getLocalDateTime());
@@ -197,12 +197,12 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".text-field").isDisabled());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(find(".text-field").isDisabled());
         Assert.assertTrue(localDateTimeTextField.isPickerShowing());
 
         // click today
-        click(".today");
+        clickOn(".today");
 
         // send esc
         press(KeyCode.ESCAPE);
@@ -219,7 +219,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
     	localDateTimeTextField.disabledLocalDateTimes().add(LocalDateTime.now());
         
         // open the picker
-        click(".icon");
+        clickOn(".icon");
 
         // make sure that today in the picker is disabled
         Assert.assertTrue(find(".today").isDisabled());
@@ -228,7 +228,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
     @Test
     public void checkIfDisabledDateIsForwardedToThePickerAtRuntime() {
         // open the picker
-        click(".icon");
+        clickOn(".icon");
         TestUtil.waitForPaintPulse();
         
         // make sure that today in the picker is enabled
@@ -249,7 +249,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
     	localDateTimeTextField.highlightedLocalDateTimes().add(LocalDateTime.now());
         
         // open the picker
-        click(".icon");
+        clickOn(".icon");
 
         // make sure that today in the picker is highlighted
         Assert.assertTrue(find(".today").getStyleClass().contains("highlight"));
@@ -258,7 +258,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
     @Test
     public void checkIfHighlightedDateIsForwardedToThePickerAtRuntime() {
         // open the picker
-        click(".icon");
+        clickOn(".icon");
         TestUtil.waitForPaintPulse();
         
         // make sure that today in the picker is enabled
@@ -288,15 +288,15 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(find(".text-field").isDisabled());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(find(".text-field").isDisabled());
         Assert.assertTrue(localDateTimeTextField.isPickerShowing());
 
         // click today
-        click(".today");
+        clickOn(".today");
 
         // move focus away
-        click("#focusHelper");
+        clickOn("#focusHelper");
 
         // should still be null
         Assert.assertNull(localDateTimeTextField.getLocalDateTime());
@@ -317,7 +317,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         });
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(localDateTimeTextField.isPickerShowing());
 
         // assert that the popup shows January 1st 2013 
@@ -336,7 +336,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertFalse(localDateTimeTextField.isPickerShowing());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
         Assert.assertTrue(localDateTimeTextField.isPickerShowing());
 
         // popup should be open
@@ -384,7 +384,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         clear(localDateTimeTextField);
 
         // move focus away
-        click("#focusHelper");
+        clickOn("#focusHelper");
 
         // check for result
         Assert.assertTrue(lParseErrorCallbackWasCalled.get());
@@ -406,10 +406,10 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertEquals(lCalendar, localDateTimeTextField.getLocalDateTime());
 
         // open the popup
-        click(".icon");
+        clickOn(".icon");
 
         // click the 1st of January
-        click("#2013-01-01");
+        clickOn("#2013-01-01");
 
         // value is still not null
         Assert.assertEquals(lCalendar, localDateTimeTextField.getLocalDateTime());
@@ -427,10 +427,10 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         localDateTimeTextField.dateTimeFormattersProperty().add(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss"));
 
         // type value
-        click(localDateTimeTextField).type("2014-12-31 00-00-00");
+        clickOn(localDateTimeTextField).type("2014-12-31 00-00-00");
 
         // move focus away
-        click("#focusHelper");
+        clickOn("#focusHelper");
 
         // now should be the value in the textfield
         Assert.assertEquals("2014-12-31 00:00:00", TestUtil.quickFormatLocalDateTimeAsDate(localDateTimeTextField.getLocalDateTime()));

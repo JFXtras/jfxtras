@@ -30,35 +30,35 @@
 package jfxtras.test;
 
 import java.util.Locale;
-
-import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
-import javafx.stage.Popup;
-import javafx.stage.Window;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
-import org.loadui.testfx.GuiTest;
-import org.loadui.testfx.exceptions.NoNodesFoundException;
-import org.loadui.testfx.exceptions.NoNodesVisibleException;
+import org.testfx.api.FxRobot;
+
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  * 
  * @author Tom Eugelink
- * https://github.com/SmartBear/TestFX/blob/master/src/main/java/org/loadui/testfx/GuiTest.java
  */
-abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
+abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.ApplicationTest {
 	
 	@Rule public TestName testName = new TestName();
-	
+
+	// TODO: let's implement this as a rule so we can keep using the @Before
 	@Before
 	public void before() throws Throwable {
 		System.out.println("========================================================================\n" + this.getClass().getSimpleName() + "." + testName.getMethodName());
-		
-		super.setupStage();
 		
 		// default we're in US locale: keep (re)setting this for each test
 		Locale.setDefault(Locale.US);
@@ -79,18 +79,27 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 		forceCloseAllPopups();
 	}
 	
+	@Override
+	public void start(Stage stage) throws Exception {
+		Scene scene = new Scene(getRootNode(), 800, 600);
+        stage.setScene(scene);
+        stage.show();
+	}
+	abstract protected Parent getRootNode();
+
+	
 	/**
 	 * Click with a qualifier pressed
 	 * @param matcher
 	 * @param keyCode
 	 * @param keyCodes
 	 */
-	public GuiTest click(String matcher, KeyCode keyCode, KeyCode... keyCodes) {
+	public FxRobot clickOn(String matcher, KeyCode keyCode, KeyCode... keyCodes) {
 		press(keyCode);
 		for (int i = 0; i < keyCodes.length; i++) {
 			press(keyCodes[i]);
 		}
-		click(matcher);
+		clickOn(matcher);
 		for (int i = keyCodes.length - 1; i >=0 ; i--) {
 			release(keyCodes[i]);
 		}
@@ -99,7 +108,7 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 	
 	protected void assertPopupIsNotVisible(Node ownedBy) {
 		TestUtil.waitForPaintPulse();
-		for (Window w : getWindows() ) {
+		for (Window w : listWindows() ) {
 			if (w instanceof Popup) {
 				Popup lPopup = (Popup)w;
 				if (ownedBy.equals(lPopup.getOwnerNode())) {
@@ -111,7 +120,7 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 	
 	protected void assertPopupIsVisible(Node ownedBy) {
 		TestUtil.waitForPaintPulse();
-		for (Window w : getWindows() ) {
+		for (Window w : listWindows() ) {
 			if (w instanceof Popup) {
 				Popup lPopup = (Popup)w;
 				if (ownedBy.equals(lPopup.getOwnerNode())) {
@@ -124,7 +133,7 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 
 	protected void forceCloseAllPopups() {
 		TestUtil.waitForPaintPulse();
-		for (Window w : getWindows() ) {
+		for (Window w : listWindows() ) {
 			if (w instanceof Popup) {
 				Popup lPopup = (Popup)w;
 				System.out.println("force closing popup: " + lPopup);
@@ -136,33 +145,36 @@ abstract public class JFXtrasGuiTest extends org.loadui.testfx.GuiTest {
 	}
 	
 	protected void clear(Node textField) {
-		click(textField);
+		clickOn(textField);
 		push(KeyCode.CONTROL, KeyCode.A);
 		push(KeyCode.DELETE);
 	}
 	
 
 	protected void assertNotFind(String string) {
-		try {
-			find(string);
-			Assert.assertTrue("Should not have found '" + string + "', but did anyway", false);
-		}
-		catch (NoNodesFoundException e) {
-			// all is well
+		if (find(string) != null) {
+			Assert.fail("Expected not to find: " + string);
 		}
 	}
 
 	protected void assertNotVisible(String string) {
-		try {
-			find(string);
-			Assert.assertTrue("Should not have found '" + string + "', but did anyway", false);
-		}
-		catch (NoNodesVisibleException e) {
-			// all is well
+		Node lNode = find(string);
+		if (lNode.isVisible()) {
+			Assert.fail("Should not have found '" + string + "', but did anyway");
 		}
 	}
 
 	protected void assertFind(String string) {
-		find(string);
+		if (find(string) == null) {
+			Assert.fail("Not found: " + string);
+		}
+	}
+	
+	protected Node find(String matcher) {
+		Set<Node> lNodes = lookup(matcher).queryAll();
+		if (lNodes.isEmpty()) {
+			return null;
+		}
+		return lNodes.iterator().next();
 	}
 }

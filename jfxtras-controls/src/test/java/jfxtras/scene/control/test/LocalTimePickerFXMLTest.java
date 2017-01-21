@@ -83,7 +83,7 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void defaultControl()
 	{
 		// show the correct tab
-		click("#defaultControl");
+		clickOn("#defaultControl");
 		
 		// get the node
 		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#id1"); // TODO: this should be accessible through .LocalTimePicker
@@ -109,7 +109,7 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void slideStep15()
 	{
 		// show the correct tab
-		click("#slideStep15");
+		clickOn("#slideStep15");
 		
 		// get the node
 		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#id2"); // TODO: this should be accessible through .LocalTimePicker
@@ -126,7 +126,7 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void locale()
 	{
 		// show the correct tab
-		click("#locale");
+		clickOn("#locale");
 		
 		// get the node
 		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#id3"); // TODO: this should be accessible through .LocalTimePicker

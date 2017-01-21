@@ -70,10 +70,10 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		click(".value").eraseCharacters(1).type("6");
+		clickOn(".value").eraseCharacters(1).type("6");
 
 		// move focus away
-		click(".button");
+		clickOn(".button");
 
 		// see if the typed text is the current value
 		Assert.assertEquals(6, lSpinner.getValue().intValue());
@@ -86,19 +86,19 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		click(".value").eraseCharacters(1).type("0");
+		clickOn(".value").eraseCharacters(1).type("0");
 
 		// move focus away
-		click(".button");
+		clickOn(".button");
 
 		// see if the typed text is the current value
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		click(".value").eraseCharacters(1).type("1");
+		clickOn(".value").eraseCharacters(1).type("1");
 
 		// move focus away
-		click(".button");
+		clickOn(".button");
 
 		// see if the typed text is the current value
 		Assert.assertEquals(1, lSpinner.getValue().intValue());
@@ -111,19 +111,19 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		click(".value").eraseCharacters(1).type("11");
+		clickOn(".value").eraseCharacters(1).type("11");
 
 		// move focus away
-		click(".button");
+		clickOn(".button");
 
 		// see if the typed text is the current value
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		click(".value").eraseCharacters(1).type("10");
+		clickOn(".value").eraseCharacters(1).type("10");
 
 		// move focus away
-		click(".button");
+		clickOn(".button");
 
 		// see if the typed text is the current value
 		Assert.assertEquals(10, lSpinner.getValue().intValue());

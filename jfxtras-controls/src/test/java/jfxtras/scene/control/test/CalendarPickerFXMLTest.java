@@ -55,6 +55,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	/**
 	 * 
 	 */
+	@Override
 	public Parent getRootNode() 
 	{
 		try {
@@ -80,7 +81,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void defaultPicker()
 	{
 		// show the correct tab
-		click("#defaultPicker");
+		clickOn("#defaultPicker");
 		
 		// get the node
 		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
@@ -89,7 +90,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 		Assert.assertNull(lCalendarPicker.getCalendar());
 
 		// click the first of the displayed month		
-		click("#id1 #" + new SimpleDateFormat("yyyy-MM-01").format(lCalendarPicker.getDisplayedCalendar().getTime()));
+		clickOn("#id1 #" + new SimpleDateFormat("yyyy-MM-01").format(lCalendarPicker.getDisplayedCalendar().getTime()));
 		
 		// default value is not null
 		Assert.assertNotNull(lCalendarPicker.getCalendar());
@@ -102,7 +103,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet2()
 	{
 		// show the correct tab
-		click("#atributesAreSet2");
+		clickOn("#atributesAreSet2");
 		
 		// get the node
 		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
@@ -120,7 +121,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet3()
 	{
 		// show the correct tab
-		click("#atributesAreSet3");
+		clickOn("#atributesAreSet3");
 		
 		// get the node
 		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
@@ -138,7 +139,7 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet4()
 	{
 		// show the correct tab
-		click("#atributesAreSet4");
+		clickOn("#atributesAreSet4");
 		
 		// get the node
 		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");

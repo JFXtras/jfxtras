@@ -231,8 +231,11 @@ project(':jfxtras-test-support') {
     dependencies {
         compile 'junit:junit:4.12'
         compile 'org.mockito:mockito-all:1.9.5'
-        compile 'org.loadui:testFx:3.1.2'
-    }
+		compile "org.testfx:testfx-core:4.0.+"
+		compile "org.testfx:testfx-junit:4.0.+", {
+			exclude group: "junit", module: "junit"
+		}
+	}
 }
 
 // TODO: _lib folder per project?

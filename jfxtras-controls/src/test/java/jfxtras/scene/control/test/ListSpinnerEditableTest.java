@@ -69,10 +69,10 @@ public class ListSpinnerEditableTest extends GuiTest {
 		Assert.assertEquals("a", lSpinner.getValue());
 
 		// enter the text (this still is limited to the list)
-		click(".value").eraseCharacters(1).type("c");
+		clickOn(".value").eraseCharacters(1).type("c");
 
 		// move focus away
-		click(".button");
+		clickOn(".button");
 
 		// see if the typed text is the current value
 		Assert.assertEquals("c", lSpinner.getValue());

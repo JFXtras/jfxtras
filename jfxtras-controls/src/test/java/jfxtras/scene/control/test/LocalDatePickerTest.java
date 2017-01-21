@@ -76,21 +76,21 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDatePicker.getLocalDate());
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertEquals("2013-01-02", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January again
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertNull( localDatePicker.getLocalDate());
@@ -110,42 +110,42 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull( localDatePicker.getLocalDate());
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// the selected value should be changed, and because of multiple mode, there are two in calendars
 		Assert.assertEquals("2013-01-02", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01, 2013-01-02]", localDatePicker.localDates().toString());
 
 		// click the 4th of January
-		click("#2013-01-04");
+		clickOn("#2013-01-04");
 
 		// the selected value should be changed, and because of multiple mode, there are three in calendars
 		Assert.assertEquals("2013-01-04", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-04]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January (unselecting it)
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// since the selected calendar was not unselected, it stays the same
 		Assert.assertEquals("2013-01-04", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01, 2013-01-04]", localDatePicker.localDates().toString());
 
 		// click the 4th of January (unselecting it)
-		click("#2013-01-04");
+		clickOn("#2013-01-04");
 
 		// the first value in the list should be selected
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01]", localDatePicker.localDates().toString());
 
 		// click the 1st of January (unselecting it)
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// the first value in the list should be selected
 		Assert.assertNull( localDatePicker.getLocalDate());
@@ -165,28 +165,28 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull( localDatePicker.getLocalDate());
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01]", localDatePicker.localDates().toString());
 
 		// shift click the 3rd of January
-		click("#2013-01-03", KeyCode.SHIFT);
+		clickOn("#2013-01-03", KeyCode.SHIFT);
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03]", localDatePicker.localDates().toString());
 
 		// click the 5th of January
-		click("#2013-01-05");
+		clickOn("#2013-01-05");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-05", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03, 2013-01-05]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January (unselecting it)
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// since the selected calendar was not unselected, it stays the samt
 		Assert.assertEquals("2013-01-05", localDatePicker.getLocalDate().toString());
@@ -203,21 +203,21 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull( localDatePicker.getLocalDate());
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// the selected value should be changed, and because of single mode, it is also the only one in calendars
 		Assert.assertEquals("2013-01-02", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January again
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// the first value in the list should be selected
 		Assert.assertNull( localDatePicker.getLocalDate());
@@ -237,35 +237,35 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull( localDatePicker.getLocalDate());
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01]", localDatePicker.localDates().toString());
 
 		// shift click the 3rd of January
-		click("#2013-01-03", KeyCode.SHIFT);
+		clickOn("#2013-01-03", KeyCode.SHIFT);
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03]", localDatePicker.localDates().toString());
 
 		// shift click the 5th of January (extending the range)
-		click("#2013-01-05", KeyCode.SHIFT);
+		clickOn("#2013-01-05", KeyCode.SHIFT);
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-05", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-01, 2013-01-02, 2013-01-03, 2013-01-04, 2013-01-05]", localDatePicker.localDates().toString());
 		
 		// click the 10th of January (switching to a single date)
-		click("#2013-01-10");
+		clickOn("#2013-01-10");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-10", localDatePicker.getLocalDate().toString());
 		Assert.assertEquals("[2013-01-10]", localDatePicker.localDates().toString());
 
 		// shift click the 5th of January (selecting a range downwards)
-		click("#2013-01-05", KeyCode.SHIFT);
+		clickOn("#2013-01-05", KeyCode.SHIFT);
 
 		// the last selected value should be set 
 		Assert.assertEquals("2013-01-05", localDatePicker.getLocalDate().toString());
@@ -303,7 +303,7 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDatePicker.getLocalDate());
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// first of January
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());		
@@ -314,7 +314,7 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		});
 		
 		// click the 1st of January again (which would unselect in allow null mode)
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// first of January
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());		
@@ -331,32 +331,32 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("2013-01-01", localDatePicker.getDisplayedLocalDate().toString());
 		
 		// click next in year
-		click("#yearListSpinner .right-arrow");
+		clickOn("#yearListSpinner .right-arrow");
 
 		// Jan 2014 is shown
 		Assert.assertEquals("2014-01-01", localDatePicker.getDisplayedLocalDate().toString());
 		
 		// click next in month
-		click("#monthListSpinner .right-arrow");
+		clickOn("#monthListSpinner .right-arrow");
 
 		// Feb 2014 is shown
 		Assert.assertEquals("2014-02-01", localDatePicker.getDisplayedLocalDate().toString());
 		
 		// click 2x prev in month
-		click("#monthListSpinner .left-arrow");
-		click("#monthListSpinner .left-arrow");
+		clickOn("#monthListSpinner .left-arrow");
+		clickOn("#monthListSpinner .left-arrow");
 
 		// Dec 2013 is shown
 		Assert.assertEquals("2013-12-01", localDatePicker.getDisplayedLocalDate().toString());
 
 		// click prev in year
-		click("#yearListSpinner .left-arrow");
+		clickOn("#yearListSpinner .left-arrow");
 
 		// Dec 2012 is shown
 		Assert.assertEquals("2012-12-01", localDatePicker.getDisplayedLocalDate().toString());
 		
 		// click next in year
-		click("#monthListSpinner .right-arrow");
+		clickOn("#monthListSpinner .right-arrow");
 
 		// Jan 2013 is shown
 		Assert.assertEquals("2013-01-01", localDatePicker.getDisplayedLocalDate().toString());
@@ -377,19 +377,19 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDatePicker.getLocalDate());
 
 		// click the 1st of January
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 
 		// there should be no change
 		Assert.assertEquals("2013-01-01", localDatePicker.getLocalDate().toString());
 
 		// click the 35d of January
-		click("#2013-01-03");
+		clickOn("#2013-01-03");
 
 		// the last selected value should be set
 		Assert.assertEquals("2013-01-03",localDatePicker.getLocalDate().toString());
@@ -416,22 +416,22 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDatePicker.getLocalDate());
 
 		// click the 1st of January: not valid
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
 
 		// click the 3rd of January: not valid
-		click("#2013-01-03");
+		clickOn("#2013-01-03");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January again
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // reselecting does not add
 		Assert.assertEquals("[]", localDatePicker.localDates().toString());
 	}
@@ -460,32 +460,32 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDatePicker.getLocalDate());
 
 		// click the 1st of January: not valid
-		click("#2013-01-01");
+		clickOn("#2013-01-01");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
 
 		// click the 4th of January
-		click("#2013-01-04");
+		clickOn("#2013-01-04");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02, 2013-01-04]", localDatePicker.localDates().toString());
 
 		// click the 3rd of January: not valid
-		click("#2013-01-03");
+		clickOn("#2013-01-03");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get());
 		Assert.assertEquals("[2013-01-02, 2013-01-04]", localDatePicker.localDates().toString());
 
 		// click the 2nd of January (unselecting it)
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
 		Assert.assertEquals("[2013-01-04]", localDatePicker.localDates().toString());
 
 		// click the 4st of January (unselecting it)
-		click("#2013-01-04");
+		clickOn("#2013-01-04");
 		Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // unselecting does not validate the value
 		Assert.assertEquals("[]", localDatePicker.localDates().toString());
 		
@@ -515,17 +515,17 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDatePicker.getLocalDate());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
 
 		// shift click the 7th of January; 5th should be skipped
-		click("#2013-01-07", KeyCode.SHIFT);
+		clickOn("#2013-01-07", KeyCode.SHIFT);
 		lCallbackCount += 5; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 7th are validated: 5 times  
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", localDatePicker.localDates().toString());
 
 		// click the 5th of January: not valid
-		click("#2013-01-05");
+		clickOn("#2013-01-05");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04, 2013-01-06, 2013-01-07]", localDatePicker.localDates().toString());
 	}
@@ -555,17 +555,17 @@ public class LocalDatePickerTest extends JFXtrasGuiTest {
 		Assert.assertNull(localDatePicker.getLocalDate());
 
 		// click the 2nd of January
-		click("#2013-01-02");
+		clickOn("#2013-01-02");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02]", localDatePicker.localDates().toString());
 
 		// shift click the 7th of January
-		click("#2013-01-07", KeyCode.SHIFT);
+		clickOn("#2013-01-07", KeyCode.SHIFT);
 		lCallbackCount += 3; Assert.assertEquals(lCallbackCount, lCallbackCountAtomicInteger.get()); // all dates from the 3rd to the 5th are validated: 3 times, then in range mode the range is broken  
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", localDatePicker.localDates().toString());
 
 		// click the 5th of January: not valid
-		click("#2013-01-05");
+		clickOn("#2013-01-05");
 		Assert.assertEquals(++lCallbackCount, lCallbackCountAtomicInteger.get()); 
 		Assert.assertEquals("[2013-01-02, 2013-01-03, 2013-01-04]", localDatePicker.localDates().toString());
 	}

@@ -80,7 +80,7 @@ public class LocalDatePickerFXMLTest extends JFXtrasGuiTest {
 	public void defaultPicker()
 	{
 		// show the correct tab
-		click("#defaultPicker");
+		clickOn("#defaultPicker");
 		
 		// get the node
 		LocalDatePicker lLocalDatePicker = (LocalDatePicker)find("#id1"); // TODO: these should match on #.LocalDatePicker, but the CalendarPicker does
@@ -89,7 +89,7 @@ public class LocalDatePickerFXMLTest extends JFXtrasGuiTest {
 		Assert.assertNull(lLocalDatePicker.getLocalDate());
 
 		// click the first of the displayed month		
-		click("#id1 #" + lLocalDatePicker.getDisplayedLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-01")));
+		clickOn("#id1 #" + lLocalDatePicker.getDisplayedLocalDate().format(DateTimeFormatter.ofPattern("yyyy-MM-01")));
 		
 		// default value is not null
 		Assert.assertNotNull(lLocalDatePicker.getLocalDate());
@@ -102,7 +102,7 @@ public class LocalDatePickerFXMLTest extends JFXtrasGuiTest {
 	public void atributesAreSet2()
 	{
 		// show the correct tab
-		click("#atributesAreSet2");
+		clickOn("#atributesAreSet2");
 		
 		// get the node
 		LocalDatePicker lLocalDatePicker = (LocalDatePicker)find("#id2"); // TODO: these should match on #.LocalDatePicker, but the CalendarPicker does
@@ -120,7 +120,7 @@ public class LocalDatePickerFXMLTest extends JFXtrasGuiTest {
 	public void atributesAreSet3()
 	{
 		// show the correct tab
-		click("#atributesAreSet3");
+		clickOn("#atributesAreSet3");
 				
 		// get the node
 		LocalDatePicker lLocalDatePicker = (LocalDatePicker)find("#id3"); // TODO: these should match on #.LocalDatePicker, but the CalendarPicker does
@@ -136,7 +136,7 @@ public class LocalDatePickerFXMLTest extends JFXtrasGuiTest {
 	public void atributesAreSet4()
 	{
 		// show the correct tab
-		click("#atributesAreSet4");
+		clickOn("#atributesAreSet4");
 				
 		// get the node
 		LocalDatePicker lLocalDatePicker = (LocalDatePicker)find("#id4"); // TODO: these should match on #.LocalDatePicker, but the CalendarPicker does
