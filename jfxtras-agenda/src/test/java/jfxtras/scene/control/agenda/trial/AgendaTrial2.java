@@ -37,7 +37,6 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javafx.animation.FadeTransitionBuilder;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -113,14 +112,15 @@ public class AgendaTrial2 extends Application {
         
         // appear animation on image
         lImageView.opacityProperty().set(0.0); // hide image
-        FadeTransitionBuilder.create()
-        	.node(lImageView)
-        	.delay(Duration.millis(2000))
-        	.fromValue(0.0)
-        	.toValue(1.0)
-        	.duration(Duration.millis(2000))
-        	.build()
-        	.play();
+// TODOJAVA9        
+//        FadeTransitionBuilder.create()
+//        	.node(lImageView)
+//        	.delay(Duration.millis(2000))
+//        	.fromValue(0.0)
+//        	.toValue(1.0)
+//        	.duration(Duration.millis(2000))
+//        	.build()
+//        	.play();
         
         lAgenda.editAppointmentCallbackProperty().set(new Callback<Agenda.Appointment, Void>()
 		{
