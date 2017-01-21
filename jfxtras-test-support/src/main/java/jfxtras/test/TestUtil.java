@@ -50,7 +50,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
-import com.sun.javafx.tk.Toolkit;
 import java.time.LocalDate;
 
 public class TestUtil {
@@ -301,9 +300,8 @@ public class TestUtil {
 	 * This method also exist in PlatformUtil in commons, but we can't use that here
 	 */
 	static public void waitForPaintPulse() {
-		runAndWait( () -> {
-			Toolkit.getToolkit().firePulse();
-		});
+            Platform.requestNextPulse();
+            sleep(100);
 	}
 
 	/**
