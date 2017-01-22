@@ -31,20 +31,20 @@ package jfxtras.scene.control.test;
 
 import java.util.Locale;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import jfxtras.scene.control.ListSpinner;
 import jfxtras.scene.layout.VBox;
+import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.util.StringConverterFactory;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 
 /**
  * Created by user on 26-12-13.
  */
-public class ListSpinnerEditableNumericTest extends GuiTest {
+public class ListSpinnerEditableNumericTest extends JFXtrasGuiTest {
 	public Parent getRootNode()
 	{
 		Locale.setDefault(Locale.ENGLISH);
@@ -70,7 +70,7 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		clickOn(".value").eraseCharacters(1).type("6");
+		clickOn(".value").eraseText(1).write("6");
 
 		// move focus away
 		clickOn(".button");
@@ -86,7 +86,7 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		clickOn(".value").eraseCharacters(1).type("0");
+		clickOn(".value").eraseText(1).write("0");
 
 		// move focus away
 		clickOn(".button");
@@ -95,7 +95,7 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		clickOn(".value").eraseCharacters(1).type("1");
+		clickOn(".value").eraseText(1).write("1");
 
 		// move focus away
 		clickOn(".button");
@@ -111,7 +111,7 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		clickOn(".value").eraseCharacters(1).type("11");
+		clickOn(".value").eraseText(1).write("11");
 
 		// move focus away
 		clickOn(".button");
@@ -120,7 +120,7 @@ public class ListSpinnerEditableNumericTest extends GuiTest {
 		Assert.assertEquals(5, lSpinner.getValue().intValue());
 
 		// enter the text (this still is limited to the list)
-		clickOn(".value").eraseCharacters(1).type("10");
+		clickOn(".value").eraseText(1).write("10");
 
 		// move focus away
 		clickOn(".button");

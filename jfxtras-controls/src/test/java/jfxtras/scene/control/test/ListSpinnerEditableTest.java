@@ -31,20 +31,20 @@ package jfxtras.scene.control.test;
 
 import java.util.Locale;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import jfxtras.scene.control.ListSpinner;
 import jfxtras.scene.layout.VBox;
+import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.util.StringConverterFactory;
-
-import org.junit.Assert;
-import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 
 /**
  * Created by user on 26-12-13.
  */
-public class ListSpinnerEditableTest extends GuiTest {
+public class ListSpinnerEditableTest extends JFXtrasGuiTest {
 	public Parent getRootNode()
 	{
 		Locale.setDefault(Locale.ENGLISH);
@@ -69,7 +69,7 @@ public class ListSpinnerEditableTest extends GuiTest {
 		Assert.assertEquals("a", lSpinner.getValue());
 
 		// enter the text (this still is limited to the list)
-		clickOn(".value").eraseCharacters(1).type("c");
+		clickOn(".value").eraseText(1).write("c");
 
 		// move focus away
 		clickOn(".button");

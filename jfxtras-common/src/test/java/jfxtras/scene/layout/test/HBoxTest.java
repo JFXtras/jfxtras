@@ -29,24 +29,25 @@
 
 package jfxtras.scene.layout.test;
 
+import org.junit.Test;
+
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import jfxtras.scene.layout.HBox;
 import jfxtras.test.AssertNode;
-
-import org.junit.Test;
-import org.loadui.testfx.GuiTest;
+import jfxtras.test.JFXtrasGuiTest;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
  */
-public class HBoxTest extends GuiTest {
+public class HBoxTest extends JFXtrasGuiTest {
 
 	/**
 	 * 
 	 */
+	@Override
 	public Parent getRootNode()
 	{
 		hbox = new HBox(5.0);

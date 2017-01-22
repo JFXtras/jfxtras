@@ -29,6 +29,8 @@
 
 package jfxtras.scene.layout.test;
 
+import org.junit.Test;
+
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -36,15 +38,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import jfxtras.scene.layout.GridPane;
 import jfxtras.test.AssertNode;
-import jfxtras.test.AssertNode.A;
-
-import org.junit.Test;
-import org.loadui.testfx.GuiTest;
+import jfxtras.test.JFXtrasGuiTest;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
  */
-public class GridPaneTest extends GuiTest {
+public class GridPaneTest extends JFXtrasGuiTest {
 
 	/**
 	 * 

@@ -29,6 +29,8 @@
 
 package jfxtras.scene.layout.test;
 
+import org.junit.Test;
+
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -36,14 +38,12 @@ import javafx.scene.layout.Priority;
 import jfxtras.scene.layout.VBox;
 import jfxtras.test.AssertNode;
 import jfxtras.test.AssertNode.A;
-
-import org.junit.Test;
-import org.loadui.testfx.GuiTest;
+import jfxtras.test.JFXtrasGuiTest;
 
 /**
  * Created by Tom Eugelink on 26-12-13.
  */
-public class VBoxTest extends GuiTest {
+public class VBoxTest extends JFXtrasGuiTest {
 
 	/**
 	 * 

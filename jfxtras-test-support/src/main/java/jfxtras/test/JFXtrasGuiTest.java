@@ -81,11 +81,22 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 	
 	@Override
 	public void start(Stage stage) throws Exception {
-		Scene scene = new Scene(getRootNode(), 800, 600);
+		Scene scene = new Scene(getRootNode());
         stage.setScene(scene);
         stage.show();
 	}
-	abstract protected Parent getRootNode();
+	
+	/**
+	 * Override public void start(Stage stage) throws Exception
+	 * @return
+	 */
+	@Deprecated
+	protected Parent getRootNode() {
+		if (1 == 1) {
+			throw new IllegalStateException("This method should not be called");
+		}
+		return null;
+	}
 
 	
 	/**
@@ -176,5 +187,32 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 			return null;
 		}
 		return lNodes.iterator().next();
+	}
+	
+	/**
+	 * Use clickOn
+	 * @param matcher
+	 */
+	@Deprecated
+	protected void click(String matcher) {
+		clickOn(matcher);
+	}
+	
+	/**
+	 * Use moveTo
+	 * @param matcher
+	 */
+	@Deprecated
+	protected void move(String matcher) {
+		moveTo(matcher);
+	}
+	
+	/**
+	 * Use write
+	 * @param text
+	 */
+	@Deprecated
+	protected void type(String text) {
+		write(text);
 	}
 }

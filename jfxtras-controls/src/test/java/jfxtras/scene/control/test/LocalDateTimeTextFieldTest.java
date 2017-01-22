@@ -34,6 +34,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,11 +47,6 @@ import javafx.scene.layout.HBox;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-
-import org.junit.Assert;
-import org.junit.Test;
-
-import static org.loadui.testfx.GuiTest.find;
 
 /**
  * Created by Samir Hadzic on 21-05-14.
@@ -427,7 +425,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         localDateTimeTextField.dateTimeFormattersProperty().add(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss"));
 
         // type value
-        clickOn(localDateTimeTextField).type("2014-12-31 00-00-00");
+        clickOn(localDateTimeTextField).write("2014-12-31 00-00-00");
 
         // move focus away
         clickOn("#focusHelper");
@@ -523,7 +521,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
             localDateTimeTextField.setLocalDateTime(lCalendar);
         });
         
-        TextField textField = find(".text-field");
+        TextField textField = (TextField)find(".text-field");
         Assert.assertFalse(textField.getText().isEmpty());
 
         localDateTimeTextField.selectAll();

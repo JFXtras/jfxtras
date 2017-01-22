@@ -666,7 +666,6 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 		press(MouseButton.PRIMARY);
 		moveBy(100,0);		
 		release(MouseButton.PRIMARY);
-sleep(5000);		
 		Assert.assertEquals("[2013-01-02T08:00:00.000]", TestUtil.quickFormatCalendarsAsDateTime(calendarPicker.calendars()));
 		
 		// move the hour slider again

@@ -29,17 +29,18 @@
 
 package jfxtras.scene.control.test;
 
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.collections.FXCollections;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import jfxtras.scene.control.CalendarTextField;
 import jfxtras.scene.layout.VBox;
 import jfxtras.test.JFXtrasGuiTest;
-import org.junit.Assert;
-import org.junit.Test;
-import org.loadui.testfx.utils.FXTestUtils;
-
-import java.util.List;
+import jfxtras.test.TestUtil;
 
 /**
  * Created by bblonski on 9/12/14.
@@ -54,12 +55,9 @@ public class CalendarTextFieldExtendedTest extends JFXtrasGuiTest {
     public void testAnonymousCalendarPicker() throws Exception {
         final CalendarTextField spinner = new CalendarTextField() {};
         Assert.assertEquals(expected, spinner.getStyleClass());
-        FXTestUtils.invokeAndWait(new Runnable() {
-            @Override
-            public void run() {
-                root.getChildren().add(spinner);
-            }
-        }, 1);
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            root.getChildren().add(spinner);
+        });
         Assert.assertTrue(pass);
     }
 
@@ -67,12 +65,9 @@ public class CalendarTextFieldExtendedTest extends JFXtrasGuiTest {
     public void testExtendedCalendarPicker() throws Exception {
         final TestCalendarTextField picker = new TestCalendarTextField();
         Assert.assertEquals(expected, picker.getStyleClass());
-        FXTestUtils.invokeAndWait(new Runnable() {
-            @Override
-            public void run() {
-                    root.getChildren().add(picker);
-            }
-        }, 1);
+        TestUtil.runThenWaitForPaintPulse( () -> {
+                root.getChildren().add(picker);
+        });
         Assert.assertTrue(pass);
     }
 
