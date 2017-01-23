@@ -6,8 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.exceptions.NoNodesFoundException;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -23,9 +23,9 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
     public void canCreateSimpleVEvent()
     {
         // Draw new appointment
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine12");
+        moveTo("#hourLine12");
         release(MouseButton.PRIMARY);
         find("#AppointmentRegularBodyPane2015-11-11/0"); // validate that the pane has the expected id
 
@@ -36,7 +36,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         TestUtil.runThenWaitForPaintPulse( () -> appointmentGroupComboBox.setValue(agenda.appointmentGroups().get(10)) );
         
         // create event
-        click("#newAppointmentCreateButton");
+        clickOn("#newAppointmentCreateButton");
         
         // verify event's creation
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
@@ -54,43 +54,43 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         assertEquals(expectedVEvent, vEvent);
     }
     
-    @Test (expected = NoNodesFoundException.class)
+    @Test //(expected = NoNodesFoundException.class)
     public void canCancelSimpleVEvent()
     {
         // Draw new appointment
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine12");
+        moveTo("#hourLine12");
         release(MouseButton.PRIMARY);
         find("#AppointmentRegularBodyPane2015-11-11/0"); // validate that the pane has the expected id
         
         // create event
-        click("#newAppointmentCancelButton");
+        clickOn("#newAppointmentCancelButton");
         
         // verify no event creation
         assertEquals(0, agenda.getVCalendar().getVEvents().size());
         assertEquals(0, agenda.appointments().size());
         
-        find("#AppointmentRegularBodyPane2015-11-11/0"); // should produce exception
+        Assert.assertNull(find("#AppointmentRegularBodyPane2015-11-11/0")); // nothing should be found
     }
     
     @Test
     public void canCreateAdvancedVEvent()
     {
         // Draw new appointment
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine12");
+        moveTo("#hourLine12");
         release(MouseButton.PRIMARY);
         find("#AppointmentRegularBodyPane2015-11-11/0"); // validate that the pane has the expected id
         
         // do advanced edit
-        click("#newAppointmentEditButton");
+        clickOn("#newAppointmentEditButton");
         TextField locationTextField = find("#locationTextField");
         locationTextField.setText("new location");
-        click("#recurrenceRuleTab");
-        click("#repeatableCheckBox");
-        click("#saveRepeatButton");
+        clickOn("#recurrenceRuleTab");
+        clickOn("#repeatableCheckBox");
+        clickOn("#saveRepeatButton");
 
         // verify event's creation
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
@@ -115,14 +115,14 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
     public void canCreateSimpleWholeDayVEvent()
     {
         // Draw new appointment
-        move("#DayHeader2015-11-12");
+        moveTo("#DayHeader2015-11-12");
         press(MouseButton.PRIMARY);
         release(MouseButton.PRIMARY);
         assertFind("#AppointmentWholedayBodyPane2015-11-12/0");
         assertFind("#AppointmentWholedayHeaderPane2015-11-12/0");
         
         // create event
-        click("#newAppointmentCreateButton");
+        clickOn("#newAppointmentCreateButton");
         
         // verify event's creation
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
@@ -144,18 +144,18 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
     public void canDragWholeDayToTimeBasedVEvent()
     {
         // Draw new appointment
-        move("#DayHeader2015-11-12");
+        moveTo("#DayHeader2015-11-12");
         press(MouseButton.PRIMARY);
         release(MouseButton.PRIMARY);
         assertFind("#AppointmentWholedayBodyPane2015-11-12/0");
         assertFind("#AppointmentWholedayHeaderPane2015-11-12/0");
         
         // create event
-        click("#newAppointmentCreateButton");
+        clickOn("#newAppointmentCreateButton");
 
-        move("#AppointmentWholedayHeaderPane2015-11-12/0"); 
+        moveTo("#AppointmentWholedayHeaderPane2015-11-12/0"); 
         press(MouseButton.PRIMARY);
-        move("#hourLine10");
+        moveTo("#hourLine10");
         release(MouseButton.PRIMARY);
         
         // verify event's creation

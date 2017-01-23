@@ -62,10 +62,10 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         summaryTextField.setText("new summary");
         
         // Save changes
-        click("#saveComponentButton");
+        clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -147,12 +147,12 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         categoryTextField.setText("new group name");
 
         // save to all
-        click("#saveComponentButton");
+        clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.ALL);
         });
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         // test iTIP message
         List<VCalendar> vMessages = getEditComponentPopup().iTIPMessagesProperty().get();
@@ -212,7 +212,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         });
 
         // Get properties
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         ComboBox<FrequencyType> frequencyComboBox = find("#frequencyComboBox");
 
         // Check initial state
@@ -257,10 +257,10 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         assertTrue(sa.isSelected());
 
         // save changes to all
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
 
         // test iTIP message
         List<VCalendar> messages = getEditComponentPopup().iTIPMessagesProperty().get();
@@ -304,7 +304,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         });
 
         // Get properties
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         ComboBox<FrequencyType> frequencyComboBox = find("#frequencyComboBox");
             
         TestUtil.runThenWaitForPaintPulse(() -> frequencyComboBox.getSelectionModel().select(FrequencyType.MONTHLY));
@@ -322,10 +322,10 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         assertFalse(dayOfMonth.isSelected());
         assertTrue(dayOfWeek.isSelected());
         
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
 
         // test iTIP message
         List<VCalendar> messages = getEditComponentPopup().iTIPMessagesProperty().get();
@@ -357,15 +357,15 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         });
 
         // Get properties
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         ComboBox<FrequencyType> frequencyComboBox = find("#frequencyComboBox");
             
         TestUtil.runThenWaitForPaintPulse(() -> frequencyComboBox.getSelectionModel().select(FrequencyType.YEARLY));
         
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
 
         // test iTIP message
         List<VCalendar> messages = getEditComponentPopup().iTIPMessagesProperty().get();
@@ -397,7 +397,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         assertTrue(wholeDayCheckBox.isSelected());
         LocalDateTextField start1 = find("#startDateTextField");
         assertEquals(LocalDate.of(2015, 11, 11), start1.getLocalDate());
-        click(wholeDayCheckBox); // turn off wholeDayCheckBox
+        clickOn(wholeDayCheckBox); // turn off wholeDayCheckBox
 
         LocalDateTimeTextField start2 = find("#startDateTimeTextField");
         assertEquals(LocalDateTime.of(2015, 11, 11, 10, 0), start2.getLocalDateTime());
@@ -407,10 +407,10 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         end2.setLocalDateTime(LocalDateTime.of(2015, 11, 11, 14, 0)); // make 1 hour long
         
         // Save changes
-        click("#saveComponentButton");        
+        clickOn("#saveComponentButton");        
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -448,17 +448,17 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                     AgendaTestAbstract.CATEGORIES);
         });
         CheckBox wholeDayCheckBox = find("#wholeDayCheckBox");
-        click(wholeDayCheckBox);
+        clickOn(wholeDayCheckBox);
 
         LocalDateTextField start = find("#startDateTextField");
         assertEquals(LocalDate.of(2016, 5, 15), start.getLocalDate());
         start.setLocalDate(LocalDate.of(2016, 5, 16)); // adds 1 day shift
         
         // Save changes
-        click("#saveComponentButton");
+        clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -509,14 +509,14 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                     AgendaTestAbstract.CATEGORIES);
         });
         // make changes
-        click("#recurrenceRuleTab");
-        click("#endNeverRadioButton");
+        clickOn("#recurrenceRuleTab");
+        clickOn("#endNeverRadioButton");
         
         // save changes
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
 
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -556,14 +556,14 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                     AgendaTestAbstract.CATEGORIES);
         });
         // make changes
-        click("#recurrenceRuleTab");
-        click("#endNeverRadioButton");
+        clickOn("#recurrenceRuleTab");
+        clickOn("#endNeverRadioButton");
         
         // save changes
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
 
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
