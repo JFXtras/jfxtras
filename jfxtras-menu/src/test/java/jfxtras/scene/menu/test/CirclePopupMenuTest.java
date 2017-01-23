@@ -100,7 +100,7 @@ public class CirclePopupMenuTest extends JFXtrasGuiTest {
 		
 		// click in the center
 		moveMouseToCenter();
-		click(MouseButton.SECONDARY);
+		clickOn(MouseButton.SECONDARY);
 		Assert.assertTrue(circlePopupMenu.isShown());
 		//generateSource();
 		assertWH(findCircularPane(), 118.47869355660265, 114.89486277938934);
@@ -122,25 +122,26 @@ public class CirclePopupMenuTest extends JFXtrasGuiTest {
 
 		// show menu
 		moveMouseToCenter();
-		click(MouseButton.SECONDARY);
+		clickOn(MouseButton.SECONDARY);
 
 		// click first item
 		Assert.assertEquals(0, menuItemClickAtomicInteger.get());
-		facebookMenuItem.setOnAction(this::handleByIncrementingMenuItemClick); // this should be #1
-		click("#CirclePopupMenuNode#1");
+		facebookMenuItem.setOnAction(event -> menuItemClickAtomicInteger.incrementAndGet()); // this should be #1
+		clickOn("#CirclePopupMenuNode#1");
 		Assert.assertEquals(1, menuItemClickAtomicInteger.get());
 		Assert.assertFalse(circlePopupMenu.isShown());
 		
 		// show menu
 		moveMouseToCenter();
-		click(MouseButton.SECONDARY);
+		clickOn(MouseButton.SECONDARY);
 		
 		// click second menu item
-		click("#CirclePopupMenuNode#2"); // this has no action handler attached
+		clickOn("#CirclePopupMenuNode#2"); // this has no action handler attached
 		Assert.assertEquals(1, menuItemClickAtomicInteger.get());
 		Assert.assertFalse(circlePopupMenu.isShown());
 	}
-	
+	private final AtomicInteger menuItemClickAtomicInteger = new AtomicInteger();
+
 
 	@Test
 	public void isClickedThrough() {
@@ -159,31 +160,25 @@ public class CirclePopupMenuTest extends JFXtrasGuiTest {
 
 		// click underlying button
 		Assert.assertEquals(0, underlyingClickAtomicInteger.get());
-		click("#UnderlyingButton");
+		clickOn("#UnderlyingButton");
 		Assert.assertEquals(1, underlyingClickAtomicInteger.get());
 
 		// show menu (positioned over the button)
 		moveMouseToCenter();
-		click(MouseButton.SECONDARY);
+		clickOn(MouseButton.SECONDARY);
 		
 		// click item that is placed over the button
-		click("#CirclePopupMenuNode#4");
+		clickOn("#CirclePopupMenuNode#4");
 		Assert.assertFalse(circlePopupMenu.isShown());
 
 		// click underlying button again
-		click("#UnderlyingButton");
+		clickOn("#UnderlyingButton");
 		Assert.assertEquals(2, underlyingClickAtomicInteger.get());
 	}
 
 	// =============================================================================================================================================================================================================================
 	// SUPPORT
 
-	@Implements(interfaces=javafx.event.EventHandler.class)
-	public void handleByIncrementingMenuItemClick(ActionEvent actionEvent) {
-		menuItemClickAtomicInteger.incrementAndGet();
-	}
-	private final AtomicInteger menuItemClickAtomicInteger = new AtomicInteger();
-	
 	private void assertWH(Pane pane, double w, double h) {
 		Assert.assertEquals(w, pane.getWidth(), 0.01);
 		Assert.assertEquals(h, pane.getHeight(), 0.01);
@@ -209,16 +204,16 @@ public class CirclePopupMenuTest extends JFXtrasGuiTest {
 	}
 	
 	private void moveMouseToCenter() {
-		move(NodeUtil.screenX(stackPane) + (stackPane.getWidth() / 2), NodeUtil.screenY(stackPane) + (stackPane.getHeight() / 2));
+		moveTo(NodeUtil.screenX(stackPane) + (stackPane.getWidth() / 2), NodeUtil.screenY(stackPane) + (stackPane.getHeight() / 2));
 	}
 	
 	private void moveMouseToLeftCorner() {
-		move(NodeUtil.screenX(stackPane) + 5,  NodeUtil.screenY(stackPane) + 5);
+		moveTo(NodeUtil.screenX(stackPane) + 5,  NodeUtil.screenY(stackPane) + 5);
 	}
 	
 	protected Popup findPopup(Node ownedBy) {
 		TestUtil.waitForPaintPulse();
-		for (Window w : getWindows() ) {
+		for (Window w : listWindows() ) {
 			if (w instanceof Popup) {
 				Popup lPopup = (Popup)w;
 				if (ownedBy == null || ownedBy.equals(lPopup.getOwnerNode())) {

@@ -178,11 +178,12 @@ public class CornerMenuTest extends JFXtrasGuiTest {
 		});
 
 		Assert.assertEquals(0, menuItemClickAtomicInteger.get());
-		facebookMenuItem.setOnAction(this::handleByIncrementingMenuItemClick); // this should be #1
-		click("#CornerMenuNode#1");
-		click("#CornerMenuNode#2"); // this has no action handler attached
+		facebookMenuItem.setOnAction(event -> menuItemClickAtomicInteger.incrementAndGet()); // this should be #1
+		clickOn("#CornerMenuNode#1");
+		clickOn("#CornerMenuNode#2"); // this has no action handler attached
 		Assert.assertEquals(1, menuItemClickAtomicInteger.get());
 	}
+	private final AtomicInteger menuItemClickAtomicInteger = new AtomicInteger();
 
 	@Test
 	public void isClickedThrough() {
@@ -205,7 +206,7 @@ public class CornerMenuTest extends JFXtrasGuiTest {
 		});
 
 		Assert.assertEquals(0, underlyingClickAtomicInteger.get());
-		click("#UnderlyingButton");
+		clickOn("#UnderlyingButton");
 		Assert.assertEquals(1, underlyingClickAtomicInteger.get());
 	}
 
@@ -238,12 +239,6 @@ public class CornerMenuTest extends JFXtrasGuiTest {
 	// =============================================================================================================================================================================================================================
 	// SUPPORT
 
-	@Implements(interfaces=javafx.event.EventHandler.class)
-	public void handleByIncrementingMenuItemClick(ActionEvent actionEvent) {
-		menuItemClickAtomicInteger.incrementAndGet();
-	}
-	private final AtomicInteger menuItemClickAtomicInteger = new AtomicInteger();
-	
 	private void assertWH(Pane pane, double w, double h) {
 		Assert.assertEquals(w, pane.getWidth(), 0.01);
 		Assert.assertEquals(h, pane.getHeight(), 0.01);
@@ -269,10 +264,10 @@ public class CornerMenuTest extends JFXtrasGuiTest {
 	}
 	
 	private void moveMouseToCenter() {
-		move(NodeUtil.screenX(stackPane) + (stackPane.getWidth() / 2), NodeUtil.screenY(stackPane) + (stackPane.getHeight() / 2));
+		moveTo(NodeUtil.screenX(stackPane) + (stackPane.getWidth() / 2), NodeUtil.screenY(stackPane) + (stackPane.getHeight() / 2));
 	}
 	
 	private void moveMouseToLeftCorner() {
-		move(NodeUtil.screenX(stackPane) + 5,  NodeUtil.screenY(stackPane) + 5);
+		moveTo(NodeUtil.screenX(stackPane) + 5,  NodeUtil.screenY(stackPane) + 5);
 	}
 }

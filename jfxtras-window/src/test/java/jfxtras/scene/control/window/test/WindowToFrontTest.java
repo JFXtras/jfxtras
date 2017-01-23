@@ -29,20 +29,21 @@
 
 package jfxtras.scene.control.window.test;
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import jfxtras.scene.control.window.Window;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import org.loadui.testfx.GuiTest;
+import jfxtras.test.JFXtrasGuiTest;
 
 /**
  *
  * @author Michael Hoffer &lt;info@michaelhoffer.de&gt;
  */
-public class WindowToFrontTest extends GuiTest {
+public class WindowToFrontTest extends JFXtrasGuiTest {
 
     private Pane pane;
     private Window windowOne;
@@ -86,7 +87,7 @@ public class WindowToFrontTest extends GuiTest {
                 pane.getChildren().stream().filter(w -> w instanceof Window).
                 findFirst().get().getId().equals("window-control-1"));
 
-        click(windowOne, MouseButton.PRIMARY).sleep(1000);
+        clickOn(windowOne, MouseButton.PRIMARY).sleep(1000);
 
         assertTrue("After clicking on first window, first window in list must be window 2",
                 pane.getChildren().stream().filter(w -> w instanceof Window).
