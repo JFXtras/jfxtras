@@ -81,16 +81,16 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void defaultPicker()
 	{
 		// show the correct tab
-		clickOn("#defaultPicker");
+		clickOn("#defaultTab");
 		
 		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
+		CalendarPicker lCalendarPicker = (CalendarPicker)find("#defaultPicker");
 		
 		// default value is null
 		Assert.assertNull(lCalendarPicker.getCalendar());
 
 		// click the first of the displayed month		
-		clickOn("#id1 #" + new SimpleDateFormat("yyyy-MM-01").format(lCalendarPicker.getDisplayedCalendar().getTime()));
+		clickOn("#defaultPicker #" + new SimpleDateFormat("yyyy-MM-01").format(lCalendarPicker.getDisplayedCalendar().getTime()));
 		
 		// default value is not null
 		Assert.assertNotNull(lCalendarPicker.getCalendar());
@@ -103,10 +103,10 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet2()
 	{
 		// show the correct tab
-		clickOn("#atributesAreSet2");
+		clickOn("#atributesAreSet2Tab");
 		
 		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
+		CalendarPicker lCalendarPicker = (CalendarPicker)find("#atributesAreSet2Picker");
 		
 		// set properties
 		Assert.assertEquals("2013-01-01", TestUtil.quickFormatCalendarAsDate(lCalendarPicker.getDisplayedCalendar()));
@@ -121,10 +121,10 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet3()
 	{
 		// show the correct tab
-		clickOn("#atributesAreSet3");
+		clickOn("#atributesAreSet3Tab");
 		
 		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
+		CalendarPicker lCalendarPicker = (CalendarPicker)find("#atributesAreSet3Picker");
 		
 		// set properties
 		Assert.assertEquals(true, lCalendarPicker.getShowTime());
@@ -139,10 +139,10 @@ public class CalendarPickerFXMLTest extends JFXtrasGuiTest {
 	public void attributesAreSet4()
 	{
 		// show the correct tab
-		clickOn("#atributesAreSet4");
+		clickOn("#atributesAreSet4Tab");
 		
 		// get the node
-		CalendarPicker lCalendarPicker = (CalendarPicker)find(".CalendarPicker");
+		CalendarPicker lCalendarPicker = (CalendarPicker)find("#atributesAreSet4Picker");
 		
 		// set properties
 		Assert.assertEquals(false, lCalendarPicker.getAllowNull());

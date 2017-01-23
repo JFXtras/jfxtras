@@ -33,6 +33,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.GregorianCalendar;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.text.Text;
@@ -40,10 +43,6 @@ import jfxtras.fxml.JFXtrasBuilderFactory;
 import jfxtras.scene.control.CalendarTimePicker;
 import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
-import jfxtras.util.PlatformUtil;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 
 /**
@@ -82,14 +81,14 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 		clickOn("#defaultControl");
 		
 		// get the node
-		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
-		Text lLabelText = (Text)find(".timeLabel");
+		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find("#defaultControlPicker");
+		Text lLabelText = (Text)find("#defaultControlPicker .timeLabel");
 		
 		// default value is not null
 		Assert.assertNotNull(lCalendarTimePicker.getCalendar());
 		Assert.assertEquals(1, lCalendarTimePicker.getMinuteStep().intValue());
 		
-		// set time to 12:30:00
+		// set time
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			lCalendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 20, 30, 00));			
 		});
@@ -108,7 +107,7 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 		clickOn("#slideStep15");
 		
 		// get the node
-		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
+		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find("#slideStep15Picker");
 		
 		// assert
 		Assert.assertEquals(15, lCalendarTimePicker.getMinuteStep().intValue());
@@ -125,8 +124,8 @@ public class CalendarTimePickerFXMLTest extends JFXtrasGuiTest {
 		clickOn("#locale");
 		
 		// get the node
-		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find(".CalendarTimePicker");
-		Text lLabelText = (Text)find(".timeLabel");
+		CalendarTimePicker lCalendarTimePicker = (CalendarTimePicker)find("#localePicker");
+		Text lLabelText = (Text)find("#localePicker .timeLabel");
 		
 		// set time to 12:30:00
 		TestUtil.runThenWaitForPaintPulse( () -> {

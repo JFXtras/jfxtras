@@ -9,17 +9,17 @@
 
 <TabPane xmlns:fx="http://javafx.com/fxml">
 	<tabs>
-		<Tab id="defaultPicker" text="tab1">
-			<CalendarPicker id="id1"/>
+		<Tab id="defaultTab" text="tab1">
+			<CalendarPicker id="defaultPicker"/>
 		</Tab>
-		<Tab id="atributesAreSet2" text="tab2">
-			<CalendarPicker id="id2" displayedCalendar="2013-01-01" locale="de" mode="MULTIPLE"/>
+		<Tab id="atributesAreSet2Tab" text="tab2">
+			<CalendarPicker id="atributesAreSet2Picker" displayedCalendar="2013-01-01" locale="de" mode="MULTIPLE"/>
 		</Tab>
-		<Tab id="atributesAreSet3" text="tab3">
-			<CalendarPicker id="id3" showTime="true" calendar="2013-01-10T22:33:44" />
+		<Tab id="atributesAreSet3Tab" text="tab3">
+			<CalendarPicker id="atributesAreSet3Picker" showTime="true" calendar="2013-01-10T22:33:44" />
 		</Tab>
-		<Tab id="atributesAreSet4" text="tab4">
-			<CalendarPicker id="id4" allowNull="false"/>
+		<Tab id="atributesAreSet4Tab" text="tab4">
+			<CalendarPicker id="atributesAreSet4Picker" allowNull="false"/>
 		</Tab>
     </tabs>
 </TabPane>

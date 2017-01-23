@@ -83,11 +83,11 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void defaultControl()
 	{
 		// show the correct tab
-		clickOn("#defaultControl");
+		clickOn("#defaultTab");
 		
 		// get the node
-		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#id1"); // TODO: this should be accessible through .LocalTimePicker
-		Text lLabelText = (Text)find(".timeLabel");
+		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#defaultPicker"); // TODO: this should be accessible through .LocalTimePicker
+		Text lLabelText = (Text)find("#defaultPicker .timeLabel");
 		
 		// default value is not null
 		Assert.assertNotNull(lLocalTimePicker.getLocalTime());
@@ -109,10 +109,10 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void slideStep15()
 	{
 		// show the correct tab
-		clickOn("#slideStep15");
+		clickOn("#slideStep15Tab");
 		
 		// get the node
-		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#id2"); // TODO: this should be accessible through .LocalTimePicker
+		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#slideStep15Picker"); // TODO: this should be accessible through .LocalTimePicker
 		
 		// default value is not null
 		Assert.assertEquals(15, lLocalTimePicker.getMinuteStep().intValue());
@@ -126,11 +126,11 @@ public class LocalTimePickerFXMLTest extends JFXtrasGuiTest {
 	public void locale()
 	{
 		// show the correct tab
-		clickOn("#locale");
+		clickOn("#localeTab");
 		
 		// get the node
-		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#id3"); // TODO: this should be accessible through .LocalTimePicker
-		Text lLabelText = (Text)find(".timeLabel");
+		LocalTimePicker lLocalTimePicker = (LocalTimePicker)find("#localePicker"); // TODO: this should be accessible through .LocalTimePicker
+		Text lLabelText = (Text)find("#localePicker .timeLabel");
 		
 		// set time to 12:30:00
 		TestUtil.runThenWaitForPaintPulse( () -> {

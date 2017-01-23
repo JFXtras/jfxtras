@@ -9,14 +9,14 @@
 
 <TabPane xmlns:fx="http://javafx.com/fxml">
 	<tabs>
-		<Tab id="defaultControl" text="tab1">
-			<LocalTimePicker id="id1"/>
+		<Tab id="defaultTab" text="tab1">
+			<LocalTimePicker id="defaultPicker"/>
 		</Tab>
-		<Tab id="slideStep15" text="tab2">
-			<LocalTimePicker id="id2" minuteStep="15" secondStep="15"/>
+		<Tab id="slideStep15Tab" text="tab2">
+			<LocalTimePicker id="slideStep15Picker" minuteStep="15" secondStep="15"/>
 		</Tab>
-		<Tab id="locale" text="tab3">
-			<LocalTimePicker id="id3" locale="de"/>
+		<Tab id="localeTab" text="tab3">
+			<LocalTimePicker id="localePicker" locale="de"/>
 		</Tab>
     </tabs>
 </TabPane>

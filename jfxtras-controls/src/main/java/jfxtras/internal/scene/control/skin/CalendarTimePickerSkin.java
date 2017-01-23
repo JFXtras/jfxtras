@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -536,7 +537,8 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			hourScrollSlider.valueProperty().set(lHour);
 			minuteScrollSlider.valueProperty().set(lMinute);
 			secondScrollSlider.valueProperty().set(lSecond);
-			timeText.setText( lCalendar == null ? "" : getLabelDateFormat().format(lCalendar.getTime()) );
+			String lTimeText = lCalendar == null ? "" : getLabelDateFormat().format(lCalendar.getTime());
+			timeText.setText(lTimeText);
 		}
 		finally {
 			refreshingAtomicInteger.addAndGet(-1);

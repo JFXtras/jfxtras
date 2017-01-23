@@ -9,19 +9,19 @@
 
 <TabPane xmlns:fx="http://javafx.com/fxml">
 	<tabs>
-		<Tab id="defaultControl" text="tab1">
-			<CalendarTextField id="id1"/>
+		<Tab id="defaultTab" text="tab1">
+			<CalendarTextField id="defaultPicker"/>
 		</Tab>
-		<Tab id="atributesAreSet2" text="tab2">
+		<Tab id="atributesAreSet2Tab" text="tab2">
 			<VBox>
 				<children>
-					<CalendarTextField dateFormat="yyyy-MM-dd HH:mm:ss" dateFormats="yyyy-MM-dd, yyyy-MM, yyyy"/>
+					<CalendarTextField id="atributesAreSet2Picker" dateFormat="yyyy-MM-dd HH:mm:ss" dateFormats="yyyy-MM-dd, yyyy-MM, yyyy"/>
 					<Button id="focusHelper"/>
 				</children>
 			</VBox>
 		</Tab>
-		<Tab id="atributesAreSet3" text="tab3">
-			<CalendarTextField locale="DE" promptText="locale set"/>
+		<Tab id="atributesAreSet3Tab" text="tab3">
+			<CalendarTextField id="atributesAreSet3Picker" locale="DE" promptText="locale set"/>
 		</Tab>
     </tabs>
 </TabPane>

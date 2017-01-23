@@ -71,6 +71,9 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 				Assert.fail("This should not occur\n" + e);
 			}
 		});
+		
+		// small delay to get things going
+		TestUtil.waitForPaintPulse();
 	}
 	
 	@After

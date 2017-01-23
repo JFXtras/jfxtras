@@ -10,13 +10,13 @@
 <TabPane xmlns:fx="http://javafx.com/fxml">
 	<tabs>
 		<Tab id="defaultControl" text="tab1">
-			<CalendarTimePicker id="id1"/>
+			<CalendarTimePicker id="defaultControlPicker"/>
 		</Tab>
 		<Tab id="slideStep15" text="tab2">
-			<CalendarTimePicker id="id2" minuteStep="15" secondStep="15"/>
+			<CalendarTimePicker id="slideStep15Picker" minuteStep="15" secondStep="15"/>
 		</Tab>
 		<Tab id="locale" text="tab3">
-			<CalendarTimePicker id="id3" locale="de"/>
+			<CalendarTimePicker id="localePicker" locale="de"/>
 		</Tab>
     </tabs>
 </TabPane>
