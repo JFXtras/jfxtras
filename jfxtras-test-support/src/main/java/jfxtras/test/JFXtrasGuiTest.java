@@ -184,12 +184,12 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 		}
 	}
 	
-	protected Node find(String matcher) {
+	protected <T extends Node> T find(String matcher) {
 		Set<Node> lNodes = lookup(matcher).queryAll();
 		if (lNodes.isEmpty()) {
 			return null;
 		}
-		return lNodes.iterator().next();
+		return (T)lNodes.iterator().next();
 	}
 	
 	/**
