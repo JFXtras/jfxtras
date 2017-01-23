@@ -29,7 +29,7 @@
 
 package jfxtras.scene.control.agenda.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

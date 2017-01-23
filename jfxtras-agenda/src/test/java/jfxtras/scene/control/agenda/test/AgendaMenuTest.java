@@ -29,15 +29,15 @@
 
 package jfxtras.scene.control.agenda.test;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.AssertNode;
 import jfxtras.test.TestUtil;
-import junit.framework.Assert;
-
-import org.junit.Test;
 
 /**
  * 
@@ -66,7 +66,7 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
             );
 		});
 				
-		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
 		assertPopupIsVisible(find("#AppointmentRegularBodyPane2014-01-01/0"));
 		//TestUtil.sleep(3000);
 	}
@@ -85,7 +85,7 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
             );
 		});
 				
-		click("#AppointmentRegularBodyPane2014-01-01/0", MouseButton.SECONDARY);
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0", MouseButton.SECONDARY);
 		assertPopupIsVisible(find("#AppointmentRegularBodyPane2014-01-01/0"));
 		//TestUtil.sleep(3000);
 	}
@@ -105,8 +105,8 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
 		});
 				
 		Assert.assertEquals(1, agenda.appointments().size() );
-		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
-		click(".delete-icon");
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
+		clickOn(".delete-icon");
 		Assert.assertEquals(0, agenda.appointments().size() );
 		//TestUtil.sleep(3000);
 	}
@@ -146,9 +146,9 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
             );
 		});
 
-		click("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
-		click("#wholeday-checkbox");
-		click(".close-icon");
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
+		clickOn("#wholeday-checkbox");
+		clickOn(".close-icon");
 		Assert.assertEquals(1, appointmentChangedCallbackList.size());
 		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
 		Assert.assertEquals(1, agenda.appointments().size() );

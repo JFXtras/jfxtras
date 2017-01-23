@@ -29,18 +29,17 @@
 
 package jfxtras.scene.control.agenda.test;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.TestUtil;
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * 
- */
+ */	
 public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 
 	/**
@@ -59,9 +58,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 	{
 		Assert.assertEquals(0, agenda.appointments().size() );
 		
-		move("#hourLine10");
+		moveTo("#hourLine10");
 		press(MouseButton.PRIMARY);
-		move("#hourLine12");
+		moveTo("#hourLine12");
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );
@@ -80,7 +79,7 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 	{
 		Assert.assertEquals(0, agenda.appointments().size() );
 		
-		move("#DayHeader2014-01-01");
+		moveTo("#DayHeader2014-01-01");
 		press(MouseButton.PRIMARY);
 		release(MouseButton.PRIMARY);
 		
@@ -108,9 +107,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		});
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0"); 
 				
-		move("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
+		moveTo("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
 		press(MouseButton.PRIMARY);
-		move("#hourLine15");
+		moveTo("#hourLine15");
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals(1, appointmentChangedCallbackList.size());
 		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
@@ -136,7 +135,7 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		});
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 				
-		move("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
+		moveTo("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
 		press(MouseButton.PRIMARY);
 		moveBy(100, 0);
 		release(MouseButton.PRIMARY);
@@ -163,9 +162,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
             );
 		});
 				
-		move("#AppointmentRegularBodyPane2014-01-01/0 .DurationDragger"); 
+		moveTo("#AppointmentRegularBodyPane2014-01-01/0 .DurationDragger"); 
 		press(MouseButton.PRIMARY);
-		move("#hourLine15");
+		moveTo("#hourLine15");
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals(1, appointmentChangedCallbackList.size());
 		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
@@ -196,9 +195,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		assertFind("#AppointmentWholedayBodyPane2014-01-01/0");
 		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		
-		move("#AppointmentWholedayBodyPane2014-01-01/0"); 
+		moveTo("#AppointmentWholedayBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
-		move(0, 0);
+		moveTo(0, 0);
 		release(MouseButton.PRIMARY);
 		
 		// nothing changed 
@@ -228,9 +227,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentWholedayHeaderPane2014-01-01/0"); 
+		moveTo("#AppointmentWholedayHeaderPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
-		move("#hourLine10");
+		moveTo("#hourLine10");
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals(1, appointmentChangedCallbackList.size());
 		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
@@ -263,9 +262,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		assertFind("#AppointmentWholedayHeaderPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentWholedayHeaderPane2014-01-01/0"); 
+		moveTo("#AppointmentWholedayHeaderPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
-		move("#hourLine10");
+		moveTo("#hourLine10");
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals(1, appointmentChangedCallbackList.size());
 		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
@@ -296,9 +295,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentRegularBodyPane2014-01-01/0"); 
+		moveTo("#AppointmentRegularBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
-		move("#DayHeader2014-01-02"); // header of next day
+		moveTo("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals(1, appointmentChangedCallbackList.size());
 		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
@@ -329,9 +328,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		assertFind("#AppointmentTaskBodyPane2014-01-01/0");
 		
 		// drag from header to body
-		move("#AppointmentTaskBodyPane2014-01-01/0"); 
+		moveTo("#AppointmentTaskBodyPane2014-01-01/0"); 
 		press(MouseButton.PRIMARY);
-		move("#DayHeader2014-01-02"); // header of next day
+		moveTo("#DayHeader2014-01-02"); // header of next day
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals(1, appointmentChangedCallbackList.size());
 		Assert.assertTrue(appointmentChangedCallbackList.contains(agenda.appointments().get(0)));
@@ -380,9 +379,9 @@ public class AgendaMouseManipulateTest extends AbstractAgendaTestBase {
 		});
 		assertFind("#AppointmentRegularBodyPane2014-01-01/0"); 
 				
-		move("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
+		moveTo("#hourLine11"); // the pane is beneath the mouse now since it runs from 10 to 12
 		press(MouseButton.PRIMARY);
-		move("#hourLine15");
+		moveTo("#hourLine15");
 		release(MouseButton.PRIMARY);
 		
 		Assert.assertEquals(1, agenda.appointments().size() );

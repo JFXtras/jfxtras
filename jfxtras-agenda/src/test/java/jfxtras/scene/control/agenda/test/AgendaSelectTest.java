@@ -31,14 +31,14 @@ package jfxtras.scene.control.agenda.test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.TestUtil;
-import junit.framework.Assert;
-
-import org.junit.Test;
 
 /**
  * 
@@ -71,14 +71,14 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/0");
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0");
 		
 		// then
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#hourLine15");
+		clickOn("#hourLine15");
 		
 		// then
 		Assert.assertEquals(1, agenda.appointments().size() );
@@ -109,27 +109,27 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/0"); // select first
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0"); // select first
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select second
+		clickOn("#AppointmentRegularBodyPane2014-01-01/1"); // select second
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.SHIFT);
-		click("#AppointmentRegularBodyPane2014-01-01/0"); // select both
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0"); // select both
 		release(KeyCode.SHIFT);
 		Assert.assertEquals(2, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.SHIFT);
-		click("#AppointmentRegularBodyPane2014-01-01/0"); // select again (no change)
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0"); // select again (no change)
 		release(KeyCode.SHIFT);
 		Assert.assertEquals(2, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#hourLine15");
+		clickOn("#hourLine15");
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		//TestUtil.sleep(3000);
@@ -158,27 +158,27 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/0"); // select first
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0"); // select first
 		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select second
+		clickOn("#AppointmentRegularBodyPane2014-01-01/1"); // select second
 		release(KeyCode.CONTROL);
 		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(2, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
-		click("#AppointmentRegularBodyPane2014-01-01/1"); // select again (deselects)
+		clickOn("#AppointmentRegularBodyPane2014-01-01/1"); // select again (deselects)
 		release(KeyCode.CONTROL);
 		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
 		press(KeyCode.CONTROL);
-		click("#AppointmentRegularBodyPane2014-01-01/0"); // select again (deselects)
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0"); // select again (deselects)
 		release(KeyCode.CONTROL);
 		TestUtil.sleep(500); // TODO: this should not be needed!
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
@@ -208,8 +208,8 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		
 		// when
 		move("#AppointmentRegularBodyPane2014-01-01/0"); 
-		click(MouseButton.PRIMARY); // single click
-		click(MouseButton.PRIMARY); // double click
+		clickOn(MouseButton.PRIMARY); // single click
+		clickOn(MouseButton.PRIMARY); // double click
 		
 		// then
 		Assert.assertEquals(1, cnt.get() );
@@ -241,7 +241,7 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		
 		// when
 		move("#AppointmentRegularBodyPane2014-01-01/0"); 
-		click(MouseButton.MIDDLE); // one click of the middle button suffices
+		clickOn(MouseButton.MIDDLE); // one click of the middle button suffices
 		
 		// then
 		Assert.assertEquals(1, cnt.get() );
@@ -269,14 +269,14 @@ public class AgendaSelectTest extends AbstractAgendaTestBase {
 		Assert.assertEquals(0, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#AppointmentRegularBodyPane2014-01-01/0");
+		clickOn("#AppointmentRegularBodyPane2014-01-01/0");
 		
 		// then
 		Assert.assertEquals(1, agenda.appointments().size() );
 		Assert.assertEquals(1, agenda.selectedAppointments().size() );
 		
 		// when
-		click("#hourLine15");
+		clickOn("#hourLine15");
 		
 		// then
 		Assert.assertEquals(1, agenda.appointments().size() );

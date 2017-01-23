@@ -194,16 +194,21 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 	
 	/**
 	 * Use clickOn
-	 * @param matcher
 	 */
 	@Deprecated
 	protected void click(String matcher) {
 		clickOn(matcher);
 	}
-	
+
+	/**
+	 * Use clickOn
+	 */
+	public void click(String matcher, KeyCode keyCode, KeyCode... keyCodes) {
+		clickOn(matcher, keyCode, keyCodes);
+	}
+
 	/**
 	 * Use moveTo
-	 * @param matcher
 	 */
 	@Deprecated
 	protected void move(String matcher) {
@@ -212,7 +217,6 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 	
 	/**
 	 * Use write
-	 * @param text
 	 */
 	@Deprecated
 	protected void type(String text) {

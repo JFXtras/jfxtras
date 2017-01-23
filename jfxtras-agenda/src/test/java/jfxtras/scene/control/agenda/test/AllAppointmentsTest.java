@@ -32,14 +32,14 @@ package jfxtras.scene.control.agenda.test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import jfxtras.internal.scene.control.skin.agenda.AllAppointments;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.JFXtrasTest;
-import junit.framework.Assert;
-
-import org.junit.Test;
 
 public class AllAppointmentsTest extends JFXtrasTest {
 

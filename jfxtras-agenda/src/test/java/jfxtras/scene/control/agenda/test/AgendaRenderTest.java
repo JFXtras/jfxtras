@@ -43,6 +43,8 @@ import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.Locale;
 
+import org.junit.Test;
+
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ScrollPane;
@@ -51,8 +53,6 @@ import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.test.AssertNode;
 import jfxtras.test.TestUtil;
 import junit.framework.Assert;
-
-import org.junit.Test;
 
 /**
  * 

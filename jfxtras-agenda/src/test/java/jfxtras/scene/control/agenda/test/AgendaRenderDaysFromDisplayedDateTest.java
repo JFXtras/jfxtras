@@ -29,13 +29,13 @@
 
 package jfxtras.scene.control.agenda.test;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import javafx.scene.Parent;
 import javafx.scene.control.Slider;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaysFromDisplayedSkin;
 import jfxtras.test.TestUtil;
-import junit.framework.Assert;
-
-import org.junit.Test;
 
 /**
  * 
