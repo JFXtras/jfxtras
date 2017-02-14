@@ -29,12 +29,11 @@ import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
+import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
-import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup.EditRecurrenceRuleVBox;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
@@ -594,6 +593,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                 .withVersion(Version.DEFAULT_ICALENDAR_SPECIFICATION_VERSION)
                 .withVEvents(ICalendarStaticComponents.getDaily1()
                         .withExceptionDates(LocalDateTime.of(2015, 11, 9, 10, 0), LocalDateTime.of(2015, 11, 11, 10, 0))
+                        .withDateTimeStamp(message.getVEvents().get(0).getDateTimeStamp())
                         .withSequence(1));
         assertEquals(expectedMessage, message);
     }
@@ -698,7 +698,9 @@ public class ExceptionDateTests extends VEventPopupTestBase
             assertEquals(expectedDates, exceptions);
         }
         click("#saveRepeatButton");
-
+        
+        String dtstamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -710,7 +712,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                 "DTEND:20151109T113000" + System.lineSeparator() +
                 "DESCRIPTION:Daily2 Description" + System.lineSeparator() +
                 "SUMMARY:Daily2 Summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                dtstamp + System.lineSeparator() +
                 "UID:20150110T080000-005@jfxtras.org" + System.lineSeparator() +
                 "RRULE:COUNT=6;FREQ=DAILY;INTERVAL=3" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +

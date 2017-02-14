@@ -58,7 +58,7 @@ public class ReviseNonRepeatingTest
                 "DESCRIPTION:Individual Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-007@jfxtras.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
@@ -107,7 +107,7 @@ public class ReviseNonRepeatingTest
                 "DESCRIPTION:Individual Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-007@jfxtras.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
@@ -154,7 +154,7 @@ public class ReviseNonRepeatingTest
                 "DURATION:PT1H" + System.lineSeparator() +
                 "DESCRIPTION:Individual Description" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-007@jfxtras.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +

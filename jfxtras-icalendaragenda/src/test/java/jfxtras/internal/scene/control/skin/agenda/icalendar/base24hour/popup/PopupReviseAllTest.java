@@ -67,6 +67,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         click("#changeDialogOkButton");
         
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -78,7 +79,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "DTEND:20151109T110000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:new summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                dtStamp + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -168,6 +169,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 .withDescription("new description")
                 .withLocation("new location")
                 .withCategories(FXCollections.observableArrayList(new Categories("new group name")))
+                .withDateTimeStamp(revisedVEvent.getDateTimeStamp())
                 .withSequence(1);
         assertEquals(expectedRevisedVEvent, revisedVEvent);
         
@@ -175,6 +177,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 .map(v -> v.toContent())
                 .collect(Collectors.joining(System.lineSeparator()));
 
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -186,7 +189,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "DTEND:20151109T090000" + System.lineSeparator() +
                 "DESCRIPTION:new description" + System.lineSeparator() +
                 "SUMMARY:new summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() + // need to match time exactly
+                dtStamp + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -285,6 +288,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         
         VEvent expectedRevisedVEvent = ICalendarStaticComponents.getDaily1()
                 .withRecurrenceRule("FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA")
+                .withDateTimeStamp(revisedVEvent.getDateTimeStamp())
                 .withSequence(1);
         assertEquals(expectedRevisedVEvent, revisedVEvent);
     }
@@ -338,6 +342,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 .withDateTimeStart("20151115T100000")
                 .withDateTimeEnd("20151115T110000")
                 .withRecurrenceRule("FREQ=MONTHLY;BYDAY=3SU")
+                .withDateTimeStamp(revisedVEvent.getDateTimeStamp())
                 .withSequence(1);
         assertEquals(expectedRevisedVEvent, revisedVEvent);
     }
@@ -376,6 +381,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         
         VEvent expectedRevisedVEvent = ICalendarStaticComponents.getDaily1()
                 .withRecurrenceRule("FREQ=YEARLY")
+                .withDateTimeStamp(revisedVEvent.getDateTimeStamp())
                 .withSequence(1);
         assertEquals(expectedRevisedVEvent, revisedVEvent);
     }
@@ -412,6 +418,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         click("#changeDialogOkButton");
         
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -419,7 +426,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "VERSION:" + Version.DEFAULT_ICALENDAR_SPECIFICATION_VERSION + System.lineSeparator() +
                 "BEGIN:VEVENT" + System.lineSeparator() +
                 "CATEGORIES:group06" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                dtStamp + System.lineSeparator() +
                 "UID:20150110T080000-010@jfxtras.org" + System.lineSeparator() +
                 "RRULE:UNTIL=20151123T210000Z;FREQ=DAILY;INTERVAL=3" + System.lineSeparator() +
                 "DTSTART;TZID=America/Los_Angeles:20151108T130000" + System.lineSeparator() +
@@ -460,6 +467,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         click("#changeDialogOkButton");
         
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -471,7 +479,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "DTEND;VALUE=DATE:20151111" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                dtStamp + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -518,6 +526,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         click("#changeDialogOkButton");
 
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -526,7 +535,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "BEGIN:VEVENT" + System.lineSeparator() +
                 "DTSTART:20151107T233000" + System.lineSeparator() +
                 "DTEND:20151108T003000" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                dtStamp + System.lineSeparator() +
                 "SUMMARY:Example Daily Event" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER:mailto:david@balsoftware.net" + System.lineSeparator() +
@@ -565,6 +574,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         click("#changeDialogOkButton");
 
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -576,7 +586,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "DTEND:20151109T110000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                dtStamp + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
