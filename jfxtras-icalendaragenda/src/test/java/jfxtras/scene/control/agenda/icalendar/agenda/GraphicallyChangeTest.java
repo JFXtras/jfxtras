@@ -55,10 +55,11 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         
         // check VEvent
         assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        VEvent editedVEvent = agenda.getVCalendar().getVEvents().get(0);
         VEvent expectedVEvent = ICalendarStaticComponents.getIndividual1()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 11, 8, 30))
+                .withDateTimeStamp(editedVEvent.getDateTimeStamp())
                 .withSequence(1);
-        VEvent editedVEvent = agenda.getVCalendar().getVEvents().get(0);
         assertEquals(expectedVEvent, editedVEvent);
     }
     
@@ -159,11 +160,12 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         
         // check VEvent
         assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        VEvent editedVEvent0 = agenda.getVCalendar().getVEvents().get(0);
         VEvent expectedVEvent0 = ICalendarStaticComponents.getDaily1()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 8, 0))
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 9, 9, 0))
+                .withDateTimeStamp(editedVEvent0.getDateTimeStamp())
                 .withSequence(1);
-        VEvent editedVEvent0 = agenda.getVCalendar().getVEvents().get(0);
         assertEquals(expectedVEvent0, editedVEvent0);
     }
     

@@ -63,7 +63,7 @@ public class ReviseAllTest
             "DTEND:20151109T103000" + System.lineSeparator() +
             "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
             "SUMMARY:Edited summary" + System.lineSeparator() +
-            "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+            vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
             "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
             "RRULE:FREQ=DAILY" + System.lineSeparator() +
             "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -109,7 +109,7 @@ public class ReviseAllTest
                 "DTSTART:20151110T090000" + System.lineSeparator() +
                 "DTEND:20151110T103000" + System.lineSeparator() +
                 "UID:20150110T080000-002@jfxtras.org" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
                 "RRULE:FREQ=WEEKLY;BYDAY=TU" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
@@ -154,7 +154,7 @@ public class ReviseAllTest
                 "DTSTART:20151117T090000" + System.lineSeparator() +
                 "DTEND:20151117T103000" + System.lineSeparator() +
                 "UID:20150110T080000-002@jfxtras.org" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
                 "RRULE:FREQ=MONTHLY;BYDAY=3TU" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
@@ -206,7 +206,7 @@ public class ReviseAllTest
                 "CATEGORIES:group13" + System.lineSeparator() +
                 "DTSTART;TZID=Europe/London:20151113T090000" + System.lineSeparator() +
                 "DTEND;TZID=Europe/London:20151113T100000" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-009@jfxtras.org" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
                 "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR" + System.lineSeparator() +
@@ -272,7 +272,7 @@ public class ReviseAllTest
                 "DTEND:20151109T103000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -365,7 +365,7 @@ public class ReviseAllTest
                 "DTEND:20151109T103000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -443,7 +443,7 @@ public class ReviseAllTest
                 "DTEND;VALUE=DATE:20151109" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -490,7 +490,7 @@ public class ReviseAllTest
                 "DTEND:20151109T113000" + System.lineSeparator() +
                 "DESCRIPTION:Daily2 Description" + System.lineSeparator() +
                 "SUMMARY:Daily2 Summary" + System.lineSeparator() +
-                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
                 "UID:20150110T080000-005@jfxtras.org" + System.lineSeparator() +
                 "RRULE:COUNT=6;FREQ=DAILY;INTERVAL=3" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
