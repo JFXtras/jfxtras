@@ -38,9 +38,9 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         });
         
         // drag to new location
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine9");
+        moveTo("#hourLine9");
         release(MouseButton.PRIMARY);
         
         // check appointment
@@ -72,16 +72,16 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         });
         
         // drag to new location
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine9");
+        moveTo("#hourLine9");
         release(MouseButton.PRIMARY);
         
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.ONE);
         });
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         // check appointment
         assertEquals(6, agenda.appointments().size());
@@ -131,16 +131,16 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         });
         
         // drag to new location
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine9");
+        moveTo("#hourLine9");
         release(MouseButton.PRIMARY);
         
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.ALL);
         });
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         // check appointment
         assertEquals(6, agenda.appointments().size());
@@ -178,16 +178,16 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         });
         
         // drag to new location
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine9");
+        moveTo("#hourLine9");
         release(MouseButton.PRIMARY);
         
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.THIS_AND_FUTURE);
         });
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
 
         // check appointment
         assertEquals(6, agenda.appointments().size());

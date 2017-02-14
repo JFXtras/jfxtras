@@ -42,10 +42,10 @@ public class PopupReviseThisAndFutureTest extends VEventPopupTestBase
        summaryTextField.setText("new summary");
 
        // save changes to THIS AND FUTURE
-       click("#saveComponentButton");
+       clickOn("#saveComponentButton");
        ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
        TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.THIS_AND_FUTURE));
-       click("#changeDialogOkButton");
+       clickOn("#changeDialogOkButton");
 
        String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
                .map(v -> v.toContent())

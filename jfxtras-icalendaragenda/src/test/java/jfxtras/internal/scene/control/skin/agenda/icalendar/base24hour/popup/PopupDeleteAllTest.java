@@ -33,10 +33,10 @@ public class PopupDeleteAllTest extends VEventPopupTestBase
         });
 
         // delete VComponent
-        click("#deleteComponentButton");
+        clickOn("#deleteComponentButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:CANCEL" + System.lineSeparator() +

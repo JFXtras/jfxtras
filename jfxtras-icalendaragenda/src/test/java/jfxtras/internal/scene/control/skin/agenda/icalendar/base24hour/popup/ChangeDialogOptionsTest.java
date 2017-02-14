@@ -37,12 +37,12 @@ public class ChangeDialogOptionsTest extends VEventPopupTestBase
         
         // Make changes
         summaryTextField.setText("new summary");
-        click("#saveComponentButton");
+        clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         List<ChangeDialogOption> expectedItems = Arrays.asList(ChangeDialogOption.ONE, ChangeDialogOption.THIS_AND_FUTURE, ChangeDialogOption.ALL);
         assertEquals(expectedItems , comboBox.getItems());
-        click("#changeDialogCancelButton");
-        click("#cancelComponentButton");
+        clickOn("#changeDialogCancelButton");
+        clickOn("#cancelComponentButton");
     }
     
     @Test
@@ -59,16 +59,16 @@ public class ChangeDialogOptionsTest extends VEventPopupTestBase
                     categories());
         });
 
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         ComboBox<FrequencyType> frequencyComboBox = find("#frequencyComboBox");
         TestUtil.runThenWaitForPaintPulse(() -> frequencyComboBox.getSelectionModel().select(FrequencyType.WEEKLY));
                 
         // Make changes
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         List<ChangeDialogOption> expectedItems = Arrays.asList(ChangeDialogOption.THIS_AND_FUTURE, ChangeDialogOption.ALL);
         assertEquals(expectedItems , comboBox.getItems());
-        click("#changeDialogCancelButton");
-        click("#cancelRepeatButton");
+        clickOn("#changeDialogCancelButton");
+        clickOn("#cancelRepeatButton");
     }
 }

@@ -44,10 +44,10 @@ public class PopupReviseOneTest extends VEventPopupTestBase
        summaryTextField.setText("new summary");
 
        // save changes to THIS AND FUTURE
-       click("#saveComponentButton");
+       clickOn("#saveComponentButton");
        ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
        TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ONE));
-       click("#changeDialogOkButton");
+       clickOn("#changeDialogOkButton");
 
        String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
                .map(v -> v.toContent())
@@ -109,10 +109,10 @@ public class PopupReviseOneTest extends VEventPopupTestBase
         categoryTextField.setText("new group name");  // TODO - FIX THIS - CATEGORY NOT WORKING
         
         // Save changes
-        click("#saveComponentButton");        
+        clickOn("#saveComponentButton");        
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ONE));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
                 .map(v -> v.toContent())
                 .collect(Collectors.joining(System.lineSeparator()));

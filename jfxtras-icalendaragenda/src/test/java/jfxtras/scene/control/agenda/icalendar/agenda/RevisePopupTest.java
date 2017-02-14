@@ -30,7 +30,7 @@ public class RevisePopupTest extends AgendaTestAbstract
         });
         
         // drag to new location
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.SECONDARY);
         release(MouseButton.SECONDARY);
         
@@ -39,10 +39,10 @@ public class RevisePopupTest extends AgendaTestAbstract
         summaryTextField.setText("new summary");
         
         // save changes to THIS AND FUTURE
-        click("#saveComponentButton");
+        clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ONE));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         // check appointment
         assertEquals(6, agenda.appointments().size());

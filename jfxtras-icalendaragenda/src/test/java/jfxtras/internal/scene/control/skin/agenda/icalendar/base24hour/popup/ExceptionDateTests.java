@@ -65,7 +65,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         });
         
         // Get properties
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
 
         // Check initial state
@@ -76,7 +76,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                 .limit(EditRecurrenceRuleVBox.EXCEPTION_CHOICE_LIMIT)
                 .collect(Collectors.toList());
         assertEquals(expectedDates, exceptions);
-        click("#cancelRepeatButton");
+        clickOn("#cancelRepeatButton");
     }
     
     @Test
@@ -94,7 +94,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         });
         
         // Make whole day
-        click("#wholeDayCheckBox");
+        clickOn("#wholeDayCheckBox");
         
         // check whole day fields
         LocalDateTextField startDateTextField = find("#startDateTextField");
@@ -103,7 +103,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         assertEquals(LocalDate.of(2015, 11, 11), endDateTextField.getLocalDate());
 
         // go back to time based
-        click("#wholeDayCheckBox");
+        clickOn("#wholeDayCheckBox");
         LocalDateTimeTextField startDateTimeTextField = find("#startDateTimeTextField");
         LocalDateTimeTextField endDateTimeTextField = find("#endDateTimeTextField");
 
@@ -111,10 +111,10 @@ public class ExceptionDateTests extends VEventPopupTestBase
         assertEquals(LocalDateTime.of(2015, 11, 10, 11, 0), endDateTimeTextField.getLocalDateTime());
 
         // Make whole day again
-        click("#wholeDayCheckBox");
+        clickOn("#wholeDayCheckBox");
         
         // Go to repeatable tab
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -127,7 +127,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                 .limit(EditRecurrenceRuleVBox.EXCEPTION_CHOICE_LIMIT)
                 .collect(Collectors.toList());
         assertEquals(expectedDates, exceptions);
-        click("#cancelRepeatButton");
+        clickOn("#cancelRepeatButton");
     }
     
     @Test
@@ -145,7 +145,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         });
         
         // Go to repeatable tab
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -303,10 +303,10 @@ public class ExceptionDateTests extends VEventPopupTestBase
         }
         
         // save changes to all
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         List<VCalendar> messages = getEditComponentPopup().iTIPMessagesProperty().get();
         assertEquals(1, messages.size());
@@ -342,7 +342,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     LocalDateTime.of(2015, 11, 10, 11, 0),
                     AgendaTestAbstract.CATEGORIES);
         });
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -386,7 +386,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     ));
             assertEquals(expectedDates, exceptions);
         }
-        click("#cancelRepeatButton");
+        clickOn("#cancelRepeatButton");
     }
     
     @Test
@@ -402,7 +402,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     LocalDateTime.of(2015, 11, 10, 11, 0),
                     AgendaTestAbstract.CATEGORIES);
         });
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -422,7 +422,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
               , LocalDateTime.of(2019, 11, 9, 10, 0)
                 ));
         assertEquals(expectedDates, exceptions);
-        click("#cancelRepeatButton");
+        clickOn("#cancelRepeatButton");
     }
     
     @Test
@@ -438,7 +438,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     LocalDateTime.of(2015, 11, 10, 11, 0),
                     AgendaTestAbstract.CATEGORIES);
         });
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
 
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -511,7 +511,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     .collect(Collectors.toList());
             assertEquals(expectedDates, exceptions);
         }
-        click("#cancelRepeatButton");
+        clickOn("#cancelRepeatButton");
     }
     
     @Test
@@ -527,7 +527,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     LocalDateTime.of(2015, 11, 10, 11, 0),
                     AgendaTestAbstract.CATEGORIES);
         });
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
         
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -536,7 +536,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         // Add exceptions and check
         Temporal e1 = exceptionComboBox.getItems().get(2);
         TestUtil.runThenWaitForPaintPulse( () -> exceptionComboBox.getSelectionModel().select(e1) );
-        click("#addExceptionButton");
+        clickOn("#addExceptionButton");
         
         {
             // verify date/time removal from exception combo box
@@ -560,7 +560,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         // Add another exceptions and check
         Temporal e2 = exceptionComboBox.getItems().get(0);
         TestUtil.runThenWaitForPaintPulse( () -> exceptionComboBox.getSelectionModel().select(e2) );
-        click("#addExceptionButton");
+        clickOn("#addExceptionButton");
         {
             // verify date/time removal from exception combo box
             List<Temporal> exceptions = exceptionComboBox.getItems().stream().limit(5)
@@ -582,7 +582,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         }
         
         // save changes to all
-        click("#saveRepeatButton");       
+        clickOn("#saveRepeatButton");       
         List<VCalendar> messages = getEditComponentPopup().iTIPMessagesProperty().get();
         assertEquals(1, messages.size());
         VCalendar message = messages.get(0);
@@ -611,7 +611,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     LocalDateTime.of(2015, 11, 9, 11, 30),
                     AgendaTestAbstract.CATEGORIES);
         });
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
 
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -646,7 +646,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
 
         // remove Exceptions one at a time, confirm gone and returned to exceptionComboBox
         TestUtil.runThenWaitForPaintPulse( () -> exceptionsListView.getSelectionModel().select(LocalDateTime.of(2015, 11, 12, 10, 0)));
-        click ("#removeExceptionButton");
+        clickOn("#removeExceptionButton");
         { // verify new state
             List<Temporal> vExceptions = exceptionsListView.getItems();
             List<Temporal> exceptions = vExceptions
@@ -674,7 +674,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         }
         
         TestUtil.runThenWaitForPaintPulse( () -> exceptionsListView.getSelectionModel().select(LocalDateTime.of(2015, 11, 15, 10, 0)));
-        click ("#removeExceptionButton");
+        clickOn("#removeExceptionButton");
         { // verify new state
             List<Temporal> vExceptions = exceptionsListView.getItems();
             List<Temporal> exceptions = vExceptions
@@ -697,7 +697,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     ));
             assertEquals(expectedDates, exceptions);
         }
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         
         String dtstamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
         

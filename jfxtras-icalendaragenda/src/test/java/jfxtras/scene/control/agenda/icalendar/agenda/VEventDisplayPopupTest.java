@@ -33,14 +33,14 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
         TestUtil.runThenWaitForPaintPulse( () -> agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1()));
 
         // Open edit popup
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.SECONDARY);
         release(MouseButton.SECONDARY);
         
         Node n = find("#editDisplayableTabPane");
 //        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
         new AssertNode(n).assertXYWH(0.0, 0.0, 400.0, 570.0, 0.01);
-        click("#cancelComponentButton");
+        clickOn("#cancelComponentButton");
     }
     
     @Test
@@ -49,35 +49,35 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
         TestUtil.runThenWaitForPaintPulse( () -> agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1()));
 
         // Open select one popup
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
         release(MouseButton.PRIMARY);
         
         // click on advanced edit
-        click("#OneAppointmentSelectedEditButton");
+        clickOn("#OneAppointmentSelectedEditButton");
         Node n = find("#editDisplayableTabPane");
 //      AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
         new AssertNode(n).assertXYWH(0.0, 0.0, 400.0, 570.0, 0.01);
-        click("#cancelComponentButton");
+        clickOn("#cancelComponentButton");
     }
     
     @Test
     public void canProduceEditPopupFromNewAppointment()
     {
         // Draw new appointment
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine12");
+        moveTo("#hourLine12");
         release(MouseButton.PRIMARY);
         
         find("#AppointmentRegularBodyPane2015-11-11/0"); // validate that the pane has the expected id
         
         // click on advanced edit
-        click("#newAppointmentEditButton");
+        clickOn("#newAppointmentEditButton");
         Node n = find("#editDisplayableTabPane");
 //      AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
         new AssertNode(n).assertXYWH(0.0, 0.0, 400.0, 570.0, 0.01);
-        click("#cancelComponentButton");
+        clickOn("#cancelComponentButton");
     }
 
     @Test
@@ -86,11 +86,11 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
         TestUtil.runThenWaitForPaintPulse( () -> agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1()));
 
         // Open edit popup
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.SECONDARY);
         release(MouseButton.SECONDARY);
         
-        click("#recurrenceRuleTab");
+        clickOn("#recurrenceRuleTab");
 
         // Get properties        
         CheckBox repeatableCheckBox = find("#repeatableCheckBox");
@@ -100,7 +100,7 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
         
         // Remove RRULE and verify state change
         TestUtil.runThenWaitForPaintPulse( () -> repeatableCheckBox.setSelected(false));
-        click("#saveRepeatButton");
+        clickOn("#saveRepeatButton");
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent v = agenda.getVCalendar().getVEvents().get(0);
         assertTrue(v.getRecurrenceRule() == null);

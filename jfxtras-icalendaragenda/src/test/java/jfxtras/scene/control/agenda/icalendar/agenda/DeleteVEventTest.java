@@ -28,16 +28,16 @@ public class DeleteVEventTest extends AgendaTestAbstract
             agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
         });
         
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
         release(MouseButton.PRIMARY);
         
-        click("#OneAppointmentSelectedDeleteButton");
+        clickOn("#OneAppointmentSelectedDeleteButton");
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.ONE);
         });
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         assertEquals(5, agenda.appointments().size());
         List<Temporal> expectedStarts = Arrays.asList(
                 LocalDateTime.of(2015, 11, 9, 10, 0),
@@ -67,11 +67,11 @@ public class DeleteVEventTest extends AgendaTestAbstract
             agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
         });
         
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
         release(MouseButton.PRIMARY);
         
-        click("Cancel");
+        clickOn("Cancel");
         press(KeyCode.DELETE);
         release(KeyCode.DELETE);
         
@@ -104,16 +104,16 @@ public class DeleteVEventTest extends AgendaTestAbstract
             agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
         });
         
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
         release(MouseButton.PRIMARY);
         
-        click("#OneAppointmentSelectedDeleteButton");
+        clickOn("#OneAppointmentSelectedDeleteButton");
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.ALL);
         });
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         assertEquals(0, agenda.appointments().size());
         assertEquals(0, agenda.getVCalendar().getAllVComponents().size());

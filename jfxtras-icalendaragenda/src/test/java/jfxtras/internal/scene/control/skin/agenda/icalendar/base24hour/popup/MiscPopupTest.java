@@ -31,7 +31,7 @@ public class MiscPopupTest extends VEventPopupTestBase
         });
         
         // click save button (no changes so no dialog)
-        click("#saveComponentButton");
+        clickOn("#saveComponentButton");
         
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
                 .map(v -> v.toContent())
@@ -60,9 +60,9 @@ public class MiscPopupTest extends VEventPopupTestBase
         startDateTimeTextField.setLocalDateTime(LocalDateTime.of(2015, 11, 11, 10, 30));
 
         // cancel changes
-        click("#saveComponentButton");
-        click("#changeDialogCancelButton");
-        click("#cancelComponentButton");
+        clickOn("#saveComponentButton");
+        clickOn("#changeDialogCancelButton");
+        clickOn("#cancelComponentButton");
         
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
                 .map(v -> v.toContent())
