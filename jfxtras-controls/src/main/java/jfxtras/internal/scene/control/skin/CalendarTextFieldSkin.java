@@ -90,7 +90,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
         getSkinnable().dateFormatProperty().addListener( (observableValue, oldValue, newValue) -> { refreshValue(); });
-            textField.textProperty().bindBidirectional(getSkinnable().textProperty());
+        textField.textProperty().bindBidirectional(getSkinnable().textProperty());
 		refreshValue();
 		
 		// focus
