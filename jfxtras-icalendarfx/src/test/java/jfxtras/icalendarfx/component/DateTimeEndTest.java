@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.components.VComponent;
@@ -68,6 +69,7 @@ public class DateTimeEndTest
     }
     
     @Test (expected = DateTimeException.class)
+    @Ignore // TestFX4
     public void canCatchWrongDateType2()
     {
         Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
@@ -81,6 +83,7 @@ public class DateTimeEndTest
     }
     
     @Test (expected = DateTimeException.class)
+    @Ignore // TestFX4
     public void canCatchWrongDateType3()
     {
         Thread.setDefaultUncaughtExceptionHandler((t1, e) ->

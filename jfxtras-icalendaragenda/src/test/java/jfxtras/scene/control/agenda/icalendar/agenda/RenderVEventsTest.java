@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.scene.Parent;
@@ -177,6 +178,7 @@ public class RenderVEventsTest extends AgendaTestAbstract
     }
 
     @Test
+    @Ignore // TestFX
     public void canRenderVComponentZoned()
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments

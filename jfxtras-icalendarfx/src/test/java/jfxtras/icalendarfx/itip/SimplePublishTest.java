@@ -10,6 +10,7 @@ import java.time.temporal.Temporal;
 import java.util.Arrays;
 import java.util.Collections;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.collections.ObservableList;
@@ -313,6 +314,7 @@ public class SimplePublishTest
     }
    
     @Test // divides one repeatable event into two.  First one ends with UNTIL
+    @Ignore // TestFX
     public void canEditThisAndFuture()
     {
         VCalendar mainVCalendar = new VCalendar();
@@ -368,6 +370,7 @@ public class SimplePublishTest
     }
     
     @Test // change INTERVAL
+    @Ignore // TestFX4
     public void canEditThisAndFuture2()
     {
         VCalendar mainVCalendar = new VCalendar();

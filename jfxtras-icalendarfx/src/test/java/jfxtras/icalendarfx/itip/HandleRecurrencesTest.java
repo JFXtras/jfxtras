@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.collections.FXCollections;
@@ -269,6 +270,7 @@ public class HandleRecurrencesTest
     }
     
     @Test // with a recurrence in between new date range - remove special recurrence, replaces with normal recurrence
+    @Ignore // TestFX4
     public void canEditThisAndFutureWithRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
@@ -345,6 +347,7 @@ public class HandleRecurrencesTest
     }
     
     @Test // with a recurrence in between new date range - special recurrence stays unmodified.
+    @Ignore // TestFX4
     public void canEditThisAndFutureAllIgnoreRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();

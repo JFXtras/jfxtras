@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.collections.FXCollections;
@@ -387,6 +388,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
     }
     
     @Test
+    @Ignore // TestFX4
     public void canChangeWholeDayToTimeBased()
     {
         VEvent vevent = ICalendarStaticComponents.getWholeDayDaily3();
