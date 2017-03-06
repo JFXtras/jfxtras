@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.sun.javafx.collections.ImmutableObservableList;
+
 import javafx.beans.Observable;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.value.ObservableNumberValue;
@@ -42,8 +44,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
-
-import com.sun.javafx.collections.ImmutableObservableList;
 
 /**
  * Utility class that provides methods to simplify node handling. Possible use
@@ -308,5 +308,15 @@ public class NodeUtil {
 	 */
 	static public void removeStyleClass(Node node, String styleclass) {
 		node.getStyleClass().remove(styleclass);
+	}
+	
+	/**
+	 * Derive a CSS file in the same package and with the same name as the node
+	 * @param n
+	 * @return
+	 */
+	static public String deriveCssFile(Node n) {
+		Class<?> c = n.getClass();
+		return c.getResource("/" + c.getPackage().getName().replaceAll("\\.", "/") + "/" + c.getSimpleName() + ".css").toExternalForm();
 	}
 }

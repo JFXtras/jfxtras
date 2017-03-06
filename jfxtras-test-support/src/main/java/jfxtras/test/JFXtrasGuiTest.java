@@ -84,10 +84,12 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 	
 	@Override
 	public void start(Stage stage) throws Exception {
+		this.stage = stage;
 		Scene scene = new Scene(getRootNode());
         stage.setScene(scene);
         stage.show();
 	}
+	protected Stage stage;
 	
 	/**
 	 * Override public void start(Stage stage) throws Exception
