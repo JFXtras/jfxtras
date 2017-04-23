@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import jfxtras.scene.control.*?>
+<?import jfxtras.scene.layout.responsivepane.*?>
+<?import java.net.*?>
+
+<ResponsivePane xmlns:fx="http://javafx.com/fxml" fx:id="responsivePane" debug="true" trace="true" fx:controller="jfxtras.scene.layout.responsivepane.SimpleController">
+	<reusableNodes>
+		<Label text="refLabel" id="label"/>
+		<Button text="refButton" id="button"/>
+	</reusableNodes>
+	
+	<deviceSizes PHABLET="9.0in" Desktop="w:12in"/>
+	
+	<layouts>
+		<Layout sizeAtLeast="3.0in">
+			<VBox>
+				<Ref to="label"/>
+				<Label text="layout_3.0"/>
+			</VBox>
+		</Layout>
+		
+		<Layout sizeAtLeast="width:3.0in">
+			<HBox>
+				<Ref to="label" id="labelid"/>
+				<Ref to="button"/>
+				<Label text="layout_width3.0"/>
+			</HBox>
+		</Layout>		
+		
+		<Layout sizeAtLeast="TABLET">
+			<HBox>
+				<Ref to="label" id="labelid"/>
+				<Ref to="button"/>
+				<Label text="layout_tablet"/>
+			</HBox>
+		</Layout>		
+		
+		<Layout sizeAtLeast="100.0cm">
+			<HBox>
+				<Ref to="label"/>
+				<Ref to="button"/>
+				<Label text="layout_100cm"/>
+			</HBox>
+		</Layout>		
+		
+		<Layout sizeAtLeast="100.0cm" orientation="LANDSCAPE">
+			<HBox>
+				<Ref to="label"/>
+				<Ref to="button"/>
+				<Label text="layout_100cm"/>
+			</HBox>
+		</Layout>		
+	</layouts>
+	
+	<sceneStylesheets>
+		<Stylesheet sizeAtLeast="3.0in" file="@phone.css"/>
+		<Stylesheet sizeAtLeast="width:3.0in" file="@desktop.css"/>
+		<Stylesheet sizeAtLeast="TABLET" file="@tablet.css"/>
+	</sceneStylesheets>
+	
+	<myStylesheets>
+		<Stylesheet sizeAtLeast="3.0in" file="@phone.css"/>
+		<Stylesheet sizeAtLeast="width:3.0in" file="@desktop.css"/>
+		<Stylesheet sizeAtLeast="TABLET" file="@tablet.css"/>
+	</myStylesheets>
+</ResponsivePane>

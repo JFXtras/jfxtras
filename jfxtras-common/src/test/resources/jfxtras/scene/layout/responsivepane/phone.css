@@ -1,0 +1,17 @@
+.ListSpinner .left-arrow { 
+    -fx-shape: "M24,-8 L0,0 L24,8 Z";
+    -fx-scale-shape: false;
+    -fx-padding: 10;
+    -fx-background-color: white;
+}
+.ListSpinner .right-arrow { 
+    -fx-shape: "M0,-8 L24,0 L0,8 Z";
+    -fx-scale-shape: false;
+    -fx-padding: 10;
+    -fx-background-color: white;
+}
+
+.xxxCalendarPicker .toggle-button {
+	-fx-padding: 5px 10px 5px 10px;
+    -fx-min-width: 0;
+}

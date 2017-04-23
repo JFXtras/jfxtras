@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import jfxtras.scene.control.*?>
+<?import jfxtras.scene.layout.responsivepane.*?>
+<?import java.net.*?>
+
+<ResponsivePane xmlns:fx="http://javafx.com/fxml" fx:id="responsivePane" debug="true">
+</ResponsivePane>
