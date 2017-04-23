@@ -40,6 +40,8 @@ import org.junit.runners.Suite.SuiteClasses;
               , GridPaneTest.class
               , HBoxTest.class
               , VBoxTest.class
+              , jfxtras.scene.layout.responsivepane.ResponsivePaneTest.class
+              , jfxtras.scene.layout.responsivepane.ResponsivePaneFXMLTest.class
 	          })
 public class AllTests {
 

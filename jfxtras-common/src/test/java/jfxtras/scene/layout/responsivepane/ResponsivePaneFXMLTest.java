@@ -37,20 +37,18 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
-import org.loadui.testfx.GuiTest;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import jfxtras.scene.layout.responsivepane.Device;
-import jfxtras.scene.layout.responsivepane.ResponsivePane;
+import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 
 /**
  * 
  */
-public class ResponsivePaneFXMLTest extends GuiTest {
+public class ResponsivePaneFXMLTest extends JFXtrasGuiTest {
 
 	@Rule public TestName testName = new TestName();
 	

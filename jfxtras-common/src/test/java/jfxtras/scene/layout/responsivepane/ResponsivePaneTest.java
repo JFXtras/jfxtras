@@ -31,25 +31,19 @@ package jfxtras.scene.layout.responsivepane;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.loadui.testfx.GuiTest;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import jfxtras.scene.layout.responsivepane.Device;
-import jfxtras.scene.layout.responsivepane.Diagonal;
-import jfxtras.scene.layout.responsivepane.Orientation;
-import jfxtras.scene.layout.responsivepane.Ref;
-import jfxtras.scene.layout.responsivepane.ResponsivePane;
-import jfxtras.scene.layout.responsivepane.Width;
+import javafx.scene.control.Label;
+import jfxtras.test.JFXtrasGuiTest;
 import jfxtras.test.TestUtil;
 
 /**
  * 
  */
 // TODO: reusableNodes and Refs
-public class ResponsivePaneTest extends GuiTest {
+public class ResponsivePaneTest extends JFXtrasGuiTest {
 
 	/**
 	 * 
