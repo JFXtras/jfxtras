@@ -45,7 +45,7 @@ public class AbsoluteMarker implements Marker {
 	}
 	
 	/* (non-Javadoc)
-	 * @see jfxtras.labs.scene.control.gauge.linear.Marker#getId()
+	 * @see jfxtras.scene.control.gauge.linear.Marker#getId()
 	 */
 	@Override
 	public String getId() {
@@ -53,7 +53,7 @@ public class AbsoluteMarker implements Marker {
 	}
 	
 	/* (non-Javadoc)
-	 * @see jfxtras.labs.scene.control.gauge.linear.Marker#getValue()
+	 * @see jfxtras.scene.control.gauge.linear.Marker#getValue()
 	 */
 	@Override
 	public double getValue() {

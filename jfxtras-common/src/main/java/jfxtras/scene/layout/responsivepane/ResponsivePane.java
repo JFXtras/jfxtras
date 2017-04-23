@@ -147,7 +147,7 @@ import javafx.stage.Window;
 	<?import javafx.scene.layout.*?>
 	<?import javafx.scene.paint.*?>
 	<?import jfxtras.scene.control.*?>
-	<?import jfxtras.labs.scene.layout.responsivepane.*?>
+	<?import jfxtras.scene.layout.responsivepane.*?>
 	<?import java.net.*?>
 	
 	<ResponsivePane xmlns:fx="http://javafx.com/fxml" fx:id="responsivePane" debug="true" trace="false">

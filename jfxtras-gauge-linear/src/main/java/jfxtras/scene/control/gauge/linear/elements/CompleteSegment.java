@@ -47,7 +47,7 @@ public class CompleteSegment implements Segment {
 	}
 	
 	/* (non-Javadoc)
-	 * @see jfxtras.labs.scene.control.gauge.linear.Segment#getId()
+	 * @see jfxtras.scene.control.gauge.linear.Segment#getId()
 	 */
 	@Override
 	public String getId() {
@@ -55,7 +55,7 @@ public class CompleteSegment implements Segment {
 	}
 	
 	/* (non-Javadoc)
-	 * @see jfxtras.labs.scene.control.gauge.linear.Segment#getMin()
+	 * @see jfxtras.scene.control.gauge.linear.Segment#getMin()
 	 */
 	@Override
 	public double getMinValue() {
@@ -63,7 +63,7 @@ public class CompleteSegment implements Segment {
 	}
 	
 	/* (non-Javadoc)
-	 * @see jfxtras.labs.scene.control.gauge.linear.Segment#getMax()
+	 * @see jfxtras.scene.control.gauge.linear.Segment#getMax()
 	 */
 	@Override
 	public double getMaxValue() {
