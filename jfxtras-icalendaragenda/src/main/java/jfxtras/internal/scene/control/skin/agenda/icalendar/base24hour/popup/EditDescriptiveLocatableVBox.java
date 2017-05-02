@@ -18,12 +18,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import jfxtras.icalendarfx.components.VLocatable;
-import jfxtras.icalendarfx.properties.component.descriptive.Description;
-import jfxtras.icalendarfx.properties.component.descriptive.Location;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.TemporalUtilities;
+import net.balsoftware.icalendar.components.VLocatable;
+import net.balsoftware.icalendar.properties.component.descriptive.Description;
+import net.balsoftware.icalendar.properties.component.descriptive.Location;
 
 /**
  * Added dateTimeEnd or dateTimeDue to {@link EditDescriptiveVBox}
@@ -117,12 +117,14 @@ public abstract class EditDescriptiveLocatableVBox<T extends VLocatable<T>> exte
         {
             vComponent.setDescription(Description.parse(""));
         }
-        descriptionTextArea.textProperty().bindBidirectional(vComponent.getDescription().valueProperty());
+        descriptionTextArea.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setDescription(newValue));
+//        descriptionTextArea.textProperty().bindBidirectional(vComponent.getDescription().valueProperty());
         if (vComponent.getLocation() == null)
         {
             vComponent.setLocation(Location.parse(""));
         }
-        locationTextField.textProperty().bindBidirectional(vComponent.getLocation().valueProperty());
+        locationTextField.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setLocation(newValue));
+//        locationTextField.textProperty().bindBidirectional(vComponent.getLocation().valueProperty());
                 
         /*
          * END DATE/TIME

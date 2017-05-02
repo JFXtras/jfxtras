@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 
 import javafx.util.Pair;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * Date and Time utilities

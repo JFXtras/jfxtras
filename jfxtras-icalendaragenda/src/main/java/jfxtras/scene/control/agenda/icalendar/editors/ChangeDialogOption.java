@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import javafx.util.Pair;
-import jfxtras.icalendarfx.components.VDisplayable;
-import jfxtras.icalendarfx.properties.PropertyType;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.scene.control.agenda.icalendar.editors.deleters.Deleter;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.Reviser;
+import net.balsoftware.icalendar.components.VDisplayable;
+import net.balsoftware.icalendar.properties.VPropertyElement;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 /**
  * Options available when editing or deleting a repeatable appointment.
@@ -34,7 +34,7 @@ public enum ChangeDialogOption
      * @param vComponentOriginal  clone of unedited {@link VDisplayable}
      * @param vComponentEdited  edited {@link VDisplayable} (only descriptive properties are edited, date/time properties are not edited)
      * @param startRecurrence  start date/time of selected recurrence  
-     * @param changedProperties  list of PropertyType that are changed between vComponentOriginal and vComponentEdited
+     * @param changedProperties  list of VPropertyElement that are changed between vComponentOriginal and vComponentEdited
      * @return  Map with key as available {@link ChangeDialogOption} and value start, end date/time pair to be affected by change
      * 
      * @see Reviser
@@ -43,10 +43,10 @@ public enum ChangeDialogOption
             U vComponentOriginal,
             U vComponentEdited,
             Temporal startRecurrence,
-            List<PropertyType> changedProperties)
+            List<VPropertyElement> changedProperties)
    {
        Map<ChangeDialogOption, Pair<Temporal,Temporal>> choices = new LinkedHashMap<>();
-       if (! changedProperties.contains(PropertyType.RECURRENCE_RULE))
+       if (! changedProperties.contains(VPropertyElement.RECURRENCE_RULE))
        {
            choices.put(ChangeDialogOption.ONE, new Pair<Temporal,Temporal>(startRecurrence, startRecurrence));
        }

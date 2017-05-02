@@ -3,8 +3,8 @@ package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 import java.time.temporal.Temporal;
 import java.util.List;
 
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
 
 /** 
  * TabPane for editing descriptive properties and a {@link RecurrenceRule} for a {@link VEvent}.

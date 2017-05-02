@@ -9,14 +9,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.Reviser;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.ReviserVEvent;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VEvent;
 
 /**
  * Tests the {@link Reviser} ability to make iTIP publish messages to edit components.
@@ -32,7 +31,7 @@ public class CancelRevisionTest
     public void canCancelEdit()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
         vComponents.add(vComponentOriginal);

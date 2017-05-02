@@ -22,16 +22,16 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VComponent;
-import jfxtras.icalendarfx.components.VDisplayable;
-import jfxtras.icalendarfx.properties.component.descriptive.Summary;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.DeleteChoiceDialog;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.Settings;
 import jfxtras.scene.control.agenda.icalendar.editors.deleters.SimpleDeleterFactory;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VComponent;
+import net.balsoftware.icalendar.components.VDisplayable;
+import net.balsoftware.icalendar.properties.component.descriptive.Summary;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.Interval;
 
 /** 
  * Base TabPane that contains two tabs for editing descriptive properties and for editing a {@link RecurrenceRule}.

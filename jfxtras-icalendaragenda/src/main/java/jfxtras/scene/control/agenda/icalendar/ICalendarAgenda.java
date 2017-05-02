@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+import org.junit.experimental.categories.Categories;
+
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -30,28 +32,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VComponent;
-import jfxtras.icalendarfx.components.VDisplayable;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.components.VJournal;
-import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyType;
-import jfxtras.icalendarfx.properties.component.descriptive.Categories;
-import jfxtras.icalendarfx.properties.component.descriptive.Description;
-import jfxtras.icalendarfx.properties.component.descriptive.Location;
-import jfxtras.icalendarfx.properties.component.descriptive.Summary;
-import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.Count;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.Frequency;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
-import jfxtras.icalendarfx.properties.component.relationship.Organizer;
-import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
-import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.AgendaDateTimeUtilities;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.DeleteChoiceDialog;
@@ -72,6 +52,25 @@ import jfxtras.scene.control.agenda.icalendar.factories.DefaultVComponentFactory
 import jfxtras.scene.control.agenda.icalendar.factories.RecurrenceFactory;
 import jfxtras.scene.control.agenda.icalendar.factories.VComponentFactory;
 import jfxtras.util.NodeUtil;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VComponent;
+import net.balsoftware.icalendar.components.VDisplayable;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.components.VJournal;
+import net.balsoftware.icalendar.components.VTodo;
+import net.balsoftware.icalendar.properties.VPropertyElement;
+import net.balsoftware.icalendar.properties.component.descriptive.Summary;
+import net.balsoftware.icalendar.properties.component.recurrence.ExceptionDates;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.Count;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.Frequency;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.Interval;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.Until;
+import net.balsoftware.icalendar.properties.component.relationship.Organizer;
+import net.balsoftware.icalendar.properties.component.time.DateTimeEnd;
+import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * <p>The {@link ICalendarAgenda} control is designed to take a {@link VCalendar VCALENDAR} object,
@@ -164,7 +163,7 @@ import jfxtras.util.NodeUtil;
  *               .withSummary("Example Daily Event")
  *               .withRecurrenceRule("RRULE:FREQ=DAILY")
  *               .withUniqueIdentifier("exampleuid000jfxtras.org");
- *       vCalendar.addVComponent(vEvent);
+ *       vCalendar.addChild(vEvent);
  *       ICalendarAgenda agenda = new ICalendarAgenda(vCalendar);
  *       
  *       BorderPane root = new BorderPane();
@@ -188,53 +187,13 @@ public class ICalendarAgenda extends Agenda
     public static final String MY_VERSION = "1.0";
     public static final String DEFAULT_PRODUCT_IDENTIFIER = ("-//JFxtras//iCalendarAgenda " + ICalendarAgenda.MY_VERSION + "//EN");
     
-    /* EMPTY iTIP VCALENDAR MESSAGES 
-     * These convenience factory methods return an empty VCalendar with the
-     * necessary properties set for various types if iTIP messages including
-     * PUBLISH, REQUEST and CANCEL */
-//    public static VCalendar emptyPublishiTIPMessage()
-//    {
-//        return new VCalendar()
-//                .withMethod(MethodType.PUBLISH)
-//                .withProductIdentifier(ICalendarAgenda.DEFAULT_PRODUCT_IDENTIFIER)
-//                .withVersion(new Version());
-//    }
-//
-//    public static VCalendar emptyRequestiTIPMessage()
-//    {
-//        return new VCalendar()
-//                .withMethod(MethodType.REQUEST)
-//                .withProductIdentifier(ICalendarAgenda.DEFAULT_PRODUCT_IDENTIFIER)
-//                .withVersion(new Version());
-//    }
-    
-//    public static VCalendar emptyCanceliTIPMessage()
-//    {
-//        return new VCalendar()
-//                .withMethod(MethodType.CANCEL)
-//                .withProductIdentifier(ICalendarAgenda.DEFAULT_PRODUCT_IDENTIFIER)
-//                .withVersion(new Version());
-//    }
-    
-//    /* PRODUCT IDENTIFIER */
-//    private String productIdentifier = DEFAULT_PRODUCT_IDENTIFIER;
-//    public String getProductIdentifier()
-//    {
-//        return productIdentifier;
-//    }
-//
-//    public void setProductIdentifier(String productIdentifier)
-//    {
-//        this.productIdentifier = productIdentifier;
-//    }   
-    
-    /* Organizer */
+    /* Default Organizer */
     public static final String DEFAULT_ORGANIZER = "mailto:default_organizer@example.org";
     public ObjectProperty<Organizer> organizerProperty()
     {
         return organizer;
     }
-    private ObjectProperty<Organizer> organizer = new SimpleObjectProperty<>(this, PropertyType.ORGANIZER.toString(), Organizer.parse(DEFAULT_ORGANIZER));
+    private ObjectProperty<Organizer> organizer = new SimpleObjectProperty<>(this, VPropertyElement.ORGANIZER.toString(), Organizer.parse(DEFAULT_ORGANIZER));
     public Organizer getOrganizer()
     {
         return organizer.get();
@@ -268,19 +227,19 @@ public class ICalendarAgenda extends Agenda
     
     /* UID Generator Callback */
     private static Integer nextKey = 0;
-    private Callback<Void, String> uidGeneratorCallback = (Void) ->
+    private net.balsoftware.icalendar.utilities.Callback<Void, String> uidGeneratorCallback = (Void) ->
     { // default UID generator callback
         String dateTime = DateTimeUtilities.LOCAL_DATE_TIME_FORMATTER.format(LocalDateTime.now());
         String domain = "jfxtras.org";
         return dateTime + "-" + nextKey++ + domain;
     };
     /** set UID callback generator.  It makes UID values for new components. */
-    public Callback<Void, String> getUidGeneratorCallback()
+    public net.balsoftware.icalendar.utilities.Callback<Void, String> getUidGeneratorCallback()
     {
     	return uidGeneratorCallback;
 	}
     /** set UID callback generator. It makes UID values for new components. */
-    public void setUidGeneratorCallback(Callback<Void, String> uidCallback)
+    public void setUidGeneratorCallback(net.balsoftware.icalendar.utilities.Callback<Void, String> uidCallback)
     {
     	this.uidGeneratorCallback = uidCallback;
         if (vComponentFactory instanceof DefaultVComponentFactory)
@@ -293,7 +252,7 @@ public class ICalendarAgenda extends Agenda
         // The code here only replaces the default vcomponent factory automatically.
 	}
     /** set UID callback generator.  Return itself for chaining. */
-    public ICalendarAgenda withUidGeneratorCallback(Callback<Void, String> uidCallback)
+    public ICalendarAgenda withUidGeneratorCallback(net.balsoftware.icalendar.utilities.Callback<Void, String> uidCallback)
     {
         setUidGeneratorCallback(uidCallback);
         return this;
@@ -303,6 +262,11 @@ public class ICalendarAgenda extends Agenda
     final private VCalendar vCalendar;
     /** get the VCalendar object that is a model of the iCalendar RFC 5545 specification */
     public VCalendar getVCalendar() { return vCalendar; }
+    
+    // Private observable copy of vEvents, vTodos and vJournals
+    final private ObservableList<VEvent> vEvents = FXCollections.observableArrayList();
+    final private ObservableList<VTodo> vTodos = FXCollections.observableArrayList(); // TODO
+    final private ObservableList<VJournal> vJournals = FXCollections.observableArrayList(); // TODO
 
     /*
      * Factory to make VComponents from Appointments
@@ -393,7 +357,7 @@ public class ICalendarAgenda extends Agenda
                     try
                     {
                         vComponentCopy = vComponent.getClass().newInstance();
-                        vComponent.copyInto(vComponentCopy);
+                        vComponent.copyChildrenInto(vComponentCopy);
                     } catch (InstantiationException | IllegalAccessException e)
                     {
                         e.printStackTrace();
@@ -460,6 +424,7 @@ public class ICalendarAgenda extends Agenda
     {
         super();
         this.vCalendar = vCalendar;
+        updateLocalLists();
         // Default recurrence factory
         recurrenceFactory = new DefaultRecurrenceFactory(appointmentGroups());
         // Default VComponent factory
@@ -603,6 +568,7 @@ public class ICalendarAgenda extends Agenda
          */
         ListChangeListener<Appointment> appointmentsListChangeListener = (ListChangeListener.Change<? extends Appointment> change) ->
         {
+        	System.out.println("appointment added");
             while (change.next())
             {
                 if (change.wasAdded())
@@ -623,7 +589,7 @@ public class ICalendarAgenda extends Agenda
                             {
                                 VComponent newVComponent = getVComponentFactory().createVComponent(appointment);
                                 VCalendar message = Reviser.emptyPublishiTIPMessage();
-                                message.addVComponent(newVComponent);
+                                message.addChild(newVComponent);
                                 getVCalendar().processITIPMessage(message);
                                 break;
                             }
@@ -652,7 +618,7 @@ public class ICalendarAgenda extends Agenda
                         try
                         {
                             vComponentCopy = vComponent.getClass().newInstance();
-                            vComponent.copyInto(vComponentCopy);
+                            vComponent.copyChildrenInto(vComponentCopy);
                         } catch (InstantiationException | IllegalAccessException e)
                         {
                             e.printStackTrace();
@@ -706,11 +672,12 @@ public class ICalendarAgenda extends Agenda
                             .stream()
                             .forEach(v -> 
                             {
+                            	vCalendar.addChild(v); // synch addition with vCalendar
                                 if (! v.isValid())
                                 {
                                     throw new RuntimeException("ERROR: Invalid " + v.getClass().getSimpleName() + " with UID:" + v.getUniqueIdentifier().getValue() + " can't be added to agenda:" + System.lineSeparator() + 
                                             v.errors().stream().collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
-                                            v.toContent());
+                                            v.toString());
                                 }
                             });
                     
@@ -738,7 +705,8 @@ public class ICalendarAgenda extends Agenda
                 }
             }
         };
-        getVCalendar().getVEvents().addListener(vComponentsChangeListener);
+//        getVCalendar().getVEvents().addListener(vComponentsChangeListener);
+        vEvents.addListener(vComponentsChangeListener);
 
         /*
          * Select One Appointment List Change Listener
@@ -779,10 +747,13 @@ public class ICalendarAgenda extends Agenda
                 vComponentAppointmentMap.clear();
                 appointmentStartOriginalMap.clear();
                 appointmentVComponentMap.clear();
-                getVCalendar().getVEvents().stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
-                getVCalendar().getVTodos().stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
-                getVCalendar().getVJournals().stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
-//                FXCollections.copy(appointments(), newAppointments);
+//                getVCalendar().getVEvents().stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
+//                getVCalendar().getVTodos().stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
+//                getVCalendar().getVJournals().stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
+                vEvents.stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
+                vTodos.stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
+                vJournals.stream().forEach(v -> newAppointments.addAll(makeAppointments(v)));
+
                 appointments().addAll(newAppointments);
                 appointments().addListener(appointmentsListChangeListener); // add back appointmentListener
             }
@@ -809,7 +780,7 @@ public class ICalendarAgenda extends Agenda
             {
                 e.printStackTrace();
             }
-            vComponent.copyInto(vComponentCopy);
+            vComponent.copyChildrenInto(vComponentCopy);
             Temporal startOriginalRecurrence = appointmentStartOriginalMap.get(System.identityHashCode(appointment));
             final Temporal startRecurrence;
             final Temporal endRecurrence;
@@ -858,5 +829,19 @@ public class ICalendarAgenda extends Agenda
         });
         vComponentAppointmentMap.put(System.identityHashCode(v), myAppointments);
         return myAppointments;
+    }
+    
+    @Override
+	public void refresh()
+    {
+    	updateLocalLists();
+    	super.refresh();
+    }
+    
+    private void updateLocalLists()
+    {
+        if (vCalendar.getVEvents() != null) vEvents.addAll(vCalendar.getVEvents());
+        if (vCalendar.getVTodos() != null) vTodos.addAll(vCalendar.getVTodos());
+        if (vCalendar.getVJournals() != null) vJournals.addAll(vCalendar.getVJournals());
     }
 }

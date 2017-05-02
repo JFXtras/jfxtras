@@ -6,16 +6,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
-import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
 
 public class MakeNewVEventsTest extends AgendaTestAbstract
 {
@@ -54,7 +53,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         assertEquals(expectedVEvent, vEvent);
     }
     
-    @Test //(expected = NoNodesFoundException.class)
+    @Test // (expected = NoNodesFoundException.class)
     public void canCancelSimpleVEvent()
     {
         // Draw new appointment
@@ -71,7 +70,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         assertEquals(0, agenda.getVCalendar().getVEvents().size());
         assertEquals(0, agenda.appointments().size());
         
-        Assert.assertNull(find("#AppointmentRegularBodyPane2015-11-11/0")); // nothing should be found
+        find("#AppointmentRegularBodyPane2015-11-11/0"); // should produce exception
     }
     
     @Test

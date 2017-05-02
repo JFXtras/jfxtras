@@ -15,10 +15,10 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.layout.HBox;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.properties.calendar.Method.MethodType;
 
 /**
  * Demo that imports an ics file
@@ -98,13 +98,13 @@ public class ImportICSFileTrial extends Application
         {
             VCalendar publishMessage = new VCalendar()
                     .withMethod(MethodType.PUBLISH);
-            mainVCalendar.copyInto(publishMessage);
+            mainVCalendar.copyChildrenInto(publishMessage);
             File file = fileChooser.showSaveDialog(primaryStage);
             BufferedWriter writer = null;
             try
             {
                 writer = new BufferedWriter(new FileWriter(file));
-                writer.write(publishMessage.toContent());
+                writer.write(publishMessage.toString());
                 writer.close();
             } catch ( IOException e2)
             {

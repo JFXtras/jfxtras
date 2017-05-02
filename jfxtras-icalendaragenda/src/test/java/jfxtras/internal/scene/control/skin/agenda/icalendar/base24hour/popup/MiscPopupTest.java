@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import javafx.scene.control.TextField;
-import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
 
 public class MiscPopupTest extends VEventPopupTestBase
 {
@@ -34,7 +34,7 @@ public class MiscPopupTest extends VEventPopupTestBase
         clickOn("#saveComponentButton");
         
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals("", iTIPMessage);
     }
@@ -65,7 +65,7 @@ public class MiscPopupTest extends VEventPopupTestBase
         clickOn("#cancelComponentButton");
         
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals("", iTIPMessage);
     }

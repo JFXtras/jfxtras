@@ -9,8 +9,6 @@ import java.util.stream.IntStream;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.Settings;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup.EditDisplayableScene;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup.SimpleEditSceneFactory;
@@ -21,6 +19,8 @@ import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.scene.control.agenda.icalendar.factories.DefaultRecurrenceFactory;
 import jfxtras.scene.control.agenda.icalendar.factories.RecurrenceFactory;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VEvent;
 
 /**
  * Demo of edit VEvent popup
@@ -43,7 +43,7 @@ public class EditComponentPopupTrial extends Application
 
         VCalendar myCalendar = new VCalendar();
         VEvent vevent = ICalendarStaticComponents.getDaily1();
-        myCalendar.addVComponent(vevent);
+        myCalendar.addChild(vevent);
         
         RecurrenceFactory<Appointment> recurrenceFactory = new DefaultRecurrenceFactory(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS); // default VComponent store - for Appointments, if other implementation used make new store
         recurrenceFactory.setStartRange(LocalDateTime.of(2016, 5, 15, 0, 0));

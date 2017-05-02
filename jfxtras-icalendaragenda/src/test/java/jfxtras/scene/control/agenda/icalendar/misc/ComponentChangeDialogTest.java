@@ -54,7 +54,7 @@ public class ComponentChangeDialogTest extends JFXtrasGuiTest
         Node n = find("#editChoiceDialog");
 //        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
         new AssertNode(n).assertXYWH(0.0, 0.0, 345.0, 166.0, 0.01);
-        click("#changeDialogCancelButton");
+        clickOn("#changeDialogCancelButton");
     }
 
 }

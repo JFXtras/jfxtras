@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import javafx.scene.control.ComboBox;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.calendar.Version;
 
 public class PopupDeleteAllTest extends VEventPopupTestBase
 {
@@ -53,7 +53,7 @@ public class PopupDeleteAllTest extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }

@@ -2,10 +2,10 @@ package jfxtras.scene.control.agenda.icalendar.editors.deleters;
 
 import java.util.List;
 
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.properties.calendar.Version;
-import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.properties.calendar.Method.MethodType;
+import net.balsoftware.icalendar.properties.calendar.Version;
 
 /**
  * Interface for the delete behavior of a VComponent

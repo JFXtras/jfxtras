@@ -5,10 +5,12 @@ import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
 import java.util.List;
 
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.PropertyType;
-import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.VPropertyElement;
+import net.balsoftware.icalendar.properties.component.time.DateTimeEnd;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities;
+
+;
 
 /**
  * Reviser for {@link VEvent}
@@ -48,9 +50,9 @@ public class ReviserVEvent extends ReviserLocatable<ReviserVEvent, VEvent>
     }
     
     @Override
-    List<PropertyType> findChangedProperties(VEvent vComponentEditedCopy, VEvent vComponentOriginalCopy)
+    List<VPropertyElement> findChangedProperties(VEvent vComponentEditedCopy, VEvent vComponentOriginalCopy)
     {
-        List<PropertyType> changedProperties = super.findChangedProperties(vComponentEditedCopy, vComponentOriginalCopy);
+        List<VPropertyElement> changedProperties = super.findChangedProperties(vComponentEditedCopy, vComponentOriginalCopy);
         TemporalAmount durationNew = DateTimeUtilities.temporalAmountBetween(getStartRecurrence(), getEndRecurrence());
         TemporalAmount durationOriginal = getVComponentCopyEdited().getActualDuration();
 
@@ -58,26 +60,26 @@ public class ReviserVEvent extends ReviserLocatable<ReviserVEvent, VEvent>
         {
             if (getVComponentCopyEdited().getDateTimeEnd() != null)
             {
-                changedProperties.add(PropertyType.DATE_TIME_END);                    
+                changedProperties.add(VPropertyElement.DATE_TIME_END);                    
             } else if (getVComponentCopyEdited().getDuration() == null)
             {
-                changedProperties.add(PropertyType.DURATION);                    
+                changedProperties.add(VPropertyElement.DURATION);                    
             }
         }      
         return changedProperties;
     }
     
     @Override
-    public List<PropertyType> dialogRequiredProperties()
+    public List<VPropertyElement> dialogRequiredProperties()
     {
-        List<PropertyType> list = super.dialogRequiredProperties();
+        List<VPropertyElement> list = super.dialogRequiredProperties();
         list.addAll(Arrays.asList(
-                        PropertyType.DESCRIPTION,
-                        PropertyType.DURATION,
-                        PropertyType.GEOGRAPHIC_POSITION,
-                        PropertyType.LOCATION,
-                        PropertyType.PRIORITY,
-                        PropertyType.RESOURCES
+        		VPropertyElement.DESCRIPTION,
+        		VPropertyElement.DURATION,
+        		VPropertyElement.GEOGRAPHIC_POSITION,
+        		VPropertyElement.LOCATION,
+        		VPropertyElement.PRIORITY,
+        		VPropertyElement.RESOURCES
                         ));
         return list;
     }

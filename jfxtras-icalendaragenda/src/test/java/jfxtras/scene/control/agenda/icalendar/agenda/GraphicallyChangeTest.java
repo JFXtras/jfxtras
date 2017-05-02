@@ -15,17 +15,17 @@ import org.junit.Test;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseButton;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.components.VPrimary;
-import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.components.VPrimary;
+import net.balsoftware.icalendar.properties.component.change.DateTimeStamp;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import net.balsoftware.icalendar.properties.component.relationship.UniqueIdentifier;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 public class GraphicallyChangeTest extends AgendaTestAbstract
 {
@@ -54,7 +54,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         assertEquals(expectedStarts, starts);
         
         // check VEvent
-        assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent editedVEvent = agenda.getVCalendar().getVEvents().get(0);
         VEvent expectedVEvent = ICalendarStaticComponents.getIndividual1()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 11, 8, 30))
@@ -72,16 +72,16 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         });
         
         // drag to new location
-        moveTo("#hourLine11");
+        move("#hourLine11");
         press(MouseButton.PRIMARY);
-        moveTo("#hourLine9");
+        move("#hourLine9");
         release(MouseButton.PRIMARY);
         
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.ONE);
         });
-        clickOn("#changeDialogOkButton");
+        click("#changeDialogOkButton");
         
         // check appointment
         assertEquals(6, agenda.appointments().size());
@@ -101,7 +101,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         
         // check VEvent
         Collections.sort(agenda.getVCalendar().getVEvents(), VPrimary.DTSTART_COMPARATOR);
-        assertEquals(2, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(2, agenda.getVCalendar().getVEvents().size());
         VEvent expectedVEvent0 = ICalendarStaticComponents.getDaily1();
         VEvent editedVEvent0 = agenda.getVCalendar().getVEvents().get(0);
         assertEquals(expectedVEvent0, editedVEvent0);
@@ -117,8 +117,8 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         assertEquals(expectedVEvent1, editedVEvent1);
         
         // check DTSTAMP
-        String dtstamp = editedVEvent1.getDateTimeStamp().toContent();
-        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+        String dtstamp = editedVEvent1.getDateTimeStamp().toString();
+        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
         assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
     }
     
@@ -159,7 +159,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         assertEquals(expectedStarts, starts);
         
         // check VEvent
-        assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent editedVEvent0 = agenda.getVCalendar().getVEvents().get(0);
         VEvent expectedVEvent0 = ICalendarStaticComponents.getDaily1()
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 8, 0))
@@ -207,7 +207,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         
         // check VEvent
         Collections.sort(agenda.getVCalendar().getVEvents(), VPrimary.DTSTART_COMPARATOR);
-        assertEquals(2, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(2, agenda.getVCalendar().getVEvents().size());
         VEvent expectedVEvent0 = ICalendarStaticComponents.getDaily1()
                 .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY)
@@ -226,8 +226,8 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         assertEquals(expectedVEvent1, editedVEvent1);
         
         // check DTSTAMP
-        String dtstamp = editedVEvent1.getDateTimeStamp().toContent();
-        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+        String dtstamp = editedVEvent1.getDateTimeStamp().toString();
+        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
         assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
     }
 }

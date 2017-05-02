@@ -11,13 +11,13 @@ import org.junit.Test;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.components.VPrimary;
-import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.components.VPrimary;
+import net.balsoftware.icalendar.properties.component.change.DateTimeStamp;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
 
 public class RevisePopupTest extends AgendaTestAbstract
 {
@@ -26,24 +26,35 @@ public class RevisePopupTest extends AgendaTestAbstract
     {
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         // drag to new location
         moveTo("#hourLine11");
         press(MouseButton.SECONDARY);
         release(MouseButton.SECONDARY);
-        
+
         // edit property
         TextField summaryTextField = find("#summaryTextField");
         summaryTextField.setText("new summary");
-        
+//        TestUtil.sleep(1000);
         // save changes to THIS AND FUTURE
         clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
-        TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ONE));
+        System.out.println("button:" + c.getSelectionModel().getSelectedItem().getClass());
+//        TestUtil.sleep(1000);
+        TestUtil.runThenWaitForPaintPulse( () -> 
+        {
+        	System.out.println("c.getSelectionModel():" + c.getSelectionModel());
+//        	c.getSelectionModel().select(ChangeDialogOption.ONE);
+        	c.getSelectionModel().select(0);
+        });
+        TestUtil.sleep(3000);
+      System.out.println("button2:");
+//        Node b = find("#changeDialogOkButton");
         clickOn("#changeDialogOkButton");
-        
+       
         // check appointment
         assertEquals(6, agenda.appointments().size());
         List<String> summaries = agenda.appointments().stream()

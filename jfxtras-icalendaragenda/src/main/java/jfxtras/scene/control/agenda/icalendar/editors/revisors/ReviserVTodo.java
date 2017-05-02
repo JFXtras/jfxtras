@@ -3,10 +3,9 @@ package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 
-import jfxtras.icalendarfx.components.VTimeZone;
-import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.component.time.DateTimeDue;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import net.balsoftware.icalendar.components.VTodo;
+import net.balsoftware.icalendar.properties.component.time.DateTimeDue;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 /**
  * Reviser for {@link VTodo}

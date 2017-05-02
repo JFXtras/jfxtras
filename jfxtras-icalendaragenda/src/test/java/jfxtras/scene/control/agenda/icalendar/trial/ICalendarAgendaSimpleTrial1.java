@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import jfxtras.icalendarfx.VCalendar;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
+import net.balsoftware.icalendar.VCalendar;
 
 /**
  * Simplest Demo of an empty {@link ICalendarAgenda}
@@ -25,7 +25,7 @@ public class ICalendarAgendaSimpleTrial1 extends Application
 
         Scene scene = new Scene(root, 1366, 768);
         primaryStage.setScene(scene);
-        primaryStage.setOnCloseRequest(e -> System.out.println(vCalendar.toContent())); // prints resulting VCALENDAR on close
+        primaryStage.setOnCloseRequest(e -> System.out.println(vCalendar.toString())); // prints resulting VCALENDAR on close
         primaryStage.show();        
     }
 }

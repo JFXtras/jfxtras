@@ -10,16 +10,15 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Version;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.scene.control.agenda.icalendar.editors.deleters.DeleterVEvent;
 import jfxtras.scene.control.agenda.icalendar.editors.deleters.SimpleDeleterFactory;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.calendar.Version;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class DeleteThisAndFutureTest
 {
@@ -27,7 +26,7 @@ public class DeleteThisAndFutureTest
     public void canDeleteThisAndFuture()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getWeeklyZoned();
         vComponents.add(vComponentOriginal);
@@ -53,7 +52,7 @@ public class DeleteThisAndFutureTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
             String iTIPMessage = iTIPmessages.stream()
-                    .map(v -> v.toContent())
+                    .map(v -> v.toString())
                     .collect(Collectors.joining(System.lineSeparator()));
             assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -62,7 +61,7 @@ public class DeleteThisAndFutureTest
     public void canDeleteThisAndFutureWithRecurrence()
     {
         VCalendar vCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = vCalendar.getVEvents();
+        final List<VEvent> vComponents = vCalendar.getVEvents();
         
         VEvent vComponent1 = ICalendarStaticComponents.getDaily1();
         vComponents.add(vComponent1);
@@ -100,7 +99,7 @@ public class DeleteThisAndFutureTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPmessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }

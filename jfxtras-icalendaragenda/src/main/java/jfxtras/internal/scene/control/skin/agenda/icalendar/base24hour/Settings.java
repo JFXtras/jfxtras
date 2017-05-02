@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
 
 /**
  * This class contains text values for controls.  It contains default values and, when the {@link #setup(ResourceBundle)}

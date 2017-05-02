@@ -11,13 +11,13 @@ import org.junit.Test;
 
 import javafx.scene.Parent;
 import javafx.scene.control.TextField;
-import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.Settings;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VTodo;
 
 public class VTodoMakeiTIPTest extends VEventPopupTestBase
 {

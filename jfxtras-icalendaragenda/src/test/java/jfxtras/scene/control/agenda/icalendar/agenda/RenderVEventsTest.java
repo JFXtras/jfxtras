@@ -16,11 +16,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.scene.Parent;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.calendar.Method.MethodType;
 
 public class RenderVEventsTest extends AgendaTestAbstract
 {

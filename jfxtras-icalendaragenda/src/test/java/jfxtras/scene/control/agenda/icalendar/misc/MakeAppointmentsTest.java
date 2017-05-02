@@ -19,17 +19,17 @@ import java.util.stream.IntStream;
 
 import org.junit.Test;
 
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.component.descriptive.Summary;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.factories.DefaultRecurrenceFactory;
 import jfxtras.scene.control.agenda.icalendar.factories.RecurrenceFactory;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.component.descriptive.Summary;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
 
 public class MakeAppointmentsTest
 {

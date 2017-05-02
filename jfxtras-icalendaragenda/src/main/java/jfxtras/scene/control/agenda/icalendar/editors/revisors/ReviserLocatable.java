@@ -4,10 +4,10 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.List;
 
-import jfxtras.icalendarfx.components.VLocatable;
-import jfxtras.icalendarfx.properties.PropertyType;
-import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import net.balsoftware.icalendar.components.VLocatable;
+import net.balsoftware.icalendar.properties.VPropertyElement;
+import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 /**
  * Handles revising a {@link VComponentLocatable}
@@ -74,10 +74,10 @@ public abstract class ReviserLocatable<T, U extends VLocatable<U>> extends Revis
     }
     
     @Override
-    public List<PropertyType> dialogRequiredProperties()
+    public List<VPropertyElement> dialogRequiredProperties()
     {
-        List<PropertyType> list = super.dialogRequiredProperties();
-        list.add(PropertyType.DATE_TIME_END);
+        List<VPropertyElement> list = super.dialogRequiredProperties();
+        list.add(VPropertyElement.DATE_TIME_END);
         return list;
     }
 }

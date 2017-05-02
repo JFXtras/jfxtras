@@ -2,8 +2,9 @@ package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 
 import java.util.List;
 
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VTimeZone;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VTimeZone;
+
 
 //TODO - add functionality
 /**

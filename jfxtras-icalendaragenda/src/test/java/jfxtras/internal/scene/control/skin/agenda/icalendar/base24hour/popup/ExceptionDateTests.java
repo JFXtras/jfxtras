@@ -27,13 +27,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
-import jfxtras.icalendarfx.properties.calendar.Version;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
@@ -41,6 +34,13 @@ import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.calendar.Method.MethodType;
+import net.balsoftware.icalendar.properties.calendar.Version;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
 
 /**
  * Tests the edit controls ability to handle EXDATE recurrence exceptions
@@ -342,7 +342,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     LocalDateTime.of(2015, 11, 10, 11, 0),
                     AgendaTestAbstract.CATEGORIES);
         });
-        clickOn("#recurrenceRuleTab");
+        click("#recurrenceRuleTab");
         
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -386,7 +386,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     ));
             assertEquals(expectedDates, exceptions);
         }
-        clickOn("#cancelRepeatButton");
+        click("#cancelRepeatButton");
     }
     
     @Test
@@ -402,7 +402,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     LocalDateTime.of(2015, 11, 10, 11, 0),
                     AgendaTestAbstract.CATEGORIES);
         });
-        clickOn("#recurrenceRuleTab");
+        click("#recurrenceRuleTab");
         
         // Get properties
         ComboBox<Temporal> exceptionComboBox = find("#exceptionComboBox");
@@ -699,7 +699,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         }
         clickOn("#saveRepeatButton");
         
-        String dtstamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtstamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -720,7 +720,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }

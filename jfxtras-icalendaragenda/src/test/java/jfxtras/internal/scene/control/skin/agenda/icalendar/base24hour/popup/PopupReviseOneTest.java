@@ -12,9 +12,6 @@ import org.junit.Test;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Version;
-import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.CategorySelectionGridPane;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
@@ -22,6 +19,9 @@ import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.calendar.Version;
+import net.balsoftware.icalendar.properties.component.change.DateTimeStamp;
 
 public class PopupReviseOneTest extends VEventPopupTestBase
 {
@@ -50,10 +50,10 @@ public class PopupReviseOneTest extends VEventPopupTestBase
        clickOn("#changeDialogOkButton");
 
        String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-               .map(v -> v.toContent())
+               .map(v -> v.toString())
                .collect(Collectors.joining(System.lineSeparator()));
        String dtstamp = iTIPMessage.split(System.lineSeparator())[10];
-       String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+       String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
        assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
 
        String expectediTIPMessage =
@@ -114,10 +114,10 @@ public class PopupReviseOneTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ONE));
         clickOn("#changeDialogOkButton");
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         String dtstamp = iTIPMessage.split(System.lineSeparator())[10];
-        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
         assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +

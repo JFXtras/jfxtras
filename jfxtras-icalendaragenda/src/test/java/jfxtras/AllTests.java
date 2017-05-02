@@ -1,4 +1,4 @@
-package jfxtras.scene.control.agenda.icalendar;
+package jfxtras;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

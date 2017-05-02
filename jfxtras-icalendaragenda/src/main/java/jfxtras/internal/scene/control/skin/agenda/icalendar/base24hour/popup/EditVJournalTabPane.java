@@ -4,11 +4,11 @@ import java.time.temporal.Temporal;
 import java.util.List;
 
 import javafx.fxml.FXML;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VJournal;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.EditChoiceDialog;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VJournal;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
 
 /** 
  * TabPane for editing descriptive properties and a {@link RecurrenceRule} for a {@link VJournal}.

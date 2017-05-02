@@ -1,10 +1,10 @@
 package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 
 import javafx.scene.Scene;
-import jfxtras.icalendarfx.components.VDisplayable;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
+import net.balsoftware.icalendar.components.VDisplayable;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
 
 /** 
  * Base Scene for editing descriptive properties and a {@link RecurrenceRule} in a {@link VDisplayable}.

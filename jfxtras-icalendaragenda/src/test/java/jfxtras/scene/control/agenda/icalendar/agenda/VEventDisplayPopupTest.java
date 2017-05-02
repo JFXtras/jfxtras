@@ -9,10 +9,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.input.MouseButton;
-import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.test.AssertNode;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
 
 /**
  * Tests displaying edit popups from Agenda.

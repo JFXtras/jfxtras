@@ -13,10 +13,10 @@ import org.junit.Test;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
+import net.balsoftware.icalendar.components.VEvent;
 
 public class DeleteVEventTest extends AgendaTestAbstract
 {
@@ -51,7 +51,7 @@ public class DeleteVEventTest extends AgendaTestAbstract
                 .collect(Collectors.toList());
         assertEquals(expectedStarts, starts);
         
-        assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent expectedVEvent = ICalendarStaticComponents.getDaily1()
                 .withExceptionDates("20151111T100000")
                 .withSequence(1);
@@ -88,7 +88,7 @@ public class DeleteVEventTest extends AgendaTestAbstract
                 .collect(Collectors.toList());
         assertEquals(expectedStarts, starts);
         
-        assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent expectedVEvent = ICalendarStaticComponents.getDaily1()
                 .withExceptionDates("20151111T100000")
                 .withSequence(1);
@@ -116,6 +116,6 @@ public class DeleteVEventTest extends AgendaTestAbstract
         clickOn("#changeDialogOkButton");
         
         assertEquals(0, agenda.appointments().size());
-        assertEquals(0, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(0, agenda.getVCalendar().getVEvents().size());
     }
 }

@@ -13,18 +13,17 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Version;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.ReviserVEvent;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
+import net.balsoftware.icalendar.VCalendar;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.calendar.Version;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
 
 public class ReviseAllTest
 {
@@ -32,7 +31,7 @@ public class ReviseAllTest
     public void canEditAll()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
         vComponents.add(vComponentOriginal);
@@ -63,7 +62,7 @@ public class ReviseAllTest
             "DTEND:20151109T103000" + System.lineSeparator() +
             "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
             "SUMMARY:Edited summary" + System.lineSeparator() +
-            vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+            vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
             "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
             "RRULE:FREQ=DAILY" + System.lineSeparator() +
             "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -71,7 +70,7 @@ public class ReviseAllTest
             "END:VEVENT" + System.lineSeparator() +
             "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -80,7 +79,7 @@ public class ReviseAllTest
     public void canShiftWeeklyAll() // shift day of weekly
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getWeekly3();
         vComponents.add(vComponentOriginal);
@@ -109,14 +108,14 @@ public class ReviseAllTest
                 "DTSTART:20151110T090000" + System.lineSeparator() +
                 "DTEND:20151110T103000" + System.lineSeparator() +
                 "UID:20150110T080000-002@jfxtras.org" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
                 "RRULE:FREQ=WEEKLY;BYDAY=TU" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -125,7 +124,7 @@ public class ReviseAllTest
     public void canShiftMonthlyAll2() // shift day of weekly with ordinal
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getMonthly7();
         vComponents.add(vComponentOriginal);
@@ -154,14 +153,14 @@ public class ReviseAllTest
                 "DTSTART:20151117T090000" + System.lineSeparator() +
                 "DTEND:20151117T103000" + System.lineSeparator() +
                 "UID:20150110T080000-002@jfxtras.org" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
                 "RRULE:FREQ=MONTHLY;BYDAY=3TU" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -170,7 +169,7 @@ public class ReviseAllTest
     public void canAddRRuleToAll()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividualZoned();
         vComponents.add(vComponentOriginal);
@@ -206,7 +205,7 @@ public class ReviseAllTest
                 "CATEGORIES:group13" + System.lineSeparator() +
                 "DTSTART;TZID=Europe/London:20151113T090000" + System.lineSeparator() +
                 "DTEND;TZID=Europe/London:20151113T100000" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-009@jfxtras.org" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
                 "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR" + System.lineSeparator() +
@@ -214,7 +213,7 @@ public class ReviseAllTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -223,7 +222,7 @@ public class ReviseAllTest
     public void canEditAllWithRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
         vComponents.add(vComponentOriginal);
@@ -272,7 +271,7 @@ public class ReviseAllTest
                 "DTEND:20151109T103000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -308,7 +307,7 @@ public class ReviseAllTest
 //                "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = itipMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -317,7 +316,7 @@ public class ReviseAllTest
     public void canEditAllIgnoreRecurrence()
     {
         VCalendar vCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = vCalendar.getVEvents();
+        final List<VEvent> vComponents = vCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
         vComponents.add(vComponentOriginal);
@@ -365,7 +364,7 @@ public class ReviseAllTest
                 "DTEND:20151109T103000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -402,7 +401,7 @@ public class ReviseAllTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = itipMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -411,7 +410,7 @@ public class ReviseAllTest
     public void canChangeToWholeDayAll()
     {
         VCalendar vCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = vCalendar.getVEvents();
+        final List<VEvent> vComponents = vCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
         vComponents.add(vComponentOriginal);
@@ -443,7 +442,7 @@ public class ReviseAllTest
                 "DTEND;VALUE=DATE:20151109" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "RRULE:FREQ=DAILY" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
@@ -452,7 +451,7 @@ public class ReviseAllTest
                 "END:VCALENDAR"
                 ;
         String iTIPMessage = itipMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -461,7 +460,7 @@ public class ReviseAllTest
     public void canRemoveException2()
     {
         VCalendar vCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = vCalendar.getVEvents();
+        final List<VEvent> vComponents = vCalendar.getVEvents();
         
         VEvent vComponentOriginal = ICalendarStaticComponents.getDailyWithException1();
         vComponents.add(vComponentOriginal);
@@ -490,7 +489,7 @@ public class ReviseAllTest
                 "DTEND:20151109T113000" + System.lineSeparator() +
                 "DESCRIPTION:Daily2 Description" + System.lineSeparator() +
                 "SUMMARY:Daily2 Summary" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-005@jfxtras.org" + System.lineSeparator() +
                 "RRULE:COUNT=6;FREQ=DAILY;INTERVAL=3" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
@@ -499,7 +498,7 @@ public class ReviseAllTest
                 "END:VCALENDAR"
                 ;
         String iTIPMessage = itipMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -508,7 +507,7 @@ public class ReviseAllTest
 //    public void canChangeUntilToForever()
 //    {
 //        VCalendar vCalendar = new VCalendar();
-//        final ObservableList<VEvent> vComponents = vCalendar.getVEvents();
+//        final List<VEvent> vComponents = vCalendar.getVEvents();
 //        
 //        ZonedDateTime until = ZonedDateTime.of(LocalDateTime.of(2015, 11, 19, 10, 0), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z"));
 //        VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1()
@@ -554,7 +553,7 @@ public class ReviseAllTest
 //                "END:VCALENDAR"
 //                ;
 //        String iTIPMessage = itipMessages.stream()
-//                .map(v -> v.toContent())
+//                .map(v -> v.toString())
 //                .collect(Collectors.joining(System.lineSeparator()));
 //        assertEquals(expectediTIPMessage, iTIPMessage);
 //    }

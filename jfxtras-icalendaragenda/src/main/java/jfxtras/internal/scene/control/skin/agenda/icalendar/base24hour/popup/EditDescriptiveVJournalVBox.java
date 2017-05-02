@@ -3,7 +3,7 @@ package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 import java.time.temporal.Temporal;
 import java.util.List;
 
-import jfxtras.icalendarfx.components.VJournal;
+import net.balsoftware.icalendar.components.VJournal;
 
 /**
  *  Controller for editing descriptive properties in a {@link VJournal}
@@ -39,6 +39,7 @@ public class EditDescriptiveVJournalVBox extends EditDescriptiveVBox<VJournal>
         {
             vComponent.withDescriptions("");
         }
-        descriptionTextArea.textProperty().bindBidirectional(vComponent.getDescriptions().get(0).valueProperty());
+        descriptionTextArea.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setSummary(newValue));
+//        descriptionTextArea.textProperty().bindBidirectional(vComponent.getDescriptions().get(0).valueProperty());
     }
 }

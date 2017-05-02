@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.Temporal;
 
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import net.balsoftware.icalendar.components.VEvent;
+import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
 
 /**
  * VBox containing controls to edit the {@link RecurrenceRule} in a {@link VEvent}.

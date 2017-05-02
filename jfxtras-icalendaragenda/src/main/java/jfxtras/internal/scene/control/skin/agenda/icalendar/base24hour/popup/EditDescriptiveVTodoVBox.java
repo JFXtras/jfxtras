@@ -3,8 +3,8 @@ package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 import java.time.temporal.Temporal;
 import java.util.List;
 
-import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.component.time.DurationProp;
+import net.balsoftware.icalendar.components.VTodo;
+import net.balsoftware.icalendar.properties.component.time.DurationProp;
 
 /** 
  * Controller for editing descriptive properties in a {@link VTodo}

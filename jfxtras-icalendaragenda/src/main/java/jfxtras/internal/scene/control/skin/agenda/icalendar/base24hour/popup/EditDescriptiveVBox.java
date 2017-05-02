@@ -35,21 +35,18 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import jfxtras.icalendarfx.components.VComponent;
-import jfxtras.icalendarfx.components.VDisplayable;
-import jfxtras.icalendarfx.properties.component.descriptive.Categories;
-import jfxtras.icalendarfx.properties.component.descriptive.Description;
-import jfxtras.icalendarfx.properties.component.descriptive.Location;
-import jfxtras.icalendarfx.properties.component.descriptive.Summary;
-import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
-import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.CategorySelectionGridPane;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.Settings;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.TemporalUtilities;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
+import net.balsoftware.icalendar.components.VComponent;
+import net.balsoftware.icalendar.components.VDisplayable;
+import net.balsoftware.icalendar.properties.component.descriptive.Summary;
+import net.balsoftware.icalendar.properties.component.time.DateTimeEnd;
+import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
+import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 /** 
  * Base controller for editing descriptive properties in a {@link VDisplayable} component.
@@ -180,7 +177,8 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
         {
             vComponentEdited.setSummary(Summary.parse(""));
         }
-        summaryTextField.textProperty().bindBidirectional(vComponentEdited.getSummary().valueProperty());
+        summaryTextField.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setSummary(newValue));
+//        summaryTextField.textProperty().bindBidirectional(vComponentEdited.getSummary().valueProperty());
         
         // START DATE/TIME
         startDateTimeTextField.setLocale(Locale.getDefault());
@@ -267,7 +265,8 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
         String initialCategory = vComponentEdited.getCategories().get(0).getValue().get(0);
         categorySelectionGridPane.setupData(initialCategory, categories);
         
-        vComponentEdited.getDateTimeStart().valueProperty().addListener(dateTimeStartListener);
+        startDateTimeTextField.localDateTimeProperty().addListener(dateTimeStartListener);
+//        vComponentEdited.getDateTimeStart().valueProperty().addListener(dateTimeStartListener);
 
     }
     
