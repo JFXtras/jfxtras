@@ -31,10 +31,8 @@ public class CancelRevisionTest
     public void canCancelEdit()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
         
         vComponentEdited.setSummary("Edited summary");

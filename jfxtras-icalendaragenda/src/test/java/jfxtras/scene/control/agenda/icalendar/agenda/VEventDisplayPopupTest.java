@@ -30,7 +30,11 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
     @Test
     public void canProduceEditPopup()
     {
-        TestUtil.runThenWaitForPaintPulse( () -> agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1()));
+        TestUtil.runThenWaitForPaintPulse( () -> 
+        {
+        	agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+        	agenda.refresh();
+        });
 
         // Open edit popup
         moveTo("#hourLine11");
@@ -38,7 +42,7 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
         release(MouseButton.SECONDARY);
         
         Node n = find("#editDisplayableTabPane");
-//        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
         new AssertNode(n).assertXYWH(0.0, 0.0, 400.0, 570.0, 0.01);
         clickOn("#cancelComponentButton");
     }
@@ -46,8 +50,12 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
     @Test
     public void canProduceEditPopupFromExistingAppointment()
     {
-        TestUtil.runThenWaitForPaintPulse( () -> agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1()));
-
+        TestUtil.runThenWaitForPaintPulse( () -> 
+        {
+        	agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+        	agenda.refresh();
+        });
+        
         // Open select one popup
         moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
@@ -83,7 +91,11 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
     @Test
     public void canToggleRepeatableCheckBox()
     {
-        TestUtil.runThenWaitForPaintPulse( () -> agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1()));
+        TestUtil.runThenWaitForPaintPulse( () -> 
+        {
+        	agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+        	agenda.refresh();
+        });
 
         // Open edit popup
         moveTo("#hourLine11");
@@ -97,7 +109,7 @@ public class VEventDisplayPopupTest extends AgendaTestAbstract
 
         // Check initial state
         assertTrue(repeatableCheckBox.isSelected());
-        
+
         // Remove RRULE and verify state change
         TestUtil.runThenWaitForPaintPulse( () -> repeatableCheckBox.setSelected(false));
         clickOn("#saveRepeatButton");

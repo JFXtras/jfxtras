@@ -33,7 +33,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         summaryTextField.setText("Edited summary");
         ComboBox<AppointmentGroup> appointmentGroupComboBox = find("#appointmentGroupComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> appointmentGroupComboBox.setValue(agenda.appointmentGroups().get(10)) );
-        
+
         // create event
         clickOn("#newAppointmentCreateButton");
         
@@ -94,7 +94,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         // verify event's creation
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent vEvent = agenda.getVCalendar().getVEvents().get(0);
-        System.out.println("old vEvent:" + System.identityHashCode(vEvent));
+//        System.out.println("old vEvent:" + System.identityHashCode(vEvent));
         VEvent expectedVEvent = new VEvent()
                 .withOrganizer(ICalendarAgenda.DEFAULT_ORGANIZER)
                 .withSummary("New")

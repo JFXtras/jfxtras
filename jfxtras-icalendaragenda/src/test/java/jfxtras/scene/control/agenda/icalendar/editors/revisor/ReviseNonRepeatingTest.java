@@ -24,13 +24,9 @@ public class ReviseNonRepeatingTest
     public void canEditIndividual()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividual1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
-        vComponents.add(vComponentEdited);
 
         vComponentEdited.setSummary("Edited summary");
         Temporal startOriginalRecurrence = LocalDateTime.of(2016, 5, 16, 10, 30);
@@ -72,13 +68,10 @@ public class ReviseNonRepeatingTest
     public void canEditIndividual2() // with other components present
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividual1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
-        vComponents.add(vComponentEdited);
         vComponents.add(ICalendarStaticComponents.getDaily1());
 
         vComponentEdited.setSummary("Edited summary");
@@ -121,13 +114,9 @@ public class ReviseNonRepeatingTest
     public void canEditIndividual3() // delete property
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividual1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
-        vComponents.add(vComponentEdited);
 
         vComponentEdited.setSummary((Summary) null);
         Temporal startOriginalRecurrence = LocalDateTime.of(2016, 5, 16, 10, 30);

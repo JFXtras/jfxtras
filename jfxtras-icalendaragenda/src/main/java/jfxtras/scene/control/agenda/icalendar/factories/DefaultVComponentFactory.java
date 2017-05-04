@@ -50,6 +50,7 @@ public class DefaultVComponentFactory extends VComponentFactory<Appointment>
             newVComponent.withCategories(category);
             newVComponent.withDateTimeStart(dtstart);
             ((VEvent) newVComponent).withDateTimeEnd(dtend);
+            // TODO - HANDLE NULL STRINGS
             ((VEvent) newVComponent).withDescription(description);
             ((VEvent) newVComponent).setLocation(location);
             newVComponent.setDateTimeCreated(dtCreated);

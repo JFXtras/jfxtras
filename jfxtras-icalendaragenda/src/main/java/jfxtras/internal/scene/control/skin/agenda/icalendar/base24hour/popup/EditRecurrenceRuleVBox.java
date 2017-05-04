@@ -89,7 +89,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
     final public static int EXCEPTION_CHOICE_LIMIT = 50;
     final public static int INITIAL_COUNT = 10;
     final public static Period DEFAULT_UNTIL_PERIOD = Period.ofMonths(1); // amount of time beyond start default for UNTIL (ends on)
-        
+
     T vComponent;
     private RecurrenceRuleValue rrule;
     private RecurrenceRuleValue oldRRule; // previous rrule from toggling repeatableCheckBox
@@ -491,6 +491,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         // REPEATABLE CHECKBOX
         repeatableCheckBox.selectedProperty().addListener((observable, oldSelection, newSelection) ->
         {
+        	System.out.println("newSelection:" + newSelection);
             if (newSelection)
             {
 //                removeListeners();
@@ -945,12 +946,12 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         });
                 
         // SETUP CONTROLLER'S INITIAL DATA FROM RRULE
-        boolean isRepeatable = (rrule != null);
-        if (isRepeatable)
+        boolean isInitiallyRepeatable = (rrule != null);
+        if (isInitiallyRepeatable)
         {
             setInitialValues(vComponent);
         }
-        repeatableCheckBox.selectedProperty().set(isRepeatable);
+        repeatableCheckBox.selectedProperty().set(isInitiallyRepeatable);
         
         // DAY OF WEEK RAIO BUTTON LISTENER (FOR MONTHLY)
         dayOfWeekRadioButton.selectedProperty().addListener(dayOfWeekButtonListener);

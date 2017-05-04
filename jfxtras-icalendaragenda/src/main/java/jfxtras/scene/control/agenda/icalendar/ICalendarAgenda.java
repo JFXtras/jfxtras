@@ -566,7 +566,7 @@ public class ICalendarAgenda extends Agenda
          */
         appointmentsListChangeListener = (ListChangeListener.Change<? extends Appointment> change) ->
         {
-        	System.out.println("appointment added");
+//        	System.out.println("appointment added");
             while (change.next())
             {
                 if (change.wasAdded())
@@ -587,6 +587,7 @@ public class ICalendarAgenda extends Agenda
                         case OK_DONE: // Create VComponent
                             {
                                 VComponent newVComponent = getVComponentFactory().createVComponent(appointment);
+                                System.out.println("newVComponent:" + newVComponent);
                                 VCalendar message = Reviser.emptyPublishiTIPMessage();
                                 message.addChild(newVComponent);
                                 getVCalendar().processITIPMessage(message);

@@ -128,15 +128,10 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
         Object[] params = new Object[] {
                 DeleteChoiceDialog.DELETE_DIALOG_CALLBACK,
                 editDescriptiveVBox.startOriginalRecurrence
-//                vComponents
         };
         List<VCalendar> result = SimpleDeleterFactory.newDeleter(vComponentCopy, params).delete();
+        System.out.println("result:" + result);
         iTIPMessagesProperty().set(result);
-
-        
-//        T result = (T) SimpleDeleterFactory.newDeleter(vComponent, params).delete();
-//        newVComponentsProperty().set(Arrays.asList(result)); // indicates control should be hidden
-//        isFinished.set(result);
     }
     
     @FXML private void handlePressEnter(KeyEvent e)
@@ -150,7 +145,6 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
     T vComponentCopy;
     T vComponentOriginal;
     public static VComponent vo;
-//    List<T> vComponents;
 
     /**
      * Provide necessary data to setup
