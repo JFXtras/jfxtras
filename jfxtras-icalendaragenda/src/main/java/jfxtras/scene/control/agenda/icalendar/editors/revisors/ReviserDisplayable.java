@@ -11,9 +11,12 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Objects;
@@ -222,7 +225,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         }
         case WITH_EXISTING_REPEAT:
             // Find which properties changed
-            List<VPropertyElement> changedProperties = findChangedProperties(vComponentEditedCopy, vComponentOriginal);
+            Collection<VPropertyElement> changedProperties = findChangedProperties(vComponentEditedCopy, vComponentOriginal);
 //            System.out.println("changedProperties:" + changedProperties);
             /* Note:
              * time properties must be checked separately because changes are stored in startRecurrence and endRecurrence,
@@ -441,34 +444,47 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
      * @param vComponentOriginalCopy original VComponent
      * @return list of changed {@link VPropertyElement}
      */
-    List<VPropertyElement> findChangedProperties(U vComponentEditedCopy, U vComponentOriginalCopy)
+    Collection<VPropertyElement> findChangedProperties(U vComponentEditedCopy, U vComponentOriginalCopy)
     {
         Map<String, VChild> editedMap = vComponentEditedCopy.childrenUnmodifiable()
         	.stream()
         	.collect(Collectors.toMap(v -> v.name(), v -> v));
-        
+
         Map<String, VChild> originalMap = vComponentOriginalCopy.childrenUnmodifiable()
             	.stream()
             	.collect(Collectors.toMap(v -> v.name(), v -> v));
         
-        List<VPropertyElement> changedChildern = editedMap.entrySet().stream()
+        List<VPropertyElement> c1 = editedMap.entrySet().stream()
         	.filter(e ->
         	{
         		String key = e.getKey();
         		VChild edited = e.getValue();
         		VChild original = originalMap.get(key);
-//        		System.out.println("EO:" + edited + " " + original);
         		return ! Objects.equal(edited, original);
         	})
         	.map(e -> e.getValue())
         	.map(v -> VPropertyElement.fromClass(v.getClass()))
         	.collect(Collectors.toList());
         
+        List<VPropertyElement> c2 = originalMap.entrySet().stream()
+            	.filter(e ->
+            	{
+            		String key = e.getKey();
+            		VChild edited = e.getValue();
+            		VChild original = editedMap.get(key);
+            		return ! Objects.equal(edited, original);
+            	})
+            	.map(e -> e.getValue())
+            	.map(v -> VPropertyElement.fromClass(v.getClass()))
+            	.collect(Collectors.toList());
+        
+        Set<VPropertyElement> changedChildern = new HashSet<>();
+        changedChildern.addAll(c1);
+        changedChildern.addAll(c2);
         if (! startOriginalRecurrence.equals(startRecurrence))
         {
         	changedChildern.add(VPropertyElement.DATE_TIME_START);
         }
-//        System.out.println("changedChildern:" + changedChildern);
         return changedChildern;
     }
 

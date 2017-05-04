@@ -3,6 +3,7 @@ package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import net.balsoftware.icalendar.components.VEvent;
@@ -50,9 +51,9 @@ public class ReviserVEvent extends ReviserLocatable<ReviserVEvent, VEvent>
     }
     
     @Override
-    List<VPropertyElement> findChangedProperties(VEvent vComponentEditedCopy, VEvent vComponentOriginalCopy)
+    Collection<VPropertyElement> findChangedProperties(VEvent vComponentEditedCopy, VEvent vComponentOriginalCopy)
     {
-        List<VPropertyElement> changedProperties = super.findChangedProperties(vComponentEditedCopy, vComponentOriginalCopy);
+        Collection<VPropertyElement> changedProperties = super.findChangedProperties(vComponentEditedCopy, vComponentOriginalCopy);
         TemporalAmount durationNew = DateTimeUtilities.temporalAmountBetween(getStartRecurrence(), getEndRecurrence());
         TemporalAmount durationOriginal = getVComponentCopyEdited().getActualDuration();
 

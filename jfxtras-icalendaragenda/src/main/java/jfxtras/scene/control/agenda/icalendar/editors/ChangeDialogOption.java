@@ -3,8 +3,8 @@ package jfxtras.scene.control.agenda.icalendar.editors;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.temporal.Temporal;
+import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -43,7 +43,7 @@ public enum ChangeDialogOption
             U vComponentOriginal,
             U vComponentEdited,
             Temporal startRecurrence,
-            List<VPropertyElement> changedProperties)
+            Collection<VPropertyElement> changedProperties)
    {
        Map<ChangeDialogOption, Pair<Temporal,Temporal>> choices = new LinkedHashMap<>();
        if (! changedProperties.contains(VPropertyElement.RECURRENCE_RULE))
