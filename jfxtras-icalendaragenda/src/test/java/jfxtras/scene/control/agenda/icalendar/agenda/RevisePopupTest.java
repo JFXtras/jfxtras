@@ -47,10 +47,12 @@ public class RevisePopupTest extends AgendaTestAbstract
         TestUtil.runThenWaitForPaintPulse( () -> 
         {
         	System.out.println("c.getSelectionModel():" + c.getSelectionModel());
-//        	c.getSelectionModel().select(ChangeDialogOption.ONE);
-        	c.getSelectionModel().select(0);
+        	c.getSelectionModel().select(ChangeDialogOption.ONE);
+//        	c.getSelectionModel().select();
+        	System.out.println("changed:" + c.getSelectionModel().getSelectedItem());
+//        	c.getSelectionModel().select(0);
         });
-        TestUtil.sleep(3000);
+//        TestUtil.sleep(3000);
       System.out.println("button2:");
 //        Node b = find("#changeDialogOkButton");
         clickOn("#changeDialogOkButton");

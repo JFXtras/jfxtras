@@ -34,7 +34,8 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
     {
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getIndividual1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getIndividual1());
+            agenda.refresh();
         });
         
         // drag to new location
@@ -68,20 +69,20 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
     {
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
         });
         
         // drag to new location
-        move("#hourLine11");
+        moveTo("#hourLine11");
         press(MouseButton.PRIMARY);
-        move("#hourLine9");
+        moveTo("#hourLine9");
         release(MouseButton.PRIMARY);
         
         ComboBox<ChangeDialogOption> comboBox = find("#changeDialogComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> {
             comboBox.getSelectionModel().select(ChangeDialogOption.ONE);
         });
-        click("#changeDialogOkButton");
+        clickOn("#changeDialogOkButton");
         
         // check appointment
         assertEquals(6, agenda.appointments().size());
@@ -127,7 +128,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
     {
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
         });
         
         // drag to new location
@@ -174,7 +175,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
     {
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
         });
         
         // drag to new location

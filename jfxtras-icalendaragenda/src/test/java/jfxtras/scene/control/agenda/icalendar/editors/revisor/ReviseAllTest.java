@@ -31,10 +31,8 @@ public class ReviseAllTest
     public void canEditAll()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
@@ -79,12 +77,9 @@ public class ReviseAllTest
     public void canShiftWeeklyAll() // shift day of weekly
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getWeekly3();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
 
         Temporal startOriginalRecurrence = LocalDateTime.of(2016, 5, 16, 10, 0);
         Temporal startRecurrence = LocalDateTime.of(2016, 5, 17, 9, 0);
@@ -124,12 +119,9 @@ public class ReviseAllTest
     public void canShiftMonthlyAll2() // shift day of weekly with ordinal
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getMonthly7();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
 
         Temporal startOriginalRecurrence = LocalDateTime.of(2016, 5, 16, 10, 0);
         Temporal startRecurrence = LocalDateTime.of(2016, 5, 17, 9, 0);
@@ -169,12 +161,10 @@ public class ReviseAllTest
     public void canAddRRuleToAll()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividualZoned();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
         vComponents.add(vComponentEdited);
         
         vComponentEdited.setSummary("Edited summary");
@@ -222,13 +212,11 @@ public class ReviseAllTest
     public void canEditAllWithRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
-        vComponents.add(vComponentOriginal);
         // make recurrence instances
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
                 .withRecurrenceRule((RecurrenceRuleValue) null)
@@ -315,11 +303,10 @@ public class ReviseAllTest
     @Test // edit ALL with a recurrence in date range
     public void canEditAllIgnoreRecurrence()
     {
-        VCalendar vCalendar = new VCalendar();
-        final List<VEvent> vComponents = vCalendar.getVEvents();
-        
+        VCalendar mainVCalendar = new VCalendar();
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
         
         // make recurrence instances
@@ -409,11 +396,9 @@ public class ReviseAllTest
     @Test
     public void canChangeToWholeDayAll()
     {
-        VCalendar vCalendar = new VCalendar();
-        final List<VEvent> vComponents = vCalendar.getVEvents();
-        
+        VCalendar mainVCalendar = new VCalendar();
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
         
         // make changes
@@ -459,13 +444,11 @@ public class ReviseAllTest
     @Test
     public void canRemoveException2()
     {
-        VCalendar vCalendar = new VCalendar();
-        final List<VEvent> vComponents = vCalendar.getVEvents();
-        
+        VCalendar mainVCalendar = new VCalendar();
         VEvent vComponentOriginal = ICalendarStaticComponents.getDailyWithException1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-        
+
         // make changes
         vComponentEdited.setExceptionDates(null);
 

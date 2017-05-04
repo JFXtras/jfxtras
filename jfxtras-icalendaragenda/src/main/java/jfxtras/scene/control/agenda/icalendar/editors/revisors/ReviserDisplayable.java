@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Objects;
@@ -272,7 +271,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                     // update child recurrences
                     VCalendar publishMessage = Reviser.emptyPublishiTIPMessage();
                     List<VDisplayable<?>> children = adjustRecurrenceChildren(startRecurrence, startOriginalRecurrence);
-                    publishMessage.addAllVComponents(children);
+                    children.forEach((c) -> publishMessage.addChild(c));
                     itipMessages.add(publishMessage);
                     break;
                 }
@@ -325,7 +324,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                                 c.setDateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z")));
                             })
                             .collect(Collectors.toList());
-                    publishMessage.addAllVComponents(children);
+                    children.forEach((c) -> publishMessage.addChild(c));
                     break;
                 }
                 case ONE:
@@ -417,15 +416,11 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         // handle WEEKLY day of week change
         if (vComponentEditedCopy.getRecurrenceRule() != null)
         {
-            Optional<ByDay> byDayOptional = vComponentEditedCopy.getRecurrenceRule().getValue()
-            		.getByRules()
-            		.stream()
-            		.filter(r -> r instanceof ByDay)
-            		.map(r -> (ByDay) r)
-            		.findFirst();
-            if (byDayOptional.isPresent())
+        	ByDay byDay = (ByDay) vComponentEditedCopy.getRecurrenceRule()
+            		.getValue()
+            		.lookupByRule(ByDay.class);
+            if (byDay != null)
             {
-            	ByDay byDay = byDayOptional.get();
                 DayOfWeek originalDayOfWeek = DayOfWeek.from(vComponentEditedCopy.getDateTimeStart().getValue());
                 DayOfWeek replacemenDayOfWeekt = DayOfWeek.from(newStart);
                 if (originalDayOfWeek != replacemenDayOfWeekt)
@@ -448,8 +443,6 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
      */
     List<VPropertyElement> findChangedProperties(U vComponentEditedCopy, U vComponentOriginalCopy)
     {
-        List<VPropertyElement> changedProperties = new ArrayList<>();
-
         Map<String, VChild> editedMap = vComponentEditedCopy.childrenUnmodifiable()
         	.stream()
         	.collect(Collectors.toMap(v -> v.name(), v -> v));
@@ -464,47 +457,19 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         		String key = e.getKey();
         		VChild edited = e.getValue();
         		VChild original = originalMap.get(key);
-        		return Objects.equal(edited, original);
+//        		System.out.println("EO:" + edited + " " + original);
+        		return ! Objects.equal(edited, original);
         	})
         	.map(e -> e.getValue())
         	.map(v -> VPropertyElement.fromClass(v.getClass()))
         	.collect(Collectors.toList());
+        
+        if (! startOriginalRecurrence.equals(startRecurrence))
+        {
+        	changedChildern.add(VPropertyElement.DATE_TIME_START);
+        }
+//        System.out.println("changedChildern:" + changedChildern);
         return changedChildern;
-
-        
-//        List<VPropertyElement> changedPropertiesToNonNull =
-//        Stream<Object> changedPropertiesToNonNull = vComponentEditedCopy.childrenUnmodifiable()
-//		.stream()
-//		.filter(c -> c instanceof Property<?>)
-//		.map(p -> ((Property<?>) p).propertyType());                
-//                .filter(t ->
-//                {
-//                    Object p1 = t.getProperty(vComponentEditedCopy);
-//                    Object p2 = t.getProperty(vComponentOriginalCopy);
-//                    return ! p1.equals(p2);
-//                })
-////                .peek(t -> System.out.println("changedPropertiesToNonNull:" + t))
-//                .collect(Collectors.toList());
-//        changedProperties.addAll(changedPropertiesToNonNull);
-        
-//        List<VPropertyElement> propertiesChangedToNull = vComponentOriginalCopy.childrenUnmodifiable()
-//                .stream()
-//                .filter(c -> c instanceof Property<?>)
-//                .map(p -> ((Property<?>) p).propertyType())
-//                .filter(t -> t.getProperty(vComponentEditedCopy) == null)
-////                .peek(t -> System.out.println("propertiesChangedToNull:" + t))
-//                .collect(Collectors.toList());
-//        changedProperties.addAll(propertiesChangedToNull);
-        
-        /* Note:
-         * time properties must be checked separately because changes are stored in startRecurrence and endRecurrence,
-         * not the VComponents DTSTART and DTEND yet.  The changes to DTSTART and DTEND are made after the dialog
-         * question is answered. */
-//        if (! startOriginalRecurrence.equals(startRecurrence))
-//        {
-//            changedProperties.add(VPropertyElement.DATE_TIME_START);
-//        }
-//        return changedProperties;
     }
 
     /**

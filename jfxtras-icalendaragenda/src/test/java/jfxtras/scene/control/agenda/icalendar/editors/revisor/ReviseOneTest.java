@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,11 +29,10 @@ public class ReviseOneTest
     @Test
     public void canEditOneRecurrence()
     {
-        VCalendar mainVCalendar = new VCalendar().withVEvents(new ArrayList<>());
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
+        VCalendar mainVCalendar = new VCalendar();
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
@@ -54,7 +52,7 @@ public class ReviseOneTest
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
 //        System.out.println("vComponents:" + vComponents.size());
-        vComponents.forEach(System.out::println);
+//        vComponents.forEach(System.out::println);
         VEvent myComponentIndividual = vComponents.get(1);
         
         String expectediTIPMessage =
@@ -79,10 +77,12 @@ public class ReviseOneTest
                 .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
+        assertEquals(2, mainVCalendar.getVEvents().size());
 
         // 2nd edit - edit component with RecurrenceID (individual)
         VEvent vComponentEditedIndividual = new VEvent(myComponentIndividual);
         VEvent vComponentIndividualCopy = new VEvent(myComponentIndividual);
+        System.out.println("vComponentIndividualCopy parent:" + vComponentIndividualCopy.getParent());
         
         vComponentEditedIndividual.setSummary("new summary");
         Temporal startOriginalRecurrence2 = LocalDateTime.of(2016, 5, 16, 9, 0);
@@ -97,7 +97,7 @@ public class ReviseOneTest
                 .withVComponentCopyEdited(vComponentEditedIndividual)
                 .withVComponentOriginal(vComponentIndividualCopy);
         iTIPMessages = reviser2.revise();
-//        System.out.println("inputVCalendar:" + iTIPMessages);
+        System.out.println("inputVCalendar:" + iTIPMessages);
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         
         expectediTIPMessage =
@@ -128,10 +128,9 @@ public class ReviseOneTest
     public void canChangeTimeBasedToWholeDayOne()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
@@ -187,10 +186,9 @@ public class ReviseOneTest
     public void canChangeWholeDayToTimeBasedOne()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getWholeDayDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
