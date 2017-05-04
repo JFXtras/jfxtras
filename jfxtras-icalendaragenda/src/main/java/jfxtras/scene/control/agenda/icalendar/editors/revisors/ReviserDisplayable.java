@@ -16,10 +16,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.google.common.base.Objects;
 
 import javafx.util.Callback;
 import javafx.util.Pair;
@@ -460,7 +459,8 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         		String key = e.getKey();
         		VChild edited = e.getValue();
         		VChild original = originalMap.get(key);
-        		return ! Objects.equal(edited, original);
+//        		System.out.println("EO1:" + edited + " " + original);
+        		return ! Objects.equals(edited, original);
         	})
         	.map(e -> e.getValue())
         	.map(v -> VPropertyElement.fromClass(v.getClass()))
@@ -470,9 +470,10 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
             	.filter(e ->
             	{
             		String key = e.getKey();
-            		VChild edited = e.getValue();
-            		VChild original = editedMap.get(key);
-            		return ! Objects.equal(edited, original);
+            		VChild original = e.getValue();
+            		VChild edited = editedMap.get(key);
+//            		System.out.println("EO2:" + edited + " " + original);
+            		return ! Objects.equals(edited, original);
             	})
             	.map(e -> e.getValue())
             	.map(v -> VPropertyElement.fromClass(v.getClass()))
@@ -485,6 +486,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         {
         	changedChildern.add(VPropertyElement.DATE_TIME_START);
         }
+//        System.out.println("changedChildern:" + changedChildern);
         return changedChildern;
     }
 

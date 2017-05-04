@@ -38,7 +38,7 @@ public class RevisePopupTest extends AgendaTestAbstract
         // edit property
         TextField summaryTextField = find("#summaryTextField");
         summaryTextField.setText("new summary");
-//        TestUtil.sleep(1000);
+        TestUtil.sleep(1000);
         // save changes to THIS AND FUTURE
         clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
@@ -75,6 +75,7 @@ public class RevisePopupTest extends AgendaTestAbstract
         assertEquals(2, agenda.getVCalendar().getVEvents().size());
         agenda.getVCalendar().getVEvents().sort(VPrimary.DTSTART_COMPARATOR);
         VEvent vComponentOriginal = agenda.getVCalendar().getVEvents().get(0);
+        System.out.println(vComponentOriginal);
         VEvent vComponentIndividual = agenda.getVCalendar().getVEvents().get(1);
 
         assertEquals(ICalendarStaticComponents.getDaily1(), vComponentOriginal);

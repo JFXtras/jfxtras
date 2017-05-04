@@ -173,12 +173,9 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
         }
         
         // String bindings
-        if (vComponentEdited.getSummary() == null)
-        {
-            vComponentEdited.setSummary(Summary.parse(""));
-        }
+        String initialSummary = (vComponent.getSummary() == null || vComponent.getSummary().getValue() == null) ? "" : vComponent.getSummary().getValue();
+        summaryTextField.setText(initialSummary);
         summaryTextField.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setSummary(newValue));
-//        summaryTextField.textProperty().bindBidirectional(vComponentEdited.getSummary().valueProperty());
         
         // START DATE/TIME
         startDateTimeTextField.setLocale(Locale.getDefault());
