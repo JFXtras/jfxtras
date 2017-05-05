@@ -25,7 +25,8 @@ public class DeleteVEventTest extends AgendaTestAbstract
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         moveTo("#hourLine11");
@@ -64,7 +65,8 @@ public class DeleteVEventTest extends AgendaTestAbstract
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         moveTo("#hourLine11");
@@ -101,7 +103,8 @@ public class DeleteVEventTest extends AgendaTestAbstract
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         moveTo("#hourLine11");

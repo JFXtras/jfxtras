@@ -32,10 +32,9 @@ public class ReviseThisAndFutureTest
     public void canEditThisAndFuture()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         // make changes
@@ -106,10 +105,9 @@ public class ReviseThisAndFutureTest
     public void canEditThisAndFutureWithRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
         
         // make recurrence
@@ -187,14 +185,13 @@ public class ReviseThisAndFutureTest
     }
     
     @Test // with a recurrence in between new date range - special recurrence stays unmodified.
-    @Ignore // TestFX4
+//    @Ignore // TestFX4
     public void canEditThisAndFutureAllIgnoreRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         // make recurrence before
@@ -298,10 +295,9 @@ public class ReviseThisAndFutureTest
     public void canChangeWholeDayToTimeBasedThisAndFuture()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getWholeDayDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
@@ -370,10 +366,9 @@ public class ReviseThisAndFutureTest
     public void canEditWholeDayToTimeBasedThisAndFutureIgnoreRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getWholeDayDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         // make recurrence
@@ -467,10 +462,9 @@ public class ReviseThisAndFutureTest
     public void canEditThisAndFuture2()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         // make changes

@@ -40,6 +40,8 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         // verify event's creation
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent vEvent = agenda.getVCalendar().getVEvents().get(0);
+//        System.out.println(vEvent.getDescription().getValue());
+//        System.out.println(vEvent.getDescription().getValue().getClass());
         VEvent expectedVEvent = new VEvent()
                 .withOrganizer(ICalendarAgenda.DEFAULT_ORGANIZER)
                 .withSummary("Edited summary")
