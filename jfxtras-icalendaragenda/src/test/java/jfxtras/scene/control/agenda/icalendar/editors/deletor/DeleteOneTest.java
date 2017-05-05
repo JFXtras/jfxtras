@@ -21,15 +21,12 @@ import net.balsoftware.icalendar.properties.component.recurrence.rrule.Recurrenc
 
 public class DeleteOneTest
 {
-    
     @Test // deletes one instance of a repeating event
     public void canDeleteOneInstance()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
 
         List<VCalendar> iTIPmessages = ((DeleterVEvent) SimpleDeleterFactory.newDeleter(vComponentOriginal))
                 .withDialogCallback((m) -> ChangeDialogOption.ONE)
@@ -62,10 +59,9 @@ public class DeleteOneTest
     public void canDeleteRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         // make recurrence
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()

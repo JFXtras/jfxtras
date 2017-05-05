@@ -24,10 +24,8 @@ public class DeleteAllTest
     public void canDeleteRepeatableAll()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
 
         List<VCalendar> iTIPmessages = ((DeleterVEvent) SimpleDeleterFactory.newDeleter(vComponentOriginal))
                 .withDialogCallback((m) -> ChangeDialogOption.ALL)
@@ -55,7 +53,6 @@ public class DeleteAllTest
             String iTIPMessage = iTIPmessages.stream()
                     .map(v -> v.toString())
                     .collect(Collectors.joining(System.lineSeparator()));
-            System.out.println(expectediTIPMessage);
             assertEquals(expectediTIPMessage, iTIPMessage);
     }
     
@@ -63,10 +60,9 @@ public class DeleteAllTest
     public void canDeleteAllWithRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final List<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         // make recurrence
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
