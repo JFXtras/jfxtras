@@ -82,7 +82,6 @@ public class ReviseOneTest
         // 2nd edit - edit component with RecurrenceID (individual)
         VEvent vComponentEditedIndividual = new VEvent(myComponentIndividual);
         VEvent vComponentIndividualCopy = new VEvent(myComponentIndividual);
-        System.out.println("vComponentIndividualCopy parent:" + vComponentIndividualCopy.getParent());
         
         vComponentEditedIndividual.setSummary("new summary");
         Temporal startOriginalRecurrence2 = LocalDateTime.of(2016, 5, 16, 9, 0);
@@ -97,7 +96,6 @@ public class ReviseOneTest
                 .withVComponentCopyEdited(vComponentEditedIndividual)
                 .withVComponentOriginal(vComponentIndividualCopy);
         iTIPMessages = reviser2.revise();
-        System.out.println("inputVCalendar:" + iTIPMessages);
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         
         expectediTIPMessage =
@@ -111,7 +109,7 @@ public class ReviseOneTest
                 "DTEND:20160516T130000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:new summary" + System.lineSeparator() +
-                myComponentIndividual.getDateTimeStamp().toString() + System.lineSeparator() +
+                vComponentEditedIndividual.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "RECURRENCE-ID:20160516T100000" + System.lineSeparator() +
