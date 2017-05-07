@@ -70,6 +70,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
             agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         // drag to new location
@@ -129,6 +130,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
             agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         // drag to new location
@@ -176,6 +178,7 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
             agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         // drag to new location

@@ -463,13 +463,11 @@ public class ICalendarAgenda extends Agenda
         Callback<Appointment, Void> appointmentChangedCallback = (Appointment appointment) ->
         {
             VDisplayable<?> vComponent = appointmentVComponentMap.get(System.identityHashCode(appointment));
-            System.out.println("vComponent aapt changed:" + vComponent);
             Object[] params = revisorParamGenerator(vComponent, appointment);
             List<VCalendar> iTIPMessage = SimpleRevisorFactory.newReviser(vComponent, params).revise();
-//            System.out.println("iTIPMessage:" + iTIPMessage);
             getVCalendar().processITIPMessage(iTIPMessage);
             appointmentStartOriginalMap.put(System.identityHashCode(appointment), appointment.getStartTemporal()); // update start map
-            Platform.runLater(() -> refresh());
+            Platform.runLater(() -> super.refresh());
             return null;
         };
         setAppointmentChangedCallback(appointmentChangedCallback);
@@ -578,7 +576,6 @@ public class ICalendarAgenda extends Agenda
                         ButtonData button = newAppointmentDrawnCallback.call(change.getAddedSubList().get(0));
                         // remove drawn appointment - it was replaced by one made when the newVComponent was added
                         appointments().remove(appointment);
-                        System.out.println("button:" + button);
                         switch (button)
                         {
                         case CANCEL_CLOSE:
@@ -770,6 +767,7 @@ public class ICalendarAgenda extends Agenda
                 e.printStackTrace();
             }
             vComponent.copyChildrenInto(vComponentCopy);
+            vComponentCopy.setParent(vComponent.getParent());
             Temporal startOriginalRecurrence = appointmentStartOriginalMap.get(System.identityHashCode(appointment));
             final Temporal startRecurrence;
             final Temporal endRecurrence;

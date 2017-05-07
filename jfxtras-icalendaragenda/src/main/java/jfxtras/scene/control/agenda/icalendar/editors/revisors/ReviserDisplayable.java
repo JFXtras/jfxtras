@@ -342,7 +342,6 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                 }
             }
         }
-
         if (incrementSequence)
         {
             vComponentEditedCopy.incrementSequence();

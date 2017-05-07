@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import javafx.collections.FXCollections;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
@@ -163,13 +162,15 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         assertEquals(1, vMessage.getVEvents().size());
         VEvent revisedVEvent = vMessage.getVEvents().get(0);
         
-        VEvent expectedRevisedVEvent = ICalendarStaticComponents.getDaily1()
+        VEvent expectedRevisedVEvent = ICalendarStaticComponents.getDaily1();
+        expectedRevisedVEvent.setCategories(null);
+        expectedRevisedVEvent
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 8, 0))
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 9, 9, 0))
                 .withSummary("new summary")
                 .withDescription("new description")
                 .withLocation("new location")
-                .withCategories(FXCollections.observableArrayList(new Categories("new group name")))
+                .withCategories(Arrays.asList(new Categories("new group name")))
                 .withDateTimeStamp(revisedVEvent.getDateTimeStamp())
                 .withSequence(1);
         assertEquals(expectedRevisedVEvent, revisedVEvent);

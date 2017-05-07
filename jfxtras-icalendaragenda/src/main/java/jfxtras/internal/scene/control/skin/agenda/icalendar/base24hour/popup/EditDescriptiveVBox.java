@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -18,7 +19,6 @@ import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -43,6 +43,7 @@ import jfxtras.scene.control.agenda.TemporalUtilities;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import net.balsoftware.icalendar.components.VComponent;
 import net.balsoftware.icalendar.components.VDisplayable;
+import net.balsoftware.icalendar.properties.component.descriptive.Categories;
 import net.balsoftware.icalendar.properties.component.descriptive.Summary;
 import net.balsoftware.icalendar.properties.component.time.DateTimeEnd;
 import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
@@ -230,7 +231,7 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
                 categories.add(i, newSelection);
             }
             categorySelectionGridPane.updateToolTip(i, categories.get(i));
-            vComponentEdited.getCategories().get(0).setValue(FXCollections.observableArrayList(newSelection));
+            vComponentEdited.getCategories().get(0).setValue(Arrays.asList(newSelection)); // keep Categories to maintain order
         });
         // verify category is unique
         categoryTextField.focusedProperty().addListener((obs, oldValue, newValue) ->
