@@ -1,9 +1,11 @@
 package jfxtras.icalendarfx.components;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.PropertyType;
+import java.util.List;
+
+import jfxtras.icalendarfx.components.VCommon;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VDescribable;
+import jfxtras.icalendarfx.components.VDescribableBase;
 import jfxtras.icalendarfx.properties.component.descriptive.Attachment;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 
@@ -34,37 +36,21 @@ public abstract class VDescribableBase<T> extends VCommon<T> implements VDescrib
      *</p>
      */
     @Override
-    public ObjectProperty<ObservableList<Attachment<?>>> attachmentsProperty()
-    {
-        if (attachments == null)
-        {
-            attachments = new SimpleObjectProperty<>(this, PropertyType.ATTACHMENT.toString());
-        }
-        return attachments;
-    }
+    public List<Attachment<?>> getAttachments() { return attachments; }
+    private List<Attachment<?>> attachments;
     @Override
-    public ObservableList<Attachment<?>> getAttachments()
+    public void setAttachments(List<Attachment<?>> attachments)
     {
-        return (attachments == null) ? null : attachments.get();
-    }
-    private ObjectProperty<ObservableList<Attachment<?>>> attachments;
-    @Override
-    public void setAttachments(ObservableList<Attachment<?>> attachments)
-    {
-        if (attachments != null)
-        {
-            if ((this.attachments != null) && (this.attachments.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(attachmentsProperty().get(), attachments);
-            }
-            orderer().registerSortOrderProperty(attachments);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(attachmentsProperty().get());
-        }
-        attachmentsProperty().set(attachments);
-    }
+    	if (this.attachments != null)
+    	{
+    		this.attachments.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.attachments = attachments;
+    	if (attachments != null)
+    	{
+    		attachments.forEach(c -> orderChild(c));
+    	}
+	}
     
     /**
      *<p>This property defines a short summary or subject for the calendar component</p>
@@ -75,18 +61,15 @@ public abstract class VDescribableBase<T> extends VCommon<T> implements VDescrib
      *</ul>
      *</p>
      */
-    @Override public ObjectProperty<Summary> summaryProperty()
-    {
-        if (summary == null)
-        {
-            summary = new SimpleObjectProperty<>(this, PropertyType.SUMMARY.toString());
-            orderer().registerSortOrderProperty(summary);
-        }
-        return summary;
-    }
     @Override
-    public Summary getSummary() { return (summary == null) ? null : summaryProperty().get(); }
-    private ObjectProperty<Summary> summary;
+    public Summary getSummary() { return summary; }
+    private Summary summary;
+    @Override
+	public void setSummary(Summary summary)
+    {
+    	orderChild(this.summary, summary);
+    	this.summary = summary;
+	}
     
     /*
      * CONSTRUCTORS

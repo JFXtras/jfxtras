@@ -6,6 +6,7 @@ import jfxtras.icalendarfx.components.VAlarm;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseLanguage;
+import jfxtras.icalendarfx.properties.component.time.DurationProp;
 
 /**
  * DURATION
@@ -33,11 +34,6 @@ import jfxtras.icalendarfx.properties.PropBaseLanguage;
  */
 public class DurationProp extends PropBaseLanguage<TemporalAmount, DurationProp>
 {
-//    public DurationProp(CharSequence contentLine)
-//    {
-//        super(contentLine);
-//    }
-
     public DurationProp(TemporalAmount value)
     {
         super(value);
@@ -53,10 +49,8 @@ public class DurationProp extends PropBaseLanguage<TemporalAmount, DurationProp>
         super();
     }
 
-    public static DurationProp parse(String propertyContent)
+    public static DurationProp parse(String content)
     {
-        DurationProp property = new DurationProp();
-        property.parseContent(propertyContent);
-        return property;
+    	return DurationProp.parse(new DurationProp(), content);
     }
 }

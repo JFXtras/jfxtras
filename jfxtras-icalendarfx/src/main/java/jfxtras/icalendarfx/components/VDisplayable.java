@@ -5,21 +5,25 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.util.Callback;
 import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VDescribable;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.components.VLastModified;
+import jfxtras.icalendarfx.components.VPersonal;
+import jfxtras.icalendarfx.components.VRepeatable;
+import jfxtras.icalendarfx.components.VRepeatableBase;
+import jfxtras.icalendarfx.properties.VPropertyElement;
 import jfxtras.icalendarfx.properties.component.change.DateTimeCreated;
 import jfxtras.icalendarfx.properties.component.change.LastModified;
 import jfxtras.icalendarfx.properties.component.change.Sequence;
@@ -37,6 +41,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRuleCache;
 import jfxtras.icalendarfx.properties.component.relationship.Contact;
 import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
 import jfxtras.icalendarfx.properties.component.relationship.RelatedTo;
+import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
@@ -78,37 +83,21 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      *</p>
      */
     @Override
-    public ObjectProperty<ObservableList<Attachment<?>>> attachmentsProperty()
-    {
-        if (attachments == null)
-        {
-            attachments = new SimpleObjectProperty<>(this, PropertyType.ATTACHMENT.toString());
-        }
-        return attachments;
-    }
+    public List<Attachment<?>> getAttachments() { return attachments; }
+    private List<Attachment<?>> attachments;
     @Override
-    public ObservableList<Attachment<?>> getAttachments()
+    public void setAttachments(List<Attachment<?>> attachments)
     {
-        return (attachments == null) ? null : attachments.get();
-    }
-    private ObjectProperty<ObservableList<Attachment<?>>> attachments;
-    @Override
-    public void setAttachments(ObservableList<Attachment<?>> attachments)
-    {
-        if (attachments != null)
-        {
-            if ((this.attachments != null) && (this.attachments.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(attachmentsProperty().get(), attachments);
-            }
-            orderer().registerSortOrderProperty(attachments);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(attachmentsProperty().get());
-        }
-        attachmentsProperty().set(attachments);
-    }
+    	if (this.attachments != null)
+    	{
+    		this.attachments.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.attachments = attachments;
+    	if (attachments != null)
+    	{
+    		attachments.forEach(e -> orderChild(e));
+    	}
+	}
     
     /**
      * CATEGORIES:
@@ -118,59 +107,40 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * CATEGORIES:APPOINTMENT,EDUCATION
      * CATEGORIES:MEETING
      */
-    public ObjectProperty<ObservableList<Categories>> categoriesProperty()
+    public List<Categories> getCategories() { return categories; }
+    private List<Categories> categories;
+    public void setCategories(List<Categories> categories)
     {
-        if (categories == null)
-        {
-            categories = new SimpleObjectProperty<>(this, PropertyType.CATEGORIES.toString());
-        }
-        return categories;
-    }
-    public ObservableList<Categories> getCategories()
+    	if (this.categories != null)
+    	{
+    		this.categories.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.categories = categories;
+    	if (categories != null)
+    	{
+    		categories.forEach(e -> orderChild(e));
+    	}
+	}
+    public T withCategories(List<Categories> categories)
     {
-        return (categories == null) ? null : categories.get();
-    }
-    private ObjectProperty<ObservableList<Categories>> categories;
-    public void setCategories(ObservableList<Categories> categories)
-    {
-        if (categories != null)
-        {
-            if ((this.categories != null) && (this.categories.get() != null))
-            {
-                // replace sort order in new list
-                // TODO - Is there a way to encapsulate this in the orderer without this method call?
-                orderer().replaceList(categoriesProperty().get(), categories);
-            }
-            orderer().registerSortOrderProperty(categories);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(categoriesProperty().get());
-        }
-        categoriesProperty().set(categories);
-    }
-    public T withCategories(ObservableList<Categories> categories)
-    {
-        setCategories(categories);
+    	if (getCategories() == null)
+    	{
+    		setCategories(new ArrayList<>());
+    	}
+    	getCategories().addAll(categories);
+    	if (categories != null)
+    	{
+    		categories.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     public T withCategories(String...categories)
     {
-        if (categories != null)
-        {
-            String c = Arrays.stream(categories).collect(Collectors.joining(","));
-            PropertyType.CATEGORIES.parse(this, c);
-        }
-        return (T) this;
+        return withCategories(new Categories(categories));
     }
     public T withCategories(Categories...categories)
     {
-        if (getCategories() == null)
-        {
-            setCategories(FXCollections.observableArrayList(categories));
-        } else
-        {
-            getCategories().addAll(categories);
-        }
+    	withCategories(new ArrayList<>(Arrays.asList(categories)));
         return (T) this;
     }
     
@@ -184,32 +154,15 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * Example:
      * CLASS:PUBLIC
      */
-    public ObjectProperty<Classification> classificationProperty()
-    {
-        if (classification == null)
-        {
-            classification = new SimpleObjectProperty<>(this, PropertyType.CLASSIFICATION.toString());
-            orderer().registerSortOrderProperty(classification);
-        }
-        return classification;
-    }
-    public Classification getClassification()
-    {
-        return (classification == null) ? null : classificationProperty().get();
-    }
-    private ObjectProperty<Classification> classification;
-    public void setClassification(String classification)
-    {
-        setClassification(Classification.parse(classification));
-    }
+    public Classification getClassification() { return classification; }
+    private Classification classification;
+    public void setClassification(String classification) { setClassification(Classification.parse(classification)); }
     public void setClassification(Classification classification)
     {
-        classificationProperty().set(classification);
-    }
-    public void setClassification(ClassificationType classification)
-    {
-        setClassification(new Classification(classification));            
-    }
+    	orderChild(this.classification, classification);
+    	this.classification = classification;
+	}
+    public void setClassification(ClassificationType classification) { setClassification(new Classification(classification)); }
     public T withClassification(Classification classification)
     {
         setClassification(classification);
@@ -238,55 +191,43 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      *  c=US???(cn=Jim%20Dolittle)":Jim Dolittle\, ABC Industries\,
      *  +1-919-555-1234
      */
-    public ObjectProperty<ObservableList<Contact>> contactsProperty()
+    public List<Contact> getContacts() { return contacts; }
+    private List<Contact> contacts;
+    public void setContacts(List<Contact> contacts)
     {
-        if (contacts == null)
-        {
-            contacts = new SimpleObjectProperty<>(this, PropertyType.CONTACT.toString());
-        }
-        return contacts;
-    }
-    public ObservableList<Contact> getContacts()
+    	if (this.contacts != null)
+    	{
+    		this.contacts.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.contacts = contacts;
+    	if (contacts != null)
+    	{
+    		contacts.forEach(c -> orderChild(c));
+    	}
+	}
+    public T withContacts(List<Contact> contacts)
     {
-        return (contacts == null) ? null : contacts.get();
-    }
-    private ObjectProperty<ObservableList<Contact>> contacts;
-    public void setContacts(ObservableList<Contact> contacts)
-    {
-        if (contacts != null)
-        {
-            if ((this.contacts != null) && (this.contacts.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(contactsProperty().get(), contacts);
-            }
-            orderer().registerSortOrderProperty(contacts);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(contactsProperty().get());
-        }
-        contactsProperty().set(contacts);
-    }
-    public T withContacts(ObservableList<Contact> contacts)
-    {
-        setContacts(contacts);
+    	if (getContacts() == null)
+    	{
+    		setContacts(new ArrayList<>());
+    	}
+    	getContacts().addAll(contacts);
+    	if (contacts != null)
+    	{
+    		contacts.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     public T withContacts(String...contacts)
     {
-        Arrays.stream(contacts).forEach(c -> PropertyType.CONTACT.parse(this, c));
-        return (T) this;
+        List<Contact> list = Arrays.stream(contacts)
+                .map(c -> Contact.parse(c))
+                .collect(Collectors.toList());
+        return withContacts(list);
     }
     public T withContacts(Contact...contacts)
     {
-        if (getContacts() == null)
-        {
-            setContacts(FXCollections.observableArrayList(contacts));
-        } else
-        {
-            getContacts().addAll(contacts);
-        }
-        return (T) this;
+    	return withContacts(Arrays.asList(contacts));
     }
     
     /**
@@ -299,49 +240,28 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * Example:
      * CREATED:19960329T133000Z
      */
-    public ObjectProperty<DateTimeCreated> dateTimeCreatedProperty()
+    public DateTimeCreated getDateTimeCreated() { return dateTimeCreated; }
+    private DateTimeCreated dateTimeCreated;
+    public void setDateTimeCreated(String dateTimeCreated) { setDateTimeCreated(DateTimeCreated.parse(dateTimeCreated)); }
+    public void setDateTimeCreated(DateTimeCreated dateTimeCreated)
     {
-        if (dateTimeCreated == null)
-        {
-            dateTimeCreated = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_CREATED.toString());
-            orderer().registerSortOrderProperty(dateTimeCreated);
-        }
-        return dateTimeCreated;
-    }
-    public DateTimeCreated getDateTimeCreated() { return (dateTimeCreated == null) ? null : dateTimeCreatedProperty().get(); }
-    private ObjectProperty<DateTimeCreated> dateTimeCreated;
-    public void setDateTimeCreated(String dtCreated)
+    	orderChild(this.dateTimeCreated, dateTimeCreated);
+    	this.dateTimeCreated = dateTimeCreated;
+	}
+    public void setDateTimeCreated(ZonedDateTime dateTimeCreated) { setDateTimeCreated(new DateTimeCreated(dateTimeCreated)); }
+    public T withDateTimeCreated(ZonedDateTime dateTimeCreated)
     {
-        if (getDateTimeCreated() == null)
-        {
-            setDateTimeCreated(DateTimeCreated.parse(dtCreated));
-        } else
-        {
-            DateTimeCreated temp = DateTimeCreated.parse(dtCreated);
-            setDateTimeCreated(temp);
-        }
-    }
-    public void setDateTimeCreated(DateTimeCreated dtCreated)
-    {
-        dateTimeCreatedProperty().set(dtCreated);
-    }
-    public void setDateTimeCreated(ZonedDateTime dtCreated)
-    {
-        setDateTimeCreated(new DateTimeCreated(dtCreated));
-    }
-    public T withDateTimeCreated(ZonedDateTime dtCreated)
-    {
-        setDateTimeCreated(dtCreated);
+        setDateTimeCreated(dateTimeCreated);
         return (T) this;
     }
-    public T withDateTimeCreated(String dtCreated)
+    public T withDateTimeCreated(String dateTimeCreated)
     {
-        setDateTimeCreated(dtCreated);
+        setDateTimeCreated(dateTimeCreated);
         return (T) this;
     }
-    public T withDateTimeCreated(DateTimeCreated dtCreated)
+    public T withDateTimeCreated(DateTimeCreated dateTimeCreated)
     {
-        setDateTimeCreated(dtCreated);
+        setDateTimeCreated(dateTimeCreated);
         return (T) this;
     }
     
@@ -353,73 +273,47 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
     * This property defines the list of DATE-TIME exceptions for
     * recurring events, to-dos, journal entries, or time zone definitions.
     */
-    public ObjectProperty<ObservableList<ExceptionDates>> exceptionDatesProperty()
+    public List<ExceptionDates> getExceptionDates() { return exceptionDates; }
+    private List<ExceptionDates> exceptionDates;
+    public void setExceptionDates(List<ExceptionDates> exceptionDates)
     {
-        if (exceptionDates == null)
-        {
-            exceptionDates = new SimpleObjectProperty<>(this, PropertyType.EXCEPTION_DATE_TIMES.toString());
-        }
-        return exceptionDates;
-    }
-    public ObservableList<ExceptionDates> getExceptionDates()
-    {
-        return (exceptionDates == null) ? null : exceptionDates.get();
-    }
-    private ObjectProperty<ObservableList<ExceptionDates>> exceptionDates;
-    public void setExceptionDates(ObservableList<ExceptionDates> exceptionDates)
-    {
+    	if (this.exceptionDates != null)
+    	{
+    		this.exceptionDates.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+        this.exceptionDates = exceptionDates;
         if (exceptionDates != null)
         {
-            if ((this.exceptionDates != null) && (this.exceptionDates.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(exceptionDatesProperty().get(), exceptionDates);
-            }
-            orderer().registerSortOrderProperty(exceptionDates);
-            exceptionDates.addListener(getRecurrencesConsistencyWithDateTimeStartListener());
-            String error = checkRecurrencesConsistency(exceptionDates);
-            if (error != null) throw new DateTimeException(error);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(exceptionDatesProperty().get());
+        	exceptionDates.forEach(e -> orderChild(e)); // order new elements
         }
-        exceptionDatesProperty().set(exceptionDates);
     }
-    public T withExceptionDates(ObservableList<ExceptionDates> exceptions)
+    public T withExceptionDates(List<ExceptionDates> exceptions)
     {
-        setExceptionDates(exceptions);
+    	if (getExceptionDates() == null)
+    	{
+    		setExceptionDates(new ArrayList<>());
+    	}
+    	getExceptionDates().addAll(exceptions);
+    	if (exceptions != null)
+    	{
+    		exceptions.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     public T withExceptionDates(String...exceptions)
     {
-        Arrays.stream(exceptions).forEach(s -> PropertyType.EXCEPTION_DATE_TIMES.parse(this, s));   
-        return (T) this;
+        List<ExceptionDates> list = Arrays.stream(exceptions)
+                .map(c -> ExceptionDates.parse(c))
+                .collect(Collectors.toList());  
+        return withExceptionDates(list);
     }
     public T withExceptionDates(Temporal...exceptions)
     {
-        final ObservableList<ExceptionDates> list;
-        if (getExceptionDates() == null)
-        {
-            list = FXCollections.observableArrayList();
-            setExceptionDates(list);
-        } else
-        {
-            list = getExceptionDates();
-        }
-        list.add(new ExceptionDates(exceptions));
-        return (T) this;
+    	return withExceptionDates(new ExceptionDates(exceptions));
     }
     public T withExceptionDates(ExceptionDates...exceptions)
     {
-        if (getExceptionDates() == null)
-        {
-            setExceptionDates(FXCollections.observableArrayList());
-            Arrays.stream(exceptions).forEach(e -> getExceptionDates().add(e)); // add one at a time to ensure date-time type compliance
-        } else
-        {
-            getExceptionDates().addAll(exceptions);
-        }
-        return (T) this;
+    	return withExceptionDates(Arrays.asList(exceptions));
     }
     
     /**
@@ -439,18 +333,15 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
     * LAST-MODIFIED:19960817T133000Z
     */
     @Override
-    public ObjectProperty<LastModified> dateTimeLastModifiedProperty()
-    {
-        if (lastModified == null)
-        {
-            lastModified = new SimpleObjectProperty<>(this, PropertyType.LAST_MODIFIED.toString());
-            orderer().registerSortOrderProperty(lastModified);
-        }
-        return lastModified;
-    }
+    public LastModified getDateTimeLastModified() { return lastModified; }
+    private LastModified lastModified;
     @Override
-    public LastModified getDateTimeLastModified() { return (lastModified == null) ? null : dateTimeLastModifiedProperty().get(); }
-    private ObjectProperty<LastModified> lastModified;
+	public void setDateTimeLastModified(LastModified lastModified)
+    {
+    	orderChild(this.lastModified, lastModified);
+    	this.lastModified = lastModified;
+	}
+    // Other setters are default methods in interface
     
     /**
      * RDATE
@@ -463,40 +354,17 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * NOTE: DOESN'T CURRENTLY SUPPORT PERIOD VALUE TYPE
      * */
     @Override
-    public ObjectProperty<ObservableList<RecurrenceDates>> recurrenceDatesProperty()
-    {
-        if (recurrenceDates == null)
-        {
-            recurrenceDates = new SimpleObjectProperty<>(this, PropertyType.RECURRENCE_DATE_TIMES.toString());
-        }
-        return recurrenceDates;
-    }
+    public List<RecurrenceDates> getRecurrenceDates() { return recurrenceDates; }
+    private List<RecurrenceDates> recurrenceDates;
     @Override
-    public ObservableList<RecurrenceDates> getRecurrenceDates()
+    public void setRecurrenceDates(List<RecurrenceDates> recurrenceDates)
     {
-        return (recurrenceDates == null) ? null : recurrenceDates.get();
-    }
-    private ObjectProperty<ObservableList<RecurrenceDates>> recurrenceDates;
-    @Override
-    public void setRecurrenceDates(ObservableList<RecurrenceDates> recurrenceDates)
-    {
-        if (recurrenceDates != null)
-        {
-            if ((this.recurrenceDates != null) && (this.recurrenceDates.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(recurrenceDatesProperty().get(), recurrenceDates);
-            }
-            orderer().registerSortOrderProperty(recurrenceDates);
-            recurrenceDates.addListener(getRecurrencesConsistencyWithDateTimeStartListener());
-            String error = checkRecurrencesConsistency(recurrenceDates);
-            if (error != null) throw new DateTimeException(error);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(recurrenceDatesProperty().get());
-        }
-        recurrenceDatesProperty().set(recurrenceDates);
-    }
+    	this.recurrenceDates = recurrenceDates;
+    	if (recurrenceDates != null)
+    	{
+    		recurrenceDates.forEach(c -> orderChild(c));
+    	}
+	}
 
     /**
      * RECURRENCE-ID: Recurrence Identifier
@@ -507,125 +375,47 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * Example:
      * RECURRENCE-ID;VALUE=DATE:19960401
      */
-    public ObjectProperty<RecurrenceId> recurrenceIdProperty()
+    public RecurrenceId getRecurrenceId() { return recurrenceId; }
+    private RecurrenceId recurrenceId;
+    public void setRecurrenceId(RecurrenceId recurrenceId)
     {
-        if (recurrenceId == null)
-        {
-            recurrenceId = new SimpleObjectProperty<>(this, PropertyType.RECURRENCE_IDENTIFIER.toString());
-            orderer().registerSortOrderProperty(recurrenceId);
-            recurrenceId.addListener((obs) -> 
-            {
-                String error = checkRecurrenceIdConsistency();
-                if (error != null)
-                {
-                    throw new DateTimeException(error);
-                }
-            });
-        }
-        return recurrenceId;
-    }
-    public RecurrenceId getRecurrenceId() { return (recurrenceId == null) ? null : recurrenceIdProperty().get(); }
-    private ObjectProperty<RecurrenceId> recurrenceId;
-    public void setRecurrenceId(RecurrenceId recurrenceId) { recurrenceIdProperty().set(recurrenceId); }
-    public void setRecurrenceId(String recurrenceId)
-    {
-        if (getRecurrenceId() == null)
-        {
-            setRecurrenceId(RecurrenceId.parse(recurrenceId));
-        } else
-        {
-            RecurrenceId temp = RecurrenceId.parse(recurrenceId);
-            if (temp.getValue().getClass().equals(getRecurrenceId().getValue().getClass()))
-            {
-                getRecurrenceId().setValue(temp.getValue());
-            } else
-            {
-                setRecurrenceId(temp);
-            }
-        }
-    }
+    	orderChild(this.recurrenceId, recurrenceId);
+    	this.recurrenceId = recurrenceId;
+	}
+    public void setRecurrenceId(String recurrenceId) { setRecurrenceId(RecurrenceId.parse(recurrenceId)); }
     public void setRecurrenceId(Temporal temporal)
     {
-        if ((getRecurrenceId() == null) || ! getRecurrenceId().getValue().getClass().equals(temporal.getClass()))
+        if ((temporal instanceof LocalDate) || (temporal instanceof LocalDateTime) || (temporal instanceof ZonedDateTime))
         {
-            if ((temporal instanceof LocalDate) || (temporal instanceof LocalDateTime) || (temporal instanceof ZonedDateTime))
+            if (getRecurrenceId() == null)
             {
-                if (getRecurrenceId() == null)
-                {
-                    setRecurrenceId(new RecurrenceId(temporal));
-                } else
-                {
-                    getRecurrenceId().setValue(temporal);
-                }
+                setRecurrenceId(new RecurrenceId(temporal));
             } else
             {
-                throw new DateTimeException("Only LocalDate, LocalDateTime and ZonedDateTime supported. "
-                        + temporal.getClass().getSimpleName() + " is not supported");
+                getRecurrenceId().setValue(temporal);
             }
         } else
         {
-            getRecurrenceId().setValue(temporal);
+            throw new DateTimeException("Only LocalDate, LocalDateTime and ZonedDateTime supported. "
+                    + temporal.getClass().getSimpleName() + " is not supported");
         }
     }
     public T withRecurrenceId(RecurrenceId recurrenceId)
     {
-        if (getRecurrenceId() == null)
-        {
-            setRecurrenceId(recurrenceId);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setRecurrenceId(recurrenceId);
+        return (T) this;
     }
     public T withRecurrenceId(String recurrenceId)
     {
-        if (getRecurrenceId() == null)
-        {
-            setRecurrenceId(recurrenceId);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setRecurrenceId(recurrenceId);
+        return (T) this;
     }
     public T withRecurrenceId(Temporal recurrenceId)
     {
-//        if (getRecurrenceId() == null)
-//        {
         setRecurrenceId(recurrenceId);
         return (T) this;
-//        } else
-//        {
-//            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-//        }
     }
-    
-//    /** Ensures RecurrenceId has same date-time type as DateTimeStart.  Should be put in listener
-//     *  after recurrenceIdProperty() is initialized */
-//    void checkRecurrenceIdConsistency()
-//    {
-//        System.out.println("test22:" + getRecurrenceId() + " " + getDateTimeStart());
-//        if ((getRecurrenceId() != null) && (getDateTimeStart() != null))
-//        {
-//            DateTimeType recurrenceIdType = DateTimeUtilities.DateTimeType.of(getRecurrenceId().getValue());
-//            if (getParent() != null)
-//            {
-//                List<VComponentDisplayableBase<?>> relatedComponents = ((VCalendar) getParent()).uidComponentsMap().get(getUniqueIdentifier().getValue());
-//                VComponentDisplayableBase<?> parentComponent = relatedComponents.stream()
-//                        .filter(v -> v.getRecurrenceId() == null)
-//                        .findFirst()
-//                        .orElseThrow(() -> new RuntimeException("no parent component found"));
-//                DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(parentComponent.getDateTimeStart().getValue());
-//                if (recurrenceIdType != dateTimeStartType)
-//                {
-//                    throw new DateTimeException("RecurrenceId DateTimeType (" + recurrenceIdType +
-//                            ") must be same as the DateTimeType of DateTimeStart (" + dateTimeStartType + ")");
-//                }
-//            }
-//        }
-//    }
-    
+        
     /** Checks if RecurrenceId has same date-time type as DateTimeStart.  Returns String containing
      * error message if there is a problem, null otherwise. */
     String checkRecurrenceIdConsistency()
@@ -636,7 +426,7 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
             DateTimeType parentDateTimeStartType = DateTimeUtilities.DateTimeType.of(recurrenceParent().getDateTimeStart().getValue());
             if (recurrenceIdType != parentDateTimeStartType)
             {
-                return PropertyType.RECURRENCE_IDENTIFIER.toString() + ":RecurrenceId DateTimeType (" + recurrenceIdType +
+                return VPropertyElement.RECURRENCE_IDENTIFIER.toString() + ":RecurrenceId DateTimeType (" + recurrenceIdType +
                         ") must be same as the type of its parent's DateTimeStart (" + parentDateTimeStartType + ")";
             }
         }
@@ -654,51 +444,43 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * Example:
      * RELATED-TO:19960401-080045-4000F192713-0052@example.com
      */
-    public ObjectProperty<ObservableList<RelatedTo>> relatedToProperty()
+    public List<RelatedTo> getRelatedTo() { return relatedTo; }
+    private List<RelatedTo> relatedTo;
+    public void setRelatedTo(List<RelatedTo> relatedTo)
     {
-        if (relatedTo == null)
-        {
-            relatedTo = new SimpleObjectProperty<>(this, PropertyType.RELATED_TO.toString());
-        }
-        return relatedTo;
-    }
-    public ObservableList<RelatedTo> getRelatedTo()
+    	if (this.relatedTo != null)
+    	{
+    		this.relatedTo.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.relatedTo = relatedTo;
+    	if (relatedTo != null)
+    	{
+        	relatedTo.forEach(c -> orderChild(c));
+    	}
+	}
+    public T withRelatedTo(List<RelatedTo> relatedTo)
     {
-        return (relatedTo == null) ? null : relatedTo.get();
-    }
-    private ObjectProperty<ObservableList<RelatedTo>> relatedTo;
-    public void setRelatedTo(ObservableList<RelatedTo> relatedTo)
-    {
-        if (relatedTo != null)
-        {
-            if ((this.relatedTo != null) && (this.relatedTo.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(relatedToProperty().get(), relatedTo);
-            }
-            orderer().registerSortOrderProperty(relatedTo);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(relatedToProperty().get());
-        }
-        relatedToProperty().set(relatedTo);
-    }
-    public T withRelatedTo(ObservableList<RelatedTo> relatedTo) { setRelatedTo(relatedTo); return (T) this; }
+    	if (getRelatedTo() == null)
+    	{
+    		setRelatedTo(new ArrayList<>());
+    	}
+    	getRelatedTo().addAll(relatedTo);
+    	if (relatedTo != null)
+    	{
+    		relatedTo.forEach(c -> orderChild(c));
+    	}
+    	return (T) this;
+	}
     public T withRelatedTo(String...relatedTo)
     {
-        Arrays.stream(relatedTo).forEach(c -> PropertyType.RELATED_TO.parse(this, c));
-        return (T) this;
+        List<RelatedTo> list = Arrays.stream(relatedTo)
+                .map(c -> RelatedTo.parse(c))
+                .collect(Collectors.toList());
+        return withRelatedTo(list);
     }
     public T withRelatedTo(RelatedTo...relatedTo)
     {
-        if (getRelatedTo() == null)
-        {
-            setRelatedTo(FXCollections.observableArrayList(relatedTo));
-        } else
-        {
-            getRelatedTo().addAll(relatedTo);
-        }
-        return (T) this;
+    	return withRelatedTo(Arrays.asList(relatedTo));
     }
     
     /**
@@ -712,18 +494,15 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * RRULE:FREQ=DAILY;COUNT=10
      * RRULE:FREQ=WEEKLY;UNTIL=19971007T000000Z;WKST=SU;BYDAY=TU,TH
      */
-    @Override public ObjectProperty<RecurrenceRule> recurrenceRuleProperty()
-    {
-        if (recurrenceRule == null)
-        {
-            recurrenceRule = new SimpleObjectProperty<>(this, PropertyType.UNIQUE_IDENTIFIER.toString());
-            orderer().registerSortOrderProperty(recurrenceRule);
-        }
-        return recurrenceRule;
-    }
     @Override
-    public RecurrenceRule getRecurrenceRule() { return (recurrenceRule == null) ? null : recurrenceRuleProperty().get(); }
-    private ObjectProperty<RecurrenceRule> recurrenceRule;
+    public RecurrenceRule getRecurrenceRule() { return recurrenceRule; }
+    private RecurrenceRule recurrenceRule;
+    @Override
+	public void setRecurrenceRule(RecurrenceRule recurrenceRule)
+    {
+    	orderChild(this.recurrenceRule, recurrenceRule);
+    	this.recurrenceRule = recurrenceRule;
+	}
  
     /**
      * SEQUENCE:
@@ -740,39 +519,15 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      *
      * SEQUENCE:2
      */
-    public ObjectProperty<Sequence> sequenceProperty()
+    public Sequence getSequence() { return sequence; }
+    private Sequence sequence;
+    public void setSequence(Sequence sequence)
     {
-        if (sequence == null)
-        {
-            sequence = new SimpleObjectProperty<>(this, PropertyType.SEQUENCE.toString());
-            orderer().registerSortOrderProperty(sequence);
-        }
-        return sequence;
-    }
-    public Sequence getSequence() { return (sequence == null) ? null : sequenceProperty().get(); }
-    private ObjectProperty<Sequence> sequence;
-    public void setSequence(String sequence)
-    {
-        if (getSequence() == null)
-        {
-            setSequence(Sequence.parse(sequence));
-        } else
-        {
-            Sequence temp = Sequence.parse(sequence);
-            getSequence().setValue(temp.getValue());
-        }
-    }
-    public void setSequence(Integer sequence)
-    {
-        if (getSequence() == null)
-        {
-            setSequence(new Sequence(sequence));
-        } else
-        {
-            getSequence().setValue(sequence);
-        }
-    }
-    public void setSequence(Sequence sequence) { sequenceProperty().set(sequence); }
+    	orderChild(this.sequence, sequence);
+    	this.sequence = sequence;
+	}
+    public void setSequence(String sequence) { setSequence(Sequence.parse(sequence)); }
+    public void setSequence(Integer sequence) { setSequence(new Sequence(sequence)); }
     public T withSequence(Sequence sequence)
     {
         if (getSequence() == null)
@@ -826,71 +581,29 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * Example:
      * STATUS:TENTATIVE
      */
-    public ObjectProperty<Status> statusProperty()
+    public Status getStatus() { return status; }
+    private Status status;
+    public void setStatus(Status status)
     {
-        if (status == null)
-        {
-            status = new SimpleObjectProperty<>(this, PropertyType.STATUS.toString());
-            orderer().registerSortOrderProperty(status);
-        }
-        return status;
-    }
-    public Status getStatus() { return (status == null) ? null : statusProperty().get(); }
-    private ObjectProperty<Status> status;
-    public void setStatus(String status)
-    {
-        if (getStatus() == null)
-        {
-            setStatus(Status.parse(status));
-        } else
-        {
-            Status temp = Status.parse(status);
-            getStatus().setValue(temp.getValue());
-        }
-    }
-    public void setStatus(Status status) { statusProperty().set(status); }
-    public void setStatus(StatusType status)
-    {
-        if (getStatus() == null)
-        {
-            setStatus(new Status(status));
-        } else
-        {
-            getStatus().setValue(status);
-        }
-    }
+    	orderChild(this.status, status);
+    	this.status = status;
+	}
+    public void setStatus(String status) { setStatus(Status.parse(status)); }
+    public void setStatus(StatusType status) { setStatus(new Status(status)); }
     public T withStatus(Status status)
     {
-        if (getStatus() == null)
-        {
-            setStatus(status);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setStatus(status);
+        return (T) this;
     }
     public T withStatus(StatusType status)
     {
-        if (getStatus() == null)
-        {
-            setStatus(status);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setStatus(status);
+        return (T) this;
     }
     public T withStatus(String status)
     {
-        if (getStatus() == null)
-        {
-            setStatus(status);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setStatus(status);
+        return (T) this;
     }
 
     /**
@@ -902,46 +615,16 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      * Example:
      * SUMMARY:Department Party
      */
-    @Override public ObjectProperty<Summary> summaryProperty()
-    {
-        if (summary == null)
-        {
-            summary = new SimpleObjectProperty<>(this, PropertyType.SUMMARY.toString());
-            orderer().registerSortOrderProperty(summary);
-        }
-        return summary;
-    }
     @Override
-    public Summary getSummary() { return (summary == null) ? null : summaryProperty().get(); }
-    private ObjectProperty<Summary> summary;
-    
-//    @Override
-//    public void checkDateTimeStartConsistency()
-//    {
-//        VComponentRepeatable.super.checkDateTimeStartConsistency();
-//        if ((getExceptionDates() != null) && (getDateTimeStart() != null))
-//        {
-//            Temporal firstException = getExceptionDates().get(0).getValue().iterator().next();
-//            DateTimeType exceptionType = DateTimeUtilities.DateTimeType.of(firstException);
-//            DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(getDateTimeStart().getValue());
-//            if (exceptionType != dateTimeStartType)
-//            {
-//                throw new DateTimeException("Exceptions DateTimeType (" + exceptionType +
-//                        ") must be same as the DateTimeType of DateTimeStart (" + dateTimeStartType + ")");
-//            }
-//        }
-//        checkRecurrenceIdConsistency();
-////        if ((getRecurrenceId() != null) && (getDateTimeStart() != null))
-////        {
-////            DateTimeType recurrenceIdType = DateTimeUtilities.DateTimeType.of(getRecurrenceId().getValue());
-////            DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(getDateTimeStart().getValue());
-////            if (recurrenceIdType != dateTimeStartType)
-////            {
-////                throw new DateTimeException("RecurrenceId DateTimeType (" + recurrenceIdType +
-////                        ") must be same as the DateTimeType of DateTimeStart (" + dateTimeStartType + ")");
-////            }
-////        }        
-//    }
+    public Summary getSummary() { return summary; }
+    private Summary summary;
+    @Override
+	public void setSummary(Summary summary)
+    {
+    	orderChild(this.summary, summary);
+    	this.summary = summary;
+	}
+
     
     @Override
     void dateTimeStartListenerHook()
@@ -959,17 +642,13 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
      */
     public VDisplayable() { super(); }
     
-//    public VComponentDisplayableBase(String contentLines)
-//    {
-//        super(contentLines);
-//    }
-    
     public VDisplayable(VDisplayable<T> source)
     {
         super(source);
     }
     
     @Override
+    @Deprecated // need to move to VCalendar
     public Stream<Temporal> streamRecurrences(Temporal start)
     {
         // get stream with recurrence rule (RRULE) and recurrence date (RDATE)
@@ -1034,45 +713,45 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
     /*
      * RECURRENCE CHILDREN - (RECURRENCE-IDs AND MATCHING UID)
      */
-    /**  Callback to make list of child components (those with RECURRENCE-ID and same UID)
-     * Callback assigned in {@link VCalendar#displayableListChangeListener } */
-    private Callback<VDisplayable<?>, List<VDisplayable<?>>> makeRecurrenceChildrenListCallBack;
-//    @Override
-//    public Callback<VComponentDisplayableBase<?>, List<VComponentDisplayableBase<?>>> getChildComponentsListCallBack()
-//    {
-//        return makeChildComponentsListCallBack;
-//    }
-    public void setRecurrenceChildrenListCallBack(Callback<VDisplayable<?>, List<VDisplayable<?>>> makeRecurrenceChildrenListCallBack)
-    {
-        this.makeRecurrenceChildrenListCallBack = makeRecurrenceChildrenListCallBack;
-    }
-
     public List<VDisplayable<?>> recurrenceChildren()
     {
-        if ((getRecurrenceId() == null) && (makeRecurrenceChildrenListCallBack != null))
-        {
-            return Collections.unmodifiableList(makeRecurrenceChildrenListCallBack.call(this));
-        }
-        return Collections.unmodifiableList(Collections.emptyList());
+    	if ((getParent() != null) && (getRecurrenceId() == null))
+    	{
+    		UniqueIdentifier myUid = getUniqueIdentifier();
+    		return calendarList()
+    			.stream()
+    			.map(c -> (VDisplayable<?>) c)
+    			.filter(c -> ! (c == this))
+    			.filter(c -> c.getUniqueIdentifier().equals(myUid))
+				.filter(c -> c.getRecurrenceId() != null)
+				.collect(Collectors.toList());
+    	} else
+    	{
+    		return Collections.emptyList();
+    	}
     }
     
     /*
      * RECURRENCE PARENT - (the VComponent with matching UID and no RECURRENCEID)
      */
-    private Callback<VDisplayable<?>, VDisplayable<?>> recurrenceParentCallBack;
-
-    public void setRecurrenceParentListCallBack(Callback<VDisplayable<?>, VDisplayable<?>> recurrenceParentCallBack)
-    {
-        this.recurrenceParentCallBack = recurrenceParentCallBack;
-    }
-    
     public VDisplayable<?> recurrenceParent()
     {
-        if ((getRecurrenceId() != null) && (recurrenceParentCallBack != null))
-        {
-            return recurrenceParentCallBack.call(this);
-        }
-        return null;
+    	if (getParent() != null && (getRecurrenceId() != null))
+    	{
+    		UniqueIdentifier myUid = getUniqueIdentifier();
+    		@SuppressWarnings("rawtypes")
+			Optional<VDisplayable> recurrenceParent = calendarList()
+    			.stream()
+    			.map(c -> (VDisplayable) c)
+    			.filter(c -> ! (c == this))
+    			.filter(c -> c.getUniqueIdentifier().equals(myUid))
+				.filter(c -> c.getRecurrenceId() == null)
+				.findAny();
+    		return (recurrenceParent.isPresent()) ? recurrenceParent.get() : null;
+    	} else
+    	{
+    		return null;
+    	}
     }
 
     /** returns list of orphaned recurrence components due to a change.  These
@@ -1085,9 +764,11 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
             VCalendar vCalendar = (VCalendar) getParent();
             if (vCalendar != null)
             {
-                final String uid = getUniqueIdentifier().getValue();
-                return vCalendar.uidComponentsMap().get(uid)
+                final UniqueIdentifier uid = getUniqueIdentifier();
+                return calendarList()
                         .stream()
+                        .map(v -> (VDisplayable<?>) v)
+                        .filter(v -> v.getUniqueIdentifier().equals(uid))
                         .filter(v -> v.getRecurrenceId() != null)
                         .filter(v -> 
                         {
@@ -1117,48 +798,11 @@ public abstract class VDisplayable<T> extends VPersonal<T> implements VRepeatabl
         {
             errors.add(reccurenceIDErrorString);
         }
-        
-        if (getDateTimeStart() != null)
-        {
-            DateTimeType startType = DateTimeUtilities.DateTimeType.of(getDateTimeStart().getValue());
-            if ((getExceptionDates() != null) && (! getExceptionDates().get(0).getValue().isEmpty()))
-            {
-                // assumes all exceptions are same Temporal type.  There is a listener to guarantee that assumption.
-                Temporal e1 = getExceptionDates().get(0).getValue().iterator().next();
-                DateTimeType exceptionType = DateTimeUtilities.DateTimeType.of(e1);
-                boolean isExceptionTypeMatch = startType == exceptionType;
-                if (! isExceptionTypeMatch)
-                {
-                    errors.add("DTSTART, EXDATE: The value type of EXDATE elements MUST be the same as the DTSTART property (" + exceptionType + ", " + startType + ")");
-                }
-            }
             
-
-//            if (getRecurrenceId() != null && getParent() != null)
-//            {
-//                DateTimeType recurrenceIdType = DateTimeUtilities.DateTimeType.of(getRecurrenceId().getValue());
-//                List<VComponentDisplayableBase<?>> relatedComponents = ((VCalendar) getParent()).uidComponentsMap().get(getUniqueIdentifier().getValue());
-//                VComponentDisplayableBase<?> parentComponent = relatedComponents.stream()
-//                        .filter(v -> v.getRecurrenceId() == null)
-//                        .findFirst()
-//                        .orElseGet(() -> null);
-//                if (parentComponent != null)
-//                {
-//                    DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(parentComponent.getDateTimeStart().getValue());
-//                    if (recurrenceIdType != dateTimeStartType)
-//                    {
-//                        errors.add("The value type of RECURRENCE-ID MUST be the same as the parent's DTSTART property (" + recurrenceIdType + ", " + dateTimeStartType);
-//                    }
-//                } else
-//                {
-//                    errors.add("Parent of this component with RECURRENCE-ID can't be found.");                    
-//                }
-//            }
-            
-            // Tests from Repeatable
-            errors.addAll(VRepeatable.errorsRepeatable(this));
-        }
-    
+        // Tests from Repeatable
+        errors.addAll(VRepeatableBase.errorsRepeatable(this));
+        errors.addAll(VRepeatableBase.errorsRecurrence(getExceptionDates(), getDateTimeStart()));
+        errors.addAll(VRepeatableBase.errorsRecurrence(getRecurrenceDates(), getDateTimeStart()));
         return errors;
     }
     

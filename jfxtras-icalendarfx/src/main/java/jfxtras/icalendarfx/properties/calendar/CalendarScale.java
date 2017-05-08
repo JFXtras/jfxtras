@@ -1,10 +1,11 @@
 package jfxtras.icalendarfx.properties.calendar;
 
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.VElement;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale.CalendarScaleType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * CALSCALE
@@ -24,7 +25,7 @@ import jfxtras.icalendarfx.properties.calendar.CalendarScale.CalendarScaleType;
  * @author David Bal
  * @see VCalendar
  */
-public class CalendarScale extends PropertyBase<CalendarScaleType, CalendarScale> implements VElement
+public class CalendarScale extends VPropertyBase<CalendarScaleType, CalendarScale> implements VElement
 {
     public static final CalendarScaleType DEFAULT_CALENDAR_SCALE = CalendarScaleType.GREGORIAN;
     
@@ -51,7 +52,7 @@ public class CalendarScale extends PropertyBase<CalendarScaleType, CalendarScale
     /** sets default value of GREGORIAN */
     public CalendarScale()
     {
-       super(DEFAULT_CALENDAR_SCALE);
+       super();
        setConverter(CONVERTER);
     }
     
@@ -67,10 +68,8 @@ public class CalendarScale extends PropertyBase<CalendarScaleType, CalendarScale
         GREGORIAN;
     }
 
-    public static CalendarScale parse(String string)
+    public static CalendarScale parse(String content)
     {
-        CalendarScale property = new CalendarScale();
-        property.parseContent(string);
-        return property;
+    	return CalendarScale.parse(new CalendarScale(), content);
     }    
 }

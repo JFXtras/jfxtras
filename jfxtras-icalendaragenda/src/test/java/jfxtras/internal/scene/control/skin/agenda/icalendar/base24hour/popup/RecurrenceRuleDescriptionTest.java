@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 import org.junit.Test;
 
+import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.AgendaDateTimeUtilities;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
-import net.balsoftware.icalendar.components.VEvent;
 
 public class RecurrenceRuleDescriptionTest
 {

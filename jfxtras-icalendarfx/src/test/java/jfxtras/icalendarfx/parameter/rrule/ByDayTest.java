@@ -20,7 +20,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByD
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 
 public class ByDayTest
-{    
+{
     @Test
     public void canParseByDay()
     {
@@ -29,7 +29,17 @@ public class ByDayTest
                 .withDayOfWeek(DayOfWeek.SUNDAY)
                 .withOrdinal(-1);
         assertEquals(byDayPair, element.getValue().get(0));
-        assertEquals("BYDAY=-1SU", element.toContent());
+        assertEquals("BYDAY=-1SU", element.toString());
+    }
+    
+    @Test
+    public void canParseByDay2()
+    {
+        ByDay element = ByDay.parse("BYDAY=SU");
+        ByDayPair byDayPair = new ByDayPair()
+                .withDayOfWeek(DayOfWeek.SUNDAY);
+        assertEquals(byDayPair, element.getValue().get(0));
+        assertEquals("BYDAY=SU", element.toString());
     }
     
     /*

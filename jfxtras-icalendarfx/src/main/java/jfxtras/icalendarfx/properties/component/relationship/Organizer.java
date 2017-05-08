@@ -7,6 +7,8 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
+import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.properties.component.relationship.PropertyBaseCalendarUser;
 
 /**
  * ORGANIZER
@@ -30,16 +32,15 @@ public class Organizer extends PropertyBaseCalendarUser<URI, Organizer> implemen
         super(source);
     }
     
-    Organizer()
+    public Organizer()
     {
         super();
     }
 
-    public static Organizer parse(String value)
+    public static Organizer parse(String content)
     {
-        Organizer organizer = new Organizer();
-        organizer.parseContent(value);
-        URI.class.cast(organizer.getValue()); // ensure value class type matches parameterized type
-        return organizer;
+    	Organizer property = Organizer.parse(new Organizer(), content);
+        URI.class.cast(property.getValue()); // ensure value class type matches parameterized type
+        return property;
     }
 }

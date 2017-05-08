@@ -18,7 +18,7 @@ public class ParseParameterTest
     {
         CalendarUser parameter = CalendarUser.parse("GROUP");
         String expectedContent = "CUTYPE=GROUP";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
     }
     
     @Test // tests list of URI value
@@ -26,7 +26,7 @@ public class ParseParameterTest
     {
         Delegatees parameter = Delegatees.parse("\"mailto:jdoe@example.com\",\"mailto:jqpublic@example.com\"");
         String expectedContent = "DELEGATED-TO=\"mailto:jdoe@example.com\",\"mailto:jqpublic@example.com\"";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
         assertEquals(2, parameter.getValue().size());
     }
     
@@ -35,7 +35,7 @@ public class ParseParameterTest
     {
         AlternateText parameter = AlternateText.parse("\"CID:part3.msg.970415T083000@example.com\"");
         String expectedContent = "ALTREP=\"CID:part3.msg.970415T083000@example.com\"";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
     }
     
     @Test // tests single URI as value
@@ -43,7 +43,7 @@ public class ParseParameterTest
     {
         String expectedContent = "\"mailto:projectA@example.com\",\"mailto:projectB@example.com\"";        
         GroupMembership parameter = GroupMembership.parse(expectedContent);
-        assertEquals("MEMBER=" + expectedContent, parameter.toContent());
+        assertEquals("MEMBER=" + expectedContent, parameter.toString());
         assertEquals(2, parameter.getValue().size());
     }
     
@@ -52,7 +52,7 @@ public class ParseParameterTest
     {
         DirectoryEntry parameter = DirectoryEntry.parse("\"ldap://example.com:6666/o=ABC%20Industries,c=US???(cn=Jim%20Dolittle)\"");
         String expectedContent = "DIR=\"ldap://example.com:6666/o=ABC%20Industries,c=US???(cn=Jim%20Dolittle)\"";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
     }
     
     @Test // tests two-value parameter
@@ -60,8 +60,19 @@ public class ParseParameterTest
     {
         FormatType parameter = FormatType.parse("application/msword");
         String expectedContent = "FMTTYPE=application/msword";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
         assertEquals("application", parameter.getTypeName());
         assertEquals("msword", parameter.getSubtypeName());
+    }
+    
+    @Test // tests two-value parameter
+    public void canChangeFormatType()
+    {
+        FormatType parameter = FormatType.parse("application/msword");
+        parameter.setSubtypeName("newapp");
+        String expectedContent = "FMTTYPE=application/newapp";
+        assertEquals(expectedContent, parameter.toString());
+        assertEquals("application", parameter.getTypeName());
+        assertEquals("newapp", parameter.getSubtypeName());
     }
 }

@@ -4,6 +4,7 @@ import java.time.temporal.Temporal;
 
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseDateTime;
+import jfxtras.icalendarfx.properties.component.time.DateTimeDue;
 
 /**
  * DUE
@@ -29,11 +30,6 @@ public class DateTimeDue extends PropBaseDateTime<Temporal, DateTimeDue>
     {
         super(temporal);
     }
-
-//    public DateTimeDue(Class<T> clazz, CharSequence contentLine)
-//    {
-//        super(clazz, contentLine);
-//    }
     
     public DateTimeDue(DateTimeDue source)
     {
@@ -49,16 +45,13 @@ public class DateTimeDue extends PropBaseDateTime<Temporal, DateTimeDue>
      * ensure parameterized type is the same as date-time represented by String parameter */
     public static DateTimeDue parse(String value)
     {
-        DateTimeDue property = new DateTimeDue();
-        property.parseContent(value);
-        return property;
+    	return DateTimeDue.parse(new DateTimeDue(), value);
     }
     
     /** Parse string with Temporal class explicitly provided as parameter */
     public static DateTimeDue parse(Class<? extends Temporal> clazz, String value)
     {
-        DateTimeDue property = new DateTimeDue();
-        property.parseContent(value);
+        DateTimeDue property = DateTimeDue.parse(new DateTimeDue(), value);
         clazz.cast(property.getValue()); // class check
         return property;
     }

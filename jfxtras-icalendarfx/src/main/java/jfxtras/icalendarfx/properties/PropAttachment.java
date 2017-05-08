@@ -1,10 +1,10 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.parameters.Encoding;
 import jfxtras.icalendarfx.parameters.FormatType;
+import jfxtras.icalendarfx.properties.VProperty;
 
-public interface PropAttachment<T> extends Property<T>
+public interface PropAttachment<T> extends VProperty<T>
 {
     /**
      * FMTTYPE: Format type parameter
@@ -12,7 +12,6 @@ public interface PropAttachment<T> extends Property<T>
      * specify the content type of a referenced object.
      */
     FormatType getFormatType();
-    ObjectProperty<FormatType> formatTypeProperty();
     void setFormatType(FormatType formatType);
     
     /**
@@ -27,6 +26,5 @@ public interface PropAttachment<T> extends Property<T>
      * encoding parameter MUST be specified with the value" ;ENCODING=BASE64".
      */
     Encoding getEncoding();
-    ObjectProperty<Encoding> encodingProperty();
     void setEncoding(Encoding encoding);
 }

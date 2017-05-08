@@ -14,7 +14,7 @@ public class FoldingAndUnfoldingTest
         String line = "COMMENT:Ek and Lorentzon said they would consider halting investment at th,eir headquarters in Stockholm. The pioneering music streaming company employs about 850 people in the city, and more than 1,000 in nearly 30 other offices around the world.";
         VEvent builtComponent = new VEvent()
                 .withComments(line);
-        String content = builtComponent.toContent();
+        String content = builtComponent.toString();
         String foldedContent = "BEGIN:VEVENT" + System.lineSeparator() +
                                  "COMMENT:Ek and Lorentzon said they would consider halting investment at th" + System.lineSeparator() +
                                  " \\,eir headquarters in Stockholm. The pioneering music streaming company em" + System.lineSeparator() +
@@ -23,6 +23,6 @@ public class FoldingAndUnfoldingTest
                                  "END:VEVENT";
         VEvent unfoldedComponent = VEvent.parse(foldedContent);
         assertEquals(builtComponent, unfoldedComponent);
-        assertEquals(foldedContent, builtComponent.toContent());
+        assertEquals(foldedContent, builtComponent.toString());
     }
 }

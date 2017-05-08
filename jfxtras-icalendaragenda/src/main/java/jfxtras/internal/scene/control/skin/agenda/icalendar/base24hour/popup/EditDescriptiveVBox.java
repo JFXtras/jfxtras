@@ -35,19 +35,21 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.properties.component.descriptive.Categories;
+import jfxtras.icalendarfx.properties.component.descriptive.Description;
+import jfxtras.icalendarfx.properties.component.descriptive.Location;
+import jfxtras.icalendarfx.properties.component.descriptive.Summary;
+import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
+import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.CategorySelectionGridPane;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.Settings;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.TemporalUtilities;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
-import net.balsoftware.icalendar.components.VComponent;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.properties.component.descriptive.Categories;
-import net.balsoftware.icalendar.properties.component.descriptive.Summary;
-import net.balsoftware.icalendar.properties.component.time.DateTimeEnd;
-import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 /** 
  * Base controller for editing descriptive properties in a {@link VDisplayable} component.

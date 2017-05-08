@@ -2,14 +2,11 @@ package jfxtras.icalendarfx.properties.component.misc;
 
 import java.net.URI;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import jfxtras.icalendarfx.parameters.AlarmTriggerRelationship;
 import jfxtras.icalendarfx.parameters.AlternateText;
 import jfxtras.icalendarfx.parameters.Encoding;
 import jfxtras.icalendarfx.parameters.FormatType;
 import jfxtras.icalendarfx.parameters.FreeBusyType;
-import jfxtras.icalendarfx.parameters.ParameterType;
 import jfxtras.icalendarfx.parameters.Range;
 import jfxtras.icalendarfx.parameters.Relationship;
 import jfxtras.icalendarfx.parameters.TimeZoneIdentifierParameter;
@@ -39,10 +36,6 @@ import jfxtras.icalendarfx.properties.component.relationship.PropertyBaseAttende
 public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> implements PropAttendee<T>, PropAltText<T>,
     PropAttachment<T>, PropFreeBusy<T>, PropRecurrenceID<T>, PropDateTime<T>, PropAlarmTrigger<T>, PropRelationship<T>
 {
-    private String propertyName;
-    // TODO - MOVE PROPERTY NAME HERE
-    // Override getter and add setter.  Other properties have constant property name.
-    
     /**
      * ALTREP : Alternate Text Representation
      * To specify an alternate text representation for the property value.
@@ -77,20 +70,14 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      * </html>
      */
     @Override
-    public AlternateText getAlternateText() { return (alternateText == null) ? null : alternateText.get(); }
+    public AlternateText getAlternateText() { return alternateText; }
+    private AlternateText alternateText;
     @Override
-    public ObjectProperty<AlternateText> alternateTextProperty()
+    public void setAlternateText(AlternateText alternateText)
     {
-        if (alternateText == null)
-        {
-            alternateText = new SimpleObjectProperty<>(this, ParameterType.ALTERNATE_TEXT_REPRESENTATION.toString());
-            orderer().registerSortOrderProperty(alternateText);
-        }
-        return alternateText;
-    }
-    private ObjectProperty<AlternateText> alternateText;
-    @Override
-    public void setAlternateText(AlternateText alternateText) { alternateTextProperty().set(alternateText); }
+    	orderChild(this.alternateText, alternateText);
+    	this.alternateText = alternateText;
+	}
     public void setAlternateText(String value) { setAlternateText(AlternateText.parse(value)); }
     public U withAlternateText(AlternateText altrep) { setAlternateText(altrep); return (U) this; }
     public U withAlternateText(URI value) { setAlternateText(new AlternateText(value)); return (U) this; }
@@ -108,27 +95,14 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      * encoding parameter MUST be specified with the value" ;ENCODING=BASE64".
      */
     @Override
-    public Encoding getEncoding() { return (encoding == null) ? null : encoding.get(); }
-    @Override
-    public ObjectProperty<Encoding> encodingProperty()
-    {
-        if (encoding == null)
-        {
-            encoding = new SimpleObjectProperty<>(this, ParameterType.INLINE_ENCODING.toString());
-            orderer().registerSortOrderProperty(encoding);
-        }
-        return encoding;
-    }
-    private ObjectProperty<Encoding> encoding;
+    public Encoding getEncoding() { return encoding; }
+    private Encoding encoding;
     @Override
     public void setEncoding(Encoding encoding)
     {
-        if (encoding.getValue() != EncodingType.BASE64)
-        {
-            throw new IllegalArgumentException("Attachment property only allows ENCODING to be set to" + EncodingType.BASE64);
-        }
-        encodingProperty().set(encoding);
-    }
+    	orderChild(this.encoding, encoding);
+    	this.encoding = encoding;
+	}
     public U withEncoding(Encoding encoding) { setEncoding(encoding); return (U) this; }
     public U withEncoding(EncodingType encoding) { setEncoding(new Encoding(encoding)); return (U) this; }
 
@@ -141,20 +115,14 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      * Values can be = "FBTYPE" "=" ("FREE" / "BUSY" / "BUSY-UNAVAILABLE" / "BUSY-TENTATIVE"
      */
     @Override
-    public FreeBusyType getFreeBusyType() { return (freeBusyType == null) ? null : freeBusyType.get(); }
+    public FreeBusyType getFreeBusyType() { return freeBusyType; }
+    private FreeBusyType freeBusyType;
     @Override
-    public ObjectProperty<FreeBusyType> freeBusyTypeProperty()
+    public void setFreeBusyType(FreeBusyType freeBusyType)
     {
-        if (freeBusyType == null)
-        {
-            freeBusyType = new SimpleObjectProperty<>(this, ParameterType.INLINE_ENCODING.toString());
-            orderer().registerSortOrderProperty(freeBusyType);
-        }
-        return freeBusyType;
-    }
-    private ObjectProperty<FreeBusyType> freeBusyType;
-    @Override
-    public void setFreeBusyType(FreeBusyType freeBusyType) { freeBusyTypeProperty().set(freeBusyType); }
+    	orderChild(this.freeBusyType, freeBusyType);
+    	this.freeBusyType = freeBusyType;
+	}
     public void setFreeBusyType(FreeBusyTypeEnum type) { setFreeBusyType(new FreeBusyType(type)); }
     public U withFreeBusyType(FreeBusyType freeBusyType) { setFreeBusyType(freeBusyType); return (U)this; }
     public U withFreeBusyType(FreeBusyTypeEnum type) { setFreeBusyType(type); return (U) this; }
@@ -166,22 +134,17 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      * specify the content type of a referenced object.
      */
     @Override
-    public FormatType getFormatType() { return (formatType == null) ? null : formatType.get(); }
+    public FormatType getFormatType() { return formatType; }
+    private FormatType formatType;
     @Override
-    public ObjectProperty<FormatType> formatTypeProperty()
+    public void setFormatType(FormatType formatType)
     {
-        if (formatType == null)
-        {
-            formatType = new SimpleObjectProperty<>(this, ParameterType.FORMAT_TYPE.toString());
-            orderer().registerSortOrderProperty(formatType);
-        }
-        return formatType;
-    }
-    private ObjectProperty<FormatType> formatType;
-    @Override
-    public void setFormatType(FormatType formatType) { formatTypeProperty().set(formatType); }
+    	orderChild(this.formatType, formatType);
+    	this.formatType = formatType;
+	}
+    public void setFormatType(String formatType) { setFormatType(FormatType.parse(formatType)); }
     public U withFormatType(FormatType format) { setFormatType(format); return (U) this; }
-    public U withFormatType(String format) { setFormatType(FormatType.parse(format)); return (U) this; }
+    public U withFormatType(String format) { setFormatType(format); return (U) this; }
 
     /**
      * RANGE
@@ -199,20 +162,14 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      *
      */
     @Override
-    public Range getRange() { return (range == null) ? null : range.get(); }
+    public Range getRange() { return range; }
+    private Range range;
     @Override
-    public ObjectProperty<Range> rangeProperty()
+    public void setRange(Range range)
     {
-        if (range == null)
-        {
-            range = new SimpleObjectProperty<>(this, ParameterType.RECURRENCE_IDENTIFIER_RANGE.toString());
-            orderer().registerSortOrderProperty(range);
-        }
-        return range;
-    }
-    private ObjectProperty<Range> range;
-    @Override
-    public void setRange(Range range) { rangeProperty().set(range); }
+    	orderChild(this.range, range);
+    	this.range = range;
+	}
     public void setRange(String value) { setRange(new Range(value)); }
     public U withRange(Range altrep) { setRange(altrep); return (U) this; }
     public U withRange(RangeType value) { setRange(new Range(value)); return (U) this; }
@@ -225,24 +182,19 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      * respect to the start or end of the calendar component.
      */
     @Override
-    public AlarmTriggerRelationship getAlarmTrigger() { return (alarmTrigger == null) ? null : alarmTrigger.get(); }
+    public AlarmTriggerRelationship getAlarmTrigger() { return alarmTrigger; }
+    private AlarmTriggerRelationship alarmTrigger;
     @Override
-    public ObjectProperty<AlarmTriggerRelationship> AlarmTriggerProperty()
+    public void setAlarmTrigger(AlarmTriggerRelationship alarmTrigger)
     {
-        if (alarmTrigger == null)
-        {
-            alarmTrigger = new SimpleObjectProperty<>(this, ParameterType.FORMAT_TYPE.toString());
-            orderer().registerSortOrderProperty(alarmTrigger);
-      }
-        return alarmTrigger;
-    }
-    private ObjectProperty<AlarmTriggerRelationship> alarmTrigger;
-    @Override
-    public void setAlarmTrigger(AlarmTriggerRelationship AlarmTrigger) { AlarmTriggerProperty().set(AlarmTrigger); }
+    	orderChild(alarmTrigger);
+    	this.alarmTrigger = alarmTrigger;
+	}
+    public void setAlarmTrigger(String AlarmTrigger) { setAlarmTrigger(AlarmTriggerRelationship.parse(AlarmTrigger));; }
     public void setAlarmTrigger(AlarmTriggerRelationshipType type) { setAlarmTrigger(new AlarmTriggerRelationship(type)); } 
     public U withAlarmTrigger(AlarmTriggerRelationship format) { setAlarmTrigger(format); return (U) this; }
     public U withAlarmTrigger(AlarmTriggerRelationshipType type) { setAlarmTrigger(type); return (U) this; }
-    public U withAlarmTrigger(String format) { setAlarmTrigger(AlarmTriggerRelationship.parse(format)); return (U) this; }
+    public U withAlarmTrigger(String AlarmTrigger) { setAlarmTrigger(AlarmTrigger); return (U) this; }
 
     /**
      * RELTYPE
@@ -257,20 +209,14 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      *  example.com
      */
     @Override
-    public Relationship getRelationship() { return (relationship == null) ? null : relationship.get(); }
+    public Relationship getRelationship() { return relationship; }
+    private Relationship relationship;
     @Override
-    public ObjectProperty<Relationship> relationshipProperty()
+    public void setRelationship(Relationship relationship)
     {
-        if (relationship == null)
-        {
-            relationship = new SimpleObjectProperty<>(this, ParameterType.RELATIONSHIP_TYPE.toString());
-            orderer().registerSortOrderProperty(relationship);
-        }
-        return relationship;
-    }
-    private ObjectProperty<Relationship> relationship;
-    @Override
-    public void setRelationship(Relationship relationship) { relationshipProperty().set(relationship); }
+    	orderChild(this.relationship, relationship);
+    	this.relationship = relationship;
+	}
     public void setRelationship(String value) { setRelationship(Relationship.parse(value)); }
     public U withRelationship(Relationship altrep) { setRelationship(altrep); return (U) this; }
     public U withRelationship(RelationshipType value) { setRelationship(new Relationship(value)); return (U) this; }
@@ -286,23 +232,41 @@ public abstract class UnknownProperty<T,U> extends PropertyBaseAttendee<T,U> imp
      * DTSTART;TZID=America/New_York:19980119T020000
      */
     @Override
-    public TimeZoneIdentifierParameter getTimeZoneIdentifier() { return (timeZoneIdentifier == null) ? null : timeZoneIdentifier.get(); }
+    public TimeZoneIdentifierParameter getTimeZoneIdentifier() { return timeZoneIdentifier; }
+    private TimeZoneIdentifierParameter timeZoneIdentifier;
     @Override
-    public ObjectProperty<TimeZoneIdentifierParameter> timeZoneIdentifierProperty()
+    public void setTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier)
     {
-        if (timeZoneIdentifier == null)
+    	orderChild(this.timeZoneIdentifier, timeZoneIdentifier);
+    	this.timeZoneIdentifier = timeZoneIdentifier;
+	}
+    public void setTimeZoneIdentifier(String value)
+    {
+    	setTimeZoneIdentifier(TimeZoneIdentifierParameter.parse(value));
+	}
+    public U withTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier)
+    {
+    	setTimeZoneIdentifier(timeZoneIdentifier);
+    	return (U) this;
+	}
+    public U withTimeZoneIdentifier(String content)
+    {
+    	setTimeZoneIdentifier(content);
+    	return (U) this;
+	}
+
+	public void setPropertyName(String name)
+    {
+        if (name.substring(0, 2).toUpperCase().equals("X-"))
         {
-            timeZoneIdentifier = new SimpleObjectProperty<>(this, ParameterType.TIME_ZONE_IDENTIFIER.toString());
-            orderer().registerSortOrderProperty(timeZoneIdentifier);
+            propertyName = name;
+        } else
+        {
+            throw new RuntimeException("Non-standard properties must begin with X-");                
         }
-        return timeZoneIdentifier;
     }
-    private ObjectProperty<TimeZoneIdentifierParameter> timeZoneIdentifier;
-    @Override
-    public void setTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier) { timeZoneIdentifierProperty().set(timeZoneIdentifier); }
-    public void setTimeZoneIdentifier(String value) { setTimeZoneIdentifier(TimeZoneIdentifierParameter.parse(value)); }
-    public U withTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier) { setTimeZoneIdentifier(timeZoneIdentifier); return (U) this; }
-    public U withTimeZoneIdentifier(String content) { ParameterType.TIME_ZONE_IDENTIFIER.parse(this, content); return (U) this; }        
+    public U withPropertyName(String name) { setPropertyName(name); return (U) this; }
+
 
     /*
      * CONSTRUCTORS

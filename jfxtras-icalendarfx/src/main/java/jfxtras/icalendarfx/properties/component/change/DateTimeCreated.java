@@ -6,6 +6,7 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseUTC;
+import jfxtras.icalendarfx.properties.component.change.DateTimeCreated;
 
 /**
  * CREATED
@@ -44,10 +45,8 @@ public class DateTimeCreated extends PropBaseUTC<DateTimeCreated>
         super();
     }
 
-    public static DateTimeCreated parse(String value)
+    public static DateTimeCreated parse(String content)
     {
-        DateTimeCreated property = new DateTimeCreated();
-        property.parseContent(value);
-        return property;
+    	return DateTimeCreated.parse(new DateTimeCreated(), content);
     }
 }

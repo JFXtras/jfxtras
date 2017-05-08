@@ -4,10 +4,10 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.List;
 
-import net.balsoftware.icalendar.components.VLocatable;
-import net.balsoftware.icalendar.properties.VPropertyElement;
-import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.components.VLocatable;
+import jfxtras.icalendarfx.properties.VPropertyElement;
+import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 
 /**
  * Handles revising a {@link VComponentLocatable}

@@ -2,6 +2,11 @@ package jfxtras.icalendarfx.parameters;
 
 import java.net.URI;
 
+import jfxtras.icalendarfx.parameters.SentBy;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
+
 /**
  * SENT-BY
  * Sent By
@@ -17,27 +22,27 @@ import java.net.URI;
  * @author David Bal
  *
  */
-public class SentBy extends ParameterBase<SentBy, URI>
+public class SentBy extends VParameterBase<SentBy, URI>
 {
+	private static final StringConverter<URI> CONVERTER = StringConverters.uriConverterWithQuotes();
+
     public SentBy(URI uri)
     {
-        super(uri);
+        super(uri, CONVERTER);
     }
 
     public SentBy()
     {
-        super();
+        super(CONVERTER);
     }
     
     public SentBy(SentBy source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
     
     public static SentBy parse(String content)
     {
-        SentBy parameter = new SentBy();
-        parameter.parseContent(content);
-        return parameter;
+    	return SentBy.parse(new SentBy(), content);
     }
 }

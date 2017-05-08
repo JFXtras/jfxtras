@@ -18,10 +18,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import jfxtras.icalendarfx.components.VLocatable;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.TemporalUtilities;
-import net.balsoftware.icalendar.components.VLocatable;
 
 /**
  * Added dateTimeEnd or dateTimeDue to {@link EditDescriptiveVBox}

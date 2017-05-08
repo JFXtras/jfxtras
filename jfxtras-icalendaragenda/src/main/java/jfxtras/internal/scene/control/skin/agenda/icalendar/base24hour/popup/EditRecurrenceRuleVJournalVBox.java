@@ -1,7 +1,7 @@
 package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 
-import net.balsoftware.icalendar.components.VJournal;
-import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.components.VJournal;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 
 /**
  * VBox containing controls to edit the {@link RecurrenceRule} in a {@link VJournal}.

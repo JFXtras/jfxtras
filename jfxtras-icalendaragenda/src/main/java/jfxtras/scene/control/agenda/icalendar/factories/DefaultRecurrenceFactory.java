@@ -6,13 +6,13 @@ import java.time.temporal.TemporalAmount;
 import java.util.Collection;
 import java.util.Optional;
 
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.components.VJournal;
+import jfxtras.icalendarfx.components.VLocatable;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.Agenda.AppointmentImplTemporal;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.components.VJournal;
-import net.balsoftware.icalendar.components.VLocatable;
 
 /**
  * Default factory to create {@link AppointmentImplTemporal} for {@link Agenda}

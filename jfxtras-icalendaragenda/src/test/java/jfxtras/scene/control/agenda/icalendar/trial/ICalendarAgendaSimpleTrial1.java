@@ -4,8 +4,8 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import jfxtras.icalendarfx.VCalendar;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
-import net.balsoftware.icalendar.VCalendar;
 
 /**
  * Simplest Demo of an empty {@link ICalendarAgenda}

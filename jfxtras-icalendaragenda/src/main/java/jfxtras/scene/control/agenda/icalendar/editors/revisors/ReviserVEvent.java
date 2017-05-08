@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.properties.VPropertyElement;
-import net.balsoftware.icalendar.properties.component.time.DateTimeEnd;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.properties.VPropertyElement;
+import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 
 ;
 

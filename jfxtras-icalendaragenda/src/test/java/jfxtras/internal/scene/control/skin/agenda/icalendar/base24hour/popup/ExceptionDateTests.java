@@ -27,6 +27,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.properties.calendar.Version;
+import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
@@ -34,13 +41,6 @@ import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.properties.calendar.Method.MethodType;
-import net.balsoftware.icalendar.properties.calendar.Version;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
 
 /**
  * Tests the edit controls ability to handle EXDATE recurrence exceptions

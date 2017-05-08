@@ -61,19 +61,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.Settings;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.properties.component.recurrence.ExceptionDates;
-import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.Interval;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.Until;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByRule;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * VBox containing controls to edit the {@link RecurrenceRule} in a {@link VDisplayable}.

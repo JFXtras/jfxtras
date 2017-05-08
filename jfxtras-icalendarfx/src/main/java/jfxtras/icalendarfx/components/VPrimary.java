@@ -2,16 +2,16 @@ package jfxtras.icalendarfx.components;
 
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.VCommon;
+import jfxtras.icalendarfx.components.VFreeBusy;
+import jfxtras.icalendarfx.components.VPrimary;
+import jfxtras.icalendarfx.components.VTimeZone;
 import jfxtras.icalendarfx.properties.component.descriptive.Comment;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
@@ -41,55 +41,43 @@ public abstract class VPrimary<T> extends VCommon<T>
          As a matter of fact\, the venue for the meeting ought to be at
          their site. - - John
      * */
-    public ListProperty<Comment> commentsProperty()
+    public List<Comment> getComments() { return comments; }
+    private List<Comment> comments;
+    public void setComments(List<Comment> comments)
     {
-        if (comments == null)
-        {
-            comments = new SimpleListProperty<>(this, PropertyType.COMMENT.toString());
-        }
-        return comments;
-    }
-    public ObservableList<Comment> getComments()
+    	if (this.comments != null)
+    	{
+    		this.comments.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.comments = comments;
+    	if (comments != null)
+    	{
+    		comments.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
+    public T withComments(List<Comment> comments)
     {
-        return (comments == null) ? null : comments.get();
-    }
-    private ListProperty<Comment> comments;
-    public void setComments(ObservableList<Comment> comments)
-    {
-        if (comments != null)
-        {
-            if (this.comments != null)
-            {
-                // replace sort order in new list
-                orderer().replaceList(this.comments.get(), comments);
-            }
-            orderer().registerSortOrderProperty(comments);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(commentsProperty().get());
-        }
-        commentsProperty().set(comments);
-    }
-    public T withComments(ObservableList<Comment> comments)
-    {
-        setComments(comments);
+    	if (getComments() == null)
+    	{
+    		setComments(new ArrayList<>());
+    	}
+    	getComments().addAll(comments);
+    	if (comments != null)
+    	{
+    		comments.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     public T withComments(String...comments)
     {
-        Arrays.stream(comments).forEach(c -> PropertyType.COMMENT.parse(this, c));
-        return (T) this;
+        List<Comment> list = Arrays.stream(comments)
+                .map(c -> Comment.parse(c))
+                .collect(Collectors.toList());
+        return withComments(list);
     }
     public T withComments(Comment...comments)
     {
-        if (getComments() == null)
-        {
-            setComments(FXCollections.observableArrayList(comments));
-        } else
-        {
-            getComments().addAll(comments);
-        }
-        return (T) this;
+    	return withComments(Arrays.asList(comments));
     }
     
     /**
@@ -98,72 +86,32 @@ public abstract class VPrimary<T> extends VCommon<T>
      * start date/times of the repeating events.
      * Can contain either a LocalDate (DATE) or LocalDateTime (DATE-TIME)
      */
-    public ObjectProperty<DateTimeStart> dateTimeStartProperty()
-    {
-        if (dateTimeStart == null)
-        {
-            dateTimeStart = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_START.toString());
-            orderer().registerSortOrderProperty(dateTimeStart);
-            dateTimeStart.addListener((obs, oldValue, newValue) ->
-            {
-                if (oldValue == null) // only check consistency when first assignment
-                {
-                    dateTimeStartListenerHook();
-                }
-            });
-        }
-        return dateTimeStart;
-    }
-    
     // hook to be overridden in subclasses
+    @Deprecated // is this needed?
     void dateTimeStartListenerHook() { }
     
-    public DateTimeStart getDateTimeStart() { return (dateTimeStart == null) ? null : dateTimeStartProperty().get(); }
-    private ObjectProperty<DateTimeStart> dateTimeStart;
-    public void setDateTimeStart(DateTimeStart dtStart)
+    public DateTimeStart getDateTimeStart() { return dateTimeStart; }
+    private DateTimeStart dateTimeStart;
+    public void setDateTimeStart(DateTimeStart dateTimeStart)
     {
-        dateTimeStartProperty().set(dtStart);
-    }
-    public void setDateTimeStart(String dtStart)
+    	orderChild(this.dateTimeStart, dateTimeStart);
+    	this.dateTimeStart = dateTimeStart;
+	}
+    public void setDateTimeStart(String dateTimeStart) { setDateTimeStart(DateTimeStart.parse(dateTimeStart)); }
+    public void setDateTimeStart(Temporal temporal) { setDateTimeStart(new DateTimeStart(temporal)); }
+    public T withDateTimeStart(DateTimeStart dateTimeStart)
     {
-//        if (getDateTimeStart() == null)
-//        {
-            setDateTimeStart(DateTimeStart.parse(dtStart));
-//        } else
-//        {
-//            DateTimeStart temp = DateTimeStart.parse(dtStart);
-//            if (temp.getValue().getClass().equals(getDateTimeStart().getValue().getClass()))
-//            {
-//                getDateTimeStart().setValue(temp.getValue());
-//            } else
-//            {
-//                setDateTimeStart(temp);
-//            }
-//        }
-    }
-    public void setDateTimeStart(Temporal temporal)
-    {
-//        if (getDateTimeStart() == null)
-//        {
-        setDateTimeStart(new DateTimeStart(temporal));
-//        } else
-//        {
-//            getDateTimeStart().setValue(temporal);
-//        }
-    }
-    public T withDateTimeStart(DateTimeStart dtStart)
-    {
-        setDateTimeStart(dtStart);
+        setDateTimeStart(dateTimeStart);
         return (T) this;
     }
-    public T withDateTimeStart(String dtStart)
+    public T withDateTimeStart(String dateTimeStart)
     {
-        setDateTimeStart(dtStart);
+        setDateTimeStart(dateTimeStart);
         return (T) this;
     }
-    public T withDateTimeStart(Temporal dtStart)
+    public T withDateTimeStart(Temporal dateTimeStart)
     {
-        setDateTimeStart(dtStart);
+        setDateTimeStart(dateTimeStart);
         return (T) this;
     }
     

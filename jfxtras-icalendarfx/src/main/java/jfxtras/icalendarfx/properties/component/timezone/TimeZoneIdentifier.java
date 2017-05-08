@@ -3,9 +3,9 @@ package jfxtras.icalendarfx.properties.component.timezone;
 import java.time.DateTimeException;
 import java.time.ZoneId;
 
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VTimeZone;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * TZID
@@ -25,7 +25,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @author David Bal
  * @see VTimeZone
  */
-public class TimeZoneIdentifier extends PropertyBase<ZoneId, TimeZoneIdentifier>
+public class TimeZoneIdentifier extends VPropertyBase<ZoneId, TimeZoneIdentifier>
 {
     private final static StringConverter<ZoneId> CONVERTER = new StringConverter<ZoneId>()
     {
@@ -49,12 +49,6 @@ public class TimeZoneIdentifier extends PropertyBase<ZoneId, TimeZoneIdentifier>
             }           
         }
     };
-
-//    public TimeZoneIdentifier(CharSequence contentLine)
-//    {
-//        this();
-//        parseContent(contentLine);
-//    }
     
     public TimeZoneIdentifier(TimeZoneIdentifier source)
     {
@@ -73,20 +67,13 @@ public class TimeZoneIdentifier extends PropertyBase<ZoneId, TimeZoneIdentifier>
         setConverter(CONVERTER);
     }
     
-    public static TimeZoneIdentifier parse(String propertyContent)
-    {
-        TimeZoneIdentifier property = new TimeZoneIdentifier();
-        property.parseContent(propertyContent);
-        return property;
-    }
-    
     @Override
     public boolean isValid()
     {
         boolean isNonGlobalOK = (getValue() != null);
         boolean isGloballyUniqueOK = ((getUnknownValue() != null) && (getUnknownValue().charAt(0) == '/'));
 //        System.out.println("time zone isValid:" + propertyType() + " " + getValueParameter());
-        boolean isValueTypeOK = (getValueType() != null) ? propertyType().allowedValueTypes().contains(getValueType().getValue()) : true;
+        boolean isValueTypeOK = (getValueType() != null) ? allowedValueTypes.contains(getValueType().getValue()) : true;
 //        System.out.println("TimeZoneIdentifier isValid:" + isNonGlobalOK + " " + isGloballyUniqueOK + " " + isValueTypeOK);
         return (isNonGlobalOK || isGloballyUniqueOK) && isValueTypeOK;
     }
@@ -102,5 +89,10 @@ public class TimeZoneIdentifier extends PropertyBase<ZoneId, TimeZoneIdentifier>
         TimeZoneIdentifier testObj = (TimeZoneIdentifier) obj;
         boolean unknownEquals = (getUnknownValue() == null) ? testObj.getUnknownValue() == null : getUnknownValue().equals(testObj.getUnknownValue());
         return unknownEquals;
+    }
+    
+    public static TimeZoneIdentifier parse(String content)
+    {
+    	return TimeZoneIdentifier.parse(new TimeZoneIdentifier(), content);
     }
 }

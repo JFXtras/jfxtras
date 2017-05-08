@@ -15,17 +15,17 @@ import org.junit.Test;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseButton;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VPrimary;
+import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.components.VPrimary;
-import net.balsoftware.icalendar.properties.component.change.DateTimeStamp;
-import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import net.balsoftware.icalendar.properties.component.relationship.UniqueIdentifier;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 public class GraphicallyChangeTest extends AgendaTestAbstract
 {

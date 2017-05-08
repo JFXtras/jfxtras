@@ -1,8 +1,10 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
+import org.junit.experimental.categories.Categories;
+
 import jfxtras.icalendarfx.parameters.Language;
-import jfxtras.icalendarfx.properties.component.descriptive.Categories;
+import jfxtras.icalendarfx.properties.PropBaseLanguage;
+import jfxtras.icalendarfx.properties.VProperty;
 import jfxtras.icalendarfx.properties.component.timezone.TimeZoneName;
 
 /**
@@ -16,7 +18,7 @@ import jfxtras.icalendarfx.properties.component.timezone.TimeZoneName;
  * @see Categories
  * @see TimeZoneName
  */
-public interface PropLanguage<T> extends Property<T>
+public interface PropLanguage<T> extends VProperty<T>
 {
     /**
      * LANGUAGE
@@ -28,6 +30,5 @@ public interface PropLanguage<T> extends Property<T>
      */
 
     Language getLanguage();
-    ObjectProperty<Language> languageProperty();
     void setLanguage(Language language);
 }

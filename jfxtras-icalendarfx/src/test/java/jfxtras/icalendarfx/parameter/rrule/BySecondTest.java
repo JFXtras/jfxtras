@@ -23,7 +23,7 @@ public class BySecondTest
     {
         BySecond element = new BySecond(10,20);
         assertEquals(Arrays.asList(10,20), element.getValue());
-        assertEquals("BYSECOND=10,20", element.toContent());
+        assertEquals("BYSECOND=10,20", element.toString());
     }
     
     /*

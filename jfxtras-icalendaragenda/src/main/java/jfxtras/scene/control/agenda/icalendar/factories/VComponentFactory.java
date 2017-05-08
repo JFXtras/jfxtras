@@ -1,6 +1,6 @@
 package jfxtras.scene.control.agenda.icalendar.factories;
 
-import net.balsoftware.icalendar.components.VDisplayable;
+import jfxtras.icalendarfx.components.VDisplayable;
 
 public abstract class VComponentFactory<R>
 {

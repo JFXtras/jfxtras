@@ -23,7 +23,7 @@ public class FrequencyTest
         String content = "DAILY";
         Frequency element = Frequency.parse(content);
         assertEquals(FrequencyType.DAILY, element.getValue());
-        assertEquals("FREQ=DAILY", element.toContent());
+        assertEquals("FREQ=DAILY", element.toString());
     }
     
     /*

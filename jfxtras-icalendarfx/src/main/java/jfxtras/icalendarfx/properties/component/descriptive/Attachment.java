@@ -3,21 +3,18 @@ package jfxtras.icalendarfx.properties.component.descriptive;
 import java.net.URI;
 import java.util.List;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import jfxtras.icalendarfx.components.VAlarm;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.parameters.Encoding;
 import jfxtras.icalendarfx.parameters.FormatType;
-import jfxtras.icalendarfx.parameters.OtherParameter;
-import jfxtras.icalendarfx.parameters.ParameterType;
 import jfxtras.icalendarfx.parameters.ValueParameter;
 import jfxtras.icalendarfx.parameters.Encoding.EncodingType;
 import jfxtras.icalendarfx.properties.PropAttachment;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
 import jfxtras.icalendarfx.properties.ValueType;
+import jfxtras.icalendarfx.properties.component.descriptive.Attachment;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
 
 /**
@@ -91,7 +88,7 @@ import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
  * 
  * @author David Bal
  */
-public class Attachment<T> extends PropertyBase<T, Attachment<T>> implements PropAttachment<T>
+public class Attachment<T> extends VPropertyBase<T, Attachment<T>> implements PropAttachment<T>
 {
     /**
     * FMTTYPE: Format type parameter
@@ -99,25 +96,13 @@ public class Attachment<T> extends PropertyBase<T, Attachment<T>> implements Pro
     * specify the content type of a referenced object.
     */
    @Override
-   public FormatType getFormatType() { return (formatType == null) ? null : formatType.get(); }
-   @Override
-   public ObjectProperty<FormatType> formatTypeProperty()
-   {
-       if (formatType == null)
-       {
-           formatType = new SimpleObjectProperty<>(this, ParameterType.FORMAT_TYPE.toString());
-           orderer().registerSortOrderProperty(formatType);
-       }
-       return formatType;
-   }
-   private ObjectProperty<FormatType> formatType;
+   public FormatType getFormatType() { return formatType; }
+   private FormatType formatType;
    @Override
    public void setFormatType(FormatType formatType)
    {
-       if (formatType != null)
-       {
-           formatTypeProperty().set(formatType);
-       }
+       orderChild(formatType);
+	   this.formatType = formatType;
    }
    public Attachment<T> withFormatType(FormatType format) { setFormatType(format); return this; }
    public Attachment<T> withFormatType(String format) { setFormatType(FormatType.parse(format)); return this; }
@@ -134,18 +119,8 @@ public class Attachment<T> extends PropertyBase<T, Attachment<T>> implements Pro
     * encoding parameter MUST be specified with the value" ;ENCODING=BASE64".
     */
    @Override
-   public Encoding getEncoding() { return (encoding == null) ? null : encoding.get(); }
-   @Override
-   public ObjectProperty<Encoding> encodingProperty()
-   {
-       if (encoding == null)
-       {
-           encoding = new SimpleObjectProperty<>(this, ParameterType.INLINE_ENCODING.toString());
-           orderer().registerSortOrderProperty(encoding);
-       }
-       return encoding;
-   }
-   private ObjectProperty<Encoding> encoding;
+   public Encoding getEncoding() { return encoding; }
+   private Encoding encoding;
    @Override
    public void setEncoding(Encoding encoding)
    {
@@ -153,11 +128,8 @@ public class Attachment<T> extends PropertyBase<T, Attachment<T>> implements Pro
        {
            throw new IllegalArgumentException("Attachment property only allows ENCODING to be set to" + EncodingType.BASE64);
        }
-
-       if (encoding != null)
-       {
-           encodingProperty().set(encoding);
-       }
+       orderChild(encoding);
+       this.encoding = encoding;
    }
    public Attachment<T> withEncoding(Encoding encoding) { setEncoding(encoding); return this; }
    public Attachment<T> withEncoding(EncodingType encoding) { setEncoding(new Encoding(encoding)); return this; }
@@ -188,7 +160,7 @@ public class Attachment<T> extends PropertyBase<T, Attachment<T>> implements Pro
    }
    
    /** Create default Attachment with no value set */
-   Attachment()
+   public Attachment()
    {
        super();
    }
@@ -223,11 +195,8 @@ public class Attachment<T> extends PropertyBase<T, Attachment<T>> implements Pro
        return errors;
    }
    
-   /** Create new Attachment by parsing unfolded calendar content */
-   public static <U> Attachment<U> parse(String string)
+   public static <U> Attachment<U> parse(String content)
    {
-       Attachment<U> property = new Attachment<U>();
-       property.parseContent(string);
-       return property;
+   		return Attachment.parse(new Attachment<U>(), content);
    }
 }

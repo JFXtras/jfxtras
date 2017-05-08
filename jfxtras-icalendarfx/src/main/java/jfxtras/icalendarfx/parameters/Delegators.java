@@ -3,7 +3,10 @@ package jfxtras.icalendarfx.parameters;
 import java.net.URI;
 import java.util.List;
 
-import jfxtras.icalendarfx.properties.component.relationship.Attendee;
+import jfxtras.icalendarfx.parameters.Delegators;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
 
 /**
  * DELEGATED-FROM
@@ -18,29 +21,28 @@ import jfxtras.icalendarfx.properties.component.relationship.Attendee;
  *  jdoe@example.com
  * 
  * @author David Bal
- * @see Attendee
  */
-public class Delegators extends ParameterBase<Delegators, List<URI>>
+public class Delegators extends VParameterBase<Delegators, List<URI>>
 {
+	private static final StringConverter< List<URI>> CONVERTER = StringConverters.uriListConverter();
+
     public Delegators(List<URI> list)
     {
-        super(list);
+        super(list, CONVERTER);
     }
     
     public Delegators()
     {
-        super();
+        super(CONVERTER);
     }
     
     public Delegators(Delegators source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
-
+    
     public static Delegators parse(String content)
     {
-        Delegators parameter = new Delegators();
-        parameter.parseContent(content);
-        return parameter;
+    	return Delegators.parse(new Delegators(), content);
     }
 }

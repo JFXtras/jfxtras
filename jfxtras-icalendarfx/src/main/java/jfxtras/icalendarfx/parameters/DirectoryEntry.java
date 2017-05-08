@@ -2,8 +2,10 @@ package jfxtras.icalendarfx.parameters;
 
 import java.net.URI;
 
-import jfxtras.icalendarfx.properties.component.relationship.Attendee;
-import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.parameters.DirectoryEntry;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
 
 /**
  * DIR
@@ -18,31 +20,29 @@ import jfxtras.icalendarfx.properties.component.relationship.Organizer;
  *  c=US???(cn=Jim%20Dolittle)":mailto:jimdo@example.com
  * 
  * @author David Bal
- * @see Attendee
- * @see Organizer
  *
  */
-public class DirectoryEntry extends ParameterBase<DirectoryEntry, URI>
+public class DirectoryEntry extends VParameterBase<DirectoryEntry, URI>
 {
+	private static final StringConverter<URI> CONVERTER = StringConverters.uriConverterWithQuotes();
+
     public DirectoryEntry(URI uri)
     {
-        super(uri);
+        super(uri, CONVERTER);
     }
     
     public DirectoryEntry()
     {
-        super();
+        super(CONVERTER);
     }
 
     public DirectoryEntry(DirectoryEntry source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
-
+    
     public static DirectoryEntry parse(String content)
     {
-        DirectoryEntry parameter = new DirectoryEntry();
-        parameter.parseContent(content);
-        return parameter;
+    	return DirectoryEntry.parse(new DirectoryEntry(), content);
     }
 }

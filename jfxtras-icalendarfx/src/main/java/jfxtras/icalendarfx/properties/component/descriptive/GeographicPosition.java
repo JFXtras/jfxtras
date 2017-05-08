@@ -2,12 +2,10 @@ package jfxtras.icalendarfx.properties.component.descriptive;
 
 import java.text.DecimalFormat;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.descriptive.GeographicPosition;
 
 /**
  * GEO
@@ -29,19 +27,25 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @see VEvent
  * @see VTodo
  */
-public class GeographicPosition extends PropertyBase<String, GeographicPosition>
+public class GeographicPosition extends VPropertyBase<String, GeographicPosition>
 {
-    public Double getLatitude() { return latitude.get(); }
-    ObjectProperty<Double> latitudeProperty() { return latitude; }
-    private ObjectProperty<Double> latitude = new SimpleObjectProperty<Double>(this, "latitude");
-    public void setLatitude(Double latitude) { this.latitude.set(latitude); }
+    public Double getLatitude() { return latitude; }
+    private Double latitude;
+    public void setLatitude(Double latitude)
+    {
+    	this.latitude = latitude;
+    	buildNewValue();
+	}
     public GeographicPosition withLatitude(Double latitude) { setLatitude(latitude); return this; }
     private final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.######");
 
-    public Double getLongitude() { return longitude.get(); }
-    ObjectProperty<Double> longitudeProperty() { return longitude; }
-    private ObjectProperty<Double> longitude = new SimpleObjectProperty<Double>(this, "longitude");
-    public void setLongitude(Double longitude) { this.longitude.set(longitude); }
+    public Double getLongitude() { return longitude; }
+    private Double longitude;
+    public void setLongitude(Double longitude)
+    {
+    	this.longitude = longitude;
+    	buildNewValue();
+	}
     public GeographicPosition withLongitude(Double longitude) { setLongitude(longitude); return this; }
 
     /*
@@ -50,14 +54,12 @@ public class GeographicPosition extends PropertyBase<String, GeographicPosition>
     public GeographicPosition(GeographicPosition source)
     {
         super(source);
-        setupListeners();
         updateParts(getValue());
     }
     
     public GeographicPosition(double latitude, double longitude)
     {
         super();
-        setupListeners();
         setLatitude(latitude);
         setLongitude(longitude);
     }
@@ -65,7 +67,6 @@ public class GeographicPosition extends PropertyBase<String, GeographicPosition>
     public GeographicPosition()
     {
         super();
-        setupListeners();
     }
     
     /** Applies string converter only to description and exception parts of the RequestStatus property
@@ -80,30 +81,13 @@ public class GeographicPosition extends PropertyBase<String, GeographicPosition>
         return builder.toString();
     }
     
-    public static GeographicPosition parse(String value)
+    public static GeographicPosition parse(String content)
     {
-        GeographicPosition geographicPosition = new GeographicPosition();
-        geographicPosition.parseContent(value);
-        return geographicPosition;
+    	return GeographicPosition.parse(new GeographicPosition(), content);
     }
-    
-    /*
-     * LISTENERS
-     * Used to keep latitude and longitude synchronized with the property value
-     */
-    private void setupListeners()
-    {
-        latitudeProperty().addListener(doubleChangeListener);
-        longitudeProperty().addListener(doubleChangeListener);
-        valueProperty().addListener(valueChangeListener);        
-    }
-    
-    private final ChangeListener<? super String> valueChangeListener = (observable, oldValue, newValue) -> updateParts(newValue);
     
     private void updateParts(String newValue)
     {
-        latitudeProperty().removeListener(doubleChangeListener);
-        longitudeProperty().removeListener(doubleChangeListener);
         String[] values = newValue.split(";");
         if (values.length == 2)
         {
@@ -113,22 +97,23 @@ public class GeographicPosition extends PropertyBase<String, GeographicPosition>
         {
             throw new IllegalArgumentException("Can't parse geographic position value:" + newValue);
         }
-        latitudeProperty().addListener(doubleChangeListener);
-        longitudeProperty().addListener(doubleChangeListener);
     }
-        
-    private final ChangeListener<? super Double> doubleChangeListener = (observable, oldValue, newValue) -> buildNewValue();
 
-    private void buildNewValue()
+    @Override
+	public void setValue(String value)
+    {
+		super.setValue(value);
+		updateParts(value);
+	}
+    
+	private void buildNewValue()
     {
         if ((getLatitude() != null) && (getLongitude() != null))
         {
-            valueProperty().removeListener(valueChangeListener);
             StringBuilder builder = new StringBuilder(20);
             builder.append(DECIMAL_FORMAT.format(getLatitude()) + ";");
             builder.append(DECIMAL_FORMAT.format(getLongitude()));
-            setValue(builder.toString());
-            valueProperty().addListener(valueChangeListener);
+            super.setValue(builder.toString());
         }
     }
 }

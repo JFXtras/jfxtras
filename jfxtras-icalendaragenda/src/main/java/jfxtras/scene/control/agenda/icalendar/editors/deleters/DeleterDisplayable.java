@@ -7,16 +7,16 @@ import java.util.Map;
 
 import javafx.util.Callback;
 import javafx.util.Pair;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VJournal;
+import jfxtras.icalendarfx.components.VTodo;
+import jfxtras.icalendarfx.parameters.Range.RangeType;
+import jfxtras.icalendarfx.properties.component.descriptive.Status.StatusType;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.components.VJournal;
-import net.balsoftware.icalendar.components.VTodo;
-import net.balsoftware.icalendar.parameters.Range.RangeType;
-import net.balsoftware.icalendar.properties.component.descriptive.Status.StatusType;
-import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
-import net.balsoftware.icalendar.properties.component.relationship.RecurrenceId;
 
 /**
  * <p>Handles deleting recurrences of a {@link VDisplayable}

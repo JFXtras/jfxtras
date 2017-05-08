@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import javafx.util.Pair;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.properties.VPropertyElement;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.scene.control.agenda.icalendar.editors.deleters.Deleter;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.Reviser;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.properties.VPropertyElement;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 /**
  * Options available when editing or deleting a repeatable appointment.

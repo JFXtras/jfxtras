@@ -13,8 +13,9 @@ public class RelationshipTypeTest
     public void canParseRelationshipType1()
     {
         String expectedContent = "NEIGHBOR";
-        Relationship p = Relationship.parse(expectedContent);
-        assertEquals("RELTYPE=" + expectedContent, p.toContent());
+        Relationship p = new Relationship()
+        		.withValue(expectedContent);
+        assertEquals("RELTYPE=" + expectedContent, p.toString());
         assertEquals(RelationshipType.UNKNOWN, p.getValue());
     }
     
@@ -23,8 +24,7 @@ public class RelationshipTypeTest
     {
         String expectedContent = "RELTYPE=NEIGHBOR";
         Relationship p = Relationship.parse(expectedContent);
-        System.out.println(p.toContent());
-        assertEquals(expectedContent, p.toContent());
+        assertEquals(expectedContent, p.toString());
         assertEquals(RelationshipType.UNKNOWN, p.getValue());
     }
 }

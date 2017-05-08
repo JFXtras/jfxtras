@@ -14,7 +14,7 @@ public class CalendarUserTest
     {
         CalendarUser parameter = CalendarUser.parse("INDIVIDUAL");
         String expectedContent = "CUTYPE=INDIVIDUAL";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
     }
     
     @Test // tests String as value
@@ -22,7 +22,7 @@ public class CalendarUserTest
     {
         CalendarUser parameter = CalendarUser.parse("X-CLAN");
         String expectedContent = "CUTYPE=X-CLAN";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
         assertEquals(CalendarUserType.UNKNOWN, parameter.getValue());
     }
 }

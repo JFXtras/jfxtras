@@ -11,11 +11,11 @@ import java.util.stream.IntStream;
 import javafx.scene.Parent;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import jfxtras.icalendarfx.VCalendar;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.test.JFXtrasGuiTest;
-import net.balsoftware.icalendar.VCalendar;
 
 public abstract class AgendaTestAbstract extends JFXtrasGuiTest
 {

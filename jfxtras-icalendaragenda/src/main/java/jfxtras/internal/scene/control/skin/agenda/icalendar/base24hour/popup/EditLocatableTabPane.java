@@ -7,15 +7,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VLocatable;
+import jfxtras.icalendarfx.properties.component.descriptive.Description;
+import jfxtras.icalendarfx.properties.component.descriptive.Location;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.EditChoiceDialog;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.VLocatable;
-import net.balsoftware.icalendar.properties.component.descriptive.Description;
-import net.balsoftware.icalendar.properties.component.descriptive.Location;
-import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 /** 
  * TabPane for editing descriptive properties and a {@link RecurrenceRule} for a {@link VComponentLocatable}.

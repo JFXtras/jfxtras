@@ -1,16 +1,17 @@
 package jfxtras.icalendarfx.components;
 
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.DaylightSavingTime;
+import jfxtras.icalendarfx.components.StandardOrDaylight;
+import jfxtras.icalendarfx.components.StandardTime;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VRepeatableBase;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRuleCache;
 import jfxtras.icalendarfx.properties.component.timezone.TimeZoneName;
 import jfxtras.icalendarfx.properties.component.timezone.TimeZoneOffsetFrom;
@@ -29,7 +30,7 @@ import jfxtras.icalendarfx.properties.component.timezone.TimeZoneOffsetTo;
  * @author David Bal
  *
  */
-public abstract class StandardOrDaylight<T> extends VRepeatableBase<T>
+public abstract class StandardOrDaylight<T extends StandardOrDaylight<T>> extends VRepeatableBase<T>
 {
     /**
      * <p>This property specifies the customary designation for a time zone description.<br>
@@ -43,43 +44,36 @@ public abstract class StandardOrDaylight<T> extends VRepeatableBase<T>
      * </ul>
      * </p>
      */
-    public ObjectProperty<ObservableList<TimeZoneName>> timeZoneNamesProperty()
+    private List<TimeZoneName> timeZoneNames;
+    public List<TimeZoneName> getTimeZoneNames() { return timeZoneNames; }
+    public void setTimeZoneNames(List<TimeZoneName> timeZoneNames)
     {
-        if (timeZoneNames == null)
-        {
-            timeZoneNames = new SimpleObjectProperty<>(this, PropertyType.TIME_ZONE_NAME.toString());
-        }
-        return timeZoneNames;
-    }
-    private ObjectProperty<ObservableList<TimeZoneName>> timeZoneNames;
-    public ObservableList<TimeZoneName> getTimeZoneNames()
-    {
-        return (timeZoneNames == null) ? null : timeZoneNames.get();
-    }
-    public void setTimeZoneNames(ObservableList<TimeZoneName> timeZoneNames)
-    {
-        if (timeZoneNames != null)
-        {
-            if ((this.timeZoneNames != null) && (this.timeZoneNames.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(timeZoneNamesProperty().get(), timeZoneNames);
-            }
-            orderer().registerSortOrderProperty(timeZoneNames);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(timeZoneNamesProperty().get());
-        }
-        timeZoneNamesProperty().set(timeZoneNames);
-    }
+    	if (this.timeZoneNames != null)
+    	{
+    		this.timeZoneNames.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.timeZoneNames = timeZoneNames;
+    	if (timeZoneNames != null)
+    	{
+    		timeZoneNames.forEach(c -> orderChild(c));
+    	}
+	}
     /**
      * Sets the value of the {@link #timeZoneNamesProperty()}
      * 
      * @return - this class for chaining
      */
-    public T withTimeZoneNames(ObservableList<TimeZoneName> timeZoneNames)
+    public T withTimeZoneNames(List<TimeZoneName> timeZoneNames)
     {
-        setTimeZoneNames(timeZoneNames);
+    	if (getTimeZoneNames() == null)
+    	{
+    		setTimeZoneNames(new ArrayList<>());
+    	}
+    	getTimeZoneNames().addAll(timeZoneNames);
+    	if (timeZoneNames != null)
+    	{
+    		timeZoneNames.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     /**
@@ -89,11 +83,10 @@ public abstract class StandardOrDaylight<T> extends VRepeatableBase<T>
      */
     public T withTimeZoneNames(String...timeZoneNames)
     {
-        List<TimeZoneName> a = Arrays.stream(timeZoneNames)
+        List<TimeZoneName> newElements = Arrays.stream(timeZoneNames)
                 .map(c -> TimeZoneName.parse(c))
                 .collect(Collectors.toList());
-        setTimeZoneNames(FXCollections.observableArrayList(a));
-        return (T) this;
+        return withTimeZoneNames(newElements);
     }
     /**
      * Sets the value of the {@link #timeZoneNamesProperty()} from a vararg of {@link TimeZoneName} objects.
@@ -102,14 +95,7 @@ public abstract class StandardOrDaylight<T> extends VRepeatableBase<T>
      */
     public T withTimeZoneNames(TimeZoneName...timeZoneNames)
     {
-        if (getTimeZoneNames() == null)
-        {
-            setTimeZoneNames(FXCollections.observableArrayList(timeZoneNames));
-        } else
-        {
-            getTimeZoneNames().addAll(timeZoneNames);
-        }
-        return (T) this;
+    	return withTimeZoneNames(Arrays.asList(timeZoneNames));
     }
     
     /**
@@ -123,40 +109,47 @@ public abstract class StandardOrDaylight<T> extends VRepeatableBase<T>
      * <li>TZOFFSETFROM:+1345
      * </ul>
      */
-    public ObjectProperty<TimeZoneOffsetFrom> timeZoneOffsetFromProperty()
+    private TimeZoneOffsetFrom timeZoneOffsetFrom;
+    public TimeZoneOffsetFrom getTimeZoneOffsetFrom() { return timeZoneOffsetFrom; }
+    public void setTimeZoneOffsetFrom(TimeZoneOffsetFrom timeZoneOffsetFrom)
     {
-        if (timeZoneOffsetFrom == null)
-        {
-            timeZoneOffsetFrom = new SimpleObjectProperty<>(this, PropertyType.TIME_ZONE_OFFSET_FROM.toString());
-            orderer().registerSortOrderProperty(timeZoneOffsetFrom);
-        }
-        return timeZoneOffsetFrom;
-    }
-    private ObjectProperty<TimeZoneOffsetFrom> timeZoneOffsetFrom;
-    public TimeZoneOffsetFrom getTimeZoneOffsetFrom() { return timeZoneOffsetFromProperty().get(); }
-    public void setTimeZoneOffsetFrom(TimeZoneOffsetFrom timeZoneOffsetFrom) { timeZoneOffsetFromProperty().set(timeZoneOffsetFrom); }
+    	orderChild(this.timeZoneOffsetFrom, timeZoneOffsetFrom);
+    	this.timeZoneOffsetFrom = timeZoneOffsetFrom;
+	}
     public void setTimeZoneOffsetFrom(ZoneOffset zoneOffset) { setTimeZoneOffsetFrom(new TimeZoneOffsetFrom(zoneOffset)); }
-    public void setTimeZoneOffsetFrom(String timeZoneOffsetFrom) { PropertyType.TIME_ZONE_OFFSET_FROM.parse(this, timeZoneOffsetFrom); }
+    public void setTimeZoneOffsetFrom(String timeZoneOffsetFrom) { setTimeZoneOffsetFrom(TimeZoneOffsetFrom.parse(timeZoneOffsetFrom)); }
     /**
      * <p>Sets the value of the {@link #timeZoneOffsetFromProperty()} by creating a new {@link TimeZoneOffsetFrom} from
      * the {@link ZoneOffset} parameter</p>
      * 
      * @param zoneOffset  value for new {@link TimeZoneOffsetFrom}
      */
-    public T withTimeZoneOffsetFrom(TimeZoneOffsetFrom timeZoneOffsetFrom) { setTimeZoneOffsetFrom(timeZoneOffsetFrom); return (T) this; }
+    public T withTimeZoneOffsetFrom(TimeZoneOffsetFrom timeZoneOffsetFrom)
+    {
+    	setTimeZoneOffsetFrom(timeZoneOffsetFrom);
+    	return (T) this;
+	}
     /**
      * <p>Sets the value of the {@link #timeZoneOffsetFromProperty()} by creating a new {@link TimeZoneOffsetFrom} from
      * the {@link ZoneOffset} parameter</p>
      * 
      * @return - this class for chaining
      */
-    public T withTimeZoneOffsetFrom(ZoneOffset zoneOffset) { setTimeZoneOffsetFrom(zoneOffset); return (T) this; }
+    public T withTimeZoneOffsetFrom(ZoneOffset zoneOffset)
+    {
+    	setTimeZoneOffsetFrom(zoneOffset);
+    	return (T) this;
+	}
     /**
      * <p>Sets the value of the {@link #timeZoneOffsetFromProperty()} by parsing a iCalendar content string</p>
      * 
      * @return - this class for chaining
      */
-    public T withTimeZoneOffsetFrom(String timeZoneOffsetFrom) { setTimeZoneOffsetFrom(timeZoneOffsetFrom); return (T) this; }
+    public T withTimeZoneOffsetFrom(String timeZoneOffsetFrom)
+    {
+    	setTimeZoneOffsetFrom(timeZoneOffsetFrom);
+    	return (T) this;
+	}
 
 
     /**
@@ -169,39 +162,52 @@ public abstract class StandardOrDaylight<T> extends VRepeatableBase<T>
      * <li>TZOFFSETTO:+1245
      * </ul>
      */
-    public ObjectProperty<TimeZoneOffsetTo> timeZoneOffsetToProperty()
+    private TimeZoneOffsetTo timeZoneOffsetTo;
+    public TimeZoneOffsetTo getTimeZoneOffsetTo() { return timeZoneOffsetTo; }
+    public void setTimeZoneOffsetTo(TimeZoneOffsetTo timeZoneOffsetTo)
     {
-        if (timeZoneOffsetTo == null)
-        {
-            timeZoneOffsetTo = new SimpleObjectProperty<>(this, PropertyType.TIME_ZONE_OFFSET_TO.toString());
-            orderer().registerSortOrderProperty(timeZoneOffsetTo);
-        }
-        return timeZoneOffsetTo;
-    }
-    private ObjectProperty<TimeZoneOffsetTo> timeZoneOffsetTo;
-    public TimeZoneOffsetTo getTimeZoneOffsetTo() { return timeZoneOffsetToProperty().get(); }
-    public void setTimeZoneOffsetTo(TimeZoneOffsetTo timeZoneOffsetTo) { timeZoneOffsetToProperty().set(timeZoneOffsetTo); }
+    	orderChild(this.timeZoneOffsetTo, timeZoneOffsetTo);
+    	this.timeZoneOffsetTo = timeZoneOffsetTo;
+	}
     public void setTimeZoneOffsetTo(ZoneOffset zoneOffset) { setTimeZoneOffsetTo(new TimeZoneOffsetTo(zoneOffset)); }
-    public void setTimeZoneOffsetTo(String timeZoneOffsetTo) { PropertyType.TIME_ZONE_OFFSET_TO.parse(this, timeZoneOffsetTo); }
+    public void setTimeZoneOffsetTo(String timeZoneOffsetTo) { setTimeZoneOffsetTo(TimeZoneOffsetTo.parse(timeZoneOffsetTo)); }
     /**
      * <p>Sets the value of the {@link #timeZoneOffsetToProperty()}</p>
      * 
      * @return - this class for chaining
      */
-    public T withTimeZoneOffsetTo(TimeZoneOffsetTo timeZoneOffsetTo) { setTimeZoneOffsetTo(timeZoneOffsetTo); return (T) this; }
+    public T withTimeZoneOffsetTo(TimeZoneOffsetTo timeZoneOffsetTo)
+    {
+    	setTimeZoneOffsetTo(timeZoneOffsetTo);
+    	return (T) this;
+	}
     /**
      * <p>Sets the value of the {@link #timeZoneOffsetToProperty()} by creating a new {@link TimeZoneOffsetTo} from
      * the {@link ZoneOffset} parameter</p>
      * 
      * @return - this class for chaining
      */
-    public T withTimeZoneOffsetTo(ZoneOffset zoneOffset) { setTimeZoneOffsetTo(zoneOffset); return (T) this; }
+    public T withTimeZoneOffsetTo(ZoneOffset zoneOffset)
+    {
+    	setTimeZoneOffsetTo(zoneOffset);
+    	return (T) this; 
+	}
     /**
      * <p>Sets the value of the {@link #timeZoneOffsetToProperty()} by parsing a iCalendar content string</p>
      * 
      * @return - this class for chaining
      */
-    public T withTimeZoneOffsetTo(String timeZoneOffsetTo) { setTimeZoneOffsetTo(timeZoneOffsetTo); return (T) this; }
+    public T withTimeZoneOffsetTo(String timeZoneOffsetTo) 
+    {
+    	setTimeZoneOffsetTo(timeZoneOffsetTo);
+    	return (T) this;
+	}
+    
+	@Override
+	public List<? extends VComponent> calendarList()
+	{
+		throw new RuntimeException("Subcomponent " + name() + " is embedded in VTimeZone not VCalendar");
+	}
     
     /*
      * CONSTRUCTORS

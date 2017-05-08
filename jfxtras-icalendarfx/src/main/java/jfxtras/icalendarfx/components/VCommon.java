@@ -1,14 +1,13 @@
 package jfxtras.icalendarfx.components;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.VCommon;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VComponentBase;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
 
 /**
@@ -22,7 +21,7 @@ import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
  *
  * @param <T> concrete subclass
  */
-public abstract class VCommon<T> extends VComponentBase
+public abstract class VCommon<T> extends VComponentBase<T>
 {
     /**
      * Provides a framework for defining non-standard properties.
@@ -33,34 +32,37 @@ public abstract class VCommon<T> extends VComponentBase
         org/mysubj.au
      *  </ul>
      */
-    public ObjectProperty<ObservableList<NonStandardProperty>> nonStandardProperty()
+    private List<NonStandardProperty> nonStandardProps;
+    public List<NonStandardProperty> getNonStandard() { return nonStandardProps; }
+    public void setNonStandard(List<NonStandardProperty> nonStandardProps)
     {
-        if (nonStandardProps == null)
-        {
-            nonStandardProps = new SimpleObjectProperty<>(this, PropertyType.NON_STANDARD.toString());
-        }
-        return nonStandardProps;
-    }
-    private ObjectProperty<ObservableList<NonStandardProperty>> nonStandardProps;
-    public ObservableList<NonStandardProperty> getNonStandard()
+    	if (this.nonStandardProps != null)
+    	{
+    		this.nonStandardProps.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.nonStandardProps = nonStandardProps;
+    	if (nonStandardProps != null)
+    	{
+    		nonStandardProps.forEach(c -> orderChild(c));
+    	}
+	}
+    /**
+     * Sets the value of the {@link #nonStandardProperty()}
+     * 
+     * @return - this class for chaining
+     */
+    public T withNonStandard(List<NonStandardProperty> nonStandardProps)
     {
-        return (nonStandardProps == null) ? null : nonStandardProps.get();
-    }
-    public void setNonStandard(ObservableList<NonStandardProperty> nonStandardProps)
-    {
-        if (nonStandardProps != null)
-        {
-            if ((this.nonStandardProps != null) && (this.nonStandardProps.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(nonStandardProperty().get(), nonStandardProps);
-            }
-            orderer().registerSortOrderProperty(nonStandardProps);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(nonStandardProperty().get());
-        }
-        nonStandardProperty().set(nonStandardProps);
+    	if (getNonStandard() == null)
+    	{
+        	setNonStandard(new ArrayList<>());
+    	}
+    	getNonStandard().addAll(nonStandardProps);
+    	if (nonStandardProps != null)
+    	{
+    		nonStandardProps.forEach(c -> orderChild(c));
+    	}
+        return (T) this;
     }
     /**
      * Sets the value of the {@link #nonStandardProperty()} by parsing a vararg of
@@ -70,21 +72,10 @@ public abstract class VCommon<T> extends VComponentBase
      */
     public T withNonStandard(String...nonStandardProps)
     {
-        List<NonStandardProperty> a = Arrays.stream(nonStandardProps)
+        List<NonStandardProperty> newElements = Arrays.stream(nonStandardProps)
                 .map(c -> NonStandardProperty.parse(c))
                 .collect(Collectors.toList());
-        setNonStandard(FXCollections.observableArrayList(a));
-        return (T) this;
-    }
-    /**
-     * Sets the value of the {@link #nonStandardProperty()}
-     * 
-     * @return - this class for chaining
-     */
-    public T withNonStandard(ObservableList<NonStandardProperty> nonStandardProps)
-    {
-        setNonStandard(nonStandardProps);
-        return (T) this;
+        return withNonStandard(newElements);
     }
     /**
      * Sets the value of the {@link #nonStandardProperty()} from a vararg of {@link NonStandardProperty} objects.
@@ -93,14 +84,7 @@ public abstract class VCommon<T> extends VComponentBase
      */    
     public T withNonStandard(NonStandardProperty...nonStandardProps)
     {
-        if (getNonStandard() == null)
-        {
-            setNonStandard(FXCollections.observableArrayList(nonStandardProps));
-        } else
-        {
-            getNonStandard().addAll(nonStandardProps);
-        }
-        return (T) this;
+    	return withNonStandard(Arrays.asList(nonStandardProps));
     }
 
     /*

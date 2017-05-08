@@ -1,11 +1,10 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.parameters.Range;
+import jfxtras.icalendarfx.properties.VProperty;
 
-public interface PropRecurrenceID<T> extends Property<T>
+public interface PropRecurrenceID<T> extends VProperty<T>
 {
     Range getRange();
-    ObjectProperty<Range> rangeProperty();
     void setRange(Range range);
 }

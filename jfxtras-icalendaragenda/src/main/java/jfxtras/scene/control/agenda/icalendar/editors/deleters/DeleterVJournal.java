@@ -1,6 +1,6 @@
 package jfxtras.scene.control.agenda.icalendar.editors.deleters;
 
-import net.balsoftware.icalendar.components.VJournal;
+import jfxtras.icalendarfx.components.VJournal;
 
 /**
  * Deleter for {@link VJournal}

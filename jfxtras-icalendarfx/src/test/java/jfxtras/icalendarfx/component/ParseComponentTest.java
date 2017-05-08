@@ -7,7 +7,6 @@ import java.time.Duration;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarTestAbstract;
-import jfxtras.icalendarfx.components.SimpleVComponentFactory;
 import jfxtras.icalendarfx.components.VAlarm;
 import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.components.VEvent;
@@ -37,7 +36,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
         VEvent vEvent = VEvent.parse(vEventString);
         VEvent expectedVEvent = getYearly1();
         assertEquals(expectedVEvent, vEvent);
-        assertEquals(vEventString, expectedVEvent.toContent());
+        assertEquals(vEventString, expectedVEvent.toString());
     }
 
     @Test
@@ -53,7 +52,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
         VEvent vEvent = VEvent.parse(vEventString);
         VEvent expectedVEvent = getDaily3();
         assertEquals(expectedVEvent, vEvent);
-        assertEquals(vEventString, expectedVEvent.toContent());
+        assertEquals(vEventString, expectedVEvent.toString());
     }
     
     @Test
@@ -79,7 +78,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
                 + "RRULE:FREQ=DAILY;INTERVAL=3;COUNT=10;BYMONTHDAY=9,10,11,12,13,14" + System.lineSeparator()
                 + "UID:20150110T080000-0@jfxtras.org" + System.lineSeparator()
                 + "END:VEVENT";
-        assertEquals(vEventString2, expectedVEvent.toContent());
+        assertEquals(vEventString2, expectedVEvent.toString());
     }
         
     @Test
@@ -98,7 +97,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
         VEvent vEvent = VEvent.parse(vEventString);
         VEvent expectedVEvent = getDailyUTC();
         assertEquals(expectedVEvent, vEvent);
-        assertEquals(vEventString, expectedVEvent.toContent());
+        assertEquals(vEventString, expectedVEvent.toString());
     }
     
     /** Tests FREQ=YEARLY */
@@ -119,7 +118,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
         VEvent vEvent = VEvent.parse(vEventString);
         VEvent expectedVEvent = getDailyWithException1();
         assertEquals(expectedVEvent, vEvent);
-        assertEquals(vEventString, expectedVEvent.toContent());
+        assertEquals(vEventString, expectedVEvent.toString());
     }
     
     @Test
@@ -157,6 +156,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
         VEvent expectedVEvent = getGoogleIndividual();
         vEvent.equals(expectedVEvent);
         assertEquals(expectedVEvent, vEvent);
+        assertEquals(vEventString, vEvent.toString());
     }
     
     @Test
@@ -206,30 +206,17 @@ public class ParseComponentTest extends ICalendarTestAbstract
         VEvent vEvent = VEvent.parse(content);
         VEvent expectedVEvent = getGoogleWithExceptions();
         assertEquals(expectedVEvent, vEvent);
-    }
-    
+    }    
 
     @Test
     public void canParseEmptyVevent()
     {
-        VComponent vEvent = SimpleVComponentFactory.emptyVComponent("VEVENT");
+    	String expectedContent = "BEGIN:VEVENT" + System.lineSeparator() +
+    			"END:VEVENT";
+        VComponent vEvent = VEvent.parse(expectedContent);
         VComponent vExpected = new VEvent();
         assertEquals(vExpected, vEvent);
-    }
-    
-    @Test
-    public void canParseEmptyVevent2()
-    {
-        String content = "BEGIN:VEVENT" + System.lineSeparator() +
-        "UID:19970610T172345Z-AF23B2@example.com" + System.lineSeparator() +
-        "DTSTAMP:19970610T172345Z" + System.lineSeparator() +
-        "DTSTART:19970714T170000Z" + System.lineSeparator() +
-        "DTEND:19970715T040000Z" + System.lineSeparator() +
-        "SUMMARY:Bastille Day Party" + System.lineSeparator() +
-        "END:VEVENT";
-        VComponent vEvent = SimpleVComponentFactory.emptyVComponent(content);
-        VComponent vExpected = new VEvent();
-        assertEquals(vExpected, vEvent);
+        assertEquals(expectedContent, vEvent.toString());
     }
 
     @Test
@@ -246,8 +233,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
                               + "" + System.lineSeparator() // ignore blank line
                               + " far away." + System.lineSeparator()
                               + "END:VEVENT";
-        VComponent vEvent = SimpleVComponentFactory.emptyVComponent(vEventString);
-        vEvent.parseContent(vEventString);
+        VComponent vEvent = VEvent.parse(vEventString);
         VEvent expectedVEvent = getWholeDayDaily1()
                 .withComments("This is a multiline comment.")
                 .withDescription("A dog ran far away.");
@@ -271,8 +257,7 @@ public class ParseComponentTest extends ICalendarTestAbstract
                               + "TRIGGER;RELATED=START:-PT30M" + System.lineSeparator()
                               + "END:VALARM" + System.lineSeparator()
                               + "END:VEVENT";
-        VComponent vEvent = SimpleVComponentFactory.emptyVComponent(vEventString);
-        vEvent.parseContent(vEventString);
+        VComponent vEvent = VEvent.parse(vEventString);
         VEvent expectedVEvent = getWholeDayDaily1()
                 .withComments("This is a multiline comment.")
                 .withVAlarms(new VAlarm()

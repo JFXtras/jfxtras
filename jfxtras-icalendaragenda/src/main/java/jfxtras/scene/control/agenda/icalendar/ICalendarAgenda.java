@@ -33,6 +33,28 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.Pair;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.VChild;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VJournal;
+import jfxtras.icalendarfx.components.VTodo;
+import jfxtras.icalendarfx.properties.VPropertyElement;
+import jfxtras.icalendarfx.properties.component.descriptive.Description;
+import jfxtras.icalendarfx.properties.component.descriptive.Location;
+import jfxtras.icalendarfx.properties.component.descriptive.Summary;
+import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Count;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Frequency;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
+import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
+import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 import jfxtras.internal.scene.control.skin.agenda.AgendaSkin;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.AgendaDateTimeUtilities;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.DeleteChoiceDialog;
@@ -53,26 +75,6 @@ import jfxtras.scene.control.agenda.icalendar.factories.DefaultVComponentFactory
 import jfxtras.scene.control.agenda.icalendar.factories.RecurrenceFactory;
 import jfxtras.scene.control.agenda.icalendar.factories.VComponentFactory;
 import jfxtras.util.NodeUtil;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.VChild;
-import net.balsoftware.icalendar.components.VComponent;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.components.VJournal;
-import net.balsoftware.icalendar.components.VTodo;
-import net.balsoftware.icalendar.properties.VPropertyElement;
-import net.balsoftware.icalendar.properties.component.descriptive.Summary;
-import net.balsoftware.icalendar.properties.component.recurrence.ExceptionDates;
-import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.Count;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.Frequency;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.Interval;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.Until;
-import net.balsoftware.icalendar.properties.component.relationship.Organizer;
-import net.balsoftware.icalendar.properties.component.time.DateTimeEnd;
-import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * <p>The {@link ICalendarAgenda} control is designed to take a {@link VCalendar VCALENDAR} object,
@@ -229,19 +231,19 @@ public class ICalendarAgenda extends Agenda
     
     /* UID Generator Callback */
     private static Integer nextKey = 0;
-    private net.balsoftware.icalendar.utilities.Callback<Void, String> uidGeneratorCallback = (Void) ->
+    private jfxtras.icalendarfx.utilities.Callback<Void, String> uidGeneratorCallback = (Void) ->
     { // default UID generator callback
         String dateTime = DateTimeUtilities.LOCAL_DATE_TIME_FORMATTER.format(LocalDateTime.now());
         String domain = "jfxtras.org";
         return dateTime + "-" + nextKey++ + domain;
     };
     /** set UID callback generator.  It makes UID values for new components. */
-    public net.balsoftware.icalendar.utilities.Callback<Void, String> getUidGeneratorCallback()
+    public jfxtras.icalendarfx.utilities.Callback<Void, String> getUidGeneratorCallback()
     {
     	return uidGeneratorCallback;
 	}
     /** set UID callback generator. It makes UID values for new components. */
-    public void setUidGeneratorCallback(net.balsoftware.icalendar.utilities.Callback<Void, String> uidCallback)
+    public void setUidGeneratorCallback(jfxtras.icalendarfx.utilities.Callback<Void, String> uidCallback)
     {
     	this.uidGeneratorCallback = uidCallback;
         if (vComponentFactory instanceof DefaultVComponentFactory)
@@ -254,7 +256,7 @@ public class ICalendarAgenda extends Agenda
         // The code here only replaces the default vcomponent factory automatically.
 	}
     /** set UID callback generator.  Return itself for chaining. */
-    public ICalendarAgenda withUidGeneratorCallback(net.balsoftware.icalendar.utilities.Callback<Void, String> uidCallback)
+    public ICalendarAgenda withUidGeneratorCallback(jfxtras.icalendarfx.utilities.Callback<Void, String> uidCallback)
     {
         setUidGeneratorCallback(uidCallback);
         return this;

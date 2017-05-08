@@ -7,6 +7,7 @@ import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseAltText;
+import jfxtras.icalendarfx.properties.component.descriptive.Comment;
 
 /**
  * COMMENT
@@ -43,10 +44,8 @@ public class Comment extends PropBaseAltText<String, Comment>
         super();
     }
     
-    public static Comment parse(String propertyContent)
+    public static Comment parse(String content)
     {
-        Comment property = new Comment();
-        property.parseContent(propertyContent);
-        return property;
+    	return Comment.parse(new Comment(), content);
     }
 }

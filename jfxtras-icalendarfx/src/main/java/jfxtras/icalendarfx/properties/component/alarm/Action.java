@@ -1,9 +1,9 @@
 package jfxtras.icalendarfx.properties.component.alarm;
 
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VAlarm;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
 import jfxtras.icalendarfx.properties.component.alarm.Action.ActionType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * <h1>ACTION</h1>
@@ -26,8 +26,11 @@ import jfxtras.icalendarfx.properties.component.alarm.Action.ActionType;
  * 
  * @see VAlarm
  */
-public class Action extends PropertyBase<ActionType, Action>
+public class Action extends VPropertyBase<ActionType, Action>
 {
+//	private static final Collection<ValueType> ALLOWED_VALUE_TYPES =  Arrays.asList(ValueType.TEXT);
+//	private static final ValueType DEFAULT_VALUE_TYPE =  ValueType.TEXT;
+
     private final static StringConverter<ActionType> CONVERTER = new StringConverter<ActionType>()
     {
         @Override
@@ -46,6 +49,7 @@ public class Action extends PropertyBase<ActionType, Action>
     
     public Action(ActionType type)
     {
+//        super(ALLOWED_VALUE_TYPES, DEFAULT_VALUE_TYPE);
         super();
         setConverter(CONVERTER);
         setValue(type);
@@ -58,15 +62,14 @@ public class Action extends PropertyBase<ActionType, Action>
 
     public Action()
     {
-        super();
-        setConverter(CONVERTER);
+//      super(ALLOWED_VALUE_TYPES, DEFAULT_VALUE_TYPE);
+      super();
+      setConverter(CONVERTER);
     }
     
-    public static Action parse(String value)
+    public static Action parse(String content)
     {
-        Action property = new Action();
-        property.parseContent(value);
-        return property;
+    	return Action.parse(new Action(), content);
     }
     
     public enum ActionType

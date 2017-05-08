@@ -1,18 +1,18 @@
 package jfxtras.icalendarfx.components;
 
-import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VDateTimeEnd;
+import jfxtras.icalendarfx.components.VDescribable2;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VLocatable;
+import jfxtras.icalendarfx.components.VRepeatable;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
-import jfxtras.icalendarfx.properties.component.time.DurationProp;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransparencyType;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
@@ -95,69 +95,16 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
      * DTEND;VALUE=DATE:19980704
      */
     @Override
-    public ObjectProperty<DateTimeEnd> dateTimeEndProperty()
-    {
-        if (dateTimeEnd == null)
-        {
-            dateTimeEnd = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_END.toString());
-            orderer().registerSortOrderProperty(dateTimeEnd);
-            dateTimeEnd.addListener((observable, oldValue, newValue) -> 
-            {
-                try
-                {
-                    checkDateTimeEndConsistency();
-                } catch (DateTimeException e)
-                {
-                    System.out.println("old value back:" + oldValue);
-                    if (oldValue != null)
-                    {
-                        setDateTimeEnd(oldValue);                        
-                    } else
-                    {
-                        setDateTimeEnd((DateTimeEnd) null);
-                    }
-                    throw e;
-                }
-            });
-            dateTimeEnd.addListener((obs) ->
-            {
-                if ((getDateTimeEnd() != null) && (getDuration() != null))
-                {
-                    throw new DateTimeException("DURATION and DTEND can't both be set");
-                }            
-            });
-        }
-        return dateTimeEnd;
-    }
+    public DateTimeEnd getDateTimeEnd() { return dateTimeEnd; }
+    private DateTimeEnd dateTimeEnd;
     @Override
-    public DateTimeEnd getDateTimeEnd() { return (dateTimeEnd == null) ? null : dateTimeEndProperty().get(); }
-    private ObjectProperty<DateTimeEnd> dateTimeEnd;
-    
-//    @Override // this functionality is handled by DTEND listener (I hope)
-//    void dateTimeStartListenerHook()
-//    {
-//        super.dateTimeStartListenerHook();
-//        List<String> dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
-//        if (! dtendError.isEmpty())
-//        {
-//            String errors = dtendError.stream().collect(Collectors.joining(System.lineSeparator()));
-//            throw new DateTimeException(errors);
-//        }
-//    }
-    
-    /** add listener to Duration to ensure both DURATION and DTEND are not both set */
-    @Override public ObjectProperty<DurationProp> durationProperty()
+	public void setDateTimeEnd(DateTimeEnd dateTimeEnd)
     {
-        ObjectProperty<DurationProp> duration = super.durationProperty();
-        duration.addListener((obs) ->
-        {
-            if ((getDateTimeEnd() != null) && (getDuration() != null))
-            {
-                throw new DateTimeException("DURATION and DTEND can't both be set");
-            }            
-        });
-        return duration;
-    }
+    	orderChild(this.dateTimeEnd, dateTimeEnd);
+    	this.dateTimeEnd = dateTimeEnd;
+	}
+    /** add listener to Duration to ensure both DURATION and DTEND are not both set */
+
 
     /**
      * TRANSP
@@ -171,32 +118,15 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
      * Example:
      * TRANSP:TRANSPARENT
      */
-    ObjectProperty<TimeTransparency> timeTransparencyProperty()
-    {
-        if (timeTransparency == null)
-        {
-            timeTransparency = new SimpleObjectProperty<>(this, PropertyType.TIME_TRANSPARENCY.toString());
-            orderer().registerSortOrderProperty(timeTransparency);
-        }
-        return timeTransparency;
-    }
-    private ObjectProperty<TimeTransparency> timeTransparency;
-    public TimeTransparency getTimeTransparency()
-    {
-        return timeTransparencyProperty().get();
-    }
-    public void setTimeTransparency(String timeTransparency)
-    {
-        setTimeTransparency(TimeTransparency.parse(timeTransparency));
-    }
+    private TimeTransparency timeTransparency;
+    public TimeTransparency getTimeTransparency() { return timeTransparency; }
+    public void setTimeTransparency(String timeTransparency) { setTimeTransparency(TimeTransparency.parse(timeTransparency)); }
     public void setTimeTransparency(TimeTransparency timeTransparency)
     {
-        timeTransparencyProperty().set(timeTransparency);
-    }
-    public void setTimeTransparency(TimeTransparencyType timeTransparency)
-    {
-        setTimeTransparency(new TimeTransparency(timeTransparency));
-    }
+    	orderChild(this.timeTransparency, timeTransparency);
+    	this.timeTransparency = timeTransparency;
+	}
+    public void setTimeTransparency(TimeTransparencyType timeTransparency) { setTimeTransparency(new TimeTransparency(timeTransparency)); }
     public VEvent withTimeTransparency(TimeTransparency timeTransparency)
     {
         setTimeTransparency(timeTransparency);
@@ -209,7 +139,7 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
     }
     public VEvent withTimeTransparency(String timeTransparency)
     {
-        PropertyType.TIME_TRANSPARENCY.parse(this, timeTransparency);
+    	setTimeTransparency(TimeTransparency.parse(timeTransparency));
         return this;
     }
     
@@ -266,12 +196,9 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
     @Override
     public List<String> errors()
     {
-        // TODO - GET ERRORS FROM CHILDREN?
-        // REMOVE DTEND LISTENERS??  WHAT ABOUT RDATE AND EXDATE LISTENERS???
         List<String> errors = super.errors();
         List<String> dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
         errors.addAll(dtendError);
-//        boolean isDateTimeEndMatch = dtendError.isEmpty();
         if (getDateTimeStart() == null)
         {
             errors.add("DTSTART is not present.  DTSTART is REQUIRED and MUST NOT occur more than once");
@@ -284,32 +211,41 @@ public class VEvent extends VLocatable<VEvent> implements VDateTimeEnd<VEvent>,
 //            errors.add("Neither DTEND or DURATION is present.  DTEND or DURATION is REQUIRED and MUST NOT occur more than once"); // not required
         } else if (isDateTimeEndPresent && isDurationPresent)
         {
-            errors.add("Both DTEND and DURATION are present.  DTEND or DURATION MAY appear, but both MUST NOT occur in the same " + name());
+            errors.add("Both DTEND and DURATION are present.  DTEND or DURATION MAY exist, but both MUST NOT occur in the same " + name());
         }
         
         return Collections.unmodifiableList(errors);
     }
     
+	@Override
+	public List<VEvent> calendarList()
+	{
+		if (getParent() != null)
+		{
+			VCalendar cal = (VCalendar) getParent();
+			return cal.getVEvents();
+		} else
+		{
+			throw new RuntimeException("Parent isn't set");
+		}
+	}
+    
     @Override
+    @Deprecated // is this necessary?
     public void eraseDateTimeProperties()
     {
         super.eraseDateTimeProperties();
         setDateTimeEnd((DateTimeEnd) null);
     }
     
-    /** Parse folded content lines into calendar component object */
-    public static VEvent parse(String foldedContent)
+    /**
+     * Creates a new VEvent calendar component by parsing a String of iCalendar content lines
+     *
+     * @param content  the text to parse, not null
+     * @return  the parsed VEvent
+     */
+    public static VEvent parse(String content)
     {
-        VEvent component = new VEvent();
-        List<String> messages = component.parseContent(foldedContent);
-        // filter out Success messages
-        String filteredMessages = messages.stream()
-            .filter(m ->! m.contains(";Success"))
-            .collect(Collectors.joining(System.lineSeparator()));
-        if (! filteredMessages.isEmpty())
-        {
-            throw new IllegalArgumentException(messages.stream().collect(Collectors.joining(System.lineSeparator())));
-        }
-        return component;
+    	return VEvent.parse(new VEvent(), content);
     }
 }

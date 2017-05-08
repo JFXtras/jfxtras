@@ -3,10 +3,11 @@ package jfxtras.icalendarfx.properties.component.time;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.time.TimeTransparency;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransparencyType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * TRANSP
@@ -25,7 +26,7 @@ import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransp
  * The property can be specified in following components:
  * @see VEvent
  */
-public class TimeTransparency extends PropertyBase<TimeTransparencyType, TimeTransparency>
+public class TimeTransparency extends VPropertyBase<TimeTransparencyType, TimeTransparency>
 {
     private final static StringConverter<TimeTransparencyType> CONVERTER = new StringConverter<TimeTransparencyType>()
     {
@@ -41,14 +42,6 @@ public class TimeTransparency extends PropertyBase<TimeTransparencyType, TimeTra
             return TimeTransparencyType.enumFromName(string);
         }
     };
-
-//    public TimeTransparency(CharSequence contentLine)
-//    {
-//        super();
-//        setConverter(CONVERTER);
-//        parseContent(contentLine);
-//        
-//    }
     
     public TimeTransparency(TimeTransparencyType value)
     {
@@ -69,11 +62,9 @@ public class TimeTransparency extends PropertyBase<TimeTransparencyType, TimeTra
         setValue(TimeTransparencyType.OPAQUE); // default value
     }
     
-    public static TimeTransparency parse(String propertyContent)
+    public static TimeTransparency parse(String content)
     {
-        TimeTransparency property = new TimeTransparency();
-        property.parseContent(propertyContent);
-        return property;
+    	return TimeTransparency.parse(new TimeTransparency(), content);
     }
     
     public enum TimeTransparencyType

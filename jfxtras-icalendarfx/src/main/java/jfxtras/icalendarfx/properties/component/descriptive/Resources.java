@@ -1,15 +1,16 @@
 package jfxtras.icalendarfx.properties.component.descriptive;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseAltText;
 import jfxtras.icalendarfx.properties.ValueType;
+import jfxtras.icalendarfx.properties.component.descriptive.Resources;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * RESOURCES
@@ -28,12 +29,12 @@ import jfxtras.icalendarfx.properties.ValueType;
  * @see VEvent
  * @see VTodo
  */
-public class Resources extends PropBaseAltText<ObservableList<String>, Resources>
+public class Resources extends PropBaseAltText<List<String>, Resources>
 {
-    private final static StringConverter<ObservableList<String>> CONVERTER = new StringConverter<ObservableList<String>>()
+    private final static StringConverter<List<String>> CONVERTER = new StringConverter<List<String>>()
     {
         @Override
-        public String toString(ObservableList<String> object)
+        public String toString(List<String> object)
         {
             return object.stream()
                     .map(v -> ValueType.TEXT.getConverter().toString(v)) // escape special characters
@@ -41,16 +42,16 @@ public class Resources extends PropBaseAltText<ObservableList<String>, Resources
         }
 
         @Override
-        public ObservableList<String> fromString(String string)
+        public List<String> fromString(String string)
         {
-            return FXCollections.observableArrayList(Arrays.stream(string.replace("\\,", "~~").split(",")) // change comma escape sequence to avoid splitting by it
+            return new ArrayList<>(Arrays.stream(string.replace("\\,", "~~").split(",")) // change comma escape sequence to avoid splitting by it
                     .map(s -> s.replace("~~", "\\,"))
                     .map(v -> (String) ValueType.TEXT.getConverter().fromString(v)) // unescape special characters
                     .collect(Collectors.toList()));
         }
     };
 
-    public Resources(ObservableList<String> values)
+    public Resources(List<String> values)
     {
         this();
         setValue(values);
@@ -61,7 +62,7 @@ public class Resources extends PropBaseAltText<ObservableList<String>, Resources
     public Resources(String...values)
     {
         this();
-        setValue(FXCollections.observableArrayList(values));
+        setValue(new ArrayList<>(Arrays.asList(values)));
     }
     
     public Resources(Resources source)
@@ -74,23 +75,15 @@ public class Resources extends PropBaseAltText<ObservableList<String>, Resources
         super();
         setConverter(CONVERTER);
     }
-    
-    // set one category
-    public void setValue(String category)
-    {
-        setValue(FXCollections.observableArrayList(category));
-    }
 
-    public static Resources parse(String propertyContent)
+    public static Resources parse(String content)
     {
-        Resources property = new Resources();
-        property.parseContent(propertyContent);
-        return property;
+    	return Resources.parse(new Resources(), content);
     }
     
     @Override
-    protected ObservableList<String> copyValue(ObservableList<String> source)
+    protected List<String> copyValue(List<String> source)
     {
-        return FXCollections.observableArrayList(source);
+        return new ArrayList<String>(source);
     }
 }

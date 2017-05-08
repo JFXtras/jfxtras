@@ -1,6 +1,9 @@
 package jfxtras.icalendarfx.parameters;
 
+import jfxtras.icalendarfx.parameters.ParameterEnumBasedWithUnknown;
+import jfxtras.icalendarfx.parameters.Relationship;
 import jfxtras.icalendarfx.parameters.Relationship.RelationshipType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * RELTYPE
@@ -19,19 +22,34 @@ import jfxtras.icalendarfx.parameters.Relationship.RelationshipType;
  */
 public class Relationship extends ParameterEnumBasedWithUnknown<Relationship, RelationshipType>
 {
+	private static final StringConverter<RelationshipType> CONVERTER = new StringConverter<RelationshipType>()
+    {
+        @Override
+        public String toString(RelationshipType object)
+        {
+            return object.toString();
+        }
+
+        @Override
+        public RelationshipType fromString(String string)
+        {
+            return RelationshipType.valueOfWithUnknown(string.toUpperCase());
+        }
+    };
+    
     public Relationship()
     {
-        super(RelationshipType.PARENT); // default value
+        super(RelationshipType.PARENT, CONVERTER); // default value
     }
   
     public Relationship(RelationshipType value)
     {
-        super(value);
+        super(value, CONVERTER);
     }
     
     public Relationship(Relationship source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
     
     public enum RelationshipType
@@ -55,11 +73,9 @@ public class Relationship extends ParameterEnumBasedWithUnknown<Relationship, Re
             return match;
         }
     }
-
+    
     public static Relationship parse(String content)
     {
-        Relationship parameter = new Relationship();
-        parameter.parseContent(content);
-        return parameter;
+    	return Relationship.parse(new Relationship(), content);
     }
 }

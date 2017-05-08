@@ -1,6 +1,6 @@
 package jfxtras.scene.control.agenda.icalendar.editors.deleters;
 
-import net.balsoftware.icalendar.components.VTodo;
+import jfxtras.icalendarfx.components.VTodo;
 
 /**
  * Deleter for {@link VTodo}

@@ -2,16 +2,14 @@ package jfxtras.icalendarfx.properties.component.relationship;
 
 import java.time.temporal.Temporal;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.parameters.ParameterType;
 import jfxtras.icalendarfx.parameters.Range;
 import jfxtras.icalendarfx.parameters.Range.RangeType;
 import jfxtras.icalendarfx.properties.PropBaseDateTime;
 import jfxtras.icalendarfx.properties.PropRecurrenceID;
+import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
 
 /**
  * RECURRENCE-ID
@@ -58,26 +56,14 @@ public class RecurrenceId extends PropBaseDateTime<Temporal, RecurrenceId> imple
      *
      */
     @Override
-    public Range getRange() { return (range == null) ? null : range.get(); }
-    @Override
-    public ObjectProperty<Range> rangeProperty()
-    {
-        if (range == null)
-        {
-            range = new SimpleObjectProperty<>(this, ParameterType.RECURRENCE_IDENTIFIER_RANGE.toString());
-            orderer().registerSortOrderProperty(range);
-        }
-        return range;
-    }
-    private ObjectProperty<Range> range;
+    public Range getRange() { return range; }
+    private Range range;
     @Override
     public void setRange(Range range)
     {
-        if (range != null)
-        {
-            rangeProperty().set(range);
-        }
-    }
+    	orderChild(range);
+    	this.range = range;
+	}
     public void setRange(String value) { setRange(new Range(value)); }
     public RecurrenceId withRange(Range altrep) { setRange(altrep); return this; }
     public RecurrenceId withRange(RangeType value) { setRange(new Range(value)); return this; }
@@ -103,18 +89,15 @@ public class RecurrenceId extends PropBaseDateTime<Temporal, RecurrenceId> imple
     
     /** Parse string to Temporal.  Not type safe.  Implementation must
      * ensure parameterized type is the same as date-time represented by String parameter */
-    public static RecurrenceId parse(String value)
+    public static RecurrenceId parse(String content)
     {
-        RecurrenceId property = new RecurrenceId();
-        property.parseContent(value);
-        return property;
+    	return RecurrenceId.parse(new RecurrenceId(), content);
     }
     
     /** Parse string with Temporal class explicitly provided as parameter */
-    public static RecurrenceId parse(Class<? extends Temporal> clazz, String value)
+    public static RecurrenceId parse(Class<? extends Temporal> clazz, String content)
     {
-        RecurrenceId property = new RecurrenceId();
-        property.parseContent(value);
+    	RecurrenceId property = RecurrenceId.parse(new RecurrenceId(), content);
         clazz.cast(property.getValue()); // class check
         return property;
     }

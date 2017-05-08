@@ -8,7 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.util.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
 
 public class StringConverters
 {

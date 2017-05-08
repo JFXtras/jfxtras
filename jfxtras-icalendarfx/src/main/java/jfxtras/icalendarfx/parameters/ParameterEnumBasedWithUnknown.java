@@ -1,28 +1,33 @@
 package jfxtras.icalendarfx.parameters;
 
+import java.util.Collections;
 import java.util.List;
 
-public abstract class ParameterEnumBasedWithUnknown<U,T> extends ParameterBase<U,T>
+import jfxtras.icalendarfx.parameters.ParameterEnumBasedWithUnknown;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+
+public abstract class ParameterEnumBasedWithUnknown<U,T> extends VParameterBase<U,T>
 {
     private String nonStandardValue; // contains exact string for unknown value
     
     /*
      * CONSTRUCTORS
      */
-    public ParameterEnumBasedWithUnknown() //List<String> registeredIANAValues)
+    public ParameterEnumBasedWithUnknown(StringConverter<T> stringConverter)
     {
-        super();
+        super(stringConverter);
     }
   
-    public ParameterEnumBasedWithUnknown(T value) //, List<String> registeredIANAValues)
+    public ParameterEnumBasedWithUnknown(T value, StringConverter<T> stringConverter) 
     {
-        this();
+        this(stringConverter);
         setValue(value);
     }
     
-    public ParameterEnumBasedWithUnknown(ParameterEnumBasedWithUnknown<U,T> source)
+    public ParameterEnumBasedWithUnknown(ParameterEnumBasedWithUnknown<U,T> source, StringConverter<T> stringConverter)
     {
-        super(source);
+        super(source, stringConverter);
         nonStandardValue = source.nonStandardValue;
     }
         
@@ -33,14 +38,14 @@ public abstract class ParameterEnumBasedWithUnknown<U,T> extends ParameterBase<U
     }
     
     @Override
-    public List<String> parseContent(String content)
+    protected List<Message> parseContent(String content)
     {
         super.parseContent(content);
         if (getValue().toString().equals("UNKNOWN"))
         {
-            String valueString = Parameter.extractValue(content);
+            String valueString = VParameterBase.extractValue(content);
             nonStandardValue = valueString;
         }
-        return errors();
+        return Collections.EMPTY_LIST;
     }
 }

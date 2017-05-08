@@ -1,6 +1,6 @@
 package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 
-import net.balsoftware.icalendar.components.VJournal;
+import jfxtras.icalendarfx.components.VJournal;
 
 /**
  * Reviser for {@link VJournal}

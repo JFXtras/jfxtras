@@ -2,9 +2,11 @@ package jfxtras.icalendarfx.component;
 
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -38,7 +40,7 @@ import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 public class PrimaryTest
 {
     @Test
-    public void canBuildPrimary() throws InstantiationException, IllegalAccessException
+    public void canBuildPrimary() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
     {
         List<VPrimary<?>> components = Arrays.asList(
                 new VEvent()
@@ -76,17 +78,27 @@ public class PrimaryTest
                     "COMMENT:Another comment" + System.lineSeparator() +
                     "COMMENT:My third comment" + System.lineSeparator() +
                     "END:" + componentName;
-                    
-            VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
 
+            VComponent parsedComponent = (VComponent) builtComponent.getClass()
+            		.getMethod("parse", String.class)
+            		.invoke(null, expectedContent);
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());            
+            assertEquals(expectedContent, builtComponent.toString());
+            assertEquals(3, builtComponent.getComments().size());
+            List<String> expectedComments = Arrays.asList(
+                    "COMMENT:This is a test comment",
+                    "COMMENT:Another comment",
+                    "COMMENT:My third comment");
+            List<String> comments = builtComponent.getComments()
+            		.stream()
+            		.map(c -> c.toString())
+            		.collect(Collectors.toList());
+			assertEquals(expectedComments, comments);
         }
     }
     
-    @Test
-    public void canIgnoreAlreadySet()
+    @Test (expected=IllegalArgumentException.class)
+    public void canCatchAlreadySet()
     {
         String content = 
             "BEGIN:VEVENT" + System.lineSeparator() +
@@ -98,13 +110,17 @@ public class PrimaryTest
     }
     
     @Test (expected=IllegalArgumentException.class)
-    public void canCatchInvalidProperty()
+    public void canHandleInvalidPropertyValue()
     {
         String content = 
             "BEGIN:VEVENT" + System.lineSeparator() +
             "DTSTART:INVALID" + System.lineSeparator() +
             "END:VEVENT";
-        VEvent.parse(content);
+        VEvent e = VEvent.parse(content);
+        String expectedContent = 
+                "BEGIN:VEVENT" + System.lineSeparator() +
+                "END:VEVENT";
+        assertEquals(expectedContent, e.toString());
     }
 
 }

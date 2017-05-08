@@ -13,10 +13,10 @@ import org.junit.Test;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
-import net.balsoftware.icalendar.components.VEvent;
 
 public class DeleteVEventTest extends AgendaTestAbstract
 {

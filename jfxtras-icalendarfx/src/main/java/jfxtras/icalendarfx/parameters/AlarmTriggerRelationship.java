@@ -1,6 +1,9 @@
 package jfxtras.icalendarfx.parameters;
 
+import jfxtras.icalendarfx.parameters.AlarmTriggerRelationship;
+import jfxtras.icalendarfx.parameters.VParameterBase;
 import jfxtras.icalendarfx.parameters.AlarmTriggerRelationship.AlarmTriggerRelationshipType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * <h2> 3.2.14.  Alarm Trigger Relationship</h2>
@@ -38,24 +41,39 @@ import jfxtras.icalendarfx.parameters.AlarmTriggerRelationship.AlarmTriggerRelat
  * @author David Bal
  *
  */
-public class AlarmTriggerRelationship extends ParameterBase<AlarmTriggerRelationship, AlarmTriggerRelationshipType>
+public class AlarmTriggerRelationship extends VParameterBase<AlarmTriggerRelationship, AlarmTriggerRelationshipType>
 {
+	private static final StringConverter<AlarmTriggerRelationshipType> CONVERTER = new StringConverter<AlarmTriggerRelationshipType>()
+    {
+        @Override
+        public String toString(AlarmTriggerRelationshipType object)
+        {
+            return object.toString();
+        }
+
+        @Override
+        public AlarmTriggerRelationshipType fromString(String string)
+        {
+            return AlarmTriggerRelationshipType.valueOf(string.toUpperCase());
+        }
+    };
+    
     /** Create default AlarmTriggerRelationship with property value set to START */
     public AlarmTriggerRelationship()
     {
-        super(AlarmTriggerRelationshipType.START);
+        super(AlarmTriggerRelationshipType.START, CONVERTER);
     }
 
     /** Create new AlarmTriggerRelationshipType with property value set to input parameter */
     public AlarmTriggerRelationship(AlarmTriggerRelationshipType value)
     {
-        super(value);
+        super(value, CONVERTER);
     }
 
     /** Create deep copy of source AlarmTriggerRelationship */
     public AlarmTriggerRelationship(AlarmTriggerRelationship source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
     
     /** Property value types for AlarmTriggerRelationship */
@@ -64,12 +82,9 @@ public class AlarmTriggerRelationship extends ParameterBase<AlarmTriggerRelation
         START,
         END;
     }
-
-    /** Create new AlarmTriggerRelationship by parsing unfolded calendar content */
-    public static AlarmTriggerRelationship parse(String unfoldedContent)
+    
+    public static AlarmTriggerRelationship parse(String content)
     {
-        AlarmTriggerRelationship parameter = new AlarmTriggerRelationship();
-        parameter.parseContent(unfoldedContent);
-        return parameter;
+    	return AlarmTriggerRelationship.parse(new AlarmTriggerRelationship(), content);
     }
 }

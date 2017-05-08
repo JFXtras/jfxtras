@@ -20,11 +20,6 @@ import jfxtras.icalendarfx.properties.PropBaseLanguage;
  */
 public class TimeZoneName extends PropBaseLanguage<String, TimeZoneName>
 {
-//    public TimeZoneName(CharSequence contentLine)
-//    {
-//        super(contentLine);
-//    }
-    
     public TimeZoneName(TimeZoneName source)
     {
         super(source);
@@ -35,10 +30,8 @@ public class TimeZoneName extends PropBaseLanguage<String, TimeZoneName>
         super();
     }
     
-    public static TimeZoneName parse(String propertyContent)
+    public static TimeZoneName parse(String content)
     {
-        TimeZoneName property = new TimeZoneName();
-        property.parseContent(propertyContent);
-        return property;
+    	return TimeZoneName.parse(new TimeZoneName(), content);
     }
 }

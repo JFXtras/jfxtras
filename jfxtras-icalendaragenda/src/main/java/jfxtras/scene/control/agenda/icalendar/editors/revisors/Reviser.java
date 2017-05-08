@@ -2,11 +2,11 @@ package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 
 import java.util.List;
 
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.properties.calendar.Version;
+import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.properties.calendar.Method.MethodType;
-import net.balsoftware.icalendar.properties.calendar.Version;
 
 /**
  * Interface for the edit behavior of a VComponent

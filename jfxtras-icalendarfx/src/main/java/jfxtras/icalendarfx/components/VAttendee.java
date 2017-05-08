@@ -1,12 +1,11 @@
 package jfxtras.icalendarfx.components;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ListProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.properties.component.relationship.Attendee;
 
 /**
@@ -31,17 +30,24 @@ public interface VAttendee<T> extends VComponent
      *  </ul>
      *  </p>
      */
-    ListProperty<Attendee> attendeesProperty();
-    ObservableList<Attendee> getAttendees();
-    void setAttendees(ObservableList<Attendee> properties);
+    List<Attendee> getAttendees();
+    void setAttendees(List<Attendee> properties);
     /**
      *  Sets the value of the {@link #attendeesProperty()} }
      *  
      *  @return - this class for chaining
      */
-    default T withAttendees(ObservableList<Attendee> attendees)
+    default T withAttendees(List<Attendee> attendees)
     {
-        setAttendees(attendees);
+    	if (getAttendees() == null)
+    	{
+    		setAttendees(new ArrayList<>());
+    	}
+    	getAttendees().addAll(attendees);
+    	if (attendees != null)
+    	{
+    		attendees.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     /**
@@ -51,8 +57,7 @@ public interface VAttendee<T> extends VComponent
      */    
     default T withAttendees(Attendee...attendees)
     {
-        setAttendees(FXCollections.observableArrayList(attendees));
-        return (T) this;
+    	return withAttendees(Arrays.asList(attendees));
     }
     /**
      * <p>Sets the value of the {@link #attendeesProperty()} by parsing a vararg of
@@ -62,10 +67,9 @@ public interface VAttendee<T> extends VComponent
      */    
     default T withAttendees(String...attendees)
     {
-        List<Attendee> a = Arrays.stream(attendees)
+        List<Attendee> list = Arrays.stream(attendees)
             .map(c -> Attendee.parse(c))
             .collect(Collectors.toList());
-        setAttendees(FXCollections.observableArrayList(a));
-        return (T) this;
+        return withAttendees(list);
     }
 }

@@ -2,8 +2,14 @@ package jfxtras.icalendarfx.properties.component.recurrence.rrule;
 
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjuster;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Frequency;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRulePartBase;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 /**
  * FREQUENCY
@@ -36,88 +42,10 @@ import java.util.stream.Stream;
  * 
  * @see FrequencyType
  */
-public class Frequency extends RRuleElementBase<FrequencyType, Frequency>
+public class Frequency extends RRulePartBase<FrequencyType, Frequency>
 {
     void setValue(String frequency) { parseContent(frequency); }
     public Frequency withValue(String frequency) { setValue(frequency); return this; }
-
-//    /**
-//     * FREQUENCY value
-//     */
-//    public ObjectProperty<FrequencyType> valueProperty() { return value; }
-//    public FrequencyType getValue() { return value.get(); }
-//    private ObjectProperty<FrequencyType> value = new SimpleObjectProperty<>(this, ElementType.FREQUENCY.toString());
-//    public void setValue(FrequencyType value) { valueProperty().set(value); }
-//    public void setValue(String value) { setValue(FrequencyType.valueOf(value)); }
-//    public Frequency2 withValue(FrequencyType value) { setValue(value); return this; }
-//    public Frequency2 withValue(String value) { setValue(value); return this; }
-    
-//    /**
-//     * INTERVAL
-//     * This value MUST be bound to the Interval value in {@link RecurrenceRule3#intervalProperty}
-//     */
-//    public IntegerProperty intervalProperty() { return interval; }
-//    private IntegerProperty interval;
-//    private Integer getInterval() { return (interval == null) ? null : interval.getValue(); }
-//    private int _interval = 1;
-//    public void setInterval(Integer i)
-//    {
-//        if (i > 0)
-//        {
-//            if (interval == null)
-//            {
-//                _interval = i;
-//            } else
-//            {
-//                interval.set(i);
-//            }
-//        } else
-//        {
-//            throw new IllegalArgumentException("INTERVAL can't be less than 1. (" + i + ")");
-//        }
-//    }
-//    public Frequency2 withInterval(int interval) { setInterval(interval); return this; }
-
-//    /** BYxxx Rules 
-//     * Collection of BYxxx rules that modify frequency rule (see RFC 5545, iCalendar 3.3.10 Page 42)
-//     * Each BYxxx rule can only occur once */
-//    public ObservableList<ByRule> byRules() { return byRules; }
-//    private final ObservableList<ByRule> byRules = FXCollections.observableArrayList();
-//    public Frequency2 withByRules(ByRule...byRules)
-//    {
-//        for (ByRule myByRule : byRules)
-//        {
-//            byRules().add(myByRule);
-//        }
-//        return this;
-//    }
-    
-//    public ByRule lookupByRule(ByRuleType byRuleType)
-//    {
-//        Optional<ByRule> rule = byRules()
-//                .stream()
-//                .filter(r -> r.byRuleType() == byRuleType)
-//                .findFirst();
-//        return (rule.isPresent()) ? rule.get() : null;
-//    }
-//    @Override public ObservableSet<ByRule> byRules() { return byRules; }
-//    private final ObservableSet<ByRule> byRules = FXCollections.observableSet(new TreeSet<>());
-    
-//    @Override public Map<ByRuleParameter, ByRule> byRules() { return byRules; }
-//    private final Map<ByRuleParameter, ByRule> byRules = new HashMap<>();
-//    @Override public void addByRule(Rule byRule)
-//    {
-//        boolean alreadyPresent = getByRules().stream().anyMatch(a -> a.getClass() == byRule.getClass());
-//        if (alreadyPresent)
-//        {
-//            throw new IllegalArgumentException("Can't add BYxxx rule (" + byRule.getClass().getSimpleName() + ") more than once.");
-//        }
-//        getByRules().add(byRule);
-//        Collections.sort(getByRules());
-//    }
-
-
-
 
     /** Time unit of last rule applied.  It represents the time span to apply future changes to the output stream of date/times
      * For example:
@@ -133,19 +61,6 @@ public class Frequency extends RRuleElementBase<FrequencyType, Frequency>
      * changes are not propagated back.  In that case, I would need a reference to the Frequency object that owns
      * it.  The ObjectProperty wrapper is easier.
      */
-//    public ObjectProperty<ChronoUnit> chronoUnitProperty() { return chronoUnit; }
-//    ChronoUnit getChronoUnit() { return chronoUnit.get(); };
-//    private ObjectProperty<ChronoUnit> chronoUnit = new SimpleObjectProperty<ChronoUnit>();
-//    public void setChronoUnit(ChronoUnit chronoUnit) { this.chronoUnit.set(chronoUnit); }
-
-//    public ChronoUnit chronoUnitProperty() { return chronoUnit; }
-//      public ChronoUnit getChronoUnit() { return chronoUnit; };
-//      final private ChronoUnit chronoUnit;
-
-
-    
-//    public FrequencyType frequencyType() { return frequencyType; }
-//    private FrequencyType frequencyType;
     
     /** TemporalAdjuster to enable frequency stream in {@link RecurrenceRuleValue#streamRecurrences(Temporal)} */
     TemporalAdjuster adjuster(int interval)
@@ -161,13 +76,6 @@ public class Frequency extends RRuleElementBase<FrequencyType, Frequency>
         this();
         setValue(frequencyType);
     }
-    
-//    // Copy constructor
-//    public Frequency2(Frequency source)
-//    {
-//        this(source.frequencyType());
-//        source.byRules().stream().forEach(b -> byRules().add(b.byRuleType().newInstance(b))); // copy each ByRule
-//    }
     
     public Frequency()
     {
@@ -197,16 +105,15 @@ public class Frequency extends RRuleElementBase<FrequencyType, Frequency>
     }
 
     @Override
-    public List<String> parseContent(String content)
+    protected List<Message> parseContent(String content)
     {
-        setValue(FrequencyType.valueOf(content.toUpperCase()));
-        return errors();
+    	String valueString = extractValue(content);
+        setValue(FrequencyType.valueOf(valueString.toUpperCase()));
+        return Collections.EMPTY_LIST;
     }
     
     public static Frequency parse(String content)
     {
-        Frequency element = new Frequency();
-        element.parseContent(content);
-        return element;
+    	return Frequency.parse(new Frequency(), content);
     }
 }

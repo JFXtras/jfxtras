@@ -3,6 +3,7 @@ package jfxtras.icalendarfx.component;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.DateTimeException;
 import java.time.Duration;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ import jfxtras.icalendarfx.properties.component.time.DurationProp;
 public class LocatableTest
 {
     @Test
-    public void canBuildLocatable() throws InstantiationException, IllegalAccessException
+    public void canBuildLocatable() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
     {
         List<VLocatable<?>> components = Arrays.asList(
                 new VEvent()
@@ -110,25 +111,19 @@ public class LocatableTest
                     "END:VALARM" + System.lineSeparator() +
                     "END:" + componentName;
 
-            VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
-
+            VComponent parsedComponent = (VComponent) builtComponent.getClass().getMethod("parse", String.class).invoke(null, expectedContent);
+//            parsedComponent.addChild(expectedContent);
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());            
+            assertEquals(expectedContent, builtComponent.toString());            
         }
     }
     
     @Test (expected = DateTimeException.class)
     public void canCatchNegativeDuration()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
         VEvent vEvent = new VEvent()
                 .withDuration(Duration.ofHours(-1))
                 .withSummary("test");
-        vEvent.errors().forEach(System.out::println);
         assertNull(vEvent.getDuration());
         assertEquals("test", vEvent.getSummary().getValue());
     }

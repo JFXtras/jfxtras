@@ -1,18 +1,20 @@
 package jfxtras.icalendarfx.components;
 
+import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 
 import jfxtras.icalendarfx.VChild;
-import jfxtras.icalendarfx.VElement;
 import jfxtras.icalendarfx.VParent;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VFreeBusy;
+import jfxtras.icalendarfx.components.VJournal;
+import jfxtras.icalendarfx.components.VTimeZone;
+import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
-import jfxtras.icalendarfx.properties.calendar.Method;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
-import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
-import jfxtras.icalendarfx.properties.component.misc.RequestStatus;
-import jfxtras.icalendarfx.utilities.UnfoldingStringIterator;
+import junit.runner.Version;
 
 /**
  * <h2>RFC 5545, 3.6. Calendar Components</h2>
@@ -102,7 +104,10 @@ public interface VComponent extends VParent, VChild
      * @return - the component content lines
      */
     @Override
-    String toContent();
+    String toString();
+    
+    // TODO - WHAT IS THIS? IS IT NECESSARY?
+    List<? extends VComponent> calendarList();
     
     /** Parse a VComponent from a {@code Iterator<String>}.
      *  Returns list of error strings for {@link RequestStatus} if collectErrorList is true,
@@ -112,5 +117,6 @@ public interface VComponent extends VParent, VChild
      * @param collectErrorMessages  true causes return List to contain error messages, false causes empty list
      * @return  list of error messages if collectErrorMessages is true, otherwise empty list
      */
-    Map<VElement, List<String>> parseContent(UnfoldingStringIterator contentLines, boolean collectErrorMessages);
+//    @Deprecated // try to move to base classes
+//    Map<VElement, List<String>> parseContent(Iterator<String> contentLines, boolean collectErrorMessages);
 }

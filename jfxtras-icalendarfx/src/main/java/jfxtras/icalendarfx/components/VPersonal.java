@@ -3,27 +3,23 @@ package jfxtras.icalendarfx.components;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.util.Callback;
-import jfxtras.icalendarfx.VElement;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.VAttendee;
+import jfxtras.icalendarfx.components.VFreeBusy;
+import jfxtras.icalendarfx.components.VPersonal;
+import jfxtras.icalendarfx.components.VPrimary;
 import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
 import jfxtras.icalendarfx.properties.component.misc.RequestStatus;
 import jfxtras.icalendarfx.properties.component.relationship.Attendee;
 import jfxtras.icalendarfx.properties.component.relationship.Organizer;
 import jfxtras.icalendarfx.properties.component.relationship.UniformResourceLocator;
 import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
+import jfxtras.icalendarfx.utilities.Callback;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
-import jfxtras.icalendarfx.utilities.UnfoldingStringIterator;
 
 /**
  * Components with the following properties:
@@ -50,77 +46,50 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
      * ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Jane Doe
      *  :mailto:jdoe@example.com
      */
+    private List<Attendee> attendees;
     @Override
-    public ListProperty<Attendee> attendeesProperty()
-    {
-        if (attendees == null)
-        {
-            attendees = new SimpleListProperty<>(this, PropertyType.ATTENDEE.toString());
-        }
-        return attendees;
-    }
-    private ListProperty<Attendee> attendees;
+    public List<Attendee> getAttendees() { return attendees; }
     @Override
-    public ObservableList<Attendee> getAttendees()
+    public void setAttendees(List<Attendee> attendees)
     {
-        return (attendees == null) ? null : attendees.get();
-    }
-    @Override
-    public void setAttendees(ObservableList<Attendee> attendees)
-    {
-        if (attendees != null)
-        {
-            if ((this.attendees != null) && (this.attendees.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(attendeesProperty().get(), attendees);
-            }
-            orderer().registerSortOrderProperty(attendees);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(attendeesProperty().get());
-        }
-        attendeesProperty().set(attendees);
-    }
+    	if (this.attendees != null)
+    	{
+    		this.attendees.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.attendees = attendees;
+    	if (attendees != null)
+    	{
+    		attendees.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
     
     /**
      * DTSTAMP: Date-Time Stamp, from RFC 5545 iCalendar 3.8.7.2 page 137
      * This property specifies the date and time that the instance of the
      * iCalendar object was created
      */
-    public ObjectProperty<DateTimeStamp> dateTimeStampProperty()
+    private DateTimeStamp dateTimeStamp;
+    public DateTimeStamp getDateTimeStamp() { return dateTimeStamp; }
+    public void setDateTimeStamp(String dateTimeStamp) { setDateTimeStamp(DateTimeStamp.parse(dateTimeStamp)); }
+    public void setDateTimeStamp(DateTimeStamp dateTimeStamp)
     {
-        if (dateTimeStamp == null)
-        {
-            dateTimeStamp = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_STAMP.toString());
-            orderer().registerSortOrderProperty(dateTimeStamp);
-        }
-        return dateTimeStamp;
-    }
-    private ObjectProperty<DateTimeStamp> dateTimeStamp;
-    public DateTimeStamp getDateTimeStamp() { return dateTimeStampProperty().get(); }
-    public void setDateTimeStamp(String dtStamp)
+    	orderChild(this.dateTimeStamp, dateTimeStamp);
+    	this.dateTimeStamp = dateTimeStamp;
+	}
+    public void setDateTimeStamp(ZonedDateTime dateTimeStamp) { setDateTimeStamp(new DateTimeStamp(dateTimeStamp)); }
+    public T withDateTimeStamp(ZonedDateTime dateTimeStamp)
     {
-        setDateTimeStamp(DateTimeStamp.parse(dtStamp));
-    }
-    public void setDateTimeStamp(DateTimeStamp dtStamp) { dateTimeStampProperty().set(dtStamp); }
-    public void setDateTimeStamp(ZonedDateTime dtStamp)
-    {
-        setDateTimeStamp(new DateTimeStamp(dtStamp));
-    }
-    public T withDateTimeStamp(ZonedDateTime dtStamp)
-    {
-        setDateTimeStamp(dtStamp);
+        setDateTimeStamp(dateTimeStamp);
         return (T) this;
     }
-    public T withDateTimeStamp(String dtStamp)
+    public T withDateTimeStamp(String dateTimeStamp)
     {
-        setDateTimeStamp(dtStamp);
+        setDateTimeStamp(dateTimeStamp);
         return (T) this;
     }
-    public T withDateTimeStamp(DateTimeStamp dtStamp)
+    public T withDateTimeStamp(DateTimeStamp dateTimeStamp)
     {
-        setDateTimeStamp(dtStamp);
+        setDateTimeStamp(dateTimeStamp);
         return (T) this;
     }
 
@@ -132,50 +101,23 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
      * Example:
      * ORGANIZER;CN=John Smith:mailto:jsmith@example.com
      */
-    public ObjectProperty<Organizer> organizerProperty()
+    public Organizer getOrganizer() { return organizer; }
+    private Organizer organizer;
+    public void setOrganizer(Organizer organizer)
     {
-        if (organizer == null)
-        {
-            organizer = new SimpleObjectProperty<Organizer>(this, PropertyType.ORGANIZER.toString());
-            orderer().registerSortOrderProperty(organizer);
-        }
-        return organizer;
-    }
-    public Organizer getOrganizer() { return (organizer == null) ? null : organizerProperty().get(); }
-    private ObjectProperty<Organizer> organizer;
-    public void setOrganizer(Organizer organizer) { organizerProperty().set(organizer); }
-    public void setOrganizer(String organizer)
-    {
-        if (getOrganizer() == null)
-        {
-            setOrganizer(Organizer.parse(organizer));
-        } else
-        {
-            Organizer temp = Organizer.parse(organizer);
-            getOrganizer().setValue(temp.getValue());
-        }
-    }
+    	orderChild(this.organizer, organizer);
+    	this.organizer = organizer;
+	}
+    public void setOrganizer(String organizer) { setOrganizer(Organizer.parse(organizer)); }
     public T withOrganizer(String organizer)
     {
-        if (getOrganizer() == null)
-        {
-            setOrganizer(organizer);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setOrganizer(organizer);
+        return (T) this;
     }
     public T withOrganizer(Organizer organizer)
     {
-        if (getOrganizer() == null)
-        {
-            setOrganizer(organizer);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setOrganizer(organizer);
+        return (T) this;
     }
 
     /**
@@ -189,55 +131,43 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
      *  mailto:jsmith@example.com
      * 
      */
-    public ObjectProperty<ObservableList<RequestStatus>> requestStatusProperty()
+    public List<RequestStatus> getRequestStatus() { return requestStatus; }
+    private List<RequestStatus> requestStatus;
+    public void setRequestStatus(List<RequestStatus> requestStatus)
     {
-        if (requestStatus == null)
-        {
-            requestStatus = new SimpleObjectProperty<>(this, PropertyType.REQUEST_STATUS.toString());
-        }
-        return requestStatus;
-    }
-    public ObservableList<RequestStatus> getRequestStatus()
+    	if (this.requestStatus != null)
+    	{
+    		this.requestStatus.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.requestStatus = requestStatus;
+    	if (requestStatus != null)
+    	{
+    		requestStatus.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
+    public T withRequestStatus(List<RequestStatus> requestStatus)
     {
-        return (requestStatus == null) ? null : requestStatus.get();
-    }
-    private ObjectProperty<ObservableList<RequestStatus>> requestStatus;
-    public void setRequestStatus(ObservableList<RequestStatus> requestStatus)
-    {
-        if (requestStatus != null)
-        {
-            if ((this.requestStatus != null) && (this.requestStatus.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(requestStatusProperty().get(), requestStatus);
-            }
-            orderer().registerSortOrderProperty(requestStatus);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(requestStatusProperty().get());
-        }
-        requestStatusProperty().set(requestStatus);
-    }
-    public T withRequestStatus(ObservableList<RequestStatus> requestStatus)
-    {
-        setRequestStatus(requestStatus);
+    	if (getRequestStatus() == null)
+    	{
+    		setRequestStatus(new ArrayList<>());
+    	}
+    	getRequestStatus().addAll(requestStatus);
+    	if (requestStatus != null)
+    	{
+    		requestStatus.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     public T withRequestStatus(String...requestStatus)
     {
-        Arrays.stream(requestStatus).forEach(c -> PropertyType.REQUEST_STATUS.parse(this, c));
-        return (T) this;
+        List<RequestStatus> list = Arrays.stream(requestStatus)
+                .map(c -> RequestStatus.parse(c))
+                .collect(Collectors.toList());
+        return withRequestStatus(list);
     }
     public T withRequestStatus(RequestStatus...requestStatus)
     {
-        if (getRequestStatus() == null)
-        {
-            setRequestStatus(FXCollections.observableArrayList(requestStatus));
-        } else
-        {
-            getRequestStatus().addAll(requestStatus);
-        }
-        return (T) this;
+    	return withRequestStatus(Arrays.asList(requestStatus));
     }
 
     /**
@@ -249,29 +179,14 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
      * Example:
      * UID:19960401T080045Z-4000F192713-0052@example.com
      */
-    public ObjectProperty<UniqueIdentifier> uniqueIdentifierProperty()
+    private UniqueIdentifier uniqueIdentifier;
+    public UniqueIdentifier getUniqueIdentifier() { return uniqueIdentifier; }
+    public void setUniqueIdentifier(UniqueIdentifier uniqueIdentifier)
     {
-        if (uniqueIdentifier == null)
-        {
-            uniqueIdentifier = new SimpleObjectProperty<>(this, PropertyType.UNIQUE_IDENTIFIER.toString());
-            orderer().registerSortOrderProperty(uniqueIdentifier);
-        }
-        return uniqueIdentifier;
-    }
-    private ObjectProperty<UniqueIdentifier> uniqueIdentifier;
-    public UniqueIdentifier getUniqueIdentifier() { return uniqueIdentifierProperty().get(); }
-    public void setUniqueIdentifier(UniqueIdentifier uniqueIdentifier) { uniqueIdentifierProperty().set(uniqueIdentifier); }
-    public void setUniqueIdentifier(String uniqueIdentifier)
-    {
-        if (getUniqueIdentifier() == null)
-        {
-            setUniqueIdentifier(UniqueIdentifier.parse(uniqueIdentifier));
-        } else
-        {
-            UniqueIdentifier temp = UniqueIdentifier.parse(uniqueIdentifier);
-            getUniqueIdentifier().setValue(temp.getValue());
-        }
-    }
+    	orderChild(this.uniqueIdentifier, uniqueIdentifier);
+    	this.uniqueIdentifier = uniqueIdentifier;
+	}
+    public void setUniqueIdentifier(String uniqueIdentifier) { setUniqueIdentifier(UniqueIdentifier.parse(uniqueIdentifier)); }
     /** Set uniqueIdentifier by calling uidGeneratorCallback */
     public void setUniqueIdentifier() { setUniqueIdentifier(getUidGeneratorCallback().call(null)); }
     public T withUniqueIdentifier(String uniqueIdentifier)
@@ -327,62 +242,29 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
      * Example:
      * URL:http://example.com/pub/calendars/jsmith/mytime.ics
      */
-    public ObjectProperty<UniformResourceLocator> uniformResourceLocatorProperty()
+    public UniformResourceLocator getURL() { return url; }
+    private UniformResourceLocator url;
+    public void setURL(UniformResourceLocator url)
     {
-        if (uniformResourceLocator == null)
-        {
-            uniformResourceLocator = new SimpleObjectProperty<>(this, PropertyType.UNIFORM_RESOURCE_LOCATOR.toString());
-            orderer().registerSortOrderProperty(uniformResourceLocator);
-        }
-        return uniformResourceLocator;
+    	orderChild(this.url, url);
+    	this.url = url;
+	};
+    public void setURL(String url) { setURL(UniformResourceLocator.parse(url)); };
+    public void setURL(URI url) { setURL(new UniformResourceLocator(url)); };
+    public T withURL(String url)
+    {
+        setURL(url);
+        return (T) this;
     }
-    public UniformResourceLocator getUniformResourceLocator() { return (uniformResourceLocator == null) ? null : uniformResourceLocatorProperty().get(); }
-    private ObjectProperty<UniformResourceLocator> uniformResourceLocator;
-    public void setUniformResourceLocator(UniformResourceLocator url) { uniformResourceLocatorProperty().set(url); };
-    public void setUniformResourceLocator(String url)
+    public T withURL(URI url)
     {
-        if (getUniformResourceLocator() == null)
-        {
-            setUniformResourceLocator(UniformResourceLocator.parse(url));
-        } else
-        {
-            UniformResourceLocator temp = UniformResourceLocator.parse(url);
-            getUniformResourceLocator().setValue(temp.getValue());
-        }
+        setURL(url);
+        return (T) this;
     }
-    public void setUniformResourceLocator(URI url) { setUniformResourceLocator(new UniformResourceLocator(url)); };
-    public T withUniformResourceLocator(String url)
+    public T withURL(UniformResourceLocator url)
     {
-        if (getUniformResourceLocator() == null)
-        {
-            setUniformResourceLocator(url);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
-    }
-    public T withUniformResourceLocator(URI url)
-    {
-        if (getUniformResourceLocator() == null)
-        {
-            setUniformResourceLocator(url);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
-    }
-    public T withUniformResourceLocator(UniformResourceLocator url)
-    {
-        if (getUniformResourceLocator() == null)
-        {
-            setUniformResourceLocator(url);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setURL(url);
+        return (T) this;
     }
     
     /*
@@ -390,30 +272,39 @@ public abstract class VPersonal<T> extends VPrimary<T> implements VAttendee<T>
      */
     VPersonal() { super(); }
     
-//    VComponentPersonalBase(String contentLines)
-//    {
-//        super(contentLines);
-//    }
-    
     public VPersonal(VPersonal<T> source)
     {
         super(source);
     }
     
-    @Override
-    public Map<VElement, List<String>> parseContent(UnfoldingStringIterator lineIterator, boolean useRequestStatus)
-    {
-        Map<VElement, List<String>> statusMessages = super.parseContent(lineIterator, useRequestStatus);
-        if (useRequestStatus)
-        { // Set REQUEST-STATUS for each message
-            setRequestStatus(FXCollections.observableArrayList());
-            statusMessages.entrySet()
-                    .stream()
-                    .flatMap(e -> e.getValue().stream())
-                    .forEach(e -> getRequestStatus().add(RequestStatus.parse(e)));
-        }
-        return statusMessages;
-    }
+//    @Override
+//    public Map<VElement, List<String>> parseContent(Iterator<String> lineIterator, boolean useRequestStatus)
+//    {
+//        Map<VElement, List<String>> statusMessages = super.parseContent(lineIterator, useRequestStatus);
+//        if (useRequestStatus)
+//        { // Set REQUEST-STATUS for each message
+//        	statusMessages.entrySet()
+//	            .stream()
+//	            .flatMap(e -> e.getValue().stream())
+//	            .forEach(e -> addChild(RequestStatus.parse(e)));
+//        }
+//        return statusMessages;
+//    }
+    
+//    @Override
+//    @Override
+//	public List<Message> parseContent(Iterator<String> lineIterator)
+//    {
+//    	List<Message> statusMessages = super.parseContent(lineIterator);
+////        if (useRequestStatus)
+////        { // Set REQUEST-STATUS for each message
+////        	statusMessages.entrySet()
+////	            .stream()
+////	            .flatMap(e -> e.getValue().stream())
+////	            .forEach(e -> addChild(RequestStatus.parse(e)));
+////        }
+//        return statusMessages;
+//    }
     
     @Override
     public List<String> errors()

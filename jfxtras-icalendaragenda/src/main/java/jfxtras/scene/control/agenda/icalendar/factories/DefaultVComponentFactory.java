@@ -5,12 +5,12 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VTodo;
+import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.utilities.Callback;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.components.VTodo;
-import net.balsoftware.icalendar.properties.component.relationship.Organizer;
-import net.balsoftware.icalendar.utilities.Callback;
 
 /**
  * Default factory to create a {@link VDisplayable} from {@link Appointment}

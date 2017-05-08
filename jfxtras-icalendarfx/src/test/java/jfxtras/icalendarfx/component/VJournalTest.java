@@ -32,7 +32,7 @@ public class VJournalTest
                 
         VJournal madeComponent = VJournal.parse(content);
         assertEquals(madeComponent, builtComponent);
-        assertEquals(content, builtComponent.toContent());
+        assertEquals(content, builtComponent.toString());
     }
     
     @Test

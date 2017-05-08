@@ -1,7 +1,8 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.parameters.TimeZoneIdentifierParameter;
+import jfxtras.icalendarfx.properties.PropBaseDateTime;
+import jfxtras.icalendarfx.properties.VProperty;
 import jfxtras.icalendarfx.properties.component.misc.UnknownProperty;
 
 /**
@@ -13,21 +14,11 @@ import jfxtras.icalendarfx.properties.component.misc.UnknownProperty;
  * @see PropBaseDateTime
  * @see UnknownProperty
  */
-public interface PropDateTime<T> extends Property<T>
+public interface PropDateTime<T> extends VProperty<T>
 {
     /*
      * default Time Zone methods are overridden by classes that require them
      */
-    default TimeZoneIdentifierParameter getTimeZoneIdentifier()
-    {
-        return null;
-    }
-    default ObjectProperty<TimeZoneIdentifierParameter> timeZoneIdentifierProperty()
-    {
-        return null;
-    }
-    default void setTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier)
-    {
-        // do nothing - not implemented
-    }
+    TimeZoneIdentifierParameter getTimeZoneIdentifier();
+    void setTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier);
 }

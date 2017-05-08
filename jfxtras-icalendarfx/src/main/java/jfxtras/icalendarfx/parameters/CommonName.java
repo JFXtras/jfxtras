@@ -1,7 +1,9 @@
 package jfxtras.icalendarfx.parameters;
 
-import jfxtras.icalendarfx.properties.component.relationship.Attendee;
-import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.parameters.CommonName;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
 
 /**
  * CN
@@ -14,26 +16,23 @@ import jfxtras.icalendarfx.properties.component.relationship.Organizer;
  * ORGANIZER;CN="John Smith":mailto:jsmith@example.com
  * 
  * @author David Bal
- * @see Attendee
- * @see Organizer
  */
-public class CommonName extends ParameterBase<CommonName, String>
+public class CommonName extends VParameterBase<CommonName, String>
 {
+	private static final StringConverter<String> CONVERTER = StringConverters.defaultStringConverterWithQuotes();
+	
     public CommonName()
     {
-        super();
+        super(CONVERTER);
     }
 
     public CommonName(CommonName source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
-
+    
     public static CommonName parse(String content)
     {
-        CommonName parameter = new CommonName();
-        parameter.parseContent(content);
-        return parameter;
-
+    	return CommonName.parse(new CommonName(), content);
     }
 }

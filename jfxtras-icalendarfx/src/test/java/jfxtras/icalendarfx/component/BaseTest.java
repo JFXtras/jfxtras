@@ -78,11 +78,9 @@ public class BaseTest
                     "END:" + componentName;
 
             VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
-System.out.println(builtComponent);
-System.out.println(parsedComponent);
+            parsedComponent.addChild(expectedContent);
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());            
+            assertEquals(expectedContent, builtComponent.toString());            
         }
     }
 }

@@ -9,15 +9,15 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.properties.calendar.Version;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.scene.control.agenda.icalendar.editors.deleters.DeleterVEvent;
 import jfxtras.scene.control.agenda.icalendar.editors.deleters.SimpleDeleterFactory;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.properties.calendar.Version;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
 
 public class DeleteOneTest
 {

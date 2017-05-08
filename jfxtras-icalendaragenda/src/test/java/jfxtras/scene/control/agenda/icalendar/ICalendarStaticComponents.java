@@ -8,12 +8,12 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.properties.component.recurrence.ExceptionDates;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
 
 /**
  * Static VEvents representing iCalendar components

@@ -1,13 +1,15 @@
 package jfxtras.icalendarfx.properties.component.recurrence;
 
 import java.time.temporal.Temporal;
+import java.util.Set;
 
-import javafx.collections.ObservableSet;
 import jfxtras.icalendarfx.components.DaylightSavingTime;
 import jfxtras.icalendarfx.components.StandardTime;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
+import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
+import jfxtras.icalendarfx.properties.component.recurrence.PropertyBaseRecurrence;
 
 /**
  * EXDATE
@@ -37,7 +39,7 @@ public class ExceptionDates extends PropertyBaseRecurrence<ExceptionDates>
         super(source);
     }
     
-    public ExceptionDates(ObservableSet<Temporal> value)
+    public ExceptionDates(Set<Temporal> value)
     {
         super(value);
     }
@@ -49,18 +51,15 @@ public class ExceptionDates extends PropertyBaseRecurrence<ExceptionDates>
 
     /** Parse string to Temporal.  Not type safe.  Implementation must
      * ensure parameterized type is the same as date-time represented by String parameter */
-    public static ExceptionDates parse(String value)
+    public static ExceptionDates parse(String content)
     {
-        ExceptionDates property = new ExceptionDates();
-        property.parseContent(value);
-        return property;
+    	return ExceptionDates.parse(new ExceptionDates(), content);
     }
     
     /** Parse string with Temporal class Exceptions provided as parameter */
-    public static  ExceptionDates parse(Class<? extends Temporal> clazz, String value)
+    public static  ExceptionDates parse(Class<? extends Temporal> clazz, String content)
     {
-        ExceptionDates property = new ExceptionDates();
-        property.parseContent(value);
+        ExceptionDates property = ExceptionDates.parse(new ExceptionDates(), content);
         clazz.cast(property.getValue().iterator().next()); // class check
         return property;
     }

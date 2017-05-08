@@ -3,7 +3,7 @@ package jfxtras.icalendarfx.properties.component.timezone;
 import java.net.URI;
 
 import jfxtras.icalendarfx.components.VTimeZone;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
 
 /**
  * TZURL
@@ -20,13 +20,8 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @author David Bal
  * @see VTimeZone
  */
-public class TimeZoneURL extends PropertyBase<URI,TimeZoneURL>
+public class TimeZoneURL extends VPropertyBase<URI,TimeZoneURL>
 {
-//    public TimeZoneURL(CharSequence contentLine)
-//    {
-//        super(contentLine);
-//    }
-    
     public TimeZoneURL(TimeZoneURL source)
     {
         super(source);
@@ -42,10 +37,8 @@ public class TimeZoneURL extends PropertyBase<URI,TimeZoneURL>
         super();
     }
 
-    public static TimeZoneURL parse(String propertyContent)
+    public static TimeZoneURL parse(String content)
     {
-        TimeZoneURL property = new TimeZoneURL();
-        property.parseContent(propertyContent);
-        return property;
+    	return TimeZoneURL.parse(new TimeZoneURL(), content);
     }
 }

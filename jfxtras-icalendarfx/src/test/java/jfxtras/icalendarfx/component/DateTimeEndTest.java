@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.components.VComponent;
@@ -49,47 +48,32 @@ public class DateTimeEndTest
                     "END:" + componentName;
                     
             VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
+            parsedComponent.addChild(expectedContent);
             
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());            
+            assertEquals(expectedContent, builtComponent.toString());            
         }
     }
     
     @Test (expected = DateTimeException.class)
     public void canCatchWrongDateType()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
         new VEvent()
                 .withDateTimeStart(LocalDate.of(1997, 3, 1))
                 .withDateTimeEnd("20160306T080000Z");
     }
     
     @Test (expected = DateTimeException.class)
-    @Ignore // TestFX4
     public void canCatchWrongDateType2()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
        VEvent v = new VEvent()
                 .withDateTimeEnd("20160306T080000Z")
                 .withDateTimeStart(LocalDate.of(1997, 3, 1));
-       v.errors().stream().forEach(System.out::println);
     }
     
     @Test (expected = DateTimeException.class)
-    @Ignore // TestFX4
     public void canCatchWrongDateType3()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
         VEvent builtComponent = new VEvent();
         builtComponent.setDateTimeEnd(new DateTimeEnd(LocalDateTime.of(2016, 3, 6, 8, 0)));
         builtComponent.setDateTimeStart(new DateTimeStart(LocalDate.of(1997, 3, 1)));

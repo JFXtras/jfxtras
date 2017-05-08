@@ -1,7 +1,7 @@
 package jfxtras.icalendarfx.properties.component.alarm;
 
 import jfxtras.icalendarfx.components.VAlarm;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
 
 /**
  * REPEAT
@@ -23,7 +23,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * The property can be specified in following components:
  * @see VAlarm
  */
-public class RepeatCount extends PropertyBase<Integer, RepeatCount>
+public class RepeatCount extends VPropertyBase<Integer, RepeatCount>
 {
     public RepeatCount(Integer value)
     {
@@ -40,11 +40,9 @@ public class RepeatCount extends PropertyBase<Integer, RepeatCount>
         super(0); // default is 0
     }
     
-    public static RepeatCount parse(String value)
+    public static RepeatCount parse(String content)
     {
-        RepeatCount property = new RepeatCount();
-        property.parseContent(value);
-        return property;
+    	return RepeatCount.parse(new RepeatCount(), content);
     }
     
     @Override
@@ -55,7 +53,7 @@ public class RepeatCount extends PropertyBase<Integer, RepeatCount>
             super.setValue(value);
         } else
         {
-            throw new IllegalArgumentException(propertyType() + " must be greater than or equal to zero");
+            throw new IllegalArgumentException(name() + " must be greater than or equal to zero");
         }
     }
 }

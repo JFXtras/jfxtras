@@ -3,7 +3,7 @@ package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 import java.time.temporal.Temporal;
 import java.util.List;
 
-import net.balsoftware.icalendar.components.VJournal;
+import jfxtras.icalendarfx.components.VJournal;
 
 /**
  *  Controller for editing descriptive properties in a {@link VJournal}

@@ -19,15 +19,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javafx.util.StringConverter;
-import javafx.util.converter.DefaultStringConverter;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 import jfxtras.icalendarfx.VElement;
+import jfxtras.icalendarfx.properties.ValueType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.utilities.DefaultStringConverter;
+import jfxtras.icalendarfx.utilities.DoubleStringConverter;
+import jfxtras.icalendarfx.utilities.IntegerStringConverter;
+import jfxtras.icalendarfx.utilities.StringConverter;
 import jfxtras.icalendarfx.utilities.StringConverters;
 
+/**
+ * Allowed value types for calendar properties' value
+ * 
+ * @author David Bal
+ *
+ */
 public enum ValueType
 {
     BINARY ("BINARY", Arrays.asList(String.class)) {
@@ -64,29 +71,6 @@ public enum ValueType
         public <T> StringConverter<T> getConverter()
         {
             return (StringConverter<T>) StringConverters.uriConverterNoQuotes();
-//            return new StringConverter<T>()
-//            {
-//                @Override
-//                public String toString(T object)
-//                {
-//                    return object.toString();
-//                }
-//
-//                @Override
-//                public T fromString(String string)
-//                {
-//                    try
-//                    {
-//                        return (T) new URI(string);
-//                    } catch (URISyntaxException e)
-//                    {
-//                        // do nada
-////                        throw e;
-////                        e.printStackTrace();
-//                    }
-//                    return null;
-//                }
-//            };
         }
     },
     DATE ("DATE", Arrays.asList(LocalDate.class))
@@ -105,7 +89,7 @@ public enum ValueType
                 @Override
                 public T fromString(String string)
                 {
-                         return (T) LocalDate.parse(string, DateTimeUtilities.LOCAL_DATE_FORMATTER);
+                     return (T) LocalDate.parse(string, DateTimeUtilities.LOCAL_DATE_FORMATTER);
                 }
             };
         }
@@ -170,20 +154,6 @@ public enum ValueType
         public <T> StringConverter<T> getConverter()
         {
             return (StringConverter<T>) new DoubleStringConverter();
-//            return new StringConverter<T>()
-//            {
-//                @Override
-//                public String toString(T object)
-//                {
-//                    return object.toString();
-//                }
-//
-//                @Override
-//                public T fromString(String string)
-//                {
-//                    return (T) new Double(Double.parseDouble(string));
-//                }
-//            };
         }
     },
     INTEGER ("INTEGER", Arrays.asList(Integer.class))
@@ -192,20 +162,6 @@ public enum ValueType
         public <T> StringConverter<T> getConverter()
         {
             return (StringConverter<T>) new IntegerStringConverter();
-//            return new StringConverter<T>()
-//            {
-//                @Override
-//                public String toString(T object)
-//                {
-//                    return object.toString();
-//                }
-//
-//                @Override
-//                public T fromString(String string)
-//                {
-//                    return (T) new Integer(Integer.parseInt(string));
-//                }
-//            };
         }
     },
     PERIOD ("PERIOD", Arrays.asList(List.class))
@@ -240,7 +196,7 @@ public enum ValueType
                 @Override
                 public String toString(T object)
                 {
-                    return ((VElement) object).toContent();
+                    return ((VElement) object).toString();
                 }
 
                 @Override
@@ -343,27 +299,6 @@ public enum ValueType
         public <T> StringConverter<T> getConverter()
         {
             return (StringConverter<T>) StringConverters.uriConverterNoQuotes();
-//            return new StringConverter<T>()
-//            {
-//                @Override
-//                public String toString(T object)
-//                {
-//                    return object.toString();
-//                }
-//
-//                @Override
-//                public T fromString(String string)
-//                {
-//                    try
-//                    {
-//                        return (T) new URI(string);
-//                    } catch (URISyntaxException e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                    return null;
-//                }
-//            };
         }
     },
     UTC_OFFSET ("UTC-OFFSET", Arrays.asList(ZoneOffset.class))

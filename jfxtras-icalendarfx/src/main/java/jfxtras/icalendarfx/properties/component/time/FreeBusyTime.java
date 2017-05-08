@@ -8,17 +8,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.Pair;
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.parameters.FreeBusyType;
-import jfxtras.icalendarfx.parameters.ParameterType;
 import jfxtras.icalendarfx.parameters.FreeBusyType.FreeBusyTypeEnum;
 import jfxtras.icalendarfx.properties.PropFreeBusy;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.time.FreeBusyTime;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.utilities.Pair;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * FREEBUSY
@@ -47,7 +45,7 @@ import jfxtras.icalendarfx.utilities.DateTimeUtilities;
  * The property can be specified in following components:
  * @see VFreeBusy
  */
-public class FreeBusyTime extends PropertyBase<List<Pair<ZonedDateTime, TemporalAmount>>, FreeBusyTime> implements PropFreeBusy<List<Pair<ZonedDateTime, TemporalAmount>>>
+public class FreeBusyTime extends VPropertyBase<List<Pair<ZonedDateTime, TemporalAmount>>, FreeBusyTime> implements PropFreeBusy<List<Pair<ZonedDateTime, TemporalAmount>>>
 {
     public final static StringConverter<List<Pair<ZonedDateTime, TemporalAmount>>> CONVERTER = new StringConverter<List<Pair<ZonedDateTime, TemporalAmount>>>()
     {
@@ -97,26 +95,14 @@ public class FreeBusyTime extends PropertyBase<List<Pair<ZonedDateTime, Temporal
      * Values can be = "FBTYPE" "=" ("FREE" / "BUSY" / "BUSY-UNAVAILABLE" / "BUSY-TENTATIVE"
      */
     @Override
-    public FreeBusyType getFreeBusyType() { return (freeBusyType == null) ? null : freeBusyType.get(); }
-    @Override
-    public ObjectProperty<FreeBusyType> freeBusyTypeProperty()
-    {
-        if (freeBusyType == null)
-        {
-            freeBusyType = new SimpleObjectProperty<>(this, ParameterType.INLINE_ENCODING.toString());
-            orderer().registerSortOrderProperty(freeBusyType);
-        }
-        return freeBusyType;
-    }
-    private ObjectProperty<FreeBusyType> freeBusyType;
+    public FreeBusyType getFreeBusyType() { return freeBusyType; }
+    private FreeBusyType freeBusyType;
     @Override
     public void setFreeBusyType(FreeBusyType freeBusyType)
     {
-        if (freeBusyType != null)
-        {
-            freeBusyTypeProperty().set(freeBusyType);
-        }
-    }
+    	orderer.orderChild(freeBusyType);
+    	this.freeBusyType = freeBusyType;
+	}
     public void setFreeBusyType(FreeBusyTypeEnum type) { setFreeBusyType(new FreeBusyType(type)); }
     public FreeBusyTime withFreeBusyType(FreeBusyType freeBusyType) { setFreeBusyType(freeBusyType); return this; }
     public FreeBusyTime withFreeBusyType(FreeBusyTypeEnum type) { setFreeBusyType(type); return this; }
@@ -144,10 +130,8 @@ public class FreeBusyTime extends PropertyBase<List<Pair<ZonedDateTime, Temporal
         setConverter(CONVERTER);
     }
     
-    public static FreeBusyTime parse(String propertyContent)
+    public static FreeBusyTime parse(String content)
     {
-        FreeBusyTime property = new FreeBusyTime();
-        property.parseContent(propertyContent);
-        return property;
+    	return FreeBusyTime.parse(new FreeBusyTime(), content);
     }
 }

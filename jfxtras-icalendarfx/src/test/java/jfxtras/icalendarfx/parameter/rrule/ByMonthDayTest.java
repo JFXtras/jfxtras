@@ -24,7 +24,7 @@ public class ByMonthDayTest
     {
         ByMonthDay element = new ByMonthDay(4,14);
         assertEquals(Arrays.asList(4, 14), element.getValue());
-        assertEquals("BYMONTHDAY=4,14", element.toContent());
+        assertEquals("BYMONTHDAY=4,14", element.toString());
     }
     
     /*

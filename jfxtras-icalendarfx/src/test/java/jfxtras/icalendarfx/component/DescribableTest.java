@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -35,7 +36,7 @@ import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 public class DescribableTest
 {
     @Test
-    public void canBuildDescribable() throws InstantiationException, IllegalAccessException
+    public void canBuildDescribable() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
     {
         List<VDescribable<?>> components = Arrays.asList(
                 new VEvent()
@@ -63,18 +64,27 @@ public class DescribableTest
         
         for (VDescribable<?> builtComponent : components)
         {
-            String componentName = builtComponent.name();            
+            String componentName = builtComponent.name();
             String expectedContent = "BEGIN:" + componentName + System.lineSeparator() +
                     "ATTACH;FMTTYPE=text/plain;ENCODING=BASE64;VALUE=BINARY:TG9yZW" + System.lineSeparator() +
                     "ATTACH:CID:jsmith.part3.960817T083000.xyzMail@example.com" + System.lineSeparator() +
                     "SUMMARY;LANGUAGE=en-USA:a test summary" + System.lineSeparator() +
                     "END:" + componentName;
 
-            VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
-
+            VComponent parsedComponent = (VComponent) builtComponent.getClass()
+            		.getMethod("parse", String.class)
+            		.invoke(null, expectedContent);
+            List<String> expectedAttachments = Arrays.asList(
+                    "ATTACH;FMTTYPE=text/plain;ENCODING=BASE64;VALUE=BINARY:TG9yZW",
+                    "ATTACH:CID:jsmith.part3.960817T083000.xyzMail@example.com"
+                    );
+            List<String> attachments = builtComponent.getAttachments()
+            		.stream()
+            		.map(c -> c.toString())
+            		.collect(Collectors.toList());
+			assertEquals(expectedAttachments, attachments);
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());            
+            assertEquals(expectedContent, builtComponent.toString());            
         }
     }
     
@@ -98,10 +108,10 @@ public class DescribableTest
                     "END:" + componentName;
                     
             VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
+            parsedComponent.addChild(expectedContent);
             
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());            
+            assertEquals(expectedContent, builtComponent.toString());            
         }
     }
 }

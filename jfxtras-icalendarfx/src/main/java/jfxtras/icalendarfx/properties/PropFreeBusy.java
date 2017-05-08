@@ -1,9 +1,9 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.parameters.FreeBusyType;
+import jfxtras.icalendarfx.properties.VProperty;
 
-public interface PropFreeBusy<T> extends Property<T>
+public interface PropFreeBusy<T> extends VProperty<T>
 {
     /**
      * FBTYPE: Incline Free/Busy Time Type
@@ -14,6 +14,5 @@ public interface PropFreeBusy<T> extends Property<T>
      * Values can be = "FBTYPE" "=" ("FREE" / "BUSY" / "BUSY-UNAVAILABLE" / "BUSY-TENTATIVE"
      */
     FreeBusyType getFreeBusyType();
-    ObjectProperty<FreeBusyType> freeBusyTypeProperty();
     void setFreeBusyType(FreeBusyType freeBusyType);
 }

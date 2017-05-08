@@ -10,11 +10,11 @@ import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 public class MethodTest
 {
     @Test
-    public void canParseAction()
+    public void canParseMethod()
     {
         Method madeProperty = Method.parse("method:publish");
         String expectedContent = "METHOD:PUBLISH";
-        assertEquals(expectedContent, madeProperty.toContent());
+        assertEquals(expectedContent, madeProperty.toString());
         assertEquals(MethodType.PUBLISH, madeProperty.getValue());
     }
 }

@@ -2,8 +2,8 @@ package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 
 import java.util.List;
 
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.DaylightSavingTime;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.DaylightSavingTime;
 
 /**
  * Reviser for {@link DaylightSavingTime}

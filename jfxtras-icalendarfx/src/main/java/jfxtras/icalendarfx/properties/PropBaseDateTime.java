@@ -9,11 +9,13 @@ import java.time.temporal.Temporal;
 import java.util.Collection;
 import java.util.List;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import jfxtras.icalendarfx.parameters.ParameterType;
 import jfxtras.icalendarfx.parameters.TimeZoneIdentifierParameter;
+import jfxtras.icalendarfx.parameters.VParameterElement;
 import jfxtras.icalendarfx.parameters.ValueParameter;
+import jfxtras.icalendarfx.properties.PropBaseDateTime;
+import jfxtras.icalendarfx.properties.PropDateTime;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.ValueType;
 import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
@@ -29,10 +31,10 @@ import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
  * @see DateTimeEnd
  * @see RecurrenceId
  */
-public abstract class PropBaseDateTime<T, U> extends PropertyBase<T,U> implements PropDateTime<T>
+public abstract class PropBaseDateTime<T,U> extends VPropertyBase<T,U> implements PropDateTime<T>
 {
     // reference to property value if T is not instance of Collection, or an element if T is a Collection
-    private Object anElement;
+    private Object myElement;
     
     /**
      * TZID
@@ -44,34 +46,43 @@ public abstract class PropBaseDateTime<T, U> extends PropertyBase<T,U> implement
      * DTSTART;TZID=America/New_York:19980119T020000
      */
     @Override
-    public TimeZoneIdentifierParameter getTimeZoneIdentifier() { return (timeZoneIdentifier == null) ? null : timeZoneIdentifier.get(); }
-    @Override
-    public ObjectProperty<TimeZoneIdentifierParameter> timeZoneIdentifierProperty()
-    {
-        if (timeZoneIdentifier == null)
-        {
-            timeZoneIdentifier = new SimpleObjectProperty<>(this, ParameterType.TIME_ZONE_IDENTIFIER.toString());
-            orderer().registerSortOrderProperty(timeZoneIdentifier);
-        }
-        return timeZoneIdentifier;
-    }
-    private ObjectProperty<TimeZoneIdentifierParameter> timeZoneIdentifier;
+    public TimeZoneIdentifierParameter getTimeZoneIdentifier() { return timeZoneIdentifier; }
+    private TimeZoneIdentifierParameter timeZoneIdentifier;
     @Override
     public void setTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier)
     {
-        if ((anElement == null) || (anElement instanceof ZonedDateTime))
+        if ((myElement == null) || (myElement instanceof ZonedDateTime))
         {
-            timeZoneIdentifierProperty().set(timeZoneIdentifier);
+        	orderChild(this.timeZoneIdentifier, timeZoneIdentifier);
+            this.timeZoneIdentifier = timeZoneIdentifier;
         } else
         {
-            throw new DateTimeException(ParameterType.TIME_ZONE_IDENTIFIER.toString() + " can't be set for date-time of type " + getValue().getClass().getSimpleName());
+            throw new DateTimeException(VParameterElement.TIME_ZONE_IDENTIFIER.name() + " can't be set for date-time of type " + getValue().getClass().getSimpleName());
         }
     }
-    public void setTimeZoneIdentifier(String value) { setTimeZoneIdentifier(TimeZoneIdentifierParameter.parse(value)); }
-    public void setTimeZoneIdentifier(ZoneId zone) { setTimeZoneIdentifier(new TimeZoneIdentifierParameter(zone)); }
-    public U withTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier) { setTimeZoneIdentifier(timeZoneIdentifier); return (U) this; }
-    public U withTimeZoneIdentifier(ZoneId zone) { setTimeZoneIdentifier(zone); return (U) this; }
-    public U withTimeZoneIdentifier(String content) { ParameterType.TIME_ZONE_IDENTIFIER.parse(this, content); return (U) this; }        
+    public void setTimeZoneIdentifier(String value)
+    {
+    	setTimeZoneIdentifier(TimeZoneIdentifierParameter.parse(value));
+	}
+    public void setTimeZoneIdentifier(ZoneId zone)
+    {
+    	setTimeZoneIdentifier(new TimeZoneIdentifierParameter(zone));
+	}
+    public U withTimeZoneIdentifier(TimeZoneIdentifierParameter timeZoneIdentifier)
+    {
+    	setTimeZoneIdentifier(timeZoneIdentifier);
+    	return (U) this;
+	}
+    public U withTimeZoneIdentifier(ZoneId zone)
+    {
+    	setTimeZoneIdentifier(zone);
+    	return (U) this;
+	}
+    public U withTimeZoneIdentifier(String content)
+    {
+    	setTimeZoneIdentifier(content);
+    	return (U) this;
+	}        
     
     /*
      * CONSTRUCTORS
@@ -96,17 +107,12 @@ public abstract class PropBaseDateTime<T, U> extends PropertyBase<T,U> implement
      * @see ValueType
      */
     @Override
-    protected String getPropertyValueString()
+	protected String modifiedValue()
     {
-        if (super.getPropertyValueString() == null)
-        {
-            return null;
-        } else
-        {
-            String timeZone = (getTimeZoneIdentifier() != null) ? "[" + getTimeZoneIdentifier().getValue().toString() + "]" : "";
-            return timeZone + super.getPropertyValueString();
-        }
-    }
+        String timeZone = (getTimeZoneIdentifier() != null) ? "[" + getTimeZoneIdentifier().getValue().toString() + "]" : "";
+    	String modifiedValue = super.modifiedValue();
+		return (modifiedValue != null) ? timeZone + modifiedValue : null;
+	}
 
     @Override
     public void setValue(T value)
@@ -115,37 +121,46 @@ public abstract class PropBaseDateTime<T, U> extends PropertyBase<T,U> implement
         if (value instanceof Collection)
         {
             Collection<?> collection = (Collection<?>) value;
-            anElement = (collection.isEmpty()) ? null : collection.iterator().next();
+            myElement = (collection.isEmpty()) ? null : collection.iterator().next();
         } else if (value instanceof Temporal)
         {
-            anElement = value;
+            myElement = value;
         } else
         {
             throw new DateTimeException("Unsupported type:" + value.getClass().getSimpleName());            
         }
 
-        if (anElement != null)
+        if (myElement != null)
         {
-            if (anElement instanceof ZonedDateTime)
+            if (myElement instanceof ZonedDateTime)
             {
-                ZoneId zone = ((ZonedDateTime) anElement).getZone();
+                ZoneId zone = ((ZonedDateTime) myElement).getZone();
                 if (! zone.equals(ZoneId.of("Z")))
                 {
-                    if (getValueType() != null && getValueType().getValue() == ValueType.DATE) setValueType((ValueParameter) null); // reset value type if previously set to DATE
-                    setTimeZoneIdentifier(new TimeZoneIdentifierParameter(zone));
+                    if (getValueType() != null && getValueType().getValue() == ValueType.DATE)
+                	{
+                    	setValueType((ValueParameter) null); // reset value type if previously set to DATE
+                	}
+                    if (getTimeZoneIdentifier() == null)
+                    {
+                    	setTimeZoneIdentifier(new TimeZoneIdentifierParameter(zone));
+                    }
                 }
-            } else if ((anElement instanceof LocalDateTime) || (anElement instanceof LocalDate))
+            } else if ((myElement instanceof LocalDateTime) || (myElement instanceof LocalDate))
             {
                 if (getTimeZoneIdentifier() != null)
                 {
-                    throw new DateTimeException("Only ZonedDateTime is permitted when specifying a Time Zone Identifier (" + anElement.getClass().getSimpleName() + ")");                            
+                    throw new DateTimeException("Only ZonedDateTime is permitted when specifying a Time Zone Identifier (" + myElement.getClass().getSimpleName() + ")");                            
                 }
-                if (anElement instanceof LocalDate)
+                if (getValueType() == null)
                 {
-                    setValueType(ValueType.DATE); // must set value parameter to force output of VALUE=DATE
-                } else
-                {
-                    if (getValueType() != null && getValueType().getValue() == ValueType.DATE) setValueType((ValueParameter) null); // reset value type if previously set to DATE
+	                if (myElement instanceof LocalDate)
+	                {
+	                    setValueType(ValueType.DATE); // must set value parameter to force output of VALUE=DATE
+	                } else
+	                {
+	                    if (getValueType() != null && getValueType().getValue() == ValueType.DATE) setValueType((ValueParameter) null); // reset value type if previously set to DATE
+	                }
                 }
             } else
             {

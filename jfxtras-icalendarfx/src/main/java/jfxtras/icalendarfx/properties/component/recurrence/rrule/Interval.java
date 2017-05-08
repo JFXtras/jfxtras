@@ -1,6 +1,10 @@
 package jfxtras.icalendarfx.properties.component.recurrence.rrule;
 
+import java.util.Collections;
 import java.util.List;
+
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRulePartBase;
 
 /**
  * INTERVAL
@@ -14,24 +18,14 @@ import java.util.List;
  * MONTHLY rule, and every year for a YEARLY rule.  For example,
  * within a DAILY rule, a value of "8" means every eight days.
  */
-public class Interval extends RRuleElementBase<Integer, Interval>
+public class Interval extends RRulePartBase<Integer, Interval>
 {
     public static final int DEFAULT_INTERVAL = 1;
-//    @Override
-//    public Integer getValue() { return (valueProperty().get() == null) ? DEFAULT_INTERVAL : valueProperty().get(); }
     
     public Interval()
     {
         super();
         setValue(DEFAULT_INTERVAL);
-//        valueProperty().addListener((obs, oldValue, newValue) ->
-//        {
-//            if ((newValue != null) && (newValue < 1))
-//            {
-//                setValue(oldValue);
-//                throw new IllegalArgumentException(elementType() + " can't be less than 1");
-//            }
-//        });
     }
     
     public Interval(Integer interval)
@@ -47,17 +41,11 @@ public class Interval extends RRuleElementBase<Integer, Interval>
     }
 
     @Override
-    public List<String> parseContent(String content)
+    protected List<Message> parseContent(String content)
     {
-        setValue(Integer.parseInt(content));
-        return errors();
-    }
-
-    public static Interval parse(String content)
-    {
-        Interval element = new Interval();
-        element.parseContent(content);
-        return element;
+    	String valueString = extractValue(content);
+        setValue(Integer.parseInt(valueString));
+        return Collections.EMPTY_LIST;
     }
     
     @Override
@@ -80,10 +68,6 @@ public class Interval extends RRuleElementBase<Integer, Interval>
         Interval other = (Interval) obj;
         
         return (getValue() == null) ? other.getValue() == null : getValue().equals(other.getValue());
-//        Integer value = (getValue() == null) ? DEFAULT_INTERVAL : getValue();
-//        Integer otherValue = (other.getValue() == null) ? DEFAULT_INTERVAL : other.getValue();
-//        System.out.println("values:" + value + " " + otherValue);
-//        return value.equals(otherValue);
     }
     
     @Override
@@ -95,5 +79,10 @@ public class Interval extends RRuleElementBase<Integer, Interval>
             errors.add("INTERVAL is " + getValue() + ".  The value MUST be greater than or equal to 1.");
         }
         return errors;
+    }
+    
+    public static Interval parse(String content)
+    {
+    	return Interval.parse(new Interval(), content);
     }
 }

@@ -1,6 +1,6 @@
 package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 
-import net.balsoftware.icalendar.components.VAlarm;
+import jfxtras.icalendarfx.components.VAlarm;
 
 /**
  * Control to add people and their email addresses to notify them of the event a certain

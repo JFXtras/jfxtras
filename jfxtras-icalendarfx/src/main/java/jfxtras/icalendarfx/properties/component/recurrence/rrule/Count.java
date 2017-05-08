@@ -1,6 +1,10 @@
 package jfxtras.icalendarfx.properties.component.recurrence.rrule;
 
+import java.util.Collections;
 import java.util.List;
+
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Count;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRulePartBase;
 
 /**
  * COUNT:
@@ -10,8 +14,21 @@ import java.util.List;
  * range-bound the recurrence.  The "DTSTART" property value always
  * counts as the first occurrence.
  */
-public class Count extends RRuleElementBase<Integer, Count>
+public class Count extends RRulePartBase<Integer, Count>
 {
+	@Override
+	public void setValue(Integer value)
+	{
+        if ((value != null) && (value < 1))
+        {
+            throw new IllegalArgumentException(name() + " is " + value + ".  It can't be less than 1");
+        }
+        super.setValue(value);	
+	}
+	
+	/*
+	 * CONSTRUCTORS
+	 */
     public Count(int count)
     {
         this();
@@ -21,14 +38,6 @@ public class Count extends RRuleElementBase<Integer, Count>
     public Count()
     {
         super();
-        valueProperty().addListener((obs, oldValue, newValue) ->
-        {
-            if ((newValue != null) && (newValue < 1))
-            {
-                setValue(oldValue);
-                throw new IllegalArgumentException(elementType() + " is " + newValue + ".  It can't be less than 1");
-            }
-        });
     }
 
     public Count(Count source)
@@ -38,16 +47,15 @@ public class Count extends RRuleElementBase<Integer, Count>
     }
 
     @Override
-    public List<String> parseContent(String content)
+    protected List<Message> parseContent(String content)
     {
-        setValue(Integer.parseInt(content));
-        return errors();
+    	String valueString = extractValue(content);
+        setValue(Integer.parseInt(valueString));
+        return Collections.EMPTY_LIST;
     }
 
     public static Count parse(String content)
     {
-        Count element = new Count();
-        element.parseContent(content);
-        return element;
+    	return Count.parse(new Count(), content);
     }
 }

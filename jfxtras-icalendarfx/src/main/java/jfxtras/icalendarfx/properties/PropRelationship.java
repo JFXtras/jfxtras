@@ -1,11 +1,10 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.parameters.Relationship;
+import jfxtras.icalendarfx.properties.VProperty;
 
-public interface PropRelationship<T> extends Property<T>
+public interface PropRelationship<T> extends VProperty<T>
 {
     Relationship getRelationship();
-    ObjectProperty<Relationship> relationshipProperty();
     void setRelationship(Relationship relationship);
 }

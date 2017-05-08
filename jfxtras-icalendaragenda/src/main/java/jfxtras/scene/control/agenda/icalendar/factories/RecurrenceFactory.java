@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import net.balsoftware.icalendar.components.VDisplayable;
+import jfxtras.icalendarfx.components.VDisplayable;
 
 /**
  * Abstract factory to create recurrences from VComponents.

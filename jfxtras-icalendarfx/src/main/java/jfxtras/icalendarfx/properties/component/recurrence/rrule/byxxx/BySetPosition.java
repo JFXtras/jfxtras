@@ -8,6 +8,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRuleIntegerAbstract;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.BySetPosition;
+
 public class BySetPosition extends ByRuleIntegerAbstract<BySetPosition>
 {
     public BySetPosition()
@@ -51,8 +54,6 @@ public class BySetPosition extends ByRuleIntegerAbstract<BySetPosition>
 
     public static BySetPosition parse(String content)
     {
-        BySetPosition element = new BySetPosition();
-        element.parseContent(content);
-        return element;
+    	return BySetPosition.parse(new BySetPosition(), content);
     }
 }

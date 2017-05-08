@@ -26,6 +26,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.properties.component.descriptive.Summary;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.internal.scene.control.skin.agenda.AgendaDaySkin;
 import jfxtras.internal.scene.control.skin.agenda.AgendaWeekSkin;
 import jfxtras.scene.control.LocalDatePicker;
@@ -33,13 +40,6 @@ import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.LocalDateTimeRange;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.properties.component.descriptive.Summary;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 
 /**

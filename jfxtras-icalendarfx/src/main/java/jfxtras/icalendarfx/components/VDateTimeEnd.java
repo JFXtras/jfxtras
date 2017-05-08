@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VDateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
@@ -34,29 +35,9 @@ public interface VDateTimeEnd<T> extends VComponent
      *<li>DTEND;VALUE=DATE:19980704
      *</ul>
      */
-    ObjectProperty<DateTimeEnd> dateTimeEndProperty();
     DateTimeEnd getDateTimeEnd();
-    default void setDateTimeEnd(String dtEnd)
-    {
-        if (getDateTimeEnd() == null)
-        {
-            setDateTimeEnd(DateTimeEnd.parse(dtEnd));
-        } else
-        {
-            DateTimeEnd temp = DateTimeEnd.parse(dtEnd);
-            if (temp.getValue().getClass().equals(getDateTimeEnd().getValue().getClass()))
-            {
-                getDateTimeEnd().setValue(temp.getValue());
-            } else
-            {
-                setDateTimeEnd(temp);
-            }
-        }
-    }
-    default void setDateTimeEnd(DateTimeEnd dtEnd)
-    {
-        dateTimeEndProperty().set(dtEnd);
-    }
+    void setDateTimeEnd(DateTimeEnd dtEnd);
+    default void setDateTimeEnd(String dtEnd) { setDateTimeEnd(DateTimeEnd.parse(dtEnd)); }
     default void setDateTimeEnd(Temporal temporal)
     {
         if ((getDateTimeEnd() == null) || ! getDateTimeEnd().getValue().getClass().equals(temporal.getClass()))
@@ -81,7 +62,8 @@ public interface VDateTimeEnd<T> extends VComponent
      * Sets the value of {@link #DateTimeEnd()}.
      * 
      * @return - this class for chaining
-     */    default T withDateTimeEnd(Temporal dtEnd)
+     */    
+    default T withDateTimeEnd(Temporal dtEnd)
     {
         setDateTimeEnd(dtEnd);
         return (T) this;
@@ -163,7 +145,7 @@ public interface VDateTimeEnd<T> extends VComponent
                 int after = DateTimeUtilities.TEMPORAL_COMPARATOR2.compare(testObj.getDateTimeEnd().getValue(), testObj.getDateTimeStart().getValue());
                 if (after == -1)
                 {
-                    errors.add("DTEND is not after DTSTART.  DTEND MUST be after DTSTART ("
+                    errors.add("DTEND does not occur after DTSTART.  DTEND MUST occur after DTSTART ("
                             + testObj.getDateTimeEnd().getValue() + ", " + testObj.getDateTimeStart().getValue() + ")");
                 }
             }

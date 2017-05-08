@@ -19,10 +19,10 @@ import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonth;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonthDay;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByWeekNumber;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransparencyType;
 
 public abstract class ICalendarTestAbstract

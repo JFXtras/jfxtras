@@ -22,18 +22,18 @@ import java.util.stream.Collectors;
 
 import javafx.util.Callback;
 import javafx.util.Pair;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.VChild;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.properties.VPropertyElement;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
+import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
+import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
+import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.VChild;
-import net.balsoftware.icalendar.components.VDisplayable;
-import net.balsoftware.icalendar.properties.VPropertyElement;
-import net.balsoftware.icalendar.properties.component.recurrence.RecurrenceRule;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.RecurrenceRuleValue;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.byxxx.ByDay;
-import net.balsoftware.icalendar.properties.component.relationship.RecurrenceId;
-import net.balsoftware.icalendar.properties.component.relationship.UniqueIdentifier;
-import net.balsoftware.icalendar.properties.component.time.DateTimeStart;
-import net.balsoftware.icalendar.utilities.DateTimeUtilities;
 
 /**
  * Handles revising one or all recurrences of a {@link VDisplayable}

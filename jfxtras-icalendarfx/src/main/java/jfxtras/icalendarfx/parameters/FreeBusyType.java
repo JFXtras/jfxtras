@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jfxtras.icalendarfx.parameters.FreeBusyType;
+import jfxtras.icalendarfx.parameters.ParameterEnumBasedWithUnknown;
 import jfxtras.icalendarfx.parameters.FreeBusyType.FreeBusyTypeEnum;
 import jfxtras.icalendarfx.properties.component.time.FreeBusyTime;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * FBTYPE
@@ -23,20 +26,35 @@ import jfxtras.icalendarfx.properties.component.time.FreeBusyTime;
  */
 public class FreeBusyType extends ParameterEnumBasedWithUnknown<FreeBusyType, FreeBusyTypeEnum>
 {
+	private static final StringConverter<FreeBusyTypeEnum> CONVERTER = new StringConverter<FreeBusyTypeEnum>()
+    {
+        @Override
+        public String toString(FreeBusyTypeEnum object)
+        {
+            return object.toString();
+        }
+
+        @Override
+        public FreeBusyTypeEnum fromString(String string)
+        {
+            return FreeBusyTypeEnum.enumFromName(string.toUpperCase());
+        }
+    };
+    
     /** set BUSY as default FreeBusy type value */
     public FreeBusyType()
     {
-        super(FreeBusyTypeEnum.BUSY); // default value
+        super(FreeBusyTypeEnum.BUSY, CONVERTER); // default value
     }
   
     public FreeBusyType(FreeBusyTypeEnum value)
     {
-        super(value);
+        super(value, CONVERTER);
     }
     
     public FreeBusyType(FreeBusyType source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
     
     public enum FreeBusyTypeEnum
@@ -70,11 +88,9 @@ public class FreeBusyType extends ParameterEnumBasedWithUnknown<FreeBusyType, Fr
             this.names = names;
         }
     }
-
+    
     public static FreeBusyType parse(String content)
     {
-        FreeBusyType parameter = new FreeBusyType();
-        parameter.parseContent(content);
-        return parameter;
+    	return FreeBusyType.parse(new FreeBusyType(), content);
     }
 }

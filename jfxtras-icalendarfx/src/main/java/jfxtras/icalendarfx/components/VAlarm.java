@@ -6,16 +6,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.VAlarm;
+import jfxtras.icalendarfx.components.VAttendee;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VDescribable2;
+import jfxtras.icalendarfx.components.VDescribableBase;
+import jfxtras.icalendarfx.components.VDuration;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.component.alarm.Action;
-import jfxtras.icalendarfx.properties.component.alarm.Action.ActionType;
 import jfxtras.icalendarfx.properties.component.alarm.RepeatCount;
 import jfxtras.icalendarfx.properties.component.alarm.Trigger;
+import jfxtras.icalendarfx.properties.component.alarm.Action.ActionType;
 import jfxtras.icalendarfx.properties.component.descriptive.Attachment;
 import jfxtras.icalendarfx.properties.component.descriptive.Description;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
@@ -230,19 +232,14 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
      * </ul>
      * </p>
      */
-    public ObjectProperty<Action> actionProperty()
-    {
-        if (action == null)
-        {
-            action = new SimpleObjectProperty<>(this, PropertyType.ACTION.toString());
-            orderer().registerSortOrderProperty(action);
-        }
-        return action;
-    }
-    private ObjectProperty<Action> action;
-    public Action getAction() { return actionProperty().get(); }
+    private Action action;
+    public Action getAction() { return action; }
     public void setAction(String action) { setAction(Action.parse(action)); }
-    public void setAction(Action action) { actionProperty().set(action); }
+    public void setAction(Action action)
+    {
+    	orderer.replaceChild(this.action, action);
+    	this.action = action;
+	}
     public void setAction(ActionType action) { setAction(new Action(action)); }
     /**
      * Sets the value of the {@link #actionProperty()}
@@ -283,30 +280,22 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
      * ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=ACCEPTED;CN=Jane Doe
      *  :mailto:jdoe@example.com
      */
+    private List<Attendee> attendees;
     @Override
-    public ListProperty<Attendee> attendeesProperty()
+    public List<Attendee> getAttendees() { return attendees; }
+    @Override
+    public void setAttendees(List<Attendee> attendees)
     {
-        if (attendees == null)
-        {
-            attendees = new SimpleListProperty<>(this, PropertyType.ATTENDEE.toString());
-        }
-        return attendees;
-    }
-    private ListProperty<Attendee> attendees;
-    @Override
-    public ObservableList<Attendee> getAttendees() { return (attendees == null) ? null : attendees.get(); }
-    @Override
-    public void setAttendees(ObservableList<Attendee> attendees)
-    {
-        if (attendees != null)
-        {
-            orderer().registerSortOrderProperty(attendees);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(this.attendees.get());
-        }
-        attendeesProperty().set(attendees);
-    }
+    	if (this.attendees != null)
+    	{
+    		this.attendees.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.attendees = attendees;
+    	if (attendees != null)
+    	{
+    		attendees.forEach(c -> orderChild(c));
+    	}
+	}
     
     /*
      * DESCRIPTION
@@ -323,18 +312,14 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
      * Note: Only VJournal allows multiple instances of DESCRIPTION
      */
     @Override
-    public ObjectProperty<Description> descriptionProperty()
-    {
-        if (description == null)
-        {
-            description = new SimpleObjectProperty<>(this, PropertyType.DESCRIPTION.toString());
-            orderer().registerSortOrderProperty(description);
-        }
-        return description;
-    }
+    public Description getDescription() { return description; }
+    private Description description;
     @Override
-    public Description getDescription() { return (description == null) ? null : description.get(); }
-    private ObjectProperty<Description> description;
+	public void setDescription(Description description)
+    {
+    	orderer.replaceChild(this.description, description);
+    	this.description = description;
+	}
     
     /*
      * DURATION
@@ -344,16 +329,15 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
      * Example:
      * DURATION:PT15M
      * */
-    @Override public ObjectProperty<DurationProp> durationProperty()
-    {
-        if (duration == null)
-        {
-            duration = new SimpleObjectProperty<>(this, PropertyType.DURATION.toString());
-            orderer().registerSortOrderProperty(duration);
-        }
-        return duration;
-    }
-    private ObjectProperty<DurationProp> duration;
+    private DurationProp duration;
+	@Override
+	public DurationProp getDuration() { return duration; }
+	@Override
+	public void setDuration(DurationProp duration)
+	{
+    	orderer.replaceChild(this.duration, duration);
+		this.duration = duration;
+	}
     
     /**
      * <p>This property defines the number of times the alarm should
@@ -371,29 +355,36 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
      * DURATION:PT5M
      * </p>
      */
-    public ObjectProperty<RepeatCount> repeatCountProperty()
+    private RepeatCount repeatCount;
+    public RepeatCount getRepeatCount() { return repeatCount; }
+    public void setRepeatCount(RepeatCount repeatCount)
     {
-        if (repeatCount == null)
-        {
-            repeatCount = new SimpleObjectProperty<>(this, PropertyType.ACTION.toString());
-            orderer().registerSortOrderProperty(repeatCount);
-        }
-        return repeatCount;
-    }
-    private ObjectProperty<RepeatCount> repeatCount;
-    public RepeatCount getRepeatCount() { return (repeatCount == null) ? null : repeatCount.get(); }
-    public void setRepeatCount(RepeatCount repeatCount) { repeatCountProperty().set(repeatCount); }
+    	orderChild(this.repeatCount, repeatCount);
+    	this.repeatCount = repeatCount;
+	}
     public void setRepeatCount(int repeatCount) { setRepeatCount(new RepeatCount(repeatCount)); }
     public void setRepeatCount(String repeatCount) { setRepeatCount(RepeatCount.parse(repeatCount)); }
     /** Sets the value of the {@link #repeatCountProperty()}
      * @return  this class for chaining */
-    public VAlarm withRepeatCount(RepeatCount repeatCount) { setRepeatCount(repeatCount); return this; }
+    public VAlarm withRepeatCount(RepeatCount repeatCount)
+    {
+    	setRepeatCount(repeatCount);
+    	return this;
+	}
     /** Sets the value of the {@link #repeatCountProperty()} by creating new {@link RepeatCount} from int parameter
      * @return  this class for chaining */
-    public VAlarm withRepeatCount(int repeatCount) { setRepeatCount(repeatCount); return this; }
+    public VAlarm withRepeatCount(int repeatCount)
+    {
+    	setRepeatCount(repeatCount);
+    	return this;
+	}
     /** Sets the value of the {@link #repeatCountProperty()} by parsing iCalendar content text
      * @return  this class for chaining */
-    public VAlarm withRepeatCount(String repeatCount) { setRepeatCount(repeatCount); return this; }
+    public VAlarm withRepeatCount(String repeatCount)
+    {
+    	setRepeatCount(repeatCount);
+    	return this;
+	}
     
     /**
      * <p>This property specifies when an alarm will trigger.<br>
@@ -413,35 +404,45 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
      * </ul>
      * </p>
      */
-    public ObjectProperty<Trigger<?>> triggerProperty()
+    private Trigger<?> trigger;
+    public Trigger<?> getTrigger() { return trigger; }
+    public void setTrigger(String trigger) { setTrigger(Trigger.parse(trigger)); }
+    public void setTrigger(Trigger<?> trigger)
     {
-        if (trigger == null)
-        {
-            trigger = new SimpleObjectProperty<>(this, PropertyType.ACTION.toString());
-            orderer().registerSortOrderProperty(trigger);
-        }
-        return trigger;
-    }
-    private ObjectProperty<Trigger<?>> trigger;
-    public Trigger<?> getTrigger() { return triggerProperty().get(); }
-    public void setTrigger(String trigger) { PropertyType.TRIGGER.parse(this, trigger); }
-    public void setTrigger(Trigger<?> trigger) { triggerProperty().set(trigger); }
+    	orderChild(this.trigger, trigger);    	
+    	this.trigger = trigger;
+	}
     public void setTrigger(Duration trigger) { setTrigger(new Trigger<Duration>(trigger)); }
     public void setTrigger(ZonedDateTime trigger) { setTrigger(new Trigger<ZonedDateTime>(trigger)); }
     /** Sets the value of the {@link #triggerProperty()}
      * @return  this class for chaining */
-    public VAlarm withTrigger(Trigger<?> trigger) { setTrigger(trigger); return this; }
+    public VAlarm withTrigger(Trigger<?> trigger)
+    {
+    	setTrigger(trigger);
+    	return this;
+	}
     /** Sets the value of the {@link #triggerProperty()} by creating new {@link Trigger} from Duration parameter
      * @return  this class for chaining */
-    public VAlarm withTrigger(Duration trigger) { setTrigger(trigger); return this; }
+    public VAlarm withTrigger(Duration trigger)
+    {
+    	setTrigger(trigger);
+    	return this;
+	}
     /** Sets the value of the {@link #triggerProperty()} by creating new {@link Trigger} from ZonedDateTime parameter
      * @return  this class for chaining */
-    public VAlarm withTrigger(ZonedDateTime trigger) { setTrigger(trigger); return this; }
+    public VAlarm withTrigger(ZonedDateTime trigger)
+    {
+    	setTrigger(trigger);
+    	return this;
+	}
     /** Sets the value of the {@link #triggerProperty()} by parsing iCalendar content text
      * @return  this class for chaining */
-    public VAlarm withTrigger(String trigger) { setTrigger(trigger); return this; }
-
-    
+    public VAlarm withTrigger(String trigger)
+    {
+    	setTrigger(trigger);
+    	return this;
+	}
+        
     /*
      * CONSTRUCTORS
      */
@@ -487,29 +488,20 @@ public class VAlarm extends VDescribableBase<VAlarm> implements VDescribable2<VA
         return Collections.unmodifiableList(errors);
     }
     
-    @Override
-    public boolean isValid()
-    {
-        boolean isActionPresent = getAction() != null;
-        boolean isTriggerPresent = getTrigger() != null;
-        boolean isDurationNull = getDuration() == null;
-        boolean isRepeatNull = getRepeatCount() == null;
-        boolean isBothNull = isDurationNull && isRepeatNull;
-        boolean isNeitherNull = ! isDurationNull && ! isRepeatNull;
-        boolean isDurationAndRepeatOK = isBothNull || isNeitherNull;
-        return isActionPresent && isTriggerPresent && isDurationAndRepeatOK;
-    }
-
+	@Override
+	public List<? extends VComponent> calendarList()
+	{
+		throw new RuntimeException("VAlarm " + name() + " is embedded in VEVENT or VTODO not VCalendar");
+	}
+	
     /**
-     *  Creates a new VAlarm calendar component by parsing a String of iCalendar content lines
+     * Creates a new VAlarm calendar component by parsing a String of iCalendar content lines
      *
-     * @param contentLines  the text to parse, not null
+     * @param content  the text to parse, not null
      * @return  the parsed VAlarm
      */
-    public static VAlarm parse(String contentLines)
+    public static VAlarm parse(String content)
     {
-        VAlarm component = new VAlarm();
-        component.parseContent(contentLines);
-        return component;
+    	return VAlarm.parse(new VAlarm(), content);
     }
 }

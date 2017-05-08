@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.test.TestUtil;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.properties.component.recurrence.rrule.FrequencyType;
 
 public class ChangeDialogOptionsTest extends VEventPopupTestBase
 {

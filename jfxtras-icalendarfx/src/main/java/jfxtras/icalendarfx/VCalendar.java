@@ -8,22 +8,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.util.Callback;
-import jfxtras.icalendarfx.components.SimpleVComponentFactory;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.VParentBase;
 import jfxtras.icalendarfx.components.VComponent;
-import jfxtras.icalendarfx.components.VDisplayable;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.components.VJournal;
@@ -31,20 +22,19 @@ import jfxtras.icalendarfx.components.VPersonal;
 import jfxtras.icalendarfx.components.VTimeZone;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.content.MultiLineContent;
+import jfxtras.icalendarfx.content.OrdererBase;
+import jfxtras.icalendarfx.content.UnfoldingStringIterator;
 import jfxtras.icalendarfx.itip.AbstractITIPFactory;
 import jfxtras.icalendarfx.itip.DefaultITIPFactory;
 import jfxtras.icalendarfx.itip.Processable;
-import jfxtras.icalendarfx.properties.PropertyType;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.Method;
-import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
 import jfxtras.icalendarfx.properties.calendar.Version;
+import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
 import jfxtras.icalendarfx.properties.component.misc.RequestStatus;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
-import jfxtras.icalendarfx.utilities.ICalendarUtilities;
-import jfxtras.icalendarfx.utilities.UnfoldingStringIterator;
 
 /**
  * iCalendar Object
@@ -55,14 +45,14 @@ import jfxtras.icalendarfx.utilities.UnfoldingStringIterator;
  * @author David Bal
  *
  */
-public class VCalendar extends VParentBase
+public class VCalendar extends VParentBase<VCalendar>
 {
     // version of this project, not associated with the iCalendar specification version
 //    public static String myVersion = "1.0";
     private static final String NAME = "VCALENDAR";
     @Override public String name() { return NAME; }
-    private static final String FIRST_CONTENT_LINE = "BEGIN:" + NAME;
-    private static final String LAST_CONTENT_LINE = "END:" + NAME;
+    private static final String FIRST_CONTENT_LINE = BEGIN + NAME;
+    private static final String LAST_CONTENT_LINE = END + NAME;
     
     /*
      * Calendar properties
@@ -84,19 +74,14 @@ public class VCalendar extends VParentBase
      * Example:
      * CALSCALE:GREGORIAN
      * */
-    ObjectProperty<CalendarScale> calendarScaleProperty()
-    {
-        if (calendarScale == null)
-        {
-            calendarScale = new SimpleObjectProperty<CalendarScale>(this, CalendarProperty.CALENDAR_SCALE.toString());
-            orderer().registerSortOrderProperty(calendarScale);
-        }
-        return calendarScale;
-    }
-    public CalendarScale getCalendarScale() { return (calendarScale == null) ? null : calendarScaleProperty().get(); }
-    private ObjectProperty<CalendarScale> calendarScale;
+    public CalendarScale getCalendarScale() { return calendarScale; }
+    private CalendarScale calendarScale;
     public void setCalendarScale(String calendarScale) { setCalendarScale(CalendarScale.parse(calendarScale)); }
-    public void setCalendarScale(CalendarScale calendarScale) { calendarScaleProperty().set(calendarScale); }
+    public void setCalendarScale(CalendarScale calendarScale)
+    {
+    	this.calendarScale = calendarScale;
+    	orderChild(calendarScale);
+	}
     public VCalendar withCalendarScale(CalendarScale calendarScale)
     {
         setCalendarScale(calendarScale);
@@ -116,20 +101,15 @@ public class VCalendar extends VParentBase
      * Example:
      * METHOD:REQUEST
      * */
-    ObjectProperty<Method> methodProperty()
-    {
-        if (method == null)
-        {
-            method = new SimpleObjectProperty<Method>(this, CalendarProperty.METHOD.toString());
-            orderer().registerSortOrderProperty(method);
-        }
-        return method;
-    }
-    public Method getMethod() { return (method == null) ? null : methodProperty().get(); }
-    private ObjectProperty<Method> method;
+    public Method getMethod() { return method; }
+    private Method method;
     public void setMethod(String method) { setMethod(Method.parse(method)); }
-    public void setMethod(Method method) { methodProperty().set(method); }
-    public void setMethod(MethodType method) { methodProperty().set(new Method(method)); }
+    public void setMethod(Method method)
+    {
+    	this.method = method;
+    	orderChild(method);
+	}
+    public void setMethod(MethodType method) { setMethod(new Method(method)); }
     public VCalendar withMethod(Method method)
     {
         setMethod(method);
@@ -156,19 +136,14 @@ public class VCalendar extends VParentBase
      * Example:
      * PRODID:-//JFxtras//JFXtras iCalendar 1.0//EN
      * */
-    ObjectProperty<ProductIdentifier> productIdentifierProperty()
-    {
-        if (productIdentifier == null)
-        {
-            productIdentifier = new SimpleObjectProperty<ProductIdentifier>(this, CalendarProperty.PRODUCT_IDENTIFIER.toString());
-            orderer().registerSortOrderProperty(productIdentifier);
-        }
-        return productIdentifier;
-    }
-    public ProductIdentifier getProductIdentifier() { return (productIdentifier == null) ? null : productIdentifierProperty().get(); }
-    private ObjectProperty<ProductIdentifier> productIdentifier;
+    public ProductIdentifier getProductIdentifier() { return productIdentifier; }
+    private ProductIdentifier productIdentifier;
     public void setProductIdentifier(String productIdentifier) { setProductIdentifier(ProductIdentifier.parse(productIdentifier)); }
-    public void setProductIdentifier(ProductIdentifier productIdentifier) { productIdentifierProperty().set(productIdentifier); }
+    public void setProductIdentifier(ProductIdentifier productIdentifier)
+    {
+    	this.productIdentifier = productIdentifier;
+    	orderChild(productIdentifier);
+	}
     public VCalendar withProductIdentifier(ProductIdentifier productIdentifier)
     {
         setProductIdentifier(productIdentifier);
@@ -192,19 +167,14 @@ public class VCalendar extends VParentBase
      * Example:
      * VERSION:2.0
      * */
-    ObjectProperty<Version> versionProperty()
-    {
-        if (version == null)
-        {
-            version = new SimpleObjectProperty<Version>(this, CalendarProperty.VERSION.toString());
-            orderer().registerSortOrderProperty(version);
-        }
-        return version;
-    }
-    public Version getVersion() { return (version == null) ? null : versionProperty().get(); }
-    private ObjectProperty<Version> version;
+    public Version getVersion() { return version; }
+    private Version version;
     public void setVersion(String version) { setVersion(Version.parse(version)); }
-    public void setVersion(Version version) { versionProperty().set(version); }
+    public void setVersion(Version version)
+    {
+    	this.version = version;
+    	orderChild(version);
+	}
     public VCalendar withVersion(Version version)
     {
         setVersion(version);
@@ -224,29 +194,37 @@ public class VCalendar extends VParentBase
     /**
      * Provides a framework for defining non-standard properties.
      */
-    public ObjectProperty<ObservableList<NonStandardProperty>> nonStandardProperty()
+    private List<NonStandardProperty> nonStandardProps;
+    public List<NonStandardProperty> getNonStandard() { return nonStandardProps; }
+    public void setNonStandard(List<NonStandardProperty> nonStandardProps)
     {
-        if (nonStandardProps == null)
-        {
-            nonStandardProps = new SimpleObjectProperty<>(this, PropertyType.NON_STANDARD.toString());
-        }
-        return nonStandardProps;
-    }
-    private ObjectProperty<ObservableList<NonStandardProperty>> nonStandardProps;
-    public ObservableList<NonStandardProperty> getNonStandard()
+    	if (this.nonStandardProps != null)
+    	{
+    		this.nonStandardProps.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.nonStandardProps = nonStandardProps;
+    	if (nonStandardProps != null)
+    	{
+    		nonStandardProps.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
+    /**
+     * Sets the value of the {@link #nonStandardProperty()}
+     * 
+     * @return - this class for chaining
+     */
+    public VCalendar withNonStandard(List<NonStandardProperty> nonStandardProps)
     {
-        return (nonStandardProps == null) ? null : nonStandardProps.get();
-    }
-    public void setNonStandard(ObservableList<NonStandardProperty> nonStandardProps)
-    {
-        if (nonStandardProps != null)
-        {
-            orderer().registerSortOrderProperty(nonStandardProps);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(nonStandardProperty().get());
-        }
-        nonStandardProperty().set(nonStandardProps);
+    	if (getNonStandard() == null)
+    	{
+        	setNonStandard(new ArrayList<>());
+    	}
+    	getNonStandard().addAll(nonStandardProps);
+    	if (nonStandardProps != null)
+    	{
+    		nonStandardProps.forEach(c -> orderChild(c));
+    	}
+        return this;
     }
     /**
      * Sets the value of the {@link #nonStandardProperty()} by parsing a vararg of
@@ -256,21 +234,10 @@ public class VCalendar extends VParentBase
      */
     public VCalendar withNonStandard(String...nonStandardProps)
     {
-        List<NonStandardProperty> a = Arrays.stream(nonStandardProps)
+        List<NonStandardProperty> newElements = Arrays.stream(nonStandardProps)
                 .map(c -> NonStandardProperty.parse(c))
                 .collect(Collectors.toList());
-        setNonStandard(FXCollections.observableArrayList(a));
-        return this;
-    }
-    /**
-     * Sets the value of the {@link #nonStandardProperty()}
-     * 
-     * @return - this class for chaining
-     */
-    public VCalendar withNonStandard(ObservableList<NonStandardProperty> nonStandardProps)
-    {
-        setNonStandard(nonStandardProps);
-        return this;
+        return withNonStandard(newElements);
     }
     /**
      * Sets the value of the {@link #nonStandardProperty()} from a vararg of {@link NonStandardProperty} objects.
@@ -279,8 +246,7 @@ public class VCalendar extends VParentBase
      */    
     public VCalendar withNonStandard(NonStandardProperty...nonStandardProps)
     {
-        setNonStandard(FXCollections.observableArrayList(nonStandardProps));
-        return this;
+    	return withNonStandard(Arrays.asList(nonStandardProps));
     }
    
     /*
@@ -293,26 +259,43 @@ public class VCalendar extends VParentBase
      * A grouping of component properties that describe an event.
      * 
      */
-    public ObservableList<VEvent> getVEvents() { return vEvents; }
-    private ObservableList<VEvent> vEvents = FXCollections.observableArrayList();
-//    private ObservableList<VEvent> vEvents = FXCollections.observableArrayList(
-//            (VEvent v) -> new Observable[] { v.summaryProperty(), v.descriptionProperty(), v.dateTimeStartProperty(), v.recurrenceRuleProperty() });
-    // TODO - ADD MORE PROPERTIES TO ABOVE EXTRACTOR
-    public void setVEvents(ObservableList<VEvent> vEvents) { this.vEvents = vEvents; }
-    public VCalendar withVEvent(ObservableList<VEvent> vEvents)
+    public List<VEvent> getVEvents() { return vEvents; }
+    private List<VEvent> vEvents;
+    public void setVEvents(List<VEvent> vEvents)
     {
-        setVEvents(vEvents);
+    	if (this.vEvents != null)
+    	{
+    		this.vEvents.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.vEvents = vEvents;
+    	if (vEvents != null)
+		{
+    		vEvents.forEach(c -> orderChild(c)); // order new elements
+		}
+	}
+    public VCalendar withVEvents(List<VEvent> vEvents)
+    {
+    	if (getVEvents() == null)
+    	{
+    		setVEvents(new ArrayList<>());
+    	}
+    	getVEvents().addAll(vEvents);
+    	if (vEvents != null)
+    	{
+    		vEvents.forEach(c -> orderChild(c));
+    	}
         return this;
     }
-    public VCalendar withVEvent(String...vEvents)
+    public VCalendar withVEvents(String...vEvents)
     {
-        Arrays.stream(vEvents).forEach(c -> getVEvents().add(VEvent.parse(c)));
-        return this;
+        List<VEvent> list = Arrays.stream(vEvents)
+                .map(c -> VEvent.parse(c))
+                .collect(Collectors.toList());
+        return withVEvents(list);
     }
     public VCalendar withVEvents(VEvent...vEvents)
     {
-        getVEvents().addAll(vEvents);
-        return this;
+        return withVEvents(Arrays.asList(vEvents));
     }
   
     /** 
@@ -321,23 +304,43 @@ public class VCalendar extends VParentBase
      * A grouping of component properties that describe a task that needs to be completed.
      * 
      */
-    public ObservableList<VTodo> getVTodos() { return vTodos; }
-    private ObservableList<VTodo> vTodos = FXCollections.observableArrayList();
-    public void setVTodos(ObservableList<VTodo> vTodos) { this.vTodos = vTodos; }
-    public VCalendar withVTodo(ObservableList<VTodo> vTodos)
+    public List<VTodo> getVTodos() { return vTodos; }
+    private List<VTodo> vTodos;
+    public void setVTodos(List<VTodo> vTodos)
     {
-        setVTodos(vTodos);
+    	if (this.vTodos != null)
+    	{
+    		this.vTodos.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.vTodos = vTodos;
+    	if (vTodos != null)
+		{
+    		vTodos.forEach(c -> orderChild(c)); // order new elements
+		}
+	}
+    public VCalendar withVTodos(List<VTodo> vTodos)
+    {
+    	if (getVTodos() == null)
+    	{
+    		setVTodos(new ArrayList<>());
+    	}
+    	getVTodos().addAll(vTodos);
+    	if (vTodos != null)
+    	{
+    		vTodos.forEach(c -> orderChild(c));
+    	}
         return this;
     }
-    public VCalendar withVTodo(String...vTodos)
+    public VCalendar withVTodos(String...vTodos)
     {
-        Arrays.stream(vTodos).forEach(c -> getVTodos().add(VTodo.parse(c)));
-        return this;
+        List<VTodo> list = Arrays.stream(vTodos)
+                .map(c -> VTodo.parse(c))
+                .collect(Collectors.toList());
+        return withVTodos(list);
     }
     public VCalendar withVTodos(VTodo...vTodos)
     {
-        getVTodos().addAll(vTodos);
-        return this;
+    	return withVTodos(Arrays.asList(vTodos));
     }
  
     /** 
@@ -348,19 +351,43 @@ public class VCalendar extends VParentBase
      * @see VComponent
      * @see VJournal
      */
-    public ObservableList<VJournal> getVJournals() { return vJournals; }
-    private ObservableList<VJournal> vJournals = FXCollections.observableArrayList();
-    public void setVJournals(ObservableList<VJournal> vJournals) { this.vJournals = vJournals; }
-    public VCalendar withVJournal(ObservableList<VJournal> vJournals) { setVJournals(vJournals); return this; }
-    public VCalendar withVJournal(String...vJournals)
+    public List<VJournal> getVJournals() { return vJournals; }
+    private List<VJournal> vJournals;
+    public void setVJournals(List<VJournal> vJournals)
     {
-        Arrays.stream(vJournals).forEach(c -> getVJournals().add(VJournal.parse(c)));
+    	if (this.vJournals != null)
+    	{
+    		this.vJournals.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.vJournals = vJournals;
+    	if (vJournals != null)
+		{
+    		vJournals.forEach(c -> orderChild(c)); // order new elements
+		}
+	}
+    public VCalendar withVJournals(List<VJournal> vJournals)
+    {
+    	if (getVJournals() == null)
+    	{
+    		setVJournals(new ArrayList<>());
+    	}
+    	getVJournals().addAll(vJournals);
+    	if (vJournals != null)
+    	{
+    		vJournals.forEach(c -> orderChild(c));
+    	}
         return this;
+	}
+    public VCalendar withVJournals(String...vJournals)
+    {
+        List<VJournal> list = Arrays.stream(vJournals)
+                .map(c -> VJournal.parse(c))
+                .collect(Collectors.toList());
+        return withVJournals(list);
     }
     public VCalendar withVJournals(VJournal...vJournals)
     {
-        getVJournals().addAll(vJournals);
-        return this;
+    	return withVJournals(Arrays.asList(vJournals));
     }
 
     /** 
@@ -368,19 +395,43 @@ public class VCalendar extends VParentBase
      * 
      * @see VFreeBusy
      */
-    public ObservableList<VFreeBusy> getVFreeBusies() { return vFreeBusys; }
-    private ObservableList<VFreeBusy> vFreeBusys = FXCollections.observableArrayList();
-    public void setVFreeBusys(ObservableList<VFreeBusy> vFreeBusys) { this.vFreeBusys = vFreeBusys; }
-    public VCalendar withVFreeBusy(ObservableList<VFreeBusy> vFreeBusys) { setVFreeBusys(vFreeBusys); return this; }
-    public VCalendar withVFreeBusy(String...vFreeBusys)
+    public List<VFreeBusy> getVFreeBusies() { return vFreeBusys; }
+    private List<VFreeBusy> vFreeBusys;
+    public void setVFreeBusys(List<VFreeBusy> vFreeBusys)
     {
-        Arrays.stream(vFreeBusys).forEach(c -> getVFreeBusies().add(VFreeBusy.parse(c)));
+    	if (this.vFreeBusys != null)
+    	{
+    		this.vFreeBusys.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.vFreeBusys = vFreeBusys;
+    	if (vFreeBusys != null)
+		{
+    		vFreeBusys.forEach(c -> orderChild(c)); // order new elements
+		}
+	}
+    public VCalendar withVFreeBusies(List<VFreeBusy> vFreeBusys)
+    {
+    	if (getVFreeBusies() == null)
+    	{
+    		setVFreeBusys(new ArrayList<>());
+    	}
+    	getVFreeBusies().addAll(vFreeBusys);
+    	if (vFreeBusys != null)
+    	{
+    		vFreeBusys.forEach(c -> orderChild(c));
+    	}
         return this;
+	}
+    public VCalendar withVFreeBusies(String...vFreeBusys)
+    {
+    	List<VFreeBusy> list = Arrays.stream(vFreeBusys)
+    			.map(c -> VFreeBusy.parse(c))
+                .collect(Collectors.toList());
+    	return withVFreeBusies(list);
     }
-    public VCalendar withVFreeBusys(VFreeBusy...vFreeBusys)
+    public VCalendar withVFreeBusies(VFreeBusy...vFreeBusys)
     {
-        getVFreeBusies().addAll(vFreeBusys);
-        return this;
+    	return withVFreeBusies(Arrays.asList(vFreeBusys));
     }
 
     /** 
@@ -388,106 +439,79 @@ public class VCalendar extends VParentBase
      * 
      * @see VTimeZone
      */
-    public ObservableList<VTimeZone> getVTimeZones() { return vTimeZones; }
-    private ObservableList<VTimeZone> vTimeZones = FXCollections.observableArrayList();
-    public void setVTimeZones(ObservableList<VTimeZone> vTimeZones) { this.vTimeZones = vTimeZones; }
-    public VCalendar withVTimeZones(ObservableList<VTimeZone> vTimeZones) { setVTimeZones(vTimeZones); return this; }
+    public List<VTimeZone> getVTimeZones() { return vTimeZones; }
+    private List<VTimeZone> vTimeZones;
+    public void setVTimeZones(List<VTimeZone> vTimeZones)
+    {
+    	if (this.vTimeZones != null)
+    	{
+    		this.vTimeZones.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.vTimeZones = vTimeZones;
+    	if (vTimeZones != null)
+		{
+    		vTimeZones.forEach(c -> orderChild(c)); // order new elements
+		}
+	}
+    public VCalendar withVTimeZones(List<VTimeZone> vTimeZones)
+    {
+    	if (getVTimeZones() == null)
+    	{
+    		setVTimeZones(new ArrayList<>());
+    	}
+    	getVTimeZones().addAll(vTimeZones);
+    	if (vTimeZones != null)
+    	{
+    		vTimeZones.forEach(c -> orderChild(c));
+    	}
+        return this;
+	}
     public VCalendar withVTimeZones(String...vTimeZones)
     {
-        Arrays.stream(vTimeZones).forEach(c -> getVTimeZones().add(VTimeZone.parse(c)));
-        return this;
+    	List<VTimeZone> list = Arrays.stream(vTimeZones)
+    			.map(c -> VTimeZone.parse(c))
+                .collect(Collectors.toList());
+    	return withVTimeZones(list);
     }
     public VCalendar withVTimeZones(VTimeZone...vTimeZones)
     {
-        getVTimeZones().addAll(vTimeZones);
-        return this;
+    	return withVTimeZones(Arrays.asList(vTimeZones));
     }
     
-    /**
-     * A convenience method that adds a VComponent to one of the ObservableLists based on
-     * its type such as VEVENT, VTODO, etc.
-     * 
-     * @param newVComponent - VComponent to add
-     * @return  true if add was successful, false otherwise
-     */
-    public boolean addVComponent(VComponent newVComponent)
-    {
-        if (newVComponent instanceof VEvent)
-        {
-            getVEvents().add((VEvent) newVComponent);
-        } else if (newVComponent instanceof VTodo)
-        {
-            getVTodos().add((VTodo) newVComponent);            
-        } else if (newVComponent instanceof VJournal)
-        {
-            getVJournals().add((VJournal) newVComponent);
-        } else if (newVComponent instanceof VFreeBusy)
-        {
-            getVFreeBusies().add((VFreeBusy) newVComponent);            
-        } else if (newVComponent instanceof VTimeZone)
-        {
-            getVTimeZones().add((VTimeZone) newVComponent);            
-        } else
-        {
-            throw new RuntimeException("Unsuppored VComponent type:" + newVComponent.getClass());
-        }
-        return true;
-    }
-    
-    public boolean removeVComponent(VComponent vComponent)
-    {
-        if (vComponent instanceof VEvent)
-        {
-            return getVEvents().remove(vComponent);
-        } else if (vComponent instanceof VTodo)
-        {
-            return getVTodos().remove(vComponent);            
-        } else if (vComponent instanceof VJournal)
-        {
-            return getVJournals().remove(vComponent);
-        } else if (vComponent instanceof VFreeBusy)
-        {
-            return getVFreeBusies().remove(vComponent);            
-        } else if (vComponent instanceof VTimeZone)
-        {
-            return getVTimeZones().remove(vComponent);            
-        } else
-        {
-            throw new RuntimeException("Unsuppored VComponent type:" + vComponent.getClass());
-        }
-    }
-    
-    /** Create a VComponent by parsing component text and add it to the appropriate list 
-     * @see #addVComponent(VComponent)*/
-    public void addVComponent(String contentText)
-    {
-        VComponent vComponent = SimpleVComponentFactory.emptyVComponent(contentText);
-        vComponent.parseContent(contentText);
-        addVComponent(vComponent);
-    }
-    
-    /** Add a collection of {@link VComponent} to the correct ObservableList based on
-    * its type, such as VEVENT, VTODO, etc.
-     * 
-     * @param newVComponents  collection of {@link VComponent} to add
-     * @return  true if add was successful, false otherwise
-     */
-    public boolean addAllVComponents(Collection<? extends VComponent> newVComponents)
-    {
-        return newVComponents.stream().map(v -> addVComponent(v)).allMatch(b -> true);
-    }
-    
-    /** Add a varargs of {@link VComponent} to the correct ObservableList based on
-    * its type, such as VEVENT, VTODO, etc.
-     * 
-     * @param newVComponents  collection of {@link VComponent} to add
-     * @return  true if add was successful, false otherwise
-     */
-    public boolean addAllVComponents(VComponent... newVComponents)
-    {
-        return addAllVComponents(Arrays.asList(newVComponents));
-    }
-    
+//    /**
+//     * A convenience method that adds a VComponent to one of the Lists based on
+//     * its type such as VEVENT, VTODO, etc.
+//     * 
+//     * @param newVComponent - VComponent to add
+//     * @return  true if add was successful, false otherwise
+//     */
+//    @Deprecated
+//    public boolean addVComponent(VComponent newVComponent)
+//    {
+//        if (newVComponent instanceof VEvent)
+//        {
+//        	System.out.println("getVEvents():" + getVEvents());
+//            getVEvents().add((VEvent) newVComponent);
+//        } else if (newVComponent instanceof VTodo)
+//        {
+//            getVTodos().add((VTodo) newVComponent);            
+//        } else if (newVComponent instanceof VJournal)
+//        {
+//            getVJournals().add((VJournal) newVComponent);
+//        } else if (newVComponent instanceof VFreeBusy)
+//        {
+//            getVFreeBusies().add((VFreeBusy) newVComponent);            
+//        } else if (newVComponent instanceof VTimeZone)
+//        {
+//            getVTimeZones().add((VTimeZone) newVComponent);            
+//        } else
+//        {
+//            throw new RuntimeException("Unsuppored VComponent type:" + newVComponent.getClass());
+//        }
+//        orderChild(newVComponent);
+//        return true;
+//    }
+//    
 //    public boolean removeVComponent(VComponent vComponent)
 //    {
 //        if (vComponent instanceof VEvent)
@@ -495,65 +519,22 @@ public class VCalendar extends VParentBase
 //            return getVEvents().remove(vComponent);
 //        } else if (vComponent instanceof VTodo)
 //        {
-//            return getVTodos().remove(vComponent);
+//            return getVTodos().remove(vComponent);            
 //        } else if (vComponent instanceof VJournal)
 //        {
 //            return getVJournals().remove(vComponent);
 //        } else if (vComponent instanceof VFreeBusy)
 //        {
-//            return getVFreeBusies().remove(vComponent);
+//            return getVFreeBusies().remove(vComponent);            
 //        } else if (vComponent instanceof VTimeZone)
 //        {
-//            return getVTimeZones().remove(vComponent);
+//            return getVTimeZones().remove(vComponent);            
 //        } else
 //        {
 //            throw new RuntimeException("Unsuppored VComponent type:" + vComponent.getClass());
 //        }
 //    }
-    
-    /** Convenience method that returns all {@link VComponent VComponents} regardless of type (e.g.
-     * {@link VEvent}, {@link VTodo}, etc.) 
-     * @return  unmodifiable list of all {@link VComponent VComponents}
-     */
-    public List<VComponent> getAllVComponents()
-    {
-        List<VComponent> vComponents = new ArrayList<>();
-        vComponents.addAll(getVEvents());
-        vComponents.addAll(getVTodos());
-        vComponents.addAll(getVJournals());
-        vComponents.addAll(getVFreeBusies());
-        vComponents.addAll(getVTimeZones());
-        return Collections.unmodifiableList(vComponents);
-    }
-    
-    /** Convenience method that returns all {@link VComponent VComponents} regardless of type (e.g.
-     * {@link VEvent}, {@link VTodo}, etc.) 
-     * 
-     * @return  unmodifiable list of all {@link VComponent VComponents}
-     */
-    public List<? extends VComponent> getVComponents(Class<? extends VComponent> vComponentClass)
-    {
-        if (vComponentClass.equals(VEvent.class))
-        {
-            return getVEvents();
-        } else if (vComponentClass.equals(VTodo.class))
-        {
-            return getVTodos();            
-        } else if (vComponentClass.equals(VJournal.class))
-        {
-            return getVJournals();            
-        } else if (vComponentClass.equals(VFreeBusy.class))
-        {
-            return getVFreeBusies();            
-        } else if (vComponentClass.equals(VTimeZone.class))
-        {
-            return getVTimeZones();            
-        } else
-        {
-            throw new RuntimeException("Unsuppored VComponent type:" + vComponentClass);
-        }
-    }
-    
+       
     /**
      * A convenience method that returns parent list of the {@link VComponent} parameter.
      * Returns null if component is not in any {@link VComponent} list.
@@ -564,19 +545,19 @@ public class VCalendar extends VParentBase
     {
         if (vComponent instanceof VEvent)
         {
-            return (getVEvents().contains(vComponent)) ? getVEvents() : null;
+            return getVEvents();
         } else if (vComponent instanceof VTodo)
         {
-            return (getVTodos().contains(vComponent)) ? getVTodos() : null;
+            return getVTodos();
         } else if (vComponent instanceof VJournal)
         {
-            return (getVJournals().contains(vComponent)) ? getVJournals() : null;
+            return getVJournals();
         } else if (vComponent instanceof VFreeBusy)
         {
-            return (getVFreeBusies().contains(vComponent)) ? getVFreeBusies() : null;
+            return getVFreeBusies();
         } else if (vComponent instanceof VTimeZone)
         {
-            return (getVTimeZones().contains(vComponent)) ? getVTimeZones() : null;
+            return getVTimeZones();
         } else
         {
             throw new RuntimeException("Unsuppored VComponent type:" + vComponent.getClass());
@@ -680,21 +661,23 @@ public class VCalendar extends VParentBase
     @Deprecated // replace with addVCalendar
     public VComponent importVComponent(String contentText)
     {
-        VPersonal<?> vComponent = (VPersonal<?>) SimpleVComponentFactory.emptyVComponent(contentText);
+//        VPersonal<?> vComponent = (VPersonal<?>) SimpleVComponentFactory.emptyVComponent(contentText);
+        VPersonal<?> vComponent = null; //TODO - FIX THIS
         List<String> contentLines = Arrays.asList(contentText.split(System.lineSeparator()));
         UnfoldingStringIterator unfoldedLines = new UnfoldingStringIterator(contentLines.iterator());
 //        Iterator<String> unfoldedLines = ICalendarUtilities.unfoldLines(contentLines).iterator();
         boolean useRequestStatus = true;
-        vComponent.parseContent(unfoldedLines, useRequestStatus);
+//        vComponent.parseContent(unfoldedLines, useRequestStatus);
+        vComponent.parseContent(unfoldedLines);
 //        requestStatusErrors.stream().forEach(System.out::println);
         // TODO - only check conflict if opaque
         String conflict = (vComponent instanceof VEvent) ? DateTimeUtilities.checkScheduleConflict((VEvent) vComponent, getVEvents()) : null;
         if (conflict != null)
         {
-            final ObservableList<RequestStatus> requestStatus;
+            final List<RequestStatus> requestStatus;
             if (vComponent.getRequestStatus() == null)
             {
-                requestStatus = FXCollections.observableArrayList();
+                requestStatus = new ArrayList<>();
                 vComponent.setRequestStatus(requestStatus);
             } else
             {
@@ -726,79 +709,11 @@ public class VCalendar extends VParentBase
         
         if (isVComponentValidToAdd)
         {
-            addVComponent(vComponent);
+            addChild(vComponent);
         }
         return vComponent;
     }
-    
-    // TODO - NEED TO GO IN DATE TIME UTILITIES
-    /*
-     * need list of recurrences and duration from vComponent
-     * make list of recurrences and duration for all other opaque VEvents
-     * check if ANY recurrences are in between any others
-     */
-//    private final static int CONFLICT_CHECK_QUANTITY = 100;
-//    private boolean checkScheduleConflict(VEvent vComponent)
-//    {
-//        // must be opaque to cause conflict, opaque is default
-//        TimeTransparencyType newTransparency = (vComponent.getTimeTransparency() == null) ? TimeTransparencyType.OPAQUE : vComponent.getTimeTransparency().getValue();
-//        if (newTransparency == TimeTransparencyType.TRANSPARENT)
-//        {
-//            return false;
-//        }
-//        
-//        LocalDate dtstart = LocalDate.from(vComponent.getDateTimeStart().getValue());
-//        TemporalAmount duration = vComponent.getActualDuration();
-//        
-//        // Make list of Pairs containing start and end temporals
-//        List<Pair<Temporal,Temporal>> eventTimes = new ArrayList<>();
-//        for (VEvent v : getVEvents())
-//        {
-//            // can only conflict with opaque events, opaque is default
-//            TimeTransparencyType myTransparency = (v.getTimeTransparency() == null) ? TimeTransparencyType.OPAQUE : v.getTimeTransparency().getValue();
-//            if (myTransparency == TimeTransparencyType.OPAQUE)
-//            {
-//                Temporal myDTStart = v.getDateTimeStart().getValue().with(dtstart);
-//                TemporalAmount actualDuration = v.getActualDuration();
-//                v.streamRecurrences(myDTStart)
-//                        .limit(CONFLICT_CHECK_QUANTITY)
-//                        .forEach(t -> eventTimes.add(new Pair<>(t, t.plus(actualDuration))));                
-//            }
-//        }
-//        
-//        /* Check for conflicts:
-//         * Start and End must NOT:
-//         *  Be after an event start
-//         *  Be before same event end
-//         *  Is new start before the existing end
-//         *  Is new start after the existing start
-//         */
-//        return vComponent.streamRecurrences()
-//                .limit(CONFLICT_CHECK_QUANTITY)
-//                .anyMatch(newStart ->
-//                {
-//                    Temporal newEnd = newStart.plus(duration);
-//                    return eventTimes.stream().anyMatch(p ->
-//                    {
-//                        Temporal existingStart = p.getKey();
-//                        Temporal existingEnd = p.getValue();
-//                        // test start
-//                        boolean isAfter = DateTimeUtilities.isAfter(newStart, existingStart);
-//                        if (isAfter)
-//                        {
-//                            return DateTimeUtilities.isBefore(newStart, existingEnd);
-//                        }
-//                        // test end
-//                        boolean isAfter2 = DateTimeUtilities.isAfter(newEnd, existingStart);
-//                        if (isAfter2)
-//                        {
-//                            return DateTimeUtilities.isBefore(newEnd, existingEnd);
-//                        }
-//                        return false;
-//                    });
-//                });
-//    }
-    
+     
     /**
      * Import new VComponent with {@link RequestStatus REQUEST-STATUS} properties containing 
      * the result of the process, such as success message or error report.
@@ -810,203 +725,6 @@ public class VCalendar extends VParentBase
     public List<String> importVComponent(VComponent newVComponent)
     {
         throw new RuntimeException("not implemented");
-    }
-    
-    private Map<String, List<VDisplayable<?>>> uidComponentsMap = new HashMap<>(); // public for testing
-    /**
-     * Map of Related Components - UID is key and List of all related VComponents is value.
-     * Note: if you only want child components you need to filter the list to only include components
-     * that have a RECURRENCE-ID
-     */
-    public Map<String, List<VDisplayable<?>>> uidComponentsMap() { return Collections.unmodifiableMap(uidComponentsMap); }
-    
-    /**
-     * RecurrenceID listener
-     * notifies parents when a child component with recurrenceID is created or removed
-     * also maintains {@link #uidToComponentMap}
-     */
-    private ListChangeListener<VDisplayable<?>> displayableListChangeListener = (ListChangeListener.Change<? extends VDisplayable<?>> change) ->
-    {
-
-        while (change.next())
-        {
-//            System.out.println("remove orphans here1:" + change.wasReplaced() + " " + change.wasAdded() + " " + change.wasRemoved());
-            if (change.wasReplaced())
-            {
-//                System.out.println("replaced:" + change); 
-            } else if (change.wasAdded())
-            {
-                change.getAddedSubList().forEach(vComponent -> 
-                {
-                    // set recurrence children callback (VComponents having RecurrenceIDs and matching UID to a recurrence parent)
-                    vComponent.setRecurrenceChildrenListCallBack( (c) ->
-                    {
-                        if (c.getUniqueIdentifier() == null) return null;
-                        return uidComponentsMap.get(c.getUniqueIdentifier().getValue())
-                                .stream()
-                                .filter(v -> v.getRecurrenceId() != null) // keep only children objects
-                                .collect(Collectors.toList());
-                    });
-                    // set recurrence parent callback (the VComponent with matching UID and no RECURRENCEID)
-                    vComponent.setRecurrenceParentListCallBack( (c) ->
-                    {
-                        if (c.getUniqueIdentifier() == null) return null;
-                        return uidComponentsMap.get(c.getUniqueIdentifier().getValue())
-                                .stream()
-                                .filter(v -> v.getRecurrenceId() == null) // parents don't have RECURRENCEID
-                                .findAny()
-                                .orElse(null);
-                    });
-                    // add VComponent to map
-                    if (vComponent.getUniqueIdentifier() != null)
-                    {
-                        String uid = vComponent.getUniqueIdentifier().getValue();
-                        final List<VDisplayable<?>> relatedComponents;
-                        if (uidComponentsMap.get(uid) == null)
-                        {
-                            relatedComponents = new ArrayList<>();
-                            uidComponentsMap.put(uid, relatedComponents);
-                        } else
-                        {
-                            relatedComponents = uidComponentsMap.get(uid);
-                        }
-                        relatedComponents.add(vComponent);
-                    }
-//                    deleteOrphans(vComponent);
-                });
-            } else if (change.wasRemoved())
-            {
-//                System.out.println("remove orphans here2:");
-                change.getRemoved().forEach(vComponent -> 
-                {
-                    String uid = vComponent.getUniqueIdentifier().getValue();
-                    List<VDisplayable<?>> relatedComponents = uidComponentsMap.get(uid);
-                    if (relatedComponents != null)
-                    {
-                        relatedComponents.remove(vComponent);
-//                        System.out.println("remove orphans here3:");
-                        if (relatedComponents.isEmpty())
-                        {
-                            uidComponentsMap.remove(uid);
-                        }
-                    }
-                    // TODO - CHECK FOR ORPHANED CHILDREN
-                    // NEED TO MAKE SURE A NEWLY ADDED COMPONENT CAN CLAIM SOME CHILDREN
-                });         
-            } else
-            {
-                System.out.println(change);
-                // CHECK FOR ORPHANED CHILDREN HERE
-//                int fromIndex = change.getFrom();
-//                int toIndex = change.getTo();
-////                change.reset();
-//                change.getList().subList(fromIndex, toIndex).forEach(v -> System.out.println(v.getRecurrenceRule()));
-//                change.getList().forEach(v -> System.out.println(System.identityHashCode(v)));
-                // SOME OTHER LISTENERS MUST NOT HAVE FIRED YET CAUSING TOCONTENT TO BE WRONG
-                // Maybe I can check for orphans anyway.
-                
-//                change.getRemoved().forEach(System.out::println);
-//                System.exit(0);
-            }
-        }
-//        change.getList().forEach(v -> System.out.println(v));
-    };
-    
-//    // Assumes the component is the only one with the children attached to it.
-//    // If a replace operation happened, the old component must be removed, but not its
-//    /*
-//     * If modify
-//     */
-//    @Deprecated // causes UnsupportedOperationException when called from displayableListChangeListener
-//    // Move to VDisplayable
-//    public void deleteOrphans(VDisplayable<?> vDisplayable)
-//    {
-//        boolean isParent = vDisplayable.getRecurrenceId() == null;
-////        List<VDisplayable<?>> orhpanedChildren = Collections.emptyList(); // initialize with empty list
-//        if (isParent)
-//        {
-//            final String uid = vDisplayable.getUniqueIdentifier().getValue();
-//            List<VDisplayable<?>> orhpanedChildren = uidComponentsMap().get(uid)
-//                    .stream()
-//                    .filter(v -> v.getRecurrenceId() != null)
-//                    .filter(v -> 
-//                    {
-//                        Temporal myRecurrenceID = v.getRecurrenceId().getValue();
-//                        Temporal cacheStart = vDisplayable.recurrenceCache().getClosestStart(myRecurrenceID);
-//                        Temporal nextRecurrenceDateTime = vDisplayable.getRecurrenceRule().getValue()
-//                                .streamRecurrences(cacheStart)
-//                                .filter(t -> ! DateTimeUtilities.isBefore(t, myRecurrenceID))
-//                                .findFirst()
-//                                .orElseGet(() -> null);
-//                        return ! Objects.equals(nextRecurrenceDateTime, myRecurrenceID);
-//                    })
-//                    .collect(Collectors.toList());
-//            System.out.println("orhpanedChildren:" + orhpanedChildren);
-//            if (! orhpanedChildren.isEmpty())
-//            {
-//                getVComponents(vDisplayable.getClass()).removeAll(orhpanedChildren);
-//            }
-//        }
-//    }
-    
-//    /*
-//     * SORT ORDER FOR CHILD ELEMENTS
-//     */
-//    final private Orderer orderer;
-//    @Override
-//    public Orderer orderer() { return orderer; }
-    
-//    private Callback<VElement, Void> copyChildElementCallback = (child) ->
-//    {
-//        CalendarElementType type = CalendarElementType.enumFromClass(child.getClass());
-//        if (type != null)
-//        { // Note: if type is null then element is a subcomponent such as a VALARM, STANDARD or DAYLIGHT and copying happens in subclasses
-//            type.copyChild(child, this);
-//        }
-//        return null;
-//    };
-    
-    @Override
-    @Deprecated
-    protected Callback<VChild, Void> copyIntoCallback()
-    {        
-        return (child) ->
-        {
-            CalendarComponent type = CalendarComponent.enumFromClass(child.getClass());
-            if (type != null)
-            {
-                type.copyChild(child, this);
-            } else
-            {
-                CalendarProperty property = CalendarProperty.enumFromClass(child.getClass());
-                if (property != null)
-                {
-                    property.copyChild(child, this);
-                }
-            }
-            return null;
-        };
-    }
-    
-    @Override
-    public void copyInto(VParent destination)
-    {
-        super.copyInto(destination);
-        childrenUnmodifiable().forEach((childSource) -> 
-        {
-            CalendarComponent componentType = CalendarComponent.enumFromClass(childSource.getClass());
-            if (componentType != null)
-            {
-                componentType.copyChild(childSource, (VCalendar) destination);
-            } else
-            {
-                CalendarProperty propertyType = CalendarProperty.enumFromClass(childSource.getClass());
-                if (propertyType != null)
-                {
-                    propertyType.copyChild(childSource, (VCalendar) destination);
-                }
-            }
-        });
     }
     
     @Override
@@ -1032,125 +750,127 @@ public class VCalendar extends VParentBase
     public VCalendar()
     {
         setMethodProcessFactory(new DefaultITIPFactory());
-        addListeners();
-        setContentLineGenerator(new MultiLineContent(
-                orderer(),
+//    	List<java.lang.reflect.Method> getters = ICalendarUtilities.collectGetters(getClass());
+        orderer = new OrdererBase(this, getGetters());
+        contentLineGenerator = new MultiLineContent(
+                orderer,
                 FIRST_CONTENT_LINE,
                 LAST_CONTENT_LINE,
-                1000));
-//        setVersion(new Version());
+                1000);
     }
   
     /** Copy constructor */
     public VCalendar(VCalendar source)
     {
         this();
-        source.copyInto(this);  
+        source.copyChildrenInto(this);  
     }
 
     /*
      * OTHER METHODS
      */
-    
-    private void addListeners()
-    {
-        // listeners to keep map to related components from UID string
-        getVEvents().addListener(displayableListChangeListener);
-        getVTodos().addListener(displayableListChangeListener);
-        getVJournals().addListener(displayableListChangeListener);
-
-        // Sort order listeners
-        orderer().registerSortOrderProperty(getVEvents());
-        orderer().registerSortOrderProperty(getVTodos());
-        orderer().registerSortOrderProperty(getVJournals());
-        orderer().registerSortOrderProperty(getVTimeZones());
-        orderer().registerSortOrderProperty(getVFreeBusies());
-    }
-    
-    @Override
-    public String toString()
-    {
-        return super.toString() + " " + toContent();
-    }
-    
-    @Override
-    public List<String> parseContent(String content)
-    {
-        Iterator<String> lineIterator = Arrays.asList(content.split(System.lineSeparator())).iterator();
-        return parseContent(lineIterator)
-                .entrySet()
-                .stream()
-                .flatMap(e -> e.getValue().stream().map(v -> e.getKey().name() + ":" + v))
-                .collect(Collectors.toList());
-    }
+        
+//    @Override
+//    public List<String> parseContent(String content)
+//    {
+//        Iterator<String> lineIterator = Arrays.asList(content.split(System.lineSeparator())).iterator();
+//        return parseContent(lineIterator)
+//                .entrySet()
+//                .stream()
+//                .flatMap(e -> e.getValue().stream().map(v -> e.getKey().name() + ":" + v))
+//                .collect(Collectors.toList());
+//    }
 
     /** Parse unfolded content line iterator into calendar object */
-    public Map<VElement, List<String>> parseContent(Iterator<String> unfoldedLineIterator)
-    {
-        boolean useResourceStatus = false;
-        return parseContent(unfoldedLineIterator, useResourceStatus);
-    }
+////    @Override
+//	public Map<VElement, List<String>> parseContent(Iterator<String> unfoldedLineIterator)
+//    {
+//        boolean useResourceStatus = false;
+//        return parseContent(unfoldedLineIterator, useResourceStatus);
+//    }
     
-    /** Parse unfolded content lines into calendar object */
-    public Map<VElement, List<String>> parseContent(Iterator<String> lineIterator, boolean collectErrorMessages)
-    {
-        List<String> vCalendarMessages = new ArrayList<>();
-        Map<VElement, List<String>> messageMap = new HashMap<>();
-        String firstLine = lineIterator.next();
-        if (! firstLine.equals("BEGIN:VCALENDAR"))
-        {
-            throw new IllegalArgumentException("Content lines must begin with BEGIN:VCALENDAR");
-        }
-        // wrap lineIterator in UnfoldingStringIterator decorator
-        UnfoldingStringIterator unfoldedLineIterator = new UnfoldingStringIterator(lineIterator);
-        while (unfoldedLineIterator.hasNext())
-        {
-            String unfoldedLine = unfoldedLineIterator.next();
-            int nameEndIndex = ICalendarUtilities.getPropertyNameIndex(unfoldedLine);
-            String propertyName = (nameEndIndex > 0) ? unfoldedLine.substring(0, nameEndIndex) : "";
-            
-            // Parse component
-            if (propertyName.equals("BEGIN"))
-            {
-                String componentName = unfoldedLine.substring(nameEndIndex+1);
-                VComponent newComponent = SimpleVComponentFactory.emptyVComponent(componentName);
-                Map<VElement, List<String>> newComponentMessages = newComponent.parseContent(unfoldedLineIterator, collectErrorMessages);
-                addVComponent(newComponent);
-                messageMap.putAll(newComponentMessages);
-//                messages.addAll(myMessages);
-            } else if (propertyName.equals("END"))
-            {
-                break;
-            } else
-            { // parse calendar property
-                VChild child = null;
-                CalendarProperty elementType = CalendarProperty.enumFromName(propertyName);
-                if (elementType != null)
-                {
-                    child = elementType.parse(this, unfoldedLine);
-                } else if (unfoldedLine.contains(":"))
-                {
-                    //non-standard - check for X- prefix
-                    boolean isNonStandard = propertyName.substring(0, PropertyType.NON_STANDARD.toString().length()).equals(PropertyType.NON_STANDARD.toString());
-                    if (isNonStandard)
-                    {
-                        child = CalendarProperty.NON_STANDARD.parse(this, unfoldedLine);
-                    } else
-                    {
-                        // ignore unknown properties
-                        vCalendarMessages.add("Unknown property is ignored:" + unfoldedLine);
-                    }
-                } else
-                {
-                    vCalendarMessages.add("Unknown line is ignored:" + unfoldedLine);                    
-                }
-                if (child != null) vCalendarMessages.addAll(child.errors());
-            }
-        }
-     // TODO - Log status messages if not using RequestStatus
-        messageMap.put(this, vCalendarMessages);
-        return messageMap;
-    }
+//    /** Parse unfolded content lines into calendar object */
+//    public List<Message> parseContent(Iterator<String> lineIterator, boolean collectErrorMessages)
+//    {
+//        List<String> vCalendarMessages = new ArrayList<>();
+//        List<Message> messages = new ArrayList<>();
+//        String firstLine = lineIterator.next();
+//        if (! firstLine.equals("BEGIN:VCALENDAR"))
+//        {
+//            throw new IllegalArgumentException("Content lines must begin with BEGIN:VCALENDAR");
+//        }
+//        // wrap lineIterator in UnfoldingStringIterator decorator
+////        int line = 0;
+//        UnfoldingStringIterator unfoldedLineIterator = new UnfoldingStringIterator(lineIterator);
+//        while (unfoldedLineIterator.hasNext())
+//        {
+//            String unfoldedLine = unfoldedLineIterator.next();
+////            System.out.println("unfoldedLine:" + unfoldedLine);
+////            if (line++ > 20000) System.exit(0);
+//            int nameEndIndex = ICalendarUtilities.getPropertyNameIndex(unfoldedLine);
+//            String propertyName = (nameEndIndex > 0) ? unfoldedLine.substring(0, nameEndIndex) : "";
+//            
+//            // Parse component
+//            if (propertyName.equals("BEGIN"))
+//            {
+//                String componentName = unfoldedLine.substring(nameEndIndex+1);
+////            	System.out.println(componentName);
+//                VComponentBase newComponent = (VComponentBase) SimpleVComponentFactory.emptyVComponent(componentName);
+////                Map<VElement, List<String>> newComponentMessages = newComponent.parseContent(unfoldedLineIterator, collectErrorMessages);
+//                List<Message> newComponentMessages = newComponent.parseContent(unfoldedLineIterator);
+//                // TODO - USE ELEMENTS STATICS
+//                addChild(newComponent);
+////                addVComponent(newComponent);
+////                System.out.println(childrenUnmodifiable().size());
+//                messages.addAll(newComponentMessages);
+//
+//                
+////                String componentName = unfoldedLine.substring(nameEndIndex+1);
+////                VComponent newComponent = SimpleVComponentFactory.emptyVComponent(componentName);
+////                // TODO - USE ADD CHILD
+////                System.out.println("new component");
+////                Map<VElement, List<String>> newComponentMessages = newComponent.parseContent(unfoldedLineIterator, collectErrorMessages);
+//////                addChild(newComponent);
+////                addVComponent(newComponent);
+////                messageMap.putAll(newComponentMessages);
+//            } else if (propertyName.equals("END"))
+//            {
+//                break;
+//            } else
+//            { // parse calendar property
+//                VChild child = null;
+//                CalendarProperty elementType = CalendarProperty.enumFromName(propertyName);
+//                if (elementType != null)
+//                {
+//                    child = elementType.parse(this, unfoldedLine);
+//                } else if (unfoldedLine.contains(":"))
+//                {
+//                    //non-standard - check for X- prefix
+//                    boolean isNonStandard = propertyName.substring(0, PropertyType.NON_STANDARD.toString().length()).equals(PropertyType.NON_STANDARD.toString());
+//                    if (isNonStandard)
+//                    {
+//                    	child = NonStandardProperty.parse(unfoldedLine);
+//                    	addChild(child);
+//                    } else
+//                    {
+//                        // ignore unknown properties
+//                        vCalendarMessages.add("Unknown property is ignored:" + unfoldedLine);
+//                    }
+//                } else
+//                {
+//                    vCalendarMessages.add("Unknown line is ignored:" + unfoldedLine);                    
+//                }
+//                if (child != null) 
+//            	{
+//                	vCalendarMessages.addAll(child.errors());
+////                	addChild(child); // TODO - USE WHEN NO USING ENUM PARSE ANYMORE.
+//            	}
+//            }
+//        }
+//     // TODO - Log status messages if not using RequestStatus
+////        messageMap.put(this, vCalendarMessages);
+//        return messages;
+//    }
 
 //    // multi threaded
 //    /** Parse content lines into calendar object */
@@ -1228,7 +948,8 @@ public class VCalendar extends VParentBase
     public static VCalendar parse(Reader reader) throws IOException
     {
         BufferedReader br = new BufferedReader(reader);
-        UnfoldingStringIterator unfoldedLineIterator = new UnfoldingStringIterator(br.lines().iterator());
+        Iterator<String> unfoldedLineIterator = new UnfoldingStringIterator(br.lines().iterator());
+//        Iterator<String> unfoldedLineIterator = br.lines().iterator();
 //        UnfoldingBufferedReader unfoldingReader = new UnfoldingBufferedReader(reader);
 //        Iterator<String> unfoldedLineIterator = unfoldingReader.lines().iterator();
         VCalendar vCalendar = new VCalendar();
@@ -1263,7 +984,8 @@ public class VCalendar extends VParentBase
         List<String> lines = br.lines().collect(Collectors.toList());
 //        Iterator<String> unfoldedLines = ICalendarUtilities.unfoldLines(lines).iterator();
         VCalendar vCalendar = new VCalendar();
-        vCalendar.parseContent(lines.iterator(), useResourceStatus);
+//        vCalendar.parseContent(lines.iterator(), useResourceStatus);
+        vCalendar.parseContent(lines.iterator());
         return vCalendar;
     }
     
@@ -1284,11 +1006,30 @@ public class VCalendar extends VParentBase
         vCalendar.parseContent(lines.iterator());
         return vCalendar;
     }
+    
+	@Override
+	protected boolean isContentValid(String valueContent)
+	{
+		boolean isElementValid = super.isContentValid(valueContent);
+		if (! isElementValid) return false;
+		boolean isBeginPresent = valueContent.startsWith(FIRST_CONTENT_LINE);
+		if (! isBeginPresent) return false;
+		int lastLineIndex = valueContent.lastIndexOf(System.lineSeparator());
+		if (lastLineIndex == -1) return false;
+		boolean isEndPresent = valueContent
+				.substring(lastLineIndex)
+				.equals(LAST_CONTENT_LINE);
+		return ! isEndPresent;
+	}
 
-    public static VCalendar parse(String contentLines)
+    /**
+     * Creates a new VCalendar calendar component by parsing a String of iCalendar content lines
+     *
+     * @param content  the text to parse, not null
+     * @return  the parsed VCalendar
+     */
+    public static VCalendar parse(String content)
     {
-        VCalendar c = new VCalendar();
-        c.parseContent(contentLines);
-        return c;
+    	return VCalendar.parse(new VCalendar(), content);
     }
 }

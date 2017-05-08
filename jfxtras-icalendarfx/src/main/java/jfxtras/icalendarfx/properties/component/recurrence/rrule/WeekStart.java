@@ -2,7 +2,12 @@ package jfxtras.icalendarfx.properties.component.recurrence.rrule;
 
 import java.time.DayOfWeek;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElement;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRulePartBase;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.WeekStart;
 
 /**
  * Week Start
@@ -16,7 +21,7 @@ import java.util.List;
  * in a YEARLY "RRULE" when a BYWEEKNO rule part is specified.  The
  * default value is MO.
  */
-public class WeekStart extends RRuleElementBase<DayOfWeek, WeekStart>
+public class WeekStart extends RRulePartBase<DayOfWeek, WeekStart>
 {
     public static final DayOfWeek DEFAULT_WEEK_START = DayOfWeek.MONDAY;
     
@@ -42,19 +47,25 @@ public class WeekStart extends RRuleElementBase<DayOfWeek, WeekStart>
     }
     
     @Override
-    public String toContent()
+    public String toString()
     {
-        return RRuleElementType.enumFromClass(getClass()).toString() + "=" + getValue().toString().substring(0, 2);
+        return RRuleElement.fromClass(getClass()).toString() + "=" + getValue().toString().substring(0, 2);
     }
 
     @Override
-    public List<String> parseContent(String content)
+    protected List<Message> parseContent(String content)
     {
+    	String valueString = extractValue(content);
         DayOfWeek dayOfWeek = Arrays.stream(DayOfWeek.values())
-            .filter(d -> d.toString().substring(0, 2).equals(content))
+            .filter(d -> d.toString().substring(0, 2).equals(valueString))
             .findAny()
             .get();
         setValue(dayOfWeek);
-        return errors();
+        return Collections.EMPTY_LIST;
+    }
+    
+    public static WeekStart parse(String content)
+    {
+    	return WeekStart.parse(new WeekStart(), content);
     }
 }

@@ -9,13 +9,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.Reviser;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.ReviserVEvent;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.VEvent;
 
 /**
  * Tests the {@link Reviser} ability to make iTIP publish messages to edit components.

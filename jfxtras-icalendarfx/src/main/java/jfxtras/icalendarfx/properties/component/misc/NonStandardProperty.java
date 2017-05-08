@@ -106,8 +106,6 @@ public class NonStandardProperty extends UnknownProperty<Object, NonStandardProp
     /** Create new Description by parsing unfolded calendar content */
     public static NonStandardProperty parse(String unfoldedContent)
     {
-        NonStandardProperty property = new NonStandardProperty();
-        property.parseContent(unfoldedContent);
-        return property;
+    	return NonStandardProperty.parse(new NonStandardProperty(), unfoldedContent);
     }
 }

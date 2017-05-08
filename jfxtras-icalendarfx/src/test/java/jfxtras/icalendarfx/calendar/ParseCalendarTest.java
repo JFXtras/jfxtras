@@ -10,15 +10,12 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.VElement;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
 
@@ -41,7 +38,7 @@ public class ParseCalendarTest extends ICalendarTestAbstract
        "END:VCALENDAR";
         
         VCalendar vCalendar = VCalendar.parse(content);
-        assertEquals(content, vCalendar.toContent());
+        assertEquals(content, vCalendar.toString());
         
         VCalendar vCalendar2 = new VCalendar()
                 .withVersion(new Version())
@@ -95,16 +92,8 @@ public class ParseCalendarTest extends ICalendarTestAbstract
        "END:VEVENT" + System.lineSeparator() +
        "END:VCALENDAR";
         
-//        Iterator<String> iterator = Arrays.stream(content.split(System.lineSeparator())).iterator();
-
         VCalendar vCalendar = VCalendar.parse(content);
-        
-//        System.out.println(vCalendar.toContent());
-//        System.out.println(content);
-//        System.out.println(vCalendar.toContent());
-        assertEquals(content, vCalendar.toContent());
-//        VEventNew e = vCalendar.getVEvents().get(1);
-//        e.getNonStandardProperties().stream().forEach(System.out::println);
+        assertEquals(content, vCalendar.toString());
     }
     
     
@@ -160,15 +149,14 @@ public class ParseCalendarTest extends ICalendarTestAbstract
                 + "END:VEVENT";
         
         VCalendar c = new VCalendar()
-                .withProductIdentifier("")
+                .withProductIdentifier("My ID")
                 .withVersion(new Version());
-        c.addVComponent(vEventString1);
-        c.addVComponent(vEventString2);
-        c.addVComponent(vEventString3);
+        c.addChild(vEventString1);
+        c.addChild(vEventString2);
+        c.addChild(vEventString3);
         assertEquals(3, c.getVEvents().size());
         assertEquals(1, c.getVEvents().get(0).recurrenceChildren().size());
         assertEquals(c.getVEvents().get(0), c.getVEvents().get(2).recurrenceParent());
-        System.out.println(c.errors());
         assertTrue(c.isValid());
     }
     
@@ -177,15 +165,14 @@ public class ParseCalendarTest extends ICalendarTestAbstract
     {
         VCalendar.parse((Reader) null);
     }
-    
+
     @Test (expected = IllegalArgumentException.class)
     public void canParseInvalidCalendar1()
     {
-        VCalendar.parse("invalid calendar");
+    	VCalendar.parse("invalid calendar");
     }
     
     @Test
-    @Ignore // TestFX4
     public void canIgnoreUnrecognizedLine()
     {
         String content = 
@@ -195,10 +182,10 @@ public class ParseCalendarTest extends ICalendarTestAbstract
         VCalendar v = VCalendar.parse(content);
         VCalendar expected = new VCalendar();
         assertEquals(expected, v);
-        assertEquals(29, v.toContent().length());
+        assertEquals(29, v.toString().length());
     }
     
-    @Test // has errors
+    @Test (expected = IllegalArgumentException.class)
     public void canParseBadVCalendar1()
     {
         String content = 
@@ -223,7 +210,7 @@ public class ParseCalendarTest extends ICalendarTestAbstract
        "STATUS:CANCELLED" + System.lineSeparator() +
        "UID:dc654e79-cc85-449c-a1b2-71b2d20b80df" + System.lineSeparator() +
        "RECURRENCE-ID;TZID=Etc/GMT:20150902T133000Z" + System.lineSeparator() +
-       "STATUS:CANCELLED" + System.lineSeparator() +
+       "STATUS:CANCELLED" + System.lineSeparator() + // extra property to be ignored
        "DTSTAMP:20150831T053218Z" + System.lineSeparator() +
        "ORGANIZER;CN=David Bal;SENT-BY=\"mailto:ddbal1@yahoo.com\":mailto:ddbal1@yaho" + System.lineSeparator() +
        " o.com" + System.lineSeparator() +
@@ -239,18 +226,7 @@ public class ParseCalendarTest extends ICalendarTestAbstract
        "END:VEVENT" + System.lineSeparator() +
        "END:VCALENDAR";
         
-        VCalendar vCalendar = new VCalendar();
-        List<String> contentLines = Arrays.asList(content.split(System.lineSeparator()));
-//        UnfoldingStringIterator unfoldedLineIterator = new UnfoldingStringIterator(contentLines.iterator());
-//        Iterator<String> unfoldedLines = ICalendarUtilities.unfoldLines(contentLines).iterator();
-        Map<VElement, List<String>> errorMap = vCalendar.parseContent(contentLines.iterator(), true);
-        List<String> errors = errorMap
-                .entrySet()
-                .stream()
-                .flatMap(e -> e.getValue().stream().map(v -> e.getKey().name() + ":" + v))
-                .collect(Collectors.toList());
-        assertEquals(3, errors.size());
-//        assertEquals(content, vCalendar.toContent());
+        VCalendar.parse(content);
     }
     
     @Test
@@ -267,7 +243,19 @@ public class ParseCalendarTest extends ICalendarTestAbstract
             assertEquals(expected, v);
     }
     
+    @Test (expected = IllegalArgumentException.class)
+    public void canHandleDuplicate()
+    {
+            String content = "BEGIN:VCALENDAR" + System.lineSeparator() +
+            "X-CUSTOM-PROP:THE DATA" + System.lineSeparator() +
+            "X-CUSTOM-PROP:THE DATA" + System.lineSeparator() +
+            "END:VCALENDAR";
+            VCalendar v = VCalendar.parse(content);
+            assertEquals(content, v.toString());
+    }
+    
     @Test
+    @Ignore // TODO - Consider ways to collect messages when parsing
     public void canGetErrorMessageFromBadLine()
     {
             String content = "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -276,7 +264,9 @@ public class ParseCalendarTest extends ICalendarTestAbstract
             "UNKNOWN-PROP:SOMETHING" + System.lineSeparator() +
             "END:VCALENDAR";
             VCalendar v = new VCalendar();
-            List<String> messages = v.parseContent(content);
+            List<String> m = v.processITIPMessage(content);
+            v.addChild(content);
+            List<String> messages = null; // v.parseContent(content);
             List<String> expectedMessages = Arrays.asList("VCALENDAR:Unknown line is ignored:IGNORE THIS LINE", "VCALENDAR:Unknown property is ignored:UNKNOWN-PROP:SOMETHING");
             assertEquals(expectedMessages, messages);
     }
@@ -289,6 +279,6 @@ public class ParseCalendarTest extends ICalendarTestAbstract
        "CALSCALE:INVALID" + System.lineSeparator() +
        "END:VCALENDAR";
 
-        VCalendar.parse(content);
+        VCalendar v = VCalendar.parse(content);
     }
 }

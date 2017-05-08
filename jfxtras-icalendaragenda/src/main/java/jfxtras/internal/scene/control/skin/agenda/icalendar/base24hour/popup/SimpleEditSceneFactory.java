@@ -3,15 +3,15 @@ package jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup;
 import java.time.temporal.Temporal;
 import java.util.List;
 
-import net.balsoftware.icalendar.components.DaylightSavingTime;
-import net.balsoftware.icalendar.components.StandardTime;
-import net.balsoftware.icalendar.components.VAlarm;
-import net.balsoftware.icalendar.components.VComponent;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.components.VFreeBusy;
-import net.balsoftware.icalendar.components.VJournal;
-import net.balsoftware.icalendar.components.VTimeZone;
-import net.balsoftware.icalendar.components.VTodo;
+import jfxtras.icalendarfx.components.DaylightSavingTime;
+import jfxtras.icalendarfx.components.StandardTime;
+import jfxtras.icalendarfx.components.VAlarm;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VFreeBusy;
+import jfxtras.icalendarfx.components.VJournal;
+import jfxtras.icalendarfx.components.VTimeZone;
+import jfxtras.icalendarfx.components.VTodo;
 
 /**
  * Simple factory to create {@link EditDisplayableScene} objects.  Contains two methods to create scenes.

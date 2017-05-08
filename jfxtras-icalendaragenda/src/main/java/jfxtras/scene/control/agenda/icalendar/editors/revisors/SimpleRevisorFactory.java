@@ -5,16 +5,16 @@ import java.util.Map;
 
 import javafx.util.Callback;
 import javafx.util.Pair;
+import jfxtras.icalendarfx.components.DaylightSavingTime;
+import jfxtras.icalendarfx.components.StandardTime;
+import jfxtras.icalendarfx.components.VAlarm;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VEvent;
+import jfxtras.icalendarfx.components.VFreeBusy;
+import jfxtras.icalendarfx.components.VJournal;
+import jfxtras.icalendarfx.components.VTimeZone;
+import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
-import net.balsoftware.icalendar.components.DaylightSavingTime;
-import net.balsoftware.icalendar.components.StandardTime;
-import net.balsoftware.icalendar.components.VAlarm;
-import net.balsoftware.icalendar.components.VComponent;
-import net.balsoftware.icalendar.components.VEvent;
-import net.balsoftware.icalendar.components.VFreeBusy;
-import net.balsoftware.icalendar.components.VJournal;
-import net.balsoftware.icalendar.components.VTimeZone;
-import net.balsoftware.icalendar.components.VTodo;
 
 /**
  * <p>Simple factory to create {@link Reviser} objects.  Two methods to create scenes

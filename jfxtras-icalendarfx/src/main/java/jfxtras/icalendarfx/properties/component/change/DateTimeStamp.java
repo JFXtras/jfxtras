@@ -1,13 +1,12 @@
 package jfxtras.icalendarfx.properties.component.change;
 
 import java.time.ZonedDateTime;
-import java.time.temporal.Temporal;
 
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseUTC;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
 
 /**
  * DTSTAMP
@@ -39,7 +38,12 @@ import jfxtras.icalendarfx.utilities.DateTimeUtilities;
  */
 public class DateTimeStamp extends PropBaseUTC<DateTimeStamp>
 {    
-    public DateTimeStamp(ZonedDateTime temporal)
+    public DateTimeStamp()
+    {
+        super();
+    }
+
+	public DateTimeStamp(ZonedDateTime temporal)
     {
         super(temporal);
     }
@@ -48,10 +52,11 @@ public class DateTimeStamp extends PropBaseUTC<DateTimeStamp>
     {
         super(source);
     }
-    
-    public static DateTimeStamp parse(String value)
+        
+    public static DateTimeStamp parse(String content)
     {
-        Temporal t = DateTimeUtilities.temporalFromString(value);
-        return new DateTimeStamp((ZonedDateTime) t);
+    	return DateTimeStamp.parse(new DateTimeStamp(), content);
+//        Temporal t = DateTimeUtilities.temporalFromString(value);
+//        return new DateTimeStamp((ZonedDateTime) t);
     }
 }

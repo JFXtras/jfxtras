@@ -12,10 +12,10 @@ import org.junit.Test;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
+import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.test.TestUtil;
-import net.balsoftware.icalendar.components.VEvent;
 
 public class MakeNewVEventsTest extends AgendaTestAbstract
 {

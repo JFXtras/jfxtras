@@ -2,11 +2,6 @@ package jfxtras.icalendarfx.properties.component.misc;
 
 import java.text.DecimalFormat;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.components.VJournal;
@@ -63,38 +58,40 @@ public class RequestStatus extends PropBaseLanguage<String, RequestStatus>
    +--------+----------------------------------------------------------+
     */
     // TODO - APPLY RULES FROM RFC 5546 TO CREATE CORRECT STATUS CODES
-    public Double getStatusCode() { return statusCode.get(); }
-    ObjectProperty<Double> statusCodeProperty() { return statusCode; }
-    private ObjectProperty<Double> statusCode = new SimpleObjectProperty<Double>(this, "statcode");
-    public void setStatusCode(Double statusCode) { this.statusCode.set(statusCode); }
+    public Double getStatusCode() { return statusCode; }
+    private Double statusCode;
+    public void setStatusCode(Double statusCode)
+    {
+    	this.statusCode = statusCode;
+    	updateValue();
+	}
     public RequestStatus withStatusCode(Double statusCode) { setStatusCode(statusCode); return this; }
     private final static DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.0#");
     
     /** Textual status description */
-    public String getDescription() { return description.get(); }
-    StringProperty descriptionProperty() { return description; }
-    private StringProperty description = new SimpleStringProperty(this, "statdesc");
-    public void setDescription(String description) { this.description.set(description); }
+    public String getDescription() { return description; }
+    private String description;
+    public void setDescription(String description)
+    {
+    	this.description = description;
+    	updateValue();
+	}
     public RequestStatus withDescription(String description) { setDescription(description); return this; }
 
     /** Textual exception data.  For example, the offending property name and value or complete property line. */
-    public String getException() { return exception.get(); }
-    StringProperty exceptionProperty() { return exception; }
-    private StringProperty exception = new SimpleStringProperty(this, "extdata");
-    public void setException(String exception) { this.exception.set(exception); }
+    public String getException() { return exception; }
+    private String exception;
+    public void setException(String exception) { this.exception = exception; }
     public RequestStatus withException(String exception) { setException(exception); return this; }
     
     public RequestStatus(RequestStatus source)
     {
         super(source);
-        setupListeners();
-        updateParts(getValue());
     }
     
     public RequestStatus()
     {
         super();
-        setupListeners();
     }
     
     /** Applies string converter only to description and exception parts of the RequestStatus property
@@ -113,57 +110,25 @@ public class RequestStatus extends PropBaseLanguage<String, RequestStatus>
         return builder.toString();        
     }
     
-    public static RequestStatus parse(String value)
+    @Override
+	public void setValue(String value)
     {
-        RequestStatus property = new RequestStatus();
-        property.parseContent(value);
-        return property;
-    }
-
-    /*
-     * LISTENERS
-     * Used to keep statusCode, description and exception synchronized with the property value
-     */
-    private void setupListeners()
-    {
-        descriptionProperty().addListener(stringChangeListener);
-        exceptionProperty().addListener(stringChangeListener);
-        statusCodeProperty().addListener(doubleChangeListener);
-        valueProperty().addListener(valueChangeListener);        
-    }
-    
-    private final ChangeListener<? super String> valueChangeListener = (observable, oldValue, newValue) -> updateParts(newValue);
-    
-    private void updateParts(String newValue)
-    {
-        descriptionProperty().removeListener(stringChangeListener);
-        exceptionProperty().removeListener(stringChangeListener);
-        statusCodeProperty().removeListener(doubleChangeListener);
-        
-        int codeIndex = newValue.indexOf(';');
-        setStatusCode(Double.parseDouble(newValue.substring(0, codeIndex)));
-        int descriptionIndex = newValue.indexOf(';',codeIndex+1);
+    	super.setValue(value);
+        int codeIndex = value.indexOf(';');
+        setStatusCode(Double.parseDouble(value.substring(0, codeIndex)));
+        int descriptionIndex = value.indexOf(';',codeIndex+1);
         if (descriptionIndex > 0)
         {
-            setDescription(newValue.substring(codeIndex+1, descriptionIndex));
-            setException(newValue.substring(descriptionIndex+1));
+            setDescription(value.substring(codeIndex+1, descriptionIndex));
+            setException(value.substring(descriptionIndex+1));
         } else
         {
-            setDescription(newValue.substring(codeIndex+1));            
+            setDescription(value.substring(codeIndex+1));            
         }
-        
-        descriptionProperty().addListener(stringChangeListener);
-        exceptionProperty().addListener(stringChangeListener);
-        statusCodeProperty().addListener(doubleChangeListener);
     }
     
-    private final ChangeListener<? super String> stringChangeListener = (observable, oldValue, newValue) -> buildNewValue();
-    
-    private final ChangeListener<? super Double> doubleChangeListener = (observable, oldValue, newValue) -> buildNewValue();
-    
-    private void buildNewValue()
+    private void updateValue()
     {
-        valueProperty().removeListener(valueChangeListener);
         StringBuilder builder = new StringBuilder(100);
         builder.append(DECIMAL_FORMAT.format(getStatusCode()) + ";");
         builder.append(getDescription());
@@ -171,7 +136,11 @@ public class RequestStatus extends PropBaseLanguage<String, RequestStatus>
         {
             builder.append(";" + getException());
         }
-        setValue(builder.toString());
-        valueProperty().addListener(valueChangeListener);
+        super.setValue(builder.toString());
+    }
+    
+    public static RequestStatus parse(String content)
+    {
+    	return RequestStatus.parse(new RequestStatus(), content);
     }
 }

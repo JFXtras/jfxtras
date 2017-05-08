@@ -12,29 +12,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.utilities.UnfoldingStringIterator;
+import jfxtras.icalendarfx.content.UnfoldingStringIterator;
 
 public class ReadICSFileTest
 {
     @Test
-    @Ignore // TestFX4
     public void canReadICSFile1() throws IOException
     {
         String fileName = "Yahoo_Sample_Calendar.ics";
         URL url = getClass().getResource(fileName);
         Path icsFilePath = Paths.get(url.getFile());
-//        VCalendar vCalendar = VCalendar.parse(icsFilePath);
-//        System.out.println(vCalendar.toContent());
+        
+//        BufferedReader br = Files.newBufferedReader(icsFilePath);
+//        UnfoldingStringIterator unfoldedLineIterator = new UnfoldingStringIterator(br.lines().iterator());
+//        List<String> expectedLines = new ArrayList<>();
+//        unfoldedLineIterator.forEachRemaining(line -> expectedLines.add(line));
+//        String expectedUnfoldedContent = expectedLines.stream().collect(Collectors.joining(System.lineSeparator()));
+//        br.close();
+//        System.out.println(expectedUnfoldedContent);
+        
         boolean useResourceStatus = false;
         VCalendar vCalendar = VCalendar.parseICalendarFile(icsFilePath, useResourceStatus);
-//        System.out.println(vCalendar.toContent());
-        // HAS REQUEST-STATUS IN LINES - NEED TO REMOVE
-        assertEquals(7641, vCalendar.toContent().length());
+//        System.out.println(vCalendar);
+        assertEquals(7554, vCalendar.toString().length());
         assertEquals(7, vCalendar.getVEvents().size());
         assertEquals(1, vCalendar.getVTimeZones().size());
         int subcomponents = vCalendar.getVTimeZones().get(0).getStandardOrDaylight().size();
@@ -42,27 +47,34 @@ public class ReadICSFileTest
     }
     
     @Test
-    @Ignore // TestFX4
-    public void canReadICSFile2() throws IOException
+    public void canReadICSFile2() throws IOException, InterruptedException
     {
-//        VCalendar myCalendar = new VCalendar();
-//        ICalendarAgenda myAgenda = new ICalendarAgenda(myCalendar);
-//        myAgenda.setOrganizer(Organizer.parse("mailto:david@balsoftware.net"));
         String fileName = "mathBirthdays.ics";       
         URL url = getClass().getResource(fileName);
         Path icsFilePath = Paths.get(url.getFile());
         BufferedReader br = Files.newBufferedReader(icsFilePath);
-//        Iterator<String> unfoldedLineIterator = br.lines().iterator();
-//        UnfoldingStringIterator unfoldedLineIterator = new UnfoldingStringIterator(br.lines().iterator());
+        
         UnfoldingStringIterator unfoldedLineIterator = new UnfoldingStringIterator(br.lines().iterator());
         List<String> expectedLines = new ArrayList<>();
         unfoldedLineIterator.forEachRemaining(line -> expectedLines.add(line));
+        String expectedUnfoldedContent = expectedLines.stream().collect(Collectors.joining(System.lineSeparator()));
+        br.close();
+
+        long t1 = System.currentTimeMillis();
         VCalendar vCalendar = VCalendar.parse(icsFilePath);
-        Iterator<String> contentIterator = Arrays.stream(vCalendar.toContent().split(System.lineSeparator())).iterator();
+        long t2 = System.currentTimeMillis();
+//        System.out.println(t2-t1);
+        
+        long t3 = System.currentTimeMillis();
+        Iterator<String> contentIterator = Arrays.stream(vCalendar.toString().split(System.lineSeparator())).iterator();
         UnfoldingStringIterator unfoldedContentLineIterator = new UnfoldingStringIterator(contentIterator);
         List<String> contentLines = new ArrayList<>();
         unfoldedContentLineIterator.forEachRemaining(line -> contentLines.add(line));
-        assertEquals(expectedLines, contentLines);
+        String unfoldedContent = contentLines.stream().collect(Collectors.joining(System.lineSeparator()));
+        long t4 = System.currentTimeMillis();
+//        System.out.println(t4-t3);
+
+        assertEquals(expectedUnfoldedContent, unfoldedContent);
         assertEquals(13217, expectedLines.size());
     }
 }

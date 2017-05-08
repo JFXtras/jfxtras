@@ -12,7 +12,6 @@ import java.util.List;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarTestAbstract;
-import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
@@ -225,18 +224,18 @@ public class ScheduleConflictTest extends ICalendarTestAbstract
     }
 
     
-    @Test
-    public void canDetectScheduleConflictDuringImport()
-    {
-        VCalendar c = new VCalendar();
-        c.addVComponent(getDaily1());
-        String content = 
-                "BEGIN:VEVENT" + System.lineSeparator() +
-                "DTSTART:20160406T100000" + System.lineSeparator() +
-                "DTEND:20160406T123000" + System.lineSeparator() +
-                "END:VEVENT";
-        VEvent newVComponent = (VEvent) c.importVComponent(content);
-        assertEquals(1, c.getVEvents().size()); // show imported component wasn't accepted
-        assertEquals("4.1;Event conflict with 20150110T080000-0@jfxtras.org, 20160406T100000", newVComponent.getRequestStatus().get(0).getValue());
-    }
+//    @Test
+//    public void canDetectScheduleConflictDuringImport()
+//    {
+//        VCalendar c = new VCalendar();
+//        c.addVComponent(getDaily1());
+//        String content = 
+//                "BEGIN:VEVENT" + System.lineSeparator() +
+//                "DTSTART:20160406T100000" + System.lineSeparator() +
+//                "DTEND:20160406T123000" + System.lineSeparator() +
+//                "END:VEVENT";
+//        VEvent newVComponent = (VEvent) c.importVComponent(content);
+//        assertEquals(1, c.getVEvents().size()); // show imported component wasn't accepted
+//        assertEquals("4.1;Event conflict with 20150110T080000-0@jfxtras.org, 20160406T100000", newVComponent.getRequestStatus().get(0).getValue());
+//    }
 }

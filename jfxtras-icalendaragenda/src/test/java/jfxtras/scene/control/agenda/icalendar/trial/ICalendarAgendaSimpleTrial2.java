@@ -8,9 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import jfxtras.icalendarfx.VCalendar;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.layout.HBox;
-import net.balsoftware.icalendar.VCalendar;
 
 /**
  * Simple Demo of {@link ICalendarAgenda} with weekly increase/decrease buttons

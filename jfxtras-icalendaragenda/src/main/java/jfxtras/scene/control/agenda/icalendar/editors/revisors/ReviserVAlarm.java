@@ -2,8 +2,8 @@ package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 
 import java.util.List;
 
-import net.balsoftware.icalendar.VCalendar;
-import net.balsoftware.icalendar.components.VAlarm;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VAlarm;
 
 //TODO - add functionality
 /**
