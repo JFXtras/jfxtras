@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.scene.Node;
@@ -43,7 +42,7 @@ public class ComponentChangeDialogTest extends JFXtrasGuiTest
     }
 
     @Test
-    @Ignore // TestFX4
+//    @Ignore // TestFX4
     public void canDisplayDialog()
     {
         TestUtil.runThenWaitForPaintPulse( () -> 

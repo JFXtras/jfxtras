@@ -597,11 +597,8 @@ public class ICalendarAgenda extends Agenda
                                 message.addChild(newVComponent);
                                 getVCalendar().processITIPMessage(message);
                                 // TODO - NEED NEW COMPONENT FOR MAP - CAN I GET LAST ONE in list?
-//                                System.out.println("here1");
                                 List<VChild> calendarChildren = vCalendar.childrenUnmodifiable();
-//                                System.out.println("here2");
                                 VDisplayable<?> v = (VDisplayable<?>) calendarChildren.get(calendarChildren.size()-1); // get last child
-                                System.out.println("here3:" + System.identityHashCode(appointment));
                                 vComponentAppointmentMap.put(System.identityHashCode(v), new ArrayList<>(Arrays.asList(appointment)));
                                 appointmentVComponentMap.put(System.identityHashCode(appointment), v);
                                 appointmentStartOriginalMap.put(System.identityHashCode(appointment), appointment.getStartTemporal());

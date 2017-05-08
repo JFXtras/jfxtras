@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
@@ -458,7 +457,7 @@ public class ReviseThisAndFutureTest
     }
     
     @Test // change INTERVAL
-    @Ignore // TestFX4
+//    @Ignore // TestFX4
     public void canEditThisAndFuture2()
     {
         VCalendar mainVCalendar = new VCalendar();

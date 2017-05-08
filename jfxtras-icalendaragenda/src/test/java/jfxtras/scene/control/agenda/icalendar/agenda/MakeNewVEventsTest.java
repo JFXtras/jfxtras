@@ -1,6 +1,7 @@
 package jfxtras.scene.control.agenda.icalendar.agenda;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,7 +56,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         assertEquals(expectedVEvent, vEvent);
     }
     
-    @Test // (expected = NoNodesFoundException.class)
+    @Test
     public void canCancelSimpleVEvent()
     {
         // Draw new appointment
@@ -69,7 +70,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         clickOn("#newAppointmentCancelButton");
         
         // verify no event creation
-        assertEquals(0, agenda.getVCalendar().getVEvents().size());
+        assertNull(agenda.getVCalendar().getVEvents());
         assertEquals(0, agenda.appointments().size());
         
         find("#AppointmentRegularBodyPane2015-11-11/0"); // should produce exception
