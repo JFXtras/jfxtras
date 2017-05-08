@@ -264,9 +264,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
             if (dayOfWeekList.isEmpty())
             {
                 DayOfWeek dayOfWeek = LocalDate.from(dateTimeStartRecurrenceNew.get()).getDayOfWeek();
-    	        System.out.println("rrule weekly start:" + rrule.getByRules());
                 rrule.addChild(new ByDay(dayOfWeek)); // add days already clicked
-//                rrule.addChild(new ByDay(dayOfWeek)); // add days already clicked
                 dayOfWeekCheckBoxMap.get(dayOfWeek).set(true);
             } else
             {

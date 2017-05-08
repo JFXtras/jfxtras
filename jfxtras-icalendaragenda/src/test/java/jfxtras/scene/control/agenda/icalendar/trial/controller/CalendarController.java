@@ -218,7 +218,7 @@ public class CalendarController
         // replace Agenda's appointmentGroups with the ones used in the test events.
         agenda.appointmentGroups().clear();
         agenda.appointmentGroups().addAll(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS);
-        agenda.refresh();
+        agenda.updateAppointments();
     }
 
     @FXML private void handleToday()

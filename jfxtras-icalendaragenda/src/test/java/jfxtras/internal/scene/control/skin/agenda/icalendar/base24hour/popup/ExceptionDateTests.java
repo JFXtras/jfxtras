@@ -369,13 +369,10 @@ public class ExceptionDateTests extends VEventPopupTestBase
                     ));
             assertEquals(expectedDates, exceptions);
         }
-        System.out.println(dayOfWeekRadioButton);
-        TestUtil.sleep(3000);
+
         // check dayOfWeekRadioButton and check state
         TestUtil.runThenWaitForPaintPulse(() -> dayOfWeekRadioButton.setSelected(true));
-        System.out.println("here1");
         assertFalse(dayOfMonthRadioButton.isSelected());
-        System.out.println("here2");
         assertTrue(dayOfWeekRadioButton.isSelected());
         {
             List<Temporal> exceptions = exceptionComboBox.getItems().stream().limit(5)

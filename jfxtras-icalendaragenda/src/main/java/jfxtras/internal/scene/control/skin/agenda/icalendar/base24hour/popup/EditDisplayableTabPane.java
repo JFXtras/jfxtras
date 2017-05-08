@@ -60,20 +60,8 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
     @FXML private Button cancelRepeatButton;
     @FXML private Button saveRepeatButton;
 
-//    ObjectProperty<Boolean> isFinished = new SimpleObjectProperty<>(false);
-//    /** When property value becomes true the control should be closed
-//     * (i.e. Attach a listener to this property, on changing hide the control */
-//    public ObjectProperty<Boolean> isFinished() { return isFinished; }
-
     ObjectProperty<List<VCalendar>> iTIPMessages = new SimpleObjectProperty<>();
     public ObjectProperty<List<VCalendar>> iTIPMessagesProperty() { return iTIPMessages; }
-//    @Deprecated
-//    ObjectProperty<List<T>> newVComponents = new SimpleObjectProperty<>();
-    /** This property contains a List of new components resulting from the editing.
-     * When property value becomes non-null the control should be closed.
-     * (i.e. Attach a listener to this property, on changing hide the control */
-//    @Deprecated
-//    public ObjectProperty<List<T>> newVComponentsProperty() { return newVComponents; }
     
     public EditDisplayableTabPane( )
     {
@@ -130,7 +118,6 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
                 editDescriptiveVBox.startOriginalRecurrence
         };
         List<VCalendar> result = SimpleDeleterFactory.newDeleter(vComponentCopy, params).delete();
-        System.out.println("result:" + result);
         iTIPMessagesProperty().set(result);
     }
     
