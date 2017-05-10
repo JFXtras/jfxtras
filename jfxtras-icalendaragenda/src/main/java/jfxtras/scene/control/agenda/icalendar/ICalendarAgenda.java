@@ -260,17 +260,11 @@ public class ICalendarAgenda extends Agenda
         setUidGeneratorCallback(uidCallback);
         return this;
     }
-
     
     final private VCalendar vCalendar;
     /** get the VCalendar object that is a model of the iCalendar RFC 5545 specification */
     public VCalendar getVCalendar() { return vCalendar; }
     
-    // Private observable copy of vEvents, vTodos and vJournals
-//    private ObservableList<VEvent> vEvents = FXCollections.observableArrayList();
-//    final private ObservableList<VTodo> vTodos = FXCollections.observableArrayList(); // TODO
-//    final private ObservableList<VJournal> vJournals = FXCollections.observableArrayList(); // TODO
-
     /*
      * Factory to make VComponents from Appointments
      */
@@ -330,9 +324,10 @@ public class ICalendarAgenda extends Agenda
 
         alert.initOwner(this.getScene().getWindow());
         Pane bodyPane = (Pane) ((AgendaSkin) getSkin()).getNodeForPopup(appointment);
-        alert.setX(NodeUtil.screenX(bodyPane) + bodyPane.getWidth()/2);
-        alert.setY(NodeUtil.screenY(bodyPane) + bodyPane.getHeight()/2);
-        
+        double x = NodeUtil.screenX(bodyPane) + bodyPane.getWidth()/2;
+		alert.setX(x);
+        double y = NodeUtil.screenY(bodyPane) + bodyPane.getHeight()/2;
+		alert.setY(y);
         // Check if previous alert so it can be closed (like autoHide for popups)
         if (lastOneAppointmentSelectedAlert != null)
         {
@@ -367,7 +362,7 @@ public class ICalendarAgenda extends Agenda
                             appointment.getStartTemporal()
                             ).delete();
                     getVCalendar().processITIPMessage(cancelMessage);
-                    super.refresh();
+                    refresh();
                 }
             }
         });
@@ -398,6 +393,11 @@ public class ICalendarAgenda extends Agenda
     private Callback<Appointment, ButtonData> newAppointmentDrawnCallback = (Appointment appointment) ->
     {
         Dialog<ButtonData> newAppointmentDialog = new NewAppointmentDialog(appointment, appointmentGroups(), Settings.resources);
+        Pane bodyPane = (Pane) ((AgendaSkin) getSkin()).getNodeForPopup(appointment);
+        double x = NodeUtil.screenX(bodyPane) + bodyPane.getPrefWidth()/2;
+        newAppointmentDialog.setX(x);
+        double y = NodeUtil.screenY(bodyPane);
+        newAppointmentDialog.setY(y);
         newAppointmentDialog.getDialogPane().getStylesheets().add(getUserAgentStylesheet());
         Optional<ButtonData> result = newAppointmentDialog.showAndWait();
         ButtonData button = result.isPresent() ? result.get() : ButtonData.CANCEL_CLOSE;
@@ -466,15 +466,11 @@ public class ICalendarAgenda extends Agenda
         Callback<Appointment, Void> appointmentChangedCallback = (Appointment appointment) ->
         {
             VDisplayable<?> vComponent = appointmentVComponentMap.get(System.identityHashCode(appointment));
-//            appointmentVComponentMap.entrySet().forEach(System.out::println);
-//            System.out.println("appointmentVComponentMap:" + appointmentVComponentMap.size());
-//            System.out.println("hash:" + System.identityHashCode(appointment));
-            // TODO - NEW APPOINTMENT BELONGS TO NO VCOMPONENT - HOW TO GET HANDLE ON VCOMPONENT
             Object[] params = revisorParamGenerator(vComponent, appointment);
             List<VCalendar> iTIPMessage = SimpleRevisorFactory.newReviser(vComponent, params).revise();
             getVCalendar().processITIPMessage(iTIPMessage);
             appointmentStartOriginalMap.put(System.identityHashCode(appointment), appointment.getStartTemporal()); // update start map
-            Platform.runLater(() -> super.refresh());
+            Platform.runLater(() -> refresh());
             return null;
         };
         setAppointmentChangedCallback(appointmentChangedCallback);
@@ -495,7 +491,6 @@ public class ICalendarAgenda extends Agenda
                 // NOTE: Can't throw exception here because in Agenda there is a mouse event that isn't consumed.
                 // Throwing an exception will leave the mouse unresponsive.
             }
-//            {
                 // make popup stage
                 Stage popupStage = new Stage();
                 String appointmentTime = AgendaDateTimeUtilities.formatRange(appointment.getStartTemporal(), appointment.getEndTemporal());
@@ -508,7 +503,6 @@ public class ICalendarAgenda extends Agenda
                         getCategories()
                         };
                 EditDisplayableScene popupScene = SimpleEditSceneFactory.newScene(vComponent, params);
-//                EditDisplayableScene popupScene = SimpleEditSceneFactory.newScene(vComponent, params);
                 popupScene.getStylesheets().addAll(getUserAgentStylesheet(), ICalendarAgenda.ICALENDAR_STYLE_SHEET);
                 popupStage.setScene(popupScene);
                 
@@ -534,9 +528,8 @@ public class ICalendarAgenda extends Agenda
                 {
                     newValue.forEach(message -> getVCalendar().processITIPMessage(message));
                     popupStage.hide();
-                    super.refresh();
+                    refresh();
                 });
-//            }
             return null;
         };
         setEditAppointmentCallback(editAppointmentCallback);
@@ -571,7 +564,7 @@ public class ICalendarAgenda extends Agenda
          */
         appointmentsListChangeListener = (ListChangeListener.Change<? extends Appointment> change) ->
         {
-        	System.out.println("appointment added");
+//        	System.out.println("appointment added");
             while (change.next())
             {
                 if (change.wasAdded())
@@ -581,39 +574,24 @@ public class ICalendarAgenda extends Agenda
                     {
                         Appointment appointment = change.getAddedSubList().get(0);
                         ButtonData button = newAppointmentDrawnCallback.call(change.getAddedSubList().get(0));
-                        // remove drawn appointment - it was replaced by one made when the newVComponent was added
-//                        appointments().remove(appointment);
-//                        System.out.println("aappointments:" + appointments().size());
-//                        System.out.println("button:" + button);
                         switch (button)
                         {
                         case CANCEL_CLOSE:
-                            super.refresh();
+                        	appointments().remove(appointment);
+                            refresh();
                             break;
                         case OK_DONE: // Create VComponent
                             {
                                 VComponent newVComponent = getVComponentFactory().createVComponent(appointment);
-//                                System.out.println("newVComponent:" + newVComponent);
                                 VCalendar message = Reviser.emptyPublishiTIPMessage();
                                 message.addChild(newVComponent);
                                 getVCalendar().processITIPMessage(message);
-                                // TODO - NEED NEW COMPONENT FOR MAP - CAN I GET LAST ONE in list?
                                 List<VChild> calendarChildren = vCalendar.childrenUnmodifiable();
                                 VDisplayable<?> v = (VDisplayable<?>) calendarChildren.get(calendarChildren.size()-1); // get last child
                                 vComponentAppointmentMap.put(System.identityHashCode(v), new ArrayList<>(Arrays.asList(appointment)));
                                 appointmentVComponentMap.put(System.identityHashCode(appointment), v);
                                 appointmentStartOriginalMap.put(System.identityHashCode(appointment), appointment.getStartTemporal());
-//                                makeAppointments(v);
-//                                System.out.println("here4");
-                             // remove drawn appointment - it was replaced by one made when the newVComponent was added
-//                                appointments().remove(appointment);
-                                Platform.runLater(() -> super.refresh()); // IS THERE ANOTHER WAY?
-                                // DO I HAVE TO REMOVE ORIGINAL???
-//                                System.out.println("here5");
-//                                appointmentVComponentMap.put(System.identityHashCode(appointment), v);
-//                                appointmentStartOriginalMap.put(System.identityHashCode(appointment), appointment.getStartTemporal());
-//                                vComponentAppointmentMap.put(System.identityHashCode(v), myAppointments);
-//                                if (newVComponent instanceof VEvent) vEvents.add((VEvent) newVComponent);
+                                Platform.runLater(() -> refresh());
                                 break;
                             }
                         case OTHER: // Advanced Edit
@@ -655,11 +633,8 @@ public class ICalendarAgenda extends Agenda
                     });
                 }
             }
-            // TODO - on Linux refresh is sometimes not done - refresh() doesn't fix problem - any change in 
-            // focus causes the refresh.  Forcing focus change doesn't fix problem.  Problem not observed in Windows.
         };
         appointments().addListener(appointmentsListChangeListener);
-//        updateAppointments();
         
         /*
          * Listener to delete selected appointments when delete key is pressed
@@ -677,61 +652,6 @@ public class ICalendarAgenda extends Agenda
                 });
             }
         });
-
-        /*
-         * VComponent List Change Listener
-         * 
-         * Handles adding new appointments when VComponents are added.  Also, removes associated appointments when
-         * VComponents are removed.
-         * Keeps appointments and vComponents synchronized.
-         */
-        // TODO - TRYING TO NOT USE
-        ListChangeListener<VDisplayable<?>> vComponentsChangeListener = (ListChangeListener.Change<? extends VDisplayable<?>> change) ->
-        {
-            while (change.next())
-            {
-                if (change.wasAdded()) // can't make appointment if range is not set
-                {
-                    // Check if all VComponets are valid, throw exception otherwise
-                    change.getAddedSubList()
-                            .stream()
-                            .forEach(v -> 
-                            {
-                            	vCalendar.addChild(v); // synch addition with vCalendar
-                                if (! v.isValid())
-                                {
-                                    throw new RuntimeException("ERROR: Invalid " + v.getClass().getSimpleName() + " with UID:" + v.getUniqueIdentifier().getValue() + " can't be added to agenda:" + System.lineSeparator() + 
-                                            v.errors().stream().collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
-                                            v.toString());
-                                }
-                            });
-                    
-                    List<Appointment> newAppointments = new ArrayList<>();
-                    // add new appointments
-                    change.getAddedSubList()
-                            .stream()
-                            .forEach(v -> newAppointments.addAll(makeAppointments(v)));
-                    appointments().removeListener(appointmentsListChangeListener);
-                    appointments().addAll(newAppointments);
-                    appointments().addListener(appointmentsListChangeListener);
-                } else if (change.wasRemoved())
-                {
-                    // remove associated appointments
-                    change.getRemoved()
-                        .stream()
-                        .forEach(v -> 
-                        {
-                            List<Appointment> remove = vComponentAppointmentMap.get(System.identityHashCode(v));
-                            if (! remove.isEmpty())
-                            {
-                            	appointments().removeAll(remove);
-                            }
-                        });
-                }
-            }
-        };
-//        getVCalendar().getVEvents().addListener(vComponentsChangeListener);
-//        vEvents.addListener(vComponentsChangeListener);
 
         /*
          * Select One Appointment List Change Listener
@@ -761,7 +681,6 @@ public class ICalendarAgenda extends Agenda
          */
         setLocalDateTimeRangeCallback(dateTimeRange ->
         {
-            List<Appointment> newAppointments = new ArrayList<>();
             getRecurrenceFactory().setStartRange(dateTimeRange.getStartLocalDateTime());
             getRecurrenceFactory().setEndRange(dateTimeRange.getEndLocalDateTime());
             if (dateTimeRange != null)
@@ -822,9 +741,8 @@ public class ICalendarAgenda extends Agenda
                     endRecurrence,
                     startOriginalRecurrence,
                     startRecurrence,
-//                    getVCalendar().getVComponents(vComponent),
                     vComponentCopy, // edited
-                    vComponent  // original // TODO - THIS IS PROBABLY CAUSING THIS-AND-FUTURE DRAG-N-DROP TO FAIL - FIXTHIS
+                    vComponent
                  // Note: edited and original are the same here - can't edit descriptive properties with drag-n-drop
                     };
         }
@@ -847,16 +765,13 @@ public class ICalendarAgenda extends Agenda
 //    @Override
 //	public void refresh()
 //    {
-//    	updateAppointments();
+//    	System.out.println("refresh");
 //    	super.refresh(); // TODO - FIX-THIS INITIAL REFRESH IS DONE TWICE because agenda does another refresh due to date range change
 //    }
     
     /** Clear and make new appointments for all displayable VComponents */
     public void updateAppointments()
     {
-//    	if (count++ == 2) throw new RuntimeException("where?");
-//    	int size = (getVCalendar().getVEvents() == null) ? 0 : getVCalendar().getVEvents().size();
-//		System.out.println("update all:" + size);
         List<Appointment> newAppointments = new ArrayList<>();
         appointments().removeListener(appointmentsListChangeListener);
         appointments().clear();
