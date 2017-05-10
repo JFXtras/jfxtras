@@ -182,7 +182,8 @@ public class ParseCalendarTest extends ICalendarTestAbstract
         VCalendar v = VCalendar.parse(content);
         VCalendar expected = new VCalendar();
         assertEquals(expected, v);
-        assertEquals(29, v.toString().length());
+        assertEquals("BEGIN:VCALENDAR" + System.lineSeparator() +   
+        	       "END:VCALENDAR", v.toString());
     }
     
     @Test (expected = IllegalArgumentException.class)

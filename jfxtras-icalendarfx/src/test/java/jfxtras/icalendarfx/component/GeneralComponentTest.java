@@ -10,8 +10,8 @@ import jfxtras.icalendarfx.ICalendarStaticComponents;
 import jfxtras.icalendarfx.components.VAlarm;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.descriptive.Categories;
-import jfxtras.icalendarfx.properties.component.descriptive.Description;
 import jfxtras.icalendarfx.properties.component.descriptive.Classification.ClassificationType;
+import jfxtras.icalendarfx.properties.component.descriptive.Description;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 
 public class GeneralComponentTest

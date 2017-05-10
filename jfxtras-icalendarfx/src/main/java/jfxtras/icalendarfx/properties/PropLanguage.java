@@ -1,10 +1,7 @@
 package jfxtras.icalendarfx.properties;
 
-import org.junit.experimental.categories.Categories;
-
 import jfxtras.icalendarfx.parameters.Language;
-import jfxtras.icalendarfx.properties.PropBaseLanguage;
-import jfxtras.icalendarfx.properties.VProperty;
+import jfxtras.icalendarfx.properties.component.descriptive.Categories;
 import jfxtras.icalendarfx.properties.component.timezone.TimeZoneName;
 
 /**

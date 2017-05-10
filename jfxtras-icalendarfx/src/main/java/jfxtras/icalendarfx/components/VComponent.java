@@ -5,16 +5,10 @@ import java.util.List;
 
 import jfxtras.icalendarfx.VChild;
 import jfxtras.icalendarfx.VParent;
-import jfxtras.icalendarfx.components.VComponent;
-import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.components.VFreeBusy;
-import jfxtras.icalendarfx.components.VJournal;
-import jfxtras.icalendarfx.components.VTimeZone;
-import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
+import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
-import junit.runner.Version;
 
 /**
  * <h2>RFC 5545, 3.6. Calendar Components</h2>

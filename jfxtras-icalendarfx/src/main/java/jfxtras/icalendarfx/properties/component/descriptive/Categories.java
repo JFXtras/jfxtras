@@ -12,7 +12,6 @@ import jfxtras.icalendarfx.parameters.Language;
 import jfxtras.icalendarfx.parameters.NonStandardParameter;
 import jfxtras.icalendarfx.properties.PropBaseLanguage;
 import jfxtras.icalendarfx.properties.ValueType;
-import jfxtras.icalendarfx.properties.component.descriptive.Categories;
 import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
@@ -120,7 +119,6 @@ public class Categories extends PropBaseLanguage<List<String>, Categories>
     }
     
     @Override
-    @Deprecated // is this necessary?
     protected List<String> copyValue(List<String> source)
     {
         return new ArrayList<>(source);

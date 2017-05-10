@@ -15,17 +15,13 @@ import jfxtras.icalendarfx.content.SingleLineContent;
 import jfxtras.icalendarfx.parameters.NonStandardParameter;
 import jfxtras.icalendarfx.parameters.VParameter;
 import jfxtras.icalendarfx.parameters.ValueParameter;
-import jfxtras.icalendarfx.properties.VProperty;
-import jfxtras.icalendarfx.properties.VPropertyBase;
-import jfxtras.icalendarfx.properties.VPropertyElement;
-import jfxtras.icalendarfx.properties.ValueType;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
+import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
 import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
 import jfxtras.icalendarfx.utilities.ICalendarUtilities;
 import jfxtras.icalendarfx.utilities.StringConverter;
-import junit.runner.Version;
 
 /**
  * Base iCalendar property class

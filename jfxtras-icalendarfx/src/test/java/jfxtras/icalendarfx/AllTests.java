@@ -14,6 +14,7 @@ import jfxtras.icalendarfx.calendar.VCalendarRecurrenceIDTest;
 import jfxtras.icalendarfx.component.BaseTest;
 import jfxtras.icalendarfx.component.ComponentStatusTest;
 import jfxtras.icalendarfx.component.CopyComponentTest;
+import jfxtras.icalendarfx.component.DateTimeEndComponentTest;
 import jfxtras.icalendarfx.component.DaylightSavingsTimeTest;
 import jfxtras.icalendarfx.component.DescribableTest;
 import jfxtras.icalendarfx.component.DisplayableTest;
@@ -148,7 +149,7 @@ import jfxtras.icalendarfx.property.component.UniqueIdentifierTest;
         BaseTest.class,
         ComponentStatusTest.class,
         CopyComponentTest.class,
-        DateTimeEndTest.class,
+        DateTimeEndComponentTest.class,
         DaylightSavingsTimeTest.class,
         DescribableTest.class,
         DisplayableTest.class,
