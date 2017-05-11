@@ -564,7 +564,6 @@ public class ICalendarAgenda extends Agenda
          */
         appointmentsListChangeListener = (ListChangeListener.Change<? extends Appointment> change) ->
         {
-//        	System.out.println("appointment added");
             while (change.next())
             {
                 if (change.wasAdded())
@@ -578,7 +577,7 @@ public class ICalendarAgenda extends Agenda
                         {
                         case CANCEL_CLOSE:
                         	appointments().remove(appointment);
-                            refresh();
+                        	((AgendaSkin) getSkin()).setupAppointments();
                             break;
                         case OK_DONE: // Create VComponent
                             {
@@ -591,7 +590,7 @@ public class ICalendarAgenda extends Agenda
                                 vComponentAppointmentMap.put(System.identityHashCode(v), new ArrayList<>(Arrays.asList(appointment)));
                                 appointmentVComponentMap.put(System.identityHashCode(appointment), v);
                                 appointmentStartOriginalMap.put(System.identityHashCode(appointment), appointment.getStartTemporal());
-                                Platform.runLater(() -> refresh());
+                                Platform.runLater(() -> ((AgendaSkin) getSkin()).setupAppointments());
                                 break;
                             }
                         case OTHER: // Advanced Edit
@@ -754,7 +753,6 @@ public class ICalendarAgenda extends Agenda
         List<Appointment> myAppointments = getRecurrenceFactory().makeRecurrences(v);
         myAppointments.forEach(a -> 
         {
-//        	System.out.println("adding hash:" + System.identityHashCode(a));
             appointmentVComponentMap.put(System.identityHashCode(a), v);
             appointmentStartOriginalMap.put(System.identityHashCode(a), a.getStartTemporal());
         });
@@ -766,7 +764,7 @@ public class ICalendarAgenda extends Agenda
 //	public void refresh()
 //    {
 //    	System.out.println("refresh");
-//    	super.refresh(); // TODO - FIX-THIS INITIAL REFRESH IS DONE TWICE because agenda does another refresh due to date range change
+//    	super.refresh()
 //    }
     
     /** Clear and make new appointments for all displayable VComponents */
