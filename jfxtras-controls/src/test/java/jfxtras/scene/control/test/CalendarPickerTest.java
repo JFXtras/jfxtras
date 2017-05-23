@@ -693,4 +693,31 @@ public class CalendarPickerTest extends JFXtrasGuiTest {
 			calendarPicker.setLocale(Locale.GERMANY);
 		});
 	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void todayButton()
+	{
+		// default value is null
+		Assert.assertNull(calendarPicker.getCalendar());
+		Calendar lTodayCalendar = Calendar.getInstance();
+		Calendar lTodayFirstOfMonthCalendar = Calendar.getInstance();
+		lTodayFirstOfMonthCalendar.set(Calendar.DATE, 1);
+
+		// click once: only display the month of today
+		clickOn(".today-button");
+
+		// the last selected value should be set
+		Assert.assertEquals( TestUtil.quickFormatCalendarAsDate(lTodayFirstOfMonthCalendar), TestUtil.quickFormatCalendarAsDate(calendarPicker.getDisplayedCalendar()));
+		Assert.assertNull(calendarPicker.getCalendar());
+
+		// click twice: also select today
+		clickOn(".today-button");
+
+		// the last selected value should be set
+		Assert.assertEquals( TestUtil.quickFormatCalendarAsDate(lTodayFirstOfMonthCalendar), TestUtil.quickFormatCalendarAsDate(calendarPicker.getDisplayedCalendar()));
+		Assert.assertEquals( TestUtil.quickFormatCalendarAsDate(lTodayCalendar), TestUtil.quickFormatCalendarAsDate(calendarPicker.getCalendar()));
+	}
 }

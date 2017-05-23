@@ -305,7 +305,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
         todayButton.getStyleClass().add("today-button");
         todayButton.setMinSize(16, 16);
 		todayButton.setOnAction((ActionEvent event) -> {
-            setDisplayedCalendarToToday();
+            setToToday();
         });
 		
 		// weekday labels
@@ -677,18 +677,28 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 	/*
 	 * 
 	 */
-	private void setDisplayedCalendarToToday()
+	private void setToToday()
 	{
 		// get spinner values
 		Calendar lTodayCalendar = Calendar.getInstance();
+		Calendar lDisplayedCalendar = getSkinnable().getDisplayedCalendar();
 		
 		// get new calendar to display
-		Calendar lCalendar = (Calendar)getSkinnable().getDisplayedCalendar().clone();
+		Calendar lCalendar = (Calendar)lDisplayedCalendar.clone();
 		lCalendar.set(Calendar.YEAR, lTodayCalendar.get(Calendar.YEAR));
 		lCalendar.set(Calendar.MONTH, lTodayCalendar.get(Calendar.MONTH));
-		
-		// set it
-		getSkinnable().setDisplayedCalendar(lCalendar);
+		lCalendar.set(Calendar.DATE, lTodayCalendar.get(Calendar.DATE));
+
+		// if not displaying in same month
+		if ( lTodayCalendar.get(Calendar.YEAR) != lDisplayedCalendar.get(Calendar.YEAR)
+		  || lTodayCalendar.get(Calendar.MONTH) != lDisplayedCalendar.get(Calendar.MONTH)
+		) {
+			getSkinnable().setDisplayedCalendar(lCalendar);			
+		}
+		// already showing the correct month, than select today
+		else if ( find(getSkinnable().calendars(), lTodayCalendar) == null ) {
+			getSkinnable().calendars().add(lCalendar);			
+		}
 	}
 	
 	/**
