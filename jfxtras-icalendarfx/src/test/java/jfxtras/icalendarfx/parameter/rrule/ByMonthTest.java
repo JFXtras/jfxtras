@@ -25,7 +25,7 @@ public class ByMonthTest
     {
         ByMonth element = new ByMonth(4);
         assertEquals(Month.APRIL, element.getValue().get(0));
-        assertEquals("BYMONTH=4", element.toContent());
+        assertEquals("BYMONTH=4", element.toString());
     }
     
     /*

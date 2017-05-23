@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VPrimary;
@@ -31,10 +30,9 @@ public class ReviseOneTest
     public void canEditOneRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
@@ -53,7 +51,8 @@ public class ReviseOneTest
 
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
-        vComponents.forEach(System.out::println);
+//        System.out.println("vComponents:" + vComponents.size());
+//        vComponents.forEach(System.out::println);
         VEvent myComponentIndividual = vComponents.get(1);
         
         String expectediTIPMessage =
@@ -67,7 +66,7 @@ public class ReviseOneTest
                 "DTEND:20160516T103000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
-                myComponentIndividual.getDateTimeStamp().toContent() + System.lineSeparator() +
+                myComponentIndividual.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "RECURRENCE-ID:20160516T100000" + System.lineSeparator() +
@@ -75,9 +74,10 @@ public class ReviseOneTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
+        assertEquals(2, mainVCalendar.getVEvents().size());
 
         // 2nd edit - edit component with RecurrenceID (individual)
         VEvent vComponentEditedIndividual = new VEvent(myComponentIndividual);
@@ -96,7 +96,6 @@ public class ReviseOneTest
                 .withVComponentCopyEdited(vComponentEditedIndividual)
                 .withVComponentOriginal(vComponentIndividualCopy);
         iTIPMessages = reviser2.revise();
-        
         iTIPMessages.forEach(inputVCalendar -> mainVCalendar.processITIPMessage(inputVCalendar));
         
         expectediTIPMessage =
@@ -110,7 +109,7 @@ public class ReviseOneTest
                 "DTEND:20160516T130000" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:new summary" + System.lineSeparator() +
-                myComponentIndividual.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEditedIndividual.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "RECURRENCE-ID:20160516T100000" + System.lineSeparator() +
@@ -118,7 +117,7 @@ public class ReviseOneTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -127,10 +126,9 @@ public class ReviseOneTest
     public void canChangeTimeBasedToWholeDayOne()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
@@ -164,7 +162,7 @@ public class ReviseOneTest
                 "DTEND;VALUE=DATE:20160517" + System.lineSeparator() +
                 "DESCRIPTION:Daily1 Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
-                individualComponent.getDateTimeStamp().toContent() + System.lineSeparator() +
+                individualComponent.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "RECURRENCE-ID:20160516T100000" + System.lineSeparator() +
@@ -172,13 +170,13 @@ public class ReviseOneTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
         
         // check DTSTAMP
         String dtstamp = iTIPMessage.split(System.lineSeparator())[10];
-        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
         assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
     }
     
@@ -186,10 +184,9 @@ public class ReviseOneTest
     public void canChangeWholeDayToTimeBasedOne()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getWholeDayDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
 
         vComponentEdited.setSummary("Edited summary");
@@ -219,7 +216,7 @@ public class ReviseOneTest
                 "VERSION:" + Version.DEFAULT_ICALENDAR_SPECIFICATION_VERSION + System.lineSeparator() +
                 "BEGIN:VEVENT" + System.lineSeparator() +
                 "CATEGORIES:group06" + System.lineSeparator() +
-                individualComponent.getDateTimeStamp().toContent() + System.lineSeparator() +
+                individualComponent.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-010@jfxtras.org" + System.lineSeparator() +
                 "DTSTART:20160516T100000" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
@@ -230,13 +227,13 @@ public class ReviseOneTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
         
         // check DTSTAMP
         String dtstamp = iTIPMessage.split(System.lineSeparator())[6];
-        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
         assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
     }
 }

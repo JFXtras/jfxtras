@@ -53,7 +53,7 @@ public class PopupDeleteAllTest extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }

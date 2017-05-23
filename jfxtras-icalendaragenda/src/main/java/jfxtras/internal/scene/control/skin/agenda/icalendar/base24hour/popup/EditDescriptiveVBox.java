@@ -11,6 +11,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -18,7 +19,6 @@ import java.util.ResourceBundle;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -176,11 +176,9 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
         }
         
         // String bindings
-        if (vComponentEdited.getSummary() == null)
-        {
-            vComponentEdited.setSummary(Summary.parse(""));
-        }
-        summaryTextField.textProperty().bindBidirectional(vComponentEdited.getSummary().valueProperty());
+        String initialSummary = (vComponent.getSummary() == null || vComponent.getSummary().getValue() == null) ? "" : vComponent.getSummary().getValue();
+        summaryTextField.setText(initialSummary);
+        summaryTextField.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setSummary(newValue));
         
         // START DATE/TIME
         startDateTimeTextField.setLocale(Locale.getDefault());
@@ -235,7 +233,7 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
                 categories.add(i, newSelection);
             }
             categorySelectionGridPane.updateToolTip(i, categories.get(i));
-            vComponentEdited.getCategories().get(0).setValue(FXCollections.observableArrayList(newSelection));
+            vComponentEdited.getCategories().get(0).setValue(Arrays.asList(newSelection)); // keep Categories to maintain order
         });
         // verify category is unique
         categoryTextField.focusedProperty().addListener((obs, oldValue, newValue) ->
@@ -267,7 +265,8 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
         String initialCategory = vComponentEdited.getCategories().get(0).getValue().get(0);
         categorySelectionGridPane.setupData(initialCategory, categories);
         
-        vComponentEdited.getDateTimeStart().valueProperty().addListener(dateTimeStartListener);
+        startDateTimeTextField.localDateTimeProperty().addListener(dateTimeStartListener);
+//        vComponentEdited.getDateTimeStart().valueProperty().addListener(dateTimeStartListener);
 
     }
     

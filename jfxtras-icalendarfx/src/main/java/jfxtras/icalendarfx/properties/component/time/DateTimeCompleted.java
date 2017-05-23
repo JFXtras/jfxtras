@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseUTC;
+import jfxtras.icalendarfx.properties.component.time.DateTimeCompleted;
 
 /**
  * COMPLETED
@@ -22,16 +23,11 @@ import jfxtras.icalendarfx.properties.PropBaseUTC;
  * @see VTodo
  */
 public class DateTimeCompleted extends PropBaseUTC<DateTimeCompleted>
-{
+{   
     public DateTimeCompleted(ZonedDateTime temporal)
     {
         super(temporal);
     }
-
-//    public DateTimeCompleted(CharSequence contentLine)
-//    {
-//        super(contentLine);
-//    }
     
     public DateTimeCompleted(DateTimeCompleted source)
     {
@@ -43,10 +39,8 @@ public class DateTimeCompleted extends PropBaseUTC<DateTimeCompleted>
         super();
     }
 
-    public static DateTimeCompleted parse(String value)
+    public static DateTimeCompleted parse(String content)
     {
-        DateTimeCompleted property = new DateTimeCompleted();
-        property.parseContent(value);
-        return property;
+    	return DateTimeCompleted.parse(new DateTimeCompleted(), content);
     }
 }

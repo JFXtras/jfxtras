@@ -2,7 +2,13 @@ package jfxtras.icalendarfx.parameters;
 
 import java.net.URI;
 
+import jfxtras.icalendarfx.parameters.AlternateText;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
+
 /**
+ * <pre>
  * 3.2.1.  Alternate Text Representation
 
    Parameter Name:  ALTREP
@@ -64,34 +70,33 @@ RFC 5545                       iCalendar                  September 2009
          </body>
        </html>
   RFC 5545                       iCalendar                  September 2009
- * 
+ * </pre>
  * @author David Bal
  */
-public class AlternateText extends ParameterBase<AlternateText, URI>
+public class AlternateText extends VParameterBase<AlternateText, URI>
 {
+	private static final StringConverter<URI> CONVERTER = StringConverters.uriConverterWithQuotes();
+	
     /** Create new AlternateText with property value set to input parameter */
     public AlternateText(URI value)
     {
-        super(value);
+        super(value, CONVERTER);
     }
 
     /** Create deep copy of source AlternateText */
     public AlternateText(AlternateText source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
 
     /** Create default Summary with no value set */
     public AlternateText()
     {
-        super();
+        super(CONVERTER);
     }
     
-    /** Create new AlternateText by parsing unfolded calendar content */
     public static AlternateText parse(String content)
     {
-        AlternateText parameter = new AlternateText();
-        parameter.parseContent(content);
-        return parameter;
+    	return AlternateText.parse(new AlternateText(), content);
     }
 }

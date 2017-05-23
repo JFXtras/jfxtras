@@ -26,24 +26,28 @@ public class RevisePopupTest extends AgendaTestAbstract
     {
         // create appointment
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         // drag to new location
         moveTo("#hourLine11");
         press(MouseButton.SECONDARY);
         release(MouseButton.SECONDARY);
-        
+
         // edit property
         TextField summaryTextField = find("#summaryTextField");
         summaryTextField.setText("new summary");
-        
+
         // save changes to THIS AND FUTURE
         clickOn("#saveComponentButton");
         ComboBox<ChangeDialogOption> c = find("#changeDialogComboBox");
-        TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ONE));
+        TestUtil.runThenWaitForPaintPulse( () -> 
+        {
+        	c.getSelectionModel().select(ChangeDialogOption.ONE);
+        });
         clickOn("#changeDialogOkButton");
-        
+       
         // check appointment
         assertEquals(6, agenda.appointments().size());
         List<String> summaries = agenda.appointments().stream()

@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonthDay;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRuleIntegerAbstract;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 
 /**
@@ -58,47 +60,6 @@ public class ByMonthDay extends ByRuleIntegerAbstract<ByMonthDay>
     {
         return (value) -> (value >= -31) && (value <= 31) && (value != 0);
     }
-
-
-//    @Override
-//    public void copyTo(ByRule destination)
-//    {
-//        ByMonthDay destination2 = (ByMonthDay) destination;
-//        destination2.daysOfMonth = new int[daysOfMonth.length];
-//        for (int i=0; i<daysOfMonth.length; i++)
-//        {
-//            destination2.daysOfMonth[i] = daysOfMonth[i];
-//        }
-//    }
-    
-//    @Override
-//    public boolean equals(Object obj)
-//    {
-//        if (obj == this) return true;
-//        if((obj == null) || (obj.getClass() != getClass())) {
-//            return false;
-//        }
-//        ByMonthDay testObj = (ByMonthDay) obj;
-//        boolean daysOfMonthEquals = getValue().equals(testObj.getValue());
-//        return daysOfMonthEquals;
-//    }
-//    
-//    @Override
-//    public int hashCode()
-//    {
-//        int hash = 5;
-//        hash = (31 * hash) + getValue().hashCode();
-//        return hash;
-//    }
-    
-//    @Override
-//    public String toContent()
-//    {
-//        String days = getValue().stream()
-//                .map(d -> d + ",")
-//                .collect(Collectors.joining(","));
-//        return RRuleElementType.BY_MONTH_DAY + "=" + days; //.substring(0, days.length()-1); // remove last comma
-//    }
     
     /**
      * Return stream of valid dates made by rule (infinite if COUNT or UNTIL not present)
@@ -106,13 +67,6 @@ public class ByMonthDay extends ByRuleIntegerAbstract<ByMonthDay>
     @Override
     public Stream<Temporal> streamRecurrences(Stream<Temporal> inStream, ChronoUnit chronoUnit, Temporal dateTimeStart)
     {
-//        if (getValue() == null)
-//        { // if no days specified when constructing, get day of month for startDateTime
-//            setValue(MonthDay.from(dateTimeStart).getDayOfMonth());
-//        }
-//        ChronoUnit originalChronoUnit = chronoUnit.get();
-//        chronoUnit.set(DAYS);
-//        Set<Month> months = new LinkedHashSet<>();
         switch (chronoUnit)
         {
         case HOURS:
@@ -132,7 +86,6 @@ public class ByMonthDay extends ByRuleIntegerAbstract<ByMonthDay>
                         return false;
                     });
         case YEARS:
-//            months.addAll(Arrays.asList(Month.values()));
             return inStream.flatMap(d -> 
             { // Expand to be daysOfMonth days in current month
                 List<Temporal> dates = new ArrayList<>();
@@ -148,21 +101,10 @@ public class ByMonthDay extends ByRuleIntegerAbstract<ByMonthDay>
             { // Expand to be daysOfMonth days in current month
                 List<Temporal> dates = new ArrayList<>();
                 dates.addAll(extracted(d, dateTimeStart));
-//                for (int dayOfMonth : getValue())
-//                {
-//                    Temporal newTemporal = d.with(ChronoField.DAY_OF_MONTH, dayOfMonth);
-//                    int actualDayOfMonth = newTemporal.get(ChronoField.DAY_OF_MONTH);
-//                    // ensure day of month hasn't changed.  If it changed the date was invalid and should be ignored.
-//                    if ((dayOfMonth == actualDayOfMonth) && (! DateTimeUtilities.isBefore(newTemporal, dateTimeStart)))
-//                    {
-//                        dates.add(newTemporal);
-//                    }
-//                }
-//                System.out.println("months:" + d + " " + dates.size());
                 return dates.stream().sorted(DateTimeUtilities.TEMPORAL_COMPARATOR);
             });
         case WEEKS:
-            throw new IllegalArgumentException(elementType().toString() + " is not available for " + chronoUnit + " frequency."); // Not available
+            throw new IllegalArgumentException(name().toString() + " is not available for " + chronoUnit + " frequency."); // Not available
         default:
             throw new IllegalArgumentException("Not implemented: " + chronoUnit);
         }
@@ -193,7 +135,7 @@ public class ByMonthDay extends ByRuleIntegerAbstract<ByMonthDay>
                 }
             } else
             {
-                throw new IllegalArgumentException(elementType().toString() + " can't have a value of zero");
+                throw new IllegalArgumentException(name().toString() + " can't have a value of zero");
             }
             Temporal newTemporal = (finalDayOfMonth != 0) ? correctMonthTemporal.with(ChronoField.DAY_OF_MONTH, finalDayOfMonth) : null;
             
@@ -206,20 +148,8 @@ public class ByMonthDay extends ByRuleIntegerAbstract<ByMonthDay>
         return dates;
     }
     
-//    @Override
-//    public void parseContent(String content)
-//    {
-//        Integer[] monthDayArray = Arrays.asList(content.split(","))
-//                .stream()
-//                .map(s -> Integer.parseInt(s))
-//                .toArray(size -> new Integer[size]);
-//        setValue(FXCollections.observableArrayList(monthDayArray));
-//    }
-    
     public static ByMonthDay parse(String content)
     {
-        ByMonthDay element = new ByMonthDay();
-        element.parseContent(content);
-        return element;
+    	return ByMonthDay.parse(new ByMonthDay(), content);
     }
 }

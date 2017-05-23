@@ -5,10 +5,11 @@ import java.time.temporal.Temporal;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.parameters.NonStandardParameter;
-import jfxtras.icalendarfx.parameters.OtherParameter;
 import jfxtras.icalendarfx.parameters.TimeZoneIdentifierParameter;
 import jfxtras.icalendarfx.properties.PropBaseDateTime;
 import jfxtras.icalendarfx.properties.ValueType;
+import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
+import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 
 /**
  * <h2> RFC 5545, 3.8.2.2.  Date-Time End</h2>
@@ -91,16 +92,13 @@ public class DateTimeEnd extends PropBaseDateTime<Temporal, DateTimeEnd>
      * ensure parameterized type is the same as date-time represented by String parameter */
     public static DateTimeEnd parse(String value)
     {
-        DateTimeEnd property = new DateTimeEnd();
-        property.parseContent(value);
-        return property;
+    	return DateTimeEnd.parse(new DateTimeEnd(), value);
     }
     
     /** Parse string with Temporal class explicitly provided as parameter */
     public static DateTimeEnd parse(Class<? extends Temporal> clazz, String value)
     {
-        DateTimeEnd property = new DateTimeEnd();
-        property.parseContent(value);
+        DateTimeEnd property = DateTimeEnd.parse(new DateTimeEnd(), value);
         clazz.cast(property.getValue()); // class check
         return property;
     }

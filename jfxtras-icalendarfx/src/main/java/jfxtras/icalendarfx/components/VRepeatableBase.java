@@ -1,17 +1,25 @@
 package jfxtras.icalendarfx.components;
 
-import java.time.DateTimeException;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.DaylightSavingTime;
+import jfxtras.icalendarfx.components.StandardTime;
+import jfxtras.icalendarfx.components.VPrimary;
+import jfxtras.icalendarfx.components.VRepeatable;
+import jfxtras.icalendarfx.components.VRepeatableBase;
+import jfxtras.icalendarfx.properties.component.recurrence.PropertyBaseRecurrence;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRuleCache;
+import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 /**
  * Contains following properties:
  * @see RecurrenceRule
@@ -36,35 +44,21 @@ public abstract class VRepeatableBase<T> extends VPrimary<T> implements VRepeata
      * NOTE: DOESN'T CURRENTLY SUPPORT PERIOD VALUE TYPE
      * */
     @Override
-    public ObjectProperty<ObservableList<RecurrenceDates>> recurrenceDatesProperty()
-    {
-        if (recurrenceDates == null)
-        {
-            recurrenceDates = new SimpleObjectProperty<>(this, PropertyType.RECURRENCE_DATE_TIMES.toString());
-        }
-        return recurrenceDates;
-    }
+    public List<RecurrenceDates> getRecurrenceDates() { return recurrenceDates; }
+    private List<RecurrenceDates> recurrenceDates;
     @Override
-    public ObservableList<RecurrenceDates> getRecurrenceDates()
+    public void setRecurrenceDates(List<RecurrenceDates> recurrenceDates)
     {
-        return (recurrenceDates == null) ? null : recurrenceDates.get();
-    }
-    private ObjectProperty<ObservableList<RecurrenceDates>> recurrenceDates;
-    @Override
-    public void setRecurrenceDates(ObservableList<RecurrenceDates> recurrenceDates)
-    {
-        if (recurrenceDates != null)
-        {
-            orderer().registerSortOrderProperty(recurrenceDates);
-            recurrenceDates.addListener(getRecurrencesConsistencyWithDateTimeStartListener());
-            String error = checkRecurrencesConsistency(recurrenceDates);
-            if (error != null) throw new DateTimeException(error);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(recurrenceDatesProperty().get());
-        }
-        recurrenceDatesProperty().set(recurrenceDates);
-    }
+    	if (this.recurrenceDates != null)
+    	{
+    		this.recurrenceDates.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.recurrenceDates = recurrenceDates;
+    	if (recurrenceDates != null)
+    	{
+    		recurrenceDates.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
 
     /**
      * RRULE, Recurrence Rule
@@ -77,30 +71,22 @@ public abstract class VRepeatableBase<T> extends VPrimary<T> implements VRepeata
      * RRULE:FREQ=DAILY;COUNT=10
      * RRULE:FREQ=WEEKLY;UNTIL=19971007T000000Z;WKST=SU;BYDAY=TU,TH
      */
-    @Override public ObjectProperty<RecurrenceRule> recurrenceRuleProperty()
-    {
-        if (recurrenceRule == null)
-        {
-            recurrenceRule = new SimpleObjectProperty<>(this, PropertyType.UNIQUE_IDENTIFIER.toString());
-            orderer().registerSortOrderProperty(recurrenceRule);
-        }
-        return recurrenceRule;
-    }
     @Override
-    public RecurrenceRule getRecurrenceRule() { return (recurrenceRule == null) ? null : recurrenceRuleProperty().get(); }
-    private ObjectProperty<RecurrenceRule> recurrenceRule;
-    
+    public RecurrenceRule getRecurrenceRule() { return recurrenceRule; }
+    private RecurrenceRule recurrenceRule;
+	@Override
+	public void setRecurrenceRule(RecurrenceRule recurrenceRule)
+	{
+		orderChild(this.recurrenceRule, recurrenceRule);
+		this.recurrenceRule = recurrenceRule;
+	}
+
     /*
      * CONSTRUCTORS
      */
     VRepeatableBase() { }
     
-//    VComponentRepeatableBase(String contentLines)
-//    {
-//        super(contentLines);
-//    }    
-    
-    public VRepeatableBase(StandardOrDaylight<T> source)
+    public VRepeatableBase(VRepeatableBase<T> source)
     {
         super(source);
     }
@@ -119,7 +105,109 @@ public abstract class VRepeatableBase<T> extends VPrimary<T> implements VRepeata
     @Override
     public List<String> errors()
     {
-        return VRepeatable.errorsRepeatable(this);
+    	List<String> errors = super.errors();
+    	errors.addAll(errorsRepeatable(this));
+    	errors.addAll(errorsRecurrence(getRecurrenceDates(), getDateTimeStart()));
+        return errors;
+    }
+    
+    protected static List<String> errorsRepeatable(VRepeatable<?> testObj)
+    {
+        List<String> errors = new ArrayList<>();
+        String recurrenceDateError = testObj.checkRecurrencesConsistency(testObj.getRecurrenceDates());
+        if (recurrenceDateError != null) errors.add(recurrenceDateError);
+
+        if (testObj.getRecurrenceRule() != null && testObj.getRecurrenceRule().getValue().getUntil() != null)
+        {
+            Temporal until = testObj.getRecurrenceRule().getValue().getUntil().getValue();
+            DateTimeType untilType = DateTimeType.of(until);
+            DateTimeType startType = DateTimeType.of(testObj.getDateTimeStart().getValue());
+            switch (startType)
+            {
+            case DATE:
+                if (untilType != DateTimeType.DATE)
+                {
+                    errors.add("If DTSTART specifies a DATE then UNTIL must also specify a DATE value instead of:" + untilType);
+                }
+                break;
+            case DATE_WITH_LOCAL_TIME:
+            case DATE_WITH_LOCAL_TIME_AND_TIME_ZONE:
+            case DATE_WITH_UTC_TIME:
+                if (untilType != DateTimeType.DATE_WITH_UTC_TIME)
+                {
+                    errors.add("If DTSTART specifies a DATE_WITH_LOCAL_TIME, DATE_WITH_LOCAL_TIME_AND_TIME_ZONE or DATE_WITH_UTC_TIME then UNTIL must specify a DATE_WITH_UTC_TIME value instead of:" + untilType);
+                }
+                break;
+            default:
+                throw new RuntimeException("unsupported DateTimeType:" + startType);
+            }
+        }
+        return errors;
+    }
+    
+    protected static List<String> errorsRecurrence(List<? extends PropertyBaseRecurrence<?>> recurrenceDates, DateTimeStart dtstart)
+    {
+    	List<String> errors = new ArrayList<>();
+    	
+    	// error check - all Temporal types must be same
+    	if ((recurrenceDates != null) && (! recurrenceDates.isEmpty()))
+		{
+    		PropertyBaseRecurrence<?> sample = recurrenceDates.get(0);
+        	Temporal sampleTemporal = recurrenceDates.stream()
+            		.flatMap(r -> r.getValue().stream())
+            		.findAny()
+            		.get();
+    		DateTimeType sampleType = DateTimeUtilities.DateTimeType.of(sampleTemporal);
+        	Optional<String> error1 = recurrenceDates
+        		.stream()
+        		.flatMap(r -> r.getValue().stream())
+	        	.map(v ->
+	        	{
+	        		DateTimeType recurrenceType = DateTimeUtilities.DateTimeType.of(v);
+	        		if (! recurrenceType.equals(sampleType))
+	        		{
+	                    return sample.name() + ": DateTimeType " + recurrenceType +
+	                            " doesn't match previous recurrence's DateTimeType " + sampleType;            
+	        		}
+	        		return null;
+	        	})
+	        	.filter(s -> s != null)
+	        	.findAny();
+        	
+        	if (error1.isPresent())
+        	{
+        		errors.add(error1.get());
+        	} else
+        	{ // don't check ZoneID if some types don't match - can cause ClassCastException otherwise
+	            // ensure all ZoneId values are the same
+	            if (sampleTemporal instanceof ZonedDateTime)
+	            {
+	                ZoneId zone = ((ZonedDateTime) sampleTemporal).getZone();
+	                boolean allZonesIdentical = recurrenceDates
+	                        .stream()
+	                        .flatMap(r -> r.getValue().stream())
+	                        .map(t -> ((ZonedDateTime) t).getZone())
+	                        .allMatch(z -> z.equals(zone));
+	                if (! allZonesIdentical)
+	                {
+	                	errors.add("ZoneId are not all identical");
+	                }
+	            }
+        	}
+            
+        	// DTSTART check
+        	if (dtstart != null)
+        	{
+	            DateTimeType dateTimeStartType = DateTimeUtilities.DateTimeType.of(dtstart.getValue());
+	            if (sampleType != dateTimeStartType)
+	            {
+	                errors.add("DTSTART, " + sample.name() + ": The value type of " + sample.name() + 
+	    	            	" elements MUST be the same as the DTSTART property (DTSTART=" + 
+	    	            	dateTimeStartType + ", " + sample.name() + "=" + sampleType);
+	            }
+        	}
+        }
+        return errors;
     }
 
     /*

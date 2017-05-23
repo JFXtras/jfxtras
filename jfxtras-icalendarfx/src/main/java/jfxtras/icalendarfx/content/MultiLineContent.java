@@ -2,8 +2,6 @@ package jfxtras.icalendarfx.content;
 
 import java.util.stream.Collectors;
 
-import jfxtras.icalendarfx.utilities.Orderer;
-
 public class MultiLineContent extends ContentLineBase
 {
     final private String firstContentLine;
@@ -27,8 +25,8 @@ public class MultiLineContent extends ContentLineBase
     {
         StringBuilder builder = new StringBuilder(builderSize);
         builder.append(firstContentLine + System.lineSeparator());
-        String content = orderer().childrenUnmodifiable().stream()
-                .map(c -> c.toContent())
+        String content = orderer.childrenUnmodifiable().stream()
+                .map(c -> c.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         if (! content.isEmpty())
         {

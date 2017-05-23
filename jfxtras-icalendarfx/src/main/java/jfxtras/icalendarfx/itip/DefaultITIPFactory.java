@@ -45,5 +45,4 @@ public class DefaultITIPFactory extends AbstractITIPFactory
         }
         throw new RuntimeException("not implemented:" + methodType);
     }
-
 }

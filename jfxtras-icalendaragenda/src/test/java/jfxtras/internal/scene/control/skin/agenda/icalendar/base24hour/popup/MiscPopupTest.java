@@ -34,7 +34,7 @@ public class MiscPopupTest extends VEventPopupTestBase
         clickOn("#saveComponentButton");
         
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals("", iTIPMessage);
     }
@@ -65,7 +65,7 @@ public class MiscPopupTest extends VEventPopupTestBase
         clickOn("#cancelComponentButton");
         
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals("", iTIPMessage);
     }

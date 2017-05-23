@@ -1,6 +1,5 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.parameters.CalendarUser;
 import jfxtras.icalendarfx.parameters.Delegatees;
 import jfxtras.icalendarfx.parameters.Delegators;
@@ -8,6 +7,7 @@ import jfxtras.icalendarfx.parameters.GroupMembership;
 import jfxtras.icalendarfx.parameters.ParticipationRole;
 import jfxtras.icalendarfx.parameters.ParticipationStatus;
 import jfxtras.icalendarfx.parameters.RSVP;
+import jfxtras.icalendarfx.properties.PropCalendarUser;
 import jfxtras.icalendarfx.properties.component.relationship.PropertyBaseAttendee;
 
 /**
@@ -32,7 +32,6 @@ public interface PropAttendee<U> extends PropCalendarUser<U>
      * ATTENDEE;CUTYPE=GROUP:mailto:ietf-calsch@example.org
      */
     CalendarUser getCalendarUser();
-    ObjectProperty<CalendarUser> calendarUserProperty();
     void setCalendarUser(CalendarUser calendarUser);  
 
     /**
@@ -48,7 +47,6 @@ public interface PropAttendee<U> extends PropCalendarUser<U>
      *  jdoe@example.com
      */
     Delegators getDelegators();
-    ObjectProperty<Delegators> delegatorsProperty();
     void setDelegators(Delegators delegators);
 
     /**
@@ -65,7 +63,6 @@ public interface PropAttendee<U> extends PropCalendarUser<U>
      * 
      */
     Delegatees getDelegatees();
-    ObjectProperty<Delegatees> delegateesProperty();
     void setDelegatees(Delegatees delegatees);
     
     /**
@@ -81,7 +78,6 @@ public interface PropAttendee<U> extends PropCalendarUser<U>
      * 
      */
     GroupMembership getGroupMembership();
-    ObjectProperty<GroupMembership> groupMembershipProperty();
     void setGroupMembership(GroupMembership groupMembership);
     
     /**
@@ -95,7 +91,6 @@ public interface PropAttendee<U> extends PropCalendarUser<U>
      * ATTENDEE;RSVP=TRUE:mailto:jsmith@example.com
      */
     RSVP getRSVP();
-    ObjectProperty<RSVP> rsvpProperty();
     void setRSVP(RSVP rsvp);
     
     /**
@@ -109,7 +104,6 @@ public interface PropAttendee<U> extends PropCalendarUser<U>
      * ATTENDEE;PARTSTAT=DECLINED:mailto:jsmith@example.com
      */
     ParticipationStatus getParticipationStatus();
-    ObjectProperty<ParticipationStatus> participationStatusProperty();
     void setParticipationStatus(ParticipationStatus participation); 
 
     /**
@@ -123,6 +117,5 @@ public interface PropAttendee<U> extends PropCalendarUser<U>
      * ATTENDEE;ROLE=CHAIR:mailto:mrbig@example.com
      */
     ParticipationRole getParticipationRole();
-    ObjectProperty<ParticipationRole> participationRoleProperty();
     void setParticipationRole(ParticipationRole participationRole);
 }

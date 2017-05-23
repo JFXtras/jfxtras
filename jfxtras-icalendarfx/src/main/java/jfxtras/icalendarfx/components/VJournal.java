@@ -1,14 +1,14 @@
 package jfxtras.icalendarfx.components;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.properties.component.descriptive.Description;
 
 /**
@@ -74,54 +74,60 @@ public class VJournal extends VDisplayable<VJournal>
      *  
      *  VJournal can have multiple description properties.
      */
-    public ObjectProperty<ObservableList<Description>> descriptionsProperty()
+    public List<Description> getDescriptions() { return descriptions; }
+    private List<Description> descriptions;
+    public void setDescriptions(List<Description> descriptions)
     {
-        if (descriptions == null)
-        {
-            descriptions = new SimpleObjectProperty<>(this, PropertyType.DESCRIPTION.toString());
-        }
-        return descriptions;
-    }
-    public ObservableList<Description> getDescriptions() { return (descriptions == null) ? null : descriptions.get(); }
-    private ObjectProperty<ObservableList<Description>> descriptions;
-    public void setDescriptions(ObservableList<Description> descriptions)
+    	if (this.descriptions != null)
+    	{
+    		this.descriptions.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.descriptions = descriptions;
+    	if (descriptions != null)
+    	{
+    		descriptions.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
+    public VJournal withDescriptions(List<Description> descriptions)
     {
-        if (descriptions != null)
-        {
-            orderer().registerSortOrderProperty(descriptions);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(this.descriptions.get());
-        }
-        descriptionsProperty().set(descriptions);
-    }
-    public VJournal withDescriptions(ObservableList<Description> descriptions) { setDescriptions(descriptions); return this; }
+    	if (getDescriptions() == null)
+    	{
+    		setDescriptions(new ArrayList<>());
+    	}
+    	getDescriptions().addAll(descriptions);
+    	if (descriptions != null)
+    	{
+    		descriptions.forEach(c -> orderChild(c));
+    	}
+    	return this;
+	}
     public VJournal withDescriptions(String...descriptions)
     {
-        Arrays.stream(descriptions).forEach(c -> PropertyType.DESCRIPTION.parse(this, c));
-        return this;
+        List<Description> list = Arrays.stream(descriptions)
+                .map(c -> Description.parse(c))
+                .collect(Collectors.toList());
+        return withDescriptions(list);
     }
     public VJournal withDescriptions(Description...descriptions)
     {
-        if (getDescriptions() == null)
-        {
-            setDescriptions(FXCollections.observableArrayList(descriptions));
-        } else
-        {
-            getDescriptions().addAll(descriptions);
-        }
-        return this;
+    	return withDescriptions(Arrays.asList(descriptions));
     }
+    
+	@Override
+	public List<VJournal> calendarList()
+	{
+		if (getParent() != null)
+		{
+			VCalendar cal = (VCalendar) getParent();
+			return cal.getVJournals();
+		}
+		return null;
+	}
     
     /*
      * CONSTRUCTORS
      */
     public VJournal() { super(); }
-    
-//    public VJournal(String contentLines)
-//    {
-//        super(contentLines);
-//    }
     
     /** Copy constructor */
     public VJournal(VJournal source)
@@ -129,21 +135,20 @@ public class VJournal extends VDisplayable<VJournal>
         super(source);
     }
     
-//    @Override
-//    public Reviser newRevisor() { return new ReviserVJournal(this); }
-    
     @Override
     public List<String> errors()
     {
         return Collections.unmodifiableList(super.errors());
     }
     
-    /** Parse content lines into calendar component object */
-    @Deprecated // use simple factory
-    public static VJournal parse(String contentLines)
+    /**
+     * Creates a new VJournal calendar component by parsing a String of iCalendar content lines
+     *
+     * @param content  the text to parse, not null
+     * @return  the parsed VJournal
+     */
+    public static VJournal parse(String content)
     {
-        VJournal component = new VJournal();
-        component.parseContent(contentLines);
-        return component;
+    	return VJournal.parse(new VJournal(), content);
     }
 }

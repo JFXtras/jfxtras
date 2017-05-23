@@ -50,10 +50,10 @@ public class PopupReviseOneTest extends VEventPopupTestBase
        clickOn("#changeDialogOkButton");
 
        String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-               .map(v -> v.toContent())
+               .map(v -> v.toString())
                .collect(Collectors.joining(System.lineSeparator()));
        String dtstamp = iTIPMessage.split(System.lineSeparator())[10];
-       String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+       String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
        assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
 
        String expectediTIPMessage =
@@ -114,10 +114,10 @@ public class PopupReviseOneTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ONE));
         clickOn("#changeDialogOkButton");
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         String dtstamp = iTIPMessage.split(System.lineSeparator())[10];
-        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toContent();
+        String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
         assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +

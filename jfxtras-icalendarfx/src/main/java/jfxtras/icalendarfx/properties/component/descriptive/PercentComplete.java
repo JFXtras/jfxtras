@@ -1,7 +1,8 @@
 package jfxtras.icalendarfx.properties.component.descriptive;
 
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.descriptive.PercentComplete;
 
 /**
  * PERCENT-COMPLETE
@@ -21,7 +22,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * The property can be specified in following components:
  * @see VTodo
  */
-public class PercentComplete extends PropertyBase<Integer, PercentComplete>
+public class PercentComplete extends VPropertyBase<Integer, PercentComplete>
 {
     public PercentComplete(PercentComplete source)
     {
@@ -38,10 +39,8 @@ public class PercentComplete extends PropertyBase<Integer, PercentComplete>
         super();
     }
     
-    public static PercentComplete parse(String propertyContent)
+    public static PercentComplete parse(String content)
     {
-        PercentComplete property = new PercentComplete();
-        property.parseContent(propertyContent);
-        return property;
+    	return PercentComplete.parse(new PercentComplete(), content);
     }
 }

@@ -4,15 +4,13 @@ import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAmount;
+import java.util.List;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import jfxtras.icalendarfx.components.VAlarm;
 import jfxtras.icalendarfx.parameters.AlarmTriggerRelationship;
-import jfxtras.icalendarfx.parameters.ParameterType;
 import jfxtras.icalendarfx.parameters.ValueParameter;
 import jfxtras.icalendarfx.properties.PropAlarmTrigger;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
 import jfxtras.icalendarfx.properties.ValueType;
 
 /**
@@ -34,7 +32,7 @@ import jfxtras.icalendarfx.properties.ValueType;
  * The property can be specified in following components:
  * @see VAlarm
  */
-public class Trigger<T> extends PropertyBase<T, Trigger<T>> implements PropAlarmTrigger<T>
+public class Trigger<T> extends VPropertyBase<T, Trigger<T>> implements PropAlarmTrigger<T>
 {
     /**
     * RELATED: Alarm Trigger Relationship
@@ -43,27 +41,18 @@ public class Trigger<T> extends PropertyBase<T, Trigger<T>> implements PropAlarm
     * respect to the start or end of the calendar component.
     */
    @Override
-   public AlarmTriggerRelationship getAlarmTrigger() { return (relationship == null) ? null : relationship.get(); }
-   @Override
-   public ObjectProperty<AlarmTriggerRelationship> AlarmTriggerProperty()
-   {
-       if (relationship == null)
-       {
-           relationship = new SimpleObjectProperty<>(this, ParameterType.ALARM_TRIGGER_RELATIONSHIP.toString());
-           orderer().registerSortOrderProperty(relationship);
-       }
-       return relationship;
-   }
-   private ObjectProperty<AlarmTriggerRelationship> relationship;
+   public AlarmTriggerRelationship getAlarmTrigger() { return relationship; }
+   private AlarmTriggerRelationship relationship;
    @Override
    public void setAlarmTrigger(AlarmTriggerRelationship relationship)
    {
        if (relationship != null)
        {
-           ValueType valueType = (getValueType() == null) ? propertyType().allowedValueTypes().get(0) : getValueType().getValue();
+           ValueType valueType = (getValueType() == null) ? defaultValueType : getValueType().getValue();
            if (valueType == ValueType.DURATION)
            {
-               AlarmTriggerProperty().set(relationship);
+        	   orderChild(relationship);
+               this.relationship = relationship;
            } else
            {
                throw new IllegalArgumentException("Alarm Trigger Relationship can only be set if value type is DURATION");
@@ -97,7 +86,7 @@ public class Trigger<T> extends PropertyBase<T, Trigger<T>> implements PropAlarm
             {
                 throw new DateTimeException("Unsupported ZoneId:" + zone + " only Z supported");
             }
-            setValueType(ValueType.DATE_TIME); // override default value type            
+            setValueType(ValueType.DATE_TIME); // override default value type
         }
         super.setValue(value);
     }
@@ -144,11 +133,9 @@ public class Trigger<T> extends PropertyBase<T, Trigger<T>> implements PropAlarm
     
     /** Parse string to Temporal.  Not type safe.  Implementation must
      * ensure parameterized type is the same as date-time represented by String parameter */
-    public static <U> Trigger<U> parse(String value)
+    public static <U> Trigger<U> parse(String content)
     {
-        Trigger<U> property = new Trigger<U>();
-        property.parseContent(value);
-        return property;
+        return Trigger.parse(new Trigger<U>(), content);
     }
     
     /** Parse string with Temporal class explicitly provided as parameter */
@@ -156,8 +143,8 @@ public class Trigger<T> extends PropertyBase<T, Trigger<T>> implements PropAlarm
     {
         Trigger<U> property = new Trigger<U>();
         property.setConverterByClass(clazz);
-        property.parseContent(value);
-        clazz.cast(property.getValue()); // class check
+        List<Message> m = property.parseContent(value);
+        if (! m.isEmpty()) throw new DateTimeException("Invalid value:" + value);
         return property;
     }
 }

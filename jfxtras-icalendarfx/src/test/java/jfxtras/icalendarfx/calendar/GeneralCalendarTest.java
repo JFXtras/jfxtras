@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VAlarm;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
@@ -116,7 +117,7 @@ public class GeneralCalendarTest extends ICalendarTestAbstract
         VCalendar c = new VCalendar()
                 .withVersion(new Version())
                 .withProductIdentifier(new ProductIdentifier("-//JFxtras//iCalendarFx-1.0//EN"))
-                .withCalendarScale(new CalendarScale())
+                .withCalendarScale(new CalendarScale(CalendarScale.DEFAULT_CALENDAR_SCALE))
                 .withVTodos(new VTodo()
                         .withDateTimeCompleted("COMPLETED:19960401T150000Z")
                         .withDateTimeDue("TZID=America/Los_Angeles:19960401T050000")
@@ -126,7 +127,7 @@ public class GeneralCalendarTest extends ICalendarTestAbstract
                 .withVEvents(getMonthly6());
 
         assertEquals(vCalendar, c);
-        assertEquals(expectedContent, c.toContent());
+        assertEquals(expectedContent, c.toString());
     }
     
     @Test
@@ -168,11 +169,8 @@ public class GeneralCalendarTest extends ICalendarTestAbstract
        "END:VEVENT" + System.lineSeparator() +
        "END:VCALENDAR";
         VCalendar vCalendar = VCalendar.parse(content);
-//        System.out.println(vCalendar.toContent());
-//        System.out.println(content);
-        assertEquals(content, vCalendar.toContent());
-//        VEventNew e = vCalendar.getVEvents().get(1);
-//        e.getNonStandardProperties().stream().forEach(System.out::println);
+        VAlarm a = vCalendar.getVEvents().get(1).getVAlarms().get(0);
+        assertEquals(content, vCalendar.toString());
     }
 
 }

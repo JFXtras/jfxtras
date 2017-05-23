@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class VCalendarRecurrenceIDTest extends ICalendarTestAbstract
         VEvent child = getRecurrenceForYearly1();
         VCalendar c = new VCalendar()
                 .withVEvents(parent, child);
+
         assertEquals(2, c.getVEvents().size());
         assertEquals(1, parent.recurrenceChildren().size());
         List<Temporal> expectedRecurrences = Arrays.asList(
@@ -45,10 +47,15 @@ public class VCalendarRecurrenceIDTest extends ICalendarTestAbstract
         VCalendar c = new VCalendar();
         
         // add components out-of-order
+        c.setVEvents(new ArrayList<>());
         c.getVEvents().add(child);
+        c.orderChild(child);
         c.getVEvents().add(parent);
+        c.orderChild(parent);
+//        c.childrenUnmodifiable().forEach(System.out::println);
         assertEquals(1, parent.recurrenceChildren().size());
         c.getVEvents().add(child2);
+        c.orderChild(child2);
         assertEquals(2, parent.recurrenceChildren().size());
         {
             List<Temporal> expectedRecurrences = Arrays.asList(
@@ -84,10 +91,11 @@ public class VCalendarRecurrenceIDTest extends ICalendarTestAbstract
         VEvent parent = getYearly1();
         VEvent child = getRecurrenceForYearly1();
         VEvent child2 = getRecurrenceForYearly2();
-        VCalendar c = new VCalendar();
+        VCalendar cal = new VCalendar();
         
         // add components all at once
-        c.getVEvents().addAll(child, parent, child2);
+        List<VEvent> children = Arrays.asList(child, parent, child2);
+        children.forEach(c -> cal.addChild(c));
         assertEquals(2, parent.recurrenceChildren().size());
         {
             List<Temporal> expectedRecurrences = Arrays.asList(

@@ -19,8 +19,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import jfxtras.icalendarfx.components.VLocatable;
-import jfxtras.icalendarfx.properties.component.descriptive.Description;
-import jfxtras.icalendarfx.properties.component.descriptive.Location;
 import jfxtras.scene.control.LocalDateTextField;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import jfxtras.scene.control.agenda.TemporalUtilities;
@@ -100,29 +98,22 @@ public abstract class EditDescriptiveLocatableVBox<T extends VLocatable<T>> exte
     }
 
     Temporal endNewRecurrence; // bound to endTextField, but adjusted to be DateTimeType identical to VComponent DTSTART, updated in endTextListener
-//    private Temporal endRecurrenceOriginal;
 
     @Override
     public void setupData(
-//            Appointment appointment,
             T vComponent,
             Temporal startRecurrence,
             Temporal endRecurrence,
-//            List<T> vComponents,
             List<String> categories)
     {
-//        endRecurrenceOriginal = appointment.getEndTemporal();
-        
-        if (vComponent.getDescription() == null)
-        {
-            vComponent.setDescription(Description.parse(""));
-        }
-        descriptionTextArea.textProperty().bindBidirectional(vComponent.getDescription().valueProperty());
-        if (vComponent.getLocation() == null)
-        {
-            vComponent.setLocation(Location.parse(""));
-        }
-        locationTextField.textProperty().bindBidirectional(vComponent.getLocation().valueProperty());
+        // String bindings
+        String initialDescription = (vComponent.getDescription() == null || vComponent.getDescription().getValue() == null) ? "" : vComponent.getDescription().getValue();
+		descriptionTextArea.setText(initialDescription);
+        descriptionTextArea.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setDescription(newValue));
+
+        String initialLocation = (vComponent.getLocation() == null || vComponent.getLocation().getValue() == null) ? "" : vComponent.getLocation().getValue();
+    	locationTextField.setText(initialLocation);
+        locationTextField.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setLocation(newValue));
                 
         /*
          * END DATE/TIME

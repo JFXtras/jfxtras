@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarStaticComponents;
@@ -17,12 +16,10 @@ import jfxtras.icalendarfx.properties.calendar.Version;
 public class ComboMessageTest
 {
     @Test
-    @Ignore // TestFX4
     public void canEditThisAndFuture()
     {
-        VCalendar mainVCalendar = new VCalendar();
-        VEvent vevent = ICalendarStaticComponents.getDaily1();
-        mainVCalendar.getVEvents().add(vevent);
+        VCalendar mainVCalendar = new VCalendar()
+        		.withVEvents(ICalendarStaticComponents.getDaily1());
 
        String iTIPMessage =
                "BEGIN:VCALENDAR" + System.lineSeparator() +

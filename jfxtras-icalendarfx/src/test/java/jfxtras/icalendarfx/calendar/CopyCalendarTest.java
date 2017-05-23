@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarTestAbstract;
 import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.calendar.CalendarScale;
 import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
@@ -31,5 +32,15 @@ public class CopyCalendarTest extends ICalendarTestAbstract
         VCalendar c2 = new VCalendar(c);
         assertEquals(c, c2);
         assertFalse(c == c2);
+    }
+    
+    @Test
+    public void canCopyCalendar2()
+    {
+        VCalendar c = new VCalendar();
+        VEvent yearly1 = getYearly1();
+		c.addChild(yearly1);
+		VEvent yearly2 = new VEvent(yearly1);
+		assertEquals(c, yearly2.getParent());
     }
 }

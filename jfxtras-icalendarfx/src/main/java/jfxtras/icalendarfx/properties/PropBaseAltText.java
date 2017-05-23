@@ -2,17 +2,18 @@ package jfxtras.icalendarfx.properties;
 
 import java.net.URI;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.StringConverter;
+import javax.annotation.Resources;
+
 import jfxtras.icalendarfx.parameters.AlternateText;
-import jfxtras.icalendarfx.parameters.ParameterType;
+import jfxtras.icalendarfx.properties.PropAltText;
+import jfxtras.icalendarfx.properties.PropBaseAltText;
+import jfxtras.icalendarfx.properties.PropBaseLanguage;
 import jfxtras.icalendarfx.properties.component.descriptive.Comment;
 import jfxtras.icalendarfx.properties.component.descriptive.Description;
 import jfxtras.icalendarfx.properties.component.descriptive.Location;
-import jfxtras.icalendarfx.properties.component.descriptive.Resources;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 import jfxtras.icalendarfx.properties.component.relationship.Contact;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * Property with language, alternate text display, and a text-based value
@@ -63,24 +64,33 @@ public abstract class PropBaseAltText<T,U> extends PropBaseLanguage<T,U> impleme
      * </html>
      */
     @Override
-    public AlternateText getAlternateText() { return (alternateText == null) ? null : alternateText.get(); }
+    public AlternateText getAlternateText() { return alternateText; }
+    private AlternateText alternateText;
     @Override
-    public ObjectProperty<AlternateText> alternateTextProperty()
+    public void setAlternateText(AlternateText alternateText)
     {
-        if (alternateText == null)
-        {
-            alternateText = new SimpleObjectProperty<>(this, ParameterType.ALTERNATE_TEXT_REPRESENTATION.toString());
-            orderer().registerSortOrderProperty(alternateText);
-        }
-        return alternateText;
-    }
-    private ObjectProperty<AlternateText> alternateText;
-    @Override
-    public void setAlternateText(AlternateText alternateText) { alternateTextProperty().set(alternateText); }
-    public void setAlternateText(String value) { setAlternateText(AlternateText.parse(value)); }
-    public U withAlternateText(AlternateText altrep) { setAlternateText(altrep); return (U) this; }
-    public U withAlternateText(URI value) { setAlternateText(new AlternateText(value)); return (U) this; }
-    public U withAlternateText(String content) { setAlternateText(content); return (U) this; }
+    	orderChild(this.alternateText, alternateText);
+    	this.alternateText = alternateText;
+	}
+    public void setAlternateText(String value)
+    {
+    	setAlternateText(AlternateText.parse(new AlternateText(), value));
+	}
+    public U withAlternateText(AlternateText altrep)
+    {
+    	setAlternateText(altrep);
+    	return (U) this;
+	}
+    public U withAlternateText(URI value)
+    {
+    	setAlternateText(new AlternateText(value));
+    	return (U) this;
+	}
+    public U withAlternateText(String content)
+    {
+    	setAlternateText(content);
+    	return (U) this;
+	}
     
     /*
      * CONSTRUCTORS

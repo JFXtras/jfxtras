@@ -4,14 +4,17 @@ import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.components.VDisplayable;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTimeZone;
 import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.component.relationship.Attendee;
 import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
 
 /** 
  * 
@@ -104,7 +107,11 @@ public class ProcessPublish implements Processable
     public List<String> process(VCalendar mainVCalendar, VCalendar iTIPMessage)
     {
         List<String> log = new ArrayList<>();
-        iTIPMessage.getAllVComponents().forEach(c ->
+        iTIPMessage.childrenUnmodifiable()
+        	.stream()
+        	.filter(c -> c instanceof VComponent)
+        	.map(c -> (VComponent) c)
+        	.forEach(c ->
         {
             if (c instanceof VDisplayable)
             {
@@ -116,12 +123,26 @@ public class ProcessPublish implements Processable
                 if (! hasNoAttendees) log.add("WARNING: According to RFC 5546, a PUBLISH MUST NOT contain the ATTENDEE property yet it's exists. " + c.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue() + " is being processed anyway.");
                 final int newSequence = (vDisplayable.getSequence() == null) ? 0 : vDisplayable.getSequence().getValue();
                 boolean isNewSequenceHigher = true;
+                UniqueIdentifier uid = vDisplayable.getUniqueIdentifier();
                 
-                final String uid = vDisplayable.getUniqueIdentifier().getValue();
+                final List<VDisplayable<?>> relatedVComponents;
+                List<? extends VComponent> list = mainVCalendar.getVComponents(vDisplayable);
+                if (list == null)
+                {
+                	relatedVComponents = null;
+                } else
+                {
+	                relatedVComponents = mainVCalendar.getVComponents(vDisplayable)
+	                	.stream()
+	                	.filter(v -> v instanceof VDisplayable)
+	            		.map(v -> (VDisplayable<?>) v)
+	            		.filter(v -> v.getUniqueIdentifier().equals(uid))
+	            		.collect(Collectors.toList());
+                }
                 final Temporal recurrenceID = (vDisplayable.getRecurrenceId() != null) ? vDisplayable.getRecurrenceId().getValue() : null;
 
                 // check for previous match to remove it
-                if (mainVCalendar.uidComponentsMap().get(uid) != null)
+                if (relatedVComponents != null)
                 {
                     /* if new has recurrence id:
                      *      if old has matching recurrence-id then replace it
@@ -129,7 +150,7 @@ public class ProcessPublish implements Processable
                      * if new doesn't have recurrence id, but match exists, replace match
                      * If no match then just add - can't have recurrence id 
                      */
-                    VDisplayable<?> oldMatchingVComponent = mainVCalendar.uidComponentsMap().get(uid)
+                    VDisplayable<?> oldMatchingVComponent = relatedVComponents
                             .stream()
                             .filter(v -> {
                                 Temporal mRecurrenceID = (v.getRecurrenceId() != null) ? v.getRecurrenceId().getValue() : null;
@@ -145,26 +166,27 @@ public class ProcessPublish implements Processable
                         if (! isNewSequenceHigher) throw new IllegalArgumentException("Can't process PUBLISH method: SEQUENCY property MUST be higher than previously published component (new=" + newSequence + " old=" + oldSequence + ")");
                         if (isNewSequenceHigher)
                         {
-                            mainVCalendar.getVComponents(oldMatchingVComponent.getClass()).remove(oldMatchingVComponent); // remove old VComponent because we're replacing it
+                        	mainVCalendar.removeChild(oldMatchingVComponent);
                         }
                     }
                 }
-                
-                mainVCalendar.addVComponent(c);
+            	mainVCalendar.addChild(c);
+
                 log.add("SUCCESS: added " + c.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue());
                 
                 // Remove orphaned recurrence children
+                // 	TODO  - IS THIS NECESSARY???
                 List<VDisplayable<?>> orphanedChildren = vDisplayable.orphanedRecurrenceChildren();
                 if (! orphanedChildren.isEmpty())
                 {
-                    mainVCalendar.getVComponents(vDisplayable.getClass()).removeAll(orphanedChildren);
+                    vDisplayable.calendarList().removeAll(orphanedChildren);
                 }
             } else if (c instanceof VTimeZone)
             {
                 mainVCalendar.getVTimeZones().add((VTimeZone) c);
             } else
             { // non-displayable VComponents (only VFREEBUSY has UID)
-                log.add("Can't process non-displayble component method (not implemented):" + System.lineSeparator() + c.toContent());
+                log.add("Can't process non-displayble component method (not implemented):" + System.lineSeparator() + c.toString());
             }
         });
 //        System.out.println("log:" + log);

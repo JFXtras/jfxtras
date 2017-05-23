@@ -4,24 +4,24 @@ import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.VChild;
-import jfxtras.icalendarfx.VParent;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.components.VAlarm;
+import jfxtras.icalendarfx.components.VComponent;
+import jfxtras.icalendarfx.components.VDescribable2;
+import jfxtras.icalendarfx.components.VDisplayable;
+import jfxtras.icalendarfx.components.VDuration;
+import jfxtras.icalendarfx.components.VLocatable;
 import jfxtras.icalendarfx.properties.component.descriptive.Description;
 import jfxtras.icalendarfx.properties.component.descriptive.GeographicPosition;
 import jfxtras.icalendarfx.properties.component.descriptive.Location;
 import jfxtras.icalendarfx.properties.component.descriptive.Priority;
 import jfxtras.icalendarfx.properties.component.descriptive.Resources;
-import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.DurationProp;
 
 public abstract class VLocatable<T> extends VDisplayable<T> implements VDescribable2<T>, VDuration<T>
@@ -41,18 +41,14 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
      * Note: Only VJournal allows multiple instances of DESCRIPTION
      */
     @Override
-    public ObjectProperty<Description> descriptionProperty()
-    {
-        if (description == null)
-        {
-            description = new SimpleObjectProperty<>(this, PropertyType.DESCRIPTION.toString());
-            orderer().registerSortOrderProperty(description);
-        }
-        return description;
-    }
+    public Description getDescription() { return description; }
+    private Description description;
     @Override
-    public Description getDescription() { return (description == null) ? null : descriptionProperty().get(); }
-    private ObjectProperty<Description> description;
+	public void setDescription(Description description)
+    {
+    	orderChild(this.description, description);
+    	this.description = description;
+	}
 
     /** 
      * DURATION
@@ -62,48 +58,25 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
      * Example:
      * DURATION:PT15M
      * */
+    private DurationProp duration;
+	@Override
+	public DurationProp getDuration() { return duration; }
     @Override
-    public ObjectProperty<DurationProp> durationProperty()
+	public void setDuration(DurationProp duration)
     {
-        if (duration == null)
+        if (duration != null)
         {
-            duration = new SimpleObjectProperty<>(this, PropertyType.DURATION.toString());
-            orderer().registerSortOrderProperty(duration);
-            duration.addListener((observable, oldValue, newValue) -> 
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime adjustedNow = now.plus(duration.getValue());
+            
+            if (adjustedNow.isBefore(now))
             {
-                if (newValue != null)
-                {
-                    LocalDateTime now = LocalDateTime.now();
-                    LocalDateTime adjustedNow = now.plus(newValue.getValue());
-                    
-                    if (adjustedNow.isBefore(now))
-                    {
-                        if (oldValue != null)
-                        {
-                            setDuration(oldValue);                        
-                        } else
-                        {
-                            setDuration((DurationProp) null);
-                        }
-                        throw new DateTimeException("DURATION is negative (" + newValue + "). DURATION MUST be positive.");
-                    }
-                }
-            });
-            duration.addListener((obs) ->
-            {
-                if (this instanceof VDateTimeEnd)
-                {
-                    DateTimeEnd dtend = ((VDateTimeEnd<T>) this).getDateTimeEnd();
-                    if ((dtend != null) && (getDuration() != null))
-                    {
-                        throw new DateTimeException("DURATION and DTEND can't both be set");
-                    }
-                }
-            });
+                throw new DateTimeException("DURATION is negative (" + duration + "). DURATION MUST be positive.");
+            }
         }
-        return duration;
+        orderChild(this.duration, duration);
+        this.duration = duration;
     }
-    private ObjectProperty<DurationProp> duration;
     
     /**
      * GEO: Geographic Position
@@ -117,71 +90,33 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
      * Example:
      * GEO:37.386013;-122.082932
      */
-    public ObjectProperty<GeographicPosition> geographicPositionProperty()
+    private GeographicPosition geographicPosition;
+    public GeographicPosition getGeographicPosition() { return geographicPosition; }
+    public void setGeographicPosition(GeographicPosition geographicPosition)
     {
-        if (geographicPosition == null)
-        {
-            geographicPosition = new SimpleObjectProperty<>(this, PropertyType.GEOGRAPHIC_POSITION.toString());
-            orderer().registerSortOrderProperty(geographicPosition);
-        }
-        return geographicPosition;
-    }
-    private ObjectProperty<GeographicPosition> geographicPosition;
-    public GeographicPosition getGeographicPosition() { return geographicPositionProperty().get(); }
-    public void setGeographicPosition(GeographicPosition geographicPosition) { geographicPositionProperty().set(geographicPosition); }
-    public void setGeographicPosition(String geographicPosition)
-    {
-        if (getGeographicPosition() == null)
-        {
-            setGeographicPosition(GeographicPosition.parse(geographicPosition));
-        } else
-        {
-            getGeographicPosition().setValue(geographicPosition);
-        }
-    }
+    	orderChild(this.geographicPosition, geographicPosition);
+    	this.geographicPosition = geographicPosition;
+	}
+    public void setGeographicPosition(String geographicPosition) { setGeographicPosition(GeographicPosition.parse(geographicPosition)); }
     public void setGeographicPosition(double latitude, double longitude)
     {
-        if (getGeographicPosition() == null)
-        {
-            setGeographicPosition(new GeographicPosition(latitude, longitude));
-        } else
-        {
-            getGeographicPosition().setLatitude(latitude);
-            getGeographicPosition().setLongitude(longitude);
-        }
+        getGeographicPosition().setLatitude(latitude);
+        getGeographicPosition().setLongitude(longitude);
     }
     public T withGeographicPosition(GeographicPosition geographicPosition)
     {
-        if (getGeographicPosition() == null)
-        {
-            setGeographicPosition(geographicPosition);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setGeographicPosition(geographicPosition);
+        return (T) this;
     }
     public T withGeographicPosition(String geographicPosition)
     {
-        if (getGeographicPosition() == null)
-        {
-            setGeographicPosition(geographicPosition);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setGeographicPosition(geographicPosition);
+        return (T) this;
     }
     public T withGeographicPosition(double latitude, double longitude)
     {
-        if (getGeographicPosition() == null)
-        {
-            setGeographicPosition(latitude, longitude);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setGeographicPosition(latitude, longitude);
+        return (T) this;
     }
 
     /**
@@ -192,53 +127,23 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
      * Example:
      * LOCATION:Conference Room - F123\, Bldg. 002
      */
-    public ObjectProperty<Location> locationProperty()
+    private Location location;
+    public Location getLocation() { return location; }
+    public void setLocation(Location location)
     {
-        if (location == null)
-        {
-            location = new SimpleObjectProperty<>(this, PropertyType.LOCATION.toString());
-            orderer().registerSortOrderProperty(location);
-        }
-        return location;
-    }
-    private ObjectProperty<Location> location;
-    public Location getLocation() { return locationProperty().get(); }
-    public void setLocation(Location location) { locationProperty().set(location); }
-    public void setLocation(String location)
-    {
-        if (getLocation() == null)
-        {
-            setLocation(Location.parse(location));
-        } else
-        {
-            Location temp = Location.parse(location);
-            getLocation().setValue(temp.getValue());
-        }
-    }
+    	orderChild(this.location, location);
+    	this.location = location;
+	}
+    public void setLocation(String location) { setLocation(Location.parse(location)); }
     public T withLocation(Location location)
     {
-        if (getLocation() == null)
-        {
-            setLocation(location);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setLocation(location);
+        return (T) this;
     }
     public T withLocation(String location)
     {
-        if (getLocation() == null)
-        {
-            if (location != null)
-            {
-                setLocation(location);
-            }
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setLocation(location);
+        return (T) this;
     }
 
     /**
@@ -250,71 +155,29 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
      * Example: The following is an example of a property with the highest priority:
      * PRIORITY:1
      */
-    public ObjectProperty<Priority> priorityProperty()
+    private Priority priority;
+    public Priority getPriority() { return priority; }
+    public void setPriority(Priority priority)
     {
-        if (priority == null)
-        {
-            priority = new SimpleObjectProperty<>(this, PropertyType.PRIORITY.toString());
-            orderer().registerSortOrderProperty(priority);
-        }
-        return priority;
-    }
-    private ObjectProperty<Priority> priority;
-    public Priority getPriority() { return priorityProperty().get(); }
-    public void setPriority(Priority priority) { priorityProperty().set(priority); }
-    public void setPriority(String priority)
-    {
-        if (getPriority() == null)
-        {
-            setPriority(Priority.parse(priority));
-        } else
-        {
-            Priority temp = Priority.parse(priority);
-            getPriority().setValue(temp.getValue());
-        }
-    }
-    public void setPriority(int priority)
-    {
-        if (getPriority() == null)
-        {
-            setPriority(new Priority(priority));
-        } else
-        {
-            getPriority().setValue(priority);
-        }
-    }
+    	orderChild(this.priority, priority);
+    	this.priority = priority;
+	}
+    public void setPriority(String priority) { setPriority(Priority.parse(priority)); }
+    public void setPriority(int priority) { setPriority(new Priority(priority)); }
     public T withPriority(Priority priority)
     {
-        if (getPriority() == null)
-        {
-            setPriority(priority);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setPriority(priority);
+        return (T) this;
     }
     public T withPriority(String priority)
     {
-        if (getPriority() == null)
-        {
-            setPriority(priority);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setPriority(priority);
+        return (T) this;
     }
     public T withPriority(int priority)
     {
-        if (getPriority() == null)
-        {
-            setPriority(priority);
-            return (T) this;
-        } else
-        {
-            throw new IllegalArgumentException("Property can only occur once in the calendar component");
-        }
+        setPriority(priority);
+        return (T) this;
     }
     
     /**
@@ -327,55 +190,43 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
      * RESOURCES:EASEL,PROJECTOR,VCR
      * RESOURCES;LANGUAGE=fr:Nettoyeur haute pression
      */
-    public ObjectProperty<ObservableList<Resources>> resourcesProperty()
+    public List<Resources> getResources() { return resources; }
+    private List<Resources> resources;
+    public void setResources(List<Resources> resources)
     {
-        if (resources == null)
-        {
-            resources = new SimpleObjectProperty<>(this, PropertyType.RESOURCES.toString());
-        }
-        return resources;
-    }
-    public ObservableList<Resources> getResources()
+    	if (this.resources != null)
+    	{
+    		this.resources.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.resources = resources;
+    	if (resources != null)
+    	{
+    		resources.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
+    public T withResources(List<Resources> resources)
     {
-        return (resources == null) ? null : resources.get();
-    }
-    private ObjectProperty<ObservableList<Resources>> resources;
-    public void setResources(ObservableList<Resources> resources)
-    {
-        if (resources != null)
-        {
-            if ((this.resources != null) && (this.resources.get() != null))
-            {
-                // replace sort order in new list
-                orderer().replaceList(resourcesProperty().get(), resources);
-            }
-            orderer().registerSortOrderProperty(resources);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(recurrenceDatesProperty().get());
-        }
-        resourcesProperty().set(resources);
-    }
-    public T withResources(ObservableList<Resources> resources)
-    {
-        setResources(resources);
+    	if (getResources() == null)
+    	{
+    		setResources(new ArrayList<>());
+    	}
+    	getResources().addAll(resources);
+    	if (resources != null)
+    	{
+    		resources.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     public T withResources(String...resources)
     {
-        Arrays.stream(resources).forEach(c -> PropertyType.RESOURCES.parse(this, c));
-        return (T) this;
+        List<Resources> list = Arrays.stream(resources)
+                .map(c -> Resources.parse(c))
+                .collect(Collectors.toList());
+        return withResources(list);
     }
     public T withResources(Resources...resources)
     {
-        if (getResources() == null)
-        {
-            setResources(FXCollections.observableArrayList(resources));
-        } else
-        {
-            getResources().addAll(resources);
-        }
-        return (T) this;
+    	return withResources(Arrays.asList(resources));
     }
 
     /** 
@@ -388,40 +239,45 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
      * The "VALARM" calendar component MUST only appear within either a
      * "VEVENT" or "VTODO" calendar component.
      */
-    public ObservableList<VAlarm> getVAlarms() { return vAlarms; }
-    private ObservableList<VAlarm> vAlarms;
-    public void setVAlarms(ObservableList<VAlarm> vAlarms)
+    public List<VAlarm> getVAlarms() { return vAlarms; }
+    private List<VAlarm> vAlarms;
+    public void setVAlarms(List<VAlarm> vAlarms)
     {
-        if (vAlarms != null)
-        {
-            orderer().registerSortOrderProperty(vAlarms);
-        } else
-        {
-            orderer().unregisterSortOrderProperty(this.vAlarms);
-        }
-        this.vAlarms = vAlarms;
-    }
-    public T withVAlarms(ObservableList<VAlarm> vAlarms) { setVAlarms(vAlarms); return (T) this; }
+    	if (this.vAlarms != null)
+    	{
+    		this.vAlarms.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.vAlarms = vAlarms;
+    	if (vAlarms != null)
+    	{
+    		vAlarms.forEach(c -> orderChild(c)); // order new elements
+    	}
+	}
+    public T withVAlarms(List<VAlarm> vAlarms)
+    {
+    	if (getVAlarms() == null)
+    	{
+    		setVAlarms(new ArrayList<>());
+    	}
+    	if (vAlarms != null)
+    	{
+    		getVAlarms().addAll(vAlarms);
+    		vAlarms.forEach(c -> orderChild(c));
+    	}
+    	return (T) this;
+	}
     public T withVAlarms(VAlarm...vAlarms)
     {
-        if (getVAlarms() == null)
-        {
-            setVAlarms(FXCollections.observableArrayList(vAlarms));
-        } else
-        {
-            getVAlarms().addAll(vAlarms);
-        }
+    	withVAlarms(Arrays.asList(vAlarms));
         return (T) this;
+        
     }
-    
-    static void copyVAlarms(VLocatable<?> source, VLocatable<?> destination)
+    public T withVAlarms(String...vAlarms)
     {
-        VAlarm[] collect = source.getVAlarms()
-                .stream()
-                .map(c -> new VAlarm(c))
-                .toArray(size -> new VAlarm[size]);
-        ObservableList<VAlarm> properties = FXCollections.observableArrayList(collect);
-        destination.setVAlarms(properties);
+        List<VAlarm> newElements = Arrays.stream(vAlarms)
+                .map(c -> VAlarm.parse(c))
+                .collect(Collectors.toList());
+        return withVAlarms(newElements);
     }
     
     /*
@@ -439,10 +295,10 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
     {
         if (subcomponent instanceof VAlarm)
         {
-            final ObservableList<VAlarm> list;
+            final List<VAlarm> list;
             if (getVAlarms() == null)
             {
-                list = FXCollections.observableArrayList();
+                list = new ArrayList<>();
                 setVAlarms(list);
             } else
             {
@@ -454,39 +310,6 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
             throw new IllegalArgumentException("Unspoorted subcomponent type:" + subcomponent.getClass().getSimpleName() +
                     " found inside " + name() + " component");
         }        
-    }
-    
-//    /** copy VAlarms */
-//    @Override
-//    @Deprecated
-//    public void copyChildrenFrom(VParent source)
-//    {
-//        super.copyChildrenFrom(source);
-//        VLocatable<?> castSource = (VLocatable<?>) source;
-//        if (castSource.getVAlarms() != null)
-//        {
-//            if (getVAlarms() == null)
-//            {
-//                setVAlarms(FXCollections.observableArrayList());
-//            }
-//            castSource.getVAlarms().forEach(a -> this.getVAlarms().add(new VAlarm(a)));            
-//        }
-//    }
-    
-    @Override
-    public void copyInto(VParent destination)
-    {
-        super.copyInto(destination);
-        ((VChild) destination).setParent(getParent());
-        VLocatable<?> castDestination = (VLocatable<?>) destination;
-        if (getVAlarms() != null)
-        {
-            if (castDestination.getVAlarms() == null)
-            {
-                castDestination.setVAlarms(FXCollections.observableArrayList());
-            }
-            getVAlarms().forEach(a -> castDestination.getVAlarms().add(new VAlarm(a)));
-        }
     }
     
     @Override
@@ -508,27 +331,6 @@ public abstract class VLocatable<T> extends VDisplayable<T> implements VDescriba
             }
         }
         return errors;
-    }
-    
-    @Override // include VAlarms
-    public boolean equals(Object obj)
-    {
-        VLocatable<?> testObj = (VLocatable<?>) obj;
-        final boolean isVAlarmsEqual;
-        if (getVAlarms() != null)
-        {
-            if (testObj.getVAlarms() == null)
-            {
-                isVAlarmsEqual = false;
-            } else
-            {
-                isVAlarmsEqual = getVAlarms().equals(testObj.getVAlarms());
-            }
-        } else
-        {
-            isVAlarmsEqual = true;
-        }
-        return isVAlarmsEqual && super.equals(obj);
     }
     
     @Override // include VAlarms

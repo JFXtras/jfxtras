@@ -1,9 +1,10 @@
 package jfxtras.icalendarfx.parameters;
 
+import jfxtras.icalendarfx.parameters.CalendarUser;
+import jfxtras.icalendarfx.parameters.ParameterEnumBasedWithUnknown;
 import jfxtras.icalendarfx.parameters.CalendarUser.CalendarUserType;
 import jfxtras.icalendarfx.properties.ValueType;
-import jfxtras.icalendarfx.properties.component.relationship.Attendee;
-import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  <h2>3.2.3.  Calendar User Type</h2>
@@ -47,33 +48,37 @@ import jfxtras.icalendarfx.properties.component.relationship.Organizer;
  * ATTENDEE;CUTYPE=GROUP:mailto:ietf-calsch@example.org
  * 
  * @author David Bal
- * @see Attendee
- * @see Organizer
  */
 public class CalendarUser extends ParameterEnumBasedWithUnknown<CalendarUser, CalendarUserType>
 {
-//    /** get list of registered IANA parameter names */
-//    public static List<String> registeredIANATokens()
-//    {
-//        return registeredIANATokens;
-//    }
-//    final private static List<String> registeredIANATokens = new ArrayList<>();
+	private static final StringConverter<CalendarUserType> CONVERTER = new StringConverter<CalendarUserType>()
+    {
+        @Override
+        public String toString(CalendarUserType object)
+        {
+            return object.toString();
+        }
+
+        @Override
+        public CalendarUserType fromString(String string)
+        {
+            return CalendarUserType.valueOfWithUnknown(string.toUpperCase());
+        }
+    };
 
     public CalendarUser()
     {
-        super(CalendarUserType.INDIVIDUAL); // default value
-//        super(CalendarUserType.INDIVIDUAL, registeredIANATokens()); // default value
+        super(CalendarUserType.INDIVIDUAL, CONVERTER); // default value
     }
 
     public CalendarUser(CalendarUserType type)
     {
-        super(type);
-//        super(type, registeredIANATokens());
+        super(type, CONVERTER);
     }
 
     public CalendarUser(CalendarUser source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
     
     public enum CalendarUserType
@@ -96,13 +101,10 @@ public class CalendarUser extends ParameterEnumBasedWithUnknown<CalendarUser, Ca
             }
             return match;
         }
-
     }
-
+    
     public static CalendarUser parse(String content)
     {
-        CalendarUser parameter = new CalendarUser();
-        parameter.parseContent(content);
-        return parameter;
+    	return CalendarUser.parse(new CalendarUser(), content);
     }
 }

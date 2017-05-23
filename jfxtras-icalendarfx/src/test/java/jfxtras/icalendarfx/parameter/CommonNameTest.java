@@ -11,16 +11,23 @@ public class CommonNameTest
     @Test // tests String as value
     public void canParseCommonName()
     {
-        CommonName parameter = CommonName.parse("David Bal");
+        CommonName parameter = CommonName.parse("CN=David Bal");
         String expectedContent = "CN=David Bal";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
     }
     
     @Test // tests String as value
     public void canParseCommonName2()
     {
-        CommonName parameter = CommonName.parse("\"John Smith\"");
+        CommonName parameter = CommonName.parse("CN=\"John Smith\"");
         String expectedContent = "CN=John Smith";
-        assertEquals(expectedContent, parameter.toContent());
+        assertEquals(expectedContent, parameter.toString());
+    }
+    
+    @Test
+    public void canMakeEmptyCommonName()
+    {
+    	CommonName parameter = new CommonName();
+    	assertEquals("CN=", parameter.toString());
     }
 }

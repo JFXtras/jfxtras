@@ -128,7 +128,7 @@ public class CalendarController
                 .withSummary(Summary.parse("Split"))
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
                 .withUniqueIdentifier("20150110T080000-00@jfxtras.org");
-        agenda.getVCalendar().getVEvents().add(vEventSplit);
+        agenda.getVCalendar().addChild(vEventSplit);
         
         VEvent vEventZonedUntil = new VEvent()
                 .withCategories(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS.get(10).getDescription())
@@ -143,7 +143,7 @@ public class CalendarController
                 .withSummary(Summary.parse("WeeklyZoned Ends"))
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
                 .withUniqueIdentifier("20150110T080000-01@jfxtras.org");
-        agenda.getVCalendar().getVEvents().add(vEventZonedUntil);
+        agenda.getVCalendar().addChild(vEventZonedUntil);
                
         VEvent vEventZonedInfinite = new VEvent()
             .withCategories(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS.get(3).getDescription())
@@ -157,7 +157,7 @@ public class CalendarController
             .withSummary(Summary.parse("WeeklyZoned Infinite"))
             .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
             .withUniqueIdentifier("20150110T080000-02@jfxtras.org");
-        agenda.getVCalendar().getVEvents().add(vEventZonedInfinite);
+        agenda.getVCalendar().addChild(vEventZonedInfinite);
         
         VEvent vEventLocalDate = new VEvent()
                 .withCategories(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS.get(15).getDescription())
@@ -171,7 +171,7 @@ public class CalendarController
                 .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.WEEKLY)
                         .withInterval(3));
-        agenda.getVCalendar().getVEvents().add(vEventLocalDate);
+        agenda.getVCalendar().addChild(vEventLocalDate);
 
         VEvent vEventLocalDateTime = new VEvent()
                 .withCategories(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS.get(2).getDescription())
@@ -184,7 +184,7 @@ public class CalendarController
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
                 .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY));
-        agenda.getVCalendar().getVEvents().add(vEventLocalDateTime); 
+        agenda.getVCalendar().addChild(vEventLocalDateTime); 
         
         VEvent vEventLocalDateTimeMonthly = new VEvent()
                 .withCategories(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS.get(17).getDescription())
@@ -197,7 +197,7 @@ public class CalendarController
                 .withOrganizer("ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org")
                 .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.MONTHLY));
-        agenda.getVCalendar().getVEvents().add(vEventLocalDateTimeMonthly); 
+        agenda.getVCalendar().addChild(vEventLocalDateTimeMonthly); 
         
         DayOfWeek dayOfWeek = DayOfWeek.from(startDate.plusDays(2));
         int ordinalWeekNumber = DateTimeUtilities.weekOrdinalInMonth(startDate.plusDays(2));
@@ -213,11 +213,12 @@ public class CalendarController
                 .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.MONTHLY)
                         .withByRules(new ByDay(new ByDay.ByDayPair(dayOfWeek, ordinalWeekNumber))));
-        agenda.getVCalendar().getVEvents().add(vEventLocalDateMonthlyOrdinal);
+        agenda.getVCalendar().addChild(vEventLocalDateMonthlyOrdinal);
         
         // replace Agenda's appointmentGroups with the ones used in the test events.
         agenda.appointmentGroups().clear();
         agenda.appointmentGroups().addAll(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS);
+        agenda.updateAppointments();
     }
 
     @FXML private void handleToday()

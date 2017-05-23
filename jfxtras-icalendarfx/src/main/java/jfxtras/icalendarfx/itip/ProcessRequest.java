@@ -143,8 +143,12 @@ public class ProcessRequest extends ProcessPublish
     public List<String> process(VCalendar mainVCalendar, VCalendar iTIPMessage)
     {
         List<String> log = new ArrayList<>();
-        // Check UID from iTIPMessage is already present
-        Iterator<VComponent> componentIterator = iTIPMessage.getAllVComponents().iterator();
+        // Check if UID from iTIPMessage is already present
+        Iterator<VComponent> componentIterator = iTIPMessage.childrenUnmodifiable()
+        		.stream()
+        		.filter(c -> c instanceof VComponent)
+        		.map(c -> (VComponent) c)
+        		.iterator();
         while (componentIterator.hasNext())
         {
             VPersonal<?> myComponent = (VPersonal<?>) componentIterator.next();
@@ -157,7 +161,11 @@ public class ProcessRequest extends ProcessPublish
             {
                 throw new IllegalArgumentException("Can't process REQUEST, VComponent has null UID");
             }
-            if (mainVCalendar.uidComponentsMap().get(uid.getValue()) == null)
+            boolean isUIDPresent = mainVCalendar.getVComponents(myComponent)
+	    		.stream()
+	    		.map(v -> (VPersonal<?>) v)
+	    		.anyMatch(v -> v.getUniqueIdentifier().equals(uid));
+            if (! isUIDPresent)
             {
                 throw new IllegalArgumentException("Can't process REQUEST, VComponent UID is not present in main VCalendar");
             }

@@ -1,12 +1,11 @@
 package jfxtras.icalendarfx.components;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.properties.component.descriptive.Attachment;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 
@@ -34,17 +33,24 @@ public interface VDescribable<T> extends VComponent
      *</ul>
      *</p>
      */
-    ObjectProperty<ObservableList<Attachment<?>>> attachmentsProperty();
-    ObservableList<Attachment<?>> getAttachments();
-    void setAttachments(ObservableList<Attachment<?>> properties);
+    List<Attachment<?>> getAttachments();
+    void setAttachments(List<Attachment<?>> properties);
     /**
      * Sets the value of the {@link #attachmentsProperty()}.
      * 
      * @return - this class for chaining
      */
-    default T withAttachments(ObservableList<Attachment<?>> attachments)
+    default T withAttachments(List<Attachment<?>> attachments)
     {
-        setAttachments(attachments);
+    	if (getAttachments() == null)
+    	{
+    		setAttachments(new ArrayList<>());
+    	}
+    	getAttachments().addAll(attachments);
+    	if (attachments != null)
+    	{
+    		attachments.forEach(c -> orderChild(c));
+    	}
         return (T) this;
     }
     /**
@@ -55,11 +61,10 @@ public interface VDescribable<T> extends VComponent
      */
     default T withAttachments(String...attachments)
     {
-        List<Attachment<?>> a = Arrays.stream(attachments)
-                .map(c -> Attachment.parse(c))
+        List<Attachment<?>> list = Arrays.stream(attachments)
+                .map(c -> (Attachment<?>) Attachment.parse(c))
                 .collect(Collectors.toList());
-        setAttachments(FXCollections.observableArrayList(a));
-        return (T) this;
+        return withAttachments(list);
     }
     /**
      * Sets the value of the {@link #attachmentsProperty()} from a vararg of {@link Attachment} objects.
@@ -68,8 +73,7 @@ public interface VDescribable<T> extends VComponent
      */
     default T withAttachments(Attachment<?>...attachments)
     {
-        setAttachments(FXCollections.observableArrayList(attachments));
-        return (T) this;
+    	return withAttachments(Arrays.asList(attachments));
     }
     
     /**
@@ -81,16 +85,12 @@ public interface VDescribable<T> extends VComponent
      *</ul>
      *</p>
      */
-    ObjectProperty<Summary> summaryProperty();
     Summary getSummary();
     default void setSummary(String summary)
     {
         setSummary(Summary.parse(summary));
     }
-    default void setSummary(Summary summary)
-    {
-        summaryProperty().set(summary);
-    }
+    void setSummary(Summary summary);
     /**
      * Sets the value of the {@link #summaryProperty()}
      * 

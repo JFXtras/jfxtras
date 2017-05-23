@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
-import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,17 +16,15 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Test;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import jfxtras.icalendarfx.ICalendarStaticComponents;
-import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.DaylightSavingTime;
 import jfxtras.icalendarfx.components.StandardTime;
 import jfxtras.icalendarfx.components.VComponent;
@@ -47,6 +44,7 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByWeekNum
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * Test following components:
@@ -126,11 +124,10 @@ public class RepeatableTest //extends Application
                     "END:" + componentName;
                     
             VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
-            System.out.println("parsedComponent:" + parsedComponent);
+            parsedComponent.addChild(expectedContent);
 
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());
+            assertEquals(expectedContent, builtComponent.toString());
             
             ((VPrimary<?>) builtComponent).setDateTimeStart(new DateTimeStart(LocalDate.of(2016, 4, 13)));
             List<Temporal> madeDates = builtComponent                    
@@ -146,7 +143,6 @@ public class RepeatableTest //extends Application
     {
         VEvent component = new VEvent()
                 .withRecurrenceRule(new RecurrenceRuleValue());
-        component.errors().forEach(System.out::println);
         assertEquals(4, component.errors().size());
     }
 
@@ -200,12 +196,12 @@ public class RepeatableTest //extends Application
         assertTrue(hasError);
     }
 
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchWrongDateType()
     {
         VEvent component = new VEvent()
                 .withDateTimeStart(LocalDate.of(1997, 3, 1));
-        ObservableList<RecurrenceDates> recurrences = FXCollections.observableArrayList();
+        List<RecurrenceDates> recurrences = new ArrayList<>();
         recurrences.add(RecurrenceDates.parse(LocalDateTime.class, "20160228T093000"));
         component.setRecurrenceDates(recurrences);
         String errorPrefix = "RDATE:";
@@ -214,30 +210,29 @@ public class RepeatableTest //extends Application
         assertTrue(hasError);
     }
 
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchDifferentRepeatableTypes()
     {
-        Thread.currentThread().setUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
         VEvent builtComponent = new VEvent()
                 .withRecurrenceDates("RDATE;VALUE=DATE:19970304,19970504,19970704,19970904");
-        ObservableSet<Temporal> expectedValues = FXCollections.observableSet(
-                ZonedDateTime.of(LocalDateTime.of(1996, 4, 4, 1, 0), ZoneId.of("Z")) );        
+        Set<Temporal> expectedValues = new LinkedHashSet<>(Arrays.asList(
+                ZonedDateTime.of(LocalDateTime.of(1996, 4, 4, 1, 0), ZoneId.of("Z")) )
+        		);        
         builtComponent.getRecurrenceDates().add(new RecurrenceDates(expectedValues));
     }
     
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchDifferentRepeatableTypes2()
     {
-        Thread.currentThread().setUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
-        VEvent builtComponent = new VEvent()
+        VEvent component = new VEvent()
                 .withRecurrenceDates("RDATE;VALUE=DATE:19970304,19970504,19970704,19970904");
-        builtComponent.getRecurrenceDates().get(0).getValue().add(LocalDateTime.of(1996, 4, 4, 1, 0));
+        component.getRecurrenceDates().get(0).getValue().add(LocalDateTime.of(1996, 4, 4, 1, 0));
+        String expectedError = "RDATE: DateTimeType " +
+            	DateTimeType.DATE + " doesn't match previous recurrence's DateTimeType " + DateTimeType.DATE_WITH_LOCAL_TIME;
+        boolean isErrorPresent = component.errors()
+        		.stream()
+                .anyMatch(s -> s.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
     
     /*
@@ -266,7 +261,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=YEARLY;BYDAY=FR */
@@ -291,7 +286,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY;BYDAY=FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=YEARLY;BYDAY=TH;BYMONTH=6,7,8 */
@@ -332,7 +327,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY;BYDAY=TH;BYMONTH=6,7,8";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=YEARLY;BYMONTH=1,2 */
@@ -357,7 +352,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY;BYMONTH=1,2";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=YEARLY;BYMONTH=11;BYMONTHDAY=10 */
@@ -382,7 +377,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY;BYMONTH=11;BYMONTHDAY=10";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
 
     }
     
@@ -414,7 +409,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY;INTERVAL=4;BYMONTH=11;BYMONTHDAY=2,3,4,5,6,7,8;BYDAY=TU";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=YEARLY;BYDAY=20MO */
@@ -437,15 +432,13 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY;BYDAY=20MO";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=YEARLY;BYWEEKNO=20;BYDAY=MO */
     @Test
     public void yearlyStreamTest8()
     {
-//        Locale oldLocale = Locale.getDefault();
-//        Locale.setDefault(Locale.FRANCE); // has Monday as first day of week system.  US is Sunday which causes an error.
         VEvent e = new VEvent()
                 .withDateTimeStart(LocalDateTime.of(1997, 5, 12, 10, 0))
                 .withRecurrenceRule(new RecurrenceRuleValue()
@@ -465,7 +458,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=YEARLY;BYWEEKNO=20;BYDAY=MO";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
 //        Locale.setDefault(oldLocale);
     }
     
@@ -490,7 +483,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=MONTHLY";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=MONTHLY;BYMONTHDAY=-2 */
@@ -516,7 +509,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=MONTHLY;BYMONTHDAY=-2";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=MONTHLY;BYDAY=TU,WE,FR */
@@ -546,7 +539,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=MONTHLY;BYDAY=TU,WE,FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=MONTHLY;BYDAY=-1SA */
@@ -571,7 +564,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=MONTHLY;BYDAY=-1SA";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13 Every Friday the 13th, forever: */
@@ -597,7 +590,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
         RecurrenceRuleValue r = RecurrenceRuleValue.parse("FREQ=MONTHLY;BYDAY=FR;BYMONTHDAY=13");
         assertEquals(r, e.getRecurrenceRule().getValue()); // verify order of parameters doesn't matter
     }
@@ -633,7 +626,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=MONTHLY;BYMONTH=11,12;BYDAY=TU,WE,FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=WEEKLY */
@@ -657,7 +650,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=WEEKLY";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE,FR */
@@ -688,7 +681,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=WEEKLY;INTERVAL=2;BYDAY=MO,WE,FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
 
     /** FREQ=WEEKLY;BYDAY=MO,WE,FR */
@@ -713,7 +706,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** FREQ=WEEKLY;INTERVAL=2;COUNT=11;BYDAY=MO,WE,FR */
@@ -745,7 +738,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=WEEKLY;INTERVAL=2;COUNT=11;BYDAY=MO,WE,FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     @Test // tests starting on Sunday (1st day of week) with other day of the week
@@ -774,7 +767,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=WEEKLY;BYDAY=SU,WE";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     @Test
@@ -803,7 +796,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=DAILY */
@@ -827,7 +820,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=DAILY";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=DAILY;INTERVAL=3;COUNT=6 */
@@ -854,7 +847,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=DAILY;INTERVAL=3;COUNT=6";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=DAILY;INTERVAL=3;BYMONTHDAY=9,10,11,12,13,14 */
@@ -886,7 +879,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=DAILY;INTERVAL=3;BYMONTHDAY=9,10,11,12,13,14";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=DAILY;INTERVAL=2;BYMONTHDAY=9 */
@@ -913,7 +906,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=DAILY;INTERVAL=2;BYMONTHDAY=9";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     /** Tests daily stream with FREQ=DAILY;INTERVAL=2;BYDAY=FR */
@@ -940,7 +933,7 @@ public class RepeatableTest //extends Application
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=DAILY;INTERVAL=2;BYDAY=FR";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     @Test
@@ -975,7 +968,7 @@ public class RepeatableTest //extends Application
                 DateTimeUtilities.ZONED_DATE_TIME_UTC_FORMATTER.format(
                         ZonedDateTime.of(LocalDateTime.of(2015, 12, 1, 9, 59, 59), ZoneOffset.systemDefault())
                         .withZoneSameInstant(ZoneId.of("Z")));
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     @Test
@@ -1005,7 +998,7 @@ public class RepeatableTest //extends Application
               ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "RRULE:FREQ=DAILY;UNTIL=20151119T010000Z";
-        assertEquals(expectedContent, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent, e.getRecurrenceRule().toString());
     }
     
     @Test
@@ -1387,26 +1380,26 @@ public class RepeatableTest //extends Application
         assertEquals(LocalDateTime.of(2016, 5, 15, 10, 0), previous);
     }
 
-    @Test
-    public void canCheckIfIsRecurrence()
-    {
-        VCalendar vCalendar = new VCalendar();
-        VEvent vComponentMain = ICalendarStaticComponents.getDaily1();
-        vCalendar.addVComponent(vComponentMain);
-        
-        VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule((RecurrenceRuleValue) null)
-                .withRecurrenceId(LocalDateTime.of(2016, 5, 17, 10, 0))
-                .withSummary("recurrence summary")
-                .withDateTimeStart(LocalDateTime.of(2016, 5, 17, 8, 30))
-                .withDateTimeEnd(LocalDateTime.of(2016, 5, 17, 9, 30));
-        vCalendar.addVComponent(vComponentRecurrence);
-        
-        assertTrue(vComponentMain.isRecurrence(LocalDateTime.of(2016, 5, 16, 10, 0)));
-        assertFalse(vComponentMain.isRecurrence(LocalDateTime.of(2016, 5, 17, 10, 0))); // is not recurrence because vComponentRecurrence uses this date/time
-        assertTrue(vComponentMain.isRecurrence(LocalDateTime.of(2016, 5, 18, 10, 0)));
-        
-        assertTrue(vComponentRecurrence.isRecurrence(LocalDateTime.of(2016, 5, 17, 8, 30)));
-    }
+//    @Test
+//    public void canCheckIfIsRecurrence()
+//    {
+//        VCalendar vCalendar = new VCalendar();
+//        VEvent vComponentMain = ICalendarStaticComponents.getDaily1();
+//        vCalendar.addVComponent(vComponentMain);
+//        
+//        VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
+//                .withRecurrenceRule((RecurrenceRuleValue) null)
+//                .withRecurrenceId(LocalDateTime.of(2016, 5, 17, 10, 0))
+//                .withSummary("recurrence summary")
+//                .withDateTimeStart(LocalDateTime.of(2016, 5, 17, 8, 30))
+//                .withDateTimeEnd(LocalDateTime.of(2016, 5, 17, 9, 30));
+//        vCalendar.addVComponent(vComponentRecurrence);
+//        
+//        assertTrue(vComponentMain.isRecurrence(LocalDateTime.of(2016, 5, 16, 10, 0)));
+//        assertFalse(vComponentMain.isRecurrence(LocalDateTime.of(2016, 5, 17, 10, 0))); // is not recurrence because vComponentRecurrence uses this date/time
+//        assertTrue(vComponentMain.isRecurrence(LocalDateTime.of(2016, 5, 18, 10, 0)));
+//        
+//        assertTrue(vComponentRecurrence.isRecurrence(LocalDateTime.of(2016, 5, 17, 8, 30)));
+//    }
 
 }

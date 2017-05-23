@@ -1,23 +1,24 @@
 package jfxtras.icalendarfx.properties.component.recurrence;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.properties.PropBaseDateTime;
 import jfxtras.icalendarfx.properties.ValueType;
+import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
+import jfxtras.icalendarfx.properties.component.recurrence.PropertyBaseRecurrence;
+import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
+import jfxtras.icalendarfx.utilities.StringConverter;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 
 /**
@@ -30,60 +31,35 @@ import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
  * @see ExceptionDates
  * @see RecurrenceDates
  */
-public abstract class PropertyBaseRecurrence<U> extends PropBaseDateTime<ObservableSet<Temporal>, U>
+public abstract class PropertyBaseRecurrence<U> extends PropBaseDateTime<Set<Temporal>, U>
 {
-    private ZoneId zone;
-    private DateTimeType myType;
-//    private final SetChangeListener<Temporal> recurrenceListener = (SetChangeListener<Temporal>) (SetChangeListener.Change<? extends Temporal> change) ->
-//    {
-//        if (change.wasAdded())
-//        {
-//            Temporal newTemporal = change.getElementAdded();
-//            DateTimeType newType = DateTimeType.of(newTemporal);
-//            if (newType != myType)
-//            {
-//                change.getSet().remove(newTemporal);
-//                throw new DateTimeException("Can't add new element of type " + newType + ". New elements must match type of existing elements (" + myType + ")");
-//            }
-//            if (newTemporal instanceof ZonedDateTime)
-//            {
-//                ZoneId myZone = ((ZonedDateTime) newTemporal).getZone();
-//                if (! myZone.equals(zone))
-//                {
-//                    change.getSet().remove(newTemporal);
-//                    throw new DateTimeException("Can't add new element with ZoneId of " + myZone + ". New elements must match ZoneId of existing elements (" + zone + ")");
-//                }
-//            }
-//        }
-//    };
-    
-    private final StringConverter<ObservableSet<Temporal>> CONVERTER = new StringConverter<ObservableSet<Temporal>>()
+    private final StringConverter<Set<Temporal>> CONVERTER = new StringConverter<Set<Temporal>>()
     {
         @Override
-        public String toString(ObservableSet<Temporal> object)
+        public String toString(Set<Temporal> object)
         {
             return object.stream()
-                    .sorted()
+                    .sorted(DateTimeUtilities.TEMPORAL_COMPARATOR)
                     .map(t -> DateTimeUtilities.temporalToString(t))
                     .collect(Collectors.joining(","));
         }
 
         @Override
-        public ObservableSet<Temporal> fromString(String string)
+        public Set<Temporal> fromString(String string)
         {
-            Set<Temporal> list = Arrays.stream(string.split(","))
+            Set<Temporal> set = Arrays.stream(string.split(","))
                     .map(s -> DateTimeUtilities.temporalFromString(s))
                     .collect(Collectors.toSet());
             TreeSet<Temporal> treeSet = new TreeSet<Temporal>(DateTimeUtilities.TEMPORAL_COMPARATOR);
-            treeSet.addAll(list);
-            return FXCollections.observableSet(list);
+            treeSet.addAll(set);
+            return set;
         }
     };
     
     /*
      * CONSTRUCTORS
      */
-    public PropertyBaseRecurrence(ObservableSet<Temporal> value)
+    public PropertyBaseRecurrence(Set<Temporal> value)
     {
         this();
         setValue(value);
@@ -98,7 +74,7 @@ public abstract class PropertyBaseRecurrence<U> extends PropBaseDateTime<Observa
         this();
         Set<Temporal> tree = new TreeSet<>(DateTimeUtilities.TEMPORAL_COMPARATOR);
         tree.addAll(Arrays.asList(temporals));
-        setValue(FXCollections.observableSet(tree));
+        setValue(tree);
         if (! isValid())
         {
             throw new IllegalArgumentException("Error in parsing " + temporals);
@@ -107,7 +83,7 @@ public abstract class PropertyBaseRecurrence<U> extends PropBaseDateTime<Observa
     
     public PropertyBaseRecurrence()
     {
-        super(FXCollections.observableSet(new TreeSet<>(DateTimeUtilities.TEMPORAL_COMPARATOR)));
+        super(new TreeSet<>(DateTimeUtilities.TEMPORAL_COMPARATOR));
         setConverter(CONVERTER);
     }
 
@@ -116,46 +92,8 @@ public abstract class PropertyBaseRecurrence<U> extends PropBaseDateTime<Observa
         super(source);
     }
 
-    // Listen to additions to collection to ensure time zone is consistent
-    private void setupListener()
-    {
-        if (! getValue().isEmpty())
-        {
-            Temporal sampleValue = getValue().iterator().next();
-            myType = DateTimeType.of(sampleValue);
-            SetChangeListener<Temporal> recurrenceListener = (SetChangeListener<Temporal>) (SetChangeListener.Change<? extends Temporal> change) ->
-            {
-                if (change.wasAdded())
-                {
-                    Temporal newTemporal = change.getElementAdded();
-                    DateTimeType newType = DateTimeType.of(newTemporal);
-                    if (newType != myType)
-                    {
-                        change.getSet().remove(newTemporal);
-                        throw new DateTimeException("Can't add new element of type " + newType + ". New elements must match type of existing elements (" + myType + ")");
-                    }
-                    if (newTemporal instanceof ZonedDateTime)
-                    {
-                        ZoneId myZone = ((ZonedDateTime) newTemporal).getZone();
-                        if (! myZone.equals(zone))
-                        {
-                            change.getSet().remove(newTemporal);
-                            throw new DateTimeException("Can't add new element with ZoneId of " + myZone + ". New elements must match ZoneId of existing elements (" + zone + ")");
-                        }
-                    }
-                }
-            };
-            getValue().addListener(recurrenceListener);
-            if (sampleValue instanceof ZonedDateTime)
-            {
-                zone = ((ZonedDateTime) sampleValue).getZone();
-            }
-        }
-
-    }
-
     @Override
-    public void setValue(ObservableSet<Temporal> value)
+    public void setValue(Set<Temporal> value)
     {
         if (! value.isEmpty())
         {
@@ -166,37 +104,59 @@ public abstract class PropertyBaseRecurrence<U> extends PropBaseDateTime<Observa
             } else if (! (sampleValue instanceof LocalDateTime) && ! (sampleValue instanceof ZonedDateTime))
             {
                 throw new RuntimeException("can't convert property value to type: " + sampleValue.getClass().getSimpleName() +
-                        ". Accepted types are: " + propertyType().allowedValueTypes());                
+                        ". Accepted types are: " + allowedValueTypes);                
             }
         }
         super.setValue(value);
-        setupListener();
-    }
-    
-    @Override
-    public boolean isValid()
-    {
-        if (! getValue().isEmpty())
-        {
-            Temporal sampleValue = getValue().iterator().next();
-            // ensure all ZoneId values are the same
-            if (sampleValue instanceof ZonedDateTime)
-            {
-                zone = ((ZonedDateTime) sampleValue).getZone();
-                boolean valuesMatchZone = getValue()
-                        .stream()
-                        .map(t -> ((ZonedDateTime) t).getZone())
-                        .allMatch(z -> z.equals(zone));
-                return valuesMatchZone && super.isValid();
-            }
-        }
-        return super.isValid();
     }
         
     @Override
-    protected ObservableSet<Temporal> copyValue(ObservableSet<Temporal> source)
+    public List<String> errors()
     {
-        ObservableSet<Temporal> newCollection = FXCollections.observableSet(new TreeSet<>(DateTimeUtilities.TEMPORAL_COMPARATOR));
+    	List<String> errors = super.errors();
+    	Set<Temporal> recurrenceDates = getValue();
+    	
+    	// error check - all Temporal types must be same
+    	if ((recurrenceDates != null) && (! recurrenceDates.isEmpty()))
+		{
+        	Temporal sampleTemporal = recurrenceDates.stream()
+            		.findAny()
+            		.get();
+    		DateTimeType sampleType = DateTimeUtilities.DateTimeType.of(sampleTemporal);
+        	Optional<DateTimeType> notMatchDateTimeType = recurrenceDates
+        		.stream()
+        		.map(v -> DateTimeUtilities.DateTimeType.of(v))
+        		.filter(v -> ! v.equals(sampleType))
+        		.findAny();
+        	if (notMatchDateTimeType.isPresent())
+        	{
+        		errors.add("Recurrences DateTimeType \"" + notMatchDateTimeType.get() +
+                        "\" doesn't match previous recurrences DateTimeType \"" + sampleType + "\"");
+        	}
+            
+            // ensure all ZoneId values are the same
+            if (sampleTemporal instanceof ZonedDateTime)
+            {
+                ZoneId zone = ((ZonedDateTime) sampleTemporal).getZone();
+                Optional<ZoneId> notMatchZone = recurrenceDates
+                        .stream()
+                        .map(t -> ((ZonedDateTime) t).getZone())
+                		.filter(z -> ! z.equals(zone))
+                		.findAny();
+                if (notMatchZone.isPresent())
+                {
+                	errors.add("ZoneId \"" + notMatchZone.get() + "\" doesn't match previous ZoneId \"" + zone + "\"");
+            	}
+                
+            }
+        }
+        return errors;
+    }
+        
+    @Override
+    protected Set<Temporal> copyValue(Set<Temporal> source)
+    {
+        Set<Temporal> newCollection = new TreeSet<>(DateTimeUtilities.TEMPORAL_COMPARATOR);
         newCollection.addAll(source);
         return newCollection;
     }

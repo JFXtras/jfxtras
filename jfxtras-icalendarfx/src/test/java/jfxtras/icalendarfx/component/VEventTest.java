@@ -1,11 +1,9 @@
 package jfxtras.icalendarfx.component;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.time.DateTimeException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,13 +16,12 @@ import java.util.stream.Collectors;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarTestAbstract;
-import jfxtras.icalendarfx.components.VComponent;
-import jfxtras.icalendarfx.components.VComponentBase;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency;
 import jfxtras.icalendarfx.properties.component.time.TimeTransparency.TimeTransparencyType;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * Test following components:
@@ -53,31 +50,34 @@ public class VEventTest extends ICalendarTestAbstract
                 
         VEvent madeComponent = VEvent.parse(content);
         assertEquals(madeComponent, builtComponent);
-        assertEquals(content, builtComponent.toContent());
+        assertEquals(content, builtComponent.toString());
     }
         
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchBothDurationAndDTEnd()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
-        new VEvent()
+        VEvent v = new VEvent()
                 .withDateTimeEnd(LocalDate.of(1997, 3, 1))
                 .withDuration(Duration.ofMinutes(30));
+        String expectedError = "Both DTEND and DURATION are present.  DTEND or DURATION MAY exist, but both MUST NOT occur in the same VEVENT";
+        boolean isErrorPresent = v.errors()
+        	.stream()
+        	.anyMatch(e -> e.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
     
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchBothDurationAndDTEnd2()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
-       new VEvent()
-             .withDuration(Duration.ofMinutes(30))
-             .withDateTimeEnd(LocalDate.of(1997, 3, 1));
+        VEvent v = new VEvent()
+                .withDuration(Duration.ofMinutes(30))
+                .withDateTimeEnd(LocalDate.of(1997, 3, 1))
+                ;
+        String expectedError = "Both DTEND and DURATION are present.  DTEND or DURATION MAY exist, but both MUST NOT occur in the same VEVENT";
+        boolean isErrorPresent = v.errors()
+        	.stream()
+        	.anyMatch(e -> e.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
     
     @Test
@@ -134,15 +134,14 @@ public class VEventTest extends ICalendarTestAbstract
         assertEquals(expectedDates, madeDates);
     }
 
-    /** use {@link VComponentBase#copyComponentFrom} */
-    @Test
-    public void canCopyComponent()
-    {
-        VEvent e = getYearly1();
-        VEvent e2 = new VEvent();
-        e.copyInto(e2);
-        assertEquals(e, e2);
-    }
+//    /** use {@link VComponentBase#copyComponentFrom} */
+//    @Test
+//    public void canCopyComponent()
+//    {
+//        VEvent e = getYearly1();
+//        VEvent e2 = new VEvent(e);
+//        assertEquals(e, e2);
+//    }
 
     // Use copy constructor
     @Test
@@ -152,23 +151,7 @@ public class VEventTest extends ICalendarTestAbstract
         VEvent e2 = new VEvent(e);
         assertEquals(e, e2);
     }
-    
-    @Test // use reflection
-    public void canCopyComponent3()
-    {
-        VComponent e = getYearly1();
-        try
-        {
-            VComponent e2 = e.getClass().newInstance();
-            e.copyInto(e2);
-            assertEquals(e, e2);
-            assertFalse(e == e2);
-        } catch (InstantiationException | IllegalAccessException e1)
-        {
-            e1.printStackTrace();
-        }
-    }
-    
+
     @Test
     public void canChangeLocalDateToLocalDateTime()
     {
@@ -177,8 +160,8 @@ public class VEventTest extends ICalendarTestAbstract
                 .withDateTimeStart(LocalDate.of(2016, 3, 6));
         vEvent.setDateTimeStart(LocalDateTime.of(2016, 3, 6, 4, 30));// NOTE: this allows a temporary invalid state
         String expectedError = "DTEND value type (DATE) must be the same value type as DTSTART (DATE_WITH_LOCAL_TIME)";
-        boolean errorFound = vEvent.errors().stream().anyMatch(s -> s.equals(expectedError));
-        assertTrue(errorFound);
+        boolean isErrorPresent = vEvent.errors().stream().anyMatch(s -> s.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
 
     @Test
@@ -187,35 +170,37 @@ public class VEventTest extends ICalendarTestAbstract
         VEvent vEvent = new VEvent()
                 .withDateTimeEnd(LocalDate.of(2016, 3, 5))
                 .withDateTimeStart(LocalDate.of(2016, 3, 6)); // makes DTEND too early
-        String expectedError = "DTEND is not after DTSTART.  DTEND MUST be after DTSTART (2016-03-05, 2016-03-06)";
-        vEvent.errors().forEach(System.out::println);
-        boolean errorFound = vEvent.errors().stream().anyMatch(s -> s.equals(expectedError));
-        assertTrue(errorFound);
+        String expectedError = "DTEND does not occur after DTSTART.  DTEND MUST occur after DTSTART (2016-03-05, 2016-03-06)";
+        boolean isErrorPresent = vEvent.errors()
+        		.stream()
+        		.anyMatch(s -> s.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
     
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchTooEarlyDTEND2()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
         VEvent vEvent = new VEvent()
                 .withDateTimeStart(LocalDate.of(2016, 3, 6));
-        vEvent.setDateTimeEnd(LocalDate.of(2016, 3, 5)); // can't set an invalid DTEND
-        assertNull(vEvent.getDateTimeEnd());
+        vEvent.setDateTimeEnd(LocalDate.of(2016, 3, 5));
+        String expectedError = "DTEND does not occur after DTSTART.  DTEND MUST occur after DTSTART (2016-03-05, 2016-03-06)";
+        boolean isErrorPresent = vEvent.errors()
+        	.stream()
+        	.anyMatch(e -> e.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
     
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchWrongDTENDType()
     {
-        Thread.setDefaultUncaughtExceptionHandler((t1, e) ->
-        {
-            throw (RuntimeException) e;
-        });
         VEvent vEvent = new VEvent()
                 .withDateTimeStart(LocalDate.of(2016, 3, 6));
         vEvent.setDateTimeEnd(LocalDateTime.of(2016, 3, 6, 4, 30));
+        String expectedError = "DTEND value type (" + DateTimeType.DATE_WITH_LOCAL_TIME + ") must be the same value type as DTSTART (" + DateTimeType.DATE + ")";
+        boolean isErrorPresent = vEvent.errors()
+        	.stream()
+        	.anyMatch(e -> e.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
     
 }

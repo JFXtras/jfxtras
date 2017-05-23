@@ -22,7 +22,7 @@ public class BySetPositionTest
     {
         BySetPosition element = new BySetPosition(-2,5);
         assertEquals(Arrays.asList(-2,5), element.getValue());
-        assertEquals("BYSETPOS=-2,5", element.toContent());
+        assertEquals("BYSETPOS=-2,5", element.toString());
     }
     
     @Test

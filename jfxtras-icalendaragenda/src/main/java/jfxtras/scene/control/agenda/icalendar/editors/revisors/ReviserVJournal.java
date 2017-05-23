@@ -1,6 +1,5 @@
 package jfxtras.scene.control.agenda.icalendar.editors.revisors;
 
-import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.components.VJournal;
 
 /**

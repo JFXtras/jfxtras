@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
@@ -32,10 +31,8 @@ public class CancelRevisionTest
     public void canCancelEdit()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
         
         vComponentEdited.setSummary("Edited summary");

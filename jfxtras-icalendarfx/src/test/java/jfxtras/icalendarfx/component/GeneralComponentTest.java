@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import jfxtras.icalendarfx.ICalendarStaticComponents;
+import jfxtras.icalendarfx.components.VAlarm;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.component.descriptive.Categories;
 import jfxtras.icalendarfx.properties.component.descriptive.Classification.ClassificationType;
@@ -17,7 +17,6 @@ import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
 public class GeneralComponentTest
 {
     @Test
-    @Ignore // TestFX4
     public void canEscapeTest()
     {
         String contentLine = "DESCRIPTION:a dog\\nran\\, far\\;\\naway \\\\\\\\1";
@@ -26,7 +25,7 @@ public class GeneralComponentTest
                                "ran, far;" + System.lineSeparator() +
                                "away \\\\1";
         assertEquals(expectedValue, d.getValue());
-        assertEquals(contentLine, d.toContent());
+        assertEquals(contentLine, d.toString());
     }
 
     
@@ -43,11 +42,11 @@ public class GeneralComponentTest
                                  " ploys about 850 people in the city\\, and more than 1\\,000 in nearly 30 oth" + System.lineSeparator() +
                                  " er offices around the world." + System.lineSeparator() +
                                  "END:" + componentName;
-        assertEquals(expectedContent, builtComponent.toContent());
+        assertEquals(expectedContent, builtComponent.toString());
         assertEquals(line, builtComponent.getComments().get(0).getValue());
     }
     
-    @Test //(expected = IllegalArgumentException.class)
+    @Test (expected = IllegalArgumentException.class)
     public void canIgnoreSecondAssignment()
     {
         String componentName = "VEVENT";
@@ -59,7 +58,7 @@ public class GeneralComponentTest
         String expectedContent = "BEGIN:" + componentName + System.lineSeparator() +
                 "CLASS:PUBLIC" + System.lineSeparator() +
                 "END:" + componentName;
-        assertEquals(expectedContent, v.toContent());
+        assertEquals(expectedContent, v.toString());
     }
     
     @Test
@@ -74,10 +73,11 @@ public class GeneralComponentTest
         assertEquals(ClassificationType.PRIVATE, madeComponent.getClassification().getValue());
     }
     
-    @Test
+    @Test // tests manually adding a list and individual property to orderer
     public void canSetPropertyOrder()
     {
-        String contentLines = "BEGIN:VEVENT" + System.lineSeparator()
+        String contentLines = 
+        		  "BEGIN:VEVENT" + System.lineSeparator()
                 + "DTSTAMP:20150110T080000Z" + System.lineSeparator()
                 + "DTSTART:20151109T100000Z" + System.lineSeparator()
                 + "DTEND:20151109T110000Z" + System.lineSeparator()
@@ -91,22 +91,22 @@ public class GeneralComponentTest
         builtComponent.setDescription((Description) null);
         Categories category2 = Categories.parse("group05");
         builtComponent.getCategories().add(category2);
-        builtComponent.orderer().elementSortOrderMap().put(category2, 450); // custom order for new category
+        builtComponent.orderChild(category2);
         builtComponent.setClassification(ClassificationType.PRIVATE);
-        builtComponent.setDateTimeStart("20151109T110000Z");
+        builtComponent.replaceChild(1, DateTimeStart.parse("20171109T110000Z"));
         
         String contentLines2 = "BEGIN:VEVENT" + System.lineSeparator()
                 + "DTSTAMP:20150110T080000Z" + System.lineSeparator()
-                + "DTSTART:20151109T110000Z" + System.lineSeparator()
+        		+ "DTSTART:20171109T110000Z" + System.lineSeparator()
                 + "DTEND:20151109T110000Z" + System.lineSeparator()
                 + "UID:20150110T080000-0@jfxtras.org" + System.lineSeparator()
                 + "CATEGORIES:group03" + System.lineSeparator()
-                + "CATEGORIES:group05" + System.lineSeparator()
                 + "SUMMARY:DailyUTC Summary" + System.lineSeparator()
                 + "RRULE:FREQ=DAILY;INTERVAL=2;UNTIL=20151201T100000Z" + System.lineSeparator()
+                + "CATEGORIES:group05" + System.lineSeparator()
                 + "CLASS:PRIVATE" + System.lineSeparator()
                 + "END:VEVENT";
-        assertEquals(contentLines2, builtComponent.toContent());
+        assertEquals(contentLines2, builtComponent.toString());
     }
     
     @Test
@@ -117,5 +117,22 @@ public class GeneralComponentTest
         DateTimeStart dtStart = new DateTimeStart(LocalDateTime.of(2015, 11, 9, 9, 30));
         vevent.setDateTimeStart(dtStart);
         assertEquals(dtStart, vevent.childrenUnmodifiable().get(1));
+    }
+    
+    @Test
+    public void canParseEmptyProperty()
+    {
+        String content = 
+       "BEGIN:VALARM" + System.lineSeparator() +
+//       "ACTION:DISPLAY" + System.lineSeparator() +
+       "DESCRIPTION:" + System.lineSeparator() +
+//       "TRIGGER;RELATED=START:-PT30M" + System.lineSeparator() +
+       "END:VALARM";
+        VAlarm a = VAlarm.parse(content);
+//        System.out.println(vCalendar.toString());
+//        System.out.println(content);
+        assertEquals(content, a.toString());
+//        VEventNew e = vCalendar.getVEvents().get(1);
+//        e.getNonStandardProperties().stream().forEach(System.out::println);
     }
 }

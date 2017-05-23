@@ -1,5 +1,6 @@
 package jfxtras.icalendarfx.properties.component.recurrence.rrule;
 
+import java.lang.reflect.Method;
 import java.time.DayOfWeek;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -7,6 +8,7 @@ import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,28 +20,30 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import javafx.util.Callback;
 import jfxtras.icalendarfx.VChild;
 import jfxtras.icalendarfx.VParent;
 import jfxtras.icalendarfx.VParentBase;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Count;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Frequency;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRulePart;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.WeekStart;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByHour;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMinute;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonth;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonthDay;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRuleAbstract;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.BySecond;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByWeekNumber;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByYearDay;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
-import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 import jfxtras.icalendarfx.utilities.ICalendarUtilities;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * RRULE
@@ -77,8 +81,7 @@ import jfxtras.icalendarfx.utilities.ICalendarUtilities;
  * @see RecurrenceRule
  *
  */
-// TODO - LISTENER TO PREVENT COUNT AND UNTIL FROM BOTH BEING SET
-public class RecurrenceRuleValue extends VParentBase implements VChild
+public class RecurrenceRuleValue extends VParentBase<RecurrenceRuleValue> implements VChild
 {
     private VParent myParent;
     @Override public void setParent(VParent parent) { myParent = parent; }
@@ -86,7 +89,7 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
     
     private static final String NAME = "RRULE";
     @Override public String name() { return NAME; }
-    
+        
     /** 
      * BYxxx Rules
      * RFC 5545, iCalendar 3.3.10 Page 42
@@ -99,34 +102,58 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
      * 
      * Each BYxxx rule can only occur once
      *  */
-    public ObservableList<ByRule<?>> byRules() { return byRules; }
-    final private ObservableList<ByRule<?>> byRules; // = FXCollections.observableArrayList();
-//    public void setByRules(ObservableList<ByRule<?>> byRules) { this.byRules = byRules; }
-//    public RecurrenceRule3 withByRules(ObservableList<ByRule<?>> byRules) { setByRules(byRules); return this; }
+    public List<ByRule<?>> getByRules() { return byRules; }
+    private List<ByRule<?>> byRules;
+    public void setByRules(List<ByRule<?>> byRules)
+    {
+    	if (this.byRules != null)
+    	{
+    		this.byRules.forEach(e -> orderChild(e, null)); // remove old elements
+    	}
+    	this.byRules = byRules;
+    	if (byRules != null)
+    	{
+    		byRules.forEach(e -> orderChild(e));
+    	}
+	}
+    public void setByRules(String...byRules)
+    {
+    	Arrays.stream(byRules).forEach(c -> parseContent(c));
+	}
+    public RecurrenceRuleValue withByRules(Collection<ByRule<?>> byRules)
+    {
+    	if (getByRules() == null)
+    	{
+    		setByRules(new ArrayList<>());
+    	}
+    	getByRules().addAll(byRules);
+    	if (byRules != null)
+    	{
+    		byRules.forEach(c -> orderChild(c));
+    	}
+        return this;
+    }
     public RecurrenceRuleValue withByRules(ByRule<?>...byRules)
     {
-        for (ByRule<?> myByRule : byRules)
-        {
-            byRules().add(myByRule);
-        }
-        return this;
+    	return withByRules(Arrays.asList(byRules));
     }
     public RecurrenceRuleValue withByRules(String...byRules)
     {
-        Arrays.stream(byRules).forEach(c -> parseContent(c));
+    	setByRules(byRules);
         return this;
     }
-    
-    /** Return ByRule associated with class type */
-    public ByRule<?> lookupByRule(Class<? extends ByRule<?>> byRuleClass)
-    {
-        Optional<ByRule<?>> rule = byRules()
-                .stream()
-                .filter(r -> byRuleClass.isInstance(r))
-                .findFirst();
-        return (rule.isPresent()) ? rule.get() : null;
-    }
-    
+    /** Return particular ByRule of passed class */
+	public ByRule<?> lookupByRule(Class<ByDay> class1)
+	{
+		if (getByRules() == null) return null;
+		Optional<ByRule<?>> byRule = getByRules()
+			.stream()
+	        .filter(r -> r instanceof ByDay)
+	        .findAny();
+		if (! byRule.isPresent()) return null;
+		return byRule.get();
+	}
+	
     /**
      * COUNT:
      * RFC 5545 iCalendar 3.3.10, page 41
@@ -135,21 +162,13 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
      * range-bound the recurrence.  The "DTSTART" property value always
      * counts as the first occurrence.
      */
-    public ObjectProperty<Count> countProperty()
+    private Count count;
+    public Count getCount() { return count; }
+    public void setCount(Count count)
     {
-        if (count == null)
-        {
-            count = new SimpleObjectProperty<>(this, RRuleElementType.COUNT.toString());
-            orderer().registerSortOrderProperty(count);
-            // TODO - add listener to ensure COUNT and UNTIL are not both set
-            // listener to ensure >0 throw new IllegalArgumentException("COUNT can't be less than 0. (" + count + ")");
-//            else throw new IllegalArgumentException("can't set COUNT if UNTIL is already set.");
-        }
-        return count;
-    }
-    private ObjectProperty<Count> count;
-    public Count getCount() { return (count == null) ? null : countProperty().get(); }
-    public void setCount(Count count) { countProperty().set(count); }
+    	orderChild(this.count, count);
+    	this.count = count;
+	}
     public void setCount(int count) { setCount(new Count(count)); }
     public RecurrenceRuleValue withCount(Count count)
     {
@@ -174,19 +193,28 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
      * include SECONDLY, to specify repeating events based on an interval
      * of a second or more; MINUTELY, to specify repeating events based
      * on an interval of a minute or more; HOURLY, to specify repeating
-     * events based on an interval of an hour or more; DAILY, to specify
+     * events based on an interval of an hour oparseContentr more; DAILY, to specify
      * repeating events based on an interval of a day or more; WEEKLY, to
      * specify repeating events based on an interval of a week or more;
      * MONTHLY, to specify repeating events based on an interval of a
      * month or more; and YEARLY, to specify repeating events based on an
      * interval of a year or more.
      */
-    public ObjectProperty<Frequency> frequencyProperty() { return frequency; }
-    final private ObjectProperty<Frequency> frequency; // initialized in constructor
-    public Frequency getFrequency() { return frequency.get(); }
-    public void setFrequency(Frequency frequency) { frequencyProperty().set(frequency); }
-    public void setFrequency(String frequency) { setFrequency(Frequency.parse(frequency)); }
-    public void setFrequency(FrequencyType frequency) { setFrequency(new Frequency(frequency)); }
+    private Frequency frequency;
+    public Frequency getFrequency() { return frequency; }
+    public void setFrequency(Frequency frequency)
+    {
+    	orderChild(this.frequency, frequency);
+    	this.frequency = frequency;
+	}
+    public void setFrequency(String frequency)
+    {
+    	setFrequency(Frequency.parse(frequency));
+	}
+    public void setFrequency(FrequencyType frequency)
+    {
+    	setFrequency(new Frequency(frequency));
+	}
     public RecurrenceRuleValue withFrequency(Frequency frequency)
     {
         setFrequency(frequency);
@@ -215,38 +243,16 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
      * MONTHLY rule, and every year for a YEARLY rule.  For example,
      * within a DAILY rule, a value of "8" means every eight days.
      */
-    public ObjectProperty<Interval> intervalProperty()
-    {
-        if (interval == null)
-        {
-            interval = new SimpleObjectProperty<>(this, RRuleElementType.INTERVAL.toString());
-            orderer().registerSortOrderProperty(interval);
-        }
-        return interval;
-    }
-    private ObjectProperty<Interval> interval;
-    public Interval getInterval()
-    {
-        return (intervalProperty() == null) ? null : intervalProperty().get();
-    }
+    private Interval interval;
+    public Interval getInterval() { return interval; }
     public void setInterval(Interval interval)
     {
-        intervalProperty().set(interval);
-    }
-    public void setInterval(Integer interval)
-    {
-        setInterval(new Interval(interval));
-    }
-    public RecurrenceRuleValue withInterval(int interval)
-    {
-        setInterval(interval);
-        return this;
-    }
-    public RecurrenceRuleValue withInterval(Interval interval)
-    {
-        setInterval(interval);
-        return this;
-    }
+    	orderChild(this.interval, interval);
+    	this.interval = interval;
+	}
+    public void setInterval(Integer interval) { setInterval(new Interval(interval)); }
+    public RecurrenceRuleValue withInterval(int interval) { setInterval(interval); return this; }
+    public RecurrenceRuleValue withInterval(Interval interval) { setInterval(interval); return this; }
     
     /**
      * UNTIL:
@@ -269,51 +275,18 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
      * time format.  If not present, and the COUNT rule part is also not
      * present, the "RRULE" is considered to repeat forever
      */
-    public SimpleObjectProperty<Until> untilProperty()
+    private Until until;
+    public Until getUntil() { return until; }
+    public void setUntil(Until until)
     {
-        if (until == null)
-        {
-            until = new SimpleObjectProperty<>(this, RRuleElementType.UNTIL.toString());
-            orderer().registerSortOrderProperty(until);
-            // TODO - add listener to ensure COUNT and UNTIL are not both set
-            // TODO - LISTENER TO ENSURE UTC OR DATE
-            // if ((DateTimeType.of(until) != DateTimeType.DATE) && (DateTimeType.of(until) != DateTimeType.DATE_WITH_UTC_TIME))
-        }
-        return until;
-    }
-    private SimpleObjectProperty<Until> until;
-    public Until getUntil() { return (until == null) ? null : untilProperty().getValue(); }
-    public void setUntil(Until until) { untilProperty().set(until); }
-    public void setUntil(Temporal until)
-    {
-        setUntil(new Until(until));
-        //  TODO - all properties need to make new object here or ORDERER listener won't fire
-        //  I NEED TO REPLACE THE SET-VALUE METHOD FOR ALL PROPERTIES
-//        System.out.println("old until:" + getUntil());
-//        if (getUntil() == null)
-//        {
-//            setUntil(new Until(until));
-//        } else
-//        {
-//            getUntil().setValue(until);
-//        }
-    }
+    	orderChild(this.until, until);
+    	this.until = until;
+	}
+    public void setUntil(Temporal until) { setUntil(new Until(until)); }
     public void setUntil(String until) { setUntil(DateTimeUtilities.temporalFromString(until)); }
-    public RecurrenceRuleValue withUntil(Temporal until)
-    {
-        setUntil(until);
-        return this;
-    }
-    public RecurrenceRuleValue withUntil(String until)
-    {
-        setUntil(until);
-        return this;
-    }
-    public RecurrenceRuleValue withUntil(Until until)
-    {
-        setUntil(until);
-        return this;
-    }
+    public RecurrenceRuleValue withUntil(Temporal until) {  setUntil(until); return this; }
+    public RecurrenceRuleValue withUntil(String until) { setUntil(until); return this; }
+    public RecurrenceRuleValue withUntil(Until until) { setUntil(until); return this; }
     
     /**
      * Week Start
@@ -327,117 +300,45 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
      * in a YEARLY "RRULE" when a BYWEEKNO rule part is specified.  The
      * default value is MO.
      */
-    public SimpleObjectProperty<WeekStart> weekStartProperty()
+    private WeekStart weekStart;
+    public WeekStart getWeekStart() { return weekStart; }
+    public void setWeekStart(WeekStart weekStart)
     {
-        if (weekStart == null)
-        {
-            weekStart = new SimpleObjectProperty<>(this, RRuleElementType.WEEK_START.toString());
-            orderer().registerSortOrderProperty(weekStart);
-            weekStart.addListener((obs, oldValue, newValue) ->
-            {
-                // bind to values in the Byxxx rules that use it
-                addWeekStartBindings(lookupByRule(ByDay.class));
-                addWeekStartBindings(lookupByRule(ByWeekNumber.class));                
-            });
-        }
-        return weekStart;
-    }
-    private SimpleObjectProperty<WeekStart> weekStart;
-    public WeekStart getWeekStart() { return (weekStart == null) ? null : weekStartProperty().get(); }
-    public void setWeekStart(WeekStart weekStart) { weekStartProperty().set(weekStart); }
-    public void setWeekStart(DayOfWeek weekStart) { weekStartProperty().set(new WeekStart(weekStart)); }
+    	orderChild(this.weekStart, weekStart);
+    	this.weekStart = weekStart;
+	}
+    public void setWeekStart(DayOfWeek weekStart) { setWeekStart(new WeekStart(weekStart)); }
     public RecurrenceRuleValue withWeekStart(WeekStart weekStart) { setWeekStart(weekStart); return this; }
     public RecurrenceRuleValue withWeekStart(DayOfWeek weekStart) { setWeekStart(weekStart); return this; }
     
-   // bind to values in the Byxxx rules that use Week Start
-    private void addWeekStartBindings(ByRule<?> rule)
-    {
-        if (getWeekStart() != null)
-        {
-            if (rule instanceof ByDay)
-            {
-                ((ByDay) rule).weekStartProperty().bind(getWeekStart().valueProperty());
-            } else if (rule instanceof ByWeekNumber)
-            {
-                ((ByWeekNumber) rule).weekStartProperty().bind(getWeekStart().valueProperty());
-            }
-        }
-    }
-    
-//    /**
-//     * List of all recurrence rule elements found in object.
-//     * The list is unmodifiable.
-//     * 
-//     * @return - the list of elements
-//     * @deprecated  not needed due to addition of Orderer, may be deleted
-//     */
-//    @Deprecated
-//    public List<RRuleElementType> elements()
-//    {
-//        List<RRuleElementType> populatedElements = Arrays.stream(RRuleElementType.values())
-//            .filter(p -> (p.getElement(this) != null))
-//            .collect(Collectors.toList());
-//      return Collections.unmodifiableList(populatedElements);
-//    }
-    
+
     /*
-     * SORT ORDER FOR CHILD ELEMENTS
+     * Changes to getSetter and getGetter methods to provide mapping for any ByRule class
+     * to the getByRule getter.
+     * 
+     * (non-Javadoc)
+     * @see net.balsoftware.icalendar.VParentBase#getSetter(net.balsoftware.icalendar.VChild)
      */
-//    final private Orderer orderer;
-//    @Override
-//    public Orderer orderer() { return orderer; }
-
-//    /** Callback to enable copy-element-behavior from {@link Orderer#copyChildrenFrom(VParent) } */
-//    private Callback<VElement, Void> copyElementChildCallback = (child) ->
-//    {
-//        RRuleElementType type = RRuleElementType.enumFromClass(child.getClass());
-//        type.copyElement((RRuleElement<?>) child, this);
-//        return null;
-//    };
-    
-    @Override
-    @Deprecated
-
-    protected Callback<VChild, Void> copyIntoCallback()
-    {        
-        return (child) ->
-        {
-            RRuleElementType type = RRuleElementType.enumFromClass(child.getClass());
-            type.copyElement((RRuleElement<?>) child, this);
-            return null;
-        };
-    }
-    
-    @Override
-    public void copyInto(VParent destination)
-    {
-        super.copyInto(destination);
-        childrenUnmodifiable().forEach((childSource) -> 
-        {
-            RRuleElementType type = RRuleElementType.enumFromClass(childSource.getClass());
-            if (type != null)
-            {
-                type.copyElement((RRuleElement<?>) childSource, (RecurrenceRuleValue) destination);
-            } 
-        });
-    }
-    
-//    /** 
-//     * SORT ORDER
-//     * 
-//     * Element sort order map.  Key is element, value is the sort order.  The map is automatically
-//     * populated when parsing the content lines to preserve the existing property order.
-//     * 
-//     * When producing the content lines, if a element is not present in the map, it is put at
-//     * the end of the sorted ones in the order appearing in {@link #RecurrenceRuleElement} 
-//     * Generally, this map shouldn't be modified.  Only modify it when you want
-//     * to force a specific property order (e.g. unit testing).
-//     */
-//    @Deprecated
-//    public Map<RRuleElementType, Integer> elementSortOrder() { return elementSortOrder; }
-//    @Deprecated
-//    final private Map<RRuleElementType, Integer> elementSortOrder = new HashMap<>();
-//    private Integer elementCounter = 0;
+	@Override
+	protected Method getSetter(VChild child)
+	{
+		Method setter = getSetters().get(child.getClass());
+		if ((setter == null) && (ByRule.class.isAssignableFrom(child.getClass())))
+		{
+			setter = getSetters().get(ByRule.class);
+		}
+		return setter;
+	}
+	@Override
+	protected Method getGetter(VChild child)
+	{
+		Method getter = getGetters().get(child.getClass());
+		if ((getter == null) && (ByRule.class.isAssignableFrom(child.getClass())))
+		{
+			getter = getGetters().get(ByRule.class);
+		}
+		return getter;
+	}
     
     /*
      * CONSTRUCTORS
@@ -445,68 +346,25 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
     
     public RecurrenceRuleValue()
     {
-        frequency = new SimpleObjectProperty<>(this, RRuleElementType.FREQUENCY.toString());
-        orderer().registerSortOrderProperty(frequencyProperty());
-        byRules = FXCollections.observableArrayList();
-        orderer().registerSortOrderProperty(byRules);
-        
-        // Listener that ensures user doesn't add same ByRule a second time.  Also keeps the byRules list sorted.
-        byRules().addListener((ListChangeListener<? super ByRule<?>>) (change) ->
-        {
-            while (change.next())
-            {
-                if (change.wasAdded())
-                {
-                    change.getAddedSubList().stream().forEach(c ->
-                    {
-                        ByRule<?> newByRule = c;
-                        long alreadyPresent = change.getList()
-                                .stream()
-                                .map(r -> r.elementType())
-                                .filter(p -> p.equals(c.elementType()))
-                                .count();
-                        if (alreadyPresent > 1)
-                        {
-                            throw new IllegalArgumentException("Can't add " + newByRule.getClass().getSimpleName() + " (" + c.elementType() + ") more than once.");
-                        }
-                        addWeekStartBindings(newByRule);
-                    });
-                    
-                    // Sort after addition
-//                    orderer().unregisterSortOrderProperty(byRules());
-                    Collections.sort(change.getList());
-//                    orderer().registerSortOrderProperty(byRules());
-                }
-            }
-        });
+    	super();
     }
 
     // Copy constructor
     public RecurrenceRuleValue(RecurrenceRuleValue source)
     {
-        this();
-        source.copyInto(this);
-//        copyChildrenFrom(source);
+    	super(source);
+        setParent(source.getParent());
     }
     
     /** Parse component from content line */
     @Override
-    public List<String> parseContent(String contentLine)
+    protected List<Message> parseContent(String contentLine)
     {
-        ICalendarUtilities.contentToParameterListPair(contentLine)
-                .stream()
-                .forEach(entry ->
-                {
-                    RRuleElementType element = RRuleElementType.enumFromName(entry.getKey());
-                    if (element != null)
-                    {
-                        element.parse(this, entry.getValue());
-                    } else
-                    {
-                        throw new IllegalArgumentException("Unsupported Recurrence Rule element: " + entry.getKey());                        
-                    }
-                });
-        return errors();
+    	List<Message> messages = new ArrayList<>();
+    	ICalendarUtilities.parseInlineElementsToListPair(contentLine)
+    		.stream()
+    		.forEach(entry -> processInLineChild(messages, entry.getKey(), entry.getValue(), RRulePart.class));
+        return messages;
     }
 
     /**
@@ -532,13 +390,17 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
                     // process byRules
                     chronoUnit = getFrequency().getValue().getChronoUnit(); // initial chronoUnit from Frequency
                     myStream = Arrays.asList(value).stream();
-                    byRules().stream()
-                            .sorted()
-                            .forEach(rule ->
-                            {
-                                myStream = rule.streamRecurrences(myStream, chronoUnit, start);
-                                chronoUnit = rule.getChronoUnit();
-                            });
+                    if (getByRules() != null)
+                    {
+	                    getByRules().stream()
+	                            .sorted()
+	                            .forEach(rule ->
+	                            {
+	                                myStream = rule.streamRecurrences(myStream, chronoUnit, start);
+//	                                chronoUnit = RRuleElement.fromClass(rule.getClass()).getChronoUnit();
+	                                chronoUnit = ((ByRuleAbstract<?, ?>) rule).elementType.getChronoUnit();
+	                            });
+                    }
                     // must filter out too early recurrences
                     return myStream.filter(r -> ! DateTimeUtilities.isBefore(r, start));
                 });
@@ -594,122 +456,70 @@ public class RecurrenceRuleValue extends VParentBase implements VChild
     }
     
     @Override
-    public String toContent()
+    public String toString()
     {
         return childrenUnmodifiable().stream()
-                .map(c -> c.toContent())
+                .map(c -> c.toString())
                 .collect(Collectors.joining(";"));
     }
     
     @Override
     public List<String> errors()
     {
-        List<String> errors = new ArrayList<>();
+        List<String> errors = super.errors();
         if (getFrequency() == null)
         {
-            errors.add("FREQ is not present.  FREQ is REQUIRED and MUST NOT occur more than once");
+            errors.add(name() + ":" + "FREQ is not present.  FREQ is REQUIRED and MUST NOT occur more than once");
+        }
+        if (getByRules() != null)
+        {
+        	getByRules().stream().collect(Collectors.groupingBy(ByRule::getClass, Collectors.counting()));
         }
         boolean isUntilPresent = getUntil() != null;
         boolean isCountPresent = getCount() != null;
         if (isUntilPresent && isCountPresent)
         {
-            errors.add("UNTIL and COUNT are both present.  UNTIL or COUNT rule parts are OPTIONAL, but they MUST NOT both occur.");
+            errors.add(name() + ":" + "UNTIL and COUNT are both present.  UNTIL or COUNT rule parts are OPTIONAL, but they MUST NOT both occur.");
         }
-        childrenUnmodifiable().forEach(c -> errors.addAll(c.errors()));
-//        byRules().forEach(b -> errors.addAll(b.errors()));
+		List<ByRule<?>> byRules = (getByRules() == null) ? Collections.emptyList() : new ArrayList<>(getByRules());
+		List<String> duplicateByRuleMessages = byRules.stream()
+				.collect(Collectors.groupingBy(ByRule::getClass, Collectors.counting()))
+				.entrySet()
+				.stream()
+				.filter(e -> e.getValue() > 1)
+				.map(e -> name() + ":" + e.getKey().getSimpleName() + " can only occur once in a RRULE.")
+				.collect(Collectors.toList());
+		errors.addAll(duplicateByRuleMessages);
         return errors;
     }
     
-    @Override
-    public String toString()
-    {
-        return super.toString() + ", " + toContent();
-    }
-    
-    // Note: can't check equals or hashCode of parents - causes stack overflow
-    
-//    @Override
-//    public boolean equals(Object obj)
-//    {
-//        boolean childrenEquals = super.equals(obj);
-//        if (! childrenEquals) return false;
-//        PropertyBase<?,?> testObj = (PropertyBase<?,?>) obj;
-//        boolean parentEquals = Objects.equal(this.getParent(), testObj.getParent());
-//        return parentEquals;
-//    }
-//    
-//    @Override
-//    public int hashCode()
-//    {
-//        int hash = super.hashCode();
-//        final int prime = 31;
-//        hash = prime * hash + ((getParent() == null) ? 0 : getParent().hashCode());
-//        return hash;
-//    }
+	@Override
+	protected boolean checkChild(List<Message> messages, String content, String elementName, VChild newChild)
+	{
+		boolean isSuperOk = super.checkChild(messages, content, elementName, newChild);
+		if (newChild instanceof ByRule)
+		{
+			List<ByRule<?>> byRules = (getByRules() == null) ? new ArrayList<>() : new ArrayList<>(getByRules());
+			byRules.add((ByRule<?>) newChild);
+//			System.out.println("byRules:" + byRules + " " + newChild);
+			List<Message> duplicateByRuleMessages = byRules.stream()
+				.collect(Collectors.groupingBy(ByRule::getClass, Collectors.counting()))
+				.entrySet()
+				.stream()
+				.filter(e -> e.getValue() > 1)
+				.map(e -> new Message(this,
+						newChild.getClass().getSimpleName() + " can only occur once in a calendar component.",
+						MessageEffect.MESSAGE_ONLY))
+				.collect(Collectors.toList());
+			boolean isDuplicateByRulePresent = duplicateByRuleMessages.isEmpty();
+			messages.addAll(duplicateByRuleMessages);
+			return isSuperOk && isDuplicateByRulePresent;
+		}
+		return isSuperOk;
+	}
 
-//    @Override
-//    public boolean equals(Object obj)
-//    {
-//        if (obj == this) return true;
-//        if((obj == null) || (obj.getClass() != getClass())) {
-//            return false;
-//        }
-//        RecurrenceRule2 testObj = (RecurrenceRule2) obj;
-//
-//        List<RRuleElementType> myElements = elements();
-//        // elements only found in testObj.  Some may be equal because default value may match assigned value
-//        List<RRuleElementType> testElements = testObj.elements()
-//                .stream()
-//                .filter(e -> ! myElements.contains(e))
-//                .collect(Collectors.toList());
-//        
-//        for (RRuleElementType t : myElements)
-//        {
-//            RRuleElement<?> myElement = t.getElement(this);
-//            RRuleElement<?> otherElement = t.getElement(testObj);
-//            testElements.remove(t);
-//            if (! myElement.equals(otherElement))
-//            {
-//                return false;
-//            }
-//        }
-//        // check elements matching default values
-//        for (RRuleElementType t : testElements)
-//        {
-//            RRuleElement<?> otherElement = t.getElement(testObj);
-//            try
-//            {
-//                RRuleElement<?> defaultElement = otherElement.getClass().newInstance();
-//                if (! otherElement.equals(defaultElement))
-//                {
-//                    return false;
-//                }
-//            } catch (InstantiationException | IllegalAccessException e1)
-//            {
-//                e1.printStackTrace();
-//            }
-//        }
-//        return true;
-//    }
-//    
-//    @Override
-//    public int hashCode()
-//    {
-//        final int prime = 31;
-//        int result = 1;
-//        result = prime * result + ((byRules == null) ? 0 : byRules.hashCode());
-//        result = prime * result + ((count == null) ? 0 : count.hashCode());
-//        result = prime * result + ((frequency == null) ? 0 : frequency.hashCode());
-//        result = prime * result + ((interval == null) ? 0 : interval.hashCode());
-//        result = prime * result + ((until == null) ? 0 : until.hashCode());
-//        result = prime * result + ((weekStart == null) ? 0 : weekStart.hashCode());
-//        return result;
-//    }
-    
-    public static RecurrenceRuleValue parse(String propertyContent)
+    public static RecurrenceRuleValue parse(String content)
     {
-        RecurrenceRuleValue property = new RecurrenceRuleValue();
-        property.parseContent(propertyContent);
-        return property;
+    	return RecurrenceRuleValue.parse(new RecurrenceRuleValue(), content);
     }
 }

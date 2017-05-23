@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
@@ -25,13 +24,9 @@ public class ReviseNonRepeatingTest
     public void canEditIndividual()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividual1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
-        vComponents.add(vComponentEdited);
 
         vComponentEdited.setSummary("Edited summary");
         Temporal startOriginalRecurrence = LocalDateTime.of(2016, 5, 16, 10, 30);
@@ -58,13 +53,13 @@ public class ReviseNonRepeatingTest
                 "DESCRIPTION:Individual Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-007@jfxtras.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -73,13 +68,10 @@ public class ReviseNonRepeatingTest
     public void canEditIndividual2() // with other components present
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividual1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
-        vComponents.add(vComponentEdited);
         vComponents.add(ICalendarStaticComponents.getDaily1());
 
         vComponentEdited.setSummary("Edited summary");
@@ -107,13 +99,13 @@ public class ReviseNonRepeatingTest
                 "DESCRIPTION:Individual Description" + System.lineSeparator() +
                 "SUMMARY:Edited summary" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-007@jfxtras.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -122,13 +114,9 @@ public class ReviseNonRepeatingTest
     public void canEditIndividual3() // delete property
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividual1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
         VEvent vComponentEdited = new VEvent(vComponentOriginal);
-
-        vComponents.add(vComponentEdited);
 
         vComponentEdited.setSummary((Summary) null);
         Temporal startOriginalRecurrence = LocalDateTime.of(2016, 5, 16, 10, 30);
@@ -154,13 +142,13 @@ public class ReviseNonRepeatingTest
                 "DURATION:PT1H" + System.lineSeparator() +
                 "DESCRIPTION:Individual Description" + System.lineSeparator() +
                 "ORGANIZER;CN=Issac Newton:mailto:isaac@greatscientists.org" + System.lineSeparator() +
-                vComponentEdited.getDateTimeStamp().toContent() + System.lineSeparator() +
+                vComponentEdited.getDateTimeStamp().toString() + System.lineSeparator() +
                 "UID:20150110T080000-007@jfxtras.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = iTIPMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }

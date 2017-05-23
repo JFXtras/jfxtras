@@ -98,13 +98,13 @@ public class ImportICSFileTrial extends Application
         {
             VCalendar publishMessage = new VCalendar()
                     .withMethod(MethodType.PUBLISH);
-            mainVCalendar.copyInto(publishMessage);
+            mainVCalendar.copyChildrenInto(publishMessage);
             File file = fileChooser.showSaveDialog(primaryStage);
             BufferedWriter writer = null;
             try
             {
                 writer = new BufferedWriter(new FileWriter(file));
-                writer.write(publishMessage.toContent());
+                writer.write(publishMessage.toString());
                 writer.close();
             } catch ( IOException e2)
             {

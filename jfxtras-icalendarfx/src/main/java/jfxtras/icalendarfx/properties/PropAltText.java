@@ -1,12 +1,10 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
+import javax.annotation.Resources;
+
 import jfxtras.icalendarfx.parameters.AlternateText;
-import jfxtras.icalendarfx.properties.component.descriptive.Comment;
-import jfxtras.icalendarfx.properties.component.descriptive.Description;
-import jfxtras.icalendarfx.properties.component.descriptive.Location;
-import jfxtras.icalendarfx.properties.component.descriptive.Resources;
-import jfxtras.icalendarfx.properties.component.descriptive.Summary;
+import jfxtras.icalendarfx.properties.PropBaseAltText;
+import jfxtras.icalendarfx.properties.PropLanguage;
 import jfxtras.icalendarfx.properties.component.relationship.Contact;
 
 /**
@@ -60,6 +58,5 @@ public interface PropAltText<T> extends PropLanguage<T>
      * </html>
      */
     AlternateText getAlternateText();
-    ObjectProperty<AlternateText> alternateTextProperty();
     void setAlternateText(AlternateText alternateText);
 }

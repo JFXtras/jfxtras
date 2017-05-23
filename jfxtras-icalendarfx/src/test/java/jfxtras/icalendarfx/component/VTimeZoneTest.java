@@ -22,10 +22,10 @@ public class VTimeZoneTest
                 "END:" + componentName;
                 
         VComponent parsedComponent = builtComponent.getClass().newInstance();
-        parsedComponent.parseContent(expectedContent);
+        parsedComponent.addChild(expectedContent);
 
         assertEquals(parsedComponent, builtComponent);
-        assertEquals(expectedContent, builtComponent.toContent());            
+        assertEquals(expectedContent, builtComponent.toString());            
     }
     
     @Test
@@ -94,9 +94,8 @@ public class VTimeZoneTest
             "END:VTIMEZONE";
         VTimeZone component = VTimeZone.parse(expectedContent);
         VTimeZone builtComponent = ICalendarTestAbstract.getTimeZone1();
-        component.equals(builtComponent);
         assertEquals(component, builtComponent);
-        assertEquals(expectedContent, component.toContent());
-        assertEquals(builtComponent.toContent(), component.toContent());
+        assertEquals(expectedContent, component.toString());
+        assertEquals(builtComponent.toString(), component.toString());
     }
 }

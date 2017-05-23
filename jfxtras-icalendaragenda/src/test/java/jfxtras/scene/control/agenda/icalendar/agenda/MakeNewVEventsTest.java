@@ -1,20 +1,22 @@
 package jfxtras.scene.control.agenda.icalendar.agenda;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-import org.junit.Assert;
 import org.junit.Test;
 
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.scene.control.agenda.Agenda.AppointmentGroup;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
+import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.test.TestUtil;
 
 public class MakeNewVEventsTest extends AgendaTestAbstract
@@ -34,7 +36,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         summaryTextField.setText("Edited summary");
         ComboBox<AppointmentGroup> appointmentGroupComboBox = find("#appointmentGroupComboBox");
         TestUtil.runThenWaitForPaintPulse( () -> appointmentGroupComboBox.setValue(agenda.appointmentGroups().get(10)) );
-        
+
         // create event
         clickOn("#newAppointmentCreateButton");
         
@@ -54,7 +56,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         assertEquals(expectedVEvent, vEvent);
     }
     
-    @Test //(expected = NoNodesFoundException.class)
+    @Test
     public void canCancelSimpleVEvent()
     {
         // Draw new appointment
@@ -68,10 +70,39 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         clickOn("#newAppointmentCancelButton");
         
         // verify no event creation
-        assertEquals(0, agenda.getVCalendar().getVEvents().size());
+        assertNull(agenda.getVCalendar().getVEvents());
         assertEquals(0, agenda.appointments().size());
         
-        Assert.assertNull(find("#AppointmentRegularBodyPane2015-11-11/0")); // nothing should be found
+        Node node = find("#AppointmentRegularBodyPane2015-11-11/0");
+        assertNull(node);
+    }
+
+    // Cancel when other events exist
+    @Test
+    public void canCancelSimpleVEvent2()
+    {
+        // create appointment
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getIndividual1());
+            agenda.refresh();
+        });
+        
+        // Draw new appointment
+        moveTo("#hourLine5");
+        press(MouseButton.PRIMARY);
+        moveTo("#hourLine6");
+        release(MouseButton.PRIMARY);
+        find("#AppointmentRegularBodyPane2015-11-5/0"); // validate that the pane has the expected id
+        
+        // create event
+        clickOn("#newAppointmentCancelButton");
+        
+        // verify no event creation
+        assertEquals(1, agenda.appointments().size());
+        
+        assertFind("#AppointmentRegularBodyPane2015-11-11/0");
+        Node node = find("#AppointmentRegularBodyPane2015-11-5/0");
+        assertNull(node);
     }
     
     @Test
@@ -95,7 +126,7 @@ public class MakeNewVEventsTest extends AgendaTestAbstract
         // verify event's creation
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent vEvent = agenda.getVCalendar().getVEvents().get(0);
-        System.out.println("old vEvent:" + System.identityHashCode(vEvent));
+//        System.out.println("old vEvent:" + System.identityHashCode(vEvent));
         VEvent expectedVEvent = new VEvent()
                 .withOrganizer(ICalendarAgenda.DEFAULT_ORGANIZER)
                 .withSummary("New")

@@ -5,6 +5,7 @@ import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseAltText;
+import jfxtras.icalendarfx.properties.component.relationship.Contact;
 
 /**
  * CONTACT
@@ -35,10 +36,8 @@ public class Contact extends PropBaseAltText<String, Contact>
         super();
     }
     
-    public static Contact parse(String propertyContent)
+    public static Contact parse(String content)
     {
-        Contact property = new Contact();
-        property.parseContent(propertyContent);
-        return property;
+    	return Contact.parse(new Contact(), content);
     }
 }

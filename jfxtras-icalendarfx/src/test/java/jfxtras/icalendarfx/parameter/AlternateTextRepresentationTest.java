@@ -13,6 +13,6 @@ public class AlternateTextRepresentationTest
     {
         String content = "\"cid:part1.0001@example.org\"";
         AlternateText p = AlternateText.parse(content);
-        assertEquals(p.name() + "=" + content, p.toContent());
+        assertEquals(p.name() + "=" + content, p.toString());
     }
 }

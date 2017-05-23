@@ -5,11 +5,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 
-import javafx.util.Callback;
 import jfxtras.icalendarfx.components.VDisplayable;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.component.relationship.Organizer;
+import jfxtras.icalendarfx.utilities.Callback;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 
 /**
@@ -50,6 +50,7 @@ public class DefaultVComponentFactory extends VComponentFactory<Appointment>
             newVComponent.withCategories(category);
             newVComponent.withDateTimeStart(dtstart);
             ((VEvent) newVComponent).withDateTimeEnd(dtend);
+            // TODO - HANDLE NULL STRINGS
             ((VEvent) newVComponent).withDescription(description);
             ((VEvent) newVComponent).setLocation(location);
             newVComponent.setDateTimeCreated(dtCreated);

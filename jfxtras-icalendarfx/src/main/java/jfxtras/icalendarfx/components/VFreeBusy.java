@@ -5,13 +5,14 @@ import java.time.temporal.TemporalAmount;
 import java.util.Collections;
 import java.util.List;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.util.Pair;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VDateTimeEnd;
+import jfxtras.icalendarfx.components.VFreeBusy;
+import jfxtras.icalendarfx.components.VPersonal;
 import jfxtras.icalendarfx.properties.component.relationship.Contact;
 import jfxtras.icalendarfx.properties.component.time.DateTimeEnd;
 import jfxtras.icalendarfx.properties.component.time.FreeBusyTime;
+import jfxtras.icalendarfx.utilities.Pair;
 
 /**
  * VFREEBUSY
@@ -105,21 +106,24 @@ public class VFreeBusy extends VPersonal<VFreeBusy> implements VDateTimeEnd<VFre
      *  c=US???(cn=Jim%20Dolittle)":Jim Dolittle\, ABC Industries\,
      *  +1-919-555-1234
      */
-    public ObjectProperty<Contact> contactProperty()
-    {
-        if (contact == null)
-        {
-            contact = new SimpleObjectProperty<>(this, PropertyType.CONTACT.toString());
-            orderer().registerSortOrderProperty(contact);
-        }
-        return contact;
-    }
-    private ObjectProperty<Contact> contact;
-    public Contact getContact() { return contactProperty().get(); }
+    private Contact contact;
+    public Contact getContact() { return contact; }
     public void setContact(String contact) { setContact(Contact.parse(contact)); }
-    public void setContact(Contact contact) { contactProperty().set(contact); }
-    public VFreeBusy withContact(Contact contact) { setContact(contact); return this; }
-    public VFreeBusy withContact(String contact) { PropertyType.CONTACT.parse(this, contact); return this; }
+    public void setContact(Contact contact)
+    {
+    	orderChild(this.contact, contact);
+    	this.contact = contact;
+	}
+    public VFreeBusy withContact(Contact contact)
+    {
+    	setContact(contact);
+    	return this;
+	}
+    public VFreeBusy withContact(String contact)
+    {
+    	setContact(Contact.parse(contact));
+    	return this;
+	}
     
     /**
      * DTEND
@@ -134,19 +138,16 @@ public class VFreeBusy extends VPersonal<VFreeBusy> implements VDateTimeEnd<VFre
      * Example:
      * DTEND;VALUE=DATE:19980704
      */
-    @Override public ObjectProperty<DateTimeEnd> dateTimeEndProperty()
-    {
-        if (dateTimeEnd == null)
-        {
-            dateTimeEnd = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_END.toString());
-            orderer().registerSortOrderProperty(dateTimeEnd);
-            dateTimeEnd.addListener((observable, oldValue, newValue) -> checkDateTimeEndConsistency());
-        }
-        return dateTimeEnd;
-    }
+    
     @Override
-    public DateTimeEnd getDateTimeEnd() { return (dateTimeEnd == null) ? null : dateTimeEndProperty().get(); }
-    private ObjectProperty<DateTimeEnd> dateTimeEnd;
+    public DateTimeEnd getDateTimeEnd() { return dateTimeEnd; }
+    private DateTimeEnd dateTimeEnd;
+    @Override
+	public void setDateTimeEnd(DateTimeEnd dateTimeEnd)
+    {
+    	orderChild(this.dateTimeEnd, dateTimeEnd);
+    	this.dateTimeEnd = dateTimeEnd;
+	}
     
     /**
      * FREEBUSY
@@ -170,43 +171,52 @@ public class VFreeBusy extends VPersonal<VFreeBusy> implements VDateTimeEnd<VFre
      * FREEBUSY;FBTYPE=FREE:19970308T160000Z/PT3H,19970308T200000Z/PT1H
      *  ,19970308T230000Z/PT1H
      */
-    // TODO - MAKE A LIST
-    public ObjectProperty<FreeBusyTime> freeBusyTimeProperty()
-    {
-        if (freeBusyTime == null)
-        {
-            freeBusyTime = new SimpleObjectProperty<>(this, PropertyType.FREE_BUSY_TIME.toString());
-            orderer().registerSortOrderProperty(freeBusyTime);
-        }
-        return freeBusyTime;
-    }
-    private ObjectProperty<FreeBusyTime> freeBusyTime;
-    public FreeBusyTime getFreeBusyTime() { return freeBusyTimeProperty().get(); }
+    private FreeBusyTime freeBusyTime;
+    public FreeBusyTime getFreeBusyTime() { return freeBusyTime; }
     public void setFreeBusyTime(String freeBusyTime) { setFreeBusyTime(FreeBusyTime.parse(freeBusyTime)); }
     public void setFreeBusyTime(List<Pair<ZonedDateTime, TemporalAmount>> freeBusyTime) { setFreeBusyTime(new FreeBusyTime(freeBusyTime)); }
-    public void setFreeBusyTime(FreeBusyTime freeBusyTime) { freeBusyTimeProperty().set(freeBusyTime); }
-    public VFreeBusy withFreeBusyTime(FreeBusyTime freeBusyTime) { setFreeBusyTime(freeBusyTime); return this; }
-    public VFreeBusy withFreeBusyTime(List<Pair<ZonedDateTime, TemporalAmount>> freeBusyTime) { setFreeBusyTime(freeBusyTime); return this; }
-    public VFreeBusy withFreeBusyTime(String freeBusyTime) { PropertyType.FREE_BUSY_TIME.parse(this, freeBusyTime); return this; }
+    public void setFreeBusyTime(FreeBusyTime freeBusyTime)
+    {
+    	orderChild(this.freeBusyTime, freeBusyTime);
+    	this.freeBusyTime = freeBusyTime;
+	}
+    public VFreeBusy withFreeBusyTime(FreeBusyTime freeBusyTime)
+    {
+    	setFreeBusyTime(freeBusyTime);
+    	return this;
+	}
+    public VFreeBusy withFreeBusyTime(List<Pair<ZonedDateTime, TemporalAmount>> freeBusyTime)
+    {
+    	setFreeBusyTime(freeBusyTime);
+    	return this;
+	}
+    public VFreeBusy withFreeBusyTime(String freeBusyTime)
+    {
+    	setFreeBusyTime(FreeBusyTime.parse(freeBusyTime));
+    	return this;
+	}
+    
+	@Override
+	public List<VFreeBusy> calendarList()
+	{
+		if (getParent() != null)
+		{
+			VCalendar cal = (VCalendar) getParent();
+			return cal.getVFreeBusies();
+		}
+		return null;
+	}
  
     /*
      * CONSTRUCTORS
      */
     public VFreeBusy() { super(); }
     
-//    public VFreeBusy(String contentLines)
-//    {
-//        super(contentLines);
-//    }
-    
     /** Copy constructor */
     public VFreeBusy(VFreeBusy source)
     {
         super(source);
     }
-    
-//    @Override
-//    public Reviser newRevisor() { return new ReviserVFreeBusy(this); }
         
     @Override
     public List<String> errors()
@@ -214,34 +224,17 @@ public class VFreeBusy extends VPersonal<VFreeBusy> implements VDateTimeEnd<VFre
         List<String> errors = super.errors();
         List<String> dtendError = VDateTimeEnd.errorsDateTimeEnd(this);
         errors.addAll(dtendError);
-//
-//        if (getDateTimeEnd() != null)
-//        {
-//            if (getDateTimeStart() != null)
-//            {
-//                DateTimeType startType = DateTimeUtilities.DateTimeType.of(getDateTimeStart().getValue());
-//                DateTimeType endType = DateTimeUtilities.DateTimeType.of(getDateTimeEnd().getValue());
-//                boolean isDateTimeEndMatch = startType == endType;
-//                if (! isDateTimeEndMatch)
-//                {
-//                    errors.add("The value type of DTEND MUST be the same as the DTSTART property (" + endType + ", " + startType);
-//                }
-//            }
-//        }
         return Collections.unmodifiableList(errors);
     }
-        
-//    @Override
-//    public void checkDateTimeStartConsistency()
-//    {
-////        VComponentDateTimeEnd.super.checkDateTimeEndConsistency();
-//    }
     
-    /** Parse content lines into calendar component object */
-    public static VFreeBusy parse(String contentLines)
+    /**
+     * Creates a new VFreeBusy calendar component by parsing a String of iCalendar content lines
+     *
+     * @param content  the text to parse, not null
+     * @return  the parsed VFreeBusy
+     */
+    public static VFreeBusy parse(String content)
     {
-        VFreeBusy component = new VFreeBusy();
-        component.parseContent(contentLines);
-        return component;
+    	return VFreeBusy.parse(new VFreeBusy(), content);
     }
 }

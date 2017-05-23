@@ -14,7 +14,11 @@ import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
  *
  */
 public class ICalendarAgendaSimpleTrial1 extends Application
-{        
+{
+    public static void main(String[] args) {
+        launch(args);       
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         VCalendar vCalendar = new VCalendar();
@@ -25,7 +29,7 @@ public class ICalendarAgendaSimpleTrial1 extends Application
 
         Scene scene = new Scene(root, 1366, 768);
         primaryStage.setScene(scene);
-        primaryStage.setOnCloseRequest(e -> System.out.println(vCalendar.toContent())); // prints resulting VCALENDAR on close
+        primaryStage.setOnCloseRequest(e -> System.out.println(vCalendar.toString())); // prints resulting VCALENDAR on close
         primaryStage.show();        
     }
 }

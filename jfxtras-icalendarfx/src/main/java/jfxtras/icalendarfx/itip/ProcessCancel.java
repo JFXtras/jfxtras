@@ -6,12 +6,14 @@ import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.components.VDisplayable;
 import jfxtras.icalendarfx.parameters.Range.RangeType;
 import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
+import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 
 /**
@@ -133,27 +135,34 @@ public class ProcessCancel implements Processable
     public List<String> process(VCalendar mainVCalendar, VCalendar iTIPMessage)
     {
         List<String> log = new ArrayList<>();
-        for (VComponent c : iTIPMessage.getAllVComponents())
+        iTIPMessage.childrenUnmodifiable()
+        	.stream()
+        	.filter(c -> c instanceof VComponent)
+        	.map(c -> (VComponent) c)
+        	.forEach(c ->
         {
             if (c instanceof VDisplayable)
             {
                 VDisplayable<?> vDisplayable = ((VDisplayable<?>) c);
                 int newSequence = (vDisplayable.getSequence() == null) ? 0 : vDisplayable.getSequence().getValue();
-                String uid = vDisplayable.getUniqueIdentifier().getValue();
+                UniqueIdentifier uid = vDisplayable.getUniqueIdentifier();
+                List<VDisplayable<?>> relatedVComponents = mainVCalendar.getVComponents(vDisplayable)
+                		.stream()
+                		.map(v -> (VDisplayable<?>) v)
+                		.filter(v -> v.getUniqueIdentifier().equals(uid))
+                		.collect(Collectors.toList());
                 RecurrenceId recurrenceID = vDisplayable.getRecurrenceId();
 
-                if (mainVCalendar.uidComponentsMap().get(uid) != null)
+                if (! relatedVComponents.isEmpty())
                 {
-                    // match RECURRENCE-ID (if present)
+                    // match RECURRENCE-ID (if deleting a parent)
                     if (recurrenceID == null)
                     { // delete all related VComponents
-                        List<VDisplayable<?>> relatedVComponents = mainVCalendar.uidComponentsMap().get(uid);
-                        List<? extends VComponent> vComponents = mainVCalendar.getVComponents(c.getClass());
-                        vComponents.removeAll(relatedVComponents);
+                        relatedVComponents.forEach(v -> mainVCalendar.removeChild(v));
                         log.add("SUCCESS: canceled " + vDisplayable.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue());
                     } else
                     {
-                        VDisplayable<?> matchingVComponent = mainVCalendar.uidComponentsMap().get(uid)
+                        VDisplayable<?> matchingVComponent = relatedVComponents
                                 .stream()
                                 .filter(v -> {
                                     return Objects.equals(recurrenceID, v.getRecurrenceId());
@@ -169,8 +178,8 @@ public class ProcessCancel implements Processable
                             int oldSequence = (matchingVComponent.getSequence() == null) ? 0 : matchingVComponent.getSequence().getValue();
                             if (newSequence >= oldSequence)
                             {
-                                List<? extends VComponent> vComponents = mainVCalendar.getVComponents(c.getClass());
-                                vComponents.remove(matchingVComponent);
+                                List<? extends VComponent> myVComponents = vDisplayable.calendarList();
+                                myVComponents.remove(matchingVComponent);
                                 log.add("SUCCESS: canceled " + c.getClass().getSimpleName() + " with UID:" + vDisplayable.getUniqueIdentifier().getValue());
                             } else
                             {
@@ -179,19 +188,20 @@ public class ProcessCancel implements Processable
                             }
                         // NO MATCH FOUND
                         } else
-                        { // add recurrence as EXDATE to main if its an recurrence
+                        { // add recurrence as EXDATE to parent
                             
                             // find parent repeatable VComponent, if RRULE is absent
                             final VDisplayable<?> parentVComponent;
                             if (vDisplayable.getRecurrenceRule() == null)
                             {
-                                parentVComponent = mainVCalendar.uidComponentsMap().get(uid)
+                                parentVComponent = relatedVComponents
                                 .stream()
                                 .filter(v -> v.getRecurrenceRule() != null)
                                 .findAny()
                                 .orElseThrow(() -> new RuntimeException("Can't add EXDATE: VComponent with Recurrence Rule can't be found for uid:" + uid));
                             } else
                             {
+//                                vDisplayable.setParent(mainVCalendar);
                                 parentVComponent = vDisplayable;
                             }
                             boolean isRecurrence = parentVComponent.isRecurrence(recurrenceID.getValue());
@@ -232,11 +242,11 @@ public class ProcessCancel implements Processable
                                         List<VDisplayable<?>> orphanedChildren = parentVComponent.orphanedRecurrenceChildren();
                                         if (! orphanedChildren.isEmpty())
                                         {
-                                            mainVCalendar.getVComponents(vDisplayable.getClass()).removeAll(orphanedChildren);
+                                        	mainVCalendar.getVComponents(vDisplayable).removeAll(orphanedChildren);
                                         }                                        
                                     } else
                                     {
-                                        throw new IllegalArgumentException("Unsupported RangeType:" + recurrenceID.getRange().toContent());
+                                        throw new IllegalArgumentException("Unsupported RangeType:" + recurrenceID.getRange().toString());
                                     }
                                     parentVComponent.incrementSequence();
                                 } else
@@ -253,7 +263,7 @@ public class ProcessCancel implements Processable
                 // TODO
                 throw new RuntimeException("not implemented");
             }
-        }
+        });
         return log;
     }
 

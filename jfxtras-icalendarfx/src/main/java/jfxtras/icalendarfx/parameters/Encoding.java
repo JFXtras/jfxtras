@@ -3,7 +3,11 @@ package jfxtras.icalendarfx.parameters;
 import java.util.HashMap;
 import java.util.Map;
 
+import jfxtras.icalendarfx.parameters.Encoding;
+import jfxtras.icalendarfx.parameters.VParameterBase;
 import jfxtras.icalendarfx.parameters.Encoding.EncodingType;
+import jfxtras.icalendarfx.properties.component.descriptive.Attachment;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * ENCODING
@@ -28,21 +32,36 @@ import jfxtras.icalendarfx.parameters.Encoding.EncodingType;
  * @author David Bal
  * @see Attachment
  */
-public class Encoding extends ParameterBase<Encoding, EncodingType>
+public class Encoding extends VParameterBase<Encoding, EncodingType>
 {
+	private static final StringConverter<EncodingType> CONVERTER = new StringConverter<EncodingType>()
+    {
+        @Override
+        public String toString(EncodingType object)
+        {
+            return object.toString();
+        }
+
+        @Override
+        public EncodingType fromString(String string)
+        {
+            return EncodingType.enumFromName(string.toUpperCase());
+        }
+    };
+    
     public Encoding()
     {
-        super(EncodingType.EIGHT_BIT);
+        super(EncodingType.EIGHT_BIT, CONVERTER);
     }
   
     public Encoding(EncodingType value)
     {
-        super(value);
+        super(value, CONVERTER);
     }
 
     public Encoding(Encoding source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
     
     public enum EncodingType
@@ -74,11 +93,9 @@ public class Encoding extends ParameterBase<Encoding, EncodingType>
             this.name = name;
         }
     }
-
+    
     public static Encoding parse(String content)
     {
-        Encoding parameter = new Encoding();
-        parameter.parseContent(content);
-        return parameter;
+    	return Encoding.parse(new Encoding(), content);
     }
 }

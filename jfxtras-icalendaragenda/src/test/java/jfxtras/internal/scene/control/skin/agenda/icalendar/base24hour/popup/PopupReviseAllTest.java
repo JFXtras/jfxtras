@@ -14,10 +14,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import javafx.collections.FXCollections;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
@@ -68,7 +66,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         clickOn("#changeDialogOkButton");
         
-        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -88,7 +86,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -163,22 +161,24 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         assertEquals(1, vMessage.getVEvents().size());
         VEvent revisedVEvent = vMessage.getVEvents().get(0);
         
-        VEvent expectedRevisedVEvent = ICalendarStaticComponents.getDaily1()
+        VEvent expectedRevisedVEvent = ICalendarStaticComponents.getDaily1();
+        expectedRevisedVEvent.setCategories(null);
+        expectedRevisedVEvent
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 9, 8, 0))
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 9, 9, 0))
                 .withSummary("new summary")
                 .withDescription("new description")
                 .withLocation("new location")
-                .withCategories(FXCollections.observableArrayList(new Categories("new group name")))
+                .withCategories(Arrays.asList(new Categories("new group name")))
                 .withDateTimeStamp(revisedVEvent.getDateTimeStamp())
                 .withSequence(1);
         assertEquals(expectedRevisedVEvent, revisedVEvent);
         
         String iTIPMessage = vMessages.stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
 
-        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -279,7 +279,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         assertEquals(FrequencyType.WEEKLY, f.getValue());
         
         // check ByDay
-        assertEquals(1, rrule.byRules().size());
+        assertEquals(1, rrule.getByRules().size());
         ByDay rule = (ByDay) rrule.lookupByRule(ByDay.class);
         
         List<DayOfWeek> allDaysOfWeek = Arrays.asList(DayOfWeek.values());
@@ -388,7 +388,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
     }
     
     @Test
-    @Ignore // TestFX4
+//    @Ignore // TestFX4
     public void canChangeWholeDayToTimeBased()
     {
         VEvent vevent = ICalendarStaticComponents.getWholeDayDaily3();
@@ -420,7 +420,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         clickOn("#changeDialogOkButton");
         
-        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -437,7 +437,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -469,7 +469,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         clickOn("#changeDialogOkButton");
         
-        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -490,7 +490,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -528,7 +528,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         clickOn("#changeDialogOkButton");
 
-        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -546,7 +546,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -576,7 +576,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         TestUtil.runThenWaitForPaintPulse( () -> c.getSelectionModel().select(ChangeDialogOption.ALL));
         clickOn("#changeDialogOkButton");
 
-        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -596,7 +596,7 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }

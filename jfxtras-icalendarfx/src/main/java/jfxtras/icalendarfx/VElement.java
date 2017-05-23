@@ -22,12 +22,6 @@ public interface VElement
      * @return - the component name
      */
     String name();
-    /**
-     * Returns iCalendar content text.
-     * 
-     * @return the content string
-     */
-    String toContent(); // This method is invoked recursively to include content of all children.
     
     /** Parse content line into calendar element.
      * If element contains children {@link #parseContent(String)} is invoked recursively to parse child elements also
@@ -36,8 +30,9 @@ public interface VElement
      * @return  log of information and error messages
      * @throws IllegalArgumentException  if calendar content is not valid, such as null
      */
-    List<String> parseContent(String content) throws IllegalArgumentException;
-    
+//    @Deprecated
+//    List<String> parseContent(String content) throws IllegalArgumentException;
+        
     /**
      * Checks element to determine if necessary properties are set.
      * {@link #isValid()} is invoked recursively to test child elements if element is a parent

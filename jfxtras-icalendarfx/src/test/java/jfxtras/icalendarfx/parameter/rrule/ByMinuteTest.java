@@ -23,7 +23,7 @@ public class ByMinuteTest
     {
         ByMinute element = new ByMinute(10,20);
         assertEquals(Arrays.asList(10,20), element.getValue());
-        assertEquals("BYMINUTE=10,20", element.toContent());
+        assertEquals("BYMINUTE=10,20", element.toString());
     }
     
     /*

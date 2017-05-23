@@ -3,12 +3,13 @@ package jfxtras.icalendarfx.properties.component.descriptive;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.descriptive.Status;
 import jfxtras.icalendarfx.properties.component.descriptive.Status.StatusType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * STATUS
@@ -26,7 +27,7 @@ import jfxtras.icalendarfx.properties.component.descriptive.Status.StatusType;
  * @see VTodo
  * @see VJournal
  */
-public class Status extends PropertyBase<StatusType, Status>
+public class Status extends VPropertyBase<StatusType, Status>
 {
     private final static StringConverter<StatusType> CONVERTER = new StringConverter<StatusType>()
     {
@@ -60,12 +61,11 @@ public class Status extends PropertyBase<StatusType, Status>
         setConverter(CONVERTER);
     }
     
-    public static Status parse(String propertyContent)
+    public static Status parse(String content)
     {
-        Status property = new Status();
-        property.parseContent(propertyContent);
-        return property;
+    	return Status.parse(new Status(), content);
     }
+    
     public enum StatusType
     {
         TENTATIVE ("TENTATIVE"),

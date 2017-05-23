@@ -1,11 +1,10 @@
 package jfxtras.icalendarfx.properties.component.descriptive;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
@@ -13,6 +12,7 @@ import jfxtras.icalendarfx.parameters.Language;
 import jfxtras.icalendarfx.parameters.NonStandardParameter;
 import jfxtras.icalendarfx.properties.PropBaseLanguage;
 import jfxtras.icalendarfx.properties.ValueType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  <h2>3.8.1.2.  Categories</h2>
@@ -66,12 +66,12 @@ import jfxtras.icalendarfx.properties.ValueType;
   </ul>
   </p>
  */
-public class Categories extends PropBaseLanguage<ObservableList<String>, Categories>
+public class Categories extends PropBaseLanguage<List<String>, Categories>
 {
-    private final static StringConverter<ObservableList<String>> CONVERTER = new StringConverter<ObservableList<String>>()
+    private final static StringConverter<List<String>> CONVERTER = new StringConverter<List<String>>()
     {
         @Override
-        public String toString(ObservableList<String> object)
+        public String toString(List<String> object)
         {
             return object.stream()
                     .map(v -> ValueType.TEXT.getConverter().toString(v)) // escape special characters
@@ -79,16 +79,16 @@ public class Categories extends PropBaseLanguage<ObservableList<String>, Categor
         }
 
         @Override
-        public ObservableList<String> fromString(String string)
+        public List<String> fromString(String string)
         {
-            return FXCollections.observableArrayList(Arrays.stream(string.replace("\\,", "~~").split(",")) // change comma escape sequence to avoid splitting by it
+            return new ArrayList<>(Arrays.stream(string.replace("\\,", "~~").split(",")) // change comma escape sequence to avoid splitting by it
                     .map(s -> s.replace("~~", "\\,"))
                     .map(v -> (String) ValueType.TEXT.getConverter().fromString(v)) // unescape special characters
                     .collect(Collectors.toList()));
         }
     };
     
-    public Categories(ObservableList<String> values)
+    public Categories(List<String> values)
     {
         this();
         setValue(values);
@@ -99,7 +99,7 @@ public class Categories extends PropBaseLanguage<ObservableList<String>, Categor
     public Categories(String...values)
     {
         this();
-        setValue(FXCollections.observableArrayList(values));
+        setValue(new ArrayList<>(Arrays.asList(values)));
     }
     
     public Categories(Categories source)
@@ -113,16 +113,14 @@ public class Categories extends PropBaseLanguage<ObservableList<String>, Categor
         setConverter(CONVERTER);
     }
 
-    public static Categories parse(String propertyContent)
+    public static Categories parse(String content)
     {
-        Categories property = new Categories();
-        property.parseContent(propertyContent);
-        return property;
+    	return Categories.parse(new Categories(), content);
     }
     
     @Override
-    protected ObservableList<String> copyValue(ObservableList<String> source)
+    protected List<String> copyValue(List<String> source)
     {
-        return FXCollections.observableArrayList(source);
+        return new ArrayList<>(source);
     }
 }

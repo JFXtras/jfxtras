@@ -1,5 +1,10 @@
 package jfxtras.icalendarfx.parameters;
 
+import jfxtras.icalendarfx.parameters.Language;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
+
 /**
  * LANGUAGE
  * Language
@@ -13,22 +18,22 @@ package jfxtras.icalendarfx.parameters;
  * @author David Bal
  *
  */
-public class Language extends ParameterBase<Language, String>
+public class Language extends VParameterBase<Language, String>
 {
+	private static final StringConverter<String> CONVERTER = StringConverters.defaultStringConverterWithQuotes();
+
     public Language()
     {
-        super();
+        super(CONVERTER);
     }
 
     public Language(Language source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
-
+    
     public static Language parse(String content)
     {
-        Language parameter = new Language();
-        parameter.parseContent(content);
-        return parameter;
+    	return Language.parse(new Language(), content);
     }
 }

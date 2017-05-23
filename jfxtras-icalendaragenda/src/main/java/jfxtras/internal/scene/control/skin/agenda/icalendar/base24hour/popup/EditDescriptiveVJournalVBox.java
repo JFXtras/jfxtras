@@ -39,6 +39,7 @@ public class EditDescriptiveVJournalVBox extends EditDescriptiveVBox<VJournal>
         {
             vComponent.withDescriptions("");
         }
-        descriptionTextArea.textProperty().bindBidirectional(vComponent.getDescriptions().get(0).valueProperty());
+        descriptionTextArea.textProperty().addListener((obs, oldValue, newValue) -> vComponent.setSummary(newValue));
+//        descriptionTextArea.textProperty().bindBidirectional(vComponent.getDescriptions().get(0).valueProperty());
     }
 }

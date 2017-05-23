@@ -43,7 +43,7 @@ public class EditComponentPopupTrial extends Application
 
         VCalendar myCalendar = new VCalendar();
         VEvent vevent = ICalendarStaticComponents.getDaily1();
-        myCalendar.addVComponent(vevent);
+        myCalendar.addChild(vevent);
         
         RecurrenceFactory<Appointment> recurrenceFactory = new DefaultRecurrenceFactory(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS); // default VComponent store - for Appointments, if other implementation used make new store
         recurrenceFactory.setStartRange(LocalDateTime.of(2016, 5, 15, 0, 0));

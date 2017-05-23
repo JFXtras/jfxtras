@@ -3,13 +3,22 @@ package jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElementBase;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElementType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRulePartBase;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByHour;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMinute;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonth;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMonthDay;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRule;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRuleAbstract;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.BySecond;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.BySetPosition;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByWeekNumber;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByYearDay;
 
 /**
  * BYxxx rule that modify frequency rule (see RFC 5545, iCalendar 3.3.10 Page 42)
@@ -26,16 +35,16 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElementTyp
  * @see BySecond
  * @see BySetPosition
  */
-public abstract class ByRuleAbstract<T, U> extends RRuleElementBase<ObservableList<T>, U> implements ByRule<ObservableList<T>>
+public abstract class ByRuleAbstract<T, U> extends RRulePartBase<List<T>, U> implements ByRule<List<T>>
 {
     @Override
-    public void setValue(ObservableList<T> values)
+    public void setValue(List<T> values)
     {
         super.setValue(values);
     }
     public void setValue(T... values)
     {
-        setValue(FXCollections.observableArrayList(values));
+        setValue(new ArrayList<>(Arrays.asList(values)));
     }
     public void setValue(String values)
     {
@@ -63,7 +72,6 @@ public abstract class ByRuleAbstract<T, U> extends RRuleElementBase<ObservableLi
     ByRuleAbstract()
     {
         super();
-        setValue(FXCollections.observableArrayList());
     }
 
     ByRuleAbstract(T... values)
@@ -74,56 +82,36 @@ public abstract class ByRuleAbstract<T, U> extends RRuleElementBase<ObservableLi
     // Copy constructor
     ByRuleAbstract(ByRuleAbstract<T, U> source)
     {
-        setValue(FXCollections.observableArrayList(source.getValue()));
+        setValue(new ArrayList<>(source.getValue()));
+        setParent(source.getParent());
     }
 
+    private final static List<Class<?>> SORT_ORDER = Arrays.asList(
+    			ByMonth.class,
+    			ByWeekNumber.class,
+    			ByYearDay.class,
+    			ByMonthDay.class,
+    			ByDay.class,
+    			ByHour.class,
+    			ByMinute.class,
+    			BySecond.class,
+    			BySetPosition.class
+    		);
+    @Override
+    public int compareTo(ByRule<List<T>> byRule)
+    {
+    	return SORT_ORDER.indexOf(getClass()) - SORT_ORDER.indexOf(byRule.getClass());
+    }
+    
     @Override
     public List<String> errors()
     {
-        List<String> errors = new ArrayList<>();
-        if (getValue() == null)
+        List<String> errors = super.errors();
+        if ((getValue() != null) && (getValue().isEmpty()))
         {
-            errors.add(elementType() + " value is null.  The element MUST have a value."); 
-        } else if (getValue().isEmpty())
-        {
-            errors.add(elementType() + " value list is empty.  List MUST have at lease one element."); 
+            errors.add(name() + " value list is empty.  List MUST have at lease one element."); 
         }
 
         return errors;
     }
-    
-    @Override
-    public int compareTo(ByRule<ObservableList<T>> byRule)
-    {
-        int p1 = RRuleElementType.enumFromClass(getClass()).sortOrder();
-        int p2 = RRuleElementType.enumFromClass(byRule.getClass()).sortOrder();
-        return Integer.compare(p1, p2);
-    }
-    
-    @Override
-    public String toString()
-    {
-        return super.toString() + ", " + toContent();
-    }
-    
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (obj == this) return true;
-        if((obj == null) || (obj.getClass() != getClass())) {
-            return false;
-        }
-        ByRuleAbstract<T, U> testObj = (ByRuleAbstract<T, U>) obj;
-        boolean valueEquals = getValue().equals(testObj.getValue());
-        return valueEquals;
-    }
-    
-    @Override
-    public int hashCode()
-    {
-        int hash = 5;
-        hash = (31 * hash) + getValue().hashCode();
-        return hash;
-    }
-
 }

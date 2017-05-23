@@ -15,6 +15,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +28,7 @@ import java.util.stream.Stream;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -64,7 +66,6 @@ import jfxtras.icalendarfx.properties.component.recurrence.ExceptionDates;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Interval;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElementType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
@@ -89,11 +90,13 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
     final public static int EXCEPTION_CHOICE_LIMIT = 50;
     final public static int INITIAL_COUNT = 10;
     final public static Period DEFAULT_UNTIL_PERIOD = Period.ofMonths(1); // amount of time beyond start default for UNTIL (ends on)
-        
+
     T vComponent;
     private RecurrenceRuleValue rrule;
     private RecurrenceRuleValue oldRRule; // previous rrule from toggling repeatableCheckBox
+    private ObjectProperty<RecurrenceRuleValue> recurrenceRuleProperty;
     private ObjectProperty<Temporal> dateTimeStartRecurrenceNew;
+    protected ObjectProperty<Temporal> dateTimeStartProperty;
 
     @FXML private ResourceBundle resources; // ResourceBundle that was given to the FXMLLoader
 
@@ -136,7 +139,8 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
     @FXML private Button removeExceptionButton;
     private List<Temporal> exceptionMasterList = new ArrayList<>();
 
-    public EditRecurrenceRuleVBox( )
+    // CONSTRUCTOR
+    public EditRecurrenceRuleVBox()
     {
         super();
         loadFxml(EditDescriptiveVBox.class.getResource("RecurrenceRule.fxml"), this);
@@ -169,7 +173,10 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         }
     };
 
-    // Listener for dayOfWeekRadioButton when frequency if monthly
+    /* Listener for dayOfWeekRadioButton when frequency if monthly 
+     * Note: Only attached to dayOfWeekRadioButton and not to dayOfMonthRadioButton.  The dayOfWeekRadioButton
+     * toggles when dayOfMonthRadioButton changes.  Attaching to both would cause double firing.
+     */
     private ChangeListener<? super Boolean> dayOfWeekButtonListener = (observable, oldSelection, newSelection) -> 
     {
         if (newSelection)
@@ -177,11 +184,11 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
             int ordinalWeekNumber = DateTimeUtilities.weekOrdinalInMonth(dateTimeStartRecurrenceNew.get());
             DayOfWeek dayOfWeek = DayOfWeek.from(dateTimeStartRecurrenceNew.get());
             ByRule<?> byDayRuleMonthly = new ByDay(new ByDayPair(dayOfWeek, ordinalWeekNumber));
-            rrule.byRules().add(byDayRuleMonthly);
+            rrule.addChild(byDayRuleMonthly);
         } else
         { // remove rule to reset to default behavior of repeat by day of month
             ByRule<?> r = rrule.lookupByRule(ByDay.class);
-            rrule.byRules().remove(r);
+            rrule.removeChild(r);
         }
         refreshSummary();
         refreshExceptionDates();
@@ -222,55 +229,58 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
     };
     
     // FREQUENCY CHANGE LISTENER
-    private final ChangeListener<? super FrequencyType> frequencyListener = (obs, oldSel, newSel) -> 
+    private final ChangeListener<? super FrequencyType> frequencyListener = (obs, oldValue, newValue) -> 
     {
+    	rrule.setFrequency(newValue);
         // Change Frequency if different.  Copy Interval, null ExDate
-        if (rrule.getFrequency().getValue() != newSel)
+        if (rrule.getFrequency().getValue() != newValue)
         {
             exceptionsListView.getItems().clear();
             vComponent.setExceptionDates(null);
         }
         
-        if (oldSel == FrequencyType.WEEKLY)
+        if (oldValue == FrequencyType.WEEKLY)
         {
             dateTimeStartRecurrenceNew.removeListener(weeklyRecurrenceListener);
         }
-        
-        ByRule<?> r = rrule.lookupByRule(ByDay.class);
-        rrule.byRules().remove(r);
+        if (rrule.getByRules() != null) // TODO - IS THIS NECESSARY? (MAYBE FOR CHANGE FROM MONTHLY?)
+        {
+	        ByRule<?> r = rrule.lookupByRule(ByDay.class);
+	        if (r != null) rrule.removeChild(r);
+        }
         
         // Setup monthlyVBox and weeklyHBox setting visibility
-        switch (newSel)
+        switch (newValue)
         {
         case DAILY:
         case YEARLY:
             break;
         case MONTHLY:
-            dayOfMonthRadioButton.selectedProperty().set(true);
-            dayOfWeekRadioButton.selectedProperty().set(false);
+            dayOfMonthRadioButton.setSelected(true);
+            dayOfWeekRadioButton.setSelected(false);
             break;
         case WEEKLY:
             dateTimeStartRecurrenceNew.addListener(weeklyRecurrenceListener);
             if (dayOfWeekList.isEmpty())
             {
                 DayOfWeek dayOfWeek = LocalDate.from(dateTimeStartRecurrenceNew.get()).getDayOfWeek();
-                rrule.byRules().add(new ByDay(dayOfWeek)); // add days already clicked
+                rrule.addChild(new ByDay(dayOfWeek)); // add days already clicked
                 dayOfWeekCheckBoxMap.get(dayOfWeek).set(true);
             } else
             {
-                rrule.byRules().add(new ByDay(dayOfWeekList)); // add days already clicked            
+                rrule.addChild(new ByDay(dayOfWeekList)); // add days already clicked            
             }
             break;
         case SECONDLY:
         case MINUTELY:
         case HOURLY:
-            throw new IllegalArgumentException("Frequency " + newSel + " not implemented");
+            throw new IllegalArgumentException("Frequency " + newValue + " not implemented");
         default:
             break;
         }
         
         // visibility of monthlyVBox & weeklyHBox
-        setFrequencyVisibility(newSel);
+        setFrequencyVisibility(newValue);
         if (intervalSpinner.getValueFactory() != null)
         {
             setIntervalText(intervalSpinner.getValue());
@@ -425,6 +435,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
     // listen for changes to start date/time (type may change requiring new exception date choices)
     private final ChangeListener<? super Temporal> dateTimeStartToExceptionChangeListener = (obs, oldValue, newValue) ->
     {
+    	System.out.println("exception listener");
         exceptionMasterList.clear();
         refreshExceptionDates();
         // update existing exceptions
@@ -535,7 +546,8 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         frequencyComboBox.setItems(FXCollections.observableArrayList(supportedFrequencyProperties));
         frequencyComboBox.setConverter(new StringConverter<FrequencyType>()
         {
-            @Override public String toString(FrequencyType frequencyType)
+            @Override
+			public String toString(FrequencyType frequencyType)
             {
                 return Settings.REPEAT_FREQUENCIES.get(frequencyType);
             }
@@ -708,34 +720,21 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
                 if (change.wasAdded())
                 {
                     List<? extends Temporal> added1 = change.getAddedSubList();
-                    final ObservableList<ExceptionDates> exceptionDates;
-                    if (vComponent.getExceptionDates() == null)
+                    final List<ExceptionDates> exceptionDates = (vComponent.getExceptionDates() == null) ? Collections.emptyList() : vComponent.getExceptionDates();
+                    boolean isEmpty = exceptionDates.isEmpty();
+                    DateTimeType startType = DateTimeType.of(vComponent.getDateTimeStart().getValue());
+                    DateTimeType newType = DateTimeType.of(added1.get(0));
+                    boolean isTemporalTypeChanged = startType != newType;
+                    if (isEmpty || isTemporalTypeChanged)
                     {
-                        exceptionDates = FXCollections.observableArrayList();
-                        vComponent.setExceptionDates(exceptionDates);
+                        List<? extends Temporal> list = change.getList();
+                        Temporal[] allExceptions = list.toArray(new Temporal[list.size()]);
+                        ExceptionDates ed = new ExceptionDates(allExceptions);
+						vComponent.setExceptionDates(new ArrayList<>(Arrays.asList(ed)));                    	
                     } else
                     {
-                        exceptionDates = vComponent.getExceptionDates();
-                    }
-                    
-                    if (exceptionDates.isEmpty())
-                    {
-                        Temporal[] added2 = added1.toArray(new Temporal[added1.size()]);
-                        exceptionDates.add(new ExceptionDates(added2));
-                    } else
-                    {
-                        DateTimeType startType = DateTimeType.of(vComponent.getDateTimeStart().getValue());
-                        DateTimeType newType = DateTimeType.of(added1.get(0));
-                        if (startType != newType)
-                        { // type changes, rebuild exceptions
-                            vComponent.getExceptionDates().clear();
-                            ObservableList<? extends Temporal> list = change.getList();
-                            Temporal[] allExceptions = list.toArray(new Temporal[list.size()]);
-                            vComponent.getExceptionDates().add(new ExceptionDates(allExceptions));
-                        } else
-                        {
-                            vComponent.getExceptionDates().get(0).getValue().addAll(added1);
-                        }
+                    	// NOTE: Only works for one EXDATE property
+                        vComponent.getExceptionDates().get(0).getValue().addAll(added1);                    	
                     }
                 } else if (change.wasRemoved())
                 {
@@ -757,7 +756,9 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
             T vComponent
           , ObjectProperty<Temporal> dateTimeStartRecurrenceNew)
     {
+    	dateTimeStartProperty = new SimpleObjectProperty<Temporal>(vComponent.getDateTimeStart().getValue());
         rrule = (vComponent.getRecurrenceRule() != null) ? vComponent.getRecurrenceRule().getValue() : null;
+        recurrenceRuleProperty = new SimpleObjectProperty<>(rrule);
         this.vComponent = vComponent;
         this.dateTimeStartRecurrenceNew = dateTimeStartRecurrenceNew;
         if (! isSupported(vComponent))
@@ -811,16 +812,18 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         });
         
         // Add or remove functionality and listeners when RRULE changes
-        vComponent.recurrenceRuleProperty().addListener((obs, oldValue, newValue) ->
+        recurrenceRuleProperty.addListener((obs, oldValue, newValue) ->
         {
             if (newValue != null)
             {
                 addListeners();
-                vComponent.getDateTimeStart().valueProperty().addListener(dateTimeStartToExceptionChangeListener);
+                dateTimeStartProperty.addListener(dateTimeStartToExceptionChangeListener);
+//                vComponent.getDateTimeStart().valueProperty().addListener(dateTimeStartToExceptionChangeListener);
             } else
             {
                 removeListeners();
-                vComponent.getDateTimeStart().valueProperty().removeListener(dateTimeStartToExceptionChangeListener);                
+                dateTimeStartProperty.removeListener(dateTimeStartToExceptionChangeListener);                
+//                vComponent.getDateTimeStart().valueProperty().removeListener(dateTimeStartToExceptionChangeListener);                
             }
         });
         
@@ -934,12 +937,12 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         });
                 
         // SETUP CONTROLLER'S INITIAL DATA FROM RRULE
-        boolean isRepeatable = (rrule != null);
-        if (isRepeatable)
+        boolean isInitiallyRepeatable = (rrule != null);
+        if (isInitiallyRepeatable)
         {
             setInitialValues(vComponent);
         }
-        repeatableCheckBox.selectedProperty().set(isRepeatable);
+        repeatableCheckBox.setSelected(isInitiallyRepeatable);
         
         // DAY OF WEEK RAIO BUTTON LISTENER (FOR MONTHLY)
         dayOfWeekRadioButton.selectedProperty().addListener(dayOfWeekButtonListener);
@@ -966,9 +969,6 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
     /* Set controls to values in rRule */
     private void setInitialValues(VDisplayable<?> vComponent)
     {
-//        rrule.getInterval().valueProperty().bind(intervalSpinner.valueProperty());
-        // TODO - OTHER LISTENERS MAY BE OBSOLETE WITH ABOVE BINDING
-        
         // setup FREQUENCY
         FrequencyType frequencyType = rrule.getFrequency().getValue();
         frequencyComboBox.setValue(frequencyType); // will trigger frequencyListener
@@ -978,10 +978,10 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
             ByDay rule = (ByDay) rrule.lookupByRule(ByDay.class);
             if (rule == null)
             {
-                dayOfMonthRadioButton.selectedProperty().set(true);
+                dayOfMonthRadioButton.setSelected(true);
             } else
             {
-                dayOfWeekRadioButton.selectedProperty().set(true);
+                dayOfWeekRadioButton.setSelected(true);
             }
             break;
         case WEEKLY:
@@ -991,7 +991,8 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         default:
             break;
         }
-        rrule.getFrequency().valueProperty().bind(frequencyComboBox.valueProperty());
+//        frequencyComboBox.valueProperty().addListener((obs, oldValue, newValue) -> );
+//        rrule.getFrequency().valueProperty().bind(frequencyComboBox.valueProperty());
         setFrequencyVisibility(frequencyType);
         
         // setup INTERVAL
@@ -1020,13 +1021,13 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         endAfterEventsSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000, initialCount));
         if (rrule.getCount() != null)
         {
-            endAfterRadioButton.selectedProperty().set(true);
+            endAfterRadioButton.setSelected(true);
         } else if (rrule.getUntil() != null)
         {
-            untilRadioButton.selectedProperty().set(true);
+            untilRadioButton.setSelected(true);
         } else
         {
-            endNeverRadioButton.selectedProperty().set(true);
+            endNeverRadioButton.setSelected(true);
         }
         startDatePicker.setValue(LocalDate.from(vComponent.getDateTimeStart().getValue()));
         refreshSummary();
@@ -1048,25 +1049,25 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
                         switch(d)
                         {
                         case FRIDAY:
-                            fridayCheckBox.selectedProperty().set(true);
+                            fridayCheckBox.setSelected(true);
                             break;
                         case MONDAY:
-                            mondayCheckBox.selectedProperty().set(true);
+                            mondayCheckBox.setSelected(true);
                             break;
                         case SATURDAY:
-                            saturdayCheckBox.selectedProperty().set(true);
+                            saturdayCheckBox.setSelected(true);
                             break;
                         case SUNDAY:
-                            sundayCheckBox.selectedProperty().set(true);
+                            sundayCheckBox.setSelected(true);
                             break;
                         case THURSDAY:
-                            thursdayCheckBox.selectedProperty().set(true);
+                            thursdayCheckBox.setSelected(true);
                             break;
                         case TUESDAY:
-                            tuesdayCheckBox.selectedProperty().set(true);
+                            tuesdayCheckBox.setSelected(true);
                             break;
                         case WEDNESDAY:
-                            wednesdayCheckBox.selectedProperty().set(true);
+                            wednesdayCheckBox.setSelected(true);
                             break;
                         default:
                             break;
@@ -1267,28 +1268,29 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
      * @param startTemporal LocalDate or LocalDateTime of start date/time (DTSTART)
      * @return Easy to read summary of repeat rule
      */
-    public static String makeSummary(RecurrenceRuleValue rRule, Temporal startTemporal)
+    public static String makeSummary(RecurrenceRuleValue rrule, Temporal startTemporal)
     {
-        if (! rRule.isValid())
+//    	System.out.println("new summary:" + rrule);
+        if (! rrule.isValid())
         {
             return (Settings.resources == null) ? "Never" : Settings.resources.getString("rrule.summary.never");
         }
         StringBuilder builder = new StringBuilder();
-        if ((rRule.getCount() != null) && (rRule.getCount().getValue() == 1))
+        if ((rrule.getCount() != null) && (rrule.getCount().getValue() == 1))
         {
             return (Settings.resources == null) ? "Once" : Settings.resources.getString("rrule.summary.once");
         }
 
         final String frequencyText;
-        if ((rRule.getInterval() == null) || (rRule.getInterval().getValue() == 1))
+        if ((rrule.getInterval() == null) || (rrule.getInterval().getValue() == 1))
         {
-            frequencyText = Settings.REPEAT_FREQUENCIES.get(rRule.getFrequency().getValue());
-        } else if (rRule.getInterval().getValue() > 1)
+            frequencyText = Settings.REPEAT_FREQUENCIES.get(rrule.getFrequency().getValue());
+        } else if (rrule.getInterval().getValue() > 1)
         {
             String every = (Settings.resources == null) ? "Every" : Settings.resources.getString("rrule.summary.every");
             builder.append(every + " ");
-            builder.append(rRule.getInterval().getValue() + " ");
-            frequencyText = Settings.REPEAT_FREQUENCIES_PLURAL.get(rRule.getFrequency().getValue());
+            builder.append(rrule.getInterval().getValue() + " ");
+            frequencyText = Settings.REPEAT_FREQUENCIES_PLURAL.get(rrule.getFrequency().getValue());
         } else
         {
             throw new RuntimeException("Interval can't be less than 1");
@@ -1296,8 +1298,8 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         builder.append(frequencyText);
         
         // NOTE: only ByRule allowed for this control is ByDay - others are not supported by this control
-        ByDay byDay = (ByDay) rRule.lookupByRule(ByDay.class);
-        switch (rRule.getFrequency().getValue())
+        ByDay byDay = (ByDay) rrule.lookupByRule(ByDay.class);
+        switch (rrule.getFrequency().getValue())
         {
         case DAILY: // add nothing else
             break;
@@ -1337,19 +1339,19 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
         case HOURLY:
         case MINUTELY:
         case SECONDLY:
-            throw new IllegalArgumentException("Not supported:" + rRule.getFrequency().getValue());
+            throw new IllegalArgumentException("Not supported:" + rrule.getFrequency().getValue());
         default:
             break;
         }
         
-        if (rRule.getCount() != null)
+        if (rrule.getCount() != null)
         {
             String times = (Settings.resources == null) ? "times" : Settings.resources.getString("rrule.summary.times");
-            builder.append(", " + rRule.getCount().getValue() + " " + times);
-        } else if (rRule.getUntil() != null)
+            builder.append(", " + rrule.getCount().getValue() + " " + times);
+        } else if (rrule.getUntil() != null)
         {
             String until = (Settings.resources == null) ? "until" : Settings.resources.getString("rrule.summary.until");
-            String date = Settings.DATE_FORMAT_AGENDA_DATEONLY.format(rRule.getUntil().getValue());
+            String date = Settings.DATE_FORMAT_AGENDA_DATEONLY.format(rrule.getUntil().getValue());
             builder.append(", " + until + " " + date);
         }
         return builder.toString();
@@ -1362,15 +1364,17 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
             return true;
         }
         ByDay byDay = (ByDay) rrule.lookupByRule(ByDay.class);
-        int byRulesSize = rrule.byRules().size();
+        int byRulesSize = (rrule.getByRules() == null) ? 0 : rrule.getByRules().size();
         int unsupportedRules = (byDay == null) ? byRulesSize : byRulesSize-1;
         if (unsupportedRules > 0)
         {
-                String unsupportedByRules = rrule.byRules()
+                String unsupportedByRules = rrule.getByRules()
                         .stream()
 //                        .map(e -> e.getValue())
-                        .filter(b -> b.elementType() != RRuleElementType.BY_DAY)
-                        .map(b -> b.elementType().toString())
+                        .filter(b -> b instanceof ByDay)
+//                        .filter(b -> b.elementType() != RRuleElementType.BY_DAY)
+//                        .map(b -> b.elementType().toString())
+                        .map(b -> b.name())
                         .collect(Collectors.joining(","));
                 System.out.println("RRULE contains unsupported ByRule" + ((unsupportedRules > 1) ? "s:" : ":") + unsupportedByRules);
             return false;

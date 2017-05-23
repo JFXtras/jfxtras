@@ -53,22 +53,6 @@ public abstract class DeleterDisplayable<T, U extends VDisplayable<?>> implement
      */
     public T withVComponentCopy(U vComponentEdited) { setVComponentCopy(vComponentEdited); return (T) this; }
 
-
-//    /*
-//     * VCOMPONENTS
-//     */
-//    /** Gets the value of the {@link VDisplayable} to be edited */
-//    public List<U> getVComponents() { return vComponents; }
-//    private List<U> vComponents;
-//    /** Sets the value of the {@link VDisplayable} to be edited */
-//    public void setVComponents(List<U> vComponents) { this.vComponents = vComponents; }
-//    /**
-//     * Sets the value of the {@link VDisplayable} to be edited and returns this class for chaining.
-//     * 
-//     * @return - this class for chaining
-//     */
-//    public T withVComponents(List<U> vComponents) { setVComponents(vComponents); return (T) this; }
-
     /*
      * START ORIGINAL RECURRENCE
      */
@@ -126,19 +110,8 @@ public abstract class DeleterDisplayable<T, U extends VDisplayable<?>> implement
         {
             throw new RuntimeException("Invalid parameters for component revision:");
         }
-        
         // Copy VComponent to ensure original is unchanged
         U vComponent = getVComponentCopy();
-//        U vComponent = null;
-//        try
-//        {
-//            vComponent = (U) getVComponent().getClass().newInstance();
-//            getVComponent().copyInto(vComponent);
-////            vComponent.copyFrom(getVComponent());
-//        } catch (InstantiationException | IllegalAccessException e)
-//        {
-//            e.printStackTrace();
-//        }
         
         List<VCalendar> itipMessages = new ArrayList<>();
         boolean hasRRule = vComponent.getRecurrenceRule() != null;
@@ -296,7 +269,7 @@ public abstract class DeleterDisplayable<T, U extends VDisplayable<?>> implement
         vComponent.setStatus(StatusType.CANCELLED);
         vComponent.setRecurrenceRule((RecurrenceRule) null);
         vComponent.eraseDateTimeProperties();
-        cancelMessage.addVComponent(vComponent);
+        cancelMessage.addChild(vComponent);
         return cancelMessage;
     }
 }

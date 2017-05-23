@@ -2,7 +2,8 @@ package jfxtras.icalendarfx.properties.calendar;
 
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.VElement;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.calendar.ProductIdentifier;
 
 /**
  * PRODID
@@ -21,10 +22,8 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @author David Bal
  * @see VCalendar
  */
-public class ProductIdentifier extends PropertyBase<String, ProductIdentifier> implements VElement
+public class ProductIdentifier extends VPropertyBase<String, ProductIdentifier> implements VElement
 {
-//    public static final String DEFAULT_PRODUCT_IDENTIFIER = ("-//JFxtras//iCalendarFx " + VCalendar.myVersion + "//EN");
-
     public ProductIdentifier(ProductIdentifier source)
     {
         super(source);
@@ -38,13 +37,10 @@ public class ProductIdentifier extends PropertyBase<String, ProductIdentifier> i
     public ProductIdentifier()
     {
         super();
-//        setValue(DEFAULT_PRODUCT_IDENTIFIER);
     }
     
-    public static ProductIdentifier parse(String string)
+    public static ProductIdentifier parse(String content)
     {
-        ProductIdentifier property = new ProductIdentifier();
-        property.parseContent(string);
-        return property;
+    	return ProductIdentifier.parse(new ProductIdentifier(), content);
     }
 }

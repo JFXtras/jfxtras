@@ -19,6 +19,8 @@ import jfxtras.icalendarfx.parameters.ParticipationRole;
 import jfxtras.icalendarfx.parameters.ParticipationStatus;
 import jfxtras.icalendarfx.parameters.RSVP;
 import jfxtras.icalendarfx.parameters.SentBy;
+import jfxtras.icalendarfx.properties.component.relationship.Attendee;
+import jfxtras.icalendarfx.properties.component.relationship.PropertyBaseAttendee;
 
 /**
  * <h2>3.8.4.1.  Attendee</h2>
@@ -159,16 +161,15 @@ public class Attendee extends PropertyBaseAttendee<URI, Attendee>
     }
     
     /** Create default Attendee with no value set */
-    Attendee()
+    public Attendee()
     {
         super();
     }
 
     /** Create new Attendee by parsing unfolded calendar content */
-    public static Attendee parse(String unfoldedContent)
+    public static Attendee parse(String content)
     {
-        Attendee property = new Attendee();
-        property.parseContent(unfoldedContent);
+    	Attendee property = Attendee.parse(new Attendee(), content);
         URI.class.cast(property.getValue()); // ensure value class type matches parameterized type
         return property;
     }

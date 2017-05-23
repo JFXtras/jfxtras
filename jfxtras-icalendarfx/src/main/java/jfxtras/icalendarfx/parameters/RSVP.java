@@ -1,5 +1,10 @@
 package jfxtras.icalendarfx.parameters;
 
+import jfxtras.icalendarfx.parameters.RSVP;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
+
 /**
  * RSVP
  * RSVP Expectation
@@ -14,27 +19,27 @@ package jfxtras.icalendarfx.parameters;
  * @author David Bal
  *
  */
-public class RSVP extends ParameterBase<RSVP, Boolean>
+public class RSVP extends VParameterBase<RSVP, Boolean>
 {
+	private static final StringConverter<Boolean> CONVERTER = StringConverters.booleanConverter();
+	
     public RSVP()
     {
-        super(false); // default value
+        super(false, CONVERTER); // default value
     }
 
     public RSVP(Boolean value)
     {
-        super(value);
+        super(value, CONVERTER);
     }
 
     public RSVP(RSVP source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
-
+    
     public static RSVP parse(String content)
     {
-        RSVP parameter = new RSVP();
-        parameter.parseContent(content);
-        return parameter;
+    	return RSVP.parse(new RSVP(), content);
     }
 }

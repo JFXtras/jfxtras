@@ -4,7 +4,8 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VFreeBusy;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.relationship.UniqueIdentifier;
 
 /**
  * UID
@@ -44,7 +45,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @see VJournal
  * @see VFreeBusy
  */
-public class UniqueIdentifier extends PropertyBase<String, UniqueIdentifier>
+public class UniqueIdentifier extends VPropertyBase<String, UniqueIdentifier>
 {
     public UniqueIdentifier(UniqueIdentifier source)
     {
@@ -56,10 +57,8 @@ public class UniqueIdentifier extends PropertyBase<String, UniqueIdentifier>
         super();
     }
 
-    public static UniqueIdentifier parse(String propertyContent)
+    public static UniqueIdentifier parse(String content)
     {
-        UniqueIdentifier property = new UniqueIdentifier();
-        property.parseContent(propertyContent);
-        return property;
+    	return UniqueIdentifier.parse(new UniqueIdentifier(), content);
     }
 }

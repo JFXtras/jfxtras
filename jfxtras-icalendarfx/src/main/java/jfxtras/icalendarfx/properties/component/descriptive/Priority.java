@@ -2,7 +2,8 @@ package jfxtras.icalendarfx.properties.component.descriptive;
 
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.descriptive.Priority;
 
 /**
  * PRIORITY
@@ -25,7 +26,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @see VEvent
  * @see VTodo
  */
-public class Priority extends PropertyBase<Integer, Priority>
+public class Priority extends VPropertyBase<Integer, Priority>
 {
     public Priority(Priority source)
     {
@@ -58,10 +59,8 @@ public class Priority extends PropertyBase<Integer, Priority>
         return ((getValue() < 0) || (getValue() > 9)) ? false : super.isValid();
     }
 
-    public static Priority parse(String propertyContent)
+    public static Priority parse(String content)
     {
-        Priority property = new Priority();
-        property.parseContent(propertyContent);
-        return property;
+    	return Priority.parse(new Priority(), content);
     }
 }

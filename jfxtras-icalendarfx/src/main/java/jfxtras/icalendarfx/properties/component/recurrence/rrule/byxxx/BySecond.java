@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByMinute;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRuleIntegerAbstract;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.BySecond;
+
 public class BySecond extends ByRuleIntegerAbstract<BySecond>
 {
     public BySecond()
@@ -81,8 +85,6 @@ public class BySecond extends ByRuleIntegerAbstract<BySecond>
 
     public static ByMinute parse(String content)
     {
-        ByMinute element = new ByMinute();
-        element.parseContent(content);
-        return element;
+    	return ByMinute.parse(new ByMinute(), content);
     }
 }

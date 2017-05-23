@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.scene.Parent;
@@ -36,11 +35,12 @@ public class RenderVEventsTest extends AgendaTestAbstract
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily2());
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getWeekly2());
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getWholeDayDaily3());
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getIndividual1());
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getIndividual2());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily2());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getWeekly2());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getWholeDayDaily3());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getIndividual1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getIndividual2());
+            agenda.updateAppointments();
         });
 
         List<LocalDateTime> startDates = agenda.appointments()
@@ -178,15 +178,15 @@ public class RenderVEventsTest extends AgendaTestAbstract
     }
 
     @Test
-    @Ignore // TestFX
+//    @Ignore // TestFX
     public void canRenderVComponentZoned()
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getIndividualZoned());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getIndividualZoned());
+            agenda.updateAppointments();
         });
         
-//        VEvent v = agenda.getVCalendar().getVEvents().get(0);
         List<Temporal> startZoneDates = agenda.appointments()
                 .stream()
                 .map(a -> a.getStartTemporal())
@@ -241,6 +241,7 @@ public class RenderVEventsTest extends AgendaTestAbstract
 
         TestUtil.runThenWaitForPaintPulse( () -> {
             agenda.getVCalendar().processITIPMessage(publishMessage);
+            agenda.updateAppointments();
         });
 
         assertEquals(4, agenda.appointments().size());

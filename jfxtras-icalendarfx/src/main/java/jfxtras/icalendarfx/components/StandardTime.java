@@ -1,5 +1,8 @@
 package jfxtras.icalendarfx.components;
 
+import jfxtras.icalendarfx.components.StandardOrDaylight;
+import jfxtras.icalendarfx.components.StandardTime;
+import jfxtras.icalendarfx.components.VTimeZone;
 import jfxtras.icalendarfx.properties.component.descriptive.Comment;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
@@ -73,16 +76,13 @@ public class StandardTime extends StandardOrDaylight<StandardTime>
     }
 
     /**
-     *  Creates a new StandardTime calendar component by parsing a String of iCalendar content lines
+     * Creates a new VFreeBusy calendar component by parsing a String of iCalendar content lines
      *
-     * @param contentLines  the text to parse, not null
-     * @return  the parsed StandardTime
+     * @param content  the text to parse, not null
+     * @return  the parsed VFreeBusy
      */
-    @Deprecated // use simple factory
-    public static StandardTime parse(String contentLines)
+    public static StandardTime parse(String content)
     {
-        StandardTime component = new StandardTime();
-        component.parseContent(contentLines);
-        return component;
+    	return StandardTime.parse(new StandardTime(), content);
     }
 }

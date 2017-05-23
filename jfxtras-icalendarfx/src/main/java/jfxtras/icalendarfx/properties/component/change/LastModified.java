@@ -8,6 +8,7 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.PropBaseUTC;
+import jfxtras.icalendarfx.properties.component.change.LastModified;
 
 /**
  * LAST-MODIFIED
@@ -51,10 +52,8 @@ public class LastModified extends PropBaseUTC<LastModified>
         super();
     }
 
-    public static LastModified parse(String value)
+    public static LastModified parse(String content)
     {
-        LastModified property = new LastModified();
-        property.parseContent(value);
-        return property;
+    	return LastModified.parse(new LastModified(), content);
     }
 }

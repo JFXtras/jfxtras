@@ -7,13 +7,13 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.ICalendarStaticComponents;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
@@ -61,15 +61,16 @@ public class SimplePublishTest
                 "UID:0981234-1234234-23@example.com" + System.lineSeparator() + 
                 "END:VEVENT" + System.lineSeparator() + 
                 "END:VCALENDAR";
-        assertEquals(expectedContent, main.toContent());
+        assertEquals(expectedContent, main.toString());
     }
     
     @Test
     public void canReviseWithPublish()
     {
-        VCalendar mainVCalendar = new VCalendar().withVersion();
         VEvent vComponent = ICalendarStaticComponents.getDaily1();
-        mainVCalendar.addVComponent(vComponent);
+        VCalendar mainVCalendar = new VCalendar()
+        		.withVersion()
+        		.withVEvents(vComponent);
         String publish = new String(
                 "BEGIN:VCALENDAR" + System.lineSeparator() + 
                 "METHOD:PUBLISH" + System.lineSeparator() + 
@@ -106,7 +107,7 @@ public class SimplePublishTest
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() + 
                 "END:VCALENDAR");
-        assertEquals(expectedContent, mainVCalendar.toContent());
+        assertEquals(expectedContent, mainVCalendar.toString());
     }
     
     @Test // the time has been changed, an end time has been added, and the sequence number has been adjusted.
@@ -153,17 +154,16 @@ public class SimplePublishTest
                 "SUMMARY:ST. PAUL SAINTS -VS- DULUTH-SUPERIOR DUKES" + System.lineSeparator() + 
                 "END:VEVENT" + System.lineSeparator() + 
                 "END:VCALENDAR");
-        assertEquals(expectedContent, main.toContent());
+        assertEquals(expectedContent, main.toString());
     }
     
     @Test // edit an individual recurrence of a repeatable event twice
     public void canEditOneRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        final List<VEvent> vComponents = new ArrayList<>(Arrays.asList(vComponentOriginal));
+        mainVCalendar.setVEvents(vComponents);
         
         String iTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -189,7 +189,7 @@ public class SimplePublishTest
         Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentRepeats = vComponents.get(0);
 
-        // confirm change
+        // check results
         assertEquals(vComponentOriginal, myComponentRepeats);
         VEvent myComponentIndividual = vComponents.get(1);
         VEvent expectedComponentIndividual = ICalendarStaticComponents.getDaily1()
@@ -257,13 +257,13 @@ public class SimplePublishTest
 
         // make recurrence
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
-                .withRecurrenceRule((RecurrenceRuleValue) null)
+                .withRecurrenceRule((RecurrenceRule) null)
                 .withRecurrenceId(LocalDateTime.of(2015, 11, 12, 10, 0))
                 .withSummary("recurrence summary")
                 .withDateTimeStart(LocalDateTime.of(2015, 11, 12, 8, 30))
                 .withDateTimeEnd(LocalDateTime.of(2015, 11, 12, 9, 30));
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        vComponents.addAll(vComponentEdited, vComponentRecurrence);
+        final List<VEvent> vComponents = new ArrayList<>(Arrays.asList(vComponentEdited, vComponentRecurrence));
+        mainVCalendar.setVEvents(vComponents);
                 
         // Publish change to ALL VEvents (recurrence gets deleted)
         String publish = new String("BEGIN:VCALENDAR" + System.lineSeparator() + 
@@ -314,14 +314,12 @@ public class SimplePublishTest
     }
    
     @Test // divides one repeatable event into two.  First one ends with UNTIL
-    @Ignore // TestFX
     public void canEditThisAndFuture()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        final List<VEvent> vComponents = new ArrayList<>(Arrays.asList(vComponentOriginal));
+        mainVCalendar.setVEvents(vComponents);
         
         String iTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -370,14 +368,12 @@ public class SimplePublishTest
     }
     
     @Test // change INTERVAL
-    @Ignore // TestFX4
     public void canEditThisAndFuture2()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        final List<VEvent> vComponents = new ArrayList<>(Arrays.asList(vComponentOriginal));
+        mainVCalendar.setVEvents(vComponents);
 
         String iTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -430,11 +426,9 @@ public class SimplePublishTest
     public void canAddRRuleToAll()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getIndividualZoned();
-        VEvent vComponentEdited = new VEvent(vComponentOriginal);
-        vComponents.add(vComponentEdited);
+        final List<VEvent> vComponents = new ArrayList<>(Arrays.asList(vComponentOriginal));
+        mainVCalendar.setVEvents(vComponents);
         
         String iTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +

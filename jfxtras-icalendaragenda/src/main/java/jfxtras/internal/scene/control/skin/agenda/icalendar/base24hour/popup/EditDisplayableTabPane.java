@@ -60,20 +60,8 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
     @FXML private Button cancelRepeatButton;
     @FXML private Button saveRepeatButton;
 
-//    ObjectProperty<Boolean> isFinished = new SimpleObjectProperty<>(false);
-//    /** When property value becomes true the control should be closed
-//     * (i.e. Attach a listener to this property, on changing hide the control */
-//    public ObjectProperty<Boolean> isFinished() { return isFinished; }
-
     ObjectProperty<List<VCalendar>> iTIPMessages = new SimpleObjectProperty<>();
     public ObjectProperty<List<VCalendar>> iTIPMessagesProperty() { return iTIPMessages; }
-//    @Deprecated
-//    ObjectProperty<List<T>> newVComponents = new SimpleObjectProperty<>();
-    /** This property contains a List of new components resulting from the editing.
-     * When property value becomes non-null the control should be closed.
-     * (i.e. Attach a listener to this property, on changing hide the control */
-//    @Deprecated
-//    public ObjectProperty<List<T>> newVComponentsProperty() { return newVComponents; }
     
     public EditDisplayableTabPane( )
     {
@@ -128,15 +116,9 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
         Object[] params = new Object[] {
                 DeleteChoiceDialog.DELETE_DIALOG_CALLBACK,
                 editDescriptiveVBox.startOriginalRecurrence
-//                vComponents
         };
         List<VCalendar> result = SimpleDeleterFactory.newDeleter(vComponentCopy, params).delete();
         iTIPMessagesProperty().set(result);
-
-        
-//        T result = (T) SimpleDeleterFactory.newDeleter(vComponent, params).delete();
-//        newVComponentsProperty().set(Arrays.asList(result)); // indicates control should be hidden
-//        isFinished.set(result);
     }
     
     @FXML private void handlePressEnter(KeyEvent e)
@@ -150,7 +132,6 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
     T vComponentCopy;
     T vComponentOriginal;
     public static VComponent vo;
-//    List<T> vComponents;
 
     /**
      * Provide necessary data to setup

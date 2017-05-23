@@ -1,10 +1,11 @@
 package jfxtras.icalendarfx.properties.calendar;
 
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.VElement;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.calendar.Method;
 import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * METHOD
@@ -22,7 +23,7 @@ import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
  * @author David Bal
  * @see VCalendar
  */
-public class Method extends PropertyBase<MethodType, Method> implements VElement
+public class Method extends VPropertyBase<MethodType, Method> implements VElement
 {
     private final static StringConverter<MethodType> CONVERTER = new StringConverter<MethodType>()
     {
@@ -56,11 +57,9 @@ public class Method extends PropertyBase<MethodType, Method> implements VElement
        setConverter(CONVERTER);
     }
     
-    public static Method parse(String string)
+    public static Method parse(String content)
     {
-        Method property = new Method();
-        property.parseContent(string);
-        return property;
+    	return Method.parse(new Method(), content);
     }
     
     /** Method types from RFC 5546 */

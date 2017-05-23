@@ -1,11 +1,12 @@
 package jfxtras.icalendarfx.properties.component.descriptive;
 
-import javafx.util.StringConverter;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.descriptive.Classification;
 import jfxtras.icalendarfx.properties.component.descriptive.Classification.ClassificationType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * CLASS
@@ -24,9 +25,9 @@ import jfxtras.icalendarfx.properties.component.descriptive.Classification.Class
  * @see VTodo
  * @see VJournal
  */
-public class Classification extends PropertyBase<ClassificationType, Classification>
+public class Classification extends VPropertyBase<ClassificationType, Classification>
 {
-    // TODO - ADD X-VALUE, registered IANA values
+    // TODO - ADD X-VALUE
     private final static StringConverter<ClassificationType> CONVERTER = new StringConverter<ClassificationType>()
     {
         @Override

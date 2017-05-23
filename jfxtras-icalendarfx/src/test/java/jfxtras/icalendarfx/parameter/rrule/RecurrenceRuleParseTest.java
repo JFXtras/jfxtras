@@ -30,7 +30,7 @@ public class RecurrenceRuleParseTest
                 .withFrequency(FrequencyType.YEARLY)
                 .withInterval(2)
                 .withByRules(new ByMonth(Month.JANUARY), new ByDay(DayOfWeek.SUNDAY));
-        assertEquals(s, expectedRRule.toContent());
+        assertEquals(s, expectedRRule.toString());
         assertEquals(expectedRRule, rRule);
     }
     
@@ -42,8 +42,8 @@ public class RecurrenceRuleParseTest
         RecurrenceRuleValue expectedRRule = new RecurrenceRuleValue()
                 .withFrequency(FrequencyType.MONTHLY)
                 .withByRules(new ByDay(DayOfWeek.SATURDAY), new ByMonthDay(7,8,9,10,11,12,13));
-        assertEquals(s, expectedRRule.toContent());
-        assertEquals(s, rRule.toContent());
+        assertEquals(s, expectedRRule.toString());
+        assertEquals(s, rRule.toString());
         assertEquals(expectedRRule, rRule);
     }
     

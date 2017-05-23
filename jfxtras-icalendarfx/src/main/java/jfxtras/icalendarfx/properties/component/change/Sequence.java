@@ -3,7 +3,8 @@ package jfxtras.icalendarfx.properties.component.change;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.change.Sequence;
 
 /**
  * SEQUENCE
@@ -96,7 +97,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @see VTodo
  * @see VJournal
  */
-public class Sequence extends PropertyBase<Integer, Sequence>
+public class Sequence extends VPropertyBase<Integer, Sequence>
 {
     public Sequence(Integer value)
     {
@@ -121,14 +122,12 @@ public class Sequence extends PropertyBase<Integer, Sequence>
             super.setValue(value);
         } else
         {
-            throw new IllegalArgumentException(propertyType() + " must be greater than or equal to zero");
+            throw new IllegalArgumentException(name() + " must be greater than or equal to zero");
         }
     }
 
-    public static Sequence parse(String propertyContent)
+    public static Sequence parse(String content)
     {
-        Sequence property = new Sequence();
-        property.parseContent(propertyContent);
-        return property;
+    	return Sequence.parse(new Sequence(), content);
     }
 }

@@ -1,6 +1,5 @@
 package jfxtras.scene.control.agenda.icalendar.editors.deleters;
 
-import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 
 /**

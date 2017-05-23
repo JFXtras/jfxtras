@@ -14,7 +14,7 @@ public class CalendarScaleTest
     {
         CalendarScale property = new CalendarScale(CalendarScaleType.GREGORIAN);
         String expectedContent = "CALSCALE:GREGORIAN";
-        assertEquals(expectedContent, property.toContent());
+        assertEquals(expectedContent, property.toString());
         CalendarScale property2 = CalendarScale.parse(expectedContent);
         assertEquals(property, property2);
     }

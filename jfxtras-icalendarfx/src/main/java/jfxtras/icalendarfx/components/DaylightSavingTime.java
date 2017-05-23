@@ -1,5 +1,8 @@
 package jfxtras.icalendarfx.components;
 
+import jfxtras.icalendarfx.components.DaylightSavingTime;
+import jfxtras.icalendarfx.components.StandardOrDaylight;
+import jfxtras.icalendarfx.components.VTimeZone;
 import jfxtras.icalendarfx.properties.component.descriptive.Comment;
 import jfxtras.icalendarfx.properties.component.misc.NonStandardProperty;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceDates;
@@ -51,7 +54,8 @@ import jfxtras.icalendarfx.properties.component.timezone.TimeZoneOffsetTo;
  *
  */
 public class DaylightSavingTime extends StandardOrDaylight<DaylightSavingTime>
-{   
+{
+	public final static String NAME = "DAYLIGHT";
     /*
      * CONSTRUCTORS
      */
@@ -75,14 +79,11 @@ public class DaylightSavingTime extends StandardOrDaylight<DaylightSavingTime>
     /**
      * Creates a new DaylightSavingTime calendar component by parsing a String of iCalendar content lines
      *
-     * @param contentLines  the text to parse, not null
+     * @param content  the text to parse, not null
      * @return  the parsed DaylightSavingTime
      */
-    @Deprecated // use simple factory
-    public static DaylightSavingTime parse(String contentLines)
+    public static DaylightSavingTime parse(String content)
     {
-        DaylightSavingTime component = new DaylightSavingTime();
-        component.parseContent(contentLines);
-        return component;
+    	return DaylightSavingTime.parse(new DaylightSavingTime(), content);
     }
 }

@@ -10,9 +10,10 @@ import java.time.temporal.TemporalAmount;
 import java.util.Collections;
 import java.util.List;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.components.VDescribable2;
+import jfxtras.icalendarfx.components.VLocatable;
+import jfxtras.icalendarfx.components.VTodo;
 import jfxtras.icalendarfx.properties.component.descriptive.PercentComplete;
 import jfxtras.icalendarfx.properties.component.time.DateTimeCompleted;
 import jfxtras.icalendarfx.properties.component.time.DateTimeDue;
@@ -59,7 +60,7 @@ import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
  *
  */
 public class VTodo extends VLocatable<VTodo> implements VDescribable2<VTodo>
-{    
+{
     /**
      * COMPLETED: Date-Time Completed
      * RFC 5545 iCalendar 3.8.2.1 page 94
@@ -70,23 +71,30 @@ public class VTodo extends VLocatable<VTodo> implements VDescribable2<VTodo>
      * Example:
      * COMPLETED:19960401T150000Z
      */
-    public ObjectProperty<DateTimeCompleted> dateTimeCompletedProperty()
+    private DateTimeCompleted dateTimeCompleted;
+    public DateTimeCompleted getDateTimeCompleted() { return dateTimeCompleted; }
+    public void setDateTimeCompleted(String dateTimeCompleted) { setDateTimeCompleted(DateTimeCompleted.parse(dateTimeCompleted)); }
+    public void setDateTimeCompleted(DateTimeCompleted dateTimeCompleted)
     {
-        if (dateTimeCompleted == null)
-        {
-            dateTimeCompleted = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_COMPLETED.toString());
-            orderer().registerSortOrderProperty(dateTimeCompleted);
-        }
-        return dateTimeCompleted;
-    }
-    private ObjectProperty<DateTimeCompleted> dateTimeCompleted;
-    public DateTimeCompleted getDateTimeCompleted() { return dateTimeCompletedProperty().get(); }
-    public void setDateTimeCompleted(String completed) { setDateTimeCompleted(DateTimeCompleted.parse(completed)); }
-    public void setDateTimeCompleted(DateTimeCompleted completed) { dateTimeCompletedProperty().set(completed); }
-    public void setDateTimeCompleted(ZonedDateTime completed) { setDateTimeCompleted(new DateTimeCompleted(completed)); }
-    public VTodo withDateTimeCompleted(ZonedDateTime completed) { setDateTimeCompleted(completed); return  this; }
-    public VTodo withDateTimeCompleted(String completed) { setDateTimeCompleted(completed); return this; }
-    public VTodo withDateTimeCompleted(DateTimeCompleted completed) { setDateTimeCompleted(completed); return this; }
+    	orderChild(this.dateTimeCompleted, dateTimeCompleted);
+    	this.dateTimeCompleted = dateTimeCompleted;
+	}
+    public void setDateTimeCompleted(ZonedDateTime dateTimeCompleted) { setDateTimeCompleted(new DateTimeCompleted(dateTimeCompleted)); }
+    public VTodo withDateTimeCompleted(ZonedDateTime dateTimeCompleted)
+    {
+    	setDateTimeCompleted(dateTimeCompleted);
+    	return this;
+	}
+    public VTodo withDateTimeCompleted(String dateTimeCompleted)
+    {
+    	setDateTimeCompleted(dateTimeCompleted);
+    	return this;
+	}
+    public VTodo withDateTimeCompleted(DateTimeCompleted dateTimeCompleted)
+    {
+    	setDateTimeCompleted(dateTimeCompleted);
+    	return this;
+	}
     
     /**
      * DUE: Date-Time Due
@@ -98,60 +106,49 @@ public class VTodo extends VLocatable<VTodo> implements VDescribable2<VTodo>
      * Example:
      * DUE:TZID=America/Los_Angeles:19970512T090000
      */
-    public ObjectProperty<DateTimeDue> dateTimeDueProperty()
+    private DateTimeDue dateTimeDue;
+    public DateTimeDue getDateTimeDue() { return dateTimeDue; }
+    public void setDateTimeDue(String dateTimeDue) { setDateTimeDue(DateTimeDue.parse(dateTimeDue)); }
+    public void setDateTimeDue(DateTimeDue dateTimeDue)
     {
-        if (dateTimeDue == null)
-        {
-            dateTimeDue = new SimpleObjectProperty<>(this, PropertyType.DATE_TIME_DUE.toString());
-            orderer().registerSortOrderProperty(dateTimeDue);
-            dateTimeDue.addListener((observable, oldValue, newValue) -> 
-            {
-                if ((getDateTimeDue() != null) && (getDuration() != null))
-                {
-                    throw new DateTimeException("DURATION and DUE can't both be set");
-                }                
-            });
-
-        }
-        return dateTimeDue;
-    }
-    private ObjectProperty<DateTimeDue> dateTimeDue;
-    public DateTimeDue getDateTimeDue() { return dateTimeDueProperty().get(); }
-    public void setDateTimeDue(String due) { setDateTimeDue(DateTimeUtilities.temporalFromString(due)); }
-    public void setDateTimeDue(DateTimeDue due) { dateTimeDueProperty().set(due); }
-    public void setDateTimeDue(Temporal due)
+    	orderChild(this.dateTimeDue, dateTimeDue);
+    	this.dateTimeDue = dateTimeDue;
+	}
+    public void setDateTimeDue(Temporal dateTimeDue)
     {
-        if (due instanceof LocalDate)
+        if ((dateTimeDue instanceof LocalDate) || (dateTimeDue instanceof LocalDateTime) || (dateTimeDue instanceof ZonedDateTime))
         {
-            setDateTimeDue(new DateTimeDue(due));            
-        } else if (due instanceof LocalDateTime)
-        {
-            setDateTimeDue(new DateTimeDue(due));            
-        } else if (due instanceof ZonedDateTime)
-        {
-            setDateTimeDue(new DateTimeDue(due));            
+            setDateTimeDue(new DateTimeDue(dateTimeDue));            
         } else
         {
             throw new DateTimeException("Only LocalDate, LocalDateTime and ZonedDateTime supported. "
-                    + due.getClass().getSimpleName() + " is not supported");
+                    + dateTimeDue.getClass().getSimpleName() + " is not supported");
         }
     }
-    public VTodo withDateTimeDue(Temporal due) { setDateTimeDue(due); return this; }
-    public VTodo withDateTimeDue(String due) { setDateTimeDue(due); return this; }
-    public VTodo withDateTimeDue(DateTimeDue due) { setDateTimeDue(due); return this; }
-
-    /** Ensures DateTimeDue and Duration are not both used. */
-    @Override public ObjectProperty<DurationProp> durationProperty()
+    public VTodo withDateTimeDue(Temporal dateTimeDue)
     {
-        ObjectProperty<DurationProp> duration = super.durationProperty();
-        duration.addListener((obs) ->
+    	setDateTimeDue(dateTimeDue);
+    	return this;
+	}
+    public VTodo withDateTimeDue(String dateTimeDue)
+    {
+    	setDateTimeDue(dateTimeDue);
+    	return this;
+	}
+    public VTodo withDateTimeDue(DateTimeDue dateTimeDue) 
+    { 
+    	setDateTimeDue(dateTimeDue); 
+    	return this; 
+	}
+
+    @Override
+    public void setDuration(DurationProp duration)
+    {
+        if ((getDateTimeDue() != null) && (getDuration() != null))
         {
-            if ((getDateTimeDue() != null) && (getDuration() != null))
-            {
-                throw new DateTimeException("DURATION and DUE can't both be set");
-            }            
-        });
-        return duration;
+            throw new DateTimeException("DURATION and DUE can't both be set");
+        }      
+        super.setDuration(duration);
     }
     
     /**
@@ -167,34 +164,48 @@ public class VTodo extends VLocatable<VTodo> implements VDescribable2<VTodo>
      * Example:  The following is an example of this property to show 39% completion:
      * PERCENT-COMPLETE:39
      */
-    public ObjectProperty<PercentComplete> percentCompleteProperty()
-    {
-        if (percentComplete == null)
-        {
-            percentComplete = new SimpleObjectProperty<>(this, PropertyType.PERCENT_COMPLETE.toString());
-            orderer().registerSortOrderProperty(percentComplete);
-        }
-        return percentComplete;
-    }
-    private ObjectProperty<PercentComplete> percentComplete;
-    public PercentComplete getPercentComplete() { return percentCompleteProperty().get(); }
+    private PercentComplete percentComplete;
+    public PercentComplete getPercentComplete() { return percentComplete; }
     public void setPercentComplete(String percentComplete) { setPercentComplete(PercentComplete.parse(percentComplete)); }
     public void setPercentComplete(Integer percentComplete) { setPercentComplete(new PercentComplete(percentComplete)); }
-    public void setPercentComplete(PercentComplete percentComplete) { percentCompleteProperty().set(percentComplete); }
-    public VTodo withPercentComplete(PercentComplete percentComplete) { setPercentComplete(percentComplete); return this; }
-    public VTodo withPercentComplete(Integer percentComplete) { setPercentComplete(percentComplete); return this; }
-    public VTodo withPercentComplete(String percentComplete) { PropertyType.PERCENT_COMPLETE.parse(this, percentComplete); return this; }
+    public void setPercentComplete(PercentComplete percentComplete)
+    {
+    	orderChild(this.percentComplete, percentComplete);
+    	this.percentComplete = percentComplete;
+	}
+    public VTodo withPercentComplete(PercentComplete percentComplete)
+    { 
+    	setPercentComplete(percentComplete); 
+    	return this; 
+	}
+    public VTodo withPercentComplete(Integer percentComplete) 
+    { 
+    	setPercentComplete(percentComplete); 
+    	return this; 
+	}
+    public VTodo withPercentComplete(String percentComplete) 
+    { 
+    	setPercentComplete(PercentComplete.parse(percentComplete));
+    	return this; 
+	}
     
+    
+	@Override
+	public List<VTodo> calendarList()
+	{
+		if (getParent() != null)
+		{
+			VCalendar cal = (VCalendar) getParent();
+			return cal.getVTodos();
+		}
+		return null;
+	}
+	
     /*
      * CONSTRUCTORS
      */
     public VTodo() { super(); }
-    
-//    public VTodo(String contentLines)
-//    {
-//        super(contentLines);
-//    }
-    
+   
     public VTodo(VTodo source)
     {
         super(source);
@@ -285,11 +296,14 @@ public class VTodo extends VLocatable<VTodo> implements VDescribable2<VTodo>
         setDateTimeDue((DateTimeDue) null);
     }
     
-    /** Parse content lines into calendar component object */
-    public static VTodo parse(String contentLines)
+    /**
+     * Creates a new VTodo calendar component by parsing a String of iCalendar content lines
+     *
+     * @param content  the text to parse, not null
+     * @return  the parsed VTodo
+     */
+    public static VTodo parse(String content)
     {
-        VTodo component = new VTodo();
-        component.parseContent(contentLines);
-        return component;
+    	return VTodo.parse(new VTodo(), content);
     }
 }

@@ -18,7 +18,6 @@ public class ComponentStatusTest
             VEvent.parse(contentLines);
         } catch (Exception e)
         {
-            System.out.println("oops:" + e.getMessage());
         }
     }
 }

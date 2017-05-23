@@ -23,7 +23,7 @@ public class ByYearDayTest
     {
         ByYearDay element = new ByYearDay(100,200,300);
         assertEquals(Arrays.asList(100,200,300), element.getValue());
-        assertEquals("BYYEARDAY=100,200,300", element.toContent());
+        assertEquals("BYYEARDAY=100,200,300", element.toString());
     }
     
     /*

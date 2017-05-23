@@ -29,8 +29,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
-import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.calendar.Version;
+import jfxtras.icalendarfx.properties.calendar.Method.MethodType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
@@ -699,7 +699,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
         }
         clickOn("#saveRepeatButton");
         
-        String dtstamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toContent();
+        String dtstamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
         
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
@@ -720,7 +720,7 @@ public class ExceptionDateTests extends VEventPopupTestBase
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
         String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
-                .map(v -> v.toContent())
+                .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }

@@ -2,7 +2,8 @@ package jfxtras.icalendarfx.properties.calendar;
 
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.VElement;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.calendar.Version;
 
 /**
  * VERSION
@@ -21,7 +22,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @author David Bal
  * @see VCalendar
  */
-public class Version extends PropertyBase<String, Version> implements VElement
+public class Version extends VPropertyBase<String, Version> implements VElement
 {
     public static final String DEFAULT_ICALENDAR_SPECIFICATION_VERSION = ("2.0");
     
@@ -37,10 +38,8 @@ public class Version extends PropertyBase<String, Version> implements VElement
         setValue(DEFAULT_ICALENDAR_SPECIFICATION_VERSION);
     }
     
-    public static Version parse(String string)
+    public static Version parse(String content)
     {
-        Version property = new Version();
-        property.parseContent(string);
-        return property;
+    	return Version.parse(new Version(), content);
     }
 }

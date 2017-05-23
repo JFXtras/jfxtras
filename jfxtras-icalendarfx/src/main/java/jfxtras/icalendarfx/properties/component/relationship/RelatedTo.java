@@ -1,15 +1,13 @@
 package jfxtras.icalendarfx.properties.component.relationship;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VJournal;
 import jfxtras.icalendarfx.components.VTodo;
-import jfxtras.icalendarfx.parameters.ParameterType;
 import jfxtras.icalendarfx.parameters.Relationship;
 import jfxtras.icalendarfx.parameters.Relationship.RelationshipType;
 import jfxtras.icalendarfx.properties.PropRelationship;
-import jfxtras.icalendarfx.properties.PropertyBase;
+import jfxtras.icalendarfx.properties.VPropertyBase;
+import jfxtras.icalendarfx.properties.component.relationship.RelatedTo;
 
 /**
  * RELATED-TO
@@ -26,7 +24,7 @@ import jfxtras.icalendarfx.properties.PropertyBase;
  * @see VTodo
  * @see VJournal
  */
-public class RelatedTo extends PropertyBase<String, RelatedTo> implements PropRelationship<String>
+public class RelatedTo extends VPropertyBase<String, RelatedTo> implements PropRelationship<String>
 {
     /**
      * RELTYPE
@@ -41,30 +39,19 @@ public class RelatedTo extends PropertyBase<String, RelatedTo> implements PropRe
      *  example.com
      */
     @Override
-    public Relationship getRelationship() { return (relationship == null) ? null : relationship.get(); }
+    public Relationship getRelationship() { return relationship; }
+    private Relationship relationship;
     @Override
-    public ObjectProperty<Relationship> relationshipProperty()
+    public void setRelationship(Relationship relationship)
     {
-        if (relationship == null)
-        {
-            relationship = new SimpleObjectProperty<>(this, ParameterType.RELATIONSHIP_TYPE.toString());
-            orderer().registerSortOrderProperty(relationship);
-        }
-        return relationship;
-    }
-    private ObjectProperty<Relationship> relationship;
-    @Override
-    public void setRelationship(Relationship relationship) { relationshipProperty().set(relationship); }
+    	orderChild(relationship);
+    	this.relationship = relationship;
+	}
     public void setRelationship(String value) { setRelationship(Relationship.parse(value)); }
     public RelatedTo withRelationship(Relationship altrep) { setRelationship(altrep); return this; }
     public RelatedTo withRelationship(RelationshipType value) { setRelationship(new Relationship(value)); return this; }
     public RelatedTo withRelationship(String content) { setRelationship(content); return this; }
     
-//    public RelatedTo(CharSequence contentLine)
-//    {
-//        super(contentLine);
-//    }
-
     public RelatedTo(RelatedTo source)
     {
         super(source);
@@ -75,10 +62,8 @@ public class RelatedTo extends PropertyBase<String, RelatedTo> implements PropRe
         super();
     }
     
-    public static RelatedTo parse(String propertyContent)
+    public static RelatedTo parse(String content)
     {
-        RelatedTo property = new RelatedTo();
-        property.parseContent(propertyContent);
-        return property;
+    	return RelatedTo.parse(new RelatedTo(), content);
     }
 }

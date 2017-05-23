@@ -1,11 +1,10 @@
 package jfxtras.icalendarfx.properties;
 
-import javafx.beans.property.ObjectProperty;
 import jfxtras.icalendarfx.parameters.AlarmTriggerRelationship;
+import jfxtras.icalendarfx.properties.VProperty;
 
-public interface PropAlarmTrigger<T> extends Property<T>
+public interface PropAlarmTrigger<T> extends VProperty<T>
 {
     AlarmTriggerRelationship getAlarmTrigger();
-    ObjectProperty<AlarmTriggerRelationship> AlarmTriggerProperty();
     void setAlarmTrigger(AlarmTriggerRelationship AlarmTrigger);
 }

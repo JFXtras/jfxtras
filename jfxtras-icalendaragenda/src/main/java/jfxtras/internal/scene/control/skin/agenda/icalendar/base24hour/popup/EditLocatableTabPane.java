@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VLocatable;
 import jfxtras.icalendarfx.properties.component.descriptive.Description;
@@ -15,7 +16,6 @@ import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.EditChoiceDialog;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
-import javafx.scene.control.ButtonType;
 
 /** 
  * TabPane for editing descriptive properties and a {@link RecurrenceRule} for a {@link VComponentLocatable}.

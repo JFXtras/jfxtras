@@ -3,7 +3,6 @@ package jfxtras.icalendarfx.component;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -16,8 +15,6 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.components.VDisplayable;
 import jfxtras.icalendarfx.components.VEvent;
@@ -29,6 +26,7 @@ import jfxtras.icalendarfx.properties.component.change.Sequence;
 import jfxtras.icalendarfx.properties.component.descriptive.Attachment;
 import jfxtras.icalendarfx.properties.component.descriptive.Categories;
 import jfxtras.icalendarfx.properties.component.descriptive.Classification;
+import jfxtras.icalendarfx.properties.component.descriptive.Status;
 import jfxtras.icalendarfx.properties.component.descriptive.Summary;
 import jfxtras.icalendarfx.properties.component.descriptive.Classification.ClassificationType;
 import jfxtras.icalendarfx.properties.component.descriptive.Status.StatusType;
@@ -41,6 +39,7 @@ import jfxtras.icalendarfx.properties.component.relationship.Contact;
 import jfxtras.icalendarfx.properties.component.relationship.RecurrenceId;
 import jfxtras.icalendarfx.properties.component.relationship.RelatedTo;
 import jfxtras.icalendarfx.properties.component.time.DateTimeStart;
+import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 
 /**
  * Test following components:
@@ -159,10 +158,10 @@ public class DisplayableTest
                     "END:" + componentName;
 
             VComponent parsedComponent = builtComponent.getClass().newInstance();
-            parsedComponent.parseContent(expectedContent);
+            parsedComponent.addChild(expectedContent);
 
             assertEquals(parsedComponent, builtComponent);
-            assertEquals(expectedContent, builtComponent.toContent());     
+            assertEquals(expectedContent, builtComponent.toString());     
             
             builtComponent.setRecurrenceRule("RRULE:FREQ=DAILY;INTERVAL=2");
             builtComponent.setDateTimeStart(DateTimeStart.parse(ZonedDateTime.class, "19960301T010000Z"));
@@ -193,9 +192,9 @@ public class DisplayableTest
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "EXDATE:20151112T100000,20151115T100000";
-        assertEquals(expectedContent, e.getExceptionDates().get(0).toContent());
+        assertEquals(expectedContent, e.getExceptionDates().get(0).toString());
         String expectedContent2 = "RRULE:FREQ=DAILY;INTERVAL=3;COUNT=6";
-        assertEquals(expectedContent2, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent2, e.getRecurrenceRule().toString());
     }
     
     @Test // 2 separate EXDATE properties, and out of order too
@@ -222,11 +221,11 @@ public class DisplayableTest
                 ));
         assertEquals(expectedDates, madeDates);
         String expectedContent = "EXDATE:20151115T100000";
-        assertEquals(expectedContent, e.getExceptionDates().get(0).toContent());
+        assertEquals(expectedContent, e.getExceptionDates().get(0).toString());
         String expectedContent2 = "EXDATE:20151112T100000";
-        assertEquals(expectedContent2, e.getExceptionDates().get(1).toContent());
+        assertEquals(expectedContent2, e.getExceptionDates().get(1).toString());
         String expectedContent3 = "RRULE:FREQ=DAILY;INTERVAL=3;COUNT=6";
-        assertEquals(expectedContent3, e.getRecurrenceRule().toContent());
+        assertEquals(expectedContent3, e.getRecurrenceRule().toString());
     }
     
     // Google test
@@ -268,9 +267,10 @@ public class DisplayableTest
                 .withRecurrenceRule(new RecurrenceRuleValue()
                         .withFrequency(FrequencyType.DAILY)
                         .withUntil(ZonedDateTime.of(LocalDateTime.of(2016, 5, 12, 19, 30, 0), ZoneId.of("Z"))));
+        e.setDateTimeCreated((DateTimeCreated) null);
         e.setExceptionDates(null);
         e.setDateTimeStart(new DateTimeStart(LocalDate.of(2016, 2, 7)));
-        e.setExceptionDates(FXCollections.observableArrayList(new ExceptionDates(
+        e.setExceptionDates(Arrays.asList(new ExceptionDates(
                             LocalDate.of(2016, 2, 10)
                           , LocalDate.of(2016, 2, 12)
                           , LocalDate.of(2016, 2, 9)
@@ -296,22 +296,27 @@ public class DisplayableTest
             .withDateTimeStart(LocalDate.of(1997, 3, 1))
             .withExceptionDates("EXDATE;VALUE=DATE:19970304,19970504,19970704,19970904");
         component.setDateTimeStart(DateTimeStart.parse(ZonedDateTime.class, "20160302T223316Z")); // invalid
-        String expectedError = "DTSTART, EXDATE:";
+        String expectedError = "DTSTART, EXDATE: The value type of EXDATE elements MUST be the same as the DTSTART property (DTSTART=" + 
+        		DateTimeType.DATE_WITH_UTC_TIME + ", EXDATE=" + DateTimeType.DATE;
         boolean isErrorPresent = component.errors().stream()
-                .filter(s -> s.substring(0, expectedError.length()).equals(expectedError))
-                .findAny()
-                .isPresent();
+                .anyMatch(s -> s.equals(expectedError));
         assertTrue(isErrorPresent);
     }
     
     
-    @Test (expected = DateTimeException.class)
+    @Test
     public void canCatchWrongDateType()
     {
         VEvent component = new VEvent()
                 .withDateTimeStart(LocalDate.of(1997, 3, 1));
-        ObservableList<ExceptionDates> exceptions = FXCollections.observableArrayList();
+        List<ExceptionDates> exceptions = new ArrayList<>();
         exceptions.add(ExceptionDates.parse("20160228T093000"));
-        component.setExceptionDates(exceptions); // invalid    
+        component.setExceptionDates(exceptions); // invalid
+        String expectedError = "DTSTART, EXDATE: The value type of EXDATE elements MUST be the same as the DTSTART property (DTSTART=" +
+        	DateTimeType.DATE + ", EXDATE=" + DateTimeType.DATE_WITH_LOCAL_TIME;
+        boolean isErrorPresent = component.errors()
+        		.stream()
+                .anyMatch(s -> s.equals(expectedError));
+        assertTrue(isErrorPresent);
     }
 }

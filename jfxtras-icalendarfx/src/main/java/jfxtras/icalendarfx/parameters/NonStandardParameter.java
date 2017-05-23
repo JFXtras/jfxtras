@@ -1,6 +1,12 @@
 package jfxtras.icalendarfx.parameters;
 
+import java.util.Collections;
 import java.util.List;
+
+import jfxtras.icalendarfx.parameters.NonStandardParameter;
+import jfxtras.icalendarfx.parameters.VParameterBase;
+import jfxtras.icalendarfx.utilities.StringConverter;
+import jfxtras.icalendarfx.utilities.StringConverters;
 
 /**
  * A non-standard, experimental parameter.
@@ -8,33 +14,49 @@ import java.util.List;
  * @author David Bal
  *
  */
-public class NonStandardParameter extends ParameterBase<NonStandardParameter, String>
+public class NonStandardParameter extends VParameterBase<NonStandardParameter, String>
 {
-    final String name;
+	private static final StringConverter<String> CONVERTER = StringConverters.defaultStringConverterWithQuotes();
+
+    String name;
     @Override
     public String name() { return name; }
     
+    /*
+     * CONSTRUCTORS
+     */
     public NonStandardParameter(String content)
     {
-        super();
-        int equalsIndex = content.indexOf('=');
+        super(CONVERTER);
+        construct(content);
+    }
+
+	private void construct(String content) {
+		int equalsIndex = content.indexOf('=');
         name = (equalsIndex >= 0) ? content.substring(0, equalsIndex) : content;
         String value = (equalsIndex >= 0) ? content.substring(equalsIndex+1) : null;
         setValue(value);
-    }
+	}
 
     public NonStandardParameter(NonStandardParameter source)
     {
-        super(source);
+        super(source, CONVERTER);
         this.name = source.name;
     }
 
-    public static NonStandardParameter parse(String content)
+    public NonStandardParameter()
     {
-        return new NonStandardParameter(content);
+    	super(CONVERTER);
+	}
+
+    @Override
+	protected List<Message> parseContent(String content)
+    {
+    	construct(content);
+    	return Collections.EMPTY_LIST;
     }
     
-    @Override
+	@Override
     public List<String> errors()
     {
         List<String> errors = super.errors();
@@ -46,8 +68,13 @@ public class NonStandardParameter extends ParameterBase<NonStandardParameter, St
     }
     
     @Override
-    public String toContent()
+    public String toString()
     {
         return (getValue() != null) ? name() + "=" + getValue() : null;
+    }
+    
+    public static NonStandardParameter parse(String content)
+    {
+    	return NonStandardParameter.parse(new NonStandardParameter(), content);
     }
 }

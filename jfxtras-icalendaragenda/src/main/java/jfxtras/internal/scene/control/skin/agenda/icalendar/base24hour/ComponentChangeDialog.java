@@ -30,7 +30,10 @@ public class ComponentChangeDialog extends Dialog<ChangeDialogOption>
      * @param choiceMap - map of ChangeDialogOption and StartEndRange pairs representing the choices available
      * @param resources
      */
-    public ComponentChangeDialog(Map<ChangeDialogOption, Pair<Temporal,Temporal>> choiceMap, ResourceBundle resources)
+    public ComponentChangeDialog(
+    		Map<ChangeDialogOption,
+    		Pair<Temporal,Temporal>> choiceMap,
+    		ResourceBundle resources)
     {
         Settings.REPEAT_CHANGE_CHOICES.get(this);
         ChangeDialogOption initialSelection = choiceMap.entrySet().iterator().next().getKey();

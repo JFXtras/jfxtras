@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import javafx.collections.ObservableList;
 import jfxtras.icalendarfx.VCalendar;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
@@ -22,15 +21,12 @@ import jfxtras.scene.control.agenda.icalendar.editors.deleters.SimpleDeleterFact
 
 public class DeleteOneTest
 {
-    
     @Test // deletes one instance of a repeating event
     public void canDeleteOneInstance()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
 
         List<VCalendar> iTIPmessages = ((DeleterVEvent) SimpleDeleterFactory.newDeleter(vComponentOriginal))
                 .withDialogCallback((m) -> ChangeDialogOption.ONE)
@@ -54,7 +50,7 @@ public class DeleteOneTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
             String iTIPMessage = iTIPmessages.stream()
-                    .map(v -> v.toContent())
+                    .map(v -> v.toString())
                     .collect(Collectors.joining(System.lineSeparator()));
             assertEquals(expectediTIPMessage, iTIPMessage);
     }
@@ -63,10 +59,9 @@ public class DeleteOneTest
     public void canDeleteRecurrence()
     {
         VCalendar mainVCalendar = new VCalendar();
-        final ObservableList<VEvent> vComponents = mainVCalendar.getVEvents();
-        
         VEvent vComponentOriginal = ICalendarStaticComponents.getDaily1();
-        vComponents.add(vComponentOriginal);
+        mainVCalendar.addChild(vComponentOriginal);
+        final List<VEvent> vComponents = mainVCalendar.getVEvents();
         
         // make recurrence
         VEvent vComponentRecurrence = ICalendarStaticComponents.getDaily1()
@@ -104,7 +99,7 @@ public class DeleteOneTest
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";
             String iTIPMessage = iTIPmessages.stream()
-                    .map(v -> v.toContent())
+                    .map(v -> v.toString())
                     .collect(Collectors.joining(System.lineSeparator()));
             assertEquals(expectediTIPMessage, iTIPMessage);
     }

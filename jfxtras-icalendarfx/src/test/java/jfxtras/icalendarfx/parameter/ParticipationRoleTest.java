@@ -14,7 +14,7 @@ public class ParticipationRoleTest
     {
         String expectedContent = "CHAIR";
         ParticipationRole p = ParticipationRole.parse(expectedContent);
-        assertEquals("ROLE=" + expectedContent, p.toContent());
+        assertEquals("ROLE=" + expectedContent, p.toString());
         assertEquals(ParticipationRoleType.CHAIR, p.getValue());
     }
 
@@ -23,7 +23,7 @@ public class ParticipationRoleTest
     {
         String expectedContent = "GRAND-POOBAH";
         ParticipationRole p = ParticipationRole.parse(expectedContent);
-        assertEquals("ROLE=" + expectedContent, p.toContent());
+        assertEquals("ROLE=" + expectedContent, p.toString());
         assertEquals(ParticipationRoleType.UNKNOWN, p.getValue());
     }
 

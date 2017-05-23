@@ -25,7 +25,8 @@ public class DeleteVEventTest extends AgendaTestAbstract
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         moveTo("#hourLine11");
@@ -51,7 +52,7 @@ public class DeleteVEventTest extends AgendaTestAbstract
                 .collect(Collectors.toList());
         assertEquals(expectedStarts, starts);
         
-        assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent expectedVEvent = ICalendarStaticComponents.getDaily1()
                 .withExceptionDates("20151111T100000")
                 .withSequence(1);
@@ -64,7 +65,8 @@ public class DeleteVEventTest extends AgendaTestAbstract
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         moveTo("#hourLine11");
@@ -88,7 +90,7 @@ public class DeleteVEventTest extends AgendaTestAbstract
                 .collect(Collectors.toList());
         assertEquals(expectedStarts, starts);
         
-        assertEquals(1, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(1, agenda.getVCalendar().getVEvents().size());
         VEvent expectedVEvent = ICalendarStaticComponents.getDaily1()
                 .withExceptionDates("20151111T100000")
                 .withSequence(1);
@@ -101,7 +103,8 @@ public class DeleteVEventTest extends AgendaTestAbstract
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
         TestUtil.runThenWaitForPaintPulse( () -> {
-            agenda.getVCalendar().getVEvents().add(ICalendarStaticComponents.getDaily1());
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getDaily1());
+            agenda.refresh();
         });
         
         moveTo("#hourLine11");
@@ -116,6 +119,6 @@ public class DeleteVEventTest extends AgendaTestAbstract
         clickOn("#changeDialogOkButton");
         
         assertEquals(0, agenda.appointments().size());
-        assertEquals(0, agenda.getVCalendar().getAllVComponents().size());
+        assertEquals(0, agenda.getVCalendar().getVEvents().size());
     }
 }

@@ -1,6 +1,9 @@
 package jfxtras.icalendarfx.parameters;
 
+import jfxtras.icalendarfx.parameters.ParameterEnumBasedWithUnknown;
+import jfxtras.icalendarfx.parameters.ValueParameter;
 import jfxtras.icalendarfx.properties.ValueType;
+import jfxtras.icalendarfx.utilities.StringConverter;
 
 /**
  * VALUE
@@ -17,38 +20,38 @@ import jfxtras.icalendarfx.properties.ValueType;
  */
 public class ValueParameter extends ParameterEnumBasedWithUnknown<ValueParameter, ValueType>
 {
-//    private String unknownValue;
+	private static final StringConverter<ValueType> CONVERTER = new StringConverter<ValueType>()
+    {
+        @Override
+        public String toString(ValueType object)
+        {
+            return object.toString();
+        }
+
+        @Override
+        public ValueType fromString(String string)
+        {
+            return ValueType.enumFromName(string.toUpperCase());
+        }
+    };
     
     public ValueParameter(ValueParameter source)
     {
-        super(source);
+        super(source, CONVERTER);
     }
     
     public ValueParameter(ValueType value)
     {
-        super(value);
+        super(value, CONVERTER);
     }
     
     public ValueParameter()
     {
-        super();
+        super(CONVERTER);
     }
     
-//    @Override
-//    public List<String> parseContent(String content)
-//    {
-//        setValue(ValueType.enumFromName(content));
-//        if (getValue() == ValueType.UNKNOWN)
-//        {
-//            unknownValue = content;
-//        }
-//        return errors();
-//    } 
-
     public static ValueParameter parse(String content)
     {
-        ValueParameter parameter = new ValueParameter();
-        parameter.parseContent(content);
-        return parameter;
+    	return ValueParameter.parse(new ValueParameter(), content);
     }
 }

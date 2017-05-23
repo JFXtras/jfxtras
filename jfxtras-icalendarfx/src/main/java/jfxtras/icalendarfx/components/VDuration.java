@@ -2,7 +2,7 @@ package jfxtras.icalendarfx.components;
 
 import java.time.temporal.TemporalAmount;
 
-import javafx.beans.property.ObjectProperty;
+import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.properties.component.time.DurationProp;
 
 /**
@@ -22,32 +22,14 @@ public interface VDuration<T> extends VComponent
      * Example:
      * DURATION:PT15M
      * */
-    /** A property wrapping the {@link DurationProp} value. */
-    ObjectProperty<DurationProp> durationProperty();
     /** Gets the value of the {@link DurationProp} */
-    default DurationProp getDuration() { return durationProperty().get(); }
+    DurationProp getDuration();
     /** Sets the value of the {@link DurationProp} */
-    default void setDuration(DurationProp duration)
-    {
-        durationProperty().set(duration);
-    }
+    void setDuration(DurationProp duration);
     /** Sets the value of the {@link DurationProp} by parsing iCalendar content text */
     default void setDuration(String duration)
     {
-        if (getDuration() == null)
-        {
-            setDuration(DurationProp.parse(duration));
-        } else
-        {
-            DurationProp temp = DurationProp.parse(duration);
-            if (temp.getValue().getClass().equals(getDuration().getValue().getClass()))
-            {
-                getDuration().setValue(temp.getValue());
-            } else
-            {
-                setDuration(temp);
-            }
-        }
+    	setDuration(DurationProp.parse(duration));
     }
     /** Sets the value of the {@link DurationProp} by creating new {@link DurationProp} from the TemporalAmount parameter */
     default void setDuration(TemporalAmount duration)

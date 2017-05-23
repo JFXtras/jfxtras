@@ -2,8 +2,12 @@ package jfxtras.icalendarfx.properties.component.recurrence.rrule;
 
 import java.time.DateTimeException;
 import java.time.temporal.Temporal;
+import java.util.Collections;
 import java.util.List;
 
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElement;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRulePartBase;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
 
@@ -28,8 +32,28 @@ import jfxtras.icalendarfx.utilities.DateTimeUtilities.DateTimeType;
  * time format.  If not present, and the COUNT rule part is also not
  * present, the "RRULE" is considered to repeat forever
  */
-public class Until extends RRuleElementBase<Temporal, Until>
+public class Until extends RRulePartBase<Temporal, Until>
 {
+	@Override
+	public void setValue(Temporal value)
+	{
+        if (value != null)
+        {
+            DateTimeType type = DateTimeUtilities.DateTimeType.of(value);
+            boolean isDate = type == DateTimeType.DATE;
+            boolean isUTC = type == DateTimeType.DATE_WITH_UTC_TIME;
+            if (! (isDate || isUTC))
+            {
+                throw new DateTimeException(name() + " can't be " + type + " It must be either " +
+                        DateTimeType.DATE + "(LocalDate) or " + DateTimeType.DATE_WITH_UTC_TIME + " (ZonedDateTime with Z as zone)");
+            }
+        }
+        super.setValue(value);	
+	}
+	
+	/*
+	 * CONSTRUCTORS
+	 */
     public Until(Temporal until)
     {
         this();
@@ -39,21 +63,6 @@ public class Until extends RRuleElementBase<Temporal, Until>
     public Until()
     {
         super();
-        valueProperty().addListener((obs, oldValue, newValue) ->
-        {
-            if (newValue != null)
-            {
-                DateTimeType type = DateTimeUtilities.DateTimeType.of(newValue);
-                boolean isDate = type == DateTimeType.DATE;
-                boolean isUTC = type == DateTimeType.DATE_WITH_UTC_TIME;
-                if (! (isDate || isUTC))
-                {
-                    setValue(oldValue);
-                    throw new DateTimeException(elementType() + " can't be " + type + " It must be either " +
-                            DateTimeType.DATE + "(LocalDate) or " + DateTimeType.DATE_WITH_UTC_TIME + " (ZonedDateTime with Z as zone)");
-                }
-            }
-        });
     }
 
     public Until(Until source)
@@ -63,22 +72,21 @@ public class Until extends RRuleElementBase<Temporal, Until>
     }
 
     @Override
-    public String toContent()
+    public String toString()
     {
-        return RRuleElementType.enumFromClass(getClass()).toString() + "=" + DateTimeUtilities.temporalToString(getValue());
+        return RRuleElement.fromClass(getClass()).toString() + "=" + DateTimeUtilities.temporalToString(getValue());
     }
 
     @Override
-    public List<String> parseContent(String content)
+    protected List<Message> parseContent(String content)
     {
-        setValue(DateTimeUtilities.temporalFromString(content));
-        return errors();
+    	String valueString = extractValue(content);
+        setValue(DateTimeUtilities.temporalFromString(valueString));
+        return Collections.EMPTY_LIST;
     }
 
     public static Until parse(String content)
     {
-        Until element = new Until();
-        element.parseContent(content);
-        return element;
+    	return Until.parse(new Until(), content);
     }
 }

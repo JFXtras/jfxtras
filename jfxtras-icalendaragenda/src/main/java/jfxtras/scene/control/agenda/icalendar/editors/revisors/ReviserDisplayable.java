@@ -11,17 +11,21 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAmount;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javafx.util.Callback;
 import javafx.util.Pair;
 import jfxtras.icalendarfx.VCalendar;
+import jfxtras.icalendarfx.VChild;
 import jfxtras.icalendarfx.components.VDisplayable;
-import jfxtras.icalendarfx.properties.Property;
-import jfxtras.icalendarfx.properties.PropertyType;
+import jfxtras.icalendarfx.properties.VPropertyElement;
 import jfxtras.icalendarfx.properties.component.recurrence.RecurrenceRule;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
@@ -188,7 +192,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         {
             throw new RuntimeException("Can't revise. Original component is invalid:" + System.lineSeparator() + 
                     vComponentEditedCopy.errors().stream().collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
-                    vComponentEditedCopy.toContent());
+                    vComponentEditedCopy);
         }
         
         List<VCalendar> itipMessages = new ArrayList<>();
@@ -214,13 +218,13 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
             }
             adjustStartAndEnd(vComponentEditedCopy, vComponentOriginal);
             vComponentEditedCopy.setDateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z")));
-            message.addVComponent(vComponentEditedCopy);
+            message.addChild(vComponentEditedCopy);
             itipMessages.add(message);
             break;
         }
         case WITH_EXISTING_REPEAT:
             // Find which properties changed
-            List<PropertyType> changedProperties = findChangedProperties(vComponentEditedCopy, vComponentOriginal);
+            Collection<VPropertyElement> changedProperties = findChangedProperties(vComponentEditedCopy, vComponentOriginal);
 //            System.out.println("changedProperties:" + changedProperties);
             /* Note:
              * time properties must be checked separately because changes are stored in startRecurrence and endRecurrence,
@@ -253,7 +257,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                     adjustDateTime(vComponentEditedCopy);
                     
                     VCalendar requestMessage = Reviser.emptyRequestiTIPMessage();
-                    requestMessage.addVComponent(vComponentEditedCopy);
+                    requestMessage.addChild(vComponentEditedCopy);
                     itipMessages.add(requestMessage);
                     // Note: Child recurrences become orphans and get deleted when the iTIP message is processed
                     break;
@@ -263,13 +267,13 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                     adjustDateTime(vComponentEditedCopy);
                     
                     VCalendar requestMessage = Reviser.emptyRequestiTIPMessage();
-                    requestMessage.addVComponent(vComponentEditedCopy);
+                    requestMessage.addChild(vComponentEditedCopy);
                     itipMessages.add(requestMessage);
                     
                     // update child recurrences
                     VCalendar publishMessage = Reviser.emptyPublishiTIPMessage();
                     List<VDisplayable<?>> children = adjustRecurrenceChildren(startRecurrence, startOriginalRecurrence);
-                    publishMessage.addAllVComponents(children);
+                    children.forEach((c) -> publishMessage.addChild(c));
                     itipMessages.add(publishMessage);
                     break;
                 }
@@ -282,12 +286,12 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                     
                     // request message to change original component
                     VCalendar requestMessage = Reviser.emptyRequestiTIPMessage();
-                    requestMessage.addVComponent(thisAndFutureVComponent);
+                    requestMessage.addChild(thisAndFutureVComponent);
                     itipMessages.add(requestMessage);
 
                     // publish message to add new the-and-future component
                     VCalendar publishMessage = Reviser.emptyPublishiTIPMessage();
-                    publishMessage.addVComponent(vComponentEditedCopy);
+                    publishMessage.addChild(vComponentEditedCopy);
                     thisAndFutureVComponent.incrementSequence();
                     incrementSequence = false;
                     itipMessages.add(publishMessage);
@@ -301,12 +305,12 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                     
                     // request message to change original component
                     VCalendar requestMessage = Reviser.emptyRequestiTIPMessage();
-                    requestMessage.addVComponent(thisAndFutureVComponent);
+                    requestMessage.addChild(thisAndFutureVComponent);
                     itipMessages.add(requestMessage);
 
                     // publish message to add new the-and-future component
                     VCalendar publishMessage = Reviser.emptyPublishiTIPMessage();
-                    publishMessage.addVComponent(vComponentEditedCopy);
+                    publishMessage.addChild(vComponentEditedCopy);
                     thisAndFutureVComponent.incrementSequence();
                     incrementSequence = false;
                     itipMessages.add(publishMessage);
@@ -322,14 +326,14 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                                 c.setDateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z")));
                             })
                             .collect(Collectors.toList());
-                    publishMessage.addAllVComponents(children);
+                    children.forEach((c) -> publishMessage.addChild(c));
                     break;
                 }
                 case ONE:
                 {
                     editOne(vComponentEditedCopy);
                     VCalendar message = Reviser.emptyPublishiTIPMessage();
-                    message.addVComponent(vComponentEditedCopy);
+                    message.addChild(vComponentEditedCopy);
                     itipMessages.add(message);
                     break;
                 }
@@ -338,7 +342,6 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                 }
             }
         }
-
         if (incrementSequence)
         {
             vComponentEditedCopy.incrementSequence();
@@ -365,7 +368,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
                     try
                     {
                         VDisplayable<?> vCopy = v.getClass().newInstance();
-                        v.copyInto(vCopy);
+                        v.copyChildrenInto(vCopy);
                         vCopy.setRecurrenceId(new RecurrenceId(newRecurreneId));
                         return vCopy;
                     } catch (Exception e)
@@ -414,7 +417,9 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         // handle WEEKLY day of week change
         if (vComponentEditedCopy.getRecurrenceRule() != null)
         {
-            ByDay byDay = (ByDay) vComponentEditedCopy.getRecurrenceRule().getValue().lookupByRule(ByDay.class);
+        	ByDay byDay = (ByDay) vComponentEditedCopy.getRecurrenceRule()
+            		.getValue()
+            		.lookupByRule(ByDay.class);
             if (byDay != null)
             {
                 DayOfWeek originalDayOfWeek = DayOfWeek.from(vComponentEditedCopy.getDateTimeStart().getValue());
@@ -430,73 +435,81 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
     }
     
     /**
-     * Generates a list of {@link PropertyType} that have changed between the original
+     * Generates a list of {@link VPropertyElement} that have changed between the original
      * and edited VComponents.
      * 
      * @param vComponentEditedCopy edited VComponent
      * @param vComponentOriginalCopy original VComponent
-     * @return list of changed {@link PropertyType}
+     * @return list of changed {@link VPropertyElement}
      */
-    List<PropertyType> findChangedProperties(U vComponentEditedCopy, U vComponentOriginalCopy)
-
+    Collection<VPropertyElement> findChangedProperties(U vComponentEditedCopy, U vComponentOriginalCopy)
     {
-        List<PropertyType> changedProperties = new ArrayList<>();
+        Map<String, VChild> editedMap = vComponentEditedCopy.childrenUnmodifiable()
+        	.stream()
+        	.collect(Collectors.toMap(v -> v.name(), v -> v));
 
-        List<PropertyType> changedPropertiesToNonNull = vComponentEditedCopy.childrenUnmodifiable()
-                .stream()
-                .filter(c -> c instanceof Property<?>)
-                .map(p -> ((Property<?>) p).propertyType())
-                .filter(t -> 
-                {
-                    Object p1 = t.getProperty(vComponentEditedCopy);
-                    Object p2 = t.getProperty(vComponentOriginalCopy);
-                    return ! p1.equals(p2);
-                })
-//                .peek(t -> System.out.println("changedPropertiesToNonNull:" + t))
-                .collect(Collectors.toList());
-        changedProperties.addAll(changedPropertiesToNonNull);
+        Map<String, VChild> originalMap = vComponentOriginalCopy.childrenUnmodifiable()
+            	.stream()
+            	.collect(Collectors.toMap(v -> v.name(), v -> v));
         
-        List<PropertyType> propertiesChangedToNull = vComponentOriginalCopy.childrenUnmodifiable()
-                .stream()
-                .filter(c -> c instanceof Property<?>)
-                .map(p -> ((Property<?>) p).propertyType())
-                .filter(t -> t.getProperty(vComponentEditedCopy) == null)
-//                .peek(t -> System.out.println("propertiesChangedToNull:" + t))
-                .collect(Collectors.toList());
-        changedProperties.addAll(propertiesChangedToNull);
+        List<VPropertyElement> c1 = editedMap.entrySet().stream()
+        	.filter(e ->
+        	{
+        		String key = e.getKey();
+        		VChild edited = e.getValue();
+        		VChild original = originalMap.get(key);
+//        		System.out.println("EO1:" + edited + " " + original);
+        		return ! Objects.equals(edited, original);
+        	})
+        	.map(e -> e.getValue())
+        	.map(v -> VPropertyElement.fromClass(v.getClass()))
+        	.collect(Collectors.toList());
         
-        /* Note:
-         * time properties must be checked separately because changes are stored in startRecurrence and endRecurrence,
-         * not the VComponents DTSTART and DTEND yet.  The changes to DTSTART and DTEND are made after the dialog
-         * question is answered. */
+        List<VPropertyElement> c2 = originalMap.entrySet().stream()
+            	.filter(e ->
+            	{
+            		String key = e.getKey();
+            		VChild original = e.getValue();
+            		VChild edited = editedMap.get(key);
+//            		System.out.println("EO2:" + edited + " " + original);
+            		return ! Objects.equals(edited, original);
+            	})
+            	.map(e -> e.getValue())
+            	.map(v -> VPropertyElement.fromClass(v.getClass()))
+            	.collect(Collectors.toList());
+        
+        Set<VPropertyElement> changedChildern = new HashSet<>();
+        changedChildern.addAll(c1);
+        changedChildern.addAll(c2);
         if (! startOriginalRecurrence.equals(startRecurrence))
         {
-            changedProperties.add(PropertyType.DATE_TIME_START);
+        	changedChildern.add(VPropertyElement.DATE_TIME_START);
         }
-        return changedProperties;
+//        System.out.println("changedChildern:" + changedChildern);
+        return changedChildern;
     }
 
     /**
-     * Returned list of {@link PropertyType} values, that when changed, necessitate a user dialog to determine scope of change.
-     * If changes do not contain ANY {@link PropertyType} in the returned list then changes can proceed automatically
+     * Returned list of {@link VPropertyElement} values, that when changed, necessitate a user dialog to determine scope of change.
+     * If changes do not contain ANY {@link VPropertyElement} in the returned list then changes can proceed automatically
      * without a user dialog.
      * 
-     * @return {@code List<PropertyType>} that when any are changed require a user dialog to request scope of change
+     * @return {@code List<VPropertyElement>} that when any are changed require a user dialog to request scope of change
      * (e.g. ONE, ALL or THIS_AND_FUTURE)
      */
-    public List<PropertyType> dialogRequiredProperties()
+    public List<VPropertyElement> dialogRequiredProperties()
     {
         return new ArrayList<>(Arrays.asList(             
-            PropertyType.ATTACHMENT,
-            PropertyType.ATTENDEE,
-            PropertyType.CATEGORIES,
-            PropertyType.COMMENT,
-            PropertyType.CONTACT,
-            PropertyType.DATE_TIME_START,
-            PropertyType.RECURRENCE_RULE,
-            PropertyType.STATUS,
-            PropertyType.SUMMARY,
-            PropertyType.UNIFORM_RESOURCE_LOCATOR
+            VPropertyElement.ATTACHMENT,
+            VPropertyElement.ATTENDEE,
+            VPropertyElement.CATEGORIES,
+            VPropertyElement.COMMENT,
+            VPropertyElement.CONTACT,
+            VPropertyElement.DATE_TIME_START,
+            VPropertyElement.RECURRENCE_RULE,
+            VPropertyElement.STATUS,
+            VPropertyElement.SUMMARY,
+            VPropertyElement.UNIFORM_RESOURCE_LOCATOR
             ));
     }
     
@@ -533,7 +546,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         try
         {
             thisAndFutureVComponent = (U) getVComponentOriginal().getClass().newInstance();
-            getVComponentOriginal().copyInto(thisAndFutureVComponent);
+            getVComponentOriginal().copyChildrenInto(thisAndFutureVComponent);
         } catch (InstantiationException | IllegalAccessException e)
         {
             e.printStackTrace();
@@ -659,7 +672,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         {
             throw new RuntimeException("Invalid component:" + System.lineSeparator() + 
                     thisAndFutureVComponent.errors().stream().collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
-                    thisAndFutureVComponent.toContent());
+                    thisAndFutureVComponent.toString());
         }
         return thisAndFutureVComponent;
     }

@@ -22,11 +22,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElementType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RRuleElement;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.WeekStart;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRuleAbstract;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay.ByDayPair;
 import jfxtras.icalendarfx.utilities.DateTimeUtilities;
 
@@ -62,11 +62,19 @@ import jfxtras.icalendarfx.utilities.DateTimeUtilities;
  * */
 public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
 {   
-    /** Start of week - default start of week is Monday */
-    public ObjectProperty<DayOfWeek> weekStartProperty() { return weekStart; }
-    private ObjectProperty<DayOfWeek> weekStart =  new SimpleObjectProperty<>(this, RRuleElementType.WEEK_START.toString()); // bind to WeekStart element
-    public DayOfWeek getWeekStart() { return (weekStart.get() == null) ? WeekStart.DEFAULT_WEEK_START : weekStart.get(); }
     private final static int MIN_DAYS_IN_WEEK = 4;
+    /** Start of week - default start of week is Monday */
+    private DayOfWeek getWeekStart()
+    {
+    	if (getParent() != null)
+    	{
+    		WeekStart weekStart = ((RecurrenceRuleValue) getParent()).getWeekStart();
+			return (weekStart == null) ? WeekStart.DEFAULT_WEEK_START : weekStart.getValue();
+    	} else
+    	{
+    		return WeekStart.DEFAULT_WEEK_START;
+    	}
+	}
     
     //CONSTRUCTORS
     /** Parse iCalendar compliant list of days of the week.  For example 1MO,2TU,4SA
@@ -101,7 +109,7 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
         ByDayPair[] dayArray = daysOfWeek.stream()
             .map(d -> new ByDayPair(d,0))
             .toArray(size -> new ByDayPair[size]);
-        setValue(FXCollections.observableArrayList(dayArray));
+        setValue(dayArray);
     }
 
     
@@ -190,8 +198,9 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
     }
     
     @Override
-    public String toContent()
+    public String toString()
     {
+    	if (getValue() == null) return "";
         String days = getValue().stream()
                 .map(d ->
                 {
@@ -199,10 +208,10 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
                     return (d.ordinal == 0) ? day : d.ordinal + day;
                 })
                 .collect(Collectors.joining(","));
-        return RRuleElementType.BY_DAY + "=" + days; //.substring(0, days.length()-1); // remove last comma
+        return RRuleElement.BY_DAY + "=" + days; //.substring(0, days.length()-1); // remove last comma
     }
     
-    @Override // TODO - try to REMOVE startTemporal
+    @Override
     public Stream<Temporal> streamRecurrences(Stream<Temporal> inStream, ChronoUnit chronoUnit, Temporal dateTimeStart)
     {
         /* TODO - according to iCalendar standard a ByDay rule doesn't need any specified days - should use day from DTSTART,
@@ -259,17 +268,14 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
             return inStream.flatMap(date -> 
             {
                 List<Temporal> dates = new ArrayList<>();
-//                boolean sortNeeded = false;
                 for (ByDayPair byDayPair : getValue())
                 {
                     if (byDayPair.ordinal == 0)
                     { // add every matching day of week in month
-//                        sortNeeded = true;
                         Month myMonth = Month.from(date);
                         for (int weekNum=1; weekNum<=5; weekNum++)
                         {
                             Temporal newTemporal = date.with(TemporalAdjusters.dayOfWeekInMonth(weekNum, byDayPair.dayOfWeek));
-//                            if (Month.from(newTemporal) == myMonth && ! DateTimeUtilities.isBefore(newTemporal, dateTimeStart))
                             if (Month.from(newTemporal) == myMonth)
                             {
                                 dates.add(newTemporal);
@@ -280,7 +286,6 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
                         Month myMonth = Month.from(date);
                         Temporal newTemporal = date.with(TemporalAdjusters.dayOfWeekInMonth(byDayPair.ordinal, byDayPair.dayOfWeek));
 
-//                        if (Month.from(newTemporal) == myMonth && ! DateTimeUtilities.isBefore(newTemporal, dateTimeStart))
                         if (Month.from(newTemporal) == myMonth)
                         {
                             dates.add(newTemporal);
@@ -288,25 +293,21 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
                     }
                 }
                 if (getValue().size() > 1) Collections.sort(dates, DateTimeUtilities.TEMPORAL_COMPARATOR);
-//                dates.stream().forEach(d -> System.out.println(d + " " + dateTimeStart));
                 return dates.stream();
             });
         case YEARS:
             return inStream.flatMap(date -> 
             {
                 List<Temporal> dates = new ArrayList<>();
-//                boolean sortNeeded = false;
                 for (ByDayPair byDayPair : getValue())
                 {
                     if (byDayPair.ordinal == 0)
                     { // add every matching day of week in year
-//                        sortNeeded = true;
                         Temporal newDate = date
                                 .with(TemporalAdjusters.firstDayOfYear())
                                 .with(TemporalAdjusters.nextOrSame(byDayPair.dayOfWeek));
                         while (Year.from(newDate).equals(Year.from(date)))
                         {
-//                            if (! DateTimeUtilities.isBefore(newDate, dateTimeStart)) dates.add(newDate);
                             dates.add(newDate);
                             newDate = newDate.plus(1, ChronoUnit.WEEKS);
                         }
@@ -314,7 +315,6 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
                     { // if never any ordinal numbers then sort is not required
                         Temporal newDate = date.with(dayOfWeekInYear(byDayPair.ordinal, byDayPair.dayOfWeek));
                         dates.add(newDate);
-//                        if (! DateTimeUtilities.isBefore(newDate, dateTimeStart)) dates.add(newDate);
                     }
                 }
                 if (getValue().size() > 1) Collections.sort(dates, DateTimeUtilities.TEMPORAL_COMPARATOR);
@@ -392,38 +392,16 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
         public String toString()
         {
             return super.toString() + ", " + getDayOfWeek() + ", " + getOrdinal();
-        }
-        
+        }        
     }
     
-//    /** Match up iCalendar 2-character day of week to Java Time DayOfWeek */
-//    @Deprecated
-//    public enum ICalendarDayOfWeek
-//    {
-//        MO (DayOfWeek.MONDAY)
-//      , TU (DayOfWeek.TUESDAY)
-//      , WE (DayOfWeek.WEDNESDAY)
-//      , TH (DayOfWeek.THURSDAY)
-//      , FR (DayOfWeek.FRIDAY)
-//      , SA (DayOfWeek.SATURDAY)
-//      , SU (DayOfWeek.SUNDAY);
-//      
-//        private DayOfWeek dow;
-//      
-//        ICalendarDayOfWeek(DayOfWeek dow)
-//        {
-//          this.dow = dow;
-//        }
-//      
-//        public DayOfWeek getDayOfWeek() { return dow; }
-//    }
-    
     @Override
-    public List<String> parseContent(String dayPairs)
+    protected List<Message> parseContent(String dayPairs)
     {
+    	String valueString = extractValue(dayPairs);
         List<ByDayPair> dayPairsList = new ArrayList<ByDayPair>();
         Pattern p = Pattern.compile("(-?[0-9]+)?([A-Z]{2})");
-        Matcher m = p.matcher(dayPairs);
+        Matcher m = p.matcher(valueString);
         while (m.find())
         {
             String token = m.group();
@@ -440,25 +418,19 @@ public class ByDay extends ByRuleAbstract<ByDayPair, ByDay>
             } else
             { // has no ordinal number
                 DayOfWeek dayOfWeek = DateTimeUtilities.dayOfWeekFromAbbreviation(token);
-//                DayOfWeek dayOfWeek = ICalendarDayOfWeek.valueOf(token).getDayOfWeek();
                 dayPairsList.add(new ByDayPair(dayOfWeek, 0));
             }
         }
-        setValue(FXCollections.observableArrayList(dayPairsList));
-        return errors();
+        setValue(dayPairsList);
+//        return errors()  // Too slow - is it OK to ignore?
+//        	.stream()
+//        	.map(s -> new Message(this, s, MessageEffect.MESSAGE_ONLY))
+//        	.collect(Collectors.toList());
+        return Collections.EMPTY_LIST;
     }
 
     public static ByDay parse(String content)
     {
-        ByDay element = new ByDay();
-        element.parseContent(content);
-        return element;
+    	return ByDay.parse(new ByDay(), content);
     }
-    
-//    @Override
-//    public boolean isValid()
-//    {
-//        // TODO Auto-generated method stub
-//        return false;
-//    }
 }

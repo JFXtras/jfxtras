@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByHour;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByRuleIntegerAbstract;
+
 /**
  * By Hour 
  * BYHOUR
@@ -98,8 +101,6 @@ public class ByHour extends ByRuleIntegerAbstract<ByHour>
     
     public static ByHour parse(String content)
     {
-        ByHour element = new ByHour();
-        element.parseContent(content);
-        return element;
+    	return ByHour.parse(new ByHour(), content);
     }
 }
