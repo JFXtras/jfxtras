@@ -196,7 +196,7 @@ implements AgendaSkin
 		LocalDate lStartLocalDate = lLocalDates.get(0);
 		LocalDate lEndLocalDate = lLocalDates.get(lLocalDates.size() - 1);
 		if (getSkinnable().getLocalDateTimeRangeCallback() != null) {
-			Agenda.LocalDateTimeRange lRange = new Agenda.LocalDateTimeRange(lStartLocalDate.atStartOfDay(), lEndLocalDate.plusDays(1).atStartOfDay());
+			Agenda.LocalDateTimeRange lRange = new Agenda.LocalDateTimeRange(lStartLocalDate.atStartOfDay(), lEndLocalDate.atStartOfDay());
 			getSkinnable().getLocalDateTimeRangeCallback().call(lRange);
 		}
 		if (getSkinnable().getCalendarRangeCallback() != null) {
