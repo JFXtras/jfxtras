@@ -216,6 +216,9 @@ public class ResponsivePane extends StackPane {
 	 * 
 	 */
 	public ResponsivePane() {
+
+		// just for easy reading
+		SINGULARITY_LAYOUT.getRoot().setId("ResponsivePane.emptyLayout");
 		
 		// default device sizes
 		setDeviceSize(Device.PHONE, Diagonal.inch(3.5));

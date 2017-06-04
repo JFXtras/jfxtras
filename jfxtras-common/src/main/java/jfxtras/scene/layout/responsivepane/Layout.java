@@ -58,4 +58,11 @@ public class Layout {
 	public String describeSizeConstraints() {
 		return getSizeAtLeast() + (getOrientation() == null ? "" : "-" + getOrientation());
 	}
+	
+	public String toString() {
+		return super.toString()
+		    + (getRoot() == null || getRoot().getId() == null ? "" : ", root-id=" + getRoot().getId())
+		    + (getRoot() == null? "" : ", root=" + getRoot())
+		    ;
+	}
 }

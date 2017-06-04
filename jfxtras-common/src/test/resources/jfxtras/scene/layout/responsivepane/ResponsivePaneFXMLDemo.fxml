@@ -5,39 +5,69 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
-<?import jfxtras.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
 <?import jfxtras.scene.layout.responsivepane.*?>
 <?import java.net.*?>
 
-<ResponsivePane xmlns:fx="http://javafx.com/fxml" debug="true" trace="false" fx:controller="jfxtras.scene.layout.responsivepane.SimpleController">
-	<reusableNodes>
-		<CalendarPicker id="id1"/>
-		<Button text="refButton" id="id2"/>
-	</reusableNodes>
-	
-	<layouts>
-		<Layout sizeAtLeast="4.0in">
-			<VBox>
-				<Ref to="id1"/>
-				<Label text="phone"/>
-			</VBox>
-		</Layout>
-		
-		<Layout sizeAtLeast="10.0in">
-			<HBox>
-				<Ref to="id1" id="l2r1"/>
-				<Ref to="id2"/>
-				<Label text="tablet"/>
-			</HBox>
-		</Layout>		
-	</layouts>
-	
-	<sceneStylesheets>
-		<Stylesheet sizeAtLeast="4.0in">  <URL value="@phone.css"/> </Stylesheet>
-		<Stylesheet sizeAtLeast="10.0in"> <URL value="@desktop.css"/> </Stylesheet>
-	</sceneStylesheets>
-	
-	<myStylesheets>
-		<Stylesheet sizeAtLeast="8.0in">  <URL value="@tablet.css"/> </Stylesheet>
-	</myStylesheets>
+<ResponsivePane debug="true" prefHeight="900.0" prefWidth="1600.0" trace="false" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jfxtras.scene.layout.responsivepane.ResponsivePaneFXMLTestBasicController">
+    <reusableNodes>
+        <Label id="label" text="refLabel" />
+        <Button id="button" text="refButton" />
+    </reusableNodes>
+    
+    <layouts>
+        <Layout sizeAtLeast="3.0in">
+            <VBox>
+                <Ref to="label" />
+                <Label text="layout_3.0" />
+            </VBox>
+        </Layout>
+         
+        <Layout sizeAtLeast="width:20cm">
+            <HBox>
+                <Ref id="labelid" to="label" />
+                <Ref to="button" />
+                <Label text="layout_width3.0" />
+            </HBox>
+        </Layout>     
+         
+        <Layout sizeAtLeast="width:40cm">
+            <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" styleClass="background">
+                <center>
+                    <AnchorPane fx:id="ilustrationAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" BorderPane.alignment="CENTER_RIGHT">
+                        <children>
+                            <ImageView fitHeight="900.0" fitWidth="1315.0" layoutX="180.0" pickOnBounds="true" scaleX="1.2" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <image>
+                                    <Image url="@../img/dashboard/dashboard.png" />
+                                </image>
+                            </ImageView>
+                            <Button fx:id="minimizeButton" layoutX="1243.0" layoutY="12.0" mnemonicParsing="false" styleClass="button-action--minimize" AnchorPane.rightAnchor="46.0" AnchorPane.topAnchor="10.0" />
+                            <Button fx:id="closeButton" layoutX="1278.0" layoutY="12.0" mnemonicParsing="false" styleClass="button-action--close" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                        </children>
+                        <BorderPane.margin>
+                            <Insets />
+                        </BorderPane.margin>
+                    </AnchorPane>
+                </center>
+                <left>
+                </left>
+                <left>
+                    <AnchorPane fx:id="leftAnchorPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #334455;" BorderPane.alignment="CENTER" />
+                </left>
+            </BorderPane>
+        </Layout>     
+    </layouts>
+     
+    <sceneStylesheets>
+        <Stylesheet sizeAtLeast="3.0in">  
+            <URL value="@../styles/controller/res1024/Dashboard.css" /> 
+        </Stylesheet>
+        <Stylesheet sizeAtLeast="width:20cm"> 
+            <URL value="@../styles/controller/res1280/Dashboard.css" /> 
+        </Stylesheet>
+        <Stylesheet sizeAtLeast="width:40cm"> 
+            <URL value="@../styles/controller/res1600/Dashboard.css" /> 
+        </Stylesheet>
+    </sceneStylesheets>
 </ResponsivePane>

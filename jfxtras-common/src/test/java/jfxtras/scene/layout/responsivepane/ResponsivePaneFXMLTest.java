@@ -93,12 +93,20 @@ public class ResponsivePaneFXMLTest extends JFXtrasGuiTest {
 	 */
 	@Test
 	public void basic() {
+
 		// GIVEN a pane with a compound configuration
 		responsivePane = (ResponsivePane)find("#responsivePane");
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(10.0);
 		});
 		
+		// THEN all the layouts haven been assigned in the controller
+		Assert.assertNotNull(ResponsivePaneFXMLTestBasicController.responsivePaneFXMLTestBasicController.layout3_0in);
+		Assert.assertNotNull(ResponsivePaneFXMLTestBasicController.responsivePaneFXMLTestBasicController.size100_0cm);
+		Assert.assertNotNull(ResponsivePaneFXMLTestBasicController.responsivePaneFXMLTestBasicController.size100_0cmL);
+		Assert.assertNotNull(ResponsivePaneFXMLTestBasicController.responsivePaneFXMLTestBasicController.tablet);
+		Assert.assertNotNull(ResponsivePaneFXMLTestBasicController.responsivePaneFXMLTestBasicController.width_3_0in);
+
 		// THEN the reusable nodes all have been loaded
 		Assert.assertEquals(2, responsivePane.getReusableNodes().size());
 		Assert.assertTrue(responsivePane.getReusableNodes().get(0) instanceof Label);
