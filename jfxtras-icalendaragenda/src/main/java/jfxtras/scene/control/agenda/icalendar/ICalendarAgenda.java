@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import javafx.application.Platform;
@@ -283,6 +284,28 @@ public class ICalendarAgenda extends Agenda
     /** Sets the value of the recurrence factory */
     public void setRecurrenceFactory(RecurrenceFactory<Appointment> recurrenceFactory) { this.recurrenceFactory = recurrenceFactory; }
 
+    
+    /*
+     * This consumer's opperation is performed when a change is made to the vCalendar by agenda
+     * It can be used to notify client code of changes. 
+     */
+    private Consumer<VCalendar> calendarConsumer = (v) ->
+    {
+    	/* default consumer does nothing
+    	 * 
+    	 * Example - run a notional method that synchs the calendar with external data store.
+    	 * synchCalendar(v);
+    	 */
+    };
+	public void setVCalendarUpdatedConsumer(Consumer<VCalendar> calendarConsumer)
+	{
+		this.calendarConsumer = calendarConsumer;
+	}
+	public Consumer<VCalendar> getVCalendarUpdatedConsumer()
+	{
+		return calendarConsumer;
+	}
+	
     /*
      * Category list - contains the descriptive part of AppointmentGroups
      */
@@ -362,6 +385,7 @@ public class ICalendarAgenda extends Agenda
                             appointment.getStartTemporal()
                             ).delete();
                     getVCalendar().processITIPMessage(cancelMessage);
+                    calendarConsumer.accept(getVCalendar()); // provide notification of calendar change
                     refresh();
                 }
             }
@@ -469,6 +493,7 @@ public class ICalendarAgenda extends Agenda
             Object[] params = revisorParamGenerator(vComponent, appointment);
             List<VCalendar> iTIPMessage = SimpleRevisorFactory.newReviser(vComponent, params).revise();
             getVCalendar().processITIPMessage(iTIPMessage);
+            calendarConsumer.accept(getVCalendar()); // provide notification of calendar change
             appointmentStartOriginalMap.put(System.identityHashCode(appointment), appointment.getStartTemporal()); // update start map
             Platform.runLater(() -> refresh());
             return null;
@@ -527,6 +552,7 @@ public class ICalendarAgenda extends Agenda
                 popupScene.getEditDisplayableTabPane().iTIPMessagesProperty().addListener((obs, oldValue, newValue) ->
                 {
                     newValue.forEach(message -> getVCalendar().processITIPMessage(message));
+                    calendarConsumer.accept(getVCalendar()); // provide notification of calendar change
                     popupStage.hide();
                     refresh();
                 });
@@ -585,6 +611,8 @@ public class ICalendarAgenda extends Agenda
                                 VCalendar message = Reviser.emptyPublishiTIPMessage();
                                 message.addChild(newVComponent);
                                 getVCalendar().processITIPMessage(message);
+                                calendarConsumer.accept(getVCalendar()); // provide notification of calendar change
+//                                System.out.println("create vcomponent");
                                 List<VChild> calendarChildren = vCalendar.childrenUnmodifiable();
                                 VDisplayable<?> v = (VDisplayable<?>) calendarChildren.get(calendarChildren.size()-1); // get last child
                                 vComponentAppointmentMap.put(System.identityHashCode(v), new ArrayList<>(Arrays.asList(appointment)));
@@ -629,6 +657,7 @@ public class ICalendarAgenda extends Agenda
                                 appointment.getStartTemporal()
                                 ).delete();
                         getVCalendar().processITIPMessage(cancelMessage);
+                        calendarConsumer.accept(getVCalendar()); // provide notification of calendar change
                     });
                 }
             }

@@ -1,4 +1,4 @@
-package jfxtras.scene.control.agenda.test;
+package jfxtras.scene.control.agenda.icalendar;
 
 public final class OSInfo {
 	

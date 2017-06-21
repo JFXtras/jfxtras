@@ -17,6 +17,7 @@ import jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup.VTo
 import jfxtras.scene.control.agenda.icalendar.agenda.DeleteVEventTest;
 import jfxtras.scene.control.agenda.icalendar.agenda.GraphicallyChangeTest;
 import jfxtras.scene.control.agenda.icalendar.agenda.MakeNewVEventsTest;
+import jfxtras.scene.control.agenda.icalendar.agenda.NotifyCalendarUpdate;
 import jfxtras.scene.control.agenda.icalendar.agenda.RenderVEventsTest;
 import jfxtras.scene.control.agenda.icalendar.agenda.RevisePopupTest;
 import jfxtras.scene.control.agenda.icalendar.agenda.VEventDisplayPopupTest;
@@ -66,6 +67,7 @@ import jfxtras.scene.control.agenda.icalendar.misc.MakeAppointmentsTest;
     DeleteVEventTest.class,
     GraphicallyChangeTest.class,
     MakeNewVEventsTest.class,
+    NotifyCalendarUpdate.class,
     RenderVEventsTest.class,
     RevisePopupTest.class,
     VEventDisplayPopupTest.class,
