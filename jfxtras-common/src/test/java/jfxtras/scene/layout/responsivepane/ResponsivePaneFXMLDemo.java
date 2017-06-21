@@ -31,14 +31,9 @@ package jfxtras.scene.layout.responsivepane;
 
 
 import java.io.IOException;
-import java.net.URL;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import jfxtras.fxml.JFXtrasBuilderFactory;
 
 public class ResponsivePaneFXMLDemo extends Application {
 
@@ -49,19 +44,19 @@ public class ResponsivePaneFXMLDemo extends Application {
 	@Override
 	public void start(Stage stage) throws IOException {
 		
-		String lName = this.getClass().getSimpleName() + ".fxml";
-		URL lURL = this.getClass().getResource(lName);
-		System.out.println("loading FXML " + lName + " -> " + lURL);
-		if (lURL == null) throw new IllegalStateException("FXML file not found: " + lName);
-		Parent lRoot = (Parent)FXMLLoader.load(lURL, null, new JFXtrasBuilderFactory());
-		
-        // setup scene
-		Scene scene = new Scene(lRoot);
-		
-        // create stage
-        stage.setTitle(this.getClass().getSimpleName());
-        stage.setScene(scene);
-        stage.show();	
+//		String lName = this.getClass().getSimpleName() + ".fxml";
+//		URL lURL = this.getClass().getResource(lName);
+//		System.out.println("loading FXML " + lName + " -> " + lURL);
+//		if (lURL == null) throw new IllegalStateException("FXML file not found: " + lName);
+//		Parent lRoot = (Parent)FXMLLoader.load(lURL, null, new jfxtras.fxml.JFXtrasBuilderFactory()); // requires JFXtras FXML
+//		
+//        // setup scene
+//		Scene scene = new Scene(lRoot);
+//		
+//        // create stage
+//        stage.setTitle(this.getClass().getSimpleName());
+//        stage.setScene(scene);
+//        stage.show();	
 	}
 	
 }
