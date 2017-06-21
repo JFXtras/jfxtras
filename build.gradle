@@ -180,7 +180,6 @@ project(':jfxtras-agenda') {
 
 project(':jfxtras-common') {
     dependencies {
-        testCompile project(':jfxtras-fxml')
         testCompile project(':jfxtras-test-support')
     }
 }
