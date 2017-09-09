@@ -319,4 +319,23 @@ public class NodeUtil {
 		Class<?> c = n.getClass();
 		return c.getResource("/" + c.getPackage().getName().replaceAll("\\.", "/") + "/" + c.getSimpleName() + ".css").toExternalForm();
 	}
+
+	/**
+	 * Determine if a node is effectively visible.
+	 * This means that if the node or any of its parents are not visible, the node is effectively not visible.
+	 * Otherwise it is visible.
+	 * 
+	 * @param n
+	 * @return
+	 */
+    static public boolean isEffectivelyVisible(Node n) {
+    	while (n != null) {
+    		if (!n.isVisible()) {
+    			return false;
+    		}
+    		n = n.getParent();
+    	}
+    	return true;
+    }
+
 }
