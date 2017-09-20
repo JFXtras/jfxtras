@@ -558,6 +558,13 @@ public class ResponsivePane extends StackPane {
 			return ppi;
 		}
 		
+		// Use command line value
+		if (System.getProperties().containsKey(PPI_SYSTEM_PROPERTY)) {
+			ppi = Double.valueOf(System.getProperty(PPI_SYSTEM_PROPERTY));
+			if (getTrace()) System.out.println("Using command line " + PPI_SYSTEM_PROPERTY + "=" + ppi); 
+			return ppi;
+		}
+		
 		// determine the DPI factor, so the thresholds become larger on screens with a higher DPI
 		ppi = 100.0; // average dpi
 		Window window = getScene().getWindow();
@@ -570,6 +577,7 @@ public class ResponsivePane extends StackPane {
 		return ppi;		
 	}
 	Double ppi;
+	final static public String PPI_SYSTEM_PROPERTY = ResponsivePane.class.getSimpleName() + ".ppi";
 	
 	/**
 	 * 
