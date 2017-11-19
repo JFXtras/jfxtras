@@ -231,8 +231,8 @@ project(':jfxtras-test-support') {
     dependencies {
         compile 'junit:junit:4.12'
         compile 'org.mockito:mockito-all:1.9.5'
-		compile "org.testfx:testfx-core:4.0.+"
-		compile "org.testfx:testfx-junit:4.0.+", {
+		compile "org.testfx:testfx-core:4.0.8-alpha"
+		compile "org.testfx:testfx-junit:4.0.8-alpha", {
 			exclude group: "junit", module: "junit"
 		}
 	}
