@@ -135,7 +135,7 @@ subprojects {
         exclude 'jfxtras/internal/*'
     }
     // all projects must be compatible with the java version specified here
-    sourceCompatibility = '1.9'
+    sourceCompatibility = '9'
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     // Needed until Gradle supports class-scanning for Java 8
@@ -236,7 +236,10 @@ project(':jfxtras-test-support') {
     dependencies {
         compile 'junit:junit:4.12'
         compile 'org.mockito:mockito-all:1.9.5'
-        compile 'org.loadui:testFx:3.1.2'
+		testCompile "org.testfx:testfx-core:4.0.8-alpha"
+		testCompile "org.testfx:testfx-junit:4.0.8-alpha", {
+			exclude group: "junit", module: "junit"
+		}
     }
 }
 
