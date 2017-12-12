@@ -60,8 +60,9 @@ public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField> impleme
 
         @Override
 	public void selectAll(){
-            calendarTimeTextField.selectAll();
-        }
+        calendarTimeTextField.selectAll();
+    }
+        
 	/*
 	 * construct the component
 	 */
@@ -75,13 +76,14 @@ public class LocalTimeTextFieldSkin extends SkinBase<LocalTimeTextField> impleme
 		calendarTimeTextField.getStyleClass().addAll(getSkinnable().getStyleClass());
 		calendarTimeTextField.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
 		calendarTimeTextField.tooltipProperty().bindBidirectional( getSkinnable().tooltipProperty() ); 
-                calendarTimeTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
+        calendarTimeTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
+		calendarTimeTextField.editableProperty().bindBidirectional( getSkinnable().editableProperty() );
 
-                getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
-                if (isFocused) {
-                    calendarTimeTextField.requestFocus();
-                }
-            });
+        getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
+            if (isFocused) {
+                calendarTimeTextField.requestFocus();
+            }
+        });
 		// bind it up
 		calendarTimeTextField.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
 		calendarTimeTextField.promptTextProperty().bindBidirectional( getSkinnable().promptTextProperty() );

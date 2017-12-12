@@ -77,22 +77,23 @@ public class LocalDateTextFieldSkin extends SkinBase<LocalDateTextField> impleme
 		calendarTextField.styleProperty().bindBidirectional( getSkinnable().styleProperty() );
 		calendarTextField.tooltipProperty().bindBidirectional( getSkinnable().tooltipProperty() ); 
 		calendarTextField.textProperty().bindBidirectional( getSkinnable().textProperty() ); 
-                calendarTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
+		calendarTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
 
-            getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
-                if (isFocused) {
-                    calendarTextField.requestFocus();
-                }
-            });
+        getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
+            if (isFocused) {
+                calendarTextField.requestFocus();
+            }
+        });
 		// bind it up
 		calendarTextField.localeProperty().bindBidirectional( getSkinnable().localeProperty() );
 		calendarTextField.allowNullProperty().bindBidirectional( getSkinnable().allowNullProperty() );
+		calendarTextField.editableProperty().bindBidirectional( getSkinnable().editableProperty() );
 		calendarTextField.promptTextProperty().bindBidirectional( getSkinnable().promptTextProperty() );
 		calendarTextField.parseErrorCallbackProperty().bindBidirectional( getSkinnable().parseErrorCallbackProperty() );
 		DateTimeToCalendarHelper.syncLocalDate(calendarTextField.calendarProperty(), getSkinnable().localDateProperty(), calendarTextField.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDates(calendarTextField.highlightedCalendars(), getSkinnable().highlightedLocalDates(), calendarTextField.localeProperty());
 		DateTimeToCalendarHelper.syncLocalDates(calendarTextField.disabledCalendars(), getSkinnable().disabledLocalDates(), calendarTextField.localeProperty());
-                DateTimeToCalendarHelper.syncLocalDate(calendarTextField.displayedCalendar(), getSkinnable().displayedLocalDate(), calendarTextField.localeProperty());
+        DateTimeToCalendarHelper.syncLocalDate(calendarTextField.displayedCalendar(), getSkinnable().displayedLocalDate(), calendarTextField.localeProperty());
 		// formatter(s) require special attention
 		DateTimeToCalendarHelper.syncDateTimeFormatterForDate(calendarTextField.dateFormatProperty(), getSkinnable().dateTimeFormatterProperty());
 		DateTimeToCalendarHelper.syncDateTimeFormattersForDate(calendarTextField.dateFormatsProperty(), getSkinnable().dateTimeFormattersProperty());

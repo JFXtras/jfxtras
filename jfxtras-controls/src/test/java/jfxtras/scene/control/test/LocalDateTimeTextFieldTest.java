@@ -438,6 +438,36 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
      *
      */
     @Test
+    public void typeValueNotAllowedWhenNotEditable() {
+        // default value is null
+        Assert.assertNull(localDateTimeTextField.getLocalDateTime());
+		
+		// Set not editable
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDateTimeTextField.setEditable(false);
+		});
+
+		// type value (we know this normally works given the typeValue test)
+        clickOn(localDateTimeTextField).write("2014-12-31 00-00-00");
+
+        // move focus away
+        clickOn("#focusHelper");
+
+		// the value should still be null
+        Assert.assertNull(localDateTimeTextField.getLocalDateTime());
+		
+		// attempt to open the popup
+		clickOn(".icon");
+		
+		// popup should be closed
+		assertPopupIsNotVisible(find(".text-field"));
+        Assert.assertFalse(localDateTimeTextField.isPickerShowing());
+    }
+
+    /**
+     *
+     */
+    @Test
     public void setValue() {
         // default value is null
         Assert.assertNull(localDateTimeTextField.getLocalDateTime());

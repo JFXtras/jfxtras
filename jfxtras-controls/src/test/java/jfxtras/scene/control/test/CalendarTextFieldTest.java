@@ -531,6 +531,37 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
+	public void typeValueNotAllowedWhenNotEditable()
+	{
+		// default value is null
+		Assert.assertNull(calendarTextField.getCalendar());
+		
+		// Set not editable
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setEditable(false);
+		});
+		
+		// type value (we know this normally works given the typeValue test)
+		clickOn(calendarTextField).write(calendarTextField.getDateFormat().format(new GregorianCalendar(2014, 11, 31).getTime()));
+		
+		// move focus away
+		clickOn("#focusHelper");
+		
+		// the value should still be null
+		Assert.assertNull(calendarTextField.getCalendar());
+		
+		// attempt to open the popup
+		clickOn(".icon");
+		
+		// popup should be closed
+		assertPopupIsNotVisible(find(".text-field"));
+        Assert.assertFalse(calendarTextField.isPickerShowing());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
 	public void typeValueUsingAdditionalDateFormatter()
 	{
 		// default value is null
@@ -592,7 +623,7 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		// open the popup
 		clickOn(".icon");
 		
-		// popup should be closed
+		// popup should be open
 		assertPopupIsVisible(find(".text-field"));
         Assert.assertTrue(calendarTextField.isPickerShowing());
 		
@@ -740,4 +771,5 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertEquals(textField.getText(), textField.getSelectedText());
     }
 
+    
 }

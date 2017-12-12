@@ -84,6 +84,9 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 	{
 		// setup component
 		createNodes();
+
+		// Bind
+        textField.editableProperty().bindBidirectional(getSkinnable().editableProperty());
 		
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observable) -> {
@@ -97,20 +100,19 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 		// focus
 		initFocusSimulation();
             
-
-            /**
-             * If the user is triggering the property, we must show the popup.
-             * We cannot bind the property directly to the popup because the
-             * popup property is read only. MoreOver, we want to show the popup
-             * next to the TextField, that's why we need to call showPopup();
-             */
-            getSkinnable().pickerShowingProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) -> {
-                if (showing) {
-                    showPopup();
-                } else if(popup != null){
-                    popup.hide();
-                }
-            });
+        /**
+         * If the user is triggering the property, we must show the popup.
+         * We cannot bind the property directly to the popup because the
+         * popup property is read only. MoreOver, we want to show the popup
+         * next to the TextField, that's why we need to call showPopup();
+         */
+        getSkinnable().pickerShowingProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) -> {
+            if (showing) {
+                showPopup();
+            } else if(popup != null){
+                popup.hide();
+            }
+        });
 	}
 	
 	/*
@@ -208,6 +210,10 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 		{
 			@Override public void handle(MouseEvent evt)
 			{
+	            // no popup if the textfield is not editable (disabled is handled by the node)
+				if (!textField.isEditable()) {
+					return;
+				}
 				if (textField.focusedProperty().get() == true) 
 				{
 					parse();
@@ -386,12 +392,10 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
     }
     private Popup popup = null;
     private CalendarTimePicker calendarPicker = null;
-	   /*
+    /*
      * 
      */
-
     private void showPopup() {
-
         if(popup == null){
             setupPopup();
         }

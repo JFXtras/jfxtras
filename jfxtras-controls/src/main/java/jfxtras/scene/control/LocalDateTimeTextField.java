@@ -237,8 +237,7 @@ public class LocalDateTimeTextField extends Control
 	public void setText(String value) { textObjectProperty.set(value); }
 	public LocalDateTimeTextField withText(String value) { setText(value); return this; }
 	
-        
-         /**
+    /**
      * Represents the current state of the Picker popup, and whether it is
      * currently visible on screen.
      */
@@ -247,4 +246,13 @@ public class LocalDateTimeTextField extends Control
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
 	public LocalDateTimeTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }
+
+    /**
+     * Is the text field editable
+     */
+    public BooleanProperty editableProperty() { return editableProperty; }
+    final private BooleanProperty editableProperty = new SimpleBooleanProperty(true);
+    public boolean isEditable() { return editableProperty.get(); }
+    public void setEditable(boolean value) { editableProperty.set(value); }
+	public LocalDateTimeTextField withEditable(boolean value) { setEditable(value); return this; }
 }

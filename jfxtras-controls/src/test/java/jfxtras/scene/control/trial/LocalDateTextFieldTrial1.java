@@ -60,6 +60,7 @@ public class LocalDateTextFieldTrial1 extends Application {
 				System.out.println("FOCUS " + lLocalDateTextField.focusedProperty().get());
 			});
 			lLocalDateTextField.tooltipProperty().set(new Tooltip("This is a custom tooltip"));
+//			lLocalDateTextField.setEditable(false);
 		}
 		
 		Button lButton = new Button("dummy");

@@ -249,4 +249,13 @@ public class LocalDateTextField extends Control
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
     public LocalDateTextField withPickerShowing(boolean value) { setPickerShowing(value); return this; }
+
+    /**
+     * Is the text field editable
+     */
+    public BooleanProperty editableProperty() { return editableProperty; }
+    final private BooleanProperty editableProperty = new SimpleBooleanProperty(true);
+    public boolean isEditable() { return editableProperty.get(); }
+    public void setEditable(boolean value) { editableProperty.set(value); }
+	public LocalDateTextField withEditable(boolean value) { setEditable(value); return this; }
 }

@@ -170,6 +170,16 @@ public class LocalTimeTextField extends Control
     final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
+
+    /**
+     * Is the text field editable
+     */
+    public BooleanProperty editableProperty() { return editableProperty; }
+    final private BooleanProperty editableProperty = new SimpleBooleanProperty(true);
+    public boolean isEditable() { return editableProperty.get(); }
+    public void setEditable(boolean value) { editableProperty.set(value); }
+	public LocalTimeTextField withEditable(boolean value) { setEditable(value); return this; }
+
 	// ==================================================================================================================
 	// SUPPORT
 }

@@ -31,6 +31,7 @@ package jfxtras.scene.control.test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -343,6 +344,37 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         // now should be the value in the textfield
         Assert.assertEquals("2014-12-31", TestUtil.quickFormatLocalDateAsDate(localDateTextField.getLocalDate()));
     }
+
+	/**
+	 * 
+	 */
+	@Test
+	public void typeValueNotAllowedWhenNotEditable()
+	{
+		// default value is null
+		Assert.assertNull(localDateTextField.getLocalDate());
+		
+		// Set not editable
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			localDateTextField.setEditable(false);
+		});
+		
+		// type value (we know this normally works given the typeValue test)
+        clickOn(localDateTextField).write(localDateTextField.getDateTimeFormatter().format(LocalDate.of(2014, 12, 31)));
+		
+		// move focus away
+		clickOn("#focusHelper");
+		
+		// the value should still be null
+		Assert.assertNull(localDateTextField.getLocalDate());
+		
+		// attempt to open the popup
+		clickOn(".icon");
+		
+		// popup should be closed
+		assertPopupIsNotVisible(find(".text-field"));
+        Assert.assertFalse(localDateTextField.isPickerShowing());
+	}
 
     /**
      *

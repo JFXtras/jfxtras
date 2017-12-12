@@ -199,8 +199,7 @@ public class CalendarTimeTextField extends Control
 	public void setDateFormats(ObservableList<DateFormat> value) { dateFormatsProperty.setValue(value); }
 	public CalendarTimeTextField withDateFormat(ObservableList<DateFormat> value) { setDateFormats(value); return this; }
 
-
-       /**
+    /**
      * Represents the current state of the Picker popup, and whether it is
      * currently visible on screen.
      */
@@ -208,6 +207,16 @@ public class CalendarTimeTextField extends Control
     final private BooleanProperty pickerShowingProperty = new SimpleBooleanProperty();
     public boolean isPickerShowing() { return pickerShowingProperty.get(); }
     public void setPickerShowing(boolean value) { pickerShowingProperty.set(value); }
+
+    /**
+     * Is the text field editable
+     */
+    public BooleanProperty editableProperty() { return editableProperty; }
+    final private BooleanProperty editableProperty = new SimpleBooleanProperty(true);
+    public boolean isEditable() { return editableProperty.get(); }
+    public void setEditable(boolean value) { editableProperty.set(value); }
+	public CalendarTimeTextField withEditable(boolean value) { setEditable(value); return this; }
+    
 	// ==================================================================================================================
 	// EVENTS
 	
