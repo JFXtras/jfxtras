@@ -34,7 +34,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ListSpinnerArrowTest.class
+@SuiteClasses({ AccordionTest.class
+              , ListSpinnerArrowTest.class
               , ListSpinnerEditableTest.class
               , ListSpinnerEditableNumericTest.class
               , ListSpinnerExtendedTest.class
