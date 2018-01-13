@@ -129,7 +129,7 @@ public class CalendarPicker extends Control
 		}
 	};
 	public Calendar getCalendar() { return calendarObjectProperty.getValue(); }
-	public void setCalendar(Calendar value) { calendarObjectProperty.setValue(value); }
+	public void setCalendar(Calendar value) { calendarObjectProperty.setValue(cloneWithMillis0(value)); }
 	public CalendarPicker withCalendar(Calendar value) { setCalendar(value); return this; } 
 	// construct property
 	private void constructCalendar()
@@ -286,12 +286,15 @@ public class CalendarPicker extends Control
 	public ObjectProperty<Calendar> displayedCalendar() { return displayedCalendarObjectProperty; }
 	volatile private ObjectProperty<Calendar> displayedCalendarObjectProperty = new SimpleObjectProperty<Calendar>(this, "displayedCalendar");
 	public Calendar getDisplayedCalendar() { return displayedCalendarObjectProperty.getValue(); }
-	public void setDisplayedCalendar(Calendar value) { displayedCalendarObjectProperty.setValue(value); }
+	public void setDisplayedCalendar(Calendar value) {
+		displayedCalendarObjectProperty.setValue(cloneWithMillis0(value)); 
+	}
 	public CalendarPicker withDisplayedCalendar(Calendar value) { setDisplayedCalendar(value); return this; }
 	private void constructDisplayedCalendar()
 	{
 		// init here, so deriveDisplayedCalendar in the skin will modify it accordingly
-		setDisplayedCalendar(Calendar.getInstance(getLocale()));
+		Calendar calendar = Calendar.getInstance(getLocale());
+		setDisplayedCalendar(calendar);
 	}
 	
 	/** valueValidationCallback: 
@@ -303,4 +306,13 @@ public class CalendarPicker extends Control
 	public Callback<Calendar, Boolean> getValueValidationCallback() { return this.valueValidationCallbackObjectProperty.getValue(); }
 	public void setValueValidationCallback(Callback<Calendar, Boolean> value) { this.valueValidationCallbackObjectProperty.setValue(value); }
 	public CalendarPicker withValueValidationCallback(Callback<Calendar, Boolean> value) { setValueValidationCallback(value); return this; }
+	
+	/* */
+	private Calendar cloneWithMillis0(Calendar calendar) {
+		if (calendar != null) {
+			calendar = (Calendar)calendar.clone();
+			calendar.set(Calendar.MILLISECOND, 0);
+		}
+		return calendar;
+	}
 }

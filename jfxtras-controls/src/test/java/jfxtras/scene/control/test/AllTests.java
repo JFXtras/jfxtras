@@ -43,6 +43,7 @@ import org.junit.runners.Suite.SuiteClasses;
               , CalendarTimePickerFXMLTest.class
               , CalendarTimePickerExtendedTest.class
               , CalendarPickerTest.class
+              , CalendarPickerNoInitTest.class
               , CalendarPickerFXMLTest.class
               , CalendarPickerExtendedTest.class
               , CalendarTextFieldTest.class

@@ -36,6 +36,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarPicker;
+import jfxtras.scene.control.CalendarPicker.Mode;
 import jfxtras.scene.control.CalendarTextField;
 
 /**
@@ -55,8 +56,9 @@ public class CalendarPickerTrial extends Application {
 		FlowPane lFlowPane = new FlowPane();
 		
 		{
-			CalendarPicker lCalendarTextField = new CalendarPicker();
-			lFlowPane.getChildren().add(lCalendarTextField);
+			CalendarPicker lCalendarPicker = new CalendarPicker();
+			lCalendarPicker.setMode(Mode.RANGE);
+			lFlowPane.getChildren().add(lCalendarPicker);
 		}
 		
 		Button lButton = new Button("dummy");
