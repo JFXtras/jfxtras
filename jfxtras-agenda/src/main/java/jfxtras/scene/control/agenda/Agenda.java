@@ -465,23 +465,23 @@ public class Agenda extends Control
 	    }
 	    
 	    /*
-	     * Temporal - backs LocalDateTime
-	     * If implementing Temporal instead of Calendar, override these default methods.
+	     * Temporal - for ZonedDateTime, and other Temporal implementations apart from LocalDateTime
+	     * If implementing Temporal instead of Calendar or LocalDateTime, override these default methods.
 	     */
 	    default Temporal getStartTemporal() {
-	        throw new RuntimeException("Not implemented");
+	        return getStartLocalDateTime();
 	    }
 	    
 	    default void setStartTemporal(Temporal t) {
-	        throw new RuntimeException("Not implemented");
+	    	setStartLocalDateTime(LocalDateTime.from(t));
 	    }
 	    
 	    default Temporal getEndTemporal() {
-	        throw new RuntimeException("Not implemented");
+	    	return getEndLocalDateTime();
 	    }
 	    
 	    default void setEndTemporal(Temporal t) {
-	        throw new RuntimeException("Not implemented");
+	    	setEndLocalDateTime(LocalDateTime.from(t));
 	    }
 	    
 	    // ----
