@@ -20,3 +20,5 @@ screenshot*.png
 /gradlew_assemble.cmd
 /.nb-gradle/private/
 /.nb-gradle/profiles/private/
+.idea
+out
