@@ -697,7 +697,7 @@ public class CalendarPickerControlSkin extends CalendarPickerMonthlySkinAbstract
 		}
 		// already showing the correct month, than select today
 		else if ( find(getSkinnable().calendars(), lTodayCalendar) == null ) {
-			getSkinnable().calendars().add(lCalendar);			
+			getSkinnable().setCalendar(lCalendar);			
 		}
 	}
 	
