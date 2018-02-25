@@ -7,26 +7,25 @@ buildscript {
         }
     }
     dependencies {
-// TODOJAVA9	
 //        classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
 //        classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
-        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
     }
 }
 plugins {
-// TODOJAVA9
-//  id "com.github.johnrengelman.shadow" version "1.2.3"
+    id "com.github.johnrengelman.shadow" version "1.2.3"
 }
 
 allprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'    
+    apply plugin: 'maven'
     apply plugin: 'signing'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
 
-// TODOJAVA9    
-//    // apply vrl license header plugin
+    sourceCompatibility = '9'
+    targetCompatibility = '9'
+
+    // apply vrl license header plugin
 //    if (!project.plugins.findPlugin(eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)) {
 //        project.apply(plugin: eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)
 //    }
@@ -36,18 +35,18 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { 
-            url 'https://oss.sonatype.org/content/repositories/snapshots/' 
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
-        maven { 
-            url "http://oss.sonatype.org/content/repositories/releases/" 
+        maven {
+            url "http://oss.sonatype.org/content/repositories/releases/"
         }
     }
 
     signing {
         sign configurations.archives
     }
-        
+
     signArchives.onlyIf {
         project.hasProperty('sonatypeUsername') && project.hasProperty('sonatypePassword')
     }
@@ -58,12 +57,12 @@ allprojects {
 
     uploadArchives {
         if (!project.hasProperty('sonatypeUsername') || !project.hasProperty('sonatypePassword')) {
-              return
+            return
         }
-        
+
         repositories.mavenDeployer {
-            beforeDeployment { 
-                MavenDeployment deployment -> signing.signPom(deployment) 
+            beforeDeployment {
+                MavenDeployment deployment -> signing.signPom(deployment)
             }
 
             repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2') {
@@ -101,7 +100,7 @@ allprojects {
 }
 
 project(':') {
-	// these dependencies are needed to the shadow plugin knows what to include
+    // these dependencies are needed to the shadow plugin knows what to include
     dependencies {
         compile project(':jfxtras-agenda')
         compile project(':jfxtras-common')
@@ -115,27 +114,18 @@ project(':') {
 }
 
 // configure shadowJar
-// TODOJAVA9
-// shadowJar {
-//   classifier = null // do not append "-all", so the generated shadow jar replaces the existing jfxtras-all.jar (instead of generating jfxtras-all-all.jar)
-//}
+shadowJar {
+    classifier = null // do not append "-all", so the generated shadow jar replaces the existing jfxtras-all.jar (instead of generating jfxtras-all-all.jar)
+}
 
 subprojects {
-//	apply plugin: 'me.tatarka.retrolambda'
-
-//	retrolambda {
-//		defaultMethods true		
-//		javaVersion JavaVersion.VERSION_1_7
-//		oldJdk System.properties.'java.home'
-//		exclude 'Test'
-//	}
+    apply plugin: 'java'
 
     //Excluding internal classes from Javadoc
     javadoc {
         exclude 'jfxtras/internal/*'
     }
     // all projects must be compatible with the java version specified here
-    sourceCompatibility = '9'
     [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
     // Needed until Gradle supports class-scanning for Java 8
@@ -145,15 +135,15 @@ subprojects {
         include "**/*Test1.class"
         exclude 'jfxtras/labs/test/JFXtrasGuiTest.class'
     }
-    
+
     configurations {
         asciidoclet
     }
-    
+
     dependencies {
         asciidoclet 'org.asciidoctor:asciidoclet:1.5.2'
     }
-    
+
     javadoc {
         options.docletpath = configurations.asciidoclet.files.asType(List)
         options.doclet = 'org.asciidoctor.Asciidoclet'
@@ -236,20 +226,29 @@ project(':jfxtras-test-support') {
     dependencies {
         compile 'junit:junit:4.12'
         compile 'org.mockito:mockito-all:1.9.5'
-		testCompile "org.testfx:testfx-core:4.0.8-alpha"
-		testCompile "org.testfx:testfx-junit:4.0.8-alpha", {
-			exclude group: "junit", module: "junit"
-		}
+        compile "org.testfx:testfx-core:4.0.8-alpha"
+        compile "org.testfx:testfx-junit:4.0.8-alpha", {
+            exclude group: "junit", module: "junit"
+        }
     }
 }
 
-// TODO: _lib folder per project?
-task copyToLib(type: Copy) {
-    into "_lib"
-    from project(':jfxtras-test-support').configurations.testCompile
-}
-
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
-}
+// Must be BELOW subprojects{}
+//task alljavadoc(type: Javadoc) {
+//    source subprojects.collect { it.sourceSets.main.allJava }
+//    classpath = files(subprojects.collect { it.sourceSets.main.compileClasspath })
+//    destinationDir = file("${buildDir}/docs/javadoc")
+//}
+//
+//task javadocJar(type: Jar, dependsOn: alljavadoc) {
+//    classifier = 'javadoc'
+//    from alljavadoc.destinationDir
+//}
+//
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//    from subprojects.collect { it.sourceSets.main.allSource }
+//}
+//
+//shadowJar.finalizedBy javadocJar
+//shadowJar.finalizedBy sourcesJar
