@@ -12,8 +12,8 @@ javadoc {
     options.source      = project.sourceCompatibility
     options.windowTitle = "${project.name} ${project.version}"
     options.docTitle    = "${project.name} ${project.version}"
-    options.links 'http://docs.oracle.com/javase/8/docs/api/'
-    options.links 'http://docs.oracle.com/javase/8/javafx/api/'
+    options.links 'https://docs.oracle.com/javase/8/docs/api/'
+    options.links 'https://docs.oracle.com/javase/8/javafx/api/'
 }
 
 // all projects must be compatible with the java version specified here
