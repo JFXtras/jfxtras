@@ -1,23 +1,14 @@
-buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven {
-            url "https://oss.sonatype.org/content/repositories/snapshots"
-        }
-    }
-    dependencies {
-//        classpath "eu.mihosoft.vrl.vlicense-header-util:VLicenseHeaderUtil:0.1-r2-SNAPSHOT"
-//        classpath "eu.mihosoft.vrl.vlicense-header-util.gradle:vlicense-header-plugin:0.1-r2-SNAPSHOT"
-    }
-}
 plugins {
-  id "com.github.johnrengelman.shadow" version "1.2.3"
+    id 'com.github.johnrengelman.shadow' version '2.0.2'
+}
+
+ext {
+   apiProject = false
 }
 
 allprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'    
+    apply plugin: 'maven'
     apply plugin: 'signing'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
@@ -32,11 +23,12 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        jcenter()
         maven { 
-            url 'https://oss.sonatype.org/content/repositories/snapshots/' 
+            url 'https://oss.sonatype.org/content/repositories/snapshots/'
         }
         maven { 
-            url "http://oss.sonatype.org/content/repositories/releases/" 
+            url 'http://oss.sonatype.org/content/repositories/releases/'
         }
     }
 
@@ -96,75 +88,20 @@ allprojects {
     }
 }
 
-project(':') {
-	// these dependencies are needed to the shadow plugin knows what to include
-    dependencies {
-        compile project(':jfxtras-agenda')
-        compile project(':jfxtras-common')
-        compile project(':jfxtras-controls')
-        compile project(':jfxtras-icalendarfx')
-        compile project(':jfxtras-icalendaragenda')
-        compile project(':jfxtras-menu')
-        compile project(':jfxtras-gauge-linear')
-        compile project(':jfxtras-font-roboto')
-    }
-}
-
-// configure shadowJar
-shadowJar {
-   classifier = null // do not append "-all", so the generated shadow jar replaces the existing jfxtras-all.jar (instead of generating jfxtras-all-all.jar)
-}
-
 subprojects {
-    apply plugin: 'java'
-
-    //Excluding internal classes from Javadoc
-    javadoc {
-        exclude 'jfxtras/internal/*'
-    }
-    // all projects must be compatible with the java version specified here
-    sourceCompatibility = '1.8'
-    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
     // Needed until Gradle supports class-scanning for Java 8
     tasks.withType(Test) {
         scanForTestClasses = false
-        include "**/*Test.class"
-        include "**/*Test1.class"
+        include '**/*Test.class'
+        include '**/*Test1.class'
         exclude 'jfxtras/labs/test/JFXtrasGuiTest.class'
     }
-    
-    configurations {
-        asciidoclet
-    }
-    
-    dependencies {
-        asciidoclet 'org.asciidoctor:asciidoclet:1.5.2'
-    }
-    
-    javadoc {
-        options.docletpath = configurations.asciidoclet.files.asType(List)
-        options.doclet = 'org.asciidoctor.Asciidoclet'
-    }
 
-    task docJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from 'build/docs/javadoc'
-    }
-
-    task sourcesJar(type: Jar) {
-        from sourceSets.main.allSource
-        classifier = 'sources'
-    }
-
-    artifacts {
-        archives jar
-        archives docJar
-        archives sourcesJar
-    }
+    apply from: rootProject.file('gradle/javadoc.gradle')
 }
 
 project(':jfxtras-agenda') {
+    project.ext.apiProject = true
     dependencies {
         compile project(':jfxtras-controls')
         testCompile project(':jfxtras-test-support')
@@ -172,12 +109,14 @@ project(':jfxtras-agenda') {
 }
 
 project(':jfxtras-common') {
+    project.ext.apiProject = true
     dependencies {
         testCompile project(':jfxtras-test-support')
     }
 }
 
 project(':jfxtras-controls') {
+    project.ext.apiProject = true
     dependencies {
         compile project(':jfxtras-common')
         compile project(':jfxtras-fxml')
@@ -186,12 +125,14 @@ project(':jfxtras-controls') {
 }
 
 project(':jfxtras-icalendarfx') {
+    project.ext.apiProject = true
     dependencies {
         testCompile project(':jfxtras-test-support')
     }
 }
 
 project(':jfxtras-icalendaragenda') {
+    project.ext.apiProject = true
     dependencies {
         compile project(':jfxtras-agenda')
         compile project(':jfxtras-controls')
@@ -201,6 +142,7 @@ project(':jfxtras-icalendaragenda') {
 }
 
 project(':jfxtras-menu') {
+    project.ext.apiProject = true
     dependencies {
         compile project(':jfxtras-common')
         testCompile project(':jfxtras-test-support')
@@ -208,6 +150,7 @@ project(':jfxtras-menu') {
 }
 
 project(':jfxtras-gauge-linear') {
+    project.ext.apiProject = true
     dependencies {
         compile project(':jfxtras-common')
         testCompile project(':jfxtras-test-support')
@@ -215,6 +158,7 @@ project(':jfxtras-gauge-linear') {
 }
 
 project(':jfxtras-font-roboto') {
+    project.ext.apiProject = true
     dependencies {
         testCompile project(':jfxtras-test-support')
     }
@@ -222,31 +166,55 @@ project(':jfxtras-font-roboto') {
 
 project(':jfxtras-test-support') {
     dependencies {
-        compile 'junit:junit:4.12'
-        compile 'org.mockito:mockito-all:1.9.5'
-		compile "org.testfx:testfx-core:4.0.8-alpha"
-		compile "org.testfx:testfx-junit:4.0.8-alpha", {
-			exclude group: "junit", module: "junit"
-		}
-	}
+        compile "junit:junit:$junitVersion"
+        compile "org.mockito:mockito-all:$mockitoVersion"
+        compile "org.testfx:testfx-core:testfxVersion"
+        compile "org.testfx:testfx-junit:$testfxVersion", {
+            exclude group: 'junit', module: 'junit'
+        }
+    }
 }
 
-// Must be BELOW subprojects{}
-//task alljavadoc(type: Javadoc) {
-//    source subprojects.collect { it.sourceSets.main.allJava }
-//    classpath = files(subprojects.collect { it.sourceSets.main.compileClasspath })
-//    destinationDir = file("${buildDir}/docs/javadoc")
-//}
-//
-//task javadocJar(type: Jar, dependsOn: alljavadoc) {
-//    classifier = 'javadoc'
-//    from alljavadoc.destinationDir
-//}
-//
-//task sourcesJar(type: Jar) {
-//    classifier = 'sources'
-//    from subprojects.collect { it.sourceSets.main.allSource }
-//}
-//
-//shadowJar.finalizedBy javadocJar
-//shadowJar.finalizedBy sourcesJar
+// wait for every subproject to be configured before reconfiguring root project
+evaluationDependsOnChildren()
+
+// find all api projects
+ext.apiProjects = subprojects.findAll { prj -> prj.apiProject }.name
+
+// mark all apiProjects as dependencies
+project(':') {
+    dependencies {
+        apiProjects.each { projectName -> compile project(projectName) }
+    }
+}
+
+// apply common settings affecting javadoc/sources
+apply from: rootProject.file('gradle/javadoc.gradle')
+
+// copy all sources to a single directory
+task copyDocs(type: Copy) {
+    destinationDir = "${buildDir}/sources" as File
+    project.apiProjects.each { projectName ->
+        from(project(projectName).sourceSets.main.allSource)
+    }
+}
+
+// update dependencies on javadoc task
+javadoc {
+    dependsOn copyDocs
+    include '**/*.java'
+    source = copyDocs.destinationDir
+}
+
+// update sourcesJar
+sourcesJar {
+    dependsOn copyDocs
+    from copyDocs.destinationDir
+}
+
+// configure shadowJar
+shadowJar {
+   classifier = '' // do not append "-all", so the generated shadow jar replaces the existing jfxtras-all.jar (instead of generating jfxtras-all-all.jar)
+}
+
+jar.finalizedBy shadowJar
