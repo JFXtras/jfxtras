@@ -92,7 +92,7 @@ allprojects {
 }
 
 subprojects {
-    // Needed until Gradle supports class-scanning for Java 8
+    // Needed until Gradle supports class-scanning for Java 9
     tasks.withType(Test) {
         scanForTestClasses = false
         include '**/*Test.class'
