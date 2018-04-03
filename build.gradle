@@ -107,12 +107,13 @@ subprojects {
 
     // follow advise from https://guides.gradle.org/building-java-9-modules/
     afterEvaluate {
-        repositories {
-            jcenter()
+        if (project.moduleName == 'jfxtras.test.support') {
+            // skip module configuration for now
+            return
         }
 
         compileJava {
-            inputs.property("moduleName", moduleName)
+            inputs.property('moduleName', moduleName)
             doFirst {
                 options.compilerArgs = [
                     '--module-path', classpath.asPath,
@@ -120,9 +121,9 @@ subprojects {
                 classpath = files()
             }
         }
-
+/* TODO: FIX how testing should be configured
         compileTestJava {
-            inputs.property("moduleName", moduleName)
+            inputs.property('moduleName', moduleName)
             doFirst {
                 options.compilerArgs = [
                     '--module-path', classpath.asPath,
@@ -135,7 +136,7 @@ subprojects {
         }
 
         test {
-            inputs.property("moduleName", moduleName)
+            inputs.property('moduleName', moduleName)
             doFirst {
                 jvmArgs = [
                     '--module-path', classpath.asPath,
@@ -146,6 +147,7 @@ subprojects {
                 classpath = files()
             }
         }
+*/
     }
 }
 
@@ -222,6 +224,8 @@ project(':jfxtras-font-roboto') {
 }
 
 project(':jfxtras-test-support') {
+    project.moduleName = 'jfxtras.test.support' // use a name even if no actual module exists
+    // must configure the following dependencies with modules instead
     dependencies {
         compile "junit:junit:$junitVersion"
         compile "org.mockito:mockito-all:$mockitoVersion"
