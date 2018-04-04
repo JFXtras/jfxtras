@@ -13,8 +13,11 @@ allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
 
-    sourceCompatibility = '9'
-    targetCompatibility = '9'
+    // force source/target compatibility
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = rootProject.sourceCompatibility
+        targetCompatibility = rootProject.targetCompatibility
+    }
 
     // apply vrl license header plugin
 //    if (!project.plugins.findPlugin(eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)) {
@@ -101,10 +104,56 @@ subprojects {
     }
 
     apply from: rootProject.file('gradle/javadoc.gradle')
+
+    // follow advise from https://guides.gradle.org/building-java-9-modules/
+    afterEvaluate {
+        if (project.moduleName == 'jfxtras.test.support') {
+            // skip module configuration for now
+            return
+        }
+
+        compileJava {
+            inputs.property('moduleName', moduleName)
+            doFirst {
+                options.compilerArgs = [
+                    '--module-path', classpath.asPath,
+                ]
+                classpath = files()
+            }
+        }
+/* TODO: FIX how testing should be configured
+        compileTestJava {
+            inputs.property('moduleName', moduleName)
+            doFirst {
+                options.compilerArgs = [
+                    '--module-path', classpath.asPath,
+                    '--add-modules', 'junit',
+                    '--add-reads', "$moduleName=junit",
+                    '--patch-module', "$moduleName=" + files(sourceSets.test.java.srcDirs).asPath,
+                ]
+                classpath = files()
+            }
+        }
+
+        test {
+            inputs.property('moduleName', moduleName)
+            doFirst {
+                jvmArgs = [
+                    '--module-path', classpath.asPath,
+                    '--add-modules', 'ALL-MODULE-PATH',
+                    '--add-reads', "$moduleName=junit",
+                    '--patch-module', "$moduleName=" + files(sourceSets.test.java.outputDir).asPath,
+                ]
+                classpath = files()
+            }
+        }
+*/
+    }
 }
 
 project(':jfxtras-agenda') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.agenda'
     dependencies {
         compile project(':jfxtras-controls')
         testCompile project(':jfxtras-test-support')
@@ -113,6 +162,7 @@ project(':jfxtras-agenda') {
 
 project(':jfxtras-common') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.common'
     dependencies {
         testCompile project(':jfxtras-test-support')
     }
@@ -120,6 +170,7 @@ project(':jfxtras-common') {
 
 project(':jfxtras-controls') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.controls'
     dependencies {
         compile project(':jfxtras-common')
         compile project(':jfxtras-fxml')
@@ -129,6 +180,7 @@ project(':jfxtras-controls') {
 
 project(':jfxtras-icalendarfx') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.icalendarfx'
     dependencies {
         testCompile project(':jfxtras-test-support')
     }
@@ -136,6 +188,7 @@ project(':jfxtras-icalendarfx') {
 
 project(':jfxtras-icalendaragenda') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.icalendaragenda'
     dependencies {
         compile project(':jfxtras-agenda')
         compile project(':jfxtras-controls')
@@ -146,6 +199,7 @@ project(':jfxtras-icalendaragenda') {
 
 project(':jfxtras-menu') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.menu'
     dependencies {
         compile project(':jfxtras-common')
         testCompile project(':jfxtras-test-support')
@@ -154,6 +208,7 @@ project(':jfxtras-menu') {
 
 project(':jfxtras-gauge-linear') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.gauge.linear'
     dependencies {
         compile project(':jfxtras-common')
         testCompile project(':jfxtras-test-support')
@@ -162,12 +217,15 @@ project(':jfxtras-gauge-linear') {
 
 project(':jfxtras-font-roboto') {
     project.ext.apiProject = true
+    project.moduleName = 'jfxtras.font.roboto'
     dependencies {
         testCompile project(':jfxtras-test-support')
     }
 }
 
 project(':jfxtras-test-support') {
+    project.moduleName = 'jfxtras.test.support' // use a name even if no actual module exists
+    // must configure the following dependencies with modules instead
     dependencies {
         compile "junit:junit:$junitVersion"
         compile "org.mockito:mockito-all:$mockitoVersion"

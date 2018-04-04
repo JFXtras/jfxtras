@@ -25,7 +25,8 @@ configurations {
 }
 
 dependencies {
-    asciidoclet 'org.asciidoctor:asciidoclet:1.5.2'
+    asciidoclet 'org.asciidoctor:asciidoclet:1.5.4'
+    asciidoclet 'org.asciidoctor:asciidoctorj:1.5.6'
 }
 
 javadoc {
