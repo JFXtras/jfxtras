@@ -22,3 +22,14 @@ screenshot*.png
 /.nb-gradle/profiles/private/
 .idea
 out
+/jfxtras-agenda/target
+/jfxtras-common/target
+/jfxtras-controls/target
+/jfxtras-font-roboto/target
+/jfxtras-fxml/target
+/jfxtras-gauge-linear/target
+/jfxtras-icalendaragenda/target
+/jfxtras-icalendarfx/target
+/jfxtras-menu/target
+/jfxtras-test-support/target
+/jfxtras-window/target
