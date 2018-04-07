@@ -148,7 +148,7 @@ abstract class AppointmentAbstractPane extends Pane {
 			}
 
 			// is dragging allowed
-			if (layoutHelp.skinnable.getAllowDragging() == false) {
+			if (layoutHelp.skinnable.getAllowDragging() == false || appointment.isDraggable() == false) {
 				handleSelect(mouseEvent);
 				return;
 			}

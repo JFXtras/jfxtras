@@ -442,7 +442,9 @@ public class Agenda extends Control
 	    
 	    AppointmentGroup getAppointmentGroup();
 	    void setAppointmentGroup(AppointmentGroup s);
-	    
+
+	    default public Boolean isDraggable() { return Boolean.TRUE; }
+
 	    // ----
 	    // Calendar
 	    
@@ -544,6 +546,13 @@ public class Agenda extends Control
 	    @Override public AppointmentGroup getAppointmentGroup() { return appointmentGroupObjectProperty.getValue(); }
 	    @Override public void setAppointmentGroup(AppointmentGroup value) { appointmentGroupObjectProperty.setValue(value); }
 	    public T withAppointmentGroup(AppointmentGroup value) { setAppointmentGroup(value); return (T)this; }
+	    
+	    /** Draggable */
+	    public ObjectProperty<Boolean> draggableProperty() { return draggableObjectProperty; }
+	    final private ObjectProperty<Boolean> draggableObjectProperty = new SimpleObjectProperty<Boolean>(this, "draggable", true);
+	    @Override public Boolean isDraggable() { return draggableObjectProperty.getValue(); }
+	    public void setDraggable(Boolean value) { draggableObjectProperty.setValue(value); }
+	    public T withDraggable(Boolean value) { setDraggable(value); return (T)this; } 
 	}
 	
 	   /**
