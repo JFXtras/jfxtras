@@ -46,11 +46,11 @@ public enum ChangeDialogOption
             Collection<VPropertyElement> changedProperties)
    {
        Map<ChangeDialogOption, Pair<Temporal,Temporal>> choices = new LinkedHashMap<>();
-       if (! changedProperties.contains(VPropertyElement.RECURRENCE_RULE))
+       boolean isRepeatable = changedProperties.contains(VPropertyElement.RECURRENCE_RULE);
+       if (! isRepeatable )
        {
            choices.put(ChangeDialogOption.ONE, new Pair<Temporal,Temporal>(startRecurrence, startRecurrence));
-       }
-        
+       }       
        Temporal lastRecurrence = vComponentEdited.lastRecurrence();
        // TODO - Gradle requires variable s.  I can't inline it or I get a compile error.
        Stream<Temporal> s = vComponentEdited.streamRecurrences();

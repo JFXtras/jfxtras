@@ -327,9 +327,6 @@ public class ICalendarAgenda extends Agenda
     private final Map<Integer, VDisplayable<?>> appointmentVComponentMap = new HashMap<>();
     /* Map to match the System.identityHashCode of each VComponent with a List of Appointments it represents */
     private final Map<Integer, List<Appointment>> vComponentAppointmentMap = new HashMap<>();
-    /* When a new appointment is drawn, it's added to this map to indicate SEQUENCE shouldn't be incremented
-     * when editAppointmentCallback is used */
-    private final Map<Appointment, Boolean> newAppointmentMap = new HashMap<>();
 
     /** used by default {@link #selectedOneAppointmentCallback} */
     private Alert lastOneAppointmentSelectedAlert;
@@ -386,8 +383,8 @@ public class ICalendarAgenda extends Agenda
                             ).delete();
                     getVCalendar().processITIPMessage(cancelMessage);
                     calendarConsumer.accept(getVCalendar()); // provide notification of calendar change
-                    refresh();
                 }
+                refresh();
             }
         });
         
