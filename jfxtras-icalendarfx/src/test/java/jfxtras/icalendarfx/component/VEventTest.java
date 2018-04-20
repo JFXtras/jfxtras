@@ -135,13 +135,13 @@ public class VEventTest extends ICalendarTestAbstract
     }
 
 //    /** use {@link VComponentBase#copyComponentFrom} */
-//    @Test
-//    public void canCopyComponent()
-//    {
-//        VEvent e = getYearly1();
-//        VEvent e2 = new VEvent(e);
-//        assertEquals(e, e2);
-//    }
+    @Test
+    public void canCopyComponent()
+    {
+        VEvent e = new VEvent().withSummary("Test").withRecurrenceRule("RRULE:FREQ=DAILY");
+        VEvent e2 = new VEvent(e);
+        assertEquals(e, e2);
+    }
 
     // Use copy constructor
     @Test

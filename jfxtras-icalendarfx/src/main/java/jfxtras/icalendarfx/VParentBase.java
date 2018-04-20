@@ -17,12 +17,6 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import jfxtras.icalendarfx.VCalendar;
-import jfxtras.icalendarfx.VChild;
-import jfxtras.icalendarfx.VElement;
-import jfxtras.icalendarfx.VElementBase;
-import jfxtras.icalendarfx.VParent;
-import jfxtras.icalendarfx.VParentBase;
 import jfxtras.icalendarfx.components.VComponent;
 import jfxtras.icalendarfx.content.ContentLineStrategy;
 import jfxtras.icalendarfx.content.Orderer;

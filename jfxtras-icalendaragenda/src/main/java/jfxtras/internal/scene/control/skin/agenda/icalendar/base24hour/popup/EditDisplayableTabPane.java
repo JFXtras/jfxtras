@@ -79,6 +79,13 @@ public abstract class EditDisplayableTabPane<T extends VDisplayable<T>, U extend
     {
         if (vComponentCopy.getRecurrenceRule() != null)
         {
+        	if (vComponentCopy.getRecurrenceRule().getValue().getByRules() != null)
+        	{
+        		if (vComponentCopy.getRecurrenceRule().getValue().getByRules().isEmpty())
+        		{
+        			vComponentCopy.getRecurrenceRule().getValue().setByRules((List) null);
+        		}
+        	}
             if (recurrenceRuleVBox.frequencyComboBox.getValue() == FrequencyType.WEEKLY && recurrenceRuleVBox.dayOfWeekList.isEmpty())
             {
                 canNotHaveZeroDaysOfWeek();

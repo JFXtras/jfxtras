@@ -223,4 +223,12 @@ public class RecurrenceRuleTest
         List<String> expected = Arrays.asList("RRULE:FREQ is not present.  FREQ is REQUIRED and MUST NOT occur more than once");
         assertEquals(expected, errors);
     }
+    
+    @Test
+    public void canCheckEquals()
+    {
+    	RecurrenceRule r1 = RecurrenceRule.parse("FREQ=DAILY");
+    	RecurrenceRule r2 = new RecurrenceRule(r1);
+    	assertEquals(r1, r2);
+    }
 }
