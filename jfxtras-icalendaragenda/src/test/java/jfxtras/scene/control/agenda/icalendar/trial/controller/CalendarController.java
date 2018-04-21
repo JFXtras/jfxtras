@@ -50,7 +50,7 @@ import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
  */
 public class CalendarController
 {
-     VCalendar vCalendar = new VCalendar();
+     public VCalendar vCalendar = new VCalendar();
      public ICalendarAgenda agenda = new ICalendarAgenda(vCalendar);
 
     @FXML private ResourceBundle resources; // ResourceBundle that was given to the FXMLLoader

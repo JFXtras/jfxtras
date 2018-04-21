@@ -2,6 +2,8 @@ package jfxtras.scene.control.agenda.icalendar.trial;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 
@@ -61,7 +63,8 @@ public class ICalendarAgendaAdvancedTrial extends Application
         primaryStage.setScene(scene);
         primaryStage.setTitle("ICalendar Agenda Demo");
         primaryStage.show();
-        
+        primaryStage.setOnCloseRequest(e -> System.out.println(controller.vCalendar.toString())); // prints resulting VCALENDAR on close
+
         controller.setupData(firstDayOfWeekLocalDate, firstDayOfWeekLocalDate.plusDays(7));
 
     }

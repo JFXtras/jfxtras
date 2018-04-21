@@ -333,7 +333,7 @@ public class HandleRecurrencesTest
         VEvent expectedOriginalEdited = ICalendarStaticComponents.getDaily1()
                 .withSequence(1);
         expectedOriginalEdited.getRecurrenceRule().getValue()
-            .setUntil(LocalDateTime.of(2016, 5, 15, 10, 0).atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
+            .setUntil(LocalDateTime.of(2016, 5, 15, 10, 0).atZone(ZoneId.of("America/Los_Angeles")).withZoneSameInstant(ZoneId.of("Z")));
         assertEquals(expectedOriginalEdited, myComponentOriginal);
         
         RelatedTo relatedTo = RelatedTo.parse(vComponentEdited.getUniqueIdentifier().getValue());
@@ -431,7 +431,7 @@ public class HandleRecurrencesTest
         VEvent expectedOriginalEdited = ICalendarStaticComponents.getDaily1()
                 .withSequence(1);
         expectedOriginalEdited.getRecurrenceRule().getValue()
-            .setUntil(LocalDateTime.of(2016, 5, 15, 10, 0).atZone(ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
+            .setUntil(LocalDateTime.of(2016, 5, 15, 10, 0).atZone(ZoneId.of("America/Los_Angeles")).withZoneSameInstant(ZoneId.of("Z")));
         assertEquals(expectedOriginalEdited, myComponentOriginal);
 
         RelatedTo relatedTo = RelatedTo.parse(vComponentOriginal.getUniqueIdentifier().getValue());

@@ -65,7 +65,7 @@ public class ComboMessageTest
        VEvent v0 = mainVCalendar.getVEvents().get(0);
        VEvent expectedV0 = ICalendarStaticComponents.getDaily1()
                .withSequence(1);
-       ZonedDateTime until = ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 10, 0), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z"));
+       ZonedDateTime until = ZonedDateTime.of(LocalDateTime.of(2015, 11, 10, 10, 0), ZoneId.of("America/Los_Angeles")).withZoneSameInstant(ZoneId.of("Z"));
        expectedV0.getRecurrenceRule().getValue()
                .setUntil(until);
        assertEquals(expectedV0, v0);
