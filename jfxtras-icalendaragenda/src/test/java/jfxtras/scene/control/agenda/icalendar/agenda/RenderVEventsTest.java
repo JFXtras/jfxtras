@@ -178,7 +178,6 @@ public class RenderVEventsTest extends AgendaTestAbstract
     }
 
     @Test
-//    @Ignore // TestFX
     public void canRenderVComponentZoned()
     {
         // Add VComponents, listener in ICalendarAgenda makes Appointments
@@ -196,15 +195,15 @@ public class RenderVEventsTest extends AgendaTestAbstract
                 ZonedDateTime.of(LocalDateTime.of(2015, 11, 11, 10, 0), ZoneId.of("Europe/London"))
                 ));
         assertEquals(expectedStartZoneDates, startZoneDates);
-
-        // Local dates must be converted to default time zone
+        
         List<LocalDateTime> startDates = agenda.appointments()
                 .stream()
                 .map(a -> a.getStartLocalDateTime())
                 .sorted()
                 .collect(Collectors.toList());
+        // Local dates must be converted to default time zone
         List<LocalDateTime> expectedStartDates = new ArrayList<>(Arrays.asList(
-                LocalDateTime.of(2015, 11, 11, 2, 0)
+        		ZonedDateTime.of(LocalDateTime.of(2015, 11, 11, 10, 0), ZoneId.of("Europe/London")).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime()
                 ));
         assertEquals(expectedStartDates, startDates);
     }

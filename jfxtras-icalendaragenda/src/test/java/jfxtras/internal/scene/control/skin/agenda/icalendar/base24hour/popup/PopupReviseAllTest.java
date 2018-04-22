@@ -388,7 +388,6 @@ public class PopupReviseAllTest extends VEventPopupTestBase
     }
     
     @Test
-//    @Ignore // TestFX4
     public void canChangeWholeDayToTimeBased()
     {
         VEvent vevent = ICalendarStaticComponents.getWholeDayDaily3();
@@ -421,6 +420,8 @@ public class PopupReviseAllTest extends VEventPopupTestBase
         clickOn("#changeDialogOkButton");
         
         String dtStamp = getEditComponentPopup().iTIPMessagesProperty().get().get(0).getVEvents().get(0).getDateTimeStamp().toString();
+        Until expectedUntil = new Until (ZonedDateTime.of(2015, 11, 23, 13, 0, 0, 0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
+        String myTimeZone = ZoneId.systemDefault().toString();
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -430,9 +431,9 @@ public class PopupReviseAllTest extends VEventPopupTestBase
                 "CATEGORIES:group06" + System.lineSeparator() +
                 dtStamp + System.lineSeparator() +
                 "UID:20150110T080000-010@jfxtras.org" + System.lineSeparator() +
-                "RRULE:UNTIL=20151123T210000Z;FREQ=DAILY;INTERVAL=3" + System.lineSeparator() +
-                "DTSTART;TZID=America/Los_Angeles:20151108T130000" + System.lineSeparator() +
-                "DTEND;TZID=America/Los_Angeles:20151108T140000" + System.lineSeparator() +
+                "RRULE:" + expectedUntil.toString() + ";FREQ=DAILY;INTERVAL=3" + System.lineSeparator() +
+                "DTSTART;TZID=" + myTimeZone + ":20151108T130000" + System.lineSeparator() +
+                "DTEND;TZID=" + myTimeZone + ":20151108T140000" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
                 "END:VCALENDAR";

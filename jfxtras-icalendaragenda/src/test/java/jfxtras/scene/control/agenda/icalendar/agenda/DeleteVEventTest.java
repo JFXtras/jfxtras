@@ -73,9 +73,9 @@ public class DeleteVEventTest extends AgendaTestAbstract
         press(MouseButton.PRIMARY);
         release(MouseButton.PRIMARY);
         
-        clickOn("Cancel");
         press(KeyCode.DELETE);
         release(KeyCode.DELETE);
+        clickOn("#changeDialogOkButton");
         
         assertEquals(5, agenda.appointments().size());
         List<Temporal> expectedStarts = Arrays.asList(

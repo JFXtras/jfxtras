@@ -64,7 +64,7 @@ public class NotifyCalendarUpdate extends AgendaTestAbstract
         
         assertEquals(1, agenda.getVCalendar().getVEvents().size());
         assertEquals(1, events); // confirm event consumer fired
-        assertEquals(LocalDateTime.of(2015, 11, 11, 8, 30), newStart);
+        assertEquals(LocalDateTime.of(2015, 11, 11, 8, 30), newStart.getValue());
     }
 
 }
