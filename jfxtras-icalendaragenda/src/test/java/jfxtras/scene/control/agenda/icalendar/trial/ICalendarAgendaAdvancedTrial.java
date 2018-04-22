@@ -58,7 +58,6 @@ public class ICalendarAgendaAdvancedTrial extends Application
         mainLoader.setLocation(ICalendarAgendaAdvancedTrial.class.getResource("view/Calendar.fxml"));
         BorderPane root = mainLoader.load();
         CalendarController controller = mainLoader.getController();
-        
         Scene scene = new Scene(root, 1366, 768);
         primaryStage.setScene(scene);
         primaryStage.setTitle("ICalendar Agenda Demo");

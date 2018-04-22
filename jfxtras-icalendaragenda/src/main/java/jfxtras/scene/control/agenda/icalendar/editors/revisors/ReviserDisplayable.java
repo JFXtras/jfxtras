@@ -352,7 +352,6 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
 //                    vComponentEditedCopy.errors().stream().collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
 //                    vComponentEditedCopy.toContent());
 //        }
-
         return itipMessages;
     }
 

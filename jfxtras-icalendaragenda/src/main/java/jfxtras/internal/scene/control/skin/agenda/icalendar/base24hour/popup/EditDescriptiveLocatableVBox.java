@@ -86,10 +86,10 @@ public abstract class EditDescriptiveLocatableVBox<T extends VLocatable<T>> exte
     {
         if (startOriginalRecurrence.isSupported(ChronoUnit.NANOS)) // ZoneDateTime, LocalDateTime
         {
-            endNewRecurrence = startOriginalRecurrence.with(newValue);            
+            endNewRecurrence = startOriginalRecurrence.with(newValue);
         } else // LocalDate - use ZonedDateTime at system default ZoneId
         {
-            endNewRecurrence = ZonedDateTime.of(newValue, ZoneId.systemDefault());
+            endNewRecurrence = ZonedDateTime.of(newValue, ZoneId.systemDefault()).withZoneSameInstant(ZONE_ID);
         }
         endDateTextField.localDateProperty().removeListener(endDateTextListener);
         LocalDate newDate = LocalDate.from(endDateTimeTextField.getLocalDateTime()).plusDays(1);
@@ -192,14 +192,13 @@ public abstract class EditDescriptiveLocatableVBox<T extends VLocatable<T>> exte
             timeGridPane.add(endDateTimeTextField, 1, 1);
             if (startOriginalRecurrence instanceof LocalDate)
             {
-                endNewRecurrence = endDateTimeTextField.getLocalDateTime().atZone(DEFAULT_ZONE_ID);
+                endNewRecurrence = endDateTimeTextField.getLocalDateTime().atZone(ZONE_ID); // default to ZoneId
             } else if (startOriginalRecurrence instanceof LocalDateTime)
             {
                 endNewRecurrence = endDateTimeTextField.getLocalDateTime();
             } else if (startOriginalRecurrence instanceof ZonedDateTime)
             {
-                ZoneId originalZoneId = ((ZonedDateTime) startOriginalRecurrence).getZone();
-                endNewRecurrence = endDateTimeTextField.getLocalDateTime().atZone(originalZoneId);
+                endNewRecurrence = endDateTimeTextField.getLocalDateTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZONE_ID);
             } else
             {
                 throw new DateTimeException("Unsupported Temporal type:" + startOriginalRecurrence.getClass());
@@ -207,7 +206,6 @@ public abstract class EditDescriptiveLocatableVBox<T extends VLocatable<T>> exte
         }
         endDateTextField.localDateProperty().addListener(endDateTextListener);
         endDateTimeTextField.localDateTimeProperty().addListener(endDateTimeTextListener);
-//        System.out.println("endNewRecurrence:" + endNewRecurrence);
     }
     
 //    /* If startRecurrence isn't valid due to a RRULE change, changes startRecurrence and

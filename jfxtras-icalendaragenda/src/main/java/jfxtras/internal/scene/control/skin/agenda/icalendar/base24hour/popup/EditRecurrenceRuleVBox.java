@@ -1127,7 +1127,7 @@ public abstract class EditRecurrenceRuleVBox<T extends VDisplayable<T>> extends 
             final Stream<Temporal> stream2; 
             if (DateTimeType.of(newDateTimeStart) == DateTimeType.DATE_WITH_LOCAL_TIME_AND_TIME_ZONE)
             {
-                stream2 = stream1.map(t -> ((ZonedDateTime) t).withZoneSameInstant(ZoneId.systemDefault()));
+                stream2 = stream1.map(t -> ((ZonedDateTime) t).withZoneSameInstant(EditDescriptiveVBox.ZONE_ID));
             } else
             {
                 stream2 = stream1;

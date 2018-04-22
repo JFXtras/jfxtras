@@ -723,7 +723,6 @@ public class ICalendarAgenda extends Agenda
         {
             // NOTE: Can't throw exception here because in Agenda there is a mouse event that isn't consumed.
             // Throwing an exception will leave the mouse unresponsive.
-            System.out.println("ERROR: no component found - popup can'b be displayed");
             return null;
         } else
         {
@@ -757,7 +756,7 @@ public class ICalendarAgenda extends Agenda
             } else
             {
                 startRecurrence = appointment.getStartTemporal();
-                endRecurrence = appointment.getEndTemporal();            
+                endRecurrence = appointment.getEndTemporal();
             }
             // select editDialogCallback depending if there are special recurrence children
             Callback<Map<ChangeDialogOption, Pair<Temporal,Temporal>>, ChangeDialogOption> editDialogCallback = (vComponent.recurrenceChildren().isEmpty()) ? EditChoiceDialog.EDIT_DIALOG_CALLBACK : EditWithRecurrencesChoiceDialog.EDIT_DIALOG_CALLBACK;

@@ -215,6 +215,16 @@ public class CalendarController
                         .withByRules(new ByDay(new ByDay.ByDayPair(dayOfWeek, ordinalWeekNumber))));
         agenda.getVCalendar().addChild(vEventLocalDateMonthlyOrdinal);
         
+        VEvent zonedIndivialEvent = new VEvent()
+                .withOrganizer("ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org")
+                .withCategories(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS.get(13).getDescription())
+                .withDateTimeStart(ZonedDateTime.of(endDate.atTime(10,0), ZoneId.of("Europe/London")))
+                .withDateTimeEnd(ZonedDateTime.of(endDate.atTime(12,0), ZoneId.of("Europe/London")))
+                .withDateTimeStamp(ZonedDateTime.of(LocalDateTime.of(2015, 1, 10, 8, 0), ZoneOffset.UTC))
+                .withSummary(Summary.parse("Europe time zone individual"))
+                .withUniqueIdentifier("20150110T080000-009@jfxtras.org");
+        agenda.getVCalendar().addChild(zonedIndivialEvent);
+        
         // replace Agenda's appointmentGroups with the ones used in the test events.
         agenda.appointmentGroups().clear();
         agenda.appointmentGroups().addAll(AgendaTestAbstract.DEFAULT_APPOINTMENT_GROUPS);

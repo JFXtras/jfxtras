@@ -129,7 +129,7 @@ public class ReviseOneTest
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
- 
+     
     @Test
     public void canChangeTimeBasedToWholeDayOne()
     {

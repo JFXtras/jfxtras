@@ -77,6 +77,55 @@ public class PopupReviseOneTest extends VEventPopupTestBase
        assertEquals(expectediTIPMessage, iTIPMessage);
     }
     
+    // Tests maintaining time zone if in any time zone other than Europe/London
+    @Test
+    public void canEditOneDifferentTimeZone()
+    {
+        VEvent vevent = ICalendarStaticComponents.getIndividualZoned();
+        ZonedDateTime z1 = (ZonedDateTime) vevent.getDateTimeStart().getValue();
+        ZonedDateTime z2 = (ZonedDateTime) vevent.getDateTimeEnd().getValue();
+        
+        TestUtil.runThenWaitForPaintPulse( () ->
+        {
+            getEditComponentPopup().setupData(
+                    vevent,
+                    z1, // start selected instance
+                    z2, // end selected instance
+                    AgendaTestAbstract.CATEGORIES);
+        });
+
+       // edit property
+       TextField summaryTextField = find("#summaryTextField");
+       summaryTextField.setText("new summary");
+
+       // save changes to THIS AND FUTURE
+       clickOn("#saveComponentButton");
+
+       String iTIPMessage = getEditComponentPopup().iTIPMessagesProperty().get().stream()
+               .map(v -> v.toString())
+               .collect(Collectors.joining(System.lineSeparator()));
+       String dtstamp = iTIPMessage.split(System.lineSeparator())[9];
+       String expectedDTStamp = new DateTimeStamp(ZonedDateTime.now().withZoneSameInstant(ZoneId.of("Z"))).toString();
+       assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
+
+       String expectediTIPMessage =
+               "BEGIN:VCALENDAR" + System.lineSeparator() +
+               "METHOD:PUBLISH" + System.lineSeparator() +
+               "PRODID:" + ICalendarAgenda.DEFAULT_PRODUCT_IDENTIFIER + System.lineSeparator() +
+               "VERSION:" + Version.DEFAULT_ICALENDAR_SPECIFICATION_VERSION + System.lineSeparator() +
+               "BEGIN:VEVENT" + System.lineSeparator() +
+               "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
+               "CATEGORIES:group13" + System.lineSeparator() +
+               "DTSTART;TZID=Europe/London:20151111T100000" + System.lineSeparator() +
+               "DTEND;TZID=Europe/London:20151111T110000" + System.lineSeparator() +
+               dtstamp + System.lineSeparator() +
+               "UID:20150110T080000-009@jfxtras.org" + System.lineSeparator() +
+               "SUMMARY:new summary" + System.lineSeparator() +
+               "END:VEVENT" + System.lineSeparator() +
+               "END:VCALENDAR";
+       assertEquals(expectediTIPMessage, iTIPMessage);
+    }
+    
     // edit descriptive properties of a repeating event to make a special recurrence instance
     @Test
     public void canEditDescribableProperties2()

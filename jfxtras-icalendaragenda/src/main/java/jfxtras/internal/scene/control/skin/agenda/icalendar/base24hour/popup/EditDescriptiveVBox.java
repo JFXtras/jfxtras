@@ -68,7 +68,7 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
 {
     @FXML private ResourceBundle resources; // ResourceBundle that was given to the FXMLLoader
     public ResourceBundle getResources() { return resources; }
-    final static ZoneId DEFAULT_ZONE_ID = ZoneId.systemDefault(); // can be changed to "Z" if preferred
+    static ZoneId ZONE_ID;
 
     @FXML GridPane timeGridPane; // contains either LocalDateTextField or LocalDateTimeTextField depending if wholeDayCheckBox is selected
     LocalDateTimeTextField startDateTimeTextField = new LocalDateTimeTextField(); // start of recurrence
@@ -118,13 +118,21 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
     /** Update startDateTextField when startDateTimeTextField changes */
     void synchStartDateTime(LocalDateTime oldValue, LocalDateTime newValue)
     {
-//        System.out.println("start date2:" + newValue);
-        if (startOriginalRecurrence.isSupported(ChronoUnit.NANOS)) // ZoneDateTime, LocalDateTime
+    	Temporal startRecurrence = startRecurrenceProperty.get();
+    	if (startRecurrence instanceof ZonedDateTime)
+    	{
+    		ZonedDateTime z = newValue.atZone(ZoneId.systemDefault()).withZoneSameInstant(ZONE_ID);
+            startRecurrenceProperty.set(z);            
+    		
+    	} else if (startRecurrence instanceof LocalDateTime)
+    	{
+            startRecurrenceProperty.set(newValue);
+        } else if (startRecurrence instanceof LocalDate)//  use ZonedDateTime at system default ZoneId
         {
-            startRecurrenceProperty.set(startOriginalRecurrence.with(newValue));            
-        } else // LocalDate - use ZonedDateTime at system default ZoneId
+            startRecurrenceProperty.set(ZonedDateTime.of(newValue, ZoneId.systemDefault()));
+        } else
         {
-            startRecurrenceProperty.set(ZonedDateTime.of(newValue, DEFAULT_ZONE_ID));
+            throw new DateTimeException("Unsupported Temporal type:" + startRecurrence.getClass());
         }
         startDateTextField.localDateProperty().removeListener(startDateTextListener);
         LocalDate newDate = LocalDate.from(startDateTimeTextField.getLocalDateTime());
@@ -164,6 +172,14 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
             Temporal endRecurrence,
             List<String> categories)
     {
+    	// store ZoneId to ensure conversion to correct time zone
+    	if (startRecurrence instanceof ZonedDateTime)
+    	{
+        	ZONE_ID = ((ZonedDateTime) startRecurrence).getZone();
+    	} else
+    	{
+        	ZONE_ID = ZoneId.systemDefault();
+    	}
         startOriginalRecurrence = startRecurrence;
         startRecurrenceProperty = new SimpleObjectProperty<>(startRecurrence);
         vComponentEdited = vComponent;
@@ -266,7 +282,6 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
         categorySelectionGridPane.setupData(initialCategory, categories);
         
         startDateTimeTextField.localDateTimeProperty().addListener(dateTimeStartListener);
-//        vComponentEdited.getDateTimeStart().valueProperty().addListener(dateTimeStartListener);
 
     }
     
@@ -308,14 +323,13 @@ public abstract class EditDescriptiveVBox<T extends VDisplayable<T>> extends VBo
             timeGridPane.add(startDateTimeTextField, 1, 0);
             if (startOriginalRecurrence instanceof LocalDate)
             {
-                startRecurrenceProperty.set(startDateTimeTextField.getLocalDateTime().atZone(DEFAULT_ZONE_ID));
+                startRecurrenceProperty.set(startDateTimeTextField.getLocalDateTime().atZone(ZONE_ID));
             } else if (startOriginalRecurrence instanceof LocalDateTime)
             {
                 startRecurrenceProperty.set(startDateTimeTextField.getLocalDateTime());
             } else if (startOriginalRecurrence instanceof ZonedDateTime)
             {
-                ZoneId originalZoneId = ((ZonedDateTime) startOriginalRecurrence).getZone();
-                startRecurrenceProperty.set(startDateTimeTextField.getLocalDateTime().atZone(originalZoneId));
+                startRecurrenceProperty.set(startDateTimeTextField.getLocalDateTime().atZone(ZoneId.systemDefault()).withZoneSameInstant(ZONE_ID));
             } else
             {
                 throw new DateTimeException("Unsupported Temporal type:" + startOriginalRecurrence.getClass());

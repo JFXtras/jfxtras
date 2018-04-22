@@ -149,7 +149,13 @@ public final class TemporalUtilities
           protected LocalDateTime toLocalDateTimeByType(Temporal t) { return ZonedDateTime.from(t).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime(); }
 
           @Override
-          protected Temporal combineByType(Temporal initialTemporal, TemporalAdjuster adjuster) { return initialTemporal.with(adjuster); }
+          protected Temporal combineByType(Temporal initialTemporal, TemporalAdjuster adjuster)
+          {
+        	  ZonedDateTime z = (ZonedDateTime) initialTemporal;
+        	  ZoneId originalZoneId = z.getZone();
+        	  ZonedDateTime modifiedTemporal = z.withZoneSameInstant(ZoneId.systemDefault());
+        	  return modifiedTemporal.with(adjuster).withZoneSameInstant(originalZoneId);
+    	  }
         };
             
         // Map to match up Temporal class to TemporalType enum
