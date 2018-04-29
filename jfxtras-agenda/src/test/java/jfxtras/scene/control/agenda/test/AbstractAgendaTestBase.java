@@ -43,6 +43,7 @@ import javafx.util.Callback;
 import jfxtras.scene.control.agenda.Agenda;
 import jfxtras.scene.control.agenda.Agenda.Appointment;
 import jfxtras.test.JFXtrasGuiTest;
+import jfxtras.test.TestUtil;
 
 public class AbstractAgendaTestBase extends JFXtrasGuiTest {
 
@@ -93,6 +94,9 @@ public class AbstractAgendaTestBase extends JFXtrasGuiTest {
 		});
         
 		vbox.getChildren().add(agenda);
+
+		TestUtil.sleep(500); // delay because otherwise the click ends up in the dos window... Can be removed with a higher version of TestFX?
+
 		return vbox;
 	}
 	protected VBox vbox = null; // cannot make this final and assign upon construction

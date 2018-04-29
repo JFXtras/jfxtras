@@ -29,6 +29,7 @@
 
 package jfxtras.scene.layout.test;
 
+import jfxtras.test.TestUtil;
 import org.junit.Test;
 
 import javafx.geometry.Insets;
@@ -50,6 +51,9 @@ public class HBoxTest extends JFXtrasGuiTest {
 	@Override
 	public Parent getRootNode()
 	{
+		stage.setWidth(800.0);
+		stage.setHeight(600.0);
+
 		hbox = new HBox(5.0);
 		hbox.add(new Button("grow"), new HBox.C().hgrow(Priority.ALWAYS));
 		hbox.add(new Button("margin 5 grow"), new HBox.C().margin(new Insets(5.0)).hgrow(Priority.ALWAYS));
@@ -67,12 +71,12 @@ public class HBoxTest extends JFXtrasGuiTest {
 	@Test
 	public void checkPositions()
 	{
-		//AssertNode.generateSource("hbox", hbox.getChildren(), null, false, A.XYWH, A.CLASS);
-		new AssertNode(hbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 43.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(1)).assertXYWH(53.0, 5.0, 94.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(2)).assertXYWH(157.0, 0.0, 61.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(3)).assertXYWH(243.0, 20.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(4)).assertXYWH(382.0, 0.0, 119.0, 50.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		AssertNode.generateSource("hbox", hbox.getChildren(), null, false, AssertNode.A.XYWH, AssertNode.A.CLASS);
+		new AssertNode(hbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 143.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(1)).assertXYWH(153.0, 5.0, 194.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(2)).assertXYWH(357.0, 0.0, 61.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(3)).assertXYWH(443.0, 20.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(4)).assertXYWH(582.0, 0.0, 218.0, 50.0, 0.01).assertClass(javafx.scene.control.Button.class);
 	}
 	
 }

@@ -50,6 +50,9 @@ public class GridPaneTest extends JFXtrasGuiTest {
 	 */
 	public Parent getRootNode()
 	{
+		stage.setWidth(800.0);
+		stage.setHeight(600.0);
+
 		gridPane = new GridPane()
 			.withHGap(5)
 			.withVGap(5)
@@ -80,7 +83,7 @@ public class GridPaneTest extends JFXtrasGuiTest {
 	@Test
 	public void checkPositions()
 	{
-		//AssertNode.generateSource("gridPane", gridPane.getChildren(), null, false, A.XYWH, A.CLASS);
+		AssertNode.generateSource("gridPane", gridPane.getChildren(), null, false, AssertNode.A.XYWH, AssertNode.A.CLASS);
 		new AssertNode(gridPane.getChildren().get(1)).assertXYWH(71.0, 10.0, 52.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
 		new AssertNode(gridPane.getChildren().get(2)).assertXYWH(199.0, 10.0, 34.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
 		new AssertNode(gridPane.getChildren().get(3)).assertXYWH(10.0, 10.0, 56.0, 51.0, 0.01).assertClass(javafx.scene.control.Label.class);
