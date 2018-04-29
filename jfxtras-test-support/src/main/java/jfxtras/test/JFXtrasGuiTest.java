@@ -92,10 +92,8 @@ abstract public class JFXtrasGuiTest extends org.testfx.framework.junit.Applicat
 	protected Stage stage;
 	
 	/**
-	 * Override public void start(Stage stage) throws Exception
 	 * @return
 	 */
-	@Deprecated
 	protected Parent getRootNode() {
 		if (1 == 1) {
 			throw new IllegalStateException("This method should not be called");

@@ -29,6 +29,7 @@
 
 package jfxtras.scene.layout.test;
 
+import jfxtras.test.TestUtil;
 import org.junit.Test;
 
 import javafx.geometry.Insets;
@@ -50,6 +51,9 @@ public class VBoxTest extends JFXtrasGuiTest {
 	 */
 	public Parent getRootNode()
 	{
+		stage.setWidth(800.0);
+		stage.setHeight(600.0);
+
 		vbox = new VBox(5.0);
 		vbox.add(new Button("short"), new VBox.C().vgrow(Priority.ALWAYS));
 		vbox.add(new Button("medium length"), new VBox.C().vgrow(Priority.ALWAYS));
@@ -70,13 +74,13 @@ public class VBoxTest extends JFXtrasGuiTest {
 	public void checkPositions()
 	{
 		AssertNode.generateSource("vbox", vbox.getChildren(), null, false, A.XYWH, A.CLASS);
-		new AssertNode(vbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 44.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(1)).assertXYWH(0.0, 30.0, 97.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(2)).assertXYWH(0.0, 60.0, 240.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(3)).assertXYWH(5.0, 95.0, 94.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(4)).assertXYWH(0.0, 130.0, 61.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(5)).assertXYWH(20.0, 180.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(6)).assertXYWH(0.0, 230.0, 150.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 44.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(1)).assertXYWH(0.0, 99.0, 97.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(2)).assertXYWH(0.0, 198.0, 240.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(3)).assertXYWH(5.0, 302.0, 94.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(4)).assertXYWH(0.0, 406.0, 61.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(5)).assertXYWH(20.0, 456.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(6)).assertXYWH(0.0, 506.0, 150.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
 	}
 	
 }

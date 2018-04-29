@@ -155,7 +155,7 @@ public class SimpleMetroArcGaugeTest extends JFXtrasGuiTest {
 		
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(-63.0, 67.0625, 199.5625, 17.34375, 0.01).assertTextText(" 45.0W");
+		new AssertNode(find(".value")).assertXYWH(0.0, 67.0625, 199.5625, 17.34375, 0.01).assertTextText(" 45.0W");
 	}
 
 	@Test

@@ -301,7 +301,7 @@ public class TestUtil {
 	 */
 	static public void waitForPaintPulse() {
             Platform.requestNextPulse();
-            sleep(100);
+            sleep(500);
 	}
 
 	/**

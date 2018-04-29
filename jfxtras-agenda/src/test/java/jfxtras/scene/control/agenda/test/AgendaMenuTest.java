@@ -65,7 +65,7 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
 	            .withAppointmentGroup(appointmentGroupMap.get("group01"))
             );
 		});
-				
+
 		clickOn("#AppointmentRegularBodyPane2014-01-01/0 .MenuIcon");
 		assertPopupIsVisible(find("#AppointmentRegularBodyPane2014-01-01/0"));
 		//TestUtil.sleep(3000);
