@@ -60,6 +60,7 @@ public class CalendarTextFieldTrial1 extends Application {
 				System.out.println("FOCUS " + lCalendarTextField.focusedProperty().get());
 			});
 			lCalendarTextField.tooltipProperty().set(new Tooltip("This is a custom tooltip"));
+			lCalendarTextField.setShowTime(true);
 //			lCalendarTextField.setEditable(false);
 //			lCalendarTextField.setDisable(true);
 		}

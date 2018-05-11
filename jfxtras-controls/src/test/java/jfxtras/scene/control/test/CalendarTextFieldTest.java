@@ -31,10 +31,13 @@ package jfxtras.scene.control.test;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
+import jfxtras.internal.scene.control.skin.ListSpinnerSkin;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -64,7 +67,8 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		HBox box = new HBox();
 		calendarTextField = new CalendarTextField();
-		calendarTextField.setParseErrorCallback( throwable -> { 
+		calendarTextField.setStyle("-fxx-immediate:YES;");
+		calendarTextField.setParseErrorCallback( throwable -> {
         	parseErrorThrowable = throwable;
         	System.out.println("Parse exception caught: " + throwable);
         	return null;
@@ -771,5 +775,50 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         Assert.assertEquals(textField.getText(), textField.getSelectedText());
     }
 
-    
+	/**
+	 *
+	 */
+	@Test
+	public void textfieldNoImmediatePerDefault()
+	{
+		// switch to datetime mode
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setShowTime(true);
+		});
+
+		// open the popup
+		clickOn(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
+
+		// click today
+		clickOn(".today");
+
+		// nothing in the textfield
+		Assert.assertEquals("", calendarTextField.getText());
+	}
+
+	/**
+	 *
+	 */
+	@Test
+	public void textfieldImmediateWriteValue()
+	{
+		// switch to datetime mode
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTextField.setShowTime(true);
+			calendarTextField.dateFormatProperty().set(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+			//setStyle is not picked up: calendarTextField.setStyle("-fxx-immediate:YES;");
+			calendarTextField.immediateProperty().set(true);
+		});
+
+		// open the popup
+		clickOn(".icon");
+		Assert.assertTrue(find(".text-field").isDisabled());
+
+		// click today
+		clickOn(".today");
+
+		// nothing in the textfield
+		Assert.assertTrue(calendarTextField.getText().length() > 0); // hard to get the exact time, since it is "now" and seconds may deviate
+	}
 }
