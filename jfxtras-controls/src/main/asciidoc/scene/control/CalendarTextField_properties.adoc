@@ -12,3 +12,6 @@ include::CalendarPicker_properties.adoc[]
 - The pickerShowing property is an indicator if the picker is currently active or not.
 - The promptText property specifies the text that is shown when nothing is typed in the textfield.
 - The text property returns the content of the textfield as-is (as opposed to the {calendar} property).
+
+There are some properties available on the default skin:
+-fxx-immediate:[YES|NO] In time mode, this removes the cancel button and immediately writes the value in the popup to the textfield.

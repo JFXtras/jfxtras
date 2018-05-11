@@ -314,4 +314,13 @@ public class CalendarTextField extends Control
     public boolean isEditable() { return editableProperty.get(); }
     public void setEditable(boolean value) { editableProperty.set(value); }
 	public CalendarTextField withEditable(boolean value) { setEditable(value); return this; }
+
+	/**
+	 * Immediately set a value entered in the popup into the text field (of use in showTime mode)
+	 */
+	public BooleanProperty immediateProperty() { return immediateProperty; }
+	final private BooleanProperty immediateProperty = new SimpleBooleanProperty(false);
+	public boolean isImmediate() { return immediateProperty.get(); }
+	public void setImmediate(boolean value) { immediateProperty.set(value); }
+	public CalendarTextField withImmediate(boolean value) { setImmediate(value); return this; }
 }

@@ -30,13 +30,18 @@
 package jfxtras.internal.scene.control.skin;
 
 import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.css.CssMetaData;
+import javafx.css.SimpleStyleableObjectProperty;
+import javafx.css.Styleable;
+import javafx.css.converter.EnumConverter;
 import javafx.scene.control.SkinBase;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -48,6 +53,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Popup;
 import javafx.util.Callback;
+import jfxtras.css.CssMetaDataForSkinProperty;
+import jfxtras.css.converters.SimpleDateFormatConverter;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 import jfxtras.scene.control.CalendarTextField;
@@ -152,7 +159,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
     {
         // the main textField
         textField = new TextField();
-        textField.setPrefColumnCount(20);
+        textField.setPrefColumnCount(10 + (getSkinnable().getShowTime() ? 10 : 0));
         textField.focusedProperty().addListener( (observable) -> {
             if (textField.isFocused() == false) {
                 parse();
@@ -210,21 +217,16 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
         });
         
         // construct a gridpane: one row, two columns
-        gridPane = new GridPane();
-        gridPane.setHgap(3);
-        gridPane.add(textField, 0, 0);
-        gridPane.add(imageView, 1, 0);
-        ColumnConstraints column0 = new ColumnConstraints(20, 100, Double.MAX_VALUE);
-        column0.setHgrow(Priority.ALWAYS);
-        gridPane.getColumnConstraints().addAll(column0); // first column gets any extra width
-        
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(textField);
+        borderPane.setRight(imageView);
+        getChildren().add(borderPane);
+
         // add to self
         getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control
-        getChildren().add(gridPane);
     }
     private TextField textField = null;
     private ImageView imageView = null;
-    private GridPane gridPane = null;
     final public BooleanProperty focusForwardingProperty = new SimpleBooleanProperty();
 
         /**
@@ -402,10 +404,10 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
             lAcceptIconImageView.setPickOnBounds(true);
             lAcceptIconImageView.setOnMouseClicked( (mouseEvent) ->  {
             getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
-                        if (popup != null) {
-                            popup.hide();
-                        }
-                    });
+                if (popup != null) {
+                    popup.hide();
+                }
+            });
             lVBox.add(lAcceptIconImageView);
             
             ImageView lCloseIconImageView = new ImageViewButton();
@@ -414,13 +416,19 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
             lCloseIconImageView.setOnMouseClicked( (mouseEvent) ->  {
                 popup.hide(); 
             });
-            lVBox.add(lCloseIconImageView);
+            System.out.println("getSkinnable().isImmediate()=" + getSkinnable().isImmediate());
+            if (!getSkinnable().isImmediate()) {
+                lVBox.add(lCloseIconImageView);
+            }
         }
         
         // if a value is selected in date mode, immediately close the popup
         calendarPicker.calendarProperty().addListener( (observable) -> {
             if (getSkinnable().getShowTime() == false && popup.isShowing()) {
                 popup.hide(); 
+            }
+            if (getSkinnable().isImmediate()) {
+                getSkinnable().calendarProperty().set(calendarPicker.calendarProperty().get());
             }
         });
 
@@ -432,7 +440,7 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
             }
             // but at least the textfield must be enabled again
             textField.setDisable(false);
-                        textField.requestFocus();
+            textField.requestFocus();
         });
         
         // add to popup
@@ -441,22 +449,22 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
         // show it just below the textfield
         textField.setDisable(true);
                 
-            /**
-             * If the popup is showing/hiding, we must notify the property of
-             * the CalendarTextField so that they are always in sync.
-             */
-            popup.showingProperty().addListener(new ChangeListener<Boolean>() {
+        /**
+         * If the popup is showing/hiding, we must notify the property of
+         * the CalendarTextField so that they are always in sync.
+         */
+        popup.showingProperty().addListener(new ChangeListener<Boolean>() {
 
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) {
-                    getSkinnable().setPickerShowing(showing);
-                    if (!showing) {
-                        popup.showingProperty().removeListener(this);
-                        popup = null;
-                    }
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean showing) {
+                getSkinnable().setPickerShowing(showing);
+                if (!showing) {
+                    popup.showingProperty().removeListener(this);
+                    popup = null;
                 }
-            });
-        
+            }
+        });
+    
         }
         
         private Popup popup = null;

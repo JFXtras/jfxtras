@@ -1,5 +1,5 @@
 /**
- * CalendarPickerTrial.java
+ * LocalDateTextFieldTrial1.java
  *
  * Copyright (c) 2011-2016, JFXtras
  * All rights reserved.
@@ -30,24 +30,20 @@
 package jfxtras.scene.control.trial;
 
 import javafx.application.Application;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import jfxtras.scene.control.CalendarPicker;
-import jfxtras.scene.control.CalendarPicker.Mode;
-import jfxtras.scene.control.CalendarTextField;
+import jfxtras.scene.control.LocalDateTextField;
+import jfxtras.scene.control.LocalTimeTextField;
 
 /**
  * 
  * @author Tom Eugelink
  *
  */
-public class CalendarPickerTrial extends Application {
+public class LocalTimeTextFieldTrial1 extends Application {
 	
     public static void main(String[] args) {
         launch(args);       
@@ -56,23 +52,17 @@ public class CalendarPickerTrial extends Application {
 	@Override
 	public void start(Stage stage) {
 		
-		FlowPane lFlowPane = new FlowPane(Orientation.VERTICAL);
+		FlowPane lFlowPane = new FlowPane();
 		
-		CalendarPicker lCalendarPicker = new CalendarPicker();
-		lCalendarPicker.setMode(Mode.SINGLE);
-		lCalendarPicker.setShowTime(true);
-		lFlowPane.getChildren().add(lCalendarPicker);
-
-		lFlowPane.getChildren().add(new Label(" "));
+		{
+			LocalTimeTextField lLocalTimeTextField = new LocalTimeTextField();
+			lFlowPane.getChildren().add(lLocalTimeTextField);
+//			lLocalTimeTextField.setEditable(false);
+		}
+		
 		Button lButton = new Button("dummy");
 		lFlowPane.getChildren().add(lButton);
-
-		CalendarTextField lCalendarTextField = new CalendarTextField();
-		lCalendarTextField.setShowTime(true);
-		lCalendarTextField.setDisable(true);
-		lFlowPane.getChildren().add(lCalendarTextField);
-		lCalendarTextField.calendarProperty().bind(lCalendarPicker.calendarProperty());
-
+		
 		// create scene
         Scene scene = new Scene(lFlowPane, 800, 800);
         

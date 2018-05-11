@@ -34,6 +34,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
+import jfxtras.internal.scene.control.skin.LocalDateTimeTextFieldSkin;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -616,5 +618,44 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         //We should have the same value everywhere.
         Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
         Assert.assertTrue(localDateTimeTextField.getText().isEmpty());
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void textfieldNoImmediatePerDefault()
+    {
+        // open the popup
+        clickOn(".icon");
+        Assert.assertTrue(find(".text-field").isDisabled());
+
+        // click today
+        clickOn(".today");
+
+        // nothing in the textfield
+        Assert.assertEquals("", localDateTimeTextField.getText());
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void textfieldImmediateWriteValue()
+    {
+        // switch to datetime mode
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            localDateTimeTextField.immediateProperty().set(true);
+        });
+
+        // open the popup
+        clickOn(".icon");
+        Assert.assertTrue(find(".text-field").isDisabled());
+
+        // click today
+        clickOn(".today");
+
+        // nothing in the textfield
+        Assert.assertTrue(localDateTimeTextField.getText().length() > 0); // hard to get the exact time, since it is "now" and seconds may deviate
     }
 }
