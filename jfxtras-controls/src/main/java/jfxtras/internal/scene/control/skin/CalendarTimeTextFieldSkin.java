@@ -234,19 +234,10 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 		// add to self
 		getSkinnable().getStyleClass().add(this.getClass().getSimpleName()); // always add self as style class, because CSS should relate to the skin not the control
 		getChildren().add(gridPane);
-		
-		// prep the picker
-		calendarTimePicker = new CalendarTimePicker();
-		// bind our properties to the picker's 
-		//Bindings.bindBidirectional(calendarTimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		Bindings.bindBidirectional(calendarTimePicker.minuteStepProperty(), getSkinnable().minuteStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
-		Bindings.bindBidirectional(calendarTimePicker.secondStepProperty(), getSkinnable().secondStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
 	}
 	private TextField textField = null;
 	private ImageView imageView = null;
 	private GridPane gridPane = null;
-	private CalendarTimePicker calendarTimePicker = null;
-	
 	/**
 	 * parse the contents that was typed in the textfield
 	 */
@@ -257,36 +248,36 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 			// get the text to parse
 			String lText = textField.getText();
 			lText = lText.trim();
-			if (lText.length() == 0) 
+			if (lText.length() == 0)
 			{
 				getSkinnable().setCalendar(null);
 				return;
 			}
-			
+
 			// starts with - means substract days
 			if (lText.startsWith("-") || lText.startsWith("+"))
 			{
-				// + has problems 
+				// + has problems
 				if (lText.startsWith("+")) lText = lText.substring(1);
-				
+
 				// special units hour, minute
 				// TODO: internationalize?
 				int lUnit = Calendar.DATE;
 				if (lText.toLowerCase().endsWith("m")) { lText = lText.substring(0, lText.length() - 1); lUnit = Calendar.MINUTE; }
 				if (lText.toLowerCase().endsWith("h")) { lText = lText.substring(0, lText.length() - 1); lUnit = Calendar.HOUR_OF_DAY; }
-				
+
 				// parse the delta
 				int lDelta = Integer.parseInt(lText);
-				Calendar lCalendar = (Calendar)getSkinnable().getCalendar().clone(); 
+				Calendar lCalendar = (Calendar)getSkinnable().getCalendar().clone();
 				lCalendar.add(lUnit, lDelta);
-				
+
 				// set the value
 				getSkinnable().setCalendar( CalendarTimePickerSkin.blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep()) );
 			}
 			else if (lText.equals("#"))
 			{
 				// set the value
-				getSkinnable().setCalendar( CalendarTimePickerSkin.blockMinutesToStep(Calendar.getInstance(getSkinnable().getLocale()), getSkinnable().getMinuteStep()) ); 
+				getSkinnable().setCalendar( CalendarTimePickerSkin.blockMinutesToStep(Calendar.getInstance(getSkinnable().getLocale()), getSkinnable().getMinuteStep()) );
 			}
 			else
 			{
@@ -306,14 +297,14 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 						}
 						catch (java.text.ParseException e2) {} // we can safely ignore this, since we will fall back to the default formatter in the end
 					}
-					if (lDate == null) 
+					if (lDate == null)
 					{
 						// parse using the default formatter
 						lDate = getSkinnable().getDateFormat().parse( lText );
 					}
-					
+
 					// set the value (the parse with the default formatter either succeeded or threw an exception, skipping this code)
-					lCalendar = Calendar.getInstance(getSkinnable().getLocale()); 
+					lCalendar = Calendar.getInstance(getSkinnable().getLocale());
 					lCalendar.setTime(lDate);
 					getSkinnable().setCalendar(lCalendar);
 				}
@@ -324,27 +315,27 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 				}
 			}
 		}
-		catch (Throwable t) 
-		{ 
+		catch (Throwable t)
+		{
 			// handle the exception
-			// TODO: implement a default handler (show in popup / validation icon) 
+			// TODO: implement a default handler (show in popup / validation icon)
 			if (getSkinnable().getParseErrorCallback() != null) {
 				getSkinnable().getParseErrorCallback().call(t);
 			}
 			else {
 				t.printStackTrace();
 			}
-		} 
+		}
 	}
-	
-        
-       private void setupPopup() {
+
+	/* */
+	private void setupPopup() {
         popup = new Popup();
         popup.setAutoFix(true);
         popup.setAutoHide(true);
         popup.setHideOnEscape(true);
 
-        // add the timepicker
+        // setup CSS
         BorderPane lBorderPane = new BorderPane() {
             // As of 1.8.0_40 CSS files are added in the scope of a control, the popup does not fall under the control, so the stylesheet must be reapplied 
             // When JFxtras is based on 1.8.0_40+: @Override 
@@ -353,6 +344,19 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
             }
         };
         lBorderPane.getStyleClass().add(this.getClass().getSimpleName() + "_popup");
+
+		// prep the picker
+		calendarTimePicker = new CalendarTimePicker();
+		// bind our properties to the picker's
+		//Bindings.bindBidirectional(calendarTimePicker.calendarProperty(), getSkinnable().calendarProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		Bindings.bindBidirectional(calendarTimePicker.minuteStepProperty(), getSkinnable().minuteStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		Bindings.bindBidirectional(calendarTimePicker.secondStepProperty(), getSkinnable().secondStepProperty()); // order is important, because the value of the first field is overwritten initially with the value of the last field
+		// support immediate mode
+		calendarTimePicker.calendarProperty().addListener( (observable) -> {
+			if (getSkinnable().isImmediate()) {
+				getSkinnable().calendarProperty().set(calendarTimePicker.calendarProperty().get());
+			}
+		});
         lBorderPane.setCenter(calendarTimePicker);
 
         // add a close button
@@ -391,7 +395,8 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
         });
     }
     private Popup popup = null;
-    private CalendarTimePicker calendarPicker = null;
+	private CalendarTimePicker calendarTimePicker = null;
+
     /*
      * 
      */

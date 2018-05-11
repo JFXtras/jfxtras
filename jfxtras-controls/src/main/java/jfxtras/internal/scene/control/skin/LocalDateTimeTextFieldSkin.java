@@ -79,6 +79,7 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 		calendarTextField.tooltipProperty().bindBidirectional(getSkinnable().tooltipProperty()); 
 		calendarTextField.textProperty().bindBidirectional( getSkinnable().textProperty() ); 
         calendarTextField.pickerShowingProperty().bindBidirectional(getSkinnable().pickerShowingProperty());
+		calendarTextField.immediateProperty().bindBidirectional(getSkinnable().immediateProperty());
 
         getSkinnable().focusedProperty().addListener((observableValue, wasFocused, isFocused) -> {
             if (isFocused) {
