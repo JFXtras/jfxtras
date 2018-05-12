@@ -19,6 +19,7 @@ import jfxtras.icalendarfx.components.VPrimary;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
 import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
@@ -54,6 +55,8 @@ public class ReviseThisAndFutureTest
         Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent myComponentFuture = vComponents.get(1);
         
+        Until expectedUntil = new Until (ZonedDateTime.of(2016, 5, 15, 10, 0, 0, 0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
+        
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -67,7 +70,7 @@ public class ReviseThisAndFutureTest
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
                 "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
-                "RRULE:FREQ=DAILY;UNTIL=20160515T170000Z" + System.lineSeparator() +
+                "RRULE:FREQ=DAILY;" + expectedUntil.toString() + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
@@ -140,6 +143,7 @@ public class ReviseThisAndFutureTest
         Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent newVComponentFuture = vComponents.get(1);
         
+        Until expectedUntil = new Until (ZonedDateTime.of(2016, 5, 15, 10, 0, 0, 0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -153,7 +157,7 @@ public class ReviseThisAndFutureTest
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
                 "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
-                "RRULE:FREQ=DAILY;UNTIL=20160515T170000Z" + System.lineSeparator() +
+                "RRULE:FREQ=DAILY;" + expectedUntil.toString() + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
@@ -234,6 +238,8 @@ public class ReviseThisAndFutureTest
         Collections.sort(vComponents, VPrimary.DTSTART_COMPARATOR);
         VEvent newVComponentFuture = vComponents.get(2);
 
+        Until expectedUntil = new Until (ZonedDateTime.of(2016, 5, 15, 10, 0, 0, 0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
+       
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -247,7 +253,7 @@ public class ReviseThisAndFutureTest
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
                 "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
-                "RRULE:FREQ=DAILY;UNTIL=20160515T170000Z" + System.lineSeparator() +
+                "RRULE:FREQ=DAILY;" + expectedUntil.toString() + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +
@@ -491,6 +497,7 @@ public class ReviseThisAndFutureTest
                 .map(v -> v.toString())
                 .collect(Collectors.joining(System.lineSeparator()));
 
+        Until expectedUntil = new Until (ZonedDateTime.of(2016, 5, 15, 10, 0, 0, 0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
         String expectediTIPMessage =
                 "BEGIN:VCALENDAR" + System.lineSeparator() +
                 "METHOD:REQUEST" + System.lineSeparator() +
@@ -504,7 +511,7 @@ public class ReviseThisAndFutureTest
                 "SUMMARY:Daily1 Summary" + System.lineSeparator() +
                 "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
                 "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
-                "RRULE:FREQ=DAILY;UNTIL=20160515T170000Z" + System.lineSeparator() +
+                "RRULE:FREQ=DAILY;" + expectedUntil.toString() + System.lineSeparator() +
                 "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                 "SEQUENCE:1" + System.lineSeparator() +
                 "END:VEVENT" + System.lineSeparator() +

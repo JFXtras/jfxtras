@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.Until;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
 import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
@@ -55,6 +56,8 @@ public class PopupReviseThisAndFutureTest extends VEventPopupTestBase
        assertEquals(expectedDTStamp.substring(0, 16), dtstamp.substring(0, 16)); // check date, month and time
        String uid = iTIPMessage.split(System.lineSeparator())[28];
        assertFalse(uid.equals(vevent.getUniqueIdentifier().toString()));
+       
+       Until expectedUntil = new Until (ZonedDateTime.of(2015, 11, 10, 10, 0, 0, 0, ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z")));
        String expectediTIPMessage =
                "BEGIN:VCALENDAR" + System.lineSeparator() +
                "METHOD:REQUEST" + System.lineSeparator() +
@@ -68,7 +71,7 @@ public class PopupReviseThisAndFutureTest extends VEventPopupTestBase
                "SUMMARY:Daily1 Summary" + System.lineSeparator() +
                "DTSTAMP:20150110T080000Z" + System.lineSeparator() +
                "UID:20150110T080000-004@jfxtras.org" + System.lineSeparator() +
-               "RRULE:FREQ=DAILY;UNTIL=20151110T180000Z" + System.lineSeparator() +
+               "RRULE:FREQ=DAILY;" + expectedUntil.toString() + System.lineSeparator() +
                "ORGANIZER;CN=Papa Smurf:mailto:papa@smurf.org" + System.lineSeparator() +
                "SEQUENCE:1" + System.lineSeparator() +
                "END:VEVENT" + System.lineSeparator() +

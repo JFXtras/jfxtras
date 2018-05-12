@@ -65,6 +65,42 @@ public class GraphicallyChangeTest extends AgendaTestAbstract
     }
     
     @Test
+    public void canMoveIndividualDifferentTimeZone()
+    {
+        // create appointment
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            agenda.getVCalendar().addChild(ICalendarStaticComponents.getIndividualZoned());
+            agenda.refresh();
+        });
+        // drag to new location
+        moveTo("#hourLine3");
+        press(MouseButton.PRIMARY);
+        moveTo("#hourLine9");
+        release(MouseButton.PRIMARY);
+//        TestUtil.sleep(3000);
+        
+        // check appointment
+        assertEquals(1, agenda.appointments().size());
+        List<Temporal> expectedStarts = Arrays.asList(
+                LocalDateTime.of(2015, 11, 11, 9, 0)
+                );
+        List<Temporal> starts = agenda.appointments().stream()
+                .map(a -> a.getStartLocalDateTime())
+                .collect(Collectors.toList());
+        assertEquals(expectedStarts, starts);
+        
+        // check VEvent
+        assertEquals(1, agenda.getVCalendar().getVEvents().size());
+        VEvent editedVEvent = agenda.getVCalendar().getVEvents().get(0);
+        VEvent expectedVEvent = ICalendarStaticComponents.getIndividualZoned()
+                .withDateTimeStart(LocalDateTime.of(2015, 11, 11, 16, 0).atZone(ZoneId.of("Europe/London")))
+                .withDateTimeEnd(LocalDateTime.of(2015, 11, 11, 17, 0).atZone(ZoneId.of("Europe/London")))
+                .withDateTimeStamp(editedVEvent.getDateTimeStamp())
+                .withSequence(1);
+        assertEquals(expectedVEvent, editedVEvent);
+    }
+    
+    @Test
     public void canMoveOneOfRepeatable()
     {
         // create appointment

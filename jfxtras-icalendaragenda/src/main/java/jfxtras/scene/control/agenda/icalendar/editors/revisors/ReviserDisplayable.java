@@ -352,7 +352,6 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
 //                    vComponentEditedCopy.errors().stream().collect(Collectors.joining(System.lineSeparator())) + System.lineSeparator() +
 //                    vComponentEditedCopy.toContent());
 //        }
-
         return itipMessages;
     }
 
@@ -458,7 +457,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
         		String key = e.getKey();
         		VChild edited = e.getValue();
         		VChild original = originalMap.get(key);
-//        		System.out.println("EO1:" + edited + " " + original);
+//        		System.out.println("EO1:" + edited + " " + original + " " + Objects.equals(edited, original));
         		return ! Objects.equals(edited, original);
         	})
         	.map(e -> e.getValue())
@@ -471,7 +470,7 @@ public abstract class ReviserDisplayable<T, U extends VDisplayable<U>> implement
             		String key = e.getKey();
             		VChild original = e.getValue();
             		VChild edited = editedMap.get(key);
-//            		System.out.println("EO2:" + edited + " " + original);
+//            		System.out.println("EO2:" + edited + " " + original + " " + Objects.equals(edited, original));
             		return ! Objects.equals(edited, original);
             	})
             	.map(e -> e.getValue())

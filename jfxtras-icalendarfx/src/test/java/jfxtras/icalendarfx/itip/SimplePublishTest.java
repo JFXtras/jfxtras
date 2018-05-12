@@ -362,7 +362,7 @@ public class SimplePublishTest
         
         assertEquals(LocalDateTime.of(2015, 11, 9, 10, 0), myComponentOriginal.getDateTimeStart().getValue());        
         assertEquals(LocalDateTime.of(2015, 11, 9, 11, 0), myComponentOriginal.getDateTimeEnd().getValue()); 
-        Temporal until = ZonedDateTime.of(LocalDateTime.of(2016, 5, 15, 10, 0), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z"));
+        Temporal until = ZonedDateTime.of(LocalDateTime.of(2016, 5, 15, 10, 0), ZoneId.of("America/Los_Angeles")).withZoneSameInstant(ZoneId.of("Z"));
         RecurrenceRuleValue expectedRRule = ICalendarStaticComponents.getDaily1().getRecurrenceRule().getValue().withUntil(until);
         assertEquals(expectedRRule, myComponentOriginal.getRecurrenceRule().getValue());
     }
@@ -417,7 +417,7 @@ public class SimplePublishTest
         
         assertEquals(LocalDateTime.of(2015, 11, 9, 10, 0), myComponentOriginal.getDateTimeStart().getValue());        
         assertEquals(LocalDateTime.of(2015, 11, 9, 11, 0), myComponentOriginal.getDateTimeEnd().getValue()); 
-        Temporal until = ZonedDateTime.of(LocalDateTime.of(2016, 5, 15, 10, 0), ZoneId.systemDefault()).withZoneSameInstant(ZoneId.of("Z"));
+        Temporal until = ZonedDateTime.of(LocalDateTime.of(2016, 5, 15, 10, 0),  ZoneId.of("America/Los_Angeles")).withZoneSameInstant(ZoneId.of("Z"));
         RecurrenceRuleValue expectedRRule = ICalendarStaticComponents.getDaily1().getRecurrenceRule().getValue().withUntil(until);
         assertEquals(expectedRRule, myComponentOriginal.getRecurrenceRule().getValue());
     }

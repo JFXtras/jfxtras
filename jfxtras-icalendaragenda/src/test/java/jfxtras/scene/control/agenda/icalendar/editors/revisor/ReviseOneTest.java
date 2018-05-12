@@ -2,9 +2,12 @@ package jfxtras.scene.control.agenda.icalendar.editors.revisor;
 
 import static org.junit.Assert.assertEquals;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.Temporal;
 import java.util.Collections;
@@ -18,8 +21,13 @@ import jfxtras.icalendarfx.components.VEvent;
 import jfxtras.icalendarfx.components.VPrimary;
 import jfxtras.icalendarfx.properties.calendar.Version;
 import jfxtras.icalendarfx.properties.component.change.DateTimeStamp;
+import jfxtras.icalendarfx.properties.component.descriptive.Summary;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.FrequencyType;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.RecurrenceRuleValue;
+import jfxtras.icalendarfx.properties.component.recurrence.rrule.byxxx.ByDay;
 import jfxtras.scene.control.agenda.icalendar.ICalendarAgenda;
 import jfxtras.scene.control.agenda.icalendar.ICalendarStaticComponents;
+import jfxtras.scene.control.agenda.icalendar.agenda.AgendaTestAbstract;
 import jfxtras.scene.control.agenda.icalendar.editors.ChangeDialogOption;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.ReviserVEvent;
 import jfxtras.scene.control.agenda.icalendar.editors.revisors.SimpleRevisorFactory;
@@ -121,7 +129,7 @@ public class ReviseOneTest
                 .collect(Collectors.joining(System.lineSeparator()));
         assertEquals(expectediTIPMessage, iTIPMessage);
     }
- 
+     
     @Test
     public void canChangeTimeBasedToWholeDayOne()
     {
