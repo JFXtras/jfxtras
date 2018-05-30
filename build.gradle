@@ -164,6 +164,13 @@ project(':jfxtras-font-roboto') {
     }
 }
 
+project(':jfxtras-styles') {
+    project.ext.apiProject = true
+    dependencies {
+        testCompile project(':jfxtras-test-support')
+    }
+}
+
 project(':jfxtras-test-support') {
     dependencies {
         compile "junit:junit:$junitVersion"
