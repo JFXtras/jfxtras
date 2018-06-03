@@ -1,4 +1,4 @@
-package jfxtras.styles.jmetro8;
+package impl.jfxtras.styles.jmetro8;
 
 import com.sun.javafx.scene.control.behavior.TextFieldBehavior;
 import com.sun.javafx.scene.control.skin.TextFieldSkin;

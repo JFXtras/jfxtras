@@ -1,4 +1,4 @@
-package jfxtras.styles.jmetro8;
+package impl.jfxtras.styles.jmetro8;
 
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
