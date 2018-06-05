@@ -20,7 +20,6 @@ screenshot*.png
 /gradlew_assemble.cmd
 /.nb-gradle/private/
 /.nb-gradle/profiles/private/
-.idea
 out
 /jfxtras-agenda/target
 /jfxtras-controls/target
@@ -31,3 +30,7 @@ out
 /jfxtras-menu/target
 /jfxtras-test-support/target
 /jfxtras-window/target
+
+# intellij files
+*.iml
+.idea
