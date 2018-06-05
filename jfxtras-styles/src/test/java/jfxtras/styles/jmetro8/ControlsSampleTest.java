@@ -58,16 +58,15 @@ public class ControlsSampleTest extends Application {
 
     static final String RESOURCE = TEXTBOX_RESOURCE;
 
-    static final String LIGHT_STYLE_SHEET = "JMetroLightTheme.css";
-    static final String DARK_STYLE_SHEET = "JMetroDarkTheme.css";
-
-    static final String STYLE_SHEET = LIGHT_STYLE_SHEET;
+    static final JMetro.Style STYLE = JMetro.Style.LIGHT;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource(RESOURCE));
         primaryStage.setTitle("JMetro");
-        root.getStylesheets().add(getClass().getResource(STYLE_SHEET).toExternalForm());
+
+        new JMetro(STYLE).applyTheme(root);
+
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.show();
