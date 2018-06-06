@@ -34,7 +34,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ControlsSampleTest extends Application {
+public class ControlsSampleSample extends Application {
     static final String CHECK_BOX_RESOURCE = "JMetro CheckBox.fxml";
     static final String CONTEXT_MENU_RESOURCE = "JMetro ContextMenu.fxml";
     static final String PUSH_BUTTON_RESOURCE = "JMetro PushButton.fxml";
