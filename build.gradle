@@ -18,6 +18,10 @@ allprojects {
         sourceCompatibility = rootProject.sourceCompatibility
         targetCompatibility = rootProject.targetCompatibility
     }
+	// Disable javadoc (asciidoc) because it is not compatible with Java 10+
+	tasks.withType(Javadoc).all { 
+		enabled = false 
+	}
 
     // apply vrl license header plugin
 //    if (!project.plugins.findPlugin(eu.mihosoft.vrl.vlicenseheaderutil.gradle.VLicenseHeaderPlugin)) {
