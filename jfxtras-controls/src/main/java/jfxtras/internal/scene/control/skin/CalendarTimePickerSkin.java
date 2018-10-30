@@ -401,7 +401,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			}
 
 			// now we're going to play with some numbers
-			// given the available width, how many labels cold we place (rounded down)
+			// given the available width, how many labels could we place (rounded down)
 			int lNumberOfLabels = (int)(this.getWidth() / lLabelWidthPlusWhitespace) + 2;
 			int lStep = 24;
 			if (lNumberOfLabels >= 24/1) lStep = 1; 
@@ -494,25 +494,25 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 	private void refreshLayout()
 	{
 		DateFormat labelDateFormat = getLabelDateFormat();
-		String formattedDate = labelDateFormat.format(DATE);
+		String formattedDate = labelDateFormat.format(DATE_WITH_UNIQUE_NUMBERS_FOR_HMS);
 		
 		getChildren().clear();
 		StackPane lStackPane = new StackPane();
 		VBox lVBox = new VBox(0);
 		lVBox.alignmentProperty().set(Pos.CENTER);
-		if ( formattedDate.contains("2") ) {
+		if ( formattedDate.contains("" + UNIQUE_NUMBER_FOR_H) ) {
 			if (getShowTickLabels() == ShowTickLabels.YES) {
 				lVBox.getChildren().add(hourLabelsPane);
 			}
 			lVBox.getChildren().add(hourScrollSlider);
 		}
-		if ( formattedDate.contains("3") ) {
+		if ( formattedDate.contains("" + UNIQUE_NUMBER_FOR_M) ) {
 			lVBox.getChildren().add(minuteScrollSlider);
 			if (getShowTickLabels() == ShowTickLabels.YES) {
 				lVBox.getChildren().add(minuteLabelsPane);
 			}
 		}
-		if ( formattedDate.contains("4") ) {
+		if ( formattedDate.contains("" + UNIQUE_NUMBER_FOR_S) ) {
 			lVBox.getChildren().add(secondScrollSlider);
 		}
 		lStackPane.getChildren().add(lVBox);
@@ -520,7 +520,10 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		StackPane.setAlignment(timeText, getShowTickLabels() == ShowTickLabels.YES ? Pos.CENTER : Pos.TOP_CENTER);
 		getChildren().add(lStackPane);
 	}
-	final static Date DATE = new Date(9999-1900, 0, 1, 2, 3, 4);
+	final static int UNIQUE_NUMBER_FOR_H = 2;
+	final static int UNIQUE_NUMBER_FOR_M = 3;
+	final static int UNIQUE_NUMBER_FOR_S = 4;
+	final static Date DATE_WITH_UNIQUE_NUMBERS_FOR_HMS = new Date(9999-1900, 0, 1, UNIQUE_NUMBER_FOR_H, UNIQUE_NUMBER_FOR_M, UNIQUE_NUMBER_FOR_S);
 	
 	/**
 	 * 
@@ -537,7 +540,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			hourScrollSlider.valueProperty().set(lHour);
 			minuteScrollSlider.valueProperty().set(lMinute);
 			secondScrollSlider.valueProperty().set(lSecond);
-			String lTimeText = lCalendar == null ? "" : getLabelDateFormat().format(lCalendar.getTime());
+			String lTimeText = lCalendar == null ? "Ø" : getLabelDateFormat().format(lCalendar.getTime());
 			timeText.setText(lTimeText);
 		}
 		finally {

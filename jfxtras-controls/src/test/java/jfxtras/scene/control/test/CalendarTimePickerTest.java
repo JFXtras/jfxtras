@@ -86,6 +86,24 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 	 * 
 	 */
 	@Test
+	public void nullValue()
+	{
+		// set time to 12:30:00
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTimePicker.setCalendar(null);			
+		});
+		
+		Text lLabelText = (Text)find(".timeLabel");
+		
+		// assert label
+		Assert.assertEquals("Ø", lLabelText.getText());
+	}
+	
+
+	/**
+	 * 
+	 */
+	@Test
 	public void locale()
 	{
 		// set time to 12:30:00
@@ -108,7 +126,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("20:30", lLabelText.getText());
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 	}
-	
+
 	/**
 	 * 
 	 */
