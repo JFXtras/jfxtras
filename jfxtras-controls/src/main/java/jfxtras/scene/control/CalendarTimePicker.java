@@ -98,7 +98,8 @@ public class CalendarTimePicker extends Control
 		}		
 	};
 	public Calendar getCalendar() { return calendarObjectProperty.getValue(); }
-	public void setCalendar(Calendar value) { calendarObjectProperty.setValue(value); }
+	public void setCalendar(Calendar value) { 
+		calendarObjectProperty.setValue(value); }
 	public CalendarTimePicker withCalendar(Calendar value) { setCalendar(value); return this; } 
 
 	/** Locale: the locale is used to determine first-day-of-week, weekday labels, etc */
