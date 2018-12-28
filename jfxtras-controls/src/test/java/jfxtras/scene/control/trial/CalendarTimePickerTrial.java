@@ -29,7 +29,9 @@
 
 package jfxtras.scene.control.trial;
 
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -53,10 +55,19 @@ public class CalendarTimePickerTrial extends Application {
 	public void start(Stage stage) {
 		
 		FlowPane lFlowPane = new FlowPane();
-		
+
 		{
+			TimeZone timeZoneCET = TimeZone.getTimeZone("CET");
+			TimeZone.setDefault(timeZoneCET);
+			TimeZone timeZonePST = TimeZone.getTimeZone("PST");
+			Calendar calendar = Calendar.getInstance(timeZonePST);
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+
 			CalendarTimePicker lCalendarTimePicker = new CalendarTimePicker();
-			lCalendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));
+			lCalendarTimePicker.setCalendar(calendar);
+//			lCalendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));
 //			lCalendarTimePicker.setHourStep(1);
 			lCalendarTimePicker.setMinuteStep(15);
 //			lCalendarTimePicker.setSecondStep(15);

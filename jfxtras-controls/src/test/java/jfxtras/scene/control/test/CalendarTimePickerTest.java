@@ -59,6 +59,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 	 */
 	public Parent getRootNode()
 	{
+		TimeZone.setDefault(TimeZone.getTimeZone("CET"));
 		Locale.setDefault(Locale.ENGLISH);
 		
 		VBox box = new VBox();
@@ -98,7 +99,6 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		// assert label
 		Assert.assertEquals("Ø", lLabelText.getText());
 	}
-	
 
 	/**
 	 * 
@@ -321,5 +321,83 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		// assert label
 		Assert.assertEquals("20:30:00", lLabelText.getText());
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+	}
+	
+	/**
+	 * GitHub issue #106
+	 */
+	@Test
+	public void timezoneDifferent()
+	{
+		// Using a different time zone from the default, this will render the hours wrong 
+		TimeZone timeZonePST = TimeZone.getTimeZone("PST");
+		Calendar calendar = Calendar.getInstance(timeZonePST);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		
+		// set time to 00:00:00
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTimePicker.setCalendar(calendar);			
+			calendarTimePicker.setLocale(Locale.GERMAN);			
+		});
+		
+		// Get time label
+		Text lLabelText = (Text)find(".timeLabel");
+		
+		// assert 
+		Assert.assertEquals("09:00", lLabelText.getText());
+		
+		// assert 
+		Assert.assertEquals("09:00:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+		
+		// move the hour slider
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(100,0);		
+		release(MouseButton.PRIMARY);
+		
+		// assert 
+		Assert.assertEquals("17:00", lLabelText.getText());
+	}
+	
+	/**
+	 * GitHub issue #106
+	 */
+	@Test
+	public void timezoneSame()
+	{
+		// Using a different time zone from the default, this will render the hours wrong 
+		TimeZone timeZonePST = TimeZone.getTimeZone("CET");
+		Calendar calendar = Calendar.getInstance(timeZonePST);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		
+		// set time to 
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			calendarTimePicker.setCalendar(calendar);			
+			calendarTimePicker.setLocale(Locale.GERMAN);			
+		});
+		
+		// Get time label
+		Text lLabelText = (Text)find(".timeLabel");
+		
+		// assert 
+		Assert.assertEquals("00:00", lLabelText.getText());
+		
+		// assert 
+		Assert.assertEquals("00:00:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
+		
+		// move the hour slider
+		move("#hourSlider > .thumb");
+		press(MouseButton.PRIMARY);
+		moveBy(100,0);		
+		release(MouseButton.PRIMARY);
+		
+		// assert 
+		Assert.assertEquals("08:00", lLabelText.getText());
 	}
 }
