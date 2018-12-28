@@ -333,7 +333,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			seconds += getSkinnable().getSecondStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
 			if (seconds > 59) seconds -= lSecondStep;
 		}
-		lCalendar.set(Calendar.SECOND, seconds);
+		setSeconds(lCalendar, seconds);
 		lCalendar = blockSecondsToStep(lCalendar, getSkinnable().getSecondStep());
 		setChangingCalendar(lCalendar);
 	}
@@ -351,7 +351,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			minutes += getSkinnable().getMinuteStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
 			if (minutes > 59) minutes -= lMinuteStep;
 		}
-		lCalendar.set(Calendar.MINUTE, minutes);
+		setMinutes(lCalendar, minutes);
 		lCalendar = blockMinutesToStep(lCalendar, getSkinnable().getMinuteStep());
 		setChangingCalendar(lCalendar);
 	}
@@ -369,7 +369,7 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			hour += getSkinnable().getHourStep() / 2; // add half a step, so the scroller jumps to the next tick when the mouse is half way
 			if (hour > 23) hour -= lHourStep;
 		}
-		lCalendar.set(Calendar.HOUR_OF_DAY, hour);
+		setHours(lCalendar, hour);
 		lCalendar = blockHoursToStep(lCalendar, getSkinnable().getHourStep());
 		setChangingCalendar(lCalendar);
 	}
@@ -535,9 +535,9 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			refreshingAtomicInteger.addAndGet(1);
 
 			Calendar lCalendar = getChangingCalendar();
-			int lHour = lCalendar == null ? 0 : lCalendar.get(Calendar.HOUR_OF_DAY);
-			int lMinute = lCalendar == null ? 0 : lCalendar.get(Calendar.MINUTE);
-			int lSecond = lCalendar == null ? 0 : lCalendar.get(Calendar.SECOND);
+			int lHour = lCalendar == null ? 0 : lCalendar.getTime().getHours();
+			int lMinute = lCalendar == null ? 0 : lCalendar.getTime().getMinutes();
+			int lSecond = lCalendar == null ? 0 : lCalendar.getTime().getSeconds();
 			hourScrollSlider.valueProperty().set(lHour);
 			minuteScrollSlider.valueProperty().set(lMinute);
 			secondScrollSlider.valueProperty().set(lSecond);
@@ -558,13 +558,13 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		if (stepSize == null || calendar == null || stepSize == 1) return calendar;
 			
 		// set the hours to match the step size
-		int lValue = calendar.get(Calendar.HOUR_OF_DAY);
+		int lValue = calendar.getTime().getHours();
 		lValue = lValue / stepSize; // trunk
 		lValue *= stepSize;
-		if (calendar.get(Calendar.HOUR_OF_DAY) != lValue)
+		if (calendar.getTime().getHours() != lValue)
 		{
 			Calendar lCalendar = (Calendar)calendar.clone();
-			lCalendar.set(Calendar.HOUR_OF_DAY, lValue);
+			setHours(lCalendar, lValue);
 			calendar = lCalendar;
 		}
 		return calendar;
@@ -578,13 +578,13 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		if (stepSize == null || calendar == null || stepSize == 1) return calendar;
 			
 		// set the minutes to match the step size
-		int lValue = calendar.get(Calendar.MINUTE);
+		int lValue = calendar.getTime().getMinutes();
 		lValue = lValue / stepSize; // trunk
 		lValue *= stepSize;
-		if (calendar.get(Calendar.MINUTE) != lValue)
+		if (calendar.getTime().getMinutes() != lValue)
 		{
 			Calendar lCalendar = (Calendar)calendar.clone();
-			lCalendar.set(Calendar.MINUTE, lValue);
+			setMinutes(lCalendar, lValue);
 			calendar = lCalendar;
 		}
 		return calendar;
@@ -598,13 +598,13 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 		if (stepSize == null || calendar == null || stepSize == 1) return calendar;
 			
 		// set the minutes to match the step size
-		int lValue = calendar.get(Calendar.SECOND);
+		int lValue = calendar.getTime().getSeconds();
 		lValue = lValue / stepSize; // trunk
 		lValue *= stepSize;
-		if (calendar.get(Calendar.SECOND) != lValue)
+		if (calendar.getTime().getSeconds() != lValue)
 		{
 			Calendar lCalendar = (Calendar)calendar.clone();
-			lCalendar.set(Calendar.SECOND, lValue);
+			setSeconds(lCalendar, lValue);
 			calendar = lCalendar;
 		}
 		return calendar;
@@ -645,5 +645,41 @@ public class CalendarTimePickerSkin extends SkinBase<CalendarTimePicker>
 			return true;
 		}
 		return lCallback.call(value);
+	}
+	
+	/*
+	 * 
+	 */
+	static private void setHours(Calendar calendar, int hours) {
+		if (calendar == null) {
+			return;
+		}
+		Date date = calendar.getTime();
+		date.setHours(hours);
+		calendar.setTime(date);
+	}
+	
+	/*
+	 * 
+	 */
+	static private void setMinutes(Calendar calendar, int minutes) {
+		if (calendar == null) {
+			return;
+		}
+		Date date = calendar.getTime();
+		date.setMinutes(minutes);
+		calendar.setTime(date);
+	}
+	
+	/*
+	 * 
+	 */
+	static private void setSeconds(Calendar calendar, int seconds) {
+		if (calendar == null) {
+			return;
+		}
+		Date date = calendar.getTime();
+		date.setSeconds(seconds);
+		calendar.setTime(date);
 	}
 }
