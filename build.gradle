@@ -279,5 +279,3 @@ shadowJar {
 }
 
 jar.finalizedBy shadowJar
-
-}
