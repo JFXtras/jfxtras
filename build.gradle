@@ -105,6 +105,27 @@ subprojects {
 
     apply from: rootProject.file('gradle/javadoc.gradle')
 
+	// Force Java 9 in Eclipse config
+	// https://docs.gradle.org/current/dsl/org.gradle.plugins.ide.eclipse.model.EclipseClasspath.html
+	eclipse {
+		classpath {
+	    	containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-9/' // Add correct container
+			file {
+	    		whenMerged { classpath ->
+	    			classpath.entries.removeAll { entry -> entry.kind == 'con' && !entry.path.contains('JavaSE-9')} // Remove all other containers
+					classpath.entries.findAll{ it.kind == 'src' && it.entryAttributes['gradle_used_by_scope'].equals('test') }.each { // Mark test folders as containing test sourcers
+						it.entryAttributes['test'] = 'true'
+					}
+				}
+	   		}
+	   }
+	   jdt {
+			sourceCompatibility = org.gradle.api.JavaVersion.VERSION_1_9 
+			targetCompatibility = org.gradle.api.JavaVersion.VERSION_1_9
+	   }
+	}
+	tasks.eclipse.dependsOn(cleanEclipse)
+
     // follow advise from https://guides.gradle.org/building-java-9-modules/
     afterEvaluate {
         if (project.moduleName == 'jfxtras.test.support') {

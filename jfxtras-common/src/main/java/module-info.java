@@ -7,4 +7,5 @@ module jfxtras.common {
     exports jfxtras.util;
 
     requires transitive javafx.controls;
+    requires transitive javafx.fxml; // actually this is only needed for the test sources
 }
