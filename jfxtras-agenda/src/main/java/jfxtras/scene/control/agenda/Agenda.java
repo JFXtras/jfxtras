@@ -138,10 +138,10 @@ import jfxtras.scene.control.agenda.TemporalUtilities.TemporalType;
  * --
  * 
  * === Editing appointments
- * Agenda has a default popup the allows the primary properties of appointments to be edited, but maybe you want to do something yourself.
+ * Agenda has a default popup that allows the primary properties of appointments to be edited, but maybe you want to do something yourself.
  * If so, you need to register to the editAppointmentCallback, and open your own popup.
  * Because Agenda does not dictate an event/callback mechanism in the implementation of Appointment, it has no way of being informed of changes on the appointment.
- * So when the custom edit is done, make sure that control gets updated (if this does not happen automatically through any of the existing listeners) by calling refresh(). 
+ * So when the custom edit is done, make sure that agenda gets updated (if this does not happen automatically through any of the existing listeners) by calling refresh(). 
  *
  * == Usage
  * The three steps to get Agenda up and running completely:
