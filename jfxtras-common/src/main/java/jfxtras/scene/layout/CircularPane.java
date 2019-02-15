@@ -584,7 +584,7 @@ public class CircularPane extends Pane {
 					    	transition = null;
 				    		getOnAnimateInFinished().handle(event);
 				    	}
-				    	if (transition.getRate() < 0 && getOnAnimateOutFinished() != null) {
+				    	else if (transition.getRate() < 0 && getOnAnimateOutFinished() != null) {
 					    	transition = null;
 				    		getOnAnimateOutFinished().handle(event);
 				    	}
