@@ -217,7 +217,7 @@ public class Window extends Control implements SelectableNode {
 
     @Override
     public String getUserAgentStylesheet() {
-        return this.getClass().getResource(DEFAULT_STYLE).toExternalForm();
+        return DEFAULT_STYLE;
     }
 
     /**
