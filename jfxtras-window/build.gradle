@@ -1,4 +1,0 @@
-dependencies {
-    compile project(":jfxtras-common")
-    testCompile project(":jfxtras-test-support")
-}

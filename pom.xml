@@ -1,0 +1,152 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jfxtras</groupId>
+	<artifactId>jfxtras-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>8.0-r7-SNAPSHOT</version>
+	<name>JFXtras parent</name>
+	<description>Miscellaneous components for JavaFX</description>
+	<licenses>
+		<license>
+			<name>BSD</name>
+			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>scm:git@github.com:jfxtras/jfxtras.git</url>
+		<connection>scm:git@github.com:jfxtras/jfxtras.git</connection>
+		<developerConnection>scm:git@github.com:jfxtras/jfxtras.git</developerConnection>
+	</scm>
+	<developers>
+		<developer>
+			<name>Tom Eugelink</name>
+		</developer>
+	</developers>
+	<distributionManagement>
+		<snapshotRepository>
+			<id>sonatype</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>sonatype</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
+	</distributionManagement>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+	</properties>
+
+	<modules>
+		<module>jfxtras-agenda</module>
+		<module>jfxtras-common</module>
+		<module>jfxtras-controls</module>
+		<module>jfxtras-font-roboto</module>
+		<module>jfxtras-fxml</module>
+		<module>jfxtras-gauge-linear</module>
+		<module>jfxtras-icalendaragenda</module>
+		<module>jfxtras-icalendarfx</module>
+		<module>jfxtras-menu</module>
+		<module>jfxtras-window</module>
+		<module>jfxtras-test-support</module>
+	</modules>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.22.2</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<plugins>
+			<!-- generate Javadoc files using Asciidoclet -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doclet>org.asciidoctor.Asciidoclet</doclet>
+					<docletArtifact>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoclet</artifactId>
+						<version>1.5.4</version>
+					</docletArtifact>
+					<additionalOptions>
+						<additionalOption>--base-dir ${project.basedir}</additionalOption>
+						<additionalOption>--attribute "name=${project.name}"</additionalOption>
+						<additionalOption>--attribute "version=${project.version}"</additionalOption>
+						<additionalOption>--attribute "title-link=http://jfxtras.com[${project.name} ${project.version}]"</additionalOption>
+					</additionalOptions>
+				</configuration>
+			</plugin>
+			
+			<!-- attach source -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+    
+			<!-- sign the jars files -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<!-- deploy using the special nexus-staging deploy plugin -->
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>sonatype</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>					
+		</plugins>
+	</build>
+</project>
