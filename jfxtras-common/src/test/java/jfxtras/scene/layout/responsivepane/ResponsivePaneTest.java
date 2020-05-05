@@ -44,7 +44,7 @@ import jfxtras.test.TestUtil;
  */
 // TODO: reusableNodes and Refs
 public class ResponsivePaneTest extends JFXtrasGuiTest {
-
+	
 	/**
 	 * 
 	 */

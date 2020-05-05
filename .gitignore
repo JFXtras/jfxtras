@@ -34,3 +34,10 @@ out
 # intellij files
 *.iml
 .idea
+/jfxtras-font-roboto/*.versionsBackup
+/build.gradle.out
+/gradle.properties.out
+/java_localOverride.cmd
+*.versionsBackup
+/target
+/bin
