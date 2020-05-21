@@ -75,6 +75,55 @@
 		</pluginManagement>
 
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<id>timestamp-property</id>
+						<goals>
+							<goal>timestamp-property</goal>
+						</goals>
+						<phase>validate</phase>
+						<configuration>
+							<locale>en_US</locale>
+							<name>year</name>
+							<pattern>yyyy</pattern>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- add license header to files http://mycila.mathieu.photography/license-maven-plugin/ -->
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<header>license-template.txt</header>
+					<properties>
+						<year>${year}</year>
+					</properties>
+					<excludes>					
+						<exclude>**/pom.xml.versionsBackup</exclude>
+						<exclude>**/*.cmd</exclude>
+						<exclude>**/*.adoc</exclude>
+						<exclude>**/*.fxml</exclude>
+						<exclude>**/README</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/resources/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- generate Javadoc files using Asciidoclet -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
