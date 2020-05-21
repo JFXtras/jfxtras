@@ -175,9 +175,7 @@
 						<additionalOption>--base-dir ${project.basedir}</additionalOption>
 						<additionalOption>--attribute "name=${project.name}"</additionalOption>
 						<additionalOption>--attribute "version=${project.version}"</additionalOption>
-						<additionalOption>--attribute
-							"title-link=http://jfxtras.com[${project.name}
-							${project.version}]"</additionalOption>
+						<additionalOption>--attribute "title-link=http://jfxtras.com[${project.name} ${project.version}]"</additionalOption>
 					</additionalOptions>
 				</configuration>
 			</plugin>
