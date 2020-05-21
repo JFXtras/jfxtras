@@ -1,3 +1,31 @@
+<!--
+
+    Copyright (c) 2011-2020, JFXtras
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+       Redistributions of source code must retain the above copyright
+          notice, this list of conditions and the following disclaimer.
+       Redistributions in binary form must reproduce the above copyright
+          notice, this list of conditions and the following disclaimer in the
+          documentation and/or other materials provided with the distribution.
+       Neither the name of the organization nor the
+          names of its contributors may be used to endorse or promote products
+          derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+    ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -75,6 +103,54 @@
 		</pluginManagement>
 
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<id>timestamp-property</id>
+						<goals>
+							<goal>timestamp-property</goal>
+						</goals>
+						<phase>validate</phase>
+						<configuration>
+							<locale>en_US</locale>
+							<name>year</name>
+							<pattern>yyyy</pattern>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- add license header to files http://mycila.mathieu.photography/license-maven-plugin/ -->
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<header>license-template.txt</header>
+					<properties>
+						<year>${year}</year>
+					</properties>
+					<excludes>					
+						<exclude>**/pom.xml.versionsBackup</exclude>
+						<exclude>**/*.cmd</exclude>
+						<exclude>**/*.adoc</exclude>
+						<exclude>**/*.fxml</exclude>
+						<exclude>**/README</exclude>
+						<exclude>src/test/resources/**</exclude>
+						<exclude>src/main/resources/**</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>format</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- generate Javadoc files using Asciidoclet -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -99,11 +175,13 @@
 						<additionalOption>--base-dir ${project.basedir}</additionalOption>
 						<additionalOption>--attribute "name=${project.name}"</additionalOption>
 						<additionalOption>--attribute "version=${project.version}"</additionalOption>
-						<additionalOption>--attribute "title-link=http://jfxtras.com[${project.name} ${project.version}]"</additionalOption>
+						<additionalOption>--attribute
+							"title-link=http://jfxtras.com[${project.name}
+							${project.version}]"</additionalOption>
 					</additionalOptions>
 				</configuration>
 			</plugin>
-			
+
 			<!-- attach source -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -118,7 +196,7 @@
 					</execution>
 				</executions>
 			</plugin>
-    
+
 			<!-- sign the jars files -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -134,7 +212,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- deploy using the special nexus-staging deploy plugin -->
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
@@ -146,7 +224,7 @@
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
-			</plugin>					
+			</plugin>
 		</plugins>
 	</build>
 </project>
