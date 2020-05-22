@@ -68,7 +68,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.release>9</maven.compiler.release>
+		<maven.compiler.target>9</maven.compiler.target>
+		<maven.compiler.source>9</maven.compiler.source>
 	</properties>
 
 	<modules>
@@ -215,6 +216,9 @@
 					</execution>
 				</executions>
 				<configuration>
+					<sourceFileExcludes>
+					    <exclude>module-info.java</exclude>
+					</sourceFileExcludes>
 					<doclet>org.asciidoctor.Asciidoclet</doclet>
 					<docletArtifact>
 						<groupId>org.asciidoctor</groupId>
