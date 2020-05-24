@@ -357,26 +357,29 @@ public abstract class VParentBase<T> extends VElementBase implements VParent
 					MessageEffect.THROW_EXCEPTION);
 			messages.add(message);
 		}
-		final boolean isChildAlreadyPresent;
-		Object currentParameter = null;
-		try {
-			currentParameter = getter.invoke(this);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		if (currentParameter instanceof Collection)
-		{
-			isChildAlreadyPresent = ((Collection<?>) currentParameter).contains(newChild); // TODO contains is expensive - try to find a way to avoid
-		} else
-		{
-			isChildAlreadyPresent = currentParameter != null;			
-		}
-		if (isChildAlreadyPresent)
-		{
-			Message message = new Message(this,
-					newChild.getClass().getSimpleName() + " can only occur once in a calendar component.  Ignoring instances beyond first.",
-					MessageEffect.MESSAGE_ONLY);
-			messages.add(message);
+    		else // Moved to an else block, because getter could be null here
+    		{		
+			final boolean isChildAlreadyPresent;
+			Object currentParameter = null;
+			try {
+				currentParameter = getter.invoke(this);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			if (currentParameter instanceof Collection)
+			{
+				isChildAlreadyPresent = ((Collection<?>) currentParameter).contains(newChild); // TODO contains is expensive - try to find a way to avoid
+			} else
+			{
+				isChildAlreadyPresent = currentParameter != null;			
+			}
+			if (isChildAlreadyPresent)
+			{
+				Message message = new Message(this,
+						newChild.getClass().getSimpleName() + " can only occur once in a calendar component.  Ignoring instances beyond first.",
+						MessageEffect.MESSAGE_ONLY);
+				messages.add(message);
+			}
 		}
 		return messages.size() == initialMessageSize;
 	}
