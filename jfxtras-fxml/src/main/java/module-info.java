@@ -28,4 +28,6 @@ module jfxtras.fxml {
     exports jfxtras.fxml;
 
     requires transitive javafx.fxml;
+    uses javafx.util.Builder;
+    uses jfxtras.fxml.BuilderService;
 }

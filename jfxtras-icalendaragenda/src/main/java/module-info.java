@@ -32,4 +32,9 @@ module jfxtras.icalendaragenda {
 
     requires transitive jfxtras.agenda;
     requires transitive jfxtras.icalendarfx;
+	requires javafx.controls;
+	requires jfxtras.controls;
+	requires javafx.fxml;
+	requires jfxtras.common;
+	requires java.xml;
 }

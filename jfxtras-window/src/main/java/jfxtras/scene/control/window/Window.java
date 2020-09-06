@@ -54,7 +54,7 @@ import jfxtras.util.NodeUtil;
 
 /**
  * Window control. A window control is a window node as known from Swing, e.g
- * {@link javax.swing.JInternalFrame}. It can be used to realize MDI based
+ * javax.swing.JInternalFrame. It can be used to realize MDI based
  * applications. See <a href=https://github.com/miho/VFXWindows-Samples>
  * https://github.com/miho/VFXWindows-Samples</a> for sample code.
  *

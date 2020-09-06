@@ -313,7 +313,6 @@ public class ResponsivePane extends StackPane {
 	
 	/**
 	 * 
-	 * @param id
 	 * @param node
 	 * @return
 	 */

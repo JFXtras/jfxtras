@@ -29,4 +29,7 @@ module jfxtras.agenda {
     exports jfxtras.internal.scene.control.skin.agenda to jfxtras.icalendarfx, jfxtras.icalendaragenda;
 
     requires transitive jfxtras.controls;
+	requires javafx.graphics;
+	requires javafx.controls;
+	requires jfxtras.common;
 }

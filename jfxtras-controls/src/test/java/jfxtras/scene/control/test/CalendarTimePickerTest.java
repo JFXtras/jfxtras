@@ -134,19 +134,18 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTimePicker.setCalendar(new GregorianCalendar(2013, 0, 1, 12, 30, 00));			
 		});
-		
 		Text lLabelText = (Text)find(".timeLabel");
-		
+
 		// move the hour slider
-		move("#hourSlider > .thumb");
+		moveTo("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
-		moveBy(100,0);		
+		moveBy(100, 0);
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals("8:30 PM", lLabelText.getText());
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// move the minute slider
-		move("#minuteSlider > .thumb");
+		moveTo("#minuteSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
@@ -170,21 +169,21 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		});
 		
 		// move the hour slider
-		move("#hourSlider > .thumb");
+		moveTo("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(90,0);		
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// move the minute slider
-		move("#minuteSlider > .thumb");
+		moveTo("#minuteSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(-50,0);		
 		release(MouseButton.PRIMARY);
 		Assert.assertEquals("20:15:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// move the second slider
-		move("#secondSlider > .thumb");
+		moveTo("#secondSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(40,0);		
 		release(MouseButton.PRIMARY);
@@ -214,7 +213,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		});
 		
 		// move the hour slider: even hour is accepted
-		move("#hourSlider > .thumb");
+		moveTo("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(100,0);		
 		release(MouseButton.PRIMARY);
@@ -222,7 +221,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 
 		// move the hour slider: odd hour is not accepted
-		move("#hourSlider > .thumb");
+		moveTo("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(15,0);		
 		release(MouseButton.PRIMARY);
@@ -230,7 +229,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("20:30:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// move the hour slider: even hour is accepted
-		move("#hourSlider > .thumb");
+		moveTo("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(30,0);		
 		release(MouseButton.PRIMARY);
@@ -350,7 +349,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("09:00:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// move the hour slider
-		move("#hourSlider > .thumb");
+		moveTo("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(100,0);		
 		release(MouseButton.PRIMARY);
@@ -389,7 +388,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		Assert.assertEquals("00:00:00", TestUtil.quickFormatCalendarAsTime(calendarTimePicker.getCalendar()));
 		
 		// move the hour slider
-		move("#hourSlider > .thumb");
+		moveTo("#hourSlider > .thumb");
 		press(MouseButton.PRIMARY);
 		moveBy(100,0);		
 		release(MouseButton.PRIMARY);

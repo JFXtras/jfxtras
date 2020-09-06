@@ -35,7 +35,7 @@
 	<groupId>org.jfxtras</groupId>
 	<artifactId>jfxtras-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>9.0-r2-SNAPSHOT</version>
+	<version>14.0-r1-SNAPSHOT</version>
 	<name>JFXtras parent</name>
 	<description>Miscellaneous components for JavaFX</description>
 	<licenses>
@@ -68,8 +68,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.target>9</maven.compiler.target>
-		<maven.compiler.source>9</maven.compiler.source>
+		<maven.compiler.target>14</maven.compiler.target>
+		<maven.compiler.source>14</maven.compiler.source>
+		<openjfx.version>14.0.2.1</openjfx.version>
 	</properties>
 
 	<modules>
@@ -86,6 +87,53 @@
 		<module>jfxtras-test-support</module>
 	</modules>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-base</artifactId>
+				<version>${openjfx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>${openjfx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-fxml</artifactId>
+				<version>${openjfx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-graphics</artifactId>
+				<version>${openjfx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-media</artifactId>
+				<version>${openjfx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-swing</artifactId>
+				<version>${openjfx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-web</artifactId>
+				<version>${openjfx.version}</version>
+				<scope>provided</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -98,7 +146,19 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.22.2</version>
-				</plugin>
+					<dependencies>
+						<dependency>
+							<groupId>org.ow2.asm</groupId>
+							<artifactId>asm</artifactId>
+							<version>7.2</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+				    	<argLine>
+				      		--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED
+				    	</argLine>
+				  	</configuration>
+				</plugin>				
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -178,7 +238,7 @@
 				<artifactId>license-maven-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
-					<header>license-template.txt</header>
+					<header>${maven.multiModuleProjectDirectory}/license-template.txt</header>
 					<properties>
 						<year>${year}</year>
 					</properties>
@@ -219,13 +279,31 @@
 					<sourceFileExcludes>
 					    <exclude>module-info.java</exclude>
 					</sourceFileExcludes>
-					<doclet>org.asciidoctor.Asciidoclet</doclet>
+					<doclet>org.asciidoctor.asciidoclet.Asciidoclet</doclet>
+					<!-- use docletPath until asciidoclet is compatible with Java 11  https://github.com/asciidoctor/asciidoclet/pull/96
 					<docletArtifact>
 						<groupId>org.asciidoctor</groupId>
 						<artifactId>asciidoclet</artifactId>
-						<version>1.5.4</version>
+						<version>2.x.x</version>
 					</docletArtifact>
-					<additionalOptions>
+					
+					https://github.com/chrisvest/asciidoclet/releases/tag/2.0.0
+					<docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.0.0-shaded.jar</docletPath>
+					
+					https://github.com/UniKnow/AsciiDoclet
+					<docletArtifact>
+			        	<groupId>org.uniknow</groupId>
+			        	<artifactId>asciidoclet</artifactId>
+			        	<version>2.1.0</version>
+			        </docletArtifact>
+					<docletPath>C:/Users/user/.m2/repository/org/uniknow/asciidoclet/2.1.0/asciidoclet-2.1.0-shaded.jar</docletPath>
+					<docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.1.0-shaded.jar</docletPath>
+					 -->
+					<docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.1.0-shaded.jar</docletPath>
+     				<additionalJOptions>
+						<additionalJOption>-J--add-exports=jdk.javadoc/jdk.javadoc.internal.tool=ALL-UNNAMED</additionalJOption>
+					</additionalJOptions>
+     				<additionalOptions>
 						<additionalOption>--base-dir ${project.basedir}</additionalOption>
 						<additionalOption>--attribute "name=${project.name}"</additionalOption>
 						<additionalOption>--attribute "version=${project.version}"</additionalOption>

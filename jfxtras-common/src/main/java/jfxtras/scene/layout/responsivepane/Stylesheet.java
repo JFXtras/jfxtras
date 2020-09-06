@@ -44,7 +44,7 @@ public class Stylesheet {
 	
 	/**
 	 * 
-	 * @param sizeInInchesAtLeast size in inches
+	 * @param sizeAtLeast size in inches
 	 * @param file
 	 */
 	public Stylesheet(Size sizeAtLeast, String file) {

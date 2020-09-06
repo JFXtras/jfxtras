@@ -43,6 +43,4 @@ module jfxtras.icalendarfx {
 	exports jfxtras.icalendarfx.properties.component.time;
 	exports jfxtras.icalendarfx.properties.component.timezone;
 	exports jfxtras.icalendarfx.utilities;
-
-	requires transitive java.xml.ws.annotation;
 }

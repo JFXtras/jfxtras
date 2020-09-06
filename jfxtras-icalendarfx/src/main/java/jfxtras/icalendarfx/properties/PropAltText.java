@@ -26,8 +26,6 @@
  */
 package jfxtras.icalendarfx.properties;
 
-import javax.annotation.Resources;
-
 import jfxtras.icalendarfx.parameters.AlternateText;
 import jfxtras.icalendarfx.properties.PropBaseAltText;
 import jfxtras.icalendarfx.properties.PropLanguage;

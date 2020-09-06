@@ -28,8 +28,6 @@ package jfxtras.icalendarfx.properties;
 
 import java.net.URI;
 
-import javax.annotation.Resources;
-
 import jfxtras.icalendarfx.parameters.AlternateText;
 import jfxtras.icalendarfx.properties.PropAltText;
 import jfxtras.icalendarfx.properties.PropBaseAltText;

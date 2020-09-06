@@ -35,7 +35,7 @@
 	<parent>
 		<groupId>org.jfxtras</groupId>
 		<artifactId>jfxtras-parent</artifactId>
-		<version>9.0-r2-SNAPSHOT</version>
+		<version>14.0-r1-SNAPSHOT</version>
     </parent>
     <artifactId>jfxtras-controls</artifactId>
     <packaging>jar</packaging>
@@ -43,19 +43,34 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>jfxtras-fxml</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
             <artifactId>jfxtras-common</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>jfxtras-fxml</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>jfxtras-test-support</artifactId>
             <version>${project.version}</version>
-			<scope>test</scope>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

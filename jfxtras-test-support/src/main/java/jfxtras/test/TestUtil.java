@@ -211,7 +211,7 @@ public class TestUtil {
 
 	/**
 	 * 
-	 * @param string
+	 * @param value
 	 * @return
 	 */
 	public static LocalDateTime quickParseLocalDateTimeYMDhm(String value) {

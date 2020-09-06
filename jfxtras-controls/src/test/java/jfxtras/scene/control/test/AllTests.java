@@ -50,7 +50,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	          , LocalDatePickerFXMLTest.class
               , LocalDateTextFieldTest.class
 	          , LocalDateTimePickerTest.class 
-	          , LocalDateTimePickerFXMLTest.class 
+	          , LocalDateTimePickerFXMLTest.class
 	          , LocalTimePickerTest.class
 	          , LocalTimePickerFXMLTest.class
               , LocalDateTimeTextFieldTest.class

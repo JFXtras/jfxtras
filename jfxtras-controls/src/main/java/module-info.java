@@ -26,10 +26,26 @@
  */
 module jfxtras.controls {
     exports jfxtras.scene.control;
+    exports jfxtras.scene.control.builders;
+    exports jfxtras.internal.scene.control.skin to jfxtras.agenda; // what does this bring?
 
-    exports jfxtras.internal.scene.control.skin to jfxtras.agenda;
-
-    requires transitive jfxtras.fxml;
     requires transitive jfxtras.common;
+    requires transitive jfxtras.fxml;
+    uses jfxtras.fxml.BuilderService;
+    provides jfxtras.fxml.BuilderService with jfxtras.scene.control.builders.CalendarPickerBuilder
+            , jfxtras.scene.control.builders.CalendarTextFieldBuilder
+            , jfxtras.scene.control.builders.CalendarTimePickerBuilder
+            , jfxtras.scene.control.builders.CalendarTimeTextFieldBuilder
+            , jfxtras.scene.control.builders.LocalDatePickerBuilder
+            , jfxtras.scene.control.builders.LocalDateTextFieldBuilder
+            , jfxtras.scene.control.builders.LocalDateTimePickerBuilder
+            , jfxtras.scene.control.builders.LocalDateTimeTextFieldBuilder
+            , jfxtras.scene.control.builders.LocalTimePickerBuilder
+            , jfxtras.scene.control.builders.LocalTimeTextFieldBuilder;
+
+	requires transitive javafx.base;
+	requires transitive javafx.controls;
+    requires transitive javafx.fxml;
+
     requires transitive java.logging;
 }
