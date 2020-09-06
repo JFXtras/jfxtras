@@ -95,7 +95,7 @@ public class SimpleMetroArcGaugeTest extends JFXtrasGuiTest {
 		
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(0.0, 67.0625, 36.375, 17.34375, 0.01).assertTextText("0");
+		new AssertNode(find(".value")).assertXYWH(0.0, 69.0625, 36.8125, 16.0625, 0.01).assertTextText("0");
 		
 		// assert the needle
 		generateNeedleSource(".needle");
@@ -124,7 +124,7 @@ public class SimpleMetroArcGaugeTest extends JFXtrasGuiTest {
 
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(0.0, 67.0625, 72.75, 17.34375, 0.01).assertTextText("45");
+		new AssertNode(find(".value")).assertXYWH(0.0, 69.0625, 73.625, 16.0625, 0.01).assertTextText("45");
 		
 		// assert the needle
 		generateNeedleSource(".needle");
@@ -143,7 +143,7 @@ public class SimpleMetroArcGaugeTest extends JFXtrasGuiTest {
 		
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(-63.0, 67.0625, 163.1875, 17.34375, 0.01).assertTextText(" 0.0W");
+		new AssertNode(find(".value")).assertXYWH(-68.0, 69.0625, 172.9375, 16.0625, 0.01).assertTextText(" 0.0W");
 		
 		// set the value 
 		TestUtil.runThenWaitForPaintPulse( () -> {
@@ -152,7 +152,7 @@ public class SimpleMetroArcGaugeTest extends JFXtrasGuiTest {
 		
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(0.0, 67.0625, 199.5625, 17.34375, 0.01).assertTextText(" 45.0W");
+		new AssertNode(find(".value")).assertXYWH(0.0, 69.0625, 209.75, 16.0625, 0.01).assertTextText(" 45.0W");
 	}
 
 	@Test
