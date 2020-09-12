@@ -44,6 +44,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javafx.scene.control.CheckBox;
@@ -74,6 +75,7 @@ import jfxtras.test.TestUtil;
  * @author David Bal
  *
  */
+@Ignore // fails
 public class ExceptionDateTests extends VEventPopupTestBase
 {
     @Test

@@ -413,7 +413,6 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
             lCloseIconImageView.setOnMouseClicked( (mouseEvent) ->  {
                 popup.hide(); 
             });
-            System.out.println("getSkinnable().isImmediate()=" + getSkinnable().isImmediate());
             if (!getSkinnable().isImmediate()) {
                 lVBox.add(lCloseIconImageView);
             }

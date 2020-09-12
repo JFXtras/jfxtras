@@ -35,7 +35,7 @@
 	<parent>
 		<groupId>org.jfxtras</groupId>
 		<artifactId>jfxtras-parent</artifactId>
-		<version>14.0-r1-SNAPSHOT</version>
+		<version>14-r1-SNAPSHOT</version>
     </parent>
     <artifactId>jfxtras-fxml</artifactId>
     <packaging>jar</packaging>

@@ -35,7 +35,7 @@
 	<parent>
 		<groupId>org.jfxtras</groupId>
 		<artifactId>jfxtras-parent</artifactId>
-		<version>14.0-r1-SNAPSHOT</version>
+		<version>14-r1-SNAPSHOT</version>
     </parent>
     <artifactId>jfxtras-font-roboto</artifactId>
     <packaging>jar</packaging>
@@ -50,7 +50,7 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>jfxtras-test-support</artifactId>
             <version>${project.version}</version>
-			<scope>test</scope>
+			<scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

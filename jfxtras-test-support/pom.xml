@@ -35,7 +35,7 @@
 	<parent>
 		<groupId>org.jfxtras</groupId>
 		<artifactId>jfxtras-parent</artifactId>
-		<version>14.0-r1-SNAPSHOT</version>
+		<version>14-r1-SNAPSHOT</version>
     </parent>
     <artifactId>jfxtras-test-support</artifactId>
     <packaging>jar</packaging>
@@ -49,7 +49,7 @@
         <dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<version>4.13</version>
         </dependency>
         <dependency>
 			<groupId>org.mockito</groupId>

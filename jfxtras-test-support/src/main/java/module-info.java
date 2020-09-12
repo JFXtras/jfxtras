@@ -24,18 +24,11 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-module jfxtras.common {
-    exports jfxtras.animation;
-    exports jfxtras.css;
-    exports jfxtras.css.converters;
-    exports jfxtras.scene.layout;
-    exports jfxtras.scene.layout.responsivepane;
-    exports jfxtras.util;
+module jfxtras.test_support {
+    exports jfxtras.test;
 
     requires transitive javafx.controls;
-
-    // this is only needed for the test sources
-    requires transitive jfxtras.test_support;
-    requires transitive javafx.fxml;
-    opens jfxtras.scene.layout.responsivepane;
+    requires transitive org.testfx;
+    requires transitive org.testfx.junit;
+    requires transitive junit;
 }
