@@ -325,13 +325,18 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 	@Test
 	public void timezoneDifferent()
 	{
-		// Using a different time zone from the default, this will render the hours wrong 
+		// Using a different time zone from the default, this will render the hours wrong
+		// We have so set the date, otherwise this test will fail on summer to winter transitions
 		TimeZone timeZonePST = TimeZone.getTimeZone("PST");
 		Calendar calendar = Calendar.getInstance(timeZonePST);
+		calendar.set(Calendar.YEAR, 2020);
+		calendar.set(Calendar.MONTH, 6);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
 		calendar.set(Calendar.HOUR_OF_DAY, 0);
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
+		System.out.print(TestUtil.quickFormatCalendarAsDateTime(calendar));
 		
 		// set time to 00:00:00
 		TestUtil.runThenWaitForPaintPulse( () -> {
