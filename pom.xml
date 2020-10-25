@@ -17,7 +17,7 @@
     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
     ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
     WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-    DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
+    DISCLAIMED. IN NO EVENT SHALL JFXRAS BE LIABLE FOR ANY
     DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
     (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -35,9 +35,10 @@
 	<groupId>org.jfxtras</groupId>
 	<artifactId>jfxtras-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>14-r1-SNAPSHOT</version>
+	<version>14-r1</version>
 	<name>JFXtras parent</name>
 	<description>Miscellaneous components for JavaFX</description>
+	<url>http://jfxtras.org/</url>
 	<licenses>
 		<license>
 			<name>BSD</name>
@@ -281,56 +282,6 @@
 				</executions>
 			</plugin>
 
-			<!-- generate Javadoc files using Asciidoclet -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.2.0</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<sourceFileExcludes>
-					    <exclude>module-info.java</exclude>
-					</sourceFileExcludes>
-					<doclet>org.asciidoctor.asciidoclet.Asciidoclet</doclet>
-					<!-- use docletPath until asciidoclet is compatible with Java 11  https://github.com/asciidoctor/asciidoclet/pull/96
-					<docletArtifact>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoclet</artifactId>
-						<version>2.x.x</version>
-					</docletArtifact>
-					
-					https://github.com/chrisvest/asciidoclet/releases/tag/2.0.0
-					<docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.0.0-shaded.jar</docletPath>
-					
-					https://github.com/UniKnow/AsciiDoclet
-					<docletArtifact>
-			        	<groupId>org.uniknow</groupId>
-			        	<artifactId>asciidoclet</artifactId>
-			        	<version>2.1.0</version>
-			        </docletArtifact>
-					<docletPath>C:/Users/user/.m2/repository/org/uniknow/asciidoclet/2.1.0/asciidoclet-2.1.0-shaded.jar</docletPath>
-					<docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.1.0-shaded.jar</docletPath>
-					 -->
-					<docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.1.0-shaded.jar</docletPath>
-     				<additionalJOptions>
-						<additionalJOption>-J--add-exports=jdk.javadoc/jdk.javadoc.internal.tool=ALL-UNNAMED</additionalJOption>
-					</additionalJOptions>
-     				<additionalOptions>
-						<additionalOption>--base-dir ${project.basedir}</additionalOption>
-						<additionalOption>--attribute "name=${project.name}"</additionalOption>
-						<additionalOption>--attribute "version=${project.version}"</additionalOption>
-						<additionalOption>--attribute "title-link=http://jfxtras.com[${project.name} ${project.version}]"</additionalOption>
-					</additionalOptions>
-				</configuration>
-			</plugin>
-			
 			<!-- attach source -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -376,4 +327,81 @@
 			</plugin>					
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>sources-as-javadoc-jar</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>3.2.0</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+								<configuration>
+									<classifier>javadoc</classifier>
+									<classesDirectory>${basedir}/src/main/java</classesDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>asciidoc</id>
+			<build>
+				<plugins>
+					<!-- generate Javadoc files using Asciidoclet -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>3.2.0</version>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+							<sourceFileExcludes>
+								<exclude>module-info.java</exclude>
+							</sourceFileExcludes>
+							<doclet>org.asciidoctor.asciidoclet.Asciidoclet</doclet>
+							<!-- use docletPath until asciidoclet is compatible with Java 11  https://github.com/asciidoctor/asciidoclet/pull/96
+                            <docletArtifact>
+                                <groupId>org.asciidoctor</groupId>
+                                <artifactId>asciidoclet</artifactId>
+                                <version>2.x.x</version>
+                            </docletArtifact>
+
+                            https://github.com/chrisvest/asciidoclet/releases/tag/2.0.0
+                            <docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.0.0-shaded.jar</docletPath>
+
+                            https://github.com/UniKnow/AsciiDoclet
+                            <docletArtifact>
+                                <groupId>org.uniknow</groupId>
+                                <artifactId>asciidoclet</artifactId>
+                                <version>2.1.0</version>
+                            </docletArtifact>
+                            <docletPath>C:/Users/user/.m2/repository/org/uniknow/asciidoclet/2.1.0/asciidoclet-2.1.0-shaded.jar</docletPath>
+                            <docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.1.0-shaded.jar</docletPath>
+                             -->
+							<docletPath>${maven.multiModuleProjectDirectory}/lib/asciidoclet-2.1.0-shaded.jar</docletPath>
+							<additionalJOptions>
+								<additionalJOption>-J--add-exports=jdk.javadoc/jdk.javadoc.internal.tool=ALL-UNNAMED</additionalJOption>
+							</additionalJOptions>
+							<additionalOptions>
+								<additionalOption>--base-dir ${project.basedir}</additionalOption>
+								<additionalOption>--attribute "name=${project.name}"</additionalOption>
+								<additionalOption>--attribute "version=${project.version}"</additionalOption>
+								<additionalOption>--attribute "title-link=http://jfxtras.com[${project.name} ${project.version}]"</additionalOption>
+							</additionalOptions>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+
+		</profile>
+	</profiles>
 </project>
