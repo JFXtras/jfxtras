@@ -6,12 +6,17 @@ A supporting library for JavaFX, containing helper classes, extended layouts, co
 ## Project structure:
 
     Root project 'jfxtras-all'
-    +--- Project ':agenda'
-    +--- Project ':common'
-    +--- Project ':controls'
-    +--- Project ':fxml'
-    +--- Project ':test-support'
-    \--- Project ':window'
+    +--- Project ':jfxtras-agenda'
+    +--- Project ':jfxtras-common'
+    +--- Project ':jfxtras-controls'
+    +--- Project ':jfxtras-font-roboto'
+    +--- Project ':jfxtras-fxml'
+    +--- Project ':jfxtras-gauge-linear'
+    +--- Project ':jfxtras-icalendaragenda'
+    +--- Project ':jfxtras-icalendarfx'
+    +--- Project ':jfxtras-menu'
+    +--- Project ':jfxtras-test-support'
+    \--- Project ':jfxtras-window'
     
 > **NOTE:** please use `./gradlew projects` to get an up-to-date list of projects
 
@@ -67,7 +72,7 @@ Navigate to the [Gradle](http://www.gradle.org/) project (e.g., `path/to/jfxtras
     
 ### How to Compile Subprojects
 
-To compile a subproject, from the root folder call `gradlew :<subproject>:assemble` e.g. `gradlew :controls:assemble`.
+To compile a subproject, from the root folder call `gradlew :<subproject>:assemble` e.g. `gradlew :jfxtras-controls:assemble`.
 
 ### How to run Unit Tests
 
