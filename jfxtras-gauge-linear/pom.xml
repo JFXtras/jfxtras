@@ -35,7 +35,7 @@
 	<parent>
 		<groupId>org.jfxtras</groupId>
 		<artifactId>jfxtras-parent</artifactId>
-		<version>11-r1</version>
+		<version>11-r2-SNAPSHOT</version>
     </parent>
     <artifactId>jfxtras-gauge-linear</artifactId>
     <packaging>jar</packaging>
