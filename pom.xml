@@ -297,9 +297,7 @@
 				</executions>
 			</plugin>
     
-			<!-- sign the jars files
-			     - gpg.passphrase is set in ~/.m2/settings.xml
-			-->
+			<!-- sign the jars files, all the additional information is set in ~/.m2/settings.xml -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>

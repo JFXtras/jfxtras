@@ -19,7 +19,11 @@ pipeline {
 
         stage ('Build') {
             steps {
-                sh 'mvn install -DskipTests -Dmaven.javadoc.skip=true'
+                // mvn activates the jfxtras profile, using that pgp can be setup in mvn's settings.xml, most notably gpg.passphrase and gpg.keyname
+                // http://maven.apache.org/plugins/maven-gpg-plugin/sign-mojo.html
+                // UI test don't well on Jenkins
+                // Javadoc generation using asciidoclet is not working well
+                sh 'mvn install -P jfxtras -DskipTests -Dmaven.javadoc.skip=true'
             }
             post {
                 success {
