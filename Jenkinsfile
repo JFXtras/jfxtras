@@ -8,11 +8,11 @@ pipeline {
         stage ('Initialize') {
             steps {
                 sh '''
-                    echo "whoami"
+                    whoami
                     echo "HOME = ${HOME}"
                     echo "PATH = ${PATH}"
                     echo "M2_HOME = ${M2_HOME}"
-                    echo "gpg --list-keys"
+                    gpg --list-keys
                 '''
             }
         }
