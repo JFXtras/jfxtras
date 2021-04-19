@@ -1,6 +1,6 @@
 <!--
 
-    Copyright (c) 2011-2020, JFXtras
+    Copyright (c) 2011-2021, JFXtras
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -70,6 +70,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.release>11</maven.compiler.release>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 		<openjfx.version>11.0.1</openjfx.version>
 	</properties>
 

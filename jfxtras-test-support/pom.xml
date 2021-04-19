@@ -1,6 +1,6 @@
 <!--
 
-    Copyright (c) 2011-2020, JFXtras
+    Copyright (c) 2011-2021, JFXtras
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -53,8 +53,8 @@
         </dependency>
         <dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
+			<artifactId>mockito-core</artifactId>
+			<version>3.6.28</version>
         </dependency>
         <dependency>
 			<groupId>org.testfx</groupId>
