@@ -336,8 +336,7 @@ public class CalendarTimePickerTest extends JFXtrasGuiTest {
 		calendar.set(Calendar.MINUTE, 0);
 		calendar.set(Calendar.SECOND, 0);
 		calendar.set(Calendar.MILLISECOND, 0);
-		System.out.print(TestUtil.quickFormatCalendarAsDateTime(calendar));
-		
+
 		// set time to 00:00:00
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			calendarTimePicker.setCalendar(calendar);			
