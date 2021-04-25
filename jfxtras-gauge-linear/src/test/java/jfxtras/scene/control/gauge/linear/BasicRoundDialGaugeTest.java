@@ -89,7 +89,7 @@ public class BasicRoundDialGaugeTest extends JFXtrasGuiTest {
 		
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(0.0, 38.84765625, 20.70703125, 9.03515625, 0.01).assertTextText("0");
+		new AssertNode(find(".value")).assertXYWH(0.0, 33.416015625, 25.048828125, 8.490234375, 0.01).assertTextText("0");
 		
 		// assert the needle
 		generateNeedleSource(".needle");
@@ -121,7 +121,7 @@ public class BasicRoundDialGaugeTest extends JFXtrasGuiTest {
 
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(0.0, 38.84765625, 41.4140625, 9.03515625, 0.01).assertTextText("45");
+		new AssertNode(find(".value")).assertXYWH(0.0, 33.416015625, 50.09765625, 8.490234375, 0.01).assertTextText("45");
 		
 		// assert the needle
 		generateNeedleSource(".needle");
@@ -140,7 +140,7 @@ public class BasicRoundDialGaugeTest extends JFXtrasGuiTest {
 		
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(-38.0, 38.84765625, 97.27734375, 9.03515625, 0.01).assertTextText(" 0.0W");
+		new AssertNode(find(".value")).assertXYWH(-45.0, 33.416015625, 116.015625, 8.490234375, 0.01).assertTextText(" 0.0W");
 		
 		// set the value 
 		TestUtil.runThenWaitForPaintPulse( () -> {
@@ -149,7 +149,7 @@ public class BasicRoundDialGaugeTest extends JFXtrasGuiTest {
 		
 		// assert value text
 		generateValueSource(".value");
-		new AssertNode(find(".value")).assertXYWH(0.0, 38.84765625, 117.984375, 9.03515625, 0.01).assertTextText(" 45.0W");
+		new AssertNode(find(".value")).assertXYWH(0.0, 33.416015625, 141.064453125, 8.490234375, 0.01).assertTextText(" 45.0W");
 	}
 
 	@Test

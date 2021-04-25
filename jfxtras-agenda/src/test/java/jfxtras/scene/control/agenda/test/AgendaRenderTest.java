@@ -81,8 +81,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		});
 				
 		Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+		AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 124.0, 81.0, 0.01);
 		//TestUtil.sleep(3000);
 	}
 
@@ -105,11 +105,11 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		});
 				
 		Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+		AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 124.0, 81.0, 0.01);
 		n = find("#AppointmentRegularBodyPane2014-01-01/1");
-		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-		new AssertNode(n).assertXYWH(0.5, 503.5, 125.0, 42.0, 0.01);
+		AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 483.5, 124.0, 40.0, 0.01);
 //		TestUtil.sleep(3000);
 	}
 
@@ -152,8 +152,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		});
 				
 		Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-		new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+		AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 124.0, 81.0, 0.01);
 		//TestUtil.sleep(3000);
 	}
 
@@ -172,8 +172,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
         });
 
         Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-        new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 124.0, 81.0, 0.01);
         //TestUtil.sleep(3000);
     }
     
@@ -190,8 +190,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
         });
 
         Node n = find("#AppointmentWholedayBodyPane2014-01-01/0");
-        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-        new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.125, 0.01);
+        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 966.375, 0.01);
         //TestUtil.sleep(3000);
     }
     
@@ -209,8 +209,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
         });
 
         Node n = find("#AppointmentWholedayBodyPane2014-01-01/0");
-        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-        new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.125, 0.01);
+        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 966.375, 0.01);
         //TestUtil.sleep(3000);
     }
     
@@ -227,8 +227,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
         });
 
         Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-        new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 124.0, 81.0, 0.01);
         //TestUtil.sleep(3000);
     }
     
@@ -253,8 +253,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
         });
 
         Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-        //AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-        new AssertNode(n).assertXYWH(0.5, 419.5, 125.0, 84.0, 0.01);
+        AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 124.0, 81.0, 0.01);
         //TestUtil.sleep(3000);
     }
 
@@ -274,8 +274,8 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		});
 				
 		Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-		//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-		new AssertNode(n).assertXYWH(0.5, 419.5, 937.0, 84.0, 0.01);
+		AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 925.0, 81.0, 0.01);
 		//TestUtil.sleep(3000);
 	}
 
@@ -300,12 +300,12 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		double h2 = (OSInfo.MY_OS == OS.UNIX) ? 483.0 : 503.0;
 		{
 			Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			new AssertNode(n).assertXYWH(0.5, y, w, h, 0.01);
 		}
 		{
 			Node n = find("#AppointmentRegularBodyPane2014-01-02/0");
-			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			new AssertNode(n).assertXYWH(0.5, 0.5, w, h2, 0.01);
 		}
 		//TestUtil.sleep(3000);
@@ -328,13 +328,13 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 			
 		{
 			Node n = find("#AppointmentWholedayBodyPane2014-01-01/0");
-			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			double h = (OSInfo.MY_OS == OS.UNIX) ? 966.375 : 1006.125;
 			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, h, 0.01);
 		}
 		{
 			Node n = find("#AppointmentWholedayHeaderPane2014-01-01/0");
-			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
 			double y = (OSInfo.MY_OS == OS.UNIX) ? 22.8671875 : 24.0390625;
 			double w = (OSInfo.MY_OS == OS.UNIX) ? 133.50516183035714 : 135.21763392857142;
 			double h = (OSInfo.MY_OS == OS.UNIX) ? 20.1328125 : 20.9609375;
@@ -365,13 +365,13 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 				
 		{
 			Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
-			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.A.XYWH);
-			new AssertNode(n).assertXYWH(0.5, 419.5, 110.0, 84.0, 0.01);
+			AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			new AssertNode(n).assertXYWH(0.5, 402.5, 108.0, 81.0, 0.01);
 		}
 		{
 			Node n = find("#AppointmentRegularBodyPane2014-01-01/1");
-			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.A.XYWH);
-			new AssertNode(n).assertXYWH(62.5, 461.5, 63.0, 84.0, 0.01);
+			AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
+			new AssertNode(n).assertXYWH(61.5, 442.5, 62.0, 81.0, 0.01);
 		}
 		//TestUtil.sleep(3000);
 	}

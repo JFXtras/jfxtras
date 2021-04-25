@@ -26,6 +26,9 @@
  */
 package jfxtras.scene.layout.test;
 
+import javafx.scene.Scene;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import jfxtras.test.TestUtil;
 import org.junit.Test;
 
@@ -42,6 +45,17 @@ import jfxtras.test.JFXtrasGuiTest;
  */
 public class HBoxTest extends JFXtrasGuiTest {
 
+	@Override
+	public void start(Stage stage) throws Exception {
+		javafx.scene.text.Font.loadFont(this.getClass().getResource("/" + "Roboto-Medium.ttf").toExternalForm(), 12);
+
+		this.stage = stage;
+		Scene scene = new Scene(getRootNode());
+		stage.setScene(scene);
+		stage.show();
+	}
+	protected Stage stage;
+
 	/**
 	 * 
 	 */
@@ -52,11 +66,11 @@ public class HBoxTest extends JFXtrasGuiTest {
 		stage.setHeight(600.0);
 
 		hbox = new HBox(5.0);
-		hbox.add(new Button("grow"), new HBox.C().hgrow(Priority.ALWAYS));
-		hbox.add(new Button("margin 5 grow"), new HBox.C().margin(new Insets(5.0)).hgrow(Priority.ALWAYS));
-		hbox.getChildren().add(new Button("old style"));
-		hbox.add(new Button("margin 20 nogrow"), new HBox.C().margin(new Insets(20.0)));
-		hbox.add(new Button("grow maxheight 50"), new HBox.C().hgrow(Priority.ALWAYS).maxHeight(50.0));
+		hbox.add(newButton("grow"), new HBox.C().hgrow(Priority.ALWAYS));
+		hbox.add(newButton("margin 5 grow"), new HBox.C().margin(new Insets(5.0)).hgrow(Priority.ALWAYS));
+		hbox.getChildren().add(newButton("old style"));
+		hbox.add(newButton("margin 20 nogrow"), new HBox.C().margin(new Insets(20.0)));
+		hbox.add(newButton("grow maxheight 50"), new HBox.C().hgrow(Priority.ALWAYS).maxHeight(50.0));
 
 		return hbox;
 	}
@@ -69,11 +83,16 @@ public class HBoxTest extends JFXtrasGuiTest {
 	public void checkPositions()
 	{
 		AssertNode.generateSource("hbox", hbox.getChildren(), null, false, AssertNode.A.XYWH, AssertNode.A.CLASS);
-		new AssertNode(hbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 143.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(1)).assertXYWH(153.0, 5.0, 194.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(2)).assertXYWH(357.0, 0.0, 61.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(3)).assertXYWH(443.0, 20.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(hbox.getChildren().get(4)).assertXYWH(582.0, 0.0, 218.0, 50.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 142.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(1)).assertXYWH(152.0, 5.0, 193.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(2)).assertXYWH(355.0, 0.0, 62.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(3)).assertXYWH(442.0, 20.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(hbox.getChildren().get(4)).assertXYWH(581.0, 0.0, 219.0, 50.0, 0.01).assertClass(javafx.scene.control.Button.class);
 	}
-	
+
+	private Button newButton(String label) {
+		Button button = new Button(label);
+		button.setFont(new Font("Roboto Medium", 12));
+		return button;
+	}
 }

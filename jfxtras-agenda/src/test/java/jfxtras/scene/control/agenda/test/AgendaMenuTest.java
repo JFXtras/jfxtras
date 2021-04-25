@@ -155,12 +155,12 @@ public class AgendaMenuTest extends AbstractAgendaTestBase {
 		{
 			Node n = (Node)find("#AppointmentWholedayBodyPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 1006.125, 0.01);
+			new AssertNode(n).assertXYWH(0.5, 0.0, 5.0, 966, 1);
 		}
 		{
 			Node n = (Node)find("#AppointmentWholedayHeaderPane2014-01-01/0");
 			//AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-			new AssertNode(n).assertXYWH(0.0, 24.0390625, 135.21763392857142, 20.9609375, 0.01);
+			new AssertNode(n).assertXYWH(0.0, 22, 133, 21, 1);
 		}
 		//TestUtil.sleep(3000);
 	}

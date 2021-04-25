@@ -26,6 +26,10 @@
  */
 package jfxtras.scene.layout.test;
 
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import org.junit.Test;
 
 import javafx.geometry.HPos;
@@ -42,6 +46,16 @@ import jfxtras.test.JFXtrasGuiTest;
  */
 public class GridPaneTest extends JFXtrasGuiTest {
 
+	@Override
+	public void start(Stage stage) throws Exception {
+		javafx.scene.text.Font.loadFont(this.getClass().getResource("/" + "Roboto-Medium.ttf").toExternalForm(), 12);
+
+		this.stage = stage;
+		Scene scene = new Scene(getRootNode());
+		stage.setScene(scene);
+		stage.show();
+	}
+	protected Stage stage;
 	/**
 	 * 
 	 */
@@ -56,19 +70,19 @@ public class GridPaneTest extends JFXtrasGuiTest {
 			.withPadding(new Insets(10, 10, 10, 10))
 			.withGridLinesVisible(true);
 	
-	    gridPane.add(new Label("SingleCell"), new GridPane.C().col(1).row(0));
-		gridPane.add(new Label("RIGHT"), new GridPane.C().col(2).row(0).halignment(HPos.RIGHT));
+	    gridPane.add(newLabel("SingleCell"), new GridPane.C().col(1).row(0));
+		gridPane.add(newLabel("RIGHT"), new GridPane.C().col(2).row(0).halignment(HPos.RIGHT));
 	
-		gridPane.add(new Label("Span2Row\nSpan2Row\nSpan2Row"), new GridPane.C().col(0).row(0).colSpan(1).rowSpan(2));
+		gridPane.add(newLabel("Span2Row\nSpan2Row\nSpan2Row"), new GridPane.C().col(0).row(0).colSpan(1).rowSpan(2));
 	
-	    gridPane.add(new Label("Span2Columns Span2Columns"), new GridPane.C().col(1).row(1).colSpan(2).rowSpan(1));
+	    gridPane.add(newLabel("Span2Columns Span2Columns"), new GridPane.C().col(1).row(1).colSpan(2).rowSpan(1));
 	
-		gridPane.add(new Label("Single"), new GridPane.C().col(0).row(2));
-		gridPane.add(new Label("Span2Col2RowCenter\nSpan2Col2RowCenter\nSpan2Col2RowCenter\nSpan2Col2RowCenter\nSpan2Col2RowCenter"), new GridPane.C().col(1).row(2).colSpan(2).rowSpan(2).halignment(HPos.CENTER));
+		gridPane.add(newLabel("Single"), new GridPane.C().col(0).row(2));
+		gridPane.add(newLabel("Span2Col2RowCenter\nSpan2Col2RowCenter\nSpan2Col2RowCenter\nSpan2Col2RowCenter\nSpan2Col2RowCenter"), new GridPane.C().col(1).row(2).colSpan(2).rowSpan(2).halignment(HPos.CENTER));
 	
-		gridPane.add(new Label("BOTTOM"), new GridPane.C().col(0).row(3).valignment(VPos.BOTTOM));
+		gridPane.add(newLabel("BOTTOM"), new GridPane.C().col(0).row(3).valignment(VPos.BOTTOM));
 	
-	    gridPane.add(new Label("TOP"), new GridPane.C().col(3).row(3).valignment(VPos.TOP));
+	    gridPane.add(newLabel("TOP"), new GridPane.C().col(3).row(3).valignment(VPos.TOP));
 
 		return gridPane;
 	}
@@ -81,13 +95,20 @@ public class GridPaneTest extends JFXtrasGuiTest {
 	public void checkPositions()
 	{
 		AssertNode.generateSource("gridPane", gridPane.getChildren(), null, false, AssertNode.A.XYWH, AssertNode.A.CLASS);
-		new AssertNode(gridPane.getChildren().get(1)).assertXYWH(71.0, 10.0, 52.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
-		new AssertNode(gridPane.getChildren().get(2)).assertXYWH(199.0, 10.0, 34.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
-		new AssertNode(gridPane.getChildren().get(3)).assertXYWH(10.0, 10.0, 56.0, 51.0, 0.01).assertClass(javafx.scene.control.Label.class);
-		new AssertNode(gridPane.getChildren().get(4)).assertXYWH(71.0, 38.0, 162.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
-		new AssertNode(gridPane.getChildren().get(5)).assertXYWH(10.0, 66.0, 33.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
-		new AssertNode(gridPane.getChildren().get(6)).assertXYWH(95.0, 66.0, 115.0, 85.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(0)).assertXYWH(0.0, 0.0, 270.5, 151.5, 0.01).assertClass(javafx.scene.Group.class);
+		new AssertNode(gridPane.getChildren().get(1)).assertXYWH(74.0, 10.0, 54.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(2)).assertXYWH(207.0, 10.0, 35.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(3)).assertXYWH(10.0, 10.0, 59.0, 51.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(4)).assertXYWH(74.0, 38.0, 168.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(5)).assertXYWH(10.0, 66.0, 34.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(6)).assertXYWH(99.0, 66.0, 119.0, 85.0, 0.01).assertClass(javafx.scene.control.Label.class);
 		new AssertNode(gridPane.getChildren().get(7)).assertXYWH(10.0, 134.0, 49.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
-		new AssertNode(gridPane.getChildren().get(8)).assertXYWH(238.0, 88.0, 23.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+		new AssertNode(gridPane.getChildren().get(8)).assertXYWH(247.0, 88.0, 23.0, 17.0, 0.01).assertClass(javafx.scene.control.Label.class);
+	}
+
+	private Label newLabel(String s) {
+		Label label = new Label(s);
+		label.setFont(new Font("Roboto Medium", 12));
+		return label;
 	}
 }

@@ -26,6 +26,9 @@
  */
 package jfxtras.scene.layout.test;
 
+import javafx.scene.Scene;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import jfxtras.test.TestUtil;
 import org.junit.Test;
 
@@ -43,6 +46,17 @@ import jfxtras.test.JFXtrasGuiTest;
  */
 public class VBoxTest extends JFXtrasGuiTest {
 
+	@Override
+	public void start(Stage stage) throws Exception {
+		javafx.scene.text.Font.loadFont(this.getClass().getResource("/" + "Roboto-Medium.ttf").toExternalForm(), 12);
+
+		this.stage = stage;
+		Scene scene = new Scene(getRootNode());
+		stage.setScene(scene);
+		stage.show();
+	}
+	protected Stage stage;
+
 	/**
 	 * 
 	 */
@@ -52,13 +66,13 @@ public class VBoxTest extends JFXtrasGuiTest {
 		stage.setHeight(600.0);
 
 		vbox = new VBox(5.0);
-		vbox.add(new Button("short"), new VBox.C().vgrow(Priority.ALWAYS));
-		vbox.add(new Button("medium length"), new VBox.C().vgrow(Priority.ALWAYS));
-		vbox.add(new Button("a longer description in order to test things"), new VBox.C().vgrow(Priority.ALWAYS));
-		vbox.add(new Button("margin 5 grow"), new VBox.C().margin(new Insets(5.0)).vgrow(Priority.ALWAYS));
-		vbox.getChildren().add(new Button("old style"));
-		vbox.add(new Button("margin 20 nogrow"), new VBox.C().margin(new Insets(20.0)));
-		vbox.add(new Button("grow maxwidth 150"), new VBox.C().vgrow(Priority.ALWAYS).maxWidth(150.0));
+		vbox.add(newButton("short"), new VBox.C().vgrow(Priority.ALWAYS));
+		vbox.add(newButton("medium length"), new VBox.C().vgrow(Priority.ALWAYS));
+		vbox.add(newButton("a longer description in order to test things"), new VBox.C().vgrow(Priority.ALWAYS));
+		vbox.add(newButton("margin 5 grow"), new VBox.C().margin(new Insets(5.0)).vgrow(Priority.ALWAYS));
+		vbox.getChildren().add(newButton("old style"));
+		vbox.add(newButton("margin 20 nogrow"), new VBox.C().margin(new Insets(20.0)));
+		vbox.add(newButton("grow maxwidth 150"), new VBox.C().vgrow(Priority.ALWAYS).maxWidth(150.0));
 
 		return vbox;
 	}
@@ -71,13 +85,18 @@ public class VBoxTest extends JFXtrasGuiTest {
 	public void checkPositions()
 	{
 		AssertNode.generateSource("vbox", vbox.getChildren(), null, false, A.XYWH, A.CLASS);
-		new AssertNode(vbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 44.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(0)).assertXYWH(0.0, 0.0, 45.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(1)).assertXYWH(0.0, 99.0, 97.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(2)).assertXYWH(0.0, 198.0, 240.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(2)).assertXYWH(0.0, 198.0, 243.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(3)).assertXYWH(5.0, 302.0, 94.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
-		new AssertNode(vbox.getChildren().get(4)).assertXYWH(0.0, 406.0, 61.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
+		new AssertNode(vbox.getChildren().get(4)).assertXYWH(0.0, 406.0, 62.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(5)).assertXYWH(20.0, 456.0, 114.0, 25.0, 0.01).assertClass(javafx.scene.control.Button.class);
 		new AssertNode(vbox.getChildren().get(6)).assertXYWH(0.0, 506.0, 150.0, 94.0, 0.01).assertClass(javafx.scene.control.Button.class);
 	}
-	
+
+	private Button newButton(String label) {
+		Button button = new Button(label);
+		button.setFont(new Font("Roboto Medium", 12));
+		return button;
+	}
 }
