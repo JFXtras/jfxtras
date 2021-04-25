@@ -63,4 +63,26 @@
 			<scope>compile</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED,org.testfx
+                        --add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.agenda=junit
+                        --add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.misc=junit
+                        --add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.editors.revisor=junit
+                        --add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.editors.deletor=junit
+                        --add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.editors.revisor=junit
+                        --add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.editors.deletor=junit
+                        --add-exports jfxtras.icalendaragenda/jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup=junit
+                        --add-opens jfxtras.icalendaragenda/jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour=javafx.fxml
+                        --add-opens jfxtras.icalendaragenda/jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup=javafx.fxml
+                    </argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

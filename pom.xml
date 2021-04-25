@@ -147,7 +147,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.2</version>
+					<version>3.0.0-M5</version>
 					<dependencies>
 						<dependency>
 							<groupId>org.ow2.asm</groupId>
@@ -155,31 +155,8 @@
 							<version>7.2</version>
 						</dependency>
 					</dependencies>
-					<configuration>
-				    	<argLine>
-				      		--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED,org.testfx
-							--add-exports jfxtras.agenda/jfxtras.scene.control.agenda.test=junit
-							--add-exports jfxtras.common/jfxtras.scene.layout.test=junit
-							--add-exports jfxtras.controls/jfxtras.scene.control.test=junit
-							--add-exports jfxtras.controls/jfxtras.scene.control.test=junit
-							--add-exports jfxtras.font.roboto/jfxtras.resources=junit
-							--add-exports jfxtras.gauge.linear/jfxtras.scene.control.gauge.linear=junit
-							--add-exports jfxtras.menu/jfxtras.scene.menu.test=junit
-							--add-exports jfxtras.window/jfxtras.scene.control.window.test=junit
-							--add-exports jfxtras.window/jfxtras.internal.scene.control.skin.window=javafx.controls
-							--add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.agenda=junit
-							--add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.misc=junit
-							--add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.editors.revisor=junit
-							--add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.icalendar.editors.deletor=junit
-							--add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.editors.revisor=junit
-							--add-exports jfxtras.icalendaragenda/jfxtras.scene.control.agenda.editors.deletor=junit
-							--add-exports jfxtras.icalendaragenda/jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup=junit
-							--add-opens jfxtras.icalendaragenda/jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour=javafx.fxml
-							--add-opens jfxtras.icalendaragenda/jfxtras.internal.scene.control.skin.agenda.icalendar.base24hour.popup=javafx.fxml
+				</plugin>
 
-						</argLine>
-				  	</configuration>
-				</plugin>				
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -253,6 +230,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			
 			<!-- add license header to files http://mycila.mathieu.photography/license-maven-plugin/ -->
 			<plugin>
 				<groupId>com.mycila</groupId>
