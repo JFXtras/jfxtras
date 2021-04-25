@@ -566,7 +566,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         });
         type(KeyCode.ESCAPE);
 
-        type(KeyCode.NUMPAD2);
+        type(KeyCode.DIGIT2);
 
         //TextField should be focused
         Assert.assertTrue(find(".text-field").isFocused());
@@ -579,7 +579,7 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         Assert.assertTrue(find(".text-field").isFocused());
 
         // Type 2
-        type(KeyCode.NUMPAD2);
+        type(KeyCode.DIGIT2);
 
         //We should have the same value everywhere.
         Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTimeTextField.getText());
