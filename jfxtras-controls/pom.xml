@@ -51,6 +51,7 @@
             <artifactId>jfxtras-fxml</artifactId>
             <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
@@ -66,11 +67,12 @@
             <artifactId>javafx-fxml</artifactId>
             <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jfxtras-test-support</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -81,7 +83,6 @@
                 <configuration>
                     <argLine>
                         --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED,org.testfx
-                        --add-exports jfxtras.controls/jfxtras.scene.control.test=junit
                         --add-exports jfxtras.controls/jfxtras.scene.control.test=junit
                     </argLine>
                 </configuration>
