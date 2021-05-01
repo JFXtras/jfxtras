@@ -45,12 +45,12 @@
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-fxml</artifactId>
 		</dependency>
-		
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jfxtras-test-support</artifactId>
             <version>${project.version}</version>
-			<scope>compile</scope>
+			<scope>test</scope>
         </dependency>
     </dependencies>
 

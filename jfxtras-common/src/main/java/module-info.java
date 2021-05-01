@@ -34,8 +34,6 @@ module jfxtras.common {
 
     requires transitive javafx.controls;
 
-    // this is only needed for the test sources
-    requires transitive jfxtras.test_support;
     requires transitive javafx.fxml;
     opens jfxtras.scene.layout.responsivepane;
 }
