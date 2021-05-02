@@ -1,0 +1,1 @@
+mvnw deploy -DskipTests -P sources-as-javadoc-jar
