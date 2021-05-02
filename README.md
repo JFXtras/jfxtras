@@ -2,43 +2,40 @@ JFXtras
 =======
 
 A supporting library for JavaFX, containing helper classes, extended layouts, controls and other interesting widgets.
+See the [JFXtras website](http://jfxtras.org/) for more details and screen clips.
 
 ## Project structure:
 
-    Root project 'jfxtras-all'
-    +--- Project ':agenda'
-    +--- Project ':common'
-    +--- Project ':controls'
-    +--- Project ':fxml'
-    +--- Project ':test-support'
-    \--- Project ':window'
-    
-> **NOTE:** please use `./gradlew projects` to get an up-to-date list of projects
+    Root project 'jfxtras-parent'
+    +--- Module 'jfxtras-agenda'
+    +--- Module 'jfxtras-common'
+    +--- Module 'jfxtras-controls'
+    +--- Module 'jfxtras-font-roboto'
+    +--- Module 'jfxtras-fxml'
+    +--- Module 'jfxtras-gauge-linear'
+    +--- Module 'jfxtras-icalendaragenda'
+    +--- Module 'jfxtras-icalendarfx'
+    +--- Module 'jfxtras-menu'
+    +--- Module 'jfxtras-test-support'
+    \--- Module 'jfxtras-window'
 
+## How to use
 
-## How to use JFXtras
+The easiest way to use JFXtras is by using Maven or Gradle and access the [Maven central repository](https://search.maven.org/search?q=g:org.jfxtras).
 
-The easiest way to use JFXtras is by obtaining it via Maven.
-
-### Maven Artifacts:
-
-The `group-id` is `org.jfxtras`, the `artifact-id` depends on the project(s) that shall be used.
-
-### Example
-
-##### Using the Controls Project:
+The `group-id` is `org.jfxtras`, the `artifact-id` is the module name.
 
 ###### Maven:
 
     <dependency>
       <groupId>org.jfxtras</groupId>
       <artifactId>jfxtras-controls</artifactId>
-      <version>8.0-r1-SNAPSHOT</version>
+      <version>11-r1-SNAPSHOT</version>
     </dependency>
     
 ###### Gradle:
 
-    compile group: 'org.jfxtras', name: 'jfxtras-controls', version: '8.0-r1-SNAPSHOT'
+    compile group: 'org.jfxtras', name: 'jfxtras-controls', version: '11-r1-SNAPSHOT'
 
 ## License
 
