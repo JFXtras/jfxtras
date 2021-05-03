@@ -1,0 +1,1 @@
+mvnw release:prepare -Dmaven.test.skip=true -P sources-as-javadoc-jar

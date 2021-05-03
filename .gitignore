@@ -44,3 +44,6 @@ out
 *.versionsBackup
 /target
 /bin
+
+release.properties
+pom.xml.releaseBackup

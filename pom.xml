@@ -47,9 +47,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>scm:git@github.com:jfxtras/jfxtras.git</url>
-		<connection>scm:git@github.com:jfxtras/jfxtras.git</connection>
-		<developerConnection>scm:git@github.com:jfxtras/jfxtras.git</developerConnection>
+		<url>https://github.com/jfxtras/jfxtras.git</url>
+		<connection>scm:git:https://git@github.com/jfxtras/jfxtras.git</connection>
+		<developerConnection>scm:git:https://git@github.com/jfxtras/jfxtras.git</developerConnection>
 	</scm>
 	<developers>
 		<developer>
@@ -303,7 +303,20 @@
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
 				</configuration>
-			</plugin>					
+			</plugin>
+
+			<!-- release plugin handles validation and versioning, use release:prepare
+				and release:perform -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<tagNameFormat>r@{project.version}</tagNameFormat>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<releaseProfiles>releases</releaseProfiles>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
