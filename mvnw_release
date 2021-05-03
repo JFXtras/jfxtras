@@ -1,0 +1,2 @@
+mvnw clean -DskipTests -Darguments=-DskipTests release:prepare release:perform -P sources-as-javadoc-jar
+

@@ -1,1 +1,0 @@
-mvnw release:perform -DskipTests -P sources-as-javadoc-jar
