@@ -58,8 +58,12 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>
-                        --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED,org.testfx
-                        --add-exports jfxtras.common/jfxtras.scene.layout.test=junit
+                        --add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED,org.testfx,junit
+                        --add-exports javafx.graphics/com.sun.javafx.util=ALL-UNNAMED,org.testfx,junit
+                        --add-exports javafx.base/com.sun.javafx.reflect=ALL-UNNAMED,org.testfx,junit
+                        --add-exports javafx.base/com.sun.javafx.beans=ALL-UNNAMED,org.testfx,junit
+                        --add-exports jfxtras.common/jfxtras.scene.layout.test=ALL-UNNAMED,org.testfx,junit
+                        --add-opens jfxtras.common/jfxtras.scene.layout.responsivepane=ALL-UNNAMED,org.testfx,junit
                     </argLine>
                 </configuration>
             </plugin>
