@@ -25,7 +25,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-./mvnw test -DfailIfNoTests=false -Dtest=ResponsivePane*Test
-./mvnw test -DfailIfNoTests=false -Dtest=!ResponsivePane*Test
-#./mvnw clean test -DfailIfNoTests=false
+#./mvnw test -DfailIfNoTests=false -Dtest=ResponsivePane*Test -pl jfxtras-common
+#./mvnw test -DfailIfNoTests=false -Dtest=!ResponsivePane*Test
+./mvnw clean test -DfailIfNoTests=false
 

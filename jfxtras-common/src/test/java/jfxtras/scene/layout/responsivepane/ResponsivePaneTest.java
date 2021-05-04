@@ -90,6 +90,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(2.0);
+			sleep(100);
 		});
 		
 		// THEN the correct one should be active
@@ -117,12 +118,13 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		Assert.assertEquals("7.62cm", responsivePane.getActiveLayout().describeSizeConstraints());
 		Assert.assertEquals(1, responsivePane.getChildren().size());
 		Assert.assertEquals("3layout", ((Label)responsivePane.getChildren().get(0)).getText());
-		
+
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(2.0);
+			sleep(100);
 		});
-		
+
 		// THEN the correct one should be active
 		Assert.assertEquals("2.54cm", responsivePane.getActiveLayout().describeSizeConstraints());
 		Assert.assertEquals(1, responsivePane.getChildren().size());
@@ -150,6 +152,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageSizeInInch(2.0, 10.0); // this is a diagonal size of over 10, but the width is only 2
+			sleep(100);
 		});
 		
 		// THEN even though the diagonal size is >10, because we are using width, then 1 inch layout should be active
@@ -176,6 +179,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(4.0);
+			sleep(100);
 		});
 		
 		// THEN phone layout should be active
@@ -219,6 +223,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is in portrait 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageSizeInInch(9.0, 11.0);
+			sleep(100);
 		});
 		
 		// THEN the PORTRAIT should be picked
@@ -227,6 +232,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is flipped to landscape 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageSizeInInch(11.0, 9.0);
+			sleep(100);
 		});
 		
 		// THEN the PORTRAIT should be picked
@@ -260,6 +266,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(2.0);
+			sleep(100);
 		});
 		
 		// THEN the first layout should be active
@@ -296,6 +303,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(2.0);
+			sleep(100);
 		});
 		
 		// THEN the correct one should be active
@@ -325,6 +333,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageSizeInInch(2.0, 10.0); // this is a diagonal size of over 10, but the width is only 2
+			sleep(100);
 		});
 		
 		// THEN the correct one should be active
@@ -351,6 +360,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(4.0);
+			sleep(100);
 		});
 		
 		// THEN phone stylesheet should be active
@@ -403,6 +413,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(2.0);
+			sleep(100);
 		});
 		
 		// THEN the correct one should be active
@@ -432,6 +443,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageSizeInInch(2.0, 10.0); // this is a diagonal size of over 10, but the width is only 2
+			sleep(100);
 		});
 		
 		// THEN the correct one should be active
@@ -458,6 +470,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// WHEN the pane is sized smaller 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			setStageDiagonalSizeInInch(4.0);
+			sleep(100);
 		});
 		
 		// THEN phone stylesheet should be active
@@ -494,6 +507,7 @@ public class ResponsivePaneTest extends JFXtrasGuiTest {
 		// GIVEN a pane with an overridden device size 
 		TestUtil.runThenWaitForPaintPulse( () -> {
 			responsivePane.setDeviceSize("desktop", Diagonal.inch(13.0));
+			sleep(100);
 		});
 		
 		// THEN the device size should be the overridden value

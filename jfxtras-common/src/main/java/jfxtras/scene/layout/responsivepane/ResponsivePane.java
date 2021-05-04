@@ -253,15 +253,15 @@ public class ResponsivePane extends StackPane {
 		
 		// react to changes in the available layouts and stylesheets
 		layouts.addListener( (javafx.collections.ListChangeListener.Change<? extends Layout> c) -> {
-			if (getTrace()) System.out.println(">>> requestLayout from changes in layouts, size=" + layouts.size());
+			if (getTrace()) log(">>> requestLayout from changes in layouts, size=" + layouts.size());
 			requestLayout();
 		});
 		sceneStylesheets.addListener( (javafx.collections.ListChangeListener.Change<? extends Stylesheet> c) -> {
-			if (getTrace()) System.out.println(">>> requestLayout from changes in scene stylesheets, size=" + sceneStylesheets.size());
+			if (getTrace()) log(">>> requestLayout from changes in scene stylesheets, size=" + sceneStylesheets.size());
 			requestLayout();
 		});
 		myStylesheets.addListener( (javafx.collections.ListChangeListener.Change<? extends Stylesheet> c) -> {
-			if (getTrace()) System.out.println(">>> requestLayout from changes in my stylesheets, size=" + myStylesheets.size());
+			if (getTrace()) log(">>> requestLayout from changes in my stylesheets, size=" + myStylesheets.size());
 			requestLayout();
 		});
 	}
@@ -281,14 +281,17 @@ public class ResponsivePane extends StackPane {
 	final private SimpleObjectProperty<Boolean> debugProperty = new SimpleObjectProperty<Boolean>(this, "debug", Boolean.FALSE);
 	public Boolean getDebug() { return debugProperty.getValue(); }
 	public void setDebug(Boolean value) { debugProperty.setValue(value); }
-	public ResponsivePane withDebug(Boolean value) { setDebug(value); return this; } 
+	public ResponsivePane withDebug(Boolean value) { setDebug(value); return this; }
 
 	/** Trace: like debug, plus show calculations determining if changes are needed on the console */
 	public ObjectProperty<Boolean> traceProperty() { return traceProperty; }
 	final private SimpleObjectProperty<Boolean> traceProperty = new SimpleObjectProperty<Boolean>(this, "trace", Boolean.FALSE);
 	public Boolean getTrace() { return traceProperty.getValue(); }
 	public void setTrace(Boolean value) { traceProperty.setValue(value); }
-	public ResponsivePane withTrace(Boolean value) { setTrace(value); return this; } 
+	public ResponsivePane withTrace(Boolean value) { setTrace(value); return this; }
+	private void log(String s) {
+		System.out.println(s);
+	}
 
 	// -----------------------------------------------------------------------------------------------
 	// Reusable nodes
@@ -530,11 +533,11 @@ public class ResponsivePane extends StackPane {
 		ppi = null;
 		
     	// layout
-		if (getTrace()) System.out.println("====================================================");
+		if (getTrace()) log("====================================================");
     	Layout lLayout = determineBestFittingLayout();
     	if (!lLayout.equals(getActiveLayout())) {
     		
-    		if (getDebug() || getTrace()) System.out.println("Activating layout " + lLayout);
+    		if (getDebug() || getTrace()) log("Activating layout " + lLayout);
         	setActiveLayout(lLayout);
 
     		// switch to active layout
@@ -543,7 +546,7 @@ public class ResponsivePane extends StackPane {
     	}
     	
     	// scene stylesheet
-		if (getTrace()) System.out.println("----------------------------------------------------");
+		if (getTrace()) log("----------------------------------------------------");
     	{
 	    	Stylesheet lStylesheet = determineBestFittingStylesheet(sceneStylesheets);
 	    	if (!lStylesheet.equals(getActiveSceneStylesheet())) {
@@ -556,7 +559,7 @@ public class ResponsivePane extends StackPane {
     	}
     	
     	// my stylesheet
-		if (getTrace()) System.out.println("----------------------------------------------------");
+		if (getTrace()) log("----------------------------------------------------");
     	{
 	    	Stylesheet lStylesheet = determineBestFittingStylesheet(myStylesheets);
 	    	if (!lStylesheet.equals(getActiveMyStylesheet())) {
@@ -567,7 +570,7 @@ public class ResponsivePane extends StackPane {
 				load(lStylesheet, myStylesheets, getStylesheets());
 	    	}
     	}
-		if (getTrace()) System.out.println("====================================================");
+		if (getTrace()) log("====================================================");
 	}
 
 
@@ -586,7 +589,7 @@ public class ResponsivePane extends StackPane {
 		// Use command line value
 		if (System.getProperties().containsKey(PPI_SYSTEM_PROPERTY)) {
 			ppi = Double.valueOf(System.getProperty(PPI_SYSTEM_PROPERTY));
-			if (getTrace()) System.out.println("Using command line " + PPI_SYSTEM_PROPERTY + "=" + ppi); 
+			if (getTrace()) log("Using command line " + PPI_SYSTEM_PROPERTY + "=" + ppi);
 			return ppi;
 		}
 		
@@ -597,7 +600,7 @@ public class ResponsivePane extends StackPane {
 		if (screensForRectangle.size() > 0) {
 			Screen lScreen = screensForRectangle.get(0); // we just use the first screen
 			ppi = lScreen.getDpi();
-			if (getTrace()) System.out.println("screens of scene: " + screensForRectangle + ", using the first then PPI=" + ppi); 
+			if (getTrace()) log("screens of scene: " + screensForRectangle + ", using the first then PPI=" + ppi);
 		}
 		return ppi;		
 	}
@@ -616,7 +619,7 @@ public class ResponsivePane extends StackPane {
 		double lWidthInInches = lScene.getWidth() / lPPI;
 		double lHeightInInches = lScene.getHeight() / lPPI;
 		double lDiagonalInInches = Math.sqrt( (lWidthInInches * lWidthInInches) + (lHeightInInches * lHeightInInches) );
-		if (getTrace()) System.out.println("Actual scene size=" + lScene.getWidth() + "x" + lScene.getHeight() + "px, scene diagonal in inches=" + lDiagonalInInches + " (ppi=" + lPPI + ")");
+		if (getTrace()) log("Actual scene size=" + lScene.getWidth() + "x" + lScene.getHeight() + "px, scene diagonal in inches=" + lDiagonalInInches + " (ppi=" + lPPI + ")");
 		return lDiagonalInInches;
 	}
 	
@@ -632,29 +635,29 @@ public class ResponsivePane extends StackPane {
 		// find the best fitting layout
 		Layout lBestFittingLayout = null;
 		for (Layout lLayout : layouts) {
-			if (getTrace()) System.out.println("determineBestFittingLayout, examining layout: " + lLayout.describeSizeConstraints());
+			if (getTrace()) log("determineBestFittingLayout, examining layout: " + lLayout.describeSizeConstraints());
 			double lLayoutSizeAtLeast = lLayout.getSizeAtLeast().toInches(this);
 			if (actualDiagonalInInches >= lLayoutSizeAtLeast) {
-				if (getTrace()) System.out.println("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is candidate based on scene diagonal: " + actualDiagonalInInches + "in");
+				if (getTrace()) log("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is candidate based on scene diagonal: " + actualDiagonalInInches + "in");
 				
 				double lBestFittingLayoutSizeAtLeast = (lBestFittingLayout == null ? -1.0 : lBestFittingLayout.getSizeAtLeast().toInches(this));
-				if (getTrace()) System.out.println("determineBestFittingLayout, comparing best fitting layout " + (lBestFittingLayout == null ? "null" : lBestFittingLayout.describeSizeConstraints()) + " (" + lBestFittingLayoutSizeAtLeast + ") with " + lLayout.describeSizeConstraints() + " (" + lLayoutSizeAtLeast + ")");
+				if (getTrace()) log("determineBestFittingLayout, comparing best fitting layout " + (lBestFittingLayout == null ? "null" : lBestFittingLayout.describeSizeConstraints()) + " (" + lBestFittingLayoutSizeAtLeast + ") with " + lLayout.describeSizeConstraints() + " (" + lLayoutSizeAtLeast + ")");
 				if (lBestFittingLayout == null || lBestFittingLayoutSizeAtLeast <= lLayoutSizeAtLeast) {
-					if (getTrace()) System.out.println("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is a better or equal candidate based on diagonal vs best fitting so far: " + (lBestFittingLayout == null ? "null" : lBestFittingLayout.describeSizeConstraints()));
+					if (getTrace()) log("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is a better or equal candidate based on diagonal vs best fitting so far: " + (lBestFittingLayout == null ? "null" : lBestFittingLayout.describeSizeConstraints()));
 					
 					// Based on the width, this layout is a candidate. But is it also based on the orientation?
 					Orientation lBestFittingLayoutOrientation = (lBestFittingLayout == null ? null : lBestFittingLayout.getOrientation()); 
 					Orientation lLayoutOrientation = lLayout.getOrientation(); 
 					if ( lBestFittingLayout == null || lLayoutOrientation == null || lSceneOrientation.equals(lLayoutOrientation)) {
-						if (getTrace()) System.out.println("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is also candidate based on orientation");
+						if (getTrace()) log("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is also candidate based on orientation");
 						
 						// Orientation also matches, do we prefer the one orientation of the other?
 						if ( (lBestFittingLayoutOrientation == null && lLayoutOrientation == null) 
 						  || (lBestFittingLayoutOrientation == null && lLayoutOrientation != null) // Prefer a layout with orientation above one without
 						   ) {
-							if (getTrace()) System.out.println("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is also a better candidate based on orientation vs best fitting so far: " + (lBestFittingLayout == null ? "null" : lBestFittingLayout.describeSizeConstraints()));
+							if (getTrace()) log("determineBestFittingLayout, layout " + lLayout.describeSizeConstraints() + " is also a better candidate based on orientation vs best fitting so far: " + (lBestFittingLayout == null ? "null" : lBestFittingLayout.describeSizeConstraints()));
 							lBestFittingLayout = lLayout;
-							if (getTrace()) System.out.println("determineBestFittingLayout, best fitting so far: " + lBestFittingLayout.describeSizeConstraints());
+							if (getTrace()) log("determineBestFittingLayout, best fitting so far: " + lBestFittingLayout.describeSizeConstraints());
 						}
 					}
 				}
@@ -667,7 +670,7 @@ public class ResponsivePane extends StackPane {
 		}
 		
 		// done
-		if (getTrace()) System.out.println("determineBestFittingLayout=" + lBestFittingLayout.describeSizeConstraints());
+		if (getTrace()) log("determineBestFittingLayout=" + lBestFittingLayout.describeSizeConstraints());
 		return lBestFittingLayout;
 	}
 	private final Layout SINGULARITY_LAYOUT = new Layout(Size.ZERO, new Label("?") );
@@ -695,7 +698,7 @@ public class ResponsivePane extends StackPane {
 		}
 		
 		// done
-		if (getTrace()) System.out.println("determineBestFittingStylesheet=" + lBestFittingStylesheet.describeSizeConstraints() + " -> " + lBestFittingStylesheet.getFile());
+		if (getTrace()) log("determineBestFittingStylesheet=" + lBestFittingStylesheet.describeSizeConstraints() + " -> " + lBestFittingStylesheet.getFile());
 		return lBestFittingStylesheet;
 	}
 	final private Stylesheet SINGULAR_STYLESHEET = new Stylesheet(Size.ZERO, null);
@@ -711,13 +714,13 @@ public class ResponsivePane extends StackPane {
 		for (Stylesheet lStylesheet : availableStylesheets) {
 			String lActiveStylesheetUrl = lStylesheet.getFile();
 			if (activeStylesheetUrls.remove(lActiveStylesheetUrl)) {
-				if (getDebug() || getTrace()) System.out.println("Removed stylesheet " + lStylesheet.getSizeAtLeast() + " -> " + lActiveStylesheetUrl);
+				if (getDebug() || getTrace()) log("Removed stylesheet " + lStylesheet.getSizeAtLeast() + " -> " + lActiveStylesheetUrl);
 			}			
 		}
 		
 		// load new
 		if (lStylesheetFile != null) {
-			if (getDebug() || getTrace()) System.out.println("Loading stylesheet " + stylesheet.getSizeAtLeast() + " -> " + lStylesheetFile);
+			if (getDebug() || getTrace()) log("Loading stylesheet " + stylesheet.getSizeAtLeast() + " -> " + lStylesheetFile);
 			activeStylesheetUrls.add(lStylesheetFile);
 		}
 	}
