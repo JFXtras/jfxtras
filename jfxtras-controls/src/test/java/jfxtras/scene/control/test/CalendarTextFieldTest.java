@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
 import jfxtras.internal.scene.control.skin.ListSpinnerSkin;
@@ -71,14 +72,19 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
         	return null;
         });
 		box.getChildren().add(calendarTextField);
-		Button lButton = new Button("focus helper");
-		lButton.setId("focusHelper");
-		box.getChildren().add(lButton);
+		button = new Button("focus helper");
+		button.setOnAction((actionEvent) -> {
+			buttonActionCount.incrementAndGet();
+		});
+		button.setId("focusHelper");
+		box.getChildren().add(button);
 
 		return box;
 	}
 	private CalendarTextField calendarTextField = null;
-    private Throwable parseErrorThrowable = null;
+	private Button button = null;
+	private Throwable parseErrorThrowable = null;
+    private AtomicInteger buttonActionCount = new AtomicInteger(0);
 
 	/**
 	 * 
@@ -526,6 +532,30 @@ public class CalendarTextFieldTest extends JFXtrasGuiTest {
 		
 		// now should be the value in the textfield
 		Assert.assertEquals("2014-12-31", TestUtil.quickFormatCalendarAsDate(calendarTextField.getCalendar()));
+	}
+
+	/**
+	 *
+	 */
+	@Test
+	public void defaultButton()
+	{
+		// press enter
+		clickOn(calendarTextField).write("\n");
+
+		// not clicked
+		Assert.assertEquals(0, buttonActionCount.get());
+
+		// make button default
+		TestUtil.runThenWaitForPaintPulse( () -> {
+			button.setDefaultButton(true);
+		});
+
+		// press enter
+		clickOn(calendarTextField).write("\n");
+
+		// clicked
+		Assert.assertEquals(1, buttonActionCount.get());
 	}
 
 	/**

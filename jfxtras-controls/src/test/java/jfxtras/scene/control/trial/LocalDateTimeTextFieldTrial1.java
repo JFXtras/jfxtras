@@ -29,19 +29,17 @@ package jfxtras.scene.control.trial;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import jfxtras.scene.control.CalendarTimeTextField;
-import jfxtras.scene.layout.VBox;
+import jfxtras.scene.control.LocalDateTimeTextField;
+import jfxtras.scene.control.LocalTimeTextField;
 
 /**
  * 
  * @author Tom Eugelink
  *
  */
-public class CalendarTimeTextFieldTrial extends Application {
+public class LocalDateTimeTextFieldTrial1 extends Application {
 	
     public static void main(String[] args) {
         launch(args);       
@@ -49,32 +47,20 @@ public class CalendarTimeTextFieldTrial extends Application {
 
 	@Override
 	public void start(Stage stage) {
-
+		
 		FlowPane lFlowPane = new FlowPane();
 		
 		{
-			CalendarTimeTextField lCalendarTimeTextField = new CalendarTimeTextField();
-			lFlowPane.getChildren().add(lCalendarTimeTextField);
-			lCalendarTimeTextField.setImmediate(true);
-			lCalendarTimeTextField.tooltipProperty().set(new Tooltip("Immediate=true"));
+			LocalDateTimeTextField lLocalTimeTextField = new LocalDateTimeTextField();
+			lFlowPane.getChildren().add(lLocalTimeTextField);
+//			lLocalTimeTextField.setEditable(false);
 		}
-
-//		{
-//			CalendarTimeTextField lCalendarTimeTextField = new CalendarTimeTextField();
-//			lFlowPane.getChildren().add(lCalendarTimeTextField);
-//			lCalendarTimeTextField.tooltipProperty().set(new Tooltip("This is a custom tooltip"));
-//		}
-//
-//		{
-//			TextField lTextField = new TextField();
-//			lFlowPane.getChildren().add(lTextField);
-//		}
-
+		
 		Button lButton = new Button("dummy");
-    	lButton.setOnAction((actionEvent) -> {
-    		System.out.println("Button clicked");
+		lButton.setOnAction((actionEvent) -> {
+			System.out.println("Button clicked");
 		});
-    	lButton.setDefaultButton(true);
+		lButton.setDefaultButton(true);
 		lFlowPane.getChildren().add(lButton);
 		
 		// create scene

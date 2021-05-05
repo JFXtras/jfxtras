@@ -84,6 +84,13 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
 
 		// Bind
         textField.editableProperty().bindBidirectional(getSkinnable().editableProperty());
+
+        // The enter event must be forwarded to support the DefaultButton
+		textField.addEventHandler(KeyEvent.ANY, keyEvent -> {
+			if (keyEvent.getCode() == KeyCode.ENTER) {
+				getSkinnable().fireEvent(keyEvent);
+			}
+		});
 		
 		// react to value changes in the model
 		getSkinnable().calendarProperty().addListener( (observable) -> {
@@ -111,7 +118,7 @@ public class CalendarTimeTextFieldSkin extends SkinBase<CalendarTimeTextField> i
             }
         });
 	}
-	
+
 	/*
 	 * 
 	 */

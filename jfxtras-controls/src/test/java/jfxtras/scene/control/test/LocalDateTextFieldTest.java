@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -65,14 +66,19 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         	return null;
         });
         box.getChildren().add(localDateTextField);
-        Button lButton = new Button("focus helper");
-        lButton.setId("focusHelper");
-        box.getChildren().add(lButton);
+        button = new Button("focus helper");
+        button.setId("focusHelper");
+        button.setOnAction((actionEvent) -> {
+            buttonActionCount.incrementAndGet();
+        });
+        box.getChildren().add(button);
 
         return box;
     }
     private LocalDateTextField localDateTextField = null;
+    private Button button = null;
     private Throwable parseErrorThrowable = null;
+    private AtomicInteger buttonActionCount = new AtomicInteger(0);
 
     /**
      *
@@ -580,5 +586,29 @@ public class LocalDateTextFieldTest extends JFXtrasGuiTest {
         //We should have the same value everywhere.
         Assert.assertEquals(((TextField) find(".text-field")).getText(), localDateTextField.getText());
         Assert.assertTrue(localDateTextField.getText().isEmpty());
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void defaultButton()
+    {
+        // press enter
+        clickOn(localDateTextField).write("\n");
+
+        // not clicked
+        Assert.assertEquals(0, buttonActionCount.get());
+
+        // make button default
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            button.setDefaultButton(true);
+        });
+
+        // press enter
+        clickOn(localDateTextField).write("\n");
+
+        // clicked
+        Assert.assertEquals(1, buttonActionCount.get());
     }
 }

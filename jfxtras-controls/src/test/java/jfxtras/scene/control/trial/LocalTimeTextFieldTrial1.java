@@ -58,6 +58,10 @@ public class LocalTimeTextFieldTrial1 extends Application {
 		}
 		
 		Button lButton = new Button("dummy");
+		lButton.setOnAction((actionEvent) -> {
+			System.out.println("Button clicked");
+		});
+		lButton.setDefaultButton(true);
 		lFlowPane.getChildren().add(lButton);
 		
 		// create scene

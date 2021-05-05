@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import jfxtras.internal.scene.control.skin.CalendarTextFieldSkin;
 import jfxtras.internal.scene.control.skin.LocalDateTimeTextFieldSkin;
@@ -66,14 +67,19 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
         	return null;
         });
         box.getChildren().add(localDateTimeTextField);
-        Button lButton = new Button("focus helper");
-        lButton.setId("focusHelper");
-        box.getChildren().add(lButton);
+        button = new Button("focus helper");
+        button.setId("focusHelper");
+        button.setOnAction((actionEvent) -> {
+            buttonActionCount.incrementAndGet();
+        });
+        box.getChildren().add(button);
 
         return box;
     }
     private LocalDateTimeTextField localDateTimeTextField = null;
+    private Button button = null;
     private Throwable parseErrorThrowable = null;
+    private AtomicInteger buttonActionCount = new AtomicInteger(0);
 
     /**
      *
@@ -654,5 +660,29 @@ public class LocalDateTimeTextFieldTest extends JFXtrasGuiTest {
 
         // nothing in the textfield
         Assert.assertTrue(localDateTimeTextField.getText().length() > 0); // hard to get the exact time, since it is "now" and seconds may deviate
+    }
+
+    /**
+     *
+     */
+    @Test
+    public void defaultButton()
+    {
+        // press enter
+        clickOn(localDateTimeTextField).write("\n");
+
+        // not clicked
+        Assert.assertEquals(0, buttonActionCount.get());
+
+        // make button default
+        TestUtil.runThenWaitForPaintPulse( () -> {
+            button.setDefaultButton(true);
+        });
+
+        // press enter
+        clickOn(localDateTimeTextField).write("\n");
+
+        // clicked
+        Assert.assertEquals(1, buttonActionCount.get());
     }
 }

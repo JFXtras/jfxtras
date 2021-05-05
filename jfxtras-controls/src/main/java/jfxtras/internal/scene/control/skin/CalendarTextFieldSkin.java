@@ -44,6 +44,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -97,7 +98,14 @@ public class CalendarTextFieldSkin extends SkinBase<CalendarTextField> implement
         textField.textProperty().bindBidirectional(getSkinnable().textProperty());
         textField.editableProperty().bindBidirectional(getSkinnable().editableProperty());
         refreshValue();
-        
+
+        // The enter event must be forwarded to support the DefaultButton
+        textField.addEventHandler(KeyEvent.ANY, keyEvent -> {
+            if (keyEvent.getCode() == KeyCode.ENTER) {
+                getSkinnable().fireEvent(keyEvent);
+            }
+        });
+
         // focus
         initFocusSimulation();
                 

@@ -30,6 +30,8 @@ import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import javafx.scene.control.SkinBase;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 import jfxtras.scene.control.CalendarPicker.CalendarRange;
 import jfxtras.scene.control.CalendarTextField;
@@ -67,7 +69,7 @@ public class LocalDateTimeTextFieldSkin extends SkinBase<LocalDateTimeTextField>
 	{
 		// setup component
 		createNodes();
-		
+
 		// basic control binding
 		calendarTextField.setShowTime(true);
 		calendarTextField.getStyleClass().addAll(getSkinnable().getClass().getSimpleName());
