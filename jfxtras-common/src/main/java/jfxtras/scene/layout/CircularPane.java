@@ -78,7 +78,7 @@ public class CircularPane extends Pane {
 	// TODO: hiding of children? Reserve space? 
 	// TODO: animate between changes in the layout?
 	
-	private enum MinPrefMax { MIN, PREF, MAX }
+	protected enum MinPrefMax { MIN, PREF, MAX }
 
 	
 	// ==========================================================================================================================================================================================================================================
@@ -559,7 +559,7 @@ public class CircularPane extends Pane {
     /**
      * 
      */
-	private void animate(double rate) {
+	protected void animate(double rate) {
 		// no animation configured
 		if (getAnimationInterpolation() == null) {
 			return;
@@ -825,7 +825,7 @@ public class CircularPane extends Pane {
      * @param width
      * @return
      */
-    private double computeChainDiameter(double beadDiameter) {
+    protected double computeChainDiameter(double beadDiameter) {
 
     	// force set?
     	if (getDiameter() != null) {
@@ -885,7 +885,7 @@ public class CircularPane extends Pane {
     	return lDiameter;
     }
 
-	private double determineBeadDiameter(MinPrefMax size) {
+	protected double determineBeadDiameter(MinPrefMax size) {
 		double lBeadDiameter = 0.0;
 		if (getChildrenAreCircular()) {
 			lBeadDiameter = determineBeadDiameterUsingWidthOrHeight(size);
@@ -914,7 +914,7 @@ public class CircularPane extends Pane {
 		}
 		return lMaximumSize;
 	}
-    
+
 	private double determineBeadDiameterUsingTheDiagonal(MinPrefMax size) {
 		List<Node> nodes = getManagedChildrenWithoutBeads();
 		double lMaximumSize = 0; 
