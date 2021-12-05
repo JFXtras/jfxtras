@@ -32,7 +32,7 @@
 	<groupId>org.jfxtras</groupId>
 	<artifactId>jfxtras-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>11-r3-SNAPSHOT</version>
+	<version>17-r1-SNAPSHOT</version>
 	<name>JFXtras parent</name>
 	<description>Miscellaneous components for JavaFX</description>
 	<url>http://jfxtras.org/</url>
@@ -68,7 +68,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>11</java.version>
-		<openjfx.version>11.0.1</openjfx.version>
+		<openjfx.version>17.0.0.1</openjfx.version>
 		<maven.compiler.release>${java.version}</maven.compiler.release>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>

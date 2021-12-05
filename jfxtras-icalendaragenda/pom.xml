@@ -32,7 +32,7 @@
 	<parent>
 		<groupId>org.jfxtras</groupId>
 		<artifactId>jfxtras-parent</artifactId>
-		<version>11-r3-SNAPSHOT</version>
+		<version>17-r1-SNAPSHOT</version>
     </parent>
     <artifactId>jfxtras-icalendaragenda</artifactId>
     <packaging>jar</packaging>
