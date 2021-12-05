@@ -42,7 +42,14 @@ public class CircularPaneTrail5 extends Application {
 	@Override
 	public void start(Stage stage) {
 
-		CircularPane lCircularPane = new CircularPane();
+		CircularPane lCircularPane = new CircularPane() {
+//			protected double determineBeadDiameter(MinPrefMax size) {
+//				return 100.0;
+//			}
+//			protected double computeChainDiameter(double beadDiameter) {
+//				return 1000.0;
+//			}
+		};
 		lCircularPane.setStyle("-fx-border-color:black;");
 		lCircularPane.setShowDebug(Color.GREEN);
 //		lCircularPane.setStartAngle(315.0); lCircularPane.setArc(90.0);
