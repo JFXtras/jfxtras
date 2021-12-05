@@ -64,6 +64,8 @@
                         --add-exports javafx.base/com.sun.javafx.beans=ALL-UNNAMED,org.testfx,junit
                         --add-exports jfxtras.common/jfxtras.scene.layout.test=ALL-UNNAMED,org.testfx,junit
                         --add-opens jfxtras.common/jfxtras.scene.layout.responsivepane=ALL-UNNAMED,org.testfx,junit
+                        --add-reads jfxtras.common=javafx.fxml
+                        --add-opens jfxtras.common/jfxtras.scene.layout.responsivepane=javafx.fxml
                     </argLine>
                 </configuration>
             </plugin>
