@@ -275,7 +275,7 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 				
 		Node n = find("#AppointmentRegularBodyPane2014-01-01/0");
 		AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-		new AssertNode(n).assertXYWH(0.5, 402.5, 925.0, 81.0, 0.01);
+		new AssertNode(n).assertXYWH(0.5, 402.5, 927.0, 81.0, 0.01);
 		//TestUtil.sleep(3000);
 	}
 
@@ -335,10 +335,10 @@ public class AgendaRenderTest extends AbstractAgendaTestBase {
 		{
 			Node n = find("#AppointmentWholedayHeaderPane2014-01-01/0");
 			AssertNode.generateSource("n", n, null, false, jfxtras.test.AssertNode.A.XYWH);
-			double y = (OSInfo.MY_OS == OS.UNIX) ? 22.8671875 : 24.0390625;
-			double w = (OSInfo.MY_OS == OS.UNIX) ? 133.50516183035714 : 135.21763392857142;
-			double h = (OSInfo.MY_OS == OS.UNIX) ? 20.1328125 : 20.9609375;
-			new AssertNode(n).assertXYWH(0.0, y, w, h, 0.01);
+			double y = (OSInfo.MY_OS == OS.UNIX) ? 22.0 : 24.0;
+			double w = (OSInfo.MY_OS == OS.UNIX) ? 133.0 : 135.0;
+			double h = (OSInfo.MY_OS == OS.UNIX) ? 20.0 : 20.0;
+			new AssertNode(n).assertXYWH(0.0, y, w, h, 1.00);
 //			new AssertNode(n).assertXYWH(0.0, 24.0390625, 135.21763392857142, 20.9609375, 0.01);
 		}
 		//TestUtil.sleep(3000);
