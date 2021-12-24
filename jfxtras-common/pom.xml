@@ -32,7 +32,7 @@
 	<parent>
 		<groupId>org.jfxtras</groupId>
 		<artifactId>jfxtras-parent</artifactId>
-		<version>17-r1</version>
+		<version>17-r2-SNAPSHOT</version>
     </parent>
     <artifactId>jfxtras-common</artifactId>
     <packaging>jar</packaging>

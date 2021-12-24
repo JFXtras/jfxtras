@@ -32,7 +32,7 @@
 	<groupId>org.jfxtras</groupId>
 	<artifactId>jfxtras-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>17-r1</version>
+	<version>17-r2-SNAPSHOT</version>
 	<name>JFXtras parent</name>
 	<description>Miscellaneous components for JavaFX</description>
 	<url>http://jfxtras.org/</url>
@@ -47,7 +47,7 @@
 		<url>https://github.com/jfxtras/jfxtras.git</url>
 		<connection>scm:git:https://git@github.com/jfxtras/jfxtras.git</connection>
 		<developerConnection>scm:git:https://git@github.com/jfxtras/jfxtras.git</developerConnection>
-	  <tag>r17-r1</tag>
+	  <tag>HEAD</tag>
   </scm>
 	<developers>
 		<developer>
