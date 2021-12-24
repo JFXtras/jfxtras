@@ -1,2 +1,2 @@
-mvnw clean -DskipTests -Darguments=-DskipTests release:prepare release:perform -Dmaven.javadoc.skip=true -P sources-as-javadoc-jar
+mvnw clean -Darguments="-DskipTests -Dmaven.javadoc.skip=true -P sources-as-javadoc-jar" release:prepare release:perform
 
