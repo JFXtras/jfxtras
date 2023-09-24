@@ -61,7 +61,7 @@
         <dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-junit</artifactId>
-			<version>4.0.15-alpha</version>
+			<version>4.0.17</version>
 			<exclusions>
 				<exclusion>
 					<groupId>junit</groupId>
