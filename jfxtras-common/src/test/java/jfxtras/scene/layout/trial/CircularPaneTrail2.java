@@ -44,29 +44,29 @@ public class CircularPaneTrail2 extends Application {
 	@Override
 	public void start(Stage stage) {
 
-		VBox lVBox = new VBox(10);		
-		HBox lHBox = new HBox(10);
-		lVBox.getChildren().add(lHBox);
+		VBox vBox = new VBox(10);
+		HBox hBox = new HBox(10);
+		vBox.getChildren().add(hBox);
 
 		for (int j = 1; j < 27; j++)
 		{
-			CircularPane lCircularPane = new CircularPane();
-			lCircularPane.setStyle("-fx-border-color:black;");
-			//lCircularPane.setChildrenAreCircular(true);
-			lCircularPane.setShowDebug(Color.GREEN);
+			CircularPane circularPane = new CircularPane();
+			circularPane.setStyle("-fx-border-color:black;");
+			//circularPane.setChildrenAreCircular(true);
+			circularPane.setShowDebug(Color.GREEN);
 			for (int i = 0; i < j; i++) {
 				javafx.scene.shape.Rectangle c = new javafx.scene.shape.Rectangle(20,20);
-				lCircularPane.add(c);
+				circularPane.add(c);
 			}
-			lHBox.getChildren().add(lCircularPane);
-			if (lHBox.prefWidth(-1) > 1000) {
-				lHBox = new HBox(10);
-				lVBox.getChildren().add(lHBox);
+			hBox.getChildren().add(circularPane);
+			if (hBox.prefWidth(-1) > 1000) {
+				hBox = new HBox(10);
+				vBox.getChildren().add(hBox);
 			}
 		}
 
         // setup scene
-		Scene scene = new Scene(lVBox);
+		Scene scene = new Scene(vBox);
 		scene.getStylesheets().add(this.getClass().getName().replace(".", "/") + ".css");
 		
         // create stage

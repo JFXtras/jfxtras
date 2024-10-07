@@ -43,13 +43,13 @@ public class AccordionDemo extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
-		AccordionPane lHarmonica = new AccordionPane();
-		lHarmonica.addTab("test1", new Label("test 1"));
-		lHarmonica.addTab("test2", createTree(5) );
-		lHarmonica.addTab("test3", createTree(500));
+		AccordionPane accordionPane = new AccordionPane();
+		accordionPane.addTab("pane1", new Label("test 1"));
+		accordionPane.addTab("pane2", createTree(5) );
+		accordionPane.addTab("pane3", createTree(500));
 
 		// show
-		primaryStage.setScene(new Scene(lHarmonica, 1000, 500));
+		primaryStage.setScene(new Scene(accordionPane, 1000, 500));
 		primaryStage.sizeToScene();
 		primaryStage.show();
 	}

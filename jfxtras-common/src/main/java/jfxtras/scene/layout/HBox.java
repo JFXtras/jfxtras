@@ -45,8 +45,8 @@ import javafx.scene.Node;
  * You can write:
  * [source,java]
  * --
- * 	HBox lHBox = new HBox(5.0);
- *	lHBox.add(new Button("short"), new HBox.C().hgrow(Priority.ALWAYS));
+ * 	HBox hBox = new HBox(5.0);
+ *	hBox.add(new Button("short"), new HBox.C().hgrow(Priority.ALWAYS));
  * --
  *
  * This class is not a reimplementation of HBox, but only applies a different API.

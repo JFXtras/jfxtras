@@ -1,8 +1,32 @@
-JFXtras
-=======
+# JFXtras
 
 A supporting library for JavaFX, containing helper classes, extended layouts, controls and other interesting widgets.
-See the [JFXtras website](http://jfxtras.org/) for more details and screen clips.
+
+## Examples
+JFXtras features an agenda control, mimicking Google Calendar with a few twists, 
+like a "pole" on whole day appointments so they are visible through out the day.
+
+<img src="README/agenda.png" width="500">
+
+Also a date and time picker, plus associated text fields.
+
+<img src="README/calendarTextField.png" width="300">
+
+Or a circular pane, aimed at those new round screen becoming more and more popular,
+which can animate the nodes into position.
+
+<img src="README/CircularPane.png" width="400">
+
+Which was used to create two menus:
+
+<img src="README/PopupMenu.gif" width="200">
+<img src="README/CornerMenu.gif" width="200">
+
+Some dials, inspired by Gerrit Grunwald's work:
+
+<img src="README/BasicRoundDailGauge.png" width="200">
+<img src="README/SimpleMetroArcGauge.png" width="200">
+
 
 ## Project structure:
 

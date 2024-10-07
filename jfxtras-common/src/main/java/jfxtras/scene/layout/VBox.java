@@ -45,8 +45,8 @@ import javafx.scene.Node;
  * You can write:
  * [source,java]
  * --
- *	VBox lVBox = new VBox(5.0);
- *	lVBox.add(new Button("short"), new VBox.C().vgrow(Priority.ALWAYS));
+ *	VBox vBox = new VBox(5.0);
+ *	vBox.add(new Button("short"), new VBox.C().vgrow(Priority.ALWAYS));
  * --
  *
  * This class is not a reimplementation of VBox, but only applies a different API.

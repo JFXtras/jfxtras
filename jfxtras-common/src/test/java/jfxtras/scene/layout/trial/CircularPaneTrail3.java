@@ -45,29 +45,29 @@ public class CircularPaneTrail3 extends Application {
 	@Override
 	public void start(Stage stage) {
 
-		VBox lVBox = new VBox();		
-		HBox lHBox = new HBox(0);
-		lVBox.getChildren().add(lHBox);
+		VBox vBox = new VBox();
+		HBox hBox = new HBox(0);
+		vBox.getChildren().add(hBox);
 
 		for (int j = 1; j < 27; j++)
 		{
-			CircularPane lCircularPane = new CircularPane();
-			lCircularPane.setStyle("-fx-border-color:black;");
-			lCircularPane.setShowDebug(Color.GREEN);
+			CircularPane circularPane = new CircularPane();
+			circularPane.setStyle("-fx-border-color:black;");
+			circularPane.setShowDebug(Color.GREEN);
 			for (int i = 0; i < j; i++) {
 				javafx.scene.shape.Rectangle c = new javafx.scene.shape.Rectangle(30,30);
 				//c.setStroke(Color.RED);
-				lCircularPane.add(c);
+				circularPane.add(c);
 			}
-			lHBox.getChildren().add(lCircularPane);
-			if (lHBox.prefWidth(-1) > 1500) {
-				lHBox = new HBox(0);
-				lVBox.getChildren().add(lHBox);
+			hBox.getChildren().add(circularPane);
+			if (hBox.prefWidth(-1) > 1500) {
+				hBox = new HBox(0);
+				vBox.getChildren().add(hBox);
 			}
 		}
 
         // setup scene
-		Scene scene = new Scene(lVBox);
+		Scene scene = new Scene(vBox);
 		scene.getStylesheets().add(this.getClass().getName().replace(".", "/") + ".css");
 		
         // create stage
